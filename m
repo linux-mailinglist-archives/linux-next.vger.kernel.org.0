@@ -1,96 +1,201 @@
-Return-Path: <linux-next+bounces-6032-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6033-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC2FDA727B8
-	for <lists+linux-next@lfdr.de>; Thu, 27 Mar 2025 01:22:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17749A727ED
+	for <lists+linux-next@lfdr.de>; Thu, 27 Mar 2025 01:54:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2C143A533C
-	for <lists+linux-next@lfdr.de>; Thu, 27 Mar 2025 00:22:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 938E816AF67
+	for <lists+linux-next@lfdr.de>; Thu, 27 Mar 2025 00:54:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EE562F36;
-	Thu, 27 Mar 2025 00:22:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0606D528;
+	Thu, 27 Mar 2025 00:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fg/NIX9f"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tjPfeI6e"
 X-Original-To: linux-next@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE165256D;
-	Thu, 27 Mar 2025 00:22:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E343C2C8;
+	Thu, 27 Mar 2025 00:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743034956; cv=none; b=VZqkhnZusD3/jOY1SiImRHfbvQFHu2q9oY0Q/nJJNwQmZW9kw9H/3NhBTE4gRE3H2TL7HcrbsRxFTrD3oJ0usyCpfg5EvXtZjrI+6y+78QwAdXMPEj2pkFmw9XRAQxU+qgvNz3glTp3fWG53KWRiQhzZqHSPPQIn9Q9vhl1QedQ=
+	t=1743036852; cv=none; b=gw3aTsZlct+UCwDiUD1LVTO2XYnoDkjsIwM1j0WemGt3DSCXVwtva20Iweaxr++8V7/2lt9TqgDu68Iw1DVUICaHYkJrFoXKSHvTBWNnMFndQ9PDjyaHxR2fm2FEK80d6sztb7ZSiE1PLpCJmUl7ZyuBGxvHz3f3wd9xxVNkZMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743034956; c=relaxed/simple;
-	bh=m2ou00RWSTPISt5+LGR9ErqICdduZd2KOzoJ7WVS2/0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mHQp6hiZKaapliwE2Zew9FF5nSe2OPEgH0D5LEN1Iv/kcEQtbqfAVF3nONRXI6lKfO7NI5jef75p7VLeqXXRjNYENvy938YbEVdBczxloADZzd6AVrosgRcCOlzN9244hVLsKZS+I/A+mXhXueyuMcZ+K7uWJkRCdIkLIBGtvzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=fg/NIX9f; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=04l0Ano4NKttJ//41wioFP+enerKAade9veITCjqTko=; b=fg/NIX9f2E7OJfnXH977f+rIIJ
-	FOk3Ua/V5k8O9Xjl9/wVH3nXgoQI+fajg7WM9Y+5dLJV5o3RySVI7+X4qMfdNKNL/cSSfAoE1T4nf
-	skdelG3FvBe88K2LwCVyWQ/g1Kc6RCeg7yQI+hNyOjYT2xlytdunGsExyZyVlFginzVby06aOxmI2
-	RLSm/TnlLlKyQxM3my1OcXRLugecsbvspPVzvDtwmytlcalLGyEjNdRs/0tQLpp0bfX5+dW4HPQyM
-	v4nwWM5HeT4bKfqkBG8nZWyIXfSXXSKJO2yBBxrPJTUQJWL3CNKr1ZFYWqq9IGNdX5BorVZvs1Acc
-	hVhBtv5g==;
-Received: from [50.53.2.24] (helo=[192.168.254.17])
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1txb0w-00000005sNH-0wc6;
-	Thu, 27 Mar 2025 00:22:31 +0000
-Message-ID: <870f6a20-7edc-4115-a700-11c886f181cf@infradead.org>
-Date: Wed, 26 Mar 2025 17:22:26 -0700
+	s=arc-20240116; t=1743036852; c=relaxed/simple;
+	bh=L+6ogoi4NO41UQnP8geqYxTPISm+Am2nckYILgUZcRk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Uud0xVQZybOcYQLV8k/75BUrS+hcAlBQtUn89hJf5v1GOHjwk/O9FitZTCMJvuNVHQDZWuoTDKtyF7MEAIWyb38dy0cNY+CnnxMZc2c9pklHnPW5p1uTPR5g+8r0xKTRaXB+pBx/LWFHyqmJXZbCEUDoAydkZ4nYUUsftCrPZ7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tjPfeI6e; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1743036845;
+	bh=7yr9Lo9Y0VL/znkYjRiW27oh92p+2n/KuTKZoC+L5xE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=tjPfeI6eMO9duLM/AqOmDmR66ixlBwa2KWO5yqRN+Gbua6/eGLaLr8849p8OEkz+r
+	 7HyZXn4xeYuGpoWQGUBf3Is1+Jsz1IeydqxBAh5FLEa+GN40SP8b8UKox1yyctcA3+
+	 Zhkt+14YM/dsAEWsOOgfYbNPoq/FR9GEoWWdZIdhRT3K5SFlr5bIjaqL8P12NgU9zM
+	 a0DvJbFDFFOmYemtAcuIrXo8WiXif/qyFE/fAXff/jbmUViFuMgzHRpttwH9bayPi/
+	 m7k1Ds1ioScF3tuKwSu627lXNyZF7KPR/fiKVUy5iKPMjHcTdJQjNnRvmhDOumOLbd
+	 5pIySA06JW+ww==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZNQCK0CMRz4wcd;
+	Thu, 27 Mar 2025 11:54:04 +1100 (AEDT)
+Date: Thu, 27 Mar 2025 11:54:03 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Kent Overstreet <kent.overstreet@linux.dev>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Uros Bizjak <ubizjak@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the bcachefs tree
+Message-ID: <20250327115403.039e8638@canb.auug.org.au>
+In-Reply-To: <20250326132819.30db65e7@canb.auug.org.au>
+References: <20250326132819.30db65e7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Mar 26 (drivers/media/cec/i2c/tda9950)
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Hans Verkuil <hverkuil-cisco@xs4all.nl>, linux-media@vger.kernel.org,
- Russell King <rmk+kernel@armlinux.org.uk>
-References: <20250326165619.58d443f8@canb.auug.org.au>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250326165619.58d443f8@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/E2DiHvhfyTb2Q2/i1KL72_K";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/E2DiHvhfyTb2Q2/i1KL72_K
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 3/25/25 10:56 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20250325:
-> 
+On Wed, 26 Mar 2025 13:28:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the bcachefs tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> fs/bcachefs/time_stats.c: In function 'bch2_time_stats_reset':
+> fs/bcachefs/time_stats.c:165:27: error: comparison of pointers to disjoin=
+t address spaces
+>   165 |             stats->buffer !=3D TIME_STATS_NONPCPU) {
+>       |                           ^~
+> fs/bcachefs/time_stats.c: In function 'bch2_time_stats_exit':
+> fs/bcachefs/time_stats.c:175:27: error: comparison of pointers to disjoin=
+t address spaces
+>   175 |         if (stats->buffer !=3D TIME_STATS_NONPCPU) {
+>       |                           ^~
+> fs/bcachefs/time_stats.c: In function 'bch2_time_stats_init_no_pcpu':
+> fs/bcachefs/time_stats.c:192:23: error: assignment from pointer to non-en=
+closed address space
+>   192 |         stats->buffer =3D TIME_STATS_NONPCPU;
+>       |                       ^
+> fs/bcachefs/time_stats.c:192:23: note: expected '__seg_gs struct time_sta=
+t_buffer *' but pointer is of type 'struct time_stat_buffer *'
+>=20
+> Caused by commit
+>=20
+>   5490554cf06f ("bcachefs: bch2_time_stats_init_no_pcpu()")
+>=20
+> interacting with commit
+>=20
+>   6a367577153a ("percpu/x86: enable strict percpu checks via named AS qua=
+lifiers")
+> (or an associated one)
+>=20
+> from the mm-stable tree.
+>=20
+> I have applied the following merge fix patch for today (but I think it
+> could just be applied to the bcachefs tree).
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 26 Mar 2025 13:15:00 +1100
+> Subject: [PATCH] fix up for "bcachefs: bch2_time_stats_init_no_pcpu()"
+>=20
+> interacting with "percpu/x86: enable strict percpu checks via named AS qu=
+alifiers"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  fs/bcachefs/time_stats.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/fs/bcachefs/time_stats.c b/fs/bcachefs/time_stats.c
+> index a8382d876835..b16540aa9ca4 100644
+> --- a/fs/bcachefs/time_stats.c
+> +++ b/fs/bcachefs/time_stats.c
+> @@ -11,7 +11,7 @@
+>  #include "time_stats.h"
+> =20
+>  /* disable automatic switching to percpu mode */
+> -#define TIME_STATS_NONPCPU	((struct time_stat_buffer *) 1)
+> +#define TIME_STATS_NONPCPU	((struct time_stat_buffer __percpu *) 1)
+> =20
+>  static const struct time_unit time_units[] =3D {
+>  	{ "ns",		1		 },
+> --=20
+> 2.45.2
 
-on x86_64, when CONFIG_I2C=m and
-CONFIG_CEC_NXP_TDA9950=y:
+This now fails like this:
 
-ld: vmlinux.o: in function `tda9950_write_range':
-tda9950.c:(.text+0x1225126): undefined reference to `i2c_transfer'
-ld: vmlinux.o: in function `tda9950_read':
-tda9950.c:(.text+0x122553f): undefined reference to `i2c_transfer'
-ld: vmlinux.o: in function `tda9950_irq':
-tda9950.c:(.text+0x122573e): undefined reference to `i2c_transfer'
-ld: vmlinux.o: in function `tda9950_driver_init':
-tda9950.c:(.init.text+0x726a3): undefined reference to `i2c_register_driver'
-ld: vmlinux.o: in function `tda9950_driver_exit':
-tda9950.c:(.exit.text+0x54fc): undefined reference to `i2c_del_driver'
+fs/bcachefs/time_stats.c: In function 'bch2_time_stats_init_no_pcpu':
+fs/bcachefs/time_stats.c:190:23: error: assignment from pointer to non-encl=
+osed address space
+  190 |         stats->buffer =3D (struct time_stat_buffer __rcu *) TIME_ST=
+ATS_NONPCPU;
+      |                       ^
+fs/bcachefs/time_stats.c:190:23: note: expected '__seg_gs struct time_stat_=
+buffer *' but pointer is of type 'struct time_stat_buffer *'
 
+I have now )instead of the above) applied the following merge fix patch (wh=
+ich should be able to be applied to the bcachefs tree directly):
 
--- 
-~Randy
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 27 Mar 2025 11:42:11 +1100
+Subject: [PATCH] fix up 2 for "bcachefs: bch2_time_stats_init_no_pcpu()"
 
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ fs/bcachefs/time_stats.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/bcachefs/time_stats.c b/fs/bcachefs/time_stats.c
+index 725d433a246f..2c34fe4be912 100644
+--- a/fs/bcachefs/time_stats.c
++++ b/fs/bcachefs/time_stats.c
+@@ -187,5 +187,5 @@ void bch2_time_stats_init(struct bch2_time_stats *stats)
+ void bch2_time_stats_init_no_pcpu(struct bch2_time_stats *stats)
+ {
+ 	bch2_time_stats_init(stats);
+-	stats->buffer =3D (struct time_stat_buffer __rcu *) TIME_STATS_NONPCPU;
++	stats->buffer =3D (struct time_stat_buffer __percpu *) TIME_STATS_NONPCPU;
+ }
+--=20
+2.45.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/E2DiHvhfyTb2Q2/i1KL72_K
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfkoasACgkQAVBC80lX
+0GybWgf/ZD0j5W/I2ykPCzOJnhYLR7/bhHlUM7LoAxL97o5BtFm2Y4m73Bh6Z8SM
+74FT68+Wb1gX9vQvHFX+pbNzyYLM9I3AhFmsa2xqktUX4d2GCjJUYbrnbGQKKFQe
+PKuxIVXcsK/YZYw8KBGDXUVWTUrVSyaZ4Y4hOrrGFr2g7Y4yCbXdSHryDjmUNfrX
+Poh+gblAPBcJidwEXtXAtW1VEDONO72m88vwDdfjoYyIf6dDS5//xQIxIV7Nlay2
+hLim+UdM/o6g9Jk6CWDDn1aaQldoobQQioBkLgEkLMYGBiiMd1SwZXR02dPDVsss
+uagE2XZLe0L7wGukGLoWixylo/N77Q==
+=YDym
+-----END PGP SIGNATURE-----
+
+--Sig_/E2DiHvhfyTb2Q2/i1KL72_K--
 

@@ -1,139 +1,143 @@
-Return-Path: <linux-next+bounces-6066-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6067-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7EFAA74664
-	for <lists+linux-next@lfdr.de>; Fri, 28 Mar 2025 10:33:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4030A748BD
+	for <lists+linux-next@lfdr.de>; Fri, 28 Mar 2025 11:54:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3ED87A8368
-	for <lists+linux-next@lfdr.de>; Fri, 28 Mar 2025 09:32:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC25C189849F
+	for <lists+linux-next@lfdr.de>; Fri, 28 Mar 2025 10:55:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2386D1DE2BA;
-	Fri, 28 Mar 2025 09:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A6DD212FAB;
+	Fri, 28 Mar 2025 10:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BZcj5sBv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WtObYDV+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA281B3957;
-	Fri, 28 Mar 2025 09:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E9C1F583D;
+	Fri, 28 Mar 2025 10:54:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743154426; cv=none; b=sgjoxGIEOfIh45LunA63LrHe+qjrd61LGxGUSuzB97yXEOklATwzHXG4vazvCrRPBM6LFmgtgq+6ihwDjuAxuD4Zlwjcghi0XLKO27MTdHGtdCtTnAzA1yXxgS3NNQB+shqBoUg10s23+A3+qAni1BJ4HyUCIC021+Bbczag2Zo=
+	t=1743159288; cv=none; b=Rfc7nzvQz7+/k/1ztaYPhxxIQRzFSxVFAMMjoaktPNdReOBRZhL7l+wdOCUotTeYMBGTxNkYyGwQ1YWkP7GjaIvru9K3ebs5fVjOP4Q1UIz2h4XP/8dOOpTSiyWfpIzzlEXOjHdiFSzuYXEmMWas8OtU8Yx7vuj/DheBWJI9GUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743154426; c=relaxed/simple;
-	bh=jk1/97f8/khzg4K46p1Cfbpj0pcqv0OI0ozBczngVNc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Vww3VfQav0LHihJqjlXW0BVMKhKwveINWw4mThJqep6jS7H8Ymz7LomyCIbhne8FSRCCiUReNT60OyV9epLhTiF+REn0ePcZEbH5ITvnKZN9u0a5X52Xi4Cwf5SmPoeQO8Y7BMOXP3T1z8PYNVYkpkqbdS4YXXP2T74zT8QT1Kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BZcj5sBv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72B9AC4AF09;
-	Fri, 28 Mar 2025 09:33:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743154425;
-	bh=jk1/97f8/khzg4K46p1Cfbpj0pcqv0OI0ozBczngVNc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BZcj5sBv3yGHhTSfGg2BlRJAUZIV2ZtyUg1Twjc0YrWHGRiOIXjKuoeYXq1Cm/U/8
-	 iyH9q75g6UzjivNT12jUP/wIIyZvgLcQtYzKGKUrpEyMkhBIY5sxxMYVIe688SN7Cw
-	 Kzq/hsiFOT5Off4mTwZXxyMY+Tr4QeiW25BVh5z5oeMpEXPfvFvWIZz6Ans8r/VeUd
-	 j4hYgE72sP2g6+oKdrcWmtI9NA58MMLJmsg1hoCY8Uxn7MxAMJVawNyTQ00zU2bdEs
-	 pHBf9jjkb90lBMAC/zeh/0m1noIoP/3L5XO3x5pm3FWbQ8k44oCqRv3xzB6WR+fAuA
-	 pz2TeZsudMiOg==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5499659e669so1953091e87.3;
-        Fri, 28 Mar 2025 02:33:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVGDtGykdk691fYgVBzJadRlMa8Eh0symioYO1+5djCw++6Regci14+/tNMXJ4cMsVZSRyRM16Ti8cP8Q==@vger.kernel.org, AJvYcCWcOufBJlh5irYVB2o/esQUGE8pNFKh7c+VTiJgdxkkUQlomH24t98eRtgs+jERKL963uNoMVaSDAYL/JE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWeQaPbi8jusSONn45Rg4kIMO3xjuRke+Av9HxEzpJOz8+whZJ
-	pEoVoX9oi1Cr4SRUXQnTieBxft/sULE9YGAg5IZe4ACMWcwHQibcMZg6lfADo8cY3lvMCRmClRg
-	unE7u6umW6kS+NmQLTVUNnhAfXA4=
-X-Google-Smtp-Source: AGHT+IGLoPeycatF7pEMeTsw1RAsi8T1INd3OU6uhamoQRp0l7KYRcm2JnXJr6tl1XMm+TFtdboFdJ7WovelvcdVbyI=
-X-Received: by 2002:a05:6512:ace:b0:545:2cb6:af31 with SMTP id
- 2adb3069b0e04-54b011d5b21mr3225654e87.15.1743154423774; Fri, 28 Mar 2025
- 02:33:43 -0700 (PDT)
+	s=arc-20240116; t=1743159288; c=relaxed/simple;
+	bh=kU6DWx+82oFtnWGqqA7HoW7UiG9956mcYw9QOvim9ak=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GlyLzArfUum27OpUSIRNHqfvQO35eZuttXvs0pKrLOZsIFtHM8PR9UWq5arCap1tuEIgdNJRf+k0Zrk3DzvNGWydQW5wx6MhDtyS2OqKQ93OzFz8yMzcXMXERYW7oKcATgnqRqj9Gq5dFifT29jWGkWN3+Inix+zx9xfQnsTlTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WtObYDV+; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1743159287; x=1774695287;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kU6DWx+82oFtnWGqqA7HoW7UiG9956mcYw9QOvim9ak=;
+  b=WtObYDV+4JBuYDhGVOPftGwvEHl08ZlfIOQr438tAkOn6YXro1tEXEKS
+   2WNIa5Isb2Z7qKmLUvy3aHkAPHovMNlXRKkZT+5hzwnjNgi2o8ikiWNeh
+   CoQ1gIakiP+1RK7LQg87le/P0vUarlTDVdgV9WIxlS7e7F2ny37tetu95
+   lzbB6riZ5lyfRG25LBSMRDtTWgiU/4JAzpA0K/cXghzcMUt37pDcxTgpN
+   qUATaJVnE24KU4BfZfgt2PU7BJjkSMoGThFnk/9qaurcmu5Y9Q6jPBl68
+   IdM8038wd3oiW1lWUy7a0SVciCo6oHvpcvN0X9ZwsiMrNTR9DO48LrdLo
+   Q==;
+X-CSE-ConnectionGUID: KUGsTZNjRHqHqJB8tdWh4Q==
+X-CSE-MsgGUID: EX+nBxDMTq64ongRq96a/A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11385"; a="44409816"
+X-IronPort-AV: E=Sophos;i="6.14,283,1736841600"; 
+   d="scan'208";a="44409816"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Mar 2025 03:54:46 -0700
+X-CSE-ConnectionGUID: C2f8czbVSKWvxp1vSuS/Pw==
+X-CSE-MsgGUID: 7zf8xngoS224O/FV4DlS6w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,283,1736841600"; 
+   d="scan'208";a="125927094"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa007.jf.intel.com with ESMTP; 28 Mar 2025 03:54:44 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+	id 681BC162; Fri, 28 Mar 2025 12:54:42 +0200 (EET)
+Date: Fri, 28 Mar 2025 12:54:42 +0200
+From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: "Kirill A. Shutemov" <kirill@shutemov.name>, 
+	Steven Rostedt <rostedt@goodmis.org>, Tom Lendacky <thomas.lendacky@amd.com>, 
+	"Aithal, Srikanth" <sraithal@amd.com>, Jason Baron <jbaron@akamai.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Linux-Next Mailing List <linux-next@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	"Roth, Michael" <Michael.Roth@amd.com>
+Subject: Re: linux-next regression: SNP Guest boot hangs with certain cpu/mem
+ config combination
+Message-ID: <el52wvltm2ptkyjhiajeo564sa6kcwqihdttvutem2qoegj5rg@wnqe7flapgbf>
+References: <ydvzjdcauzyvv7hxtra6l2gh4diz7zp4wx46eqculr7azynjke@z4x6eryq3rqd>
+ <4f258a96-42fe-4567-886b-e8e2b949ab1a@akamai.com>
+ <xcxcte6tzti7e6gcucf2ylfptie6kkvs2q5edup6mtzo5tenft@d2rm3p2yjoue>
+ <20250327110224.68c69c78@gandalf.local.home>
+ <2kwzi2qxqualhskbgckk6m7oc6vsgupquceqgfx2gnz5xbkier@rwdrhym7yxhr>
+ <vhwle6fj3ifmcouppec5adegqludggsxcsxxveqa43hugtsdgy@pb7vd5cqjmx3>
+ <m4cubsijicsrtq3blyzxeknsuc4cqswg35yz45uk5lipza4lps@yeqq2j5hf4y3>
+ <CAMj1kXGLWYrfEzdDXy1wriBycx0DPQ_kL==Jkw_sDW5f0KxEHw@mail.gmail.com>
+ <wl7m7xtqg6ftqmkyaabtzsk7lkhxnpkinyehwy6eokvwkfklzi@m6chqm3rht2u>
+ <CAMj1kXF68ibzc0_5tPmC7bLBHC0F6w_S7HeYMZeDr8PHo9jzDg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <08981771-39ac-af66-e2ec-e8f9bf6aed0a@amd.com> <idlcitykk3hxg5by5sltuljyjf7uanmve5fspu6dectubhy5za@mjmv4i5vwyby>
- <ydvzjdcauzyvv7hxtra6l2gh4diz7zp4wx46eqculr7azynjke@z4x6eryq3rqd>
- <4f258a96-42fe-4567-886b-e8e2b949ab1a@akamai.com> <xcxcte6tzti7e6gcucf2ylfptie6kkvs2q5edup6mtzo5tenft@d2rm3p2yjoue>
- <20250327110224.68c69c78@gandalf.local.home> <2kwzi2qxqualhskbgckk6m7oc6vsgupquceqgfx2gnz5xbkier@rwdrhym7yxhr>
- <vhwle6fj3ifmcouppec5adegqludggsxcsxxveqa43hugtsdgy@pb7vd5cqjmx3>
- <m4cubsijicsrtq3blyzxeknsuc4cqswg35yz45uk5lipza4lps@yeqq2j5hf4y3>
- <CAMj1kXGLWYrfEzdDXy1wriBycx0DPQ_kL==Jkw_sDW5f0KxEHw@mail.gmail.com> <wl7m7xtqg6ftqmkyaabtzsk7lkhxnpkinyehwy6eokvwkfklzi@m6chqm3rht2u>
-In-Reply-To: <wl7m7xtqg6ftqmkyaabtzsk7lkhxnpkinyehwy6eokvwkfklzi@m6chqm3rht2u>
-From: Ard Biesheuvel <ardb@kernel.org>
-Date: Fri, 28 Mar 2025 10:33:31 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXF68ibzc0_5tPmC7bLBHC0F6w_S7HeYMZeDr8PHo9jzDg@mail.gmail.com>
-X-Gm-Features: AQ5f1JqGgetqByQlp4xvYY0HkBtshVg_U6-IptbKLGugqFb6gRBR6SYOemN1Ofk
-Message-ID: <CAMj1kXF68ibzc0_5tPmC7bLBHC0F6w_S7HeYMZeDr8PHo9jzDg@mail.gmail.com>
-Subject: Re: linux-next regression: SNP Guest boot hangs with certain cpu/mem
- config combination
-To: "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc: Steven Rostedt <rostedt@goodmis.org>, 
-	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>, Tom Lendacky <thomas.lendacky@amd.com>, 
-	"Aithal, Srikanth" <sraithal@amd.com>, Jason Baron <jbaron@akamai.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Linux-Next Mailing List <linux-next@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	"Roth, Michael" <Michael.Roth@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXF68ibzc0_5tPmC7bLBHC0F6w_S7HeYMZeDr8PHo9jzDg@mail.gmail.com>
 
-On Fri, 28 Mar 2025 at 10:26, Kirill A. Shutemov <kirill@shutemov.name> wrote:
->
-> On Fri, Mar 28, 2025 at 10:17:16AM +0100, Ard Biesheuvel wrote:
-> > On Fri, 28 Mar 2025 at 10:09, Kirill A. Shutemov <kirill@shutemov.name> wrote:
-> > >
-> > > On Fri, Mar 28, 2025 at 10:28:19AM +0200, Kirill A. Shutemov wrote:
-> > > > On Thu, Mar 27, 2025 at 07:39:22PM +0200, Kirill A. Shutemov wrote:
-> > > > > On Thu, Mar 27, 2025 at 11:02:24AM -0400, Steven Rostedt wrote:
-> > > > > > On Thu, 27 Mar 2025 16:43:43 +0200
-> > > > > > "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com> wrote:
-> > > > > >
-> > > > > > > > > The only option I see so far is to drop static branch from this path.
-> > > > > > > > >
-> > > > > > > > > But I am not sure if it the only case were we use static branch from CPU
-> > > > > > > > > hotplug callbacks.
-> > > > > > > > >
-> > > > > > > > > Any other ideas?
-> > > > > > > >
-> > > > > > > >
-> > > > > > > > Hmmm, didn't take too close a look here, but there is the
-> > > > > > > > static_key_slow_dec_cpuslocked() variant, would that work here? Is the issue
-> > > > > > > > the caller may or may not have the cpu_hotplug lock?
-> > > > > > >
-> > > > > > > Yes. This is generic page alloc path and it can be called with and without
-> > > > > > > the lock.
-> > > > > >
-> > > > > > Note, it's not the static_branch that is an issue, it's enabling/disabling
-> > > > > > the static branch that is. Changing a static branch takes a bit of work as
-> > > > > > it does modify the kernel text.
-> > > > > >
-> > > > > > Is it possible to delay the update via a workqueue?
-> > > > >
-> > > > > Ah. Good point. Should work. I'll give it try.
-> > > >
-> > > > The patch below fixes problem for me.
-> > >
-> > > Ah. No, it won't work. We can get there before workqueues are initialized:
-> > > mm_core_init() is called before workqueue_init_early().
-> > >
-> > > We cannot queue a work. :/
-> > >
-> > > Steven, any other ideas?
-> > >
-> >
-> > Why is the use of a static key required here?
->
-> It is not required, but nice to have. We don't want extra conditional in
-> page alloc path.
->
+On Fri, Mar 28, 2025 at 10:33:31AM +0100, Ard Biesheuvel wrote:
+> Can you quantify the speedup?
 
-This would be a __read_mostly global variable that rarely changes, and
-therefore gets predicted correctly 99% of the time. So I wonder if the
-static key is worth the hassle.
+Test is below. I run it 10 times on a VM without unaccepted memory. With
+and without has_unaccepted_memory() check in cond_accept_memory().
 
-Can you quantify the speedup?
+The difference is not huge, but it is there:
+
+Without static branch:	Mean: 35559993 us, StdDev: 167264
+With static branch:	Mean: 35286227 us, StdDev: 207595
+Diff:			-273766 us / -0.77%
+
+static int __init alloc_test(void)
+{
+	ktime_t start_time, end_time;
+	s64 delta, total = 0;
+	struct page *page;
+	int i, j;
+
+	for (i = 0; i < 10; i++) {
+		start_time = ktime_get();
+		for (j = 0; j < 100000; j++) {
+			page = alloc_pages(GFP_KERNEL, PMD_ORDER);
+			__free_pages(page, PMD_ORDER);
+		}
+		end_time = ktime_get();
+		printk("%d: %lld us\n", i, ktime_us_delta(end_time, start_time));
+	}
+
+	for (i = 0; i < 100; i++) {
+		start_time = ktime_get();
+		for (j = 0; j < 100000; j++) {
+			page = alloc_pages(GFP_KERNEL, PMD_ORDER);
+			__free_pages(page, PMD_ORDER);
+		}
+		end_time = ktime_get();
+		delta = ktime_us_delta(end_time, start_time);
+		total += delta;
+		printk("%d: %lld us\n", i, delta);
+	}
+
+	printk("total: %lld us\n", total);
+
+	return 0;
+}
+late_initcall(alloc_test);
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
 

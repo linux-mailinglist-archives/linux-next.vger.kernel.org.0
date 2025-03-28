@@ -1,104 +1,121 @@
-Return-Path: <linux-next+bounces-6056-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6057-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0C78A7441F
-	for <lists+linux-next@lfdr.de>; Fri, 28 Mar 2025 07:47:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A705DA74432
+	for <lists+linux-next@lfdr.de>; Fri, 28 Mar 2025 07:57:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0C34189B9BA
-	for <lists+linux-next@lfdr.de>; Fri, 28 Mar 2025 06:47:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5469F177209
+	for <lists+linux-next@lfdr.de>; Fri, 28 Mar 2025 06:57:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 438781898FB;
-	Fri, 28 Mar 2025 06:47:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A246E21149C;
+	Fri, 28 Mar 2025 06:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="qNtDTwoo"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="D+uOyMHm"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D9528373;
-	Fri, 28 Mar 2025 06:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5AFEC2C8;
+	Fri, 28 Mar 2025 06:57:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743144422; cv=none; b=rH2wesNJ1RRcsgUOwKS80yctXaFy2P5GMGTA0WCRHrculF2deXBKfJbu6O3mLMLh7PN8g/4LKMHKJ1moJgE6vULHZRH/RNdn3buED5CwLA6tLAOGQtN5L8hZgp33Fjk1DgvWxn5KJXB4fzVhmUP3FrtmPjGG8u3/DPWT2r11MTQ=
+	t=1743145072; cv=none; b=OndCNCQHNihDxYX32o2o4py32gRPZdTRoDszpmGX7mhibOVDfQbTqblLlYYAyWV7rtnMd1X5Ho9/4C8wyClGOPE+z1etx/NsJdjQ/jBMZcReN8nL3ugJDwqiqEUn9d7XNJKZ5tJjTkp9koplp8wImaZOHuMOBrOFQiGVIaNUj2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743144422; c=relaxed/simple;
-	bh=OKR+lC5VJRVqCMVJoDGeDWGZtabsFBTTKPUGjfyXcz0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dnggRjElI96ISQbYKlqU0q7eK705pk4iEe5pMQ6mzf1QTT6WCu2tg8BeRLGaPtY1FfcXk4R7mEqI153ivx+cccJvG1IVO2zVvcAzMGeT1MWGFM05q9wUdJrzMpZpqpWA4dTv6WERcT6pch6P+qxkbiW7Hnwk9Mr+XWylJgIq83s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=qNtDTwoo; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1743145072; c=relaxed/simple;
+	bh=fqn1sNdp7XTxAsfS81siDrBYMb7spo0YQWmWiuH7buA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bkjin0LDW+YaZPm5sJbHhApWYKXkLRT7hnmporHJzcBt+SWu7Lj2RhcnyTqoAyu5Iq/TK/SFH/kYyU3M7ivAXE/hZYPoOzKu8RjdHKHJIMBvIQlUW/GXjz1o/SYnAI/DNQwgU69iSHmx/NO2m24Ar3dtbp2xY3kV+Gj09DgJH9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=D+uOyMHm; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=201702; t=1743144415;
-	bh=VkGqOeM+Cy9eGR0P4x50E0Xk5FAKhBuvVhH5nrmgQnY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=qNtDTwooxLqZIzf4t6XOqquiG12RAnqG+bYXoDUt9FoWsXAbtzmI7PqxxVPE06pLT
-	 4p4uHd5cLQsus0B0z4enKViaQR10lvjcIWBXGyHCex9OVBVNFGSQF7+aeVIDkhumPO
-	 W/7YnZITYbi/24+apPCQzavY3/sDWOflEonaEZ6jWKOMqN+qS5MbPysxFeZRBoU3wh
-	 ejE6EKQyVNumg8KoPBWEULZlX1Z2g3K8N7qxyjnBf+XMzKYY81tu7qxINXJcPfPNOP
-	 vdZlvbRU0iheo12XOAh+R2/q9BQG+4Va9QfdO+V5QU6h1N0WKFZTZIWhSwdC+Tt5ff
-	 8L2OKmEHDg6+Q==
+	s=201702; t=1743145066;
+	bh=gtrmpLFu9NFyCseORhGab0BfgU5yV+aysRBcn9FP0i4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=D+uOyMHmcAjwHmFTrJsJwFubUL+qwAjXnjlhHs+RjBwCXjDU4x7QvZM6lzO+/dKU6
+	 EnsgFNlE4mGHP904u8B/S+lxAQBnvwW6F/OgwIlvtBTdlUG5pxwjE7kx4/GXTcoXLZ
+	 AsBh/I9V5G+f/ASsKNSDRVnohE8EFxQnqmglvUUrHUSUbikvrhnACeaplQD6rNc24q
+	 5AhgOzKhNXtI2AbmoJEVkkKlaDvILO+f0CQkOBAWbmpRRByk+1cLGY6X1LVg5+2LlT
+	 uIvP+lR1vr/MQm4Q+wvjnlK6G+gZEuuJKWtlFA/2+L6EX5xJV5L8bq3jORZPFrnwmr
+	 K+XhLKexPco5Q==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZP9zz2tPfz4wcZ;
-	Fri, 28 Mar 2025 17:46:55 +1100 (AEDT)
-Date: Fri, 28 Mar 2025 17:46:54 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZPBDV5BmTz4wcn;
+	Fri, 28 Mar 2025 17:57:46 +1100 (AEDT)
+Date: Fri, 28 Mar 2025 17:57:45 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Kent Overstreet <kent.overstreet@linux.dev>, Linux Kernel Mailing List
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Nicolin Chen <nicolinc@nvidia.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the mm tree
-Message-ID: <20250328174654.06495cf9@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the iommufd tree
+Message-ID: <20250328175745.7ecfee87@canb.auug.org.au>
+In-Reply-To: <20250318213359.5dc56fd1@canb.auug.org.au>
+References: <20250318213359.5dc56fd1@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YZ5vVGqywSakGg=/C8GacBC";
+Content-Type: multipart/signed; boundary="Sig_/oCqlxps/yWr+Efk63b+z.1l";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/YZ5vVGqywSakGg=/C8GacBC
+--Sig_/oCqlxps/yWr+Efk63b+z.1l
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm tree, today's linux-next build (htmldocs) produced
-this warning:
+On Tue, 18 Mar 2025 21:33:59 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the iommufd tree, today's linux-next build (htmldocs)
+> produced this warning:
+>=20
+> Documentation/userspace-api/iommufd:323: include/uapi/linux/iommufd.h:103=
+3: CRITICAL: Unexpected section title or transition.
+>=20
+> -------------------------------------------------------------------------=
+ [docutils]
+> WARNING: kernel-doc 'scripts/kernel-doc -rst -enable-lineno include/uapi/=
+linux/iommufd.h' processing failed with: Documentation/userspace-api/iommuf=
+d:323: include/uapi/linux/iommufd.h:1033: (SEVERE/4) Unexpected section tit=
+le or transition.
+>=20
+> -------------------------------------------------------------------------
+>=20
+> Introduced by commit
+>=20
+>   50c842dd6cd3 ("iommufd: Add IOMMUFD_OBJ_VEVENTQ and IOMMUFD_CMD_VEVENTQ=
+_ALLOC")
 
-lib/sort.c:222: warning: expecting prototype for sort_r(). Prototype was fo=
-r __sort_r() instead
-lib/sort.c:1: warning: no structured comments found
-
-Introduced by commit
-
-  f79965d13aa1 ("lib/sort.c: add _nonatomic() variants with cond_resched()")
+Any progress on this?
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/YZ5vVGqywSakGg=/C8GacBC
+--Sig_/oCqlxps/yWr+Efk63b+z.1l
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfmRd4ACgkQAVBC80lX
-0GxM8gf8CRir7QeqMBhuNGly2sqJBvchj0mpZVVWiMF6RdrEskALGGMdfTB4tMI+
-RiG0V+2tPdJGaSwJfc4zSC5wfgt1+UjiQdmCIOwfXi2iu9GkBe5iaG8vfSSI7Phy
-UJo7s9x1PL7zQASszYiKA8YwHY9b3Nna7WqvaSrPsdEB6r1hbk+LRKjdtRPB8Ay+
-iO4co6v7Kh/Z7sGzHbpR1Fqv9wSJz+Ioa9qwpEb3tcoJMUcDgo8WRXzIWADsU3ht
-Z8JJQrDGv+7wKXjCRDawS0o86CKDu38KuhM4klifBvdQuDmjitDS6gEXpI0KlAJl
-Kz/yrWMZfzIvJC8TsJvVdMexLCWeGQ==
-=t7ay
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfmSGkACgkQAVBC80lX
+0GzVgQf9F7nfcBkbujW4wDZ4D2AvEXRZXNzyE1bczzn7VcxBNJs6HGM17w27WZ8l
+oNHTA+qOfMn1sGdTuYHcnfgVrhTOF5GYEF1J1XN2oDG0DMQOxmf8iuh6lXoqSGMp
+B6AQZsru/XvrjZ6x1dWRYwG8BEVztA1+R7QR0/8AQGoLPZSpVVOb3SztUS9z5GXY
+QdDLIpfc3LsyxYUnWphsLrs4RwMnrN3/krVbyd4gU/cNleOQocjIaal1iYQ0zfS/
+6mZ3Uuzbh5YI9mZbZYe9yrTQ4xTS00BpcbSqUXCvqX3Ra9osC6ysachXAH7id97n
+favvT+DaNqk9dT75RDYjZbkzmABsmw==
+=zwO2
 -----END PGP SIGNATURE-----
 
---Sig_/YZ5vVGqywSakGg=/C8GacBC--
+--Sig_/oCqlxps/yWr+Efk63b+z.1l--
 

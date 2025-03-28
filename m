@@ -1,79 +1,118 @@
-Return-Path: <linux-next+bounces-6053-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6054-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79784A74246
-	for <lists+linux-next@lfdr.de>; Fri, 28 Mar 2025 03:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D0936A742FB
+	for <lists+linux-next@lfdr.de>; Fri, 28 Mar 2025 05:19:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17AD717A737
-	for <lists+linux-next@lfdr.de>; Fri, 28 Mar 2025 02:29:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6668B17883F
+	for <lists+linux-next@lfdr.de>; Fri, 28 Mar 2025 04:19:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8158B20DD5E;
-	Fri, 28 Mar 2025 02:29:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3A411D554;
+	Fri, 28 Mar 2025 04:19:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kvDVeIK6"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jnpzymAv"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5BA13D89D;
-	Fri, 28 Mar 2025 02:29:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715C04A21;
+	Fri, 28 Mar 2025 04:19:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743128991; cv=none; b=iuWBgGBmzSmFRto4pFDFAupWv8boV8sVIRYWSnIGrwttiGOzhjcbMW5ovYEuxv0DVcJASwXawA7fO6szUj2qU+QHVXkz/BoR3sqrUvIFY7sXzd9q9lZ43wR+x4wvA+uiAc7gddc3CkKQ2Q/2s/9I9RKNMUg0DPgkaYYaU47l8Qs=
+	t=1743135591; cv=none; b=Npi2zoN83e7+jcXTNsZNg6sDgdGGu05oTTKU8+8pL7mxyoCC+1MPjpC3Myr7PGD1CF5kxsgs2Rrdr74TosVVnWv++W/gjoGeBenOaus8FW7UvaEsDBHpRct0TKFUWvnplLG2TGAIxO1r/8TnomdvwVbQaRCvS8d10WifsdByVNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743128991; c=relaxed/simple;
-	bh=fZjBQXKbzvp4PvIfvKMm/X6dbHEzS9oe17yDlVOH6iY=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=FFZcFcEcfceRCZJiKXJFuMWYo08vTakR+GRlXvmG9DUDVsY4+p03BMMUqUnG27zX+uKUH1+CIA8nq+eBcE9w6SCy3l0mIJWtdx3js9ooTXb/MZZo306RKMoZHwCHlInxea/QqthMCEMSN0PjMG767pXdlCOxwhbbATLYURsjfD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kvDVeIK6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 266EFC4CEDD;
-	Fri, 28 Mar 2025 02:29:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743128991;
-	bh=fZjBQXKbzvp4PvIfvKMm/X6dbHEzS9oe17yDlVOH6iY=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=kvDVeIK6nLtvnp5Ugw1+EXAjaxyWd45Cpym1dUHUmBb8ZW7Y5xLJ8UHLgSzCppVeT
-	 PUnvuzlqlQAuBpuNuiYtwZ0Xh+aouYJ+2EDKXsuaLsWEiOofwVukEFB9OcNrfpLQyZ
-	 nN51UN76iH3iJ07d2IVEbwUiQthKkfYYAq9JmjaoXLkCQQIe0SK2zRNjJiKxrYdaBl
-	 RlK5oTG3OCPzsJwncv0vZZGHarSMo1cISdD6N0uLn48SMT0rIIRdsksID2bXoZdt5k
-	 FSPa/ljnkK1tT1f5+EUsoHcTxQ7re1jnVKVS1tKfjSVWu75ZuNSIi/yNgGaN5gBoNi
-	 BdwlprbM6fbkA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AEBFB380AAEB;
-	Fri, 28 Mar 2025 02:30:28 +0000 (UTC)
-Subject: Re: [GIT PULL] kunit next update for Linux 6.15-rc1
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <2bc29da1-5c77-45a4-ab75-7afc6f9210be@linuxfoundation.org>
-References: <2bc29da1-5c77-45a4-ab75-7afc6f9210be@linuxfoundation.org>
-X-PR-Tracked-List-Id: <netdev.vger.kernel.org>
-X-PR-Tracked-Message-Id: <2bc29da1-5c77-45a4-ab75-7afc6f9210be@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-6.15-rc1
-X-PR-Tracked-Commit-Id: 2e0cf2b32f72b20b0db5cc665cd8465d0f257278
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a10c7949adf94356e56d5c8878f6fc3f25bd0c15
-Message-Id: <174312902723.2321319.13357008960559029910.pr-tracker-bot@kernel.org>
-Date: Fri, 28 Mar 2025 02:30:27 +0000
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Stephen Rothwell <sfr@canb.auug.org.au>, Kees Cook <keescook@chromium.org>, "kuba@kernel.org" <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Networking <netdev@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
+	s=arc-20240116; t=1743135591; c=relaxed/simple;
+	bh=CX8hHtZC3zHqhzfOkrbwnsalwwY4TaonL3D5GHpHHqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SvKISxkLBHO3Yiv7j+NznTYkyL4jAMDkKwySwWlsD/otO5njQ52DuuPMavwK1aIjaGT3lN4KVEiePdihkjXTg/IUtqpUIT7vt7/mjNnmsUKwZ6KScbkoSYbNyoWvrNMsCvzPJCH2hnlwnKPSDapRBS1XKOFbCFfsILedCbHX4Rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=jnpzymAv; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=201702; t=1743135584;
+	bh=1JI8Spr8CQJwiv/5zUbjBL/c6fAB1sqcE9kasiVrFP4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=jnpzymAv1zAA0RWvb91quB+H+w3pYz1u+Sk3y4FjosfTjwqwQlnBkbPffP/iBFpn/
+	 tyUK+2MnYG6l6Zxv8W5d6Yw/rCzNgaJf5CMFE4YglDxJZeRQyvAQX0BxHn6ZParBwZ
+	 nuPEwuimk0eEzaTAZIA0ts9y/6N1DbO2Q292dD1rCbCUAxidj6jJuo4yJtA4cA3bUh
+	 lGqyPrBvNpX2q1ECH7Nkc8iHNKMhvS0Zuqi8RahKvGBg5xLluuBJLxmq5EAcGjan4P
+	 9vMR5Em0kNGdLu1DqPNJw1fudx1tuf5QY80hnWp3EgU01DYUG6edINd/wHUo0JB5jq
+	 szsfPUiVCJh5A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZP6k74mgmz4x2c;
+	Fri, 28 Mar 2025 15:19:43 +1100 (AEDT)
+Date: Fri, 28 Mar 2025 15:19:42 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Juergen Gross <jgross@suse.com>, Konrad Rzeszutek Wilk
+ <konrad.wilk@oracle.com>, Stefano Stabellini <sstabellini@kernel.org>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>, Xen Devel
+ <xen-devel@lists.xenproject.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the xen-tip tree
+Message-ID: <20250328151942.4f7010c0@canb.auug.org.au>
+In-Reply-To: <20250326090310.4f162838@canb.auug.org.au>
+References: <20250326090310.4f162838@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/VaLoMydcT4kXtExIf_CvhVI";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-The pull request you sent on Wed, 26 Mar 2025 21:05:06 -0600:
+--Sig_/VaLoMydcT4kXtExIf_CvhVI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-kunit-6.15-rc1
+Hi Stephen,
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a10c7949adf94356e56d5c8878f6fc3f25bd0c15
+On Wed, 26 Mar 2025 09:03:10 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> The following commits are also in Linus Torvalds' tree as different
+> commits (but the same patches):
+>=20
+>   d9f2164238d8 ("PCI/MSI: Convert pci_msi_ignore_mask to per MSI domain f=
+lag")
+>   cae5129fccb1 ("PCI: vmd: Disable MSI remapping bypass under Xen")
+>=20
+> These are commits
+>=20
+>   c3164d2e0d18 ("PCI/MSI: Convert pci_msi_ignore_mask to per MSI domain f=
+lag")
+>   6c4d5aadf5df ("PCI: vmd: Disable MSI remapping bypass under Xen")
+>=20
+> in Linus' tree.
 
-Thank you!
+This is now causing an unnecessary conflict.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/VaLoMydcT4kXtExIf_CvhVI
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfmI14ACgkQAVBC80lX
+0Gzh/Af9FOi+c8QohCH1jPO+K+gzuS9jsyRS/J5hUklhzkTeytANSpuw+zJSBLzX
+QlxsbuMb7jmDQMRSZZzVT12rOirCjiUheNFWv+zW3Tu6BfUaIzLWmM3+fA9QIVef
+mfvZZxKhsY7WTCM90A4s0bPYMbT34GpNFL2NKkODmtxHzr+y0rEzCYPByhuceyaL
+ID7dpaXk9yMDiyqu+0ngRUV4D4Yihns/f5aqnePlI9vRUxU9fdqqZZTeahU9YEvl
+DbBKy42zaBWxn/m6FpND3y1XmMEEPsAIGK/howEm9d4vfPb6K6utCbkDURhApB+9
+JH0+nKQglk9ZowFvG86GBX1ljWfGHQ==
+=EJ1Z
+-----END PGP SIGNATURE-----
+
+--Sig_/VaLoMydcT4kXtExIf_CvhVI--
 

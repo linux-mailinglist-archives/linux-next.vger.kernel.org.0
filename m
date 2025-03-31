@@ -1,137 +1,119 @@
-Return-Path: <linux-next+bounces-6103-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6104-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56ABDA760E1
-	for <lists+linux-next@lfdr.de>; Mon, 31 Mar 2025 10:06:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6858A7631B
+	for <lists+linux-next@lfdr.de>; Mon, 31 Mar 2025 11:21:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D03716419C
-	for <lists+linux-next@lfdr.de>; Mon, 31 Mar 2025 08:06:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3826D3A69B4
+	for <lists+linux-next@lfdr.de>; Mon, 31 Mar 2025 09:21:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BAD81CAA6E;
-	Mon, 31 Mar 2025 08:06:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 177981D88A4;
+	Mon, 31 Mar 2025 09:21:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nYW7ZXwr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UPQzH+Ep"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698AF78F54
-	for <linux-next@vger.kernel.org>; Mon, 31 Mar 2025 08:06:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DBB91C5D5E
+	for <linux-next@vger.kernel.org>; Mon, 31 Mar 2025 09:21:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743408380; cv=none; b=lsgsKtfY+3px01YinyRoOADUSiH54fykv5o86NZujiJjaGUlAuBvO7S/itxFcQo87npT8YsRZOnTollPDQpj/uwEm3sj/Y5wghyONDGxcescmkxZ4SsR8dyxrtqbPkepAAk8Yg2JJlfWNLpPKUQ3uslmwWTtHi4J1umqs+vWelc=
+	t=1743412882; cv=none; b=Pp5FGL5pZM1dGsacbuWwxVOphg0xglQuzlmxsTWHbGz8m+ky9O9y5kMudwybSryCryzlkv/NS+GswNlGHDGw8guOdcVtt2PJC8LT0in0o+hBc+owCzUa/JASr951zgkrsB0jAjBjOgTjlFW+fe9VCpjfPb3GBjGiXFtSlNSq0Zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743408380; c=relaxed/simple;
-	bh=ZfJC0SeKdJDQbt1YZCchBbUcg7nBqFPWQB9hQRz76Os=;
+	s=arc-20240116; t=1743412882; c=relaxed/simple;
+	bh=A/q95Mszo7oI+7BMFg+K7gqrw3B5Kfb6DstaYhYmUfA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XHSuB+DaYqQAw532OCXLl5KJFE2qZuOMmA2NeFmmazJ8Ybx+o9RO7SXV0cv/z82DfMZ1C2ru/DYsAJNI446C+bV+TJcrOYVSUParjQamUX+bx5VgQ3/Mx8WI/2rN8WOXya/WX4JRzFJqLKTe+4RAqacbIkY+njZeoDZN8qHmAy0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nYW7ZXwr; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cf05f0c3eso27774325e9.0
-        for <linux-next@vger.kernel.org>; Mon, 31 Mar 2025 01:06:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1743408377; x=1744013177; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dem/AHZR7qF3cH79b+8VdRbhMuCiw79+oYYuDn1nDoI=;
-        b=nYW7ZXwrLX1j6ndkWjLKlFmTOP8IFtRO1aRj9OhlprisCFwJQtJ3RKPln49b6Mmp95
-         Y8nVE9GXzmYUdcO77/7AF5MHvhE4CELpr9VsVXZbK60CKet1wQGbykgDrFtiBr4SD1n8
-         que9RNF7Oz8U3oL3GrTN/j0U6yTYUgBxC9EYs9sAUeoTN+sDAtMCzmAqIvKbSvt3y3C2
-         y+YsIHuNJ14uqwHNrPa13jBfA02VwS13F4dlCaUkaGzbUBkeGIJ1el/YzMAJqxftHNzd
-         rDWmFcZYwkJsux5d+ROGmo6ACx2FeB6/+Ks4q5BrFeUuV1yfXsffACZGuXbp8wSbeFzw
-         dM3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743408377; x=1744013177;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dem/AHZR7qF3cH79b+8VdRbhMuCiw79+oYYuDn1nDoI=;
-        b=U6pbvzK6H4Qz0MvMMVGzcrDH8Q7qwkruhXl+sjJAEGukgBhuwF8rHN0Zs1gRAl5sQI
-         sc/3Q4JI+x5fzQWxfwofQb1J24UpUUy1mHqBem+x9U0YIAEG6QQufX1P2uYv4l7midir
-         Ln38J0+zsZTmnKK16uqNO8QfKbkOd2KFB3jRZWREBrU1OPscZkD4TcLKwl3yHXrAzyHi
-         LjnIFHoG+HaMSWjzGLA756O8yJcEvpQvYrScbm7LqePrvGEhoReIbzw2GEhsaKsGaghh
-         zjUGJYN+X6xz5APHtgd8B5PlfCyojP7ohk8Wi1hV7vwps9JS5QSAaUYEKpUNCrPVFSsV
-         j31g==
-X-Forwarded-Encrypted: i=1; AJvYcCWGS25vQsWhfOVr8GW2d2/96woTzk85AT1LYYeTmqcIRH3nBPH+/lWJQiWM0djqZ4eniJGB+eOKhcYV@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbbHEbv0nGmXwdN8Z3YmG/Q/55xtat0uqCaZLVbXcEMSgiRc3q
-	M4C/xB4X73cOSrmcktUnoD+jc9ua7S56IrtvkxMbVHQyK2HV9V8EulLP0S63W1o=
-X-Gm-Gg: ASbGncv34POmVbXShhoU5fi3wywMzmjXsgTlJCYNNR7U6QphkVzBVuEydXLjr13vGrc
-	MSTxX2/3JIC59FKtIG+w6ZOdKGP/CpbrM8ZZkdP30eoUMBPuCfadOFiMxEQ+5Hn+LmdY+1dmGJf
-	BnjjbkiJrGHTgPYpkvS75QFJTeGbgZx+SVVHR+rGR9SRHamF/k8Lkd8iy+mLbHp5gKQ4qdQlRk1
-	ZL6cJ/C51pyt7HR9YAARac7oPvDgDOKggI8ljEo/PsRQH7vQEV4WWOuw/g6ufxJFYA6gnFmPNW0
-	VrLQXYa1VC+teFp0XBpnHhjgZ274xz2G7/Hn5KEtt3t3NvpkcA==
-X-Google-Smtp-Source: AGHT+IH4vJ/KqgunlkK1ej1cXacAghtjETA+BJXj8kGxSrm8d1nKUfuPzSv/zW4Kld1su7UgbTv4Jw==
-X-Received: by 2002:a05:600c:4f0d:b0:43c:f597:d589 with SMTP id 5b1f17b1804b1-43db62b5b62mr61296165e9.27.1743408376550;
-        Mon, 31 Mar 2025 01:06:16 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-43d8fba3ef1sm117879915e9.2.2025.03.31.01.06.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Mar 2025 01:06:16 -0700 (PDT)
-Date: Mon, 31 Mar 2025 11:06:13 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: David Gow <davidgow@google.com>
-Cc: Alessandro Carminati <acarmina@redhat.com>,
-	linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-	Daniel Diaz <daniel.diaz@linaro.org>,
-	Arthur Grillo <arthurgrillo@riseup.net>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Naresh Kamboju <naresh.kamboju@linaro.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Ville Syrjala <ville.syrjala@linux.intel.com>,
-	Daniel Vetter <daniel@ffwll.ch>, Guenter Roeck <linux@roeck-us.net>,
-	Alessandro Carminati <alessandro.carminati@gmail.com>,
-	Jani Nikula <jani.nikula@intel.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: Re: [PATCH] kunit: fixes backtrace suppression test module
- description
-Message-ID: <8e4dcf64-898c-4334-8124-598964089f4a@stanley.mountain>
-References: <20250329150529.331215-1-acarmina@redhat.com>
- <CABVgOS=s-NgS1tPOOPDstuVfTmsW9H0kP8nEQmtfFiubQeyvWw@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tG/gz129McFq6hZ8jDAaEQuy5+QuKP7Lx2Ee4Ipdh53e9fkTTyCuvimbvFa78z0kZKK0Il6r/PH8AAwUePyp2VHtkN8kE+COcN+vVpsc4UdmuTS46SRfLPouVbTslNNBUywPbKF6J08553X+5QVp+mAw5JAhLVTssCluYlXQbaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UPQzH+Ep; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1743412879;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BPld2TMVKNvxrI6q1VRGJO7d7XjErhaFH+sNM1huaWs=;
+	b=UPQzH+Epv0mf9gj1j1Eh1YygIXhLw7+OlFtJNIfw9RL6kUth0JhDcD7VC5CWzd84fCkXS2
+	oZmjNCIAOfBCirgZeQi5eyvNtbxXgmjlmb3wjKeY4aH3liXk0aL5S3OnCRr/bzJ3SSXbxZ
+	ogS5SSVbyX7FTzZjb8MU3vKL3R3S6Xk=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-519-YYmS3ViWNMejKwcS_KtyHw-1; Mon,
+ 31 Mar 2025 05:21:15 -0400
+X-MC-Unique: YYmS3ViWNMejKwcS_KtyHw-1
+X-Mimecast-MFC-AGG-ID: YYmS3ViWNMejKwcS_KtyHw_1743412874
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6DB971956087;
+	Mon, 31 Mar 2025 09:21:13 +0000 (UTC)
+Received: from fedora (unknown [10.72.120.27])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 60FA41955BC0;
+	Mon, 31 Mar 2025 09:21:06 +0000 (UTC)
+Date: Mon, 31 Mar 2025 17:21:01 +0800
+From: Ming Lei <ming.lei@redhat.com>
+To: Valdis =?utf-8?Q?Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Jens Axboe <axboe@kernel.dk>,
+	linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-block@vger.kernel.org
+Subject: Re: next-20250327 - lockdep whine and USB issues at boot
+Message-ID: <Z-peffTZ7lVo3m5n@fedora>
+References: <8775.1743185453@turing-police>
+ <Z-dVr6cIyrOID0J0@fedora>
+ <7755.1743228130@turing-police>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CABVgOS=s-NgS1tPOOPDstuVfTmsW9H0kP8nEQmtfFiubQeyvWw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7755.1743228130@turing-police>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-On Sun, Mar 30, 2025 at 01:11:59PM +0800, David Gow wrote:
-> On Sat, 29 Mar 2025 at 23:06, Alessandro Carminati <acarmina@redhat.com> wrote:
+On Sat, Mar 29, 2025 at 02:02:10AM -0400, Valdis Klētnieks wrote:
+> On Sat, 29 Mar 2025 10:06:39 +0800, Ming Lei said:
+> > On Fri, Mar 28, 2025 at 02:10:53PM -0400, Valdis Kl??tnieks wrote:
+> > > Saw this during boot on a Dell Inspiron 5559 laptop.  
+> > > 
+> > > In addition, the external USB ports all gave up, rendering a USB mouse and a
+> > > USB external drive totally dead in the water.  May or may not be related, I didn't
+> > > dig too far into it.
 > >
-> > Adds module description to the backtrace suppression test
-> >
-> > Fixes:  ("19f3496") kunit: add test cases for backtrace warning suppression
-> >
-> > Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
-> > ---
+> > It shouldn't be related to the warning.
 > 
-> The "Fixes" tag here should be immediately before the Signed-off-by
-> line, without a newline. Also, ideally the format should be something
-> like:
-> Fixes: d03d078df162 ("kunit: add test cases for backtrace warning suppression")
+> > For this lockdep warning, feel free to try patch in the following link:
+> >
+> > https://lore.kernel.org/linux-block/Z-dUCLvf06SfTOHy@fedora/
 > 
+> After applying that patch, USB *didn't* die during boot.  So apparently
+> *something* changed.  
 
-Yeah.  Everyone should configure the default hash length to 12.
+That is surprising, and maybe the USB die isn't 100% thing.
 
-git config set --global core.abbrev 12
+> 
+> Also, the patch merely caused a *different* lockdep warning.
+> Rather than  &q->q_usage_counter(io) and &q->elevator_lock, the
+> new one is &q->elevator_lock versus pcpu_alloc_mutex...
+> 
+> Looks like it's a bit more convoluted than first looked?
 
-I generate my fixes tags like so:
+That is another story wrt. freeze lock, fs_reclaim & percpu allocator
+lock, looks one real risk, I will try to work one patch and see if
+all can be addressed.
 
-#!/bin/bash
 
-git log -1 --format='Fixes: %h ("%s")' $*
 
-regards,
-dan carpenter
+Thanks,
+Ming
 
 

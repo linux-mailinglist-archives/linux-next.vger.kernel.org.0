@@ -1,117 +1,137 @@
-Return-Path: <linux-next+bounces-6102-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6103-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B726A76098
-	for <lists+linux-next@lfdr.de>; Mon, 31 Mar 2025 09:53:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56ABDA760E1
+	for <lists+linux-next@lfdr.de>; Mon, 31 Mar 2025 10:06:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BB273AB113
-	for <lists+linux-next@lfdr.de>; Mon, 31 Mar 2025 07:52:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D03716419C
+	for <lists+linux-next@lfdr.de>; Mon, 31 Mar 2025 08:06:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 239AE1C84A0;
-	Mon, 31 Mar 2025 07:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BAD81CAA6E;
+	Mon, 31 Mar 2025 08:06:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AuUPLgdA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nYW7ZXwr"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C07F1C1F22;
-	Mon, 31 Mar 2025 07:52:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698AF78F54
+	for <linux-next@vger.kernel.org>; Mon, 31 Mar 2025 08:06:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743407581; cv=none; b=TNvwifs82nuDImF4A115Wu2E5+AVYsiEpVm6A9FLVZf7lBF1c7hecp6wA+Q6qeRdclseQ8Gxxrm15Cmfc/3GjjtiKg3Vb2PmxO9KDGhgdKWiC7tXGxmszggJC3CoiKgZn+GDADKk50wa3oT/mSaSxv4X582Er7yeORCO9C8+TNo=
+	t=1743408380; cv=none; b=lsgsKtfY+3px01YinyRoOADUSiH54fykv5o86NZujiJjaGUlAuBvO7S/itxFcQo87npT8YsRZOnTollPDQpj/uwEm3sj/Y5wghyONDGxcescmkxZ4SsR8dyxrtqbPkepAAk8Yg2JJlfWNLpPKUQ3uslmwWTtHi4J1umqs+vWelc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743407581; c=relaxed/simple;
-	bh=nVsr6h/d6wxlnXYTNX2+zfMFUgOmP7kxOHDWcKbB0O0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rEkwK65ACUJJRImVv9KffJXZpzxl1VHA06m3zAD+KFSuzaO/L5jfP4UPwe9gXZXCoDRUSwhNqGYZvNTKmfBJSv7vxu17RNtk1Algx2CbsztYtCyuQXM1lhH5zZLJjVFJ2cWymINdaq1jlyoRUSeLA2JvoGK3gUmGWXyDll5jbHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AuUPLgdA; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-301317939a0so951016a91.2;
-        Mon, 31 Mar 2025 00:52:59 -0700 (PDT)
+	s=arc-20240116; t=1743408380; c=relaxed/simple;
+	bh=ZfJC0SeKdJDQbt1YZCchBbUcg7nBqFPWQB9hQRz76Os=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XHSuB+DaYqQAw532OCXLl5KJFE2qZuOMmA2NeFmmazJ8Ybx+o9RO7SXV0cv/z82DfMZ1C2ru/DYsAJNI446C+bV+TJcrOYVSUParjQamUX+bx5VgQ3/Mx8WI/2rN8WOXya/WX4JRzFJqLKTe+4RAqacbIkY+njZeoDZN8qHmAy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nYW7ZXwr; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cf05f0c3eso27774325e9.0
+        for <linux-next@vger.kernel.org>; Mon, 31 Mar 2025 01:06:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1743407579; x=1744012379; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DQKkjiuT794y4BQUqltzWiJ7Uf7+ew47mA8K1XybC9s=;
-        b=AuUPLgdAjUO48mLcq+pkSqSjoju+t0SUxdBUFms0iUBNqUlxyy7sXReI3zqjGgCXln
-         UBlAL8t4Lte535M1yd3MJapF/cHNWyuahAT0WejIZr2x9+PldnXtAEl3STuJeXT+hcYP
-         AalIz30/5/BwoERXg2ch4wG4ybRmVyOniM3D0kSuP57dOe2A4tGfriMD41wPJLCR3JNE
-         xKaFqcuD5jbgY4micXJZv1a4qY4HmhraV06iZyhjI6RXlV1hhbqVmMOfhulwOYZb8FOf
-         eYEiqog8SlbWtlTk2zWrUrFRRh+eYJ84ls+1Y+iJQUOW+Z8bqbOyKW1m9aO1lhIBaZNR
-         VKdw==
+        d=linaro.org; s=google; t=1743408377; x=1744013177; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dem/AHZR7qF3cH79b+8VdRbhMuCiw79+oYYuDn1nDoI=;
+        b=nYW7ZXwrLX1j6ndkWjLKlFmTOP8IFtRO1aRj9OhlprisCFwJQtJ3RKPln49b6Mmp95
+         Y8nVE9GXzmYUdcO77/7AF5MHvhE4CELpr9VsVXZbK60CKet1wQGbykgDrFtiBr4SD1n8
+         que9RNF7Oz8U3oL3GrTN/j0U6yTYUgBxC9EYs9sAUeoTN+sDAtMCzmAqIvKbSvt3y3C2
+         y+YsIHuNJ14uqwHNrPa13jBfA02VwS13F4dlCaUkaGzbUBkeGIJ1el/YzMAJqxftHNzd
+         rDWmFcZYwkJsux5d+ROGmo6ACx2FeB6/+Ks4q5BrFeUuV1yfXsffACZGuXbp8wSbeFzw
+         dM3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743407579; x=1744012379;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DQKkjiuT794y4BQUqltzWiJ7Uf7+ew47mA8K1XybC9s=;
-        b=VAkzLvASYu4AhKJ0eum0e+bjh1KUH9YsEk11dPg7NcK+Z+Drw2lv1XRrcrf02EgIvb
-         RuV9RzpYuooze61gR+19OT+g0IjeCBKWxnX76eMKYzhCBUexlSlrSk52NwV2xtOF1WAK
-         +28VbJIK3jaiZJLvXVwmuHvDrzrBReS3X8DsIIoaY7Y+vLX1qhsri60QIQZBYgz3R6IR
-         RJxwixcQ7GNcf5eCFyXIYXp2IX2WI15QHv1hAwVc6KUMYgrgb8FpejNVV84N+Pz2pXUL
-         awwPu9n11ClfRz0/u2Bs1v9N3lZDaQtLK+OWYIvSWMulCw6ztWjCuTRM1AykTy29GTT9
-         aNyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVU9TeBa+IwCAE5hD714Nt5tIjvnf6RbbTxB+Jx8aA+/uduR6rZEd/QSn3IF9vQi4c5jMfPuo1eMd3Ey3Y=@vger.kernel.org, AJvYcCVkTjQnbTvZqXmRUy38jVPklrQ7cXMHTwKvuFhhBq9mnTwTZ+do4SwGqDMomxigwUzhgCJ7SLtXKC/SCw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBSEQZxaPi8In79m1Xzz44ZD5Jzl+jpnrHI0cAoBGMig/A9fsw
-	DAUB7cagMaoC3qGM4U4rTk8+KUieg7+cD4/MlOlxc+05ptoRgskBL+9i6Ggn4Ws+EQxjXk8eEsp
-	dbxmBH0zpqn0IuVnsU2MvKfu0mjXRprg5
-X-Gm-Gg: ASbGncvdXRVCU7RK7Y/9JboK3n0O/+hKyltM2AXk9HObZkQ5ORLt45EzqBEheWnaYIA
-	NddsRQ4McUkXHOUFzXTmY20pUXVdlpgiItcMnTFcfUFAMzujGO6wC+9t0hSlR0RT3gcHIZgMn+B
-	EM81rVez3Xe8QrD5OPIZAsK783Hg==
-X-Google-Smtp-Source: AGHT+IExlfy+kCtZtMaJcYDQP5xOqBKVUmeEGNbJM8Eb6hjgi5fuPefp4DGFeV5Xv5oQUNQnx5Z2Lw31XHXWhigW2C0=
-X-Received: by 2002:a17:90b:1d11:b0:2fe:a747:935a with SMTP id
- 98e67ed59e1d1-3053213f401mr3653033a91.4.1743407578651; Mon, 31 Mar 2025
- 00:52:58 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1743408377; x=1744013177;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dem/AHZR7qF3cH79b+8VdRbhMuCiw79+oYYuDn1nDoI=;
+        b=U6pbvzK6H4Qz0MvMMVGzcrDH8Q7qwkruhXl+sjJAEGukgBhuwF8rHN0Zs1gRAl5sQI
+         sc/3Q4JI+x5fzQWxfwofQb1J24UpUUy1mHqBem+x9U0YIAEG6QQufX1P2uYv4l7midir
+         Ln38J0+zsZTmnKK16uqNO8QfKbkOd2KFB3jRZWREBrU1OPscZkD4TcLKwl3yHXrAzyHi
+         LjnIFHoG+HaMSWjzGLA756O8yJcEvpQvYrScbm7LqePrvGEhoReIbzw2GEhsaKsGaghh
+         zjUGJYN+X6xz5APHtgd8B5PlfCyojP7ohk8Wi1hV7vwps9JS5QSAaUYEKpUNCrPVFSsV
+         j31g==
+X-Forwarded-Encrypted: i=1; AJvYcCWGS25vQsWhfOVr8GW2d2/96woTzk85AT1LYYeTmqcIRH3nBPH+/lWJQiWM0djqZ4eniJGB+eOKhcYV@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbbHEbv0nGmXwdN8Z3YmG/Q/55xtat0uqCaZLVbXcEMSgiRc3q
+	M4C/xB4X73cOSrmcktUnoD+jc9ua7S56IrtvkxMbVHQyK2HV9V8EulLP0S63W1o=
+X-Gm-Gg: ASbGncv34POmVbXShhoU5fi3wywMzmjXsgTlJCYNNR7U6QphkVzBVuEydXLjr13vGrc
+	MSTxX2/3JIC59FKtIG+w6ZOdKGP/CpbrM8ZZkdP30eoUMBPuCfadOFiMxEQ+5Hn+LmdY+1dmGJf
+	BnjjbkiJrGHTgPYpkvS75QFJTeGbgZx+SVVHR+rGR9SRHamF/k8Lkd8iy+mLbHp5gKQ4qdQlRk1
+	ZL6cJ/C51pyt7HR9YAARac7oPvDgDOKggI8ljEo/PsRQH7vQEV4WWOuw/g6ufxJFYA6gnFmPNW0
+	VrLQXYa1VC+teFp0XBpnHhjgZ274xz2G7/Hn5KEtt3t3NvpkcA==
+X-Google-Smtp-Source: AGHT+IH4vJ/KqgunlkK1ej1cXacAghtjETA+BJXj8kGxSrm8d1nKUfuPzSv/zW4Kld1su7UgbTv4Jw==
+X-Received: by 2002:a05:600c:4f0d:b0:43c:f597:d589 with SMTP id 5b1f17b1804b1-43db62b5b62mr61296165e9.27.1743408376550;
+        Mon, 31 Mar 2025 01:06:16 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-43d8fba3ef1sm117879915e9.2.2025.03.31.01.06.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Mar 2025 01:06:16 -0700 (PDT)
+Date: Mon, 31 Mar 2025 11:06:13 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: David Gow <davidgow@google.com>
+Cc: Alessandro Carminati <acarmina@redhat.com>,
+	linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+	Daniel Diaz <daniel.diaz@linaro.org>,
+	Arthur Grillo <arthurgrillo@riseup.net>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Ville Syrjala <ville.syrjala@linux.intel.com>,
+	Daniel Vetter <daniel@ffwll.ch>, Guenter Roeck <linux@roeck-us.net>,
+	Alessandro Carminati <alessandro.carminati@gmail.com>,
+	Jani Nikula <jani.nikula@intel.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: [PATCH] kunit: fixes backtrace suppression test module
+ description
+Message-ID: <8e4dcf64-898c-4334-8124-598964089f4a@stanley.mountain>
+References: <20250329150529.331215-1-acarmina@redhat.com>
+ <CABVgOS=s-NgS1tPOOPDstuVfTmsW9H0kP8nEQmtfFiubQeyvWw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250331160726.4e3d93dd@canb.auug.org.au>
-In-Reply-To: <20250331160726.4e3d93dd@canb.auug.org.au>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 31 Mar 2025 09:52:45 +0200
-X-Gm-Features: AQ5f1JoDIIjMX-klTP4q5jHdGxKVyW3--zvZLHd4NxngTGQHoznPsrL35nSiuD4
-Message-ID: <CANiq72=LaRJK22Z6=KppMea_vk-34-UixTtQKFmjW6EFBytfrQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with the loongarch tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	WANG Rui <wangrui@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABVgOS=s-NgS1tPOOPDstuVfTmsW9H0kP8nEQmtfFiubQeyvWw@mail.gmail.com>
 
-On Mon, Mar 31, 2025 at 7:07=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Today's linux-next merge of the rust tree got a conflict in:
->
->   rust/Makefile
->
-> between commit:
->
->   13c23cb4ed09 ("rust: Fix enabling Rust and building with GCC for LoongA=
-rch")
->
-> from the loongarch tree and commit:
->
->   6b2dab17d6fa ("rust: pass correct target to bindgen on Usermode Linux")
->
-> from the rust tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
+On Sun, Mar 30, 2025 at 01:11:59PM +0800, David Gow wrote:
+> On Sat, 29 Mar 2025 at 23:06, Alessandro Carminati <acarmina@redhat.com> wrote:
+> >
+> > Adds module description to the backtrace suppression test
+> >
+> > Fixes:  ("19f3496") kunit: add test cases for backtrace warning suppression
+> >
+> > Signed-off-by: Alessandro Carminati <acarmina@redhat.com>
+> > ---
+> 
+> The "Fixes" tag here should be immediately before the Signed-off-by
+> line, without a newline. Also, ideally the format should be something
+> like:
+> Fixes: d03d078df162 ("kunit: add test cases for backtrace warning suppression")
+> 
 
-Looks good to me, thanks!
+Yeah.  Everyone should configure the default hash length to 12.
 
-Cheers,
-Miguel
+git config set --global core.abbrev 12
+
+I generate my fixes tags like so:
+
+#!/bin/bash
+
+git log -1 --format='Fixes: %h ("%s")' $*
+
+regards,
+dan carpenter
+
 

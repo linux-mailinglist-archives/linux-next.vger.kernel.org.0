@@ -1,183 +1,113 @@
-Return-Path: <linux-next+bounces-6124-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6125-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A320BA772F1
-	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 05:22:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9DCFA77390
+	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 06:39:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F2EA16AF33
-	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 03:22:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF7CE188D4CD
+	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 04:40:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0868F1CBE8C;
-	Tue,  1 Apr 2025 03:22:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAA291519B8;
+	Tue,  1 Apr 2025 04:39:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BVoJLmb7"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CHl3eL9x"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8783CB673;
-	Tue,  1 Apr 2025 03:22:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300B785C5E;
+	Tue,  1 Apr 2025 04:39:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743477726; cv=none; b=H1Gl1E58ohUvWi0lKFMqCLopFtATZY13OyBFhN0efsmB3xpePcdYC12p+CIjVSjRZ8RAoM/cOpCL+s+mzWpX4+/mL0qoORObYUbnYLgHgRpYyXFVqJ4ZxvbmCJiFpesUp3Pr5m9o4lOLVVoqJGOc5ZZzVnbZ/wbbYmBv9x+Wqgg=
+	t=1743482391; cv=none; b=H1nFLCy/MX0NfYP24rtNGXA4tJ6h8SVZaBy6me0kEcU/IJx2xG1GFq2XqT1V1HJESIs2tC1taCfSFKhn7rTYXzTtW/3fdcWZ0gRuIhmKm5plTwXqYfbsOrvePkf2M1oMrgc1VZ6ncvYMUV0xTuXFb24aVHroLQP7ranky6JR2Sg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743477726; c=relaxed/simple;
-	bh=VZw2pYV3IXXQg2xhNsRRQIyVlevcvBLgPaL//dheS5A=;
+	s=arc-20240116; t=1743482391; c=relaxed/simple;
+	bh=GS1OlFhgyF3Siu/oIkub775avi42WrJAVoFodgNIMDk=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PP0Snl6EFibFlrjug2oSzoMtxEzDZOZV7OhoeNRKTgpc5lfuPhjZ7dklYfMQM8pD3wYHtJQb83RdnrlhzjAUpZQ8c4g1XZSsZ0kTsibhX3ipWch24QYDyIerGph3m1+8AXpPB/M8zJGcCuaU4jW088s4zqbmtMXMs97+O1OwCus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BVoJLmb7; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=gcB2rkSR+N/0vIxG06V/K2hBJro8dQAzGT0Vw1dmX+m4srnjNub/NRjtfPAUxjZPDbZ/ryEz0H2y57V6AoO+UgSWLEthYD3EBmrfVzN5SvdqSzTWf1pZAIvdqCULRLfGOhqAcCW00x5t/4wV4/kX/vF67Fbx7jeRhSY4NnoJCmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CHl3eL9x; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1743477721;
-	bh=6kz1VwHKILsWDlid7TS14Nwv5qyWGtTI62w3/+MpU0U=;
+	s=202503; t=1743482385;
+	bh=xYywIpFSmG3+CS3r2bqmQwXU4y1Y3SfoDTT4ElxLcZw=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=BVoJLmb7NjtBy76umJa0nqqJWk8bbTfGJ86VonXS8apBz7wwB8o3w3yLeGJQfybdn
-	 9wxm5JuDaDHlQ2yxL7BntkLjN2KVDYMRn645mF+nrJTeo95e4BQOFvYLkbg2BcGNOs
-	 wYX96zZkaKVj3L6UF9RGhAOswI2jArlR+dGElCnOwE66lKMJ3jWD+zbBLZJDEOz14L
-	 MmLB1PWWBpU6r43zUydmiBFzEaWVT0PjAMKSW05zIG7nPNS4vKcIjMtqvZW9kRslFS
-	 ce8q5wIkx6Y7+1Cnfr0UJYo7rNt/iX46mdHF8OAF8rO/gjhV8uM1Bl0m9MJvUJUl8j
-	 l/qpHLnkzlj7w==
+	b=CHl3eL9xe9eaxDga0bEVIA5P3ty0w93Xa7eq8d90hrFcjJjWu0kxBdu+Z2G8+rTAh
+	 F2I4KG9Fyk+wtokmRqvNxTkK17i6yXws9+cWJQNlORvxw585doR7DtY638M20xuLO2
+	 FgKwW77M+SRILTiIEuw2OtwjjxhiGe3e1vfYx36dcklLDyPRYPCURc0FwH0XK27Ymn
+	 7pPvtW7QDoo1NbvfJcFGFV5BPvOOIRj8mAKdg8pjTsYN1F/0uqEkJxdkoSdCbIkvFq
+	 mKveQaRANF+y9SmkCpHb+rgI+nbK7UdmoQg2X2TUnILGZqr5JM20QS1DJGcGhyhvjf
+	 RRNaoy4oJurwQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZRYFh4jbtz4x2g;
-	Tue,  1 Apr 2025 14:22:00 +1100 (AEDT)
-Date: Tue, 1 Apr 2025 14:21:59 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZRZzM719sz4x3p;
+	Tue,  1 Apr 2025 15:39:42 +1100 (AEDT)
+Date: Tue, 1 Apr 2025 15:39:41 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Miguel Ojeda <ojeda@kernel.org>, Greg KH <greg@kroah.com>
-Cc: Abdiel Janulgue <abdiel.janulgue@gmail.com>, Danilo Krummrich
- <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>, Borislav Petkov
+ <bp@alien8.de>, Tony Luck <tony.luck@intel.com>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>, Shiju Jose
+ <shiju.jose@huawei.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the rust tree with the driver-core
- tree
-Message-ID: <20250401142159.6f468edf@canb.auug.org.au>
-In-Reply-To: <20250321185630.566dc075@canb.auug.org.au>
-References: <20250321185630.566dc075@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the edac tree
+Message-ID: <20250401153941.517aac17@canb.auug.org.au>
+In-Reply-To: <20250228185102.15842f8b@canb.auug.org.au>
+References: <20250228185102.15842f8b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/i08cdZDqBePamcHQk8DzCXY";
+Content-Type: multipart/signed; boundary="Sig_/+6emJ0YDFW9isGnkJ/F5rUC";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/i08cdZDqBePamcHQk8DzCXY
+--Sig_/+6emJ0YDFW9isGnkJ/F5rUC
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Fri, 21 Mar 2025 18:56:30 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Fri, 28 Feb 2025 18:51:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> Today's linux-next merge of the rust tree got a semantic conflict in:
+> After merging the edac tree, today's linux-next build (htmldocs) produced
+> this warning:
 >=20
->   samples/rust/rust_dma.rs
+> Documentation/edac/index.rst: WARNING: document isn't included in any toc=
+tree
 >=20
-> between commit:
+> Introduced by commit
 >=20
->   7b948a2af6b5 ("rust: pci: fix unrestricted &mut pci::Device")
->=20
-> from the driver-core tree and commit:
->=20
->   9901addae63b ("samples: rust: add Rust dma test sample driver")
->=20
-> from the rust tree.
->=20
-> I fixed it up (I applied the following supplied resolution, thanks Danilo)
-> and can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 21 Mar 2025 18:21:27 +1100
-> Subject: [PATCH] fix up for "samples: rust: add Rust dma test sample driv=
-er"
->=20
-> interacting with commit
->=20
->   7b948a2af6b5 ("rust: pci: fix unrestricted &mut pci::Device")
->=20
-> from the driver-core tree.
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  samples/rust/rust_dma.rs | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/samples/rust/rust_dma.rs b/samples/rust/rust_dma.rs
-> index 908acd34b8db..874c2c964afa 100644
-> --- a/samples/rust/rust_dma.rs
-> +++ b/samples/rust/rust_dma.rs
-> @@ -4,10 +4,10 @@
->  //!
->  //! To make this driver probe, QEMU must be run with `-device pci-testde=
-v`.
-> =20
-> -use kernel::{bindings, dma::CoherentAllocation, pci, prelude::*};
-> +use kernel::{bindings, device::Core, dma::CoherentAllocation, pci, prelu=
-de::*, types::ARef};
-> =20
->  struct DmaSampleDriver {
-> -    pdev: pci::Device,
-> +    pdev: ARef<pci::Device>,
->      ca: CoherentAllocation<MyStruct>,
->  }
-> =20
-> @@ -48,7 +48,7 @@ impl pci::Driver for DmaSampleDriver {
->      type IdInfo =3D ();
->      const ID_TABLE: pci::IdTable<Self::IdInfo> =3D &PCI_TABLE;
-> =20
-> -    fn probe(pdev: &mut pci::Device, _info: &Self::IdInfo) -> Result<Pin=
-<KBox<Self>>> {
-> +    fn probe(pdev: &pci::Device<Core>, _info: &Self::IdInfo) -> Result<P=
-in<KBox<Self>>> {
->          dev_info!(pdev.as_ref(), "Probe DMA test driver.\n");
-> =20
->          let ca: CoherentAllocation<MyStruct> =3D
-> @@ -64,7 +64,7 @@ fn probe(pdev: &mut pci::Device, _info: &Self::IdInfo) =
--> Result<Pin<KBox<Self>>
-> =20
->          let drvdata =3D KBox::new(
->              Self {
-> -                pdev: pdev.clone(),
-> +                pdev: pdev.into(),
->                  ca,
->              },
->              GFP_KERNEL,
-> --=20
-> 2.45.2
+>   db99ea5f2c03 ("EDAC: Add support for EDAC device features control")
 
-This is now a conflict between the driver-core tree and Linus' tree.
+I am still getting this warning, but that commit is now in Linus' tree :-(
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/i08cdZDqBePamcHQk8DzCXY
+--Sig_/+6emJ0YDFW9isGnkJ/F5rUC
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfrW9cACgkQAVBC80lX
-0GzwFgf8CHfegwu2VpWF7Hc87eAsNBn5N2yrHmYcxyK7d5rV9WimuByxKpt3EJ+9
-9qgCnKtaOA0hQ0M8y4rcnv5AkDVaKrG/w/Rayfa4EweX8PpgpO67TBHbUpx7GZyW
-7YpsvL50XbtVSvpMxXLGI+HLY66HPdsXKZ9wQGrdU3KUv6IrtAx+xA/7EBZX/qKt
-MxoQfd2bW4LI/B8NrB+r3E/0R3NnQTHDm6r9a7NSbZD8Rzvmc+asZAJucPxOAwIK
-iMZUANfSKfmCayP1mbitU0zIfY8cfS5rehfGjByfGnxaYxONxNasFQmktHiWS0td
-xopvwyYnfXoMr90GsFT1Xn4+wn9ppQ==
-=R2pX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfrbg0ACgkQAVBC80lX
+0GycVggAjD2TZu2aoDHFDDY/8VNKteKOatc5yPIR/dN3uqbqxKXkvINkbUUlxh+E
+FSlm5/rN1DRxJwJNn4YmouNu1FVl0Oa30JU4KzXclEFAIEIH0Lny/us3AQXflfLY
+GGhTGIOepsEraWe/e5evFDBkuCvoLkaGAUK7O8fiXQi8EAqImfuwfH3A6ac97Uiv
+qQ2NyU+Lmh/r9sbPDe5Ifx9C25/Oik8QwbgHKRYljk+Ltr3IdF3Kq40lpmG5V4Mp
+SwJqbnVeSpru7u5WvPLOymvjZXuyE+HcyDcNZQUmyiCBJaJ08012/xvVdCXVcM3K
+0EmvDGT/yCdBeCYOXLt746sgQWs+Lg==
+=hGjD
 -----END PGP SIGNATURE-----
 
---Sig_/i08cdZDqBePamcHQk8DzCXY--
+--Sig_/+6emJ0YDFW9isGnkJ/F5rUC--
 

@@ -1,141 +1,133 @@
-Return-Path: <linux-next+bounces-6122-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6123-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67776A771DC
-	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 02:27:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54F5AA771E3
+	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 02:31:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23AB51680BE
-	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 00:27:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 744343A6C46
+	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 00:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39EAC2AF14;
-	Tue,  1 Apr 2025 00:27:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C2CE13AC1;
+	Tue,  1 Apr 2025 00:31:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="eK2qpMJ5"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iMtwiMao"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C302110;
-	Tue,  1 Apr 2025 00:27:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCECE3595D;
+	Tue,  1 Apr 2025 00:31:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743467223; cv=none; b=tQqwZqGtGHL0qj0cw60JXSj1LU2PhDxFXfIvOxN14uV0ehB6zPo1Zfnq4z33t4Odv+gCpGaOXtqi0IkfgJYGuNCQXW9wc02k3v21qs2W1unRSGz0Pf4fhDTFPSd7GClTYiLdmN6ua+Vd6qh4XXPxWnmyQitQimJo4r+r4iVwayM=
+	t=1743467474; cv=none; b=tIM18+zTkU/gPO8pYzTcCp437KBlBUWl7kWgTYof8mtdk3WOM1sE5xc7n6N1yH/yzL3Uwec2m1d4LzOJ/El2lXClc6QGd47QQFqaNx30QCGOe+b9RdLpBMwR/0qcfUXP19WTtxaahZBah2+RFkCokxXxnIYva501oOQvt99GxcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743467223; c=relaxed/simple;
-	bh=yvU/D+f5dpFF4g9qVA0ZspYAyRw0cXdV28p7aODVRsk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e6BNW3UmY7OkwQwF/A9ekGP75VQ+3JVJDHdnA7MW0xqmyOXvdlfGVt4uW4Rv373lhZ2AI86rvHJ2sJwsI/nmTbTwfCzS86ICxrdE1cuntrGqTy6Za8XgguT1GEn6SHGgheg4cIyI5alyLDfAdXcaO2I8NIJ0c4qZZyUaxjxjZYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=eK2qpMJ5; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1743467474; c=relaxed/simple;
+	bh=2bnlZKcqF1QfX8cbYQlebyb0ms5YPOYfQQpLSje/PXg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=YE5m0pF+RbS6ZCEZ1IIDNSafrTakciKBMKvqpAOqqzz+n1Ezxuk9tPLS9D9xppwiHlTt7p8NLkZSGHd0hJBGly30dvwr6B82SBoIoUobuaiOaUVLWKYbZsjI9f1c1hiH/mDwDE6C4KaFiLEcU7oyCFe/wmjWKkcivNp0qHVte7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=iMtwiMao; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1743467218;
-	bh=cBDOQP4gS5b2In4CkS503iiQCSa+VPdG3Lz7yETg+/A=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=eK2qpMJ51DEPJIyxRJ2S79Qfe92CQLmhdR6qaAAg51FCY+ByISYgXgxnTLhUIrknQ
-	 0zTgfbmAGTiwBkhPhHr5ie38wBdZQ41EMQQIRsXE+XtEIbSUz3Cdn/6WA5LlG/TYL1
-	 ugG8Qddkp1ox1ZRA2M57rt7aUD830ih0/1NbTgKWNeNeZr1Px5QigtRYIzFYmgXB/i
-	 W+SP+ic1PN85y9f4JHotN6J4D9FzO8WIS4kXgDk4jSAAJ8sZ9YRUI3mWdifac7IsRK
-	 e2RC98/SELfS2PXqh5uBKNqtGZwTCrPV9G9y+wyD4FErHqEQPTOvkWHSK9sDj9Agr2
-	 FXC2eT51uUtKg==
+	s=202503; t=1743467470;
+	bh=f5UFSKlpZMd23yYXyYvmQ+25iHMADDGseIQfDj8UagA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=iMtwiMaozSMxU4VK/dGIL8xtnSqKDo/jUiqSeV4QuJYSrQjnWdBqvai0Ply8nz8Km
+	 sA1XuCft/pr6J7xUtScRH2kYZIjX2a/Eg/nzscBJMpfNDvoCerJsoP8x93svmFIVQp
+	 sUhb4ux/uMhjq0vy9o8nL89vOqbQZE3FK6tCh4kJXOadsMsm4VBWkuPyOR+haiw0oZ
+	 syFXhb7r/XCYi9cuN6ijNZ8L0duQIuAUOq17pcawG9tQPqjo1GymG1I0vJj1w7mneX
+	 8OoYbdqvGaUw7vUcKqp0sh2XiWBtwE2dDLJ/NwWMV6tibMua9H5mFhE5m/KM4dvUoR
+	 UVeCE78ZVMJkw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZRTMk25nHz4wbZ;
-	Tue,  1 Apr 2025 11:26:58 +1100 (AEDT)
-Date: Tue, 1 Apr 2025 11:26:57 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZRTSY62SWz4xG8;
+	Tue,  1 Apr 2025 11:31:09 +1100 (AEDT)
+Date: Tue, 1 Apr 2025 11:31:09 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Huacai Chen <chenhuacai@loongson.cn>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Thomas =?UTF-8?B?V2Vpw59zY2h1?=
- =?UTF-8?B?aA==?= <linux@weissschuh.net>, WANG Rui <wangrui@loongson.cn>
-Subject: Re: linux-next: manual merge of the rust tree with the loongarch
- tree
-Message-ID: <20250401112657.5df1001c@canb.auug.org.au>
-In-Reply-To: <20250331160726.4e3d93dd@canb.auug.org.au>
-References: <20250331160726.4e3d93dd@canb.auug.org.au>
+To: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@de.ibm.com>, Masahiro Yamada
+ <masahiroy@kernel.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Sumanth Korikkar <sumanthk@linux.ibm.com>
+Subject: linux-next: manual merge of the s390 tree with the kbuild tree
+Message-ID: <20250401113109.2c8cb2b2@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cLctm6n3edB50y8MtQ0+Vz5";
+Content-Type: multipart/signed; boundary="Sig_/a+.RNlqCLfOPPdabUjbL3_p";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/cLctm6n3edB50y8MtQ0+Vz5
+--Sig_/a+.RNlqCLfOPPdabUjbL3_p
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 31 Mar 2025 16:07:26 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Today's linux-next merge of the rust tree got a conflict in:
->=20
->   rust/Makefile
->=20
-> between commit:
->=20
->   13c23cb4ed09 ("rust: Fix enabling Rust and building with GCC for LoongA=
-rch")
->=20
-> from the loongarch tree and commit:
->=20
->   6b2dab17d6fa ("rust: pass correct target to bindgen on Usermode Linux")
->=20
-> from the rust tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
->=20
-> diff --cc rust/Makefile
-> index 1750affda774,b9cc810764e9..000000000000
-> --- a/rust/Makefile
-> +++ b/rust/Makefile
-> @@@ -251,8 -274,7 +279,9 @@@ bindgen_skip_c_flags :=3D -mno-fp-ret-in-
->   # Derived from `scripts/Makefile.clang`.
->   BINDGEN_TARGET_x86	:=3D x86_64-linux-gnu
->   BINDGEN_TARGET_arm64	:=3D aarch64-linux-gnu
->  +BINDGEN_TARGET_arm	:=3D arm-linux-gnueabi
->  +BINDGEN_TARGET_loongarch	:=3D loongarch64-linux-gnusf
-> + BINDGEN_TARGET_um	:=3D $(BINDGEN_TARGET_$(SUBARCH))
->   BINDGEN_TARGET		:=3D $(BINDGEN_TARGET_$(SRCARCH))
->  =20
->   # All warnings are inhibited since GCC builds are very experimental,
+Today's linux-next merge of the s390 tree got a conflict in:
 
-This is now a conflict between the loongarch tree and Linus' tree.
+  arch/s390/Makefile
+
+between commit:
+
+  9b400d17259b ("kbuild: Introduce Kconfig symbol for linking vmlinux with =
+relocations")
+
+from the kbuild tree and commit:
+
+  991a20173a1f ("s390: Fix linker error when -no-pie option is unavailable")
+
+from the s390 tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/cLctm6n3edB50y8MtQ0+Vz5
+diff --cc arch/s390/Makefile
+index d5f4be440879,fd3b70d9aab1..000000000000
+--- a/arch/s390/Makefile
++++ b/arch/s390/Makefile
+@@@ -15,7 -15,7 +15,7 @@@ KBUILD_CFLAGS_MODULE +=3D -fPI
+  KBUILD_AFLAGS	+=3D -m64
+  KBUILD_CFLAGS	+=3D -m64
+  KBUILD_CFLAGS	+=3D -fPIC
+- LDFLAGS_vmlinux	:=3D -no-pie
+ -LDFLAGS_vmlinux	:=3D $(call ld-option,-no-pie) --emit-relocs --discard-no=
+ne
+++LDFLAGS_vmlinux	:=3D $(call ld-option,-no-pie)
+  extra_tools	:=3D relocs
+  aflags_dwarf	:=3D -Wa,-gdwarf-2
+  KBUILD_AFLAGS_DECOMPRESSOR :=3D $(CLANG_FLAGS) -m64 -D__ASSEMBLY__
+
+--Sig_/a+.RNlqCLfOPPdabUjbL3_p
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfrMtEACgkQAVBC80lX
-0GzQzAf8Cqvvgi2cHIfCv+G5/jBagjeU+35HqrTYk9olpKlkk1uQwLoME/kShQlu
-Ta8MCdFM7EMubnXHcN76mikwV3TtH10oSGOMR9biLQF6VLF2JTBAz38lxAIkfwsl
-gAv9k20Ii/LQVbJErrDH3cvCKc/51GoJWzrXvjrIvPhQ4v9GF+U2Sk5ToVjG3aF+
-1GPvsUpHfTgViSJcfZn8Yg8luYQ/fgzo9RVmWkiyrXCWYbQz0jSrIfRv/5xX6MeO
-L8iCRRZmhmGWkFb6PIaPNqGGp0r2YKd09/ajSWk9RWZX6NTiQIH6OEBy6/jm6sXh
-W9rh/kKZO9pJ8fYrBxnE98OS76ma/w==
-=vspo
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfrM80ACgkQAVBC80lX
+0GxI0wgApZBKLDbtNZv0NIRRzRuXd4a5KEV+QPNNr38R4se4ygBT9U37ebzferfH
+/azTkTnO/4KVTBsgDYB5FPEYTJ582HVEr8lN7MgbH0wzkCpluIQSJHqHBjwkfSB4
+DYFcU3LQDdjceL0+cWPpK5WRy2d7Ovf3cbEMi8/MPLLdvBUbaLvmMWtxFjVrkyMJ
+Wdh/waIzLSEXfcujFXLOHYmoCsDjcZpMFq8ptiBx31gPLZCLn9ySGMCgF3v2TdGG
+nw/Ycl4PG/SfIxbcAyEQXZ4UK/D7BPE0Gxw4wh9DQP0TX8/Kq5ysybZGjfA5N7Fy
+xheQa+drfU6jR6RD3wv/0oZT+CqaUA==
+=jAJf
 -----END PGP SIGNATURE-----
 
---Sig_/cLctm6n3edB50y8MtQ0+Vz5--
+--Sig_/a+.RNlqCLfOPPdabUjbL3_p--
 

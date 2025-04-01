@@ -1,117 +1,101 @@
-Return-Path: <linux-next+bounces-6130-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6131-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23AC5A7790C
-	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 12:45:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BF88A77A4F
+	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 14:02:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54A3C16A979
-	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 10:45:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C8CE1884F8D
+	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 12:02:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0FE1EE008;
-	Tue,  1 Apr 2025 10:45:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="cHj5CGqy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 299A01EC01F;
+	Tue,  1 Apr 2025 12:02:40 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD3763B9;
-	Tue,  1 Apr 2025 10:45:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E808F4690;
+	Tue,  1 Apr 2025 12:02:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743504323; cv=none; b=fd6wGLVgJr3zaLPkJqlx/G4tY0cQ91a93wG5JrnWpM2CKaSnJTYeEEvBFfOA2a+jXy61dU7G8A39j7rWyguhmeOkYtW3+HWhw3IO2s3dPpS79Oy4Ak1WZsUaPQHN1Yr31/yEZWhD+v/8QhZA+2kh1WQ06mmQ7goqM81ldIy6pQs=
+	t=1743508960; cv=none; b=hspGHemoMW7vuWiEZq6erJNDtUHiezPMs0Z03wo5xxt44m34FMqoOBnFyvTUueYMR0Y3sKb9BcsxwEyVVVHxGXSmbz/ovRVHtEF5+X7btQFRbxCmXO1cuMH1C8OCi8Mthh47I5mvHddicciikAKp0sfZPiuODHgPoyO67MeEbwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743504323; c=relaxed/simple;
-	bh=adZ9mRpavm1pB0ubmDN+IN+zH2OYxifh+epKKPut1LU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QM8v7Bs26lDUHuGuUg2BzhvLB8m409W24hQZ6Y0+RDPgKabwQlYWTlN5RWJxD92tu8wVAECP/AILmB19FVJohu5+ASd46l7w8bOGJ7xPXdLUxYQ9zMw5olhVG04S2y0QUjmiT5DgRr6pHALEyVg3nI4msbnj65QA5PLUcrOfOSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=cHj5CGqy; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0BC0040E0215;
-	Tue,  1 Apr 2025 10:45:17 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id fLg6liKhuFDQ; Tue,  1 Apr 2025 10:45:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1743504311; bh=RRAgkPYoGHRjKzNdm1bx2i45J/dfbIchU3cMFNdnerM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cHj5CGqyUdl4tknOqR9W9Hcd2b4SvEaBoapEmRteuSq4blZlptbT8R94WFyyVPe2K
-	 rLDewSl+wkVSquxErOe/xT2VU2v34FubSBeQVVXcm+p47/2yIOgP69kUrkHoMJJgnR
-	 /vpSILPxx7aLAPZ6NhfYw1/R1hJ7JxLG/diH7A7MSHvPftvEReq0M4EOxaDiwnBGyT
-	 dTNApj9fQRPokK6pNlXFqcYOqJuQSbo6kkPyl1wsnbpwsZ/W9186eVbGJO79cFrSnD
-	 xFxOlJoA5WaRjI0k4PbFrvrdnNh8x/u4wlS43JDfx5m2ipu2T+aDbrbOZJ40tumDKT
-	 veXujTmkLjWwX/fsXLxPuqtdQoaZLYLMxEq1rFrDHVGeEnOf2GmS4qX20LBasa+spI
-	 wY600hV1RBRNWx72ybsdN8hns+HuIfgQ54v/hoLQy7tONl81K4YRUFUgsWGpU21WYx
-	 /ugvor7jnz+ecAS+kisAR2d6UOXgAci3CmTJqfwBPAV3WA5vYozMoMz5BSFcNt9Go+
-	 ByKPxBZoMWA4kWZBM0TVNm1DMqTrl6Du89HhCSMjJ4LmGHDbp4F8BstkEcVZN7gegC
-	 3AqHp+Lk5NLYendv/6Zn57x6I9N02VMZyW8Bf3oIR9pM7nw4NKKOEw1xcT9EUCtGDc
-	 xKnfu7wo3H16qwss2i5N7MQo=
-Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B6EC040E021E;
-	Tue,  1 Apr 2025 10:45:04 +0000 (UTC)
-Date: Tue, 1 Apr 2025 12:44:57 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Shiju Jose <shiju.jose@huawei.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-	Tony Luck <tony.luck@intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the edac tree
-Message-ID: <20250401104457.GBZ-vDqbrZVOlEzhgf@fat_crate.local>
+	s=arc-20240116; t=1743508960; c=relaxed/simple;
+	bh=zN7rzAwlTsbjIndHloW6wNKS4OoWbPzkahZ/ZizfTN8=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Tv/2VqPmj1DWV6Pr3Y+SVO4qqkQfoXiQBcijJkOFKyfqsj4yqo0s5r6P45T1ng8TMtyPtL5wrJnLSg2dfRxlcJTd9ITvV46WOGunF3iNEt5Dnd3pe3T1MdXQI3iKSVfjqx2KTH4G6EljMNw+yy1Lc0SLWPBF90aJcyx8QK1y9V0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4ZRmkB5Z53z6L6vr;
+	Tue,  1 Apr 2025 19:58:58 +0800 (CST)
+Received: from frapeml100005.china.huawei.com (unknown [7.182.85.132])
+	by mail.maildlp.com (Postfix) with ESMTPS id 14F4214059F;
+	Tue,  1 Apr 2025 20:02:36 +0800 (CST)
+Received: from frapeml500007.china.huawei.com (7.182.85.172) by
+ frapeml100005.china.huawei.com (7.182.85.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 1 Apr 2025 14:02:35 +0200
+Received: from frapeml500007.china.huawei.com ([7.182.85.172]) by
+ frapeml500007.china.huawei.com ([7.182.85.172]) with mapi id 15.01.2507.039;
+ Tue, 1 Apr 2025 14:02:35 +0200
+From: Shiju Jose <shiju.jose@huawei.com>
+To: Borislav Petkov <bp@alien8.de>
+CC: Stephen Rothwell <sfr@canb.auug.org.au>, Mauro Carvalho Chehab
+	<mchehab+samsung@kernel.org>, Tony Luck <tony.luck@intel.com>, "Jonathan
+ Cameron" <jonathan.cameron@huawei.com>, Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	<linux-next@vger.kernel.org>
+Subject: RE: linux-next: build warning after merge of the edac tree
+Thread-Topic: linux-next: build warning after merge of the edac tree
+Thread-Index: AQHbibWQCX91qZEQwUaDSgjPpJhSnbOOSziAgABmDoCAADbHMA==
+Date: Tue, 1 Apr 2025 12:02:35 +0000
+Message-ID: <b6862252ef2b476cb1c650d5abe7c04d@huawei.com>
 References: <20250228185102.15842f8b@canb.auug.org.au>
  <20250401153941.517aac17@canb.auug.org.au>
+ <20250401104457.GBZ-vDqbrZVOlEzhgf@fat_crate.local>
+In-Reply-To: <20250401104457.GBZ-vDqbrZVOlEzhgf@fat_crate.local>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250401153941.517aac17@canb.auug.org.au>
 
-On Tue, Apr 01, 2025 at 03:39:41PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Fri, 28 Feb 2025 18:51:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > After merging the edac tree, today's linux-next build (htmldocs) produced
-> > this warning:
-> > 
-> > Documentation/edac/index.rst: WARNING: document isn't included in any toctree
-> > 
-> > Introduced by commit
-> > 
-> >   db99ea5f2c03 ("EDAC: Add support for EDAC device features control")
-> 
-> I am still getting this warning, but that commit is now in Linus' tree :-(
-
-Shiju,
-
-please send this:
-
-https://lore.kernel.org/r/af3e1e183b034ea89ed6582a5382e5c3@huawei.com
-
-as a proper patch.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Pi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+RnJvbTogQm9yaXNsYXYgUGV0a292IDxicEBh
+bGllbjguZGU+DQo+U2VudDogMDEgQXByaWwgMjAyNSAxMTo0NQ0KPlRvOiBTaGlqdSBKb3NlIDxz
+aGlqdS5qb3NlQGh1YXdlaS5jb20+DQo+Q2M6IFN0ZXBoZW4gUm90aHdlbGwgPHNmckBjYW5iLmF1
+dWcub3JnLmF1PjsgTWF1cm8gQ2FydmFsaG8gQ2hlaGFiDQo+PG1jaGVoYWIrc2Ftc3VuZ0BrZXJu
+ZWwub3JnPjsgVG9ueSBMdWNrIDx0b255Lmx1Y2tAaW50ZWwuY29tPjsgSm9uYXRoYW4NCj5DYW1l
+cm9uIDxqb25hdGhhbi5jYW1lcm9uQGh1YXdlaS5jb20+OyBMaW51eCBLZXJuZWwgTWFpbGluZyBM
+aXN0IDxsaW51eC0NCj5rZXJuZWxAdmdlci5rZXJuZWwub3JnPjsgTGludXggTmV4dCBNYWlsaW5n
+IExpc3QgPGxpbnV4LW5leHRAdmdlci5rZXJuZWwub3JnPg0KPlN1YmplY3Q6IFJlOiBsaW51eC1u
+ZXh0OiBidWlsZCB3YXJuaW5nIGFmdGVyIG1lcmdlIG9mIHRoZSBlZGFjIHRyZWUNCj4NCj5PbiBU
+dWUsIEFwciAwMSwgMjAyNSBhdCAwMzozOTo0MVBNICsxMTAwLCBTdGVwaGVuIFJvdGh3ZWxsIHdy
+b3RlOg0KPj4gSGkgYWxsLA0KPj4NCj4+IE9uIEZyaSwgMjggRmViIDIwMjUgMTg6NTE6MDIgKzEx
+MDAgU3RlcGhlbiBSb3Rod2VsbCA8c2ZyQGNhbmIuYXV1Zy5vcmcuYXU+DQo+d3JvdGU6DQo+PiA+
+DQo+PiA+IEFmdGVyIG1lcmdpbmcgdGhlIGVkYWMgdHJlZSwgdG9kYXkncyBsaW51eC1uZXh0IGJ1
+aWxkIChodG1sZG9jcykNCj4+ID4gcHJvZHVjZWQgdGhpcyB3YXJuaW5nOg0KPj4gPg0KPj4gPiBE
+b2N1bWVudGF0aW9uL2VkYWMvaW5kZXgucnN0OiBXQVJOSU5HOiBkb2N1bWVudCBpc24ndCBpbmNs
+dWRlZCBpbg0KPj4gPiBhbnkgdG9jdHJlZQ0KPj4gPg0KPj4gPiBJbnRyb2R1Y2VkIGJ5IGNvbW1p
+dA0KPj4gPg0KPj4gPiAgIGRiOTllYTVmMmMwMyAoIkVEQUM6IEFkZCBzdXBwb3J0IGZvciBFREFD
+IGRldmljZSBmZWF0dXJlcw0KPj4gPiBjb250cm9sIikNCj4+DQo+PiBJIGFtIHN0aWxsIGdldHRp
+bmcgdGhpcyB3YXJuaW5nLCBidXQgdGhhdCBjb21taXQgaXMgbm93IGluIExpbnVzJyB0cmVlDQo+
+PiA6LSgNCj4NCj5TaGlqdSwNCj4NCj5wbGVhc2Ugc2VuZCB0aGlzOg0KPg0KPmh0dHBzOi8vbG9y
+ZS5rZXJuZWwub3JnL3IvYWYzZTFlMTgzYjAzNGVhODllZDY1ODJhNTM4MmU1YzNAaHVhd2VpLmNv
+bQ0KPg0KPmFzIGEgcHJvcGVyIHBhdGNoLg0KDQpIaSBCb3JpcywNCg0KU3VyZS4NCg0KUGxlYXNl
+IGNoZWNrIHRoZSBmaXggcGF0Y2ggc2VudC4NCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4
+LWVkYWMvMjAyNTA0MDExMTU4MjMuNTczLTEtc2hpanUuam9zZUBodWF3ZWkuY29tL1QvI3UNCg0K
+Pg0KPlRoeC4NCj4NCj4tLQ0KPlJlZ2FyZHMvR3J1c3MsDQo+ICAgIEJvcmlzLg0KPg0KPmh0dHBz
+Oi8vcGVvcGxlLmtlcm5lbC5vcmcvdGdseC9ub3Rlcy1hYm91dC1uZXRpcXVldHRlDQoNClRoYW5r
+cywNClNoaWp1DQo=
 

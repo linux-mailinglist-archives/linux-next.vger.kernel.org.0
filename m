@@ -1,196 +1,117 @@
-Return-Path: <linux-next+bounces-6129-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6130-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 691D9A77585
-	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 09:45:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23AC5A7790C
+	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 12:45:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 662323AB46B
-	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 07:44:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54A3C16A979
+	for <lists+linux-next@lfdr.de>; Tue,  1 Apr 2025 10:45:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 610981E9B3B;
-	Tue,  1 Apr 2025 07:44:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0FE1EE008;
+	Tue,  1 Apr 2025 10:45:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="qzPej9P0";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YC7CEe3x"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="cHj5CGqy"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4FC1E9B32;
-	Tue,  1 Apr 2025 07:44:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD3763B9;
+	Tue,  1 Apr 2025 10:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743493467; cv=none; b=WYDw/QFaCWwJ0NO9yPvEHXnaubidiD6ZIO/16xlkh5O+cksvCJz9MLg3lqv514wcu2p2yFEqw28DXDtUKElE2irhuBttNcqe6UubxX6mGqX90eQKLfZADdvt+5+Hu6zR8WWHmh6OqbvxEmeFACGb82GCRkWkX8k9G/U/0jwIB8I=
+	t=1743504323; cv=none; b=fd6wGLVgJr3zaLPkJqlx/G4tY0cQ91a93wG5JrnWpM2CKaSnJTYeEEvBFfOA2a+jXy61dU7G8A39j7rWyguhmeOkYtW3+HWhw3IO2s3dPpS79Oy4Ak1WZsUaPQHN1Yr31/yEZWhD+v/8QhZA+2kh1WQ06mmQ7goqM81ldIy6pQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743493467; c=relaxed/simple;
-	bh=AmmDVvNi5dUbIT7C5bbti693/xc8nSbVjPiErpkXIaw=;
+	s=arc-20240116; t=1743504323; c=relaxed/simple;
+	bh=adZ9mRpavm1pB0ubmDN+IN+zH2OYxifh+epKKPut1LU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rMDVuWeNSh8btTuohYfdd0vAJ4l1hQkHVRHX0uF/jyzyLoe7eYRec9UJRUorTmJ/LnDbipN+KQfqP5CQnvratEGmVlU+tu6w5WPit9PJ1X5zWzxQjpUBp4GDaS4J4oEQlEwV32liPyYkKS9bQdTCgdG9cq8ynKcQhrPV483cZX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=qzPej9P0; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YC7CEe3x; arc=none smtp.client-ip=103.168.172.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id B731F1382D13;
-	Tue,  1 Apr 2025 03:44:23 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Tue, 01 Apr 2025 03:44:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1743493463; x=1743579863; bh=N3XLkCWVDT
-	ZLVCH6BsDAQxYTNal1m2sMxq815aRphRI=; b=qzPej9P0Cpjf6qLjB/9fUndGFZ
-	F3VNEm3hbSvecuLfg9odO2CLwy/3HbmsIrAodrRIBR+eiREukEZFlFaF4TPhCV+Y
-	nQsO1rwP5Bc4fwg7c77T1ZMdCV861HpfN5XzTKW8tsciprl61oWpHmVw2axMjMos
-	KcHcKlyEEnf0QDJHbXaZeNHI4t3L/zf5XTj/OTbC/ArG0gyxPmxI5TnUCCz2pqEG
-	9TIGvad3bhWCgedZLvOM4zTLJBw9yFInnsJdHiEQLhNRfudIhxWzj8FzdzeYwKWp
-	WTAU1Llc+gQUccXYQrECx3fyCmIFovSD7JjVw6rtsmfx+jgFe5vfwlFoT7dQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1743493463; x=1743579863; bh=N3XLkCWVDTZLVCH6BsDAQxYTNal1m2sMxq8
-	15aRphRI=; b=YC7CEe3xYPPfyWxJQGzpE/SeuxkPW7cLjwM8kuQ466RrpXZeIcz
-	blqnekVw8yMI7nZZti5UYEANCVyzPbZs4Fi8bFZzGKJtZqSd07Bp5Qzu1Y77eMtb
-	ZyYs9JI5dk/wXs1p59CHg9FaJiaQUjLhDCFTTh2QWgp/vA5hV3yW2CXbCeGUtncQ
-	iwTILdC88FynRKwf6DWh1u3ytAkZYw80mbD5zGyjZxKHr+xvNa3+8/lobaDkkIaD
-	7NP0mBHG2h28ULCeTRqxn3TSw88f10DC41pMfucJhxS5qIDRQIv6NT58VT4kPDbN
-	wJaKi2ERBisY/BcEXSEAsS5zfylikWdiwuQ==
-X-ME-Sender: <xms:VpnrZ-Q5G0zN6nkPZpwkxhfKnpz38cisloQiG7Ex9shXPcsd7A013Q>
-    <xme:VpnrZzyawDvhhWSGIA5REmTgiL51c-iGYytapGFUdjK43anqKuWbyTleBn0S5Vq3K
-    OCPfoBcRnF2AQ>
-X-ME-Received: <xmr:VpnrZ73rQ6rDy_KJviwtnjF5GGLDTWfoB9dZtmdVoql-0jXf3QyPW80_Y5i5>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukedvvdefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    vdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecugg
-    ftrfgrthhtvghrnhepheegvdevvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeu
-    fefhgfehkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepghhrvghgsehkrhhorghhrdgtohhmpdhnsggprhgtphhtthhopeduvddpmhhouggv
-    pehsmhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrg
-    hupdhrtghpthhtohepohhjvggurgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprggs
-    ughivghlrdhjrghnuhhlghhuvgesghhmrghilhdrtghomhdprhgtphhtthhopegurghkrh
-    eskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgv
-    rhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqnhgvgihtsehvghgvrh
-    drkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:VpnrZ6CZ1gE5M17iV3Xe5klEyQmkXBk6Gt5buKD5FTQTCeWwgzh9VA>
-    <xmx:VpnrZ3jtKDLZmImLRHBHTc5sjmUR_wNCZqTirgTOWj4FRgmlu4WF6w>
-    <xmx:VpnrZ2qITZxwSpCG59LkWy5mbFyffMM_PB0YEct3MHbySen1vu-NJw>
-    <xmx:VpnrZ6ji51Vy9Jz8LFjcCngH37v3qW1gqw85U1VIwYyTdB4XCduidg>
-    <xmx:V5nrZwbdcfqM5NPRgylc6NdK0ri3GtYuMfegh1lG73xPONpzlf0dLxb8>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 1 Apr 2025 03:44:22 -0400 (EDT)
-Date: Tue, 1 Apr 2025 08:42:57 +0100
-From: Greg KH <greg@kroah.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Miguel Ojeda <ojeda@kernel.org>,
-	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
-	Danilo Krummrich <dakr@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=QM8v7Bs26lDUHuGuUg2BzhvLB8m409W24hQZ6Y0+RDPgKabwQlYWTlN5RWJxD92tu8wVAECP/AILmB19FVJohu5+ASd46l7w8bOGJ7xPXdLUxYQ9zMw5olhVG04S2y0QUjmiT5DgRr6pHALEyVg3nI4msbnj65QA5PLUcrOfOSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=cHj5CGqy; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0BC0040E0215;
+	Tue,  1 Apr 2025 10:45:17 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id fLg6liKhuFDQ; Tue,  1 Apr 2025 10:45:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1743504311; bh=RRAgkPYoGHRjKzNdm1bx2i45J/dfbIchU3cMFNdnerM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cHj5CGqyUdl4tknOqR9W9Hcd2b4SvEaBoapEmRteuSq4blZlptbT8R94WFyyVPe2K
+	 rLDewSl+wkVSquxErOe/xT2VU2v34FubSBeQVVXcm+p47/2yIOgP69kUrkHoMJJgnR
+	 /vpSILPxx7aLAPZ6NhfYw1/R1hJ7JxLG/diH7A7MSHvPftvEReq0M4EOxaDiwnBGyT
+	 dTNApj9fQRPokK6pNlXFqcYOqJuQSbo6kkPyl1wsnbpwsZ/W9186eVbGJO79cFrSnD
+	 xFxOlJoA5WaRjI0k4PbFrvrdnNh8x/u4wlS43JDfx5m2ipu2T+aDbrbOZJ40tumDKT
+	 veXujTmkLjWwX/fsXLxPuqtdQoaZLYLMxEq1rFrDHVGeEnOf2GmS4qX20LBasa+spI
+	 wY600hV1RBRNWx72ybsdN8hns+HuIfgQ54v/hoLQy7tONl81K4YRUFUgsWGpU21WYx
+	 /ugvor7jnz+ecAS+kisAR2d6UOXgAci3CmTJqfwBPAV3WA5vYozMoMz5BSFcNt9Go+
+	 ByKPxBZoMWA4kWZBM0TVNm1DMqTrl6Du89HhCSMjJ4LmGHDbp4F8BstkEcVZN7gegC
+	 3AqHp+Lk5NLYendv/6Zn57x6I9N02VMZyW8Bf3oIR9pM7nw4NKKOEw1xcT9EUCtGDc
+	 xKnfu7wo3H16qwss2i5N7MQo=
+Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B6EC040E021E;
+	Tue,  1 Apr 2025 10:45:04 +0000 (UTC)
+Date: Tue, 1 Apr 2025 12:44:57 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Shiju Jose <shiju.jose@huawei.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+	Tony Luck <tony.luck@intel.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the rust tree with the driver-core
- tree
-Message-ID: <2025040140-postage-upchuck-34cd@gregkh>
-References: <20250321185630.566dc075@canb.auug.org.au>
- <20250401142159.6f468edf@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the edac tree
+Message-ID: <20250401104457.GBZ-vDqbrZVOlEzhgf@fat_crate.local>
+References: <20250228185102.15842f8b@canb.auug.org.au>
+ <20250401153941.517aac17@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250401142159.6f468edf@canb.auug.org.au>
+In-Reply-To: <20250401153941.517aac17@canb.auug.org.au>
 
-On Tue, Apr 01, 2025 at 02:21:59PM +1100, Stephen Rothwell wrote:
+On Tue, Apr 01, 2025 at 03:39:41PM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> On Fri, 21 Mar 2025 18:56:30 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> On Fri, 28 Feb 2025 18:51:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > >
-> > Today's linux-next merge of the rust tree got a semantic conflict in:
+> > After merging the edac tree, today's linux-next build (htmldocs) produced
+> > this warning:
 > > 
-> >   samples/rust/rust_dma.rs
+> > Documentation/edac/index.rst: WARNING: document isn't included in any toctree
 > > 
-> > between commit:
+> > Introduced by commit
 > > 
-> >   7b948a2af6b5 ("rust: pci: fix unrestricted &mut pci::Device")
-> > 
-> > from the driver-core tree and commit:
-> > 
-> >   9901addae63b ("samples: rust: add Rust dma test sample driver")
-> > 
-> > from the rust tree.
-> > 
-> > I fixed it up (I applied the following supplied resolution, thanks Danilo)
-> > and can carry the fix as necessary. This is now fixed as far as linux-next
-> > is concerned, but any non trivial conflicts should be mentioned to your
-> > upstream maintainer when your tree is submitted for merging.  You may
-> > also want to consider cooperating with the maintainer of the conflicting
-> > tree to minimise any particularly complex conflicts.
-> > 
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Fri, 21 Mar 2025 18:21:27 +1100
-> > Subject: [PATCH] fix up for "samples: rust: add Rust dma test sample driver"
-> > 
-> > interacting with commit
-> > 
-> >   7b948a2af6b5 ("rust: pci: fix unrestricted &mut pci::Device")
-> > 
-> > from the driver-core tree.
-> > 
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  samples/rust/rust_dma.rs | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/samples/rust/rust_dma.rs b/samples/rust/rust_dma.rs
-> > index 908acd34b8db..874c2c964afa 100644
-> > --- a/samples/rust/rust_dma.rs
-> > +++ b/samples/rust/rust_dma.rs
-> > @@ -4,10 +4,10 @@
-> >  //!
-> >  //! To make this driver probe, QEMU must be run with `-device pci-testdev`.
-> >  
-> > -use kernel::{bindings, dma::CoherentAllocation, pci, prelude::*};
-> > +use kernel::{bindings, device::Core, dma::CoherentAllocation, pci, prelude::*, types::ARef};
-> >  
-> >  struct DmaSampleDriver {
-> > -    pdev: pci::Device,
-> > +    pdev: ARef<pci::Device>,
-> >      ca: CoherentAllocation<MyStruct>,
-> >  }
-> >  
-> > @@ -48,7 +48,7 @@ impl pci::Driver for DmaSampleDriver {
-> >      type IdInfo = ();
-> >      const ID_TABLE: pci::IdTable<Self::IdInfo> = &PCI_TABLE;
-> >  
-> > -    fn probe(pdev: &mut pci::Device, _info: &Self::IdInfo) -> Result<Pin<KBox<Self>>> {
-> > +    fn probe(pdev: &pci::Device<Core>, _info: &Self::IdInfo) -> Result<Pin<KBox<Self>>> {
-> >          dev_info!(pdev.as_ref(), "Probe DMA test driver.\n");
-> >  
-> >          let ca: CoherentAllocation<MyStruct> =
-> > @@ -64,7 +64,7 @@ fn probe(pdev: &mut pci::Device, _info: &Self::IdInfo) -> Result<Pin<KBox<Self>>
-> >  
-> >          let drvdata = KBox::new(
-> >              Self {
-> > -                pdev: pdev.clone(),
-> > +                pdev: pdev.into(),
-> >                  ca,
-> >              },
-> >              GFP_KERNEL,
-> > -- 
-> > 2.45.2
+> >   db99ea5f2c03 ("EDAC: Add support for EDAC device features control")
 > 
-> This is now a conflict between the driver-core tree and Linus' tree.
+> I am still getting this warning, but that commit is now in Linus' tree :-(
 
-Thanks, I've sent the pull request to Linus right after the rust one,
-and warned him about this conflict.
+Shiju,
 
-greg k-h
+please send this:
+
+https://lore.kernel.org/r/af3e1e183b034ea89ed6582a5382e5c3@huawei.com
+
+as a proper patch.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 

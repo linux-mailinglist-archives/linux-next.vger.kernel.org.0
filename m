@@ -1,106 +1,85 @@
-Return-Path: <linux-next+bounces-6153-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6154-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD6F7A79BF6
-	for <lists+linux-next@lfdr.de>; Thu,  3 Apr 2025 08:29:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9616AA7B1D0
+	for <lists+linux-next@lfdr.de>; Fri,  4 Apr 2025 00:03:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7AD83B1989
-	for <lists+linux-next@lfdr.de>; Thu,  3 Apr 2025 06:29:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15F6118922FE
+	for <lists+linux-next@lfdr.de>; Thu,  3 Apr 2025 22:03:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12A761624E0;
-	Thu,  3 Apr 2025 06:29:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EEED2E62CE;
+	Thu,  3 Apr 2025 22:03:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="c6mDfxlh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eLy56ujV"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE9828FF
-	for <linux-next@vger.kernel.org>; Thu,  3 Apr 2025 06:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233AF2E62A2;
+	Thu,  3 Apr 2025 22:03:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743661788; cv=none; b=UssG51PdbB84wnwc8K20sLqvfBV4sR/3ckL291ujjk5POjnLa7RsH4n47Voq5vGKTAqeYHF3nbHWFpRab8bwRQvPxAFsC8HUHTlzGtGCdudRBbPp4MPu/i3eoW0olbsWQfBlIERi+f8QIUZPLzKu3i5dKFhQA4P8nJ8C7PpMP1E=
+	t=1743717808; cv=none; b=Hdh6ssyzmpU9jBJbkn9qzovbmnpOx73diYvzl4rGUXliaOVSmHMPHa0OMYK5no1RD8wmEFrVg8xSWa6cKAi+DCAtI144L+yUDh7EMwwwQP08fvIfBt4Og2KQGdMjVzKKExONdXqYS2Eqlt25OgzNERUWhOPFIF0E6UtI1yMFCd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743661788; c=relaxed/simple;
-	bh=3VMJD9M4qwwCZAnuMeXC+JixiDn1kJwilDGaeSamM6M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lWEpbZBEwzMPLGjWWPMwDRwPKvcVxxvSWB6GypeVYVz9gHrGsx/HzBXN+jGQ/f/OAdkM1FwdZ4rTJvzJx6GoTCJCAcQnEANw4vOLqF1+/DxAIDCCkB9E5GHA1ZFBxawgF3i62cHdhTbXWpRGb57wMBQ7FdmkYjDkomgt6a0Keuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=c6mDfxlh; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1743661781;
-	bh=3VMJD9M4qwwCZAnuMeXC+JixiDn1kJwilDGaeSamM6M=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=c6mDfxlhkscF/au++bbbYVWEDfE5JmC9IBB9JnPw2pd3+sQ3TBByr5mPJhTBJdnBp
-	 vQfoab64e5gEfywL1z/4GVsdK9tLkIrAQixkWOfrFbUZgmdo6beyJcbQGmhgNhm+XR
-	 /gwkLGwSd11+VLjo18vpzjSg6mki2liBpJqVHSNrJPio8Cr9ZHWCny8kh+5f58PamH
-	 v8iTWSlbpc5vGN1baFhtSjPWLLbMGFU35z+WZoDjALY/HX5HI98SYeECpsq0zYGpXg
-	 KFVEuTNy+cynEJyw0fxfGjvRJmnZUyxkDnPvyc53iSbW06jzYwhJRcqzP42xr4M/gy
-	 gCSH/vVEnqNBw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZSsKJ5899z4x3p;
-	Thu,  3 Apr 2025 17:29:40 +1100 (AEDT)
-Date: Thu, 3 Apr 2025 17:29:40 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Michael Ellerman <mpe@ellerman.id.au>
-Cc: maddy@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, Linux Next Mailing
- List <linux-next@vger.kernel.org>, Andrew Donnellan <ajd@linux.ibm.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: Re: Please add powerpc topic/cxl branch to linux-next
-Message-ID: <20250403172940.3224efe9@canb.auug.org.au>
-In-Reply-To: <878qoiht4k.fsf@mpe.ellerman.id.au>
-References: <87y0x3dibs.fsf@mpe.ellerman.id.au>
-	<20250318002643.71ef29f1@canb.auug.org.au>
-	<878qoiht4k.fsf@mpe.ellerman.id.au>
+	s=arc-20240116; t=1743717808; c=relaxed/simple;
+	bh=NTehLNXmH7Bizbedi+xODEVPVgOQ2s+y/9axPGNjI2g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l3O4flAvq+PgcPEDurfaTidvOh/yFG4oRly/d4KDRDAHVhmwPqsApjS8m3cGX4OT0Eh4ttBU7+lbUewGtPVBdBJZVK5gO55SRacDUqJpYnAgoYyAM826k3PSUCGJWiEpp1nDAuXRkicjfOlA9rAzlis3KtJrEVVVb+zXeXO0NA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eLy56ujV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C43D0C4CEE3;
+	Thu,  3 Apr 2025 22:03:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743717807;
+	bh=NTehLNXmH7Bizbedi+xODEVPVgOQ2s+y/9axPGNjI2g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eLy56ujVv6L7NpCx01q+UdTSEeearvHP6IFSVNI+Uz6w1zaRLW7Z6hiewd2AwKrdg
+	 /fiy2Cq/mRvzY/tsqzY+CTI/6M/8SJYFIk8+kluKVBZHwDds/KvLbeive+bgkF9C8T
+	 +5wiLA1pup2XZGaErnITk3PDZdfXSkqoBAwimZEBdTZfY0jwAUnMh3jvN6yvlJN/C8
+	 QnsWwcMmw2SyZ9sIObknp5cvloDg6hdHkBuCv9vXcfC5UJobkCGUVmwRpHvJ19mMkM
+	 wVD+rxDLr6LV1T5rtrz/0JCknW/Stw2zd6Te2T74LLv0J1sH9jocBVXbnZ8D2tCrit
+	 t4l9y8cGTgcFA==
+Date: Thu, 3 Apr 2025 15:03:22 -0700
+From: Josh Poimboeuf <jpoimboe@kernel.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, kasan-dev@googlegroups.com
+Subject: Re: linux-next: Tree for Apr 2 (objtool: KCOV)
+Message-ID: <gz4mvn6q55buqjtk57jxke7tq4ge2nxoxj4rqd2xmjin5ulska@wtesjas4n3n3>
+References: <20250402143503.28919c29@canb.auug.org.au>
+ <ffe48f0a-9217-4f38-83dd-5fbc4de3eb73@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=VNAbOBBRZ0a4lxNf0yen0j";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ffe48f0a-9217-4f38-83dd-5fbc4de3eb73@infradead.org>
 
---Sig_/=VNAbOBBRZ0a4lxNf0yen0j
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Apr 02, 2025 at 07:53:09PM -0700, Randy Dunlap wrote:
+> 
+> 
+> On 4/1/25 8:35 PM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20250401:
+> > 
+> 
+> on x86_64, using 
+> gcc (SUSE Linux) 14.2.1 20250220 [revision 9ffecde121af883b60bbe60d00425036bc873048]:
+> 
+> vmlinux.o: warning: objtool: __sanitizer_cov_trace_pc+0x37: RET before UNTRAIN
 
-Hi Michael,
+Thanks.  Turns out this is a duplicate of an issue for which I posted a
+fix earlier:
 
-On Thu, 03 Apr 2025 13:32:43 +1100 Michael Ellerman <mpe@ellerman.id.au> wr=
-ote:
->
-> This branch has been merged intoo mainline, you can drop it from
-> linux-next. Thanks.
+  https://lore.kernel.org/41761c1db9acfc34d4f71d44284aa23b3f020f74.1743706046.git.jpoimboe@kernel.org
 
-Done.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/=VNAbOBBRZ0a4lxNf0yen0j
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfuKtQACgkQAVBC80lX
-0Gy2+Af/YKjP118KuxHZJ5MQag78XZYte7irr12ssyoYNvksOz93QaTMZ/pFWo3G
-J5o+Wn2CNWficMbtfZaFJhtnt3vIwZ9gMeoySj77MP5w70SnIGxOXPKDZIusbira
-qZsMmLFC/dsVOqoCjaCc+2fPMCo/aAOHjeEU0ku9s8uwbCAUFKJA9ocMrTqQkev+
-X82RKu9+J3tfb/Ahs+pKzKA8PBZpLO3+HZs+UqwgmW32FxZQB2I+SP8HtHwvg/ew
-mDpluCEAxxh3Px6qQ1caA22D/iu47kqSsSUVKdWP3825rYCutd13a0+dCK4HRABs
-D29wbveCEMCup3R1yOLHEmoWabcd1Q==
-=/p0+
------END PGP SIGNATURE-----
-
---Sig_/=VNAbOBBRZ0a4lxNf0yen0j--
+-- 
+Josh
 

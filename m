@@ -1,123 +1,101 @@
-Return-Path: <linux-next+bounces-6163-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6164-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25BC5A7CF76
-	for <lists+linux-next@lfdr.de>; Sun,  6 Apr 2025 20:21:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7982A7D082
+	for <lists+linux-next@lfdr.de>; Sun,  6 Apr 2025 22:54:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E41247A422A
-	for <lists+linux-next@lfdr.de>; Sun,  6 Apr 2025 18:20:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C7C818885B4
+	for <lists+linux-next@lfdr.de>; Sun,  6 Apr 2025 20:54:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF1C199FA4;
-	Sun,  6 Apr 2025 18:21:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C428915B0EC;
+	Sun,  6 Apr 2025 20:54:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IgKAVIbO"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com [209.85.221.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFF1D1CA81;
-	Sun,  6 Apr 2025 18:21:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40C472A8C1;
+	Sun,  6 Apr 2025 20:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743963706; cv=none; b=pfgOdnlZd+oGhl5hqy8gpy9/iUB+ANwslUDI+qSVYzFsWNUzadDrnsqOU68GsEehpThuEhXRqkWqcPsYao089uOMOvikEkv0kEmzgkRTVZ4hQmdHC8kd9AhkQjn4172SDvbYhQCOgvudJqDtLt4KX+H2E8lkkPa457P9ts5R/bQ=
+	t=1743972878; cv=none; b=XFkHRSfDYeRFsRxf2GapO+oP7+ap+LfbH+aGNqX59ycE46UlqtDTHJRra4O/Nu9GGGaVhE3AXJ3PW6pY/p63V09qigcmvqaTAnGIe7Cp18aqLUPgU+ErsJEfBCiHfTs830hihjg1fmP+GTEV+cVGtFB5jPpK98qaWMGoOeqMG70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743963706; c=relaxed/simple;
-	bh=LaZfxkSb5FyHIDc0qBbJvYi6Ow3SxwYSODg56DGNs/4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FFIAXMvjq1uc0TnbpEAI62mPwDUSBWsbDoOtK1beap9P2lgWLGpyl0Tq6MnzdD1LtAxP6L8enFBs5ZWW9y0dmGe1x66Xpy2Rf36aQATfYLn+Ji9wKu3H1YDS1jiitLsbENJ1+DVqwDm/TL+I9CZmjhCh485S7FbWX+X0TO3HtEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-523ed8ac2a3so1619835e0c.3;
-        Sun, 06 Apr 2025 11:21:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1743963700; x=1744568500;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=68f5FHAmZta1ghAPpoGBWcTGk+bj6/niB8/w0no43ik=;
-        b=bwcyCTP3sKHfJYh93EcMnBfX6DQj1heEdGKGeSyY78SMQEqGGifk6t6kUr+8fTov5A
-         DUGXYTum4uB/ePwecJdVpaQ5jUqDp/R3UJDcNFG93Tc2rE/N08INeCeL2LzV5FX8jx+v
-         5nJgjDQuWrP9wEzrYoOC2RS7+uyFwipI4fHUQUmsVzCRyZE1b6NeJiiGff8XLADHPi1v
-         soOzaDVx4/gGIZAc8hDlbzWfi0tqepgCdkV/iWMKrl5Ny/HVEE/n9k2Kxb7HjKq1v2fe
-         SQk8n+TBbl7S6ov/Gt8ssIW4fj6jVe83RKCtFKtoEq7pVfrExDiE12qxIQ2vC9CuBSO4
-         4+/w==
-X-Forwarded-Encrypted: i=1; AJvYcCUl2nreSFpYvFVcag+qsGOCBtXMmQiIgq87lD2C0GB5+sOXLnedNERowV2LigWVQrdRuNctlvzds2mSk+Y=@vger.kernel.org, AJvYcCX/jE9gOp3mmLNfXW3nIJYNRpa4u0Zp+aaJfc5TJoUAI9fLD5sgv03uWimRXZFLv4YND/HlQR6U5FXUkg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyB6y8IzxEAazKD52X+Jck/UImqwAScgXGCI12WMZ/icpNP1qB0
-	QrIWCvjMl6yZ7dvyRxDYLgY4gA8UuWi8fWyjON1ALOEWxXLhMtJZjzUWeKJ5
-X-Gm-Gg: ASbGncscaE9sQiJJJEZbNI1lgmaCwg7FaCurcVWFzdPSEiVzk9iyNMtEuD83hIj5nSv
-	lzChXfGk4q/ITaTj7F0NWm9NxtV6kDiJwt3cvB9PatOE2Eep6eZr+Hqd5zdLqpnd/rL+ae35CMx
-	SV4QDiWkwVd5Eu8dFgjGOrXrX2LhJyCACAPg6CkGv6H12WIAbfk8pRjI8g/pYNnYogImiRgoRHs
-	2cpKUDqV69kfcZQyFCf0AIAjq2uVOeXGpVNno8cfvrEt4WXJFU4qbSHOQvFa3zzptesXtuKdZIt
-	3EQGFrdbuOGs2RyuoBeKXm2AQT+VR4Yc6mkC3/KuuJRX9mLKD7cdN570QJ+n24lUeVhMYLksQi+
-	jcDJhWM4=
-X-Google-Smtp-Source: AGHT+IEGMn1pA1cYGHfXOyh1Rv4Go1MzRnm0Tp01LMUfGqfn8A1AvnWKfI8TNdqS3MmXOdAaPqpbQg==
-X-Received: by 2002:a05:6122:6593:b0:516:230b:eec with SMTP id 71dfb90a1353d-52765c89280mr6513732e0c.5.1743963700058;
-        Sun, 06 Apr 2025 11:21:40 -0700 (PDT)
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5275ae64302sm1575418e0c.24.2025.04.06.11.21.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Apr 2025 11:21:39 -0700 (PDT)
-Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-86d5e3ddb66so1713291241.2;
-        Sun, 06 Apr 2025 11:21:39 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVLx19QPiWTie+UOV5HTLJgB2eYVAZ0tcd+sWNlbBb/+PlVBVBe6hDHBCZ8FifkbawbMpaHLy8DamfCyo4=@vger.kernel.org, AJvYcCXaBPsUzN/VC1NcFhHl/3xKXVsD6XoY0RtMbCA/QvEjfDKeTRuPZGzapB53zT+ZcOdC9pxbGBMS1Dc1RQ==@vger.kernel.org
-X-Received: by 2002:a05:6102:3f8f:b0:4c1:7ece:88d9 with SMTP id
- ada2fe7eead31-4c856a2c5b1mr7651241137.21.1743963699239; Sun, 06 Apr 2025
- 11:21:39 -0700 (PDT)
+	s=arc-20240116; t=1743972878; c=relaxed/simple;
+	bh=3u5D7QMdelDpQ5v2tzGaK5MeEw9WB/xTKNmlFuHNTis=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=K768PpfO2ztMhAm5ARzzBTTpMeByhIbxIhVXxVHCc5HfA1oKLYCUddwEeI9b76StpxzfpwI0JDgN4KpCXvIskgRqJXvi8efsVR3U/dD1Z6UDwHj6jlzbnWhLLaoEXUyuuOrI+TqpLPGxvAkHh/K1CJCAUJGAr0u4R63bDXK4g5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IgKAVIbO; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1743972874;
+	bh=3u5D7QMdelDpQ5v2tzGaK5MeEw9WB/xTKNmlFuHNTis=;
+	h=Date:From:To:Cc:Subject:From;
+	b=IgKAVIbOY2O3iE64zRTYDjrS+bEU8sURYNsXFaDz2GAXsaGqAgpYZfsTKs/BsURDs
+	 /3eNJU0EHSAOt7YqWL/X/t07ckAAbtLGm/p23c0BrXaNLBump/QDfxv26CuMFxfgap
+	 aCjAJv9+e1fEqG6hBRiX7nI9y/NxPH7bc3lxSCyPWiwRgrBvE5bdtmfOf7wD0wExk9
+	 b05rXJ5qlQVpbEs1MOjOEgKNF7aMaZiemzsd72diFPDsa5y+8A9WU4abJ6Jfo10wOP
+	 UkxqrWGT17q9NfbEQLrj+qGqgbTT+gbBnay5FPx2adkQ9JvV2Vekg0G1jFd0fDGKPr
+	 6nGoStNXbOunw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZW4Ms4Cffz4wyh;
+	Mon,  7 Apr 2025 06:54:33 +1000 (AEST)
+Date: Mon, 7 Apr 2025 06:54:32 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: failure fetchign the the tip tree
+Message-ID: <20250407065432.0f5a8c30@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250324173242.1501003-1-arnd@kernel.org> <20250324173242.1501003-2-arnd@kernel.org>
-In-Reply-To: <20250324173242.1501003-2-arnd@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Sun, 6 Apr 2025 20:21:27 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWpbrLms_0Ukfdz2Me_VJxP48X1YgSCt9hEc=T2AZWjtg@mail.gmail.com>
-X-Gm-Features: ATxdqUHj902URW2CruvbnJIkEHk8_NegI2tcXrNlPqQrXtXbUGHKxRBOcRDA6dY
-Message-ID: <CAMuHMdWpbrLms_0Ukfdz2Me_VJxP48X1YgSCt9hEc=T2AZWjtg@mail.gmail.com>
-Subject: Re: [PATCH 02/10] ASN.1: add module description
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Jeff Johnson <jeff.johnson@oss.qualcomm.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, linux-next@vger.kernel.org, 
-	Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/1=gDHofyclz.xA82aVnHFgR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi Arnd,
+--Sig_/1=gDHofyclz.xA82aVnHFgR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 24 Mar 2025 at 18:35, Arnd Bergmann <arnd@kernel.org> wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> This is needed to avoid a build warning:
->
-> WARNING: modpost: missing MODULE_DESCRIPTION() in lib/asn1_decoder.o
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi all,
 
-Thank, this fixes build issues in the m68k defconfigs
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Fetching the tip tree
+(https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git#master)
+today produces this error:
 
-> --- a/lib/asn1_decoder.c
-> +++ b/lib/asn1_decoder.c
-> @@ -518,4 +518,5 @@ int asn1_ber_decoder(const struct asn1_decoder *decoder,
->  }
->  EXPORT_SYMBOL_GPL(asn1_ber_decoder);
->
-> +MODULE_DESCRIPTION("Decoder for ASN.1 BER/DER/CER encoded bytestream");
->  MODULE_LICENSE("GPL");
+remote: fatal: bad tree object 7bbeab06d5538bd4ae6a29ef18c9ccd2499dfaeb
+remote: aborting due to possible repository corruption on the remote side.
+fatal: protocol error: bad pack header
 
-Gr{oetje,eeting}s,
+--=20
+Cheers,
+Stephen Rothwell
 
-                        Geert
+--Sig_/1=gDHofyclz.xA82aVnHFgR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+-----BEGIN PGP SIGNATURE-----
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmfy6ggACgkQAVBC80lX
+0Gw51Qf+Kg1l4JlYgyWD3mViEFvmX1wNQpVHEYdVM7edsK3YQabhclQD4CXcEUrj
+3L25yog60ErJ7sLo2fJh+FFxb4XqDno16nplnSkUIBohgLsLI5n6fWmUPhovEG5E
+W+f70itkm1Oe729hwiMBYal3atuhoUr7Mgum56GOcmhmkqIByXUh++MkxjsGyrD8
+4i9lyIRmlWn5dmm3A6d1euJVYOdFAxholFuTx9enzv1Yx2bxivK/7vuCH1MD1+FJ
+bPfMKKVDEDD2hzFGEumykcVmJcz0vw4c+mwSDoIIQK182E7ACKvsXjgAXWnXqBeX
+b2kV4T1EZCC4G6w11wOurNzFhidbhA==
+=ndCK
+-----END PGP SIGNATURE-----
+
+--Sig_/1=gDHofyclz.xA82aVnHFgR--
 

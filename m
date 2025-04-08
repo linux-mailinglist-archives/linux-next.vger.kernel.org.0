@@ -1,98 +1,156 @@
-Return-Path: <linux-next+bounces-6183-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6184-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25010A7F511
-	for <lists+linux-next@lfdr.de>; Tue,  8 Apr 2025 08:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B695CA80722
+	for <lists+linux-next@lfdr.de>; Tue,  8 Apr 2025 14:34:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A51D3B0054
-	for <lists+linux-next@lfdr.de>; Tue,  8 Apr 2025 06:35:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47DCD8866E9
+	for <lists+linux-next@lfdr.de>; Tue,  8 Apr 2025 12:21:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0827325F78F;
-	Tue,  8 Apr 2025 06:35:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 322A526B2DD;
+	Tue,  8 Apr 2025 12:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CyxrQgFA"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="bCIXj9mf";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="+wE0iaNX";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="bCIXj9mf";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="+wE0iaNX"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD2961CD15;
-	Tue,  8 Apr 2025 06:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F9B1FCFF3
+	for <linux-next@vger.kernel.org>; Tue,  8 Apr 2025 12:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744094151; cv=none; b=N2KynkgxQGgIMjcDoYe3ci1BTauSXBWqyTnDE00ZxntFGmPyHtGhG6+Szwotk7n4Cr+b5pvSlFdQGOuBou84B0jbBPvDX2UyTIQPa2AryDv2WbpXXiyMjrUGqn6Psi8QbnIed/wl2YfiHVgpiql3mAMgXbazL4cMnFLOJpyjTU0=
+	t=1744114743; cv=none; b=YNiaMFOw/x3UjsXftYZHfp4/DKR73SzYMiG8Gwj6BXCQgwmF9OaiqnRoUF99nA9Y3u6yzMJGmbAdKgMmwpt24Is27ZP0R7zyp9NiEQHOlS+pdD7JwD7gCIlmI7p9CT5PrHSuQ76Sx+dDgFMw9LPAW/lz5ivjVLKpT2vmuDWsvB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744094151; c=relaxed/simple;
-	bh=Csqgrzyk+uBAewDCXxAVP30No7fss9Z45XpijiikhNs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NCMlukhFbsXZQ3A0Ao9PYoHGHnXR3A5T/Wq1i1V+v30XqHRZ+UN/1xAaNXgbqYgLWAp/Rcs5DFYJ2qud+qL3SEjm1jMKEEYZhICT19NR9j4JEPm8SkGdu9xM1EW2PW6WzO/+10GyeDq204oFIj7iOqMCuzlNo7c7owFymz0p7+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CyxrQgFA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF770C4CEE5;
-	Tue,  8 Apr 2025 06:35:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744094151;
-	bh=Csqgrzyk+uBAewDCXxAVP30No7fss9Z45XpijiikhNs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CyxrQgFAql85niNS0g6S67Ta4AYHuTXDHML/VqxfetcqFYjm0PiEl9Lz0dutT3qcH
-	 9nKubvNkkgpYQSKV5mje4Qj2kzWsI8H5BvjgyN2L8GNptItE9smEChP4ZMaOTX+MJL
-	 wbhn/Yj17G+9Cwwl0fU25LnD1V1z/0HlxGSN06iY5XT+eggIDljSsCkwYnnAPlxcBT
-	 O7saJ3Dhz/KP7RFQs15xx9glGC3sMoxgPR3yYUKwMzSQDnThfWqJGw85vscNHtuJSx
-	 oR/3z0xiAw9Kdt0hkHsPUE0jBueVBv4skrIA6FgYZNCEUn2nE5BSjXHaAO05HsA5FM
-	 FLbtkafhsPsKg==
-Date: Tue, 8 Apr 2025 08:35:46 +0200
-From: Ingo Molnar <mingo@kernel.org>
+	s=arc-20240116; t=1744114743; c=relaxed/simple;
+	bh=sYPxeZK936EVFr7AsQTpdf5bA66QrnQRSJ598hdXWcQ=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=C02QyxR9ArVC/pEcD9gViR8cy41HlZgeVKxqyxS64Nuc4WhZfXwErwNt/xUjW5/Xo5Kt900EDdaNQi4UpD0MkgSvfwR7C2kh9jTVeqyAtvo/eVYMIaHpKL44ZyI0TNuyaXzl0idtcGDOCNFFeLzxZFmprYjsTv/xamJHBuC5f8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=bCIXj9mf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=+wE0iaNX; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=bCIXj9mf; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=+wE0iaNX; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id BD8B021185;
+	Tue,  8 Apr 2025 12:18:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1744114739; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qGYcgBHc8VjoivNn4IjEqPycNCabc5c0VhqSLw5Xq+M=;
+	b=bCIXj9mfzc3TAgwExTHXyb/lpHybAwrQN5XtHIf7QIqfkNRvL0hmS0h4mXgFqn9s8I2u6V
+	GKYtgQ8ZjIEgxLD3sQX6u7ERJqImbPT9Fyk96fFXeG7cn9ivTPkY/dxNCf8POSy2X7aacp
+	Vu8X/xL/tPWUMW07s+zZVFnHxBxvTro=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1744114739;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qGYcgBHc8VjoivNn4IjEqPycNCabc5c0VhqSLw5Xq+M=;
+	b=+wE0iaNXPGwzDxbFwqpFvUv1qnSnjwFah/K6CHTZoizOVoxSd6uU9/Uf6aAPWIilwrY4Qx
+	zHAocH2DK6b2/XDw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1744114739; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qGYcgBHc8VjoivNn4IjEqPycNCabc5c0VhqSLw5Xq+M=;
+	b=bCIXj9mfzc3TAgwExTHXyb/lpHybAwrQN5XtHIf7QIqfkNRvL0hmS0h4mXgFqn9s8I2u6V
+	GKYtgQ8ZjIEgxLD3sQX6u7ERJqImbPT9Fyk96fFXeG7cn9ivTPkY/dxNCf8POSy2X7aacp
+	Vu8X/xL/tPWUMW07s+zZVFnHxBxvTro=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1744114739;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qGYcgBHc8VjoivNn4IjEqPycNCabc5c0VhqSLw5Xq+M=;
+	b=+wE0iaNXPGwzDxbFwqpFvUv1qnSnjwFah/K6CHTZoizOVoxSd6uU9/Uf6aAPWIilwrY4Qx
+	zHAocH2DK6b2/XDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A658213A1E;
+	Tue,  8 Apr 2025 12:18:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id GFQaKDMU9WekGwAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Tue, 08 Apr 2025 12:18:59 +0000
+Date: Tue, 08 Apr 2025 14:18:59 +0200
+Message-ID: <87tt6yhmmk.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Linux Crypto List <linux-crypto@vger.kernel.org>,
+Cc: Mark Brown <broonie@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Takashi Iwai <tiwai@suse.de>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Uros Bizjak <ubizjak@gmail.com>
-Subject: Re: linux-next: manual merge of the tip tree with the crypto tree
-Message-ID: <Z_TDwj7cxauy0gQu@gmail.com>
-References: <20250408112830.4769244e@canb.auug.org.au>
+	Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the sound-asoc tree
+In-Reply-To: <20250408132729.78ce049a@canb.auug.org.au>
+References: <20250408132729.78ce049a@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250408112830.4769244e@canb.auug.org.au>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -3.30
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.998];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,suse.de,vger.kernel.org];
+	RCPT_COUNT_FIVE(0.00)[6];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_DN_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid]
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-
-* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-
+On Tue, 08 Apr 2025 05:27:29 +0200,
+Stephen Rothwell wrote:
+> 
 > Hi all,
 > 
-> Today's linux-next merge of the tip tree got a conflict in:
+> The following commit is also in the sound tree as a different commit
+> (but the same patch):
 > 
->   arch/x86/Kconfig.assembler
+>   7288aa73e5cf ("ASoC: loongson: Replace deprecated PCI functions")
 > 
-> between commits:
+> This is commit
 > 
->   984f835009d6 ("crypto: x86 - Remove CONFIG_AS_SHA1_NI")
->   d032a27e8fe9 ("crypto: x86 - Remove CONFIG_AS_SHA256_NI")
+>   a81aca6f8ed8 ("ASoC: loongson: Replace deprecated PCI functions")
 > 
-> from the crypto tree and commit:
-> 
->   a72d55dc3bd6 ("x86/idle: Remove CONFIG_AS_TPAUSE")
-> 
-> from the tip tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> in the sound tree.
 
-The resolution looks good to me, thank you!
+Yes, it's an oversight.  Since the doubly commits shouldn't bring too
+much problem for this small change, we decided to keep as is.
 
-	Ingo
+
+thanks,
+
+Takashi
 

@@ -1,105 +1,119 @@
-Return-Path: <linux-next+bounces-6195-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6196-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 148DFA83667
-	for <lists+linux-next@lfdr.de>; Thu, 10 Apr 2025 04:23:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AC49A837E8
+	for <lists+linux-next@lfdr.de>; Thu, 10 Apr 2025 06:40:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F0434A03E5
-	for <lists+linux-next@lfdr.de>; Thu, 10 Apr 2025 02:22:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 133161B6155A
+	for <lists+linux-next@lfdr.de>; Thu, 10 Apr 2025 04:40:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66AED1E9B1B;
-	Thu, 10 Apr 2025 02:20:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3AC41EB190;
+	Thu, 10 Apr 2025 04:40:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="QE00JUtz"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="I6ATp2oQ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA53F1E32CD;
-	Thu, 10 Apr 2025 02:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15335259C;
+	Thu, 10 Apr 2025 04:40:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744251611; cv=none; b=nElu2ViK3A0WEcBy4HG9EZcE2rvXfg1V1gNlj8nbQhN+WDrAC725Q8CIElmIDf8u6uqgbcH2kXCYG9hCGmce0jipwcdGNcnHbBFxYEONQMyb5gwsFnja8e9gD6PcYn8KzmOdj2aRkmKTQ+QVya4PH7EIBq+jYJ/ws8cDfsElHMg=
+	t=1744260019; cv=none; b=gUttJPOqr5xao9xDW1PE2ooz3Lj3J48vszXla0CvsO+PxEDphfadMUKBuxZK7SvtH540Oj/Ja0Gmo90n2uO4DIPyaC4pXMEx0EIgDCpvjpXSO/zgIKL7QLCnuYWu3wKq42fe6Obj0dc+bmv0Gc3BBPDsZlkGELKnqWqfqfoqcFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744251611; c=relaxed/simple;
-	bh=bUkqiLfAP/k+IFyaQBzohFul3Uad4pjwsVFoXvMIUm4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=AxKiRsCCIA0fna3aPezJ5p2GNp0Ju4RdlBd9kVPF8m6VeUeFyiXx8bePcUiGEnXNgeua1KcHfFovOgH/j8+pRcgFHx+tErLWqdL7LxhDyfl6/0hGfi7E5YstHMmmQO5C/p1Jk8WXhftwSIoADp2mG90su8RPirUyAO/UwrtvIaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=QE00JUtz; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1744260019; c=relaxed/simple;
+	bh=dgU+r1Kd+5sVDT1q85+jZqDo4nSjljnAEFJdkLJ5Lbc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=DF4JMHBIxJw8uwt0W/cJIzCc6tOCOFr7SIlljtJRhnmIIztmFIISZKsH/OLBpIKYsP8T2VCawoCxJTG2CsXlsCYFjZ+8P/Ukfqo/Oww4fQm17upznRVxfsM7g1eZOY1auwm6F/nHc1a1qOahO3amb1K8ppby7ZG4sdtPG3+MyJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=I6ATp2oQ; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1744251604;
-	bh=EIGh7xVw9mJe7tfwQcjcshSTNY9R4WoIrtEq0zhtpyw=;
-	h=Date:From:To:Cc:Subject:From;
-	b=QE00JUtzwc7pCrVRYXnz3qL0SUGpvba8+G/fLI1FGVzOP6B4VJM26IYfbcrFnFlP3
-	 FUku062M/dtXAWCeIEpnaTz+UQspGmgei4HxYLUwgvOrgzvon1q3CbtNuWWz02ykET
-	 gouKvKt1dZ343BQbZuchZmx6I8GEICHkovOy2iIXIAo+6NJpOiaqzYhOhcRzmQfIE3
-	 qU2qK4jx1IvaUIpDiiFXvVLPaE8ZLnsYI/PVFerMTErbccvb64742GKyx8+kYzVTTA
-	 RCpOoZs65iPUF2aoMCw8r3FHM0mCs/hSaHlejPLst7Etm57JITtixzLVPB2egJTdly
-	 fXB6YSH+a6LaQ==
+	s=202503; t=1744260011;
+	bh=rltrVT1Cc74K5pmQLyPNXg9Ms+Yl+JLn5rcLT2KUgOI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=I6ATp2oQq9yyJpaX9B8fBZVxGY8W72YyzmBPufVYQBxbof8s0PXOlbp6hrNPI7mqo
+	 m0un4vSMg5wdinQGwXC55EWFizjOICUWPTSEU3pGzmZPvw0BGN/paZfJ4A20Upqa7O
+	 +ccAHFlKOzDnBguV3x7OpSX2BSkLuNqz4FGiFGxlcPoWaqzK6nkFp1ZYsjRopmWV8G
+	 LN04IM2rMhdw+NDxbCHyE/QvcmWFmIzo3zc2ny8aM0Fy/uWvZwPLs128A6Rtfz+mO9
+	 rgmHDtH93RfL84w+Ukq1Kk5mMvnspw2IUQhh6WMOhFUKzxwbxMuu/5r5/feHXo7BzB
+	 LU32rtJilPXNg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZY3S404f4z4x2c;
-	Thu, 10 Apr 2025 12:20:03 +1000 (AEST)
-Date: Thu, 10 Apr 2025 12:20:03 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZY6Yl1dCwz4wcD;
+	Thu, 10 Apr 2025 14:40:11 +1000 (AEST)
+Date: Thu, 10 Apr 2025 14:40:10 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alasdair G Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>
-Cc: LongPing Wei <weilongping@oppo.com>, Mikulas Patocka
- <mpatocka@redhat.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Alex Deucher <alexdeucher@gmail.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>, Dominik Kaszewski
+ <dominik.kaszewski@amd.com>, Roman Li <roman.li@amd.com>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the device-mapper tree
-Message-ID: <20250410122003.5434159b@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20250410144010.502f7802@canb.auug.org.au>
+In-Reply-To: <20250409131035.1df305e3@canb.auug.org.au>
+References: <20250409131035.1df305e3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/551n4GLkAtAk0HXFkm7t2tx";
+Content-Type: multipart/signed; boundary="Sig_/V4lgCNzN2lW0tg5YojRK4J+";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/551n4GLkAtAk0HXFkm7t2tx
+--Sig_/V4lgCNzN2lW0tg5YojRK4J+
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the device-mapper tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+On Wed, 9 Apr 2025 13:10:35 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> After merging the amdgpu tree, today's linux-next build (htmldocs)
+> produced this warning:
+>=20
+> drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h:646: warning: Function =
+parameter or struct member 'fused_io' not described in 'amdgpu_display_mana=
+ger'
+>=20
+> Introduced by commit
+>=20
+>   ce801e5d6c1b ("drm/amd/display: HDCP Locality check using DMUB Fused IO=
+")
 
-ERROR: modpost: "__blk_flush_plug" [drivers/md/dm-bufio.ko] undefined!
+Today, due to changes in the kerneldoc software, the warning changed to:
 
-Caused by commit
-
-  713ff5c782f5 ("dm-bufio: improve the performance of __dm_bufio_prefetch")
-
-I have used the device-mapper tree from next-20250409 for today.
+Warning: drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h:645 struct membe=
+r 'fused_io' not described in 'amdgpu_display_manager'
+WARNING: kernel-doc 'scripts/kernel-doc.py -rst -enable-lineno -internal dr=
+ivers/gpu/drm/amd/displayamdgpu_dm/amdgpu_dm.h' failed with return code 1
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/551n4GLkAtAk0HXFkm7t2tx
+--Sig_/V4lgCNzN2lW0tg5YojRK4J+
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmf3KtMACgkQAVBC80lX
-0Gz8kAgAmXlyLAHb1KrPCiDS46XMuZGwYuYnZaLoFLxJWcroDDEANRP6LKvKDYmp
-gBS6ru/ATiz+CjidNpUG3Gv8ikCC8am3X58QSW+sw+x5Eub/ssjC+iYzIVNtrqvc
-VYfasmv8MvI7hy55n6MAD78aotli2rcpUF/BivXlaWKb92fmQV87owoVdiJO0O4o
-rW6zbpoG6UX7R+FiYqnOVHsU0K6GF/1bVqfLPoOsf+mAIDZNQBReU2vgQGagtgKE
-OuOJya+Oofqg60omWdXe90HBvGmhp4u4L0GwOdonmxxSzQ8YrCiWH7MCo2oYiS4u
-hclG5AtE4NW2aHn25Y2vaI+P/P6geA==
-=8YGT
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmf3S6oACgkQAVBC80lX
+0GzkMAf8CQOnqqEHZ3SGcrIg5O0bCP4GkikQu1ss8W0vbZnhu1JRuWYHjsgMiKVZ
+/e/51RB2zK1cayGcHhiDUw1vGdlq1GFJg3cisA6iHfuzXUf+ptit6/5DbxuKsOGC
+q4ud3JPG4j0DkrMIHaCivNkOEWNNfpTi+8TyeKl3SgAWQx9EWDACgZxMLiKT+CCl
+Srv0orIhpJ2Wg4C8thu0vs+xNaaq9qgUh1MdzXk0L3EgSLdDQcvOh6owuOfOvM4X
+c1HtaS7yPHjH6suWepkoqXCwE4UwdvTNSY/G+f0Zt9dxmAIZ3u5nODetfKaev3B7
+/txgT7bbXvk2kvrwaJc2vrpkBdUAMQ==
+=UQ9A
 -----END PGP SIGNATURE-----
 
---Sig_/551n4GLkAtAk0HXFkm7t2tx--
+--Sig_/V4lgCNzN2lW0tg5YojRK4J+--
 

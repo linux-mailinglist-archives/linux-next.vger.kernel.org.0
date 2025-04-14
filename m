@@ -1,146 +1,97 @@
-Return-Path: <linux-next+bounces-6228-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6229-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A903A887BD
-	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 17:50:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCA2FA88AD0
+	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 20:14:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 860F03A8788
-	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 15:50:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A4901898A5F
+	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 18:14:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A11627587A;
-	Mon, 14 Apr 2025 15:50:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D867928E5E0;
+	Mon, 14 Apr 2025 18:13:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M80dE7Yq"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="dzSCGL7S"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D668425E813;
-	Mon, 14 Apr 2025 15:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6FA5288CB0;
+	Mon, 14 Apr 2025 18:13:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744645837; cv=none; b=AZr0MGnv2DRtA308fm+08ZvlNagK/LkvNGX8/eeQiiw7ohlTnst/dgFWyTKy2LFkpU6W3VSvdi8bwGzYaJzRiqFuEHfivewppO0FFhgXcDKj2hCcylhY6c4cEpQeuTvEax/vC0yb2sA041/irrXUxvhkl1/lSW+4M35cbrSUY5U=
+	t=1744654383; cv=none; b=E2Ctk+Xp4eV0fiHmbeIL8qlp9YFjXWE8j/qqkPm2r/7YjzeXQTmxgLdKCY7Gx2gX5JHutcJwMjvTw02xJ5Gb2ZpiDUErgidIwKt2/CW+kFsZjtbRZ41eP4UoLQ6tXDSgmdHNWDCMeY0FPqp78iO3f3DTGbJNhHppZLcTsXiiawA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744645837; c=relaxed/simple;
-	bh=r1m7JKkm48IkvWCjD/5V7wAI2RFbRWcgsqepwAl+GE8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PxyNB6WfnUzVC5KMReQyV13N89CyGzKAOmwjjPtCJGcIkPtKiFRPRy49X5xn1fd1qpwyixD5lLwLKSvJGCA/z5A3QiArjpeukDf5/YLOoQ2mDUxbZx0UApz26Mxdp7lMLaZGh4R75hRqMbXDPIGLYG4dWJ+o3dTzEKhs3w4inRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M80dE7Yq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A997C4CEEB;
-	Mon, 14 Apr 2025 15:50:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744645837;
-	bh=r1m7JKkm48IkvWCjD/5V7wAI2RFbRWcgsqepwAl+GE8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=M80dE7Yq4F/VYMpMWIsVzkuDbqHZhgNgq9OwpJ8f3vJn/yy+V4I2E2F9nc3v3oM2U
-	 FyldtmAZ7rJFJZ/7F0q8VYRW6L9D3ZP25vwLbUZCqr61v4M68tzHaldUVKOr0gi4C0
-	 Ky0+V0Zh/mRSIbIIUyCUG8N9soNdevg1awmW1xbFLb2/hcaTjHKi0zmDL01z12cqfN
-	 88L4PNFDWeyFBWlIF0q3rqZn1XRzzvkmia0G+WJ80oz+NJ9IL8D1GFoqiVjdUJp3gn
-	 Ucu7ObEkyY47hCeN1/qRiPGlkunDQzONS6ZN8Jf/YRxwQl4FbhW6r3EtGOPF0zyTxe
-	 H3FrIG13uM0YA==
-Date: Mon, 14 Apr 2025 17:50:26 +0200
-From: Ingo Molnar <mingo@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: syzbot <syzbot+c2537ce72a879a38113e@syzkaller.appspotmail.com>,
-	riel@surriel.com, bp@alien8.de, dave.hansen@linux.intel.com,
-	hpa@zytor.com, linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-	sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
-	tglx@linutronix.de, x86@kernel.org
-Subject: Re: [syzbot] [kernel?] linux-next test error: WARNING in
- switch_mm_irqs_off
-Message-ID: <Z_0uwvnbusKR2WqC@gmail.com>
-References: <67fce34b.050a0220.3483fc.0026.GAE@google.com>
- <20250414135629.GA17910@noisy.programming.kicks-ass.net>
- <Z_0lSxPcw4WW1wAP@gmail.com>
+	s=arc-20240116; t=1744654383; c=relaxed/simple;
+	bh=gY2+/IaOxZ9WI5uEFp9Ue+W+KfbiBOHIE2dibrrD68E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jRKVpLKhFD14NGhMSiYgzm79JpW6XPRgqJdJJdrf1u6cCkYwNPfQCVeI2B7hqcS4CNmVgSc0InoXunq9Mf/tXE1Mmj+n3Ph684oro8njCx+3LqqpDuB3fsAwOnbDErfHFASki7h2w9HkT/anraEj98TgDlNChMi9Ju37UXEvaE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=dzSCGL7S; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=pJ/36NqTPbfU92mLQwOP/jkuDkZAtiM1YNatxAkLpzM=; b=dzSCGL7Szdc4KTgwrVRHBaxS1o
+	rmMPX72z2Ph1B/x7b58EZ8ngWIX7cDyHRa2SzdR6nC1hFOGQos/44y06FY15vd6wQOjgV3fxmkKGk
+	bYkr5YqOOi9ozHs+wO+ebA701S7p3okKaysfZNzy995LOWjl9Po3U5AEkQZbgsnxSDhL3lG2cjwRm
+	icivkRnnb3njIZfaOgCUPyqD9UVkMc+AmwUaJHXz3a2P+69LVF5Ms6c4TqTpWrZc+CK6U5qaKV1Ik
+	9dDL4QsuwH3bKJ1dDYJMXvBrJkyB4qotRKmYjTE+bE4Lj/zzr5ItI4sLJDnGBbNsy6QoRtJtsrVbj
+	GGRmHmDw==;
+Received: from [50.39.124.201] (helo=[192.168.254.17])
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1u4OIc-0000000DFZe-15DV;
+	Mon, 14 Apr 2025 18:12:51 +0000
+Message-ID: <8d70668e-fd0e-4cd5-b33f-16f3250b90b8@infradead.org>
+Date: Mon, 14 Apr 2025 11:12:36 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z_0lSxPcw4WW1wAP@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Apr 14 (UML [2])
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-um@lists.infradead.org
+References: <20250414171511.6c7c80af@canb.auug.org.au>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250414171511.6c7c80af@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-* Ingo Molnar <mingo@kernel.org> wrote:
 
+On 4/14/25 12:15 AM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> * Peter Zijlstra <peterz@infradead.org> wrote:
+> Changes since 20250411:
 > 
-> > > Call Trace:
-> > >  <TASK>
-> > >  unuse_temporary_mm+0x9f/0x100 arch/x86/mm/tlb.c:1038
-> > >  __text_poke+0x7b6/0xb40 arch/x86/kernel/alternative.c:2214
-> > >  text_poke arch/x86/kernel/alternative.c:2257 [inline]
-> > >  smp_text_poke_batch_finish+0x3e7/0x12c0 arch/x86/kernel/alternative.c:2565
-> > >  arch_jump_label_transform_apply+0x1c/0x30 arch/x86/kernel/jump_label.c:146
-> > >  static_key_disable_cpuslocked+0xd2/0x1c0 kernel/jump_label.c:240
-> > >  static_key_disable+0x1a/0x20 kernel/jump_label.c:248
-> > >  once_deferred+0x70/0xb0 lib/once.c:20
-> > >  process_one_work kernel/workqueue.c:3238 [inline]
-> > >  process_scheduled_works+0xac3/0x18e0 kernel/workqueue.c:3319
-> > >  worker_thread+0x870/0xd50 kernel/workqueue.c:3400
-> > >  kthread+0x7b7/0x940 kernel/kthread.c:464
-> > >  ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:153
-> > >  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
-> > >  </TASK>
-> > 
-> > So I can reproduce, and I I think I see what happens, except I'm
-> > confused as to why the recently merged patches show this.
-> > 
-> > AFAIU what happens is that unuse_temporary_mm() clears the 
-> > mm_cpumask() for the current CPU, while switch_mm_irqs_off() then 
-> > checks that the mm_cpumask() bit is set for the current CPU.
-> > 
-> > This behaviour hasn't really changed since 209954cbc7d0 ("x86/mm/tlb: 
-> > Update mm_cpumask lazily") introduced both.
-> > 
-> > I'm not entirely sure what the best way forward is.. we can simply 
-> > delete the warning, or make use_temporary_mm() tag the special MMs 
-> > somehow and exclude them from the warning.
-> 
-> So, mm_cpumask is basically tracking on which CPUs the MM ran on, and 
-> this gets cleared lazily whenever there's an opportune time, but not 
-> during context switches (for shared cacheline performance reasons), 
-> right?
-> 
-> So why do we need to clear the mm_cpumask in unuse_temporary_mm() to 
-> begin with:
-> 
-> 	/* Clear the cpumask, to indicate no TLB flushing is needed anywhere */
->         cpumask_clear_cpu(smp_processor_id(), mm_cpumask(this_cpu_read(cpu_tlbstate.loaded_mm)));
-> 
-> What TLB flushing are we worried about here? Nothing much should 
-> trigger any TLB flushing for text_poke_mm AFAICS?
 
-Ie. something like the patch below - but I might be missing something 
-here ...
 
-Thanks,
+on i386 defconfig:
 
-	Ingo
+../arch/um/kernel/um_arch.c:480:6: warning: no previous prototype for 'text_poke_sync' [-Wmissing-prototypes]
+  480 | void text_poke_sync(void)
+      |      ^~~~~~~~~~~~~~
 
-=================>
- arch/x86/mm/tlb.c | 3 ---
- 1 file changed, 3 deletions(-)
 
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index 0ebbaab55b0a..d36d370042e2 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -1032,9 +1032,6 @@ void unuse_temporary_mm(struct mm_struct *prev_mm)
- {
- 	lockdep_assert_preemption_disabled();
- 
--	/* Clear the cpumask, to indicate no TLB flushing is needed anywhere */
--	cpumask_clear_cpu(smp_processor_id(), mm_cpumask(this_cpu_read(cpu_tlbstate.loaded_mm)));
--
- 	switch_mm_irqs_off(NULL, prev_mm, current);
- 
- 	/*
+on x86_64 defconfig:
+
+../arch/um/kernel/um_arch.c:480:6: warning: no previous prototype for 'text_poke_sync' [-Wmissing-prototypes]
+  480 | void text_poke_sync(void)
+      |      ^~~~~~~~~~~~~~
+/usr/lib64/gcc/x86_64-suse-linux/14/../../../../x86_64-suse-linux/bin/ld: arch/x86/kernel/module.o: in function `write_relocate_add':
+/home/rdunlap/lnx/next/linux-next-20250414/UM64/arch/x86/um/../kernel/module.c:209:(.text+0x1e7): undefined reference to `smp_text_poke_sync_each_cpu'
+
+
+-- 
+~Randy
+
 

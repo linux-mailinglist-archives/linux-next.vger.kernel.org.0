@@ -1,70 +1,70 @@
-Return-Path: <linux-next+bounces-6211-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6212-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 363C8A876E1
-	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 06:23:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8259A876EF
+	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 06:27:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DB69188FD3E
-	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 04:23:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAC7B3A69C7
+	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 04:27:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25BD61925BC;
-	Mon, 14 Apr 2025 04:23:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBAB9175D39;
+	Mon, 14 Apr 2025 04:27:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PiMfB+HK"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="I8m851z9"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 827E317A586;
-	Mon, 14 Apr 2025 04:23:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C885155C83;
+	Mon, 14 Apr 2025 04:27:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744604593; cv=none; b=eOocPuPgdjw6BGKRGcwDaYACf5HhTgZKT+GgOEoo0rE2lo5thhX8QYbUp8kqeRLufoR48Xx7PG92ohUEXrYIdykcpUr1+6MKXBKHYcUdi3aNw9rCRo0gf6JeIW0mzmbuKzlRlhQfZK1jh48Ii5PFLZUZsFOR5jvtJAe21XO7QhA=
+	t=1744604866; cv=none; b=l/xpVbX6p830aTEJz6wb1hS5vkalOQlvFWlbZbL5l4Rz4Z+Ot63IB/Trpfh8pDKEg0bzb27CSrvP7z/H4i4RLei7rMJ6T//DsGzXCu7JNq8/vhB7oOpo1ILijBzP5ucsnk2QRN1157XHmnha5EDNye2s/3ro+zT71ST+brDbphE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744604593; c=relaxed/simple;
-	bh=SI/yMIbrU5RJMbKvNS2C9js5QNV6MNoDwN8h2gvaqxc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=O2vVDmxDNZtGMym2pfc7/bgW55G8sG6YWH7DRKHVBUGXHLNAp1NBL97aEwPa3cDzeCzpKHMzjIcxjyJk7mHIgeziOHsVKJhDBvoZpsjx+/YAf3Oi8Sd3e7zHYm3dvpwaYlls4FL90kE+l6wLzw+dzWpVxYAfaP+7tGQ/hAzjG54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=PiMfB+HK; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1744604866; c=relaxed/simple;
+	bh=ANkMDoeKwRx61nJjsgTo5/adP+NJVOloiogx6HuztBI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=LTCR1QJHaQpsI3fUDzvgL4lOXkva2bm0SJwepvzS0djFpUFpzNfQjXlBUTzajs12hhh07bjvvq2m+rlAA9oaC3N+TBLHJrDUG/oYdNlLpHhegKMj5jD0pr10nDDq+Ixijjex32H93uzkM42sN6pVDdcg1bZFbrD1/miuUv5GYaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=I8m851z9; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1744604588;
-	bh=CyarvyjTtLMRhzYDsLNbSCVGVbO9qlGbtamPzbN+qNM=;
+	s=202503; t=1744604861;
+	bh=izat2NnbRoo5hRIjmcUQdtzedlt6iMtpmClmX2HNuBk=;
 	h=Date:From:To:Cc:Subject:From;
-	b=PiMfB+HKenf/60lR4m9+JEQ9PN33iP5iF88RLVMGobFyZ1R4xV595n+KRm5yEAA0H
-	 gTKx4gEKX/DAqbge7obKZPC16P1Lte9boQT+H4PJd1DjJpKrGsDNli5XNydqljT3Yc
-	 JgkTh3GGAB1DQV/2atPvyFofuTt0QzCmhhRPYTtJaGOQeyjRDG5XnElVOMhkVvdPiU
-	 eMX2VzlAqWMuhAeaIPxselLVgHxzor9CsE8Sxd0DxXbsx2FvPQS9lLp/z7q7lF5BbM
-	 TataLUR+tRyUgFQ+XNsQeSSYZMUozkTvJBeWqvuJe47xKXgWNiBXWAZSO977/27KZX
-	 EyzTXs1+6GxWA==
+	b=I8m851z9qePvxNCs1WLp+WVvEkcyWM/0iTyONe6aTruJwW7SU7Y6sfLvkqTricFzS
+	 lXHOo3c0YG/erYAlRY2EeeJXyVP2daz4SXz464sNevhmnusbxwXwyNb7EVh5khX/7F
+	 cGJc5ZeLj3DUfL1x0r2VtKs8Dl+7Huluy4nQh+f7FbU6WFCQhlBxCM2tiSeWraeyY5
+	 hJnIFpVw9nukXxw9HwPN3PWMRyMfN58N/MbXdDwTJzmDiinFgbK9SgAYQ/wdvBZEY7
+	 duSTmAdQcK4PSUqnlxUF4stEzj521WgA7AGcHWuxVEgeJ/vFBFY26vmaNjMj2Dj+mM
+	 nkDAPbBf6r5XA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZbZ0C5vWCz4wbb;
-	Mon, 14 Apr 2025 14:23:07 +1000 (AEST)
-Date: Mon, 14 Apr 2025 14:23:07 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZbZ5T33zyz4wnp;
+	Mon, 14 Apr 2025 14:27:41 +1000 (AEST)
+Date: Mon, 14 Apr 2025 14:27:40 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Greg KH <greg@kroah.com>
-Cc: Fedor Pchelkin <pchelkin@ispras.ru>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Xu Yang <xu.yang_2@nxp.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Mathias Nyman
+ <mathias.nyman@linux.intel.com>, Wesley Cheng <quic_wcheng@quicinc.com>
 Subject: linux-next: manual merge of the usb tree with the usb.current tree
-Message-ID: <20250414142307.7df3443d@canb.auug.org.au>
+Message-ID: <20250414142740.550af271@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QTB6j2jdEf+9OAfWRawRpEu";
+Content-Type: multipart/signed; boundary="Sig_/zkdLiaEg5pubC/WNE6xYyWz";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/QTB6j2jdEf+9OAfWRawRpEu
+--Sig_/zkdLiaEg5pubC/WNE6xYyWz
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -72,20 +72,22 @@ Hi all,
 
 Today's linux-next merge of the usb tree got a conflict in:
 
-  drivers/usb/chipidea/ci_hdrc_imx.c
+  drivers/usb/host/xhci.h
 
 between commit:
 
-  8cab0e9a3f3e ("usb: chipidea: ci_hdrc_imx: fix call balance of regulator =
-routines")
+  bea5892d0ed2 ("xhci: Limit time spent with xHC interrupts disabled during=
+ bus resume")
 
 from the usb.current tree and commit:
 
-  ee0dc2f7d522 ("usb: chipidea: imx: add wakeup interrupt handling")
+  5beb4a53a1dd ("usb: host: xhci-mem: Cleanup pending secondary event ring =
+events")
 
 from the usb tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
+I fixed it up (they both added the same function, and the former added
+another function, so I used that) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
 conflicts should be mentioned to your upstream maintainer when your tree
 is submitted for merging.  You may also want to consider cooperating
@@ -96,50 +98,21 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/usb/chipidea/ci_hdrc_imx.c
-index 4f8bfd242b59,c34298ccc399..000000000000
---- a/drivers/usb/chipidea/ci_hdrc_imx.c
-+++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-@@@ -336,13 -338,16 +338,23 @@@ static int ci_hdrc_imx_notify_event(str
-  	return ret;
-  }
- =20
- +static void ci_hdrc_imx_disable_regulator(void *arg)
- +{
- +	struct ci_hdrc_imx_data *data =3D arg;
- +
- +	regulator_disable(data->hsic_pad_regulator);
- +}
- +
-+ static irqreturn_t ci_wakeup_irq_handler(int irq, void *data)
-+ {
-+ 	struct ci_hdrc_imx_data *imx_data =3D data;
-+=20
-+ 	disable_irq_nosync(irq);
-+ 	pm_runtime_resume(&imx_data->ci_pdev->dev);
-+=20
-+ 	return IRQ_HANDLED;
-+ }
-+=20
-  static int ci_hdrc_imx_probe(struct platform_device *pdev)
-  {
-  	struct ci_hdrc_imx_data *data;
-
---Sig_/QTB6j2jdEf+9OAfWRawRpEu
+--Sig_/zkdLiaEg5pubC/WNE6xYyWz
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmf8jasACgkQAVBC80lX
-0Gx4CQgApiqKDqgJK4H7NS4rSHd8G0aRkhGs4QKueKzaylXUD63pYlvpf/QvsSVB
-rP9YCjfs5AAb0yKUe3hNEFRr+ymuKF2f94ka2sIAZU4izpLeqJpOLyLmovkCYHKS
-O1aRiLsWEFotMGGgXsyO2YDnmarRw5NI+QiwRokagglEbt4gNMTucGvLBxG+CWCU
-T1emAMkF40DWYwr0bON1+m68LLBqbLqU9nq9xIl2+3pOvq1TILtAXPS05Q/fRhEI
-Z46/1vzgU2r41+Mib3HeDNEDJINbajQ+IigQl1Fy2kp7kU/gFrmUkRogMuoq40OL
-AlI4W98owiPCDu3ojnp86D7vNUHioQ==
-=AnX4
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmf8jrwACgkQAVBC80lX
+0GzpUwf9HntDjxp4WdMbmdEYMtCUIrKH5Kkwd46PjklrwnR7oVGSXJWaGXy0cbwy
+eCSsQYS0C9Z0XmkKJyqKI2lHeBj1VNhpb+OZQxq3+lPMrZC38Ngp/EqRmKNAZ7WF
+2AP/woxhWdB3CJZ/kgrjnc89gfAczGZ4imQFWlxTGugWhh/BCIegyqyg52vCqSS0
+UxQOZKvJ7FXUjJIx77TiSOyDLl3K49GS8S0g0DvYbstw0dMaMJNpqHyyh0V57jIK
+sUEeqNXxCdToXSbdqDMGyEMWHK67IIq1pVnE933iEkW5pXLv0RH+IgDvQ6ej2VNX
+0RUvjMlmY82viI/5DYhh+JkPT/t+kA==
+=Qff7
 -----END PGP SIGNATURE-----
 
---Sig_/QTB6j2jdEf+9OAfWRawRpEu--
+--Sig_/zkdLiaEg5pubC/WNE6xYyWz--
 

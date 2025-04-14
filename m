@@ -1,123 +1,81 @@
-Return-Path: <linux-next+bounces-6223-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6224-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A650A881DF
-	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 15:27:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB569A8842B
+	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 16:14:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF9317AA72D
-	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 13:26:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB1BB1717BB
+	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 14:07:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB471279914;
-	Mon, 14 Apr 2025 13:24:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16FD02DFA59;
+	Mon, 14 Apr 2025 13:33:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mFCriNJ/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UL239mgp"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0277279902;
-	Mon, 14 Apr 2025 13:24:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9F52DFA57;
+	Mon, 14 Apr 2025 13:32:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744637093; cv=none; b=oGKKBmRhqfazlWYlMfEr5TsAIwkBDCPj4CBvBUX7xq9xxFuNxlU4sXq15FPi1XZh67IAGTuOI+graFz18ruyRG03uUWVzPimXDQvJ91Cyl9pervz6up3fSSDBAqg5RdwsbjD88FxGGCa2FJCUMBbeAH2jX2DAzsza1z0X6X4Q8k=
+	t=1744637580; cv=none; b=EygfJgp0Wq4siOsJ0zJp8fDLODus/2XF+K0igtvUKpvNtTcn89DrFacql3opIdvPyB0Oh6KrWq5dbtoX46VJ8Vs+qfjie42xDtc7XT/ja8o8Pe+beSyR/gDzYMMi/nKL66dGw3Lokw97HefaGLZ/MtwsfGZsro2euwwsm1LxoSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744637093; c=relaxed/simple;
-	bh=ACVA+TUPNfROGQIvsomtPiAhn/6FzmipLP5nblzK3RQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dVBxzYXujQpDNEoHzZ7562PXkwTZu0tLNXtjAyMPFpzoBvA4zY2m4lFh+zJ5Lewo2eIwZjpl9ga50p0190ilTcqGg8Lyp0m0gnQQb/YDMZdzPdKe23BaYHFAm0Y7FUkCayRyMvNN3rqZS+lzd3bB0EDcf5m/qtok0iuCKcWOWTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mFCriNJ/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C34AAC4CEE9;
-	Mon, 14 Apr 2025 13:24:50 +0000 (UTC)
+	s=arc-20240116; t=1744637580; c=relaxed/simple;
+	bh=PVh4ckW/rAu6UdSpu1FQ1HmH0IVyLanqaHyGThOzK58=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IV+slTg9+PpsTd9caQRrjdkPLCcZfNRehC6YaU/2xj1i4a0GDCG61z8CZAzpF35Tl+3oNqp981l8Lb9rhAZwU6S3KA0kss8fWnw5A+ubeRBk+ct5FgZEvrKIGCT4r+r9XR30t5j5FwB1Eajnrcy940xsUWu542nhWRuKiiBhZNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UL239mgp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF24C4CEE2;
+	Mon, 14 Apr 2025 13:32:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744637092;
-	bh=ACVA+TUPNfROGQIvsomtPiAhn/6FzmipLP5nblzK3RQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mFCriNJ/U1LCcnmlXrR970arCWU9JWeP+uI+fcxAR5yOUjKwMJ7GxXN59c+X3goy0
-	 07s/lNrbDjbZmoBaXjF6qtZBxkNNSQjsjNEgt6ApUkfVoAGbymm/XAjp5j8tUTRiZk
-	 Utp3jE4wb2aLafNZzeIdIad+EysD5lBiewrGWN02LrdKnvQP44eLmn0s0XJh/6VI/X
-	 /BIkUKjP20aclzs0MDDj/M26Jiuiv2z2EgLBVuASTgEoAfcRxk58sjYkYiQRFOfiSa
-	 sngEyQxHdn+OCagW8EhlZlh5JdHs/Yk99+2zCLD+IT1HbDrdfiEnoVqvZzto1zXcJH
-	 17DklS5/4qxMw==
+	s=k20201202; t=1744637579;
+	bh=PVh4ckW/rAu6UdSpu1FQ1HmH0IVyLanqaHyGThOzK58=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UL239mgpFjvycQleYGG196KUI2P5dJvBx0NNdhasKNPF730HTIuavUmYHrahmqdo+
+	 uNJc3k6XJSXl8asyT6I8vxoQ7t92JLplM80KpAqC+IFou5pW1UVzQ5dsnDE6rUfsJZ
+	 0sWFN8/Mc9kAx+He3erSB/PBaqYWb8dv9hIwKp6xS33y7vpcWiYlADTjUYpfvNGEQ5
+	 /uPo0MtXKY/3V7NPeGpJAayKK1OtZ5h5FQWSmzxaBUwUal18bWYWTZgGnczNwS9q3Z
+	 sagIgbkcL40Br086w867EhMb6MJ8DT0I0EULpiE71yQ4C9rOcuuIG8vskJkxN+42YV
+	 kuTnoxeIIxZ3Q==
+Date: Mon, 14 Apr 2025 21:32:55 +0800
 From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: bleung@chromium.org,
-	sfr@canb.auug.org.au
-Cc: chrome-platform@lists.linux.dev,
-	tzungbi@kernel.org,
-	linux-next@vger.kernel.org,
-	srosek@chromium.org
-Subject: [PATCH 2/2] platform/chrome: cros_kbd_led_backlight: Fix build dependencies
-Date: Mon, 14 Apr 2025 21:24:27 +0800
-Message-ID: <20250414132427.204078-3-tzungbi@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250414132427.204078-1-tzungbi@kernel.org>
-References: <20250414132427.204078-1-tzungbi@kernel.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	chrome-platform@lists.linux.dev, Simon Que <sque@chromium.org>
+Subject: Re: linux-next: Tree for Apr 11
+ (drivers/platform/chrome/cros_kbd_led_backlight.c)
+Message-ID: <Z_0Oh8OjiLVUSbMh@tzungbi-laptop>
+References: <20250411154455.3767ebb7@canb.auug.org.au>
+ <ed8adc69-c505-4108-bf63-92911b0395c7@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ed8adc69-c505-4108-bf63-92911b0395c7@infradead.org>
 
-ccf395bde6ae ("platform/chrome: cros_ec_proto: Allow to build as module")
-allows CROS_EC_PROTO to be a module.
+On Fri, Apr 11, 2025 at 02:29:22PM -0700, Randy Dunlap wrote:
+> On 4/10/25 10:44 PM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20250410:
+> > 
+> 
+> pn x86_64:
+> 
+> ld: vmlinux.o: in function `keyboard_led_set_brightness_ec_pwm':
+> cros_kbd_led_backlight.c:(.text+0x3554e4c): undefined reference to `cros_ec_cmd_xfer_status'
+> ld: vmlinux.o: in function `keyboard_led_get_brightness_ec_pwm':
+> cros_kbd_led_backlight.c:(.text+0x3554f41): undefined reference to `cros_ec_cmd_xfer_status'
 
-The config is possible to be:
-- CONFIG_ACPI=y
-- CONFIG_CROS_EC=m
-- CONFIG_MFD_CROS_EC_DEV=m
-- CONFIG_CROS_EC_PROTO=m
-- CONFIG_CROS_KBD_LED_BACKLIGHT=y
-
-As a result:
-ld: vmlinux.o: in function `keyboard_led_set_brightness_ec_pwm':
-cros_kbd_led_backlight.c:(.text+0x3554e4c): undefined reference to `cros_ec_cmd_xfer_status'
-ld: vmlinux.o: in function `keyboard_led_get_brightness_ec_pwm':
-cros_kbd_led_backlight.c:(.text+0x3554f41): undefined reference to `cros_ec_cmd_xfer_status'
-
-The built-in code in CROS_KBD_LED_BACKLIGHT can't find symbols defined in
-the module CROS_EC_PROTO.
-
-Let A=ACPI (bool), M=MFD_CROS_EC_DEV (tristate), and
-K=CROS_KBD_LED_BACKLIGHT (tristate).  The possible values are:
-
-| A | M | choice for K |
-------------------------
-| y | y | y/m/n        |
-| y | m | m/n          |
-| y | n | y/m/n        |
-| n | y | y/m/n        |
-| n | m | m/n          |
-| n | n | n            |
-
-Fix the dependencies in the Kconfig.
-
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Closes: https://lore.kernel.org/chrome-platform/ed8adc69-c505-4108-bf63-92911b0395c7@infradead.org/T/#u
-Fixes: ccf395bde6ae ("platform/chrome: cros_ec_proto: Allow to build as module")
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
----
- drivers/platform/chrome/Kconfig | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
-index 1614b9d3c5c2..10941ac37305 100644
---- a/drivers/platform/chrome/Kconfig
-+++ b/drivers/platform/chrome/Kconfig
-@@ -161,7 +161,8 @@ config CROS_EC_PROTO
- 
- config CROS_KBD_LED_BACKLIGHT
- 	tristate "Backlight LED support for Chrome OS keyboards"
--	depends on LEDS_CLASS && (ACPI || MFD_CROS_EC_DEV)
-+	depends on LEDS_CLASS
-+	depends on MFD_CROS_EC_DEV || (MFD_CROS_EC_DEV=n && ACPI)
- 	help
- 	  This option enables support for the keyboard backlight LEDs on
- 	  select Chrome OS systems.
--- 
-2.43.0
-
+Proposed a fix in https://lore.kernel.org/chrome-platform/20250414132427.204078-3-tzungbi@kernel.org/T/#u
 

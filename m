@@ -1,112 +1,107 @@
-Return-Path: <linux-next+bounces-6232-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6233-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 295C7A88EE2
-	for <lists+linux-next@lfdr.de>; Tue, 15 Apr 2025 00:09:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69689A88EE9
+	for <lists+linux-next@lfdr.de>; Tue, 15 Apr 2025 00:11:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63D657AA984
-	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 22:08:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22EBF3AB7B5
+	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 22:11:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D16FB1F4639;
-	Mon, 14 Apr 2025 22:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 654101EEA59;
+	Mon, 14 Apr 2025 22:11:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="j6ctk9rb"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="hMA4HNAs"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318FA1F4190;
-	Mon, 14 Apr 2025 22:08:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1091EEA4A;
+	Mon, 14 Apr 2025 22:11:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744668523; cv=none; b=MIFx0dxxYqYv2GgnsABv8qAIT8jp3vYi8wRSQa3Zq9ZfKVa6taHG89LF6KCqKs0CNNHOYnALEldTAiyLfZWiPicvFZc8k9gEZgwKplwWxhIj7NbuNaX2rA7Dr6hMvMWeps1zp7skPAhQEisKZ5uMsGzqO+2iOCG093wjdcYpx4s=
+	t=1744668688; cv=none; b=gQYy0nI08T38fA5gYknEcJIEWVZrpoQtW4AQMzBpWoMsdFaLWqIfSdfU8UHNQeB5m/FSR5Dke5tfJMG9i0j3i6c5YKUEg6LlQljR9RbQbj5dfDMH4jdIWR72cOkXMsqZvj9KssURdBSUmyj3kpPB7Qf22kodsWOmQ8shjkvujFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744668523; c=relaxed/simple;
-	bh=9Yo0VnBx72SR6fTR3rO+jIcqF/jg1UP0MC6aWN4pb10=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=gKI2DsFsKtfvJJ7cfClgxryF75Pvv8CGbgZzd0Ib4zGBw4LDeBYm70Bq/D2U5uwEnkqfowKCZkQE7YEQR9Vz0+YB+ibJQ0iuIxg1KUv4H13Gz/QPcolG2uhfQRSjpqN25abH/dtSzRiQin6wfETlFNrhaNCz0RflV1ifyAqcM4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=j6ctk9rb; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1744668518;
-	bh=kDu+BlNi+UHbmYwJ6hWzHVjUNjd/te1W25WFCYyPpPQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=j6ctk9rbUwaN5gPspCV4MwhiOWzktdkMPfRJiK0MpquNtemMBaJ0TcKMICfyWD/Bz
-	 ID6lLw8YTVtzivstA6oWA4W2yMRRPeUub+AeGC/w7LsUQgZVaA91ip7WYamn9+1qq6
-	 jl7tuVOfhq3jv851vyNFt53y/5vcVq2m8vV9hnbZoHWiOzCkkhqlWFu7Z60iKImng9
-	 dXj+nQTROZDbmBO8BACOpDz/sltMdFVt01KzElD44DYakEGjXIyIF1gINBj6omzsdT
-	 B7LmX73b3Cv+ZRM2g+pP48w7F+SbvDu0dcLF9UWOF0gT6xPUNcjW8b6cLJ0Nb6FXy5
-	 0CWuUpGe9Q+NQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zc1df2TsGz4wcy;
-	Tue, 15 Apr 2025 08:08:37 +1000 (AEST)
-Date: Tue, 15 Apr 2025 08:08:37 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Sterba <dsterba@suse.cz>
-Cc: Filipe Manana <fdmanana@suse.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the btrfs tree
-Message-ID: <20250415080837.477fd5a9@canb.auug.org.au>
+	s=arc-20240116; t=1744668688; c=relaxed/simple;
+	bh=cUE0zAXa5hPMBecTRoOdIjynzPgDmGWYiPP0wgNUr9M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DrkcXK8cE8pWu6GzXUvh0t6Kb+ygSxzfKtUhVtok9LDGTW6c9MQQ9zv5YgH4Y78WyYK3A84kxqq4qW4DK7Pc5931dHHgW2xL7R6PAOK67Yvyx7g8IsJP8m0waYS2hc/reB9qZKAAgJMS4O0KbkN0EOYI/dWYF1thZ1gQ/PL0GpA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=hMA4HNAs; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=Qxgdw+lYOjcGfLOYm1309qvR8kFdtfIB0s1YyPFtgnM=; b=hMA4HNAsuszo2WRXcLtSnJXKU1
+	SGGC1s1g9cSVVyZZLGgcm6lqSzDbNp53UngYqzDjgDMxa/+I2svgE9kdPtSTNg/Q120ieO4lny3bb
+	9vNnTrQcQPYE6RZkcQMQ8F5reca/g9375EPLVBiqdDjqC8MGVIkl4KL6RH+5ImFJh3GFeUcJdCZS3
+	6WMI5PwaSig7NEH4dShgd7yegjTeT8nBZBvTTu5KWYLxapiQReDG2A5m+PJxbVOBH3jaS5nW7M4VM
+	0qUEpwLG4CId17a0lgM8awIQZCQwEuMzCYhpOHOd1eEuX68zjceKZ+y80OYbv13Y0X7WoOgarZUWz
+	1YnCNsgA==;
+Received: from [50.39.124.201] (helo=[192.168.254.17])
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1u4S1B-00000001zOI-2v8T;
+	Mon, 14 Apr 2025 22:11:06 +0000
+Message-ID: <8c011b58-b9da-417f-80db-440f21a94fec@infradead.org>
+Date: Mon, 14 Apr 2025 15:10:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CC3AWSz0vs6WylPUwgyQX1B";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] platform/chrome: cros_kbd_led_backlight: Remove
+ CROS_EC dependency
+To: Tzung-Bi Shih <tzungbi@kernel.org>, bleung@chromium.org,
+ sfr@canb.auug.org.au
+Cc: chrome-platform@lists.linux.dev, linux-next@vger.kernel.org,
+ srosek@chromium.org
+References: <20250414132427.204078-1-tzungbi@kernel.org>
+ <20250414132427.204078-2-tzungbi@kernel.org>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250414132427.204078-2-tzungbi@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---Sig_/CC3AWSz0vs6WylPUwgyQX1B
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-In commit
+On 4/14/25 6:24 AM, Tzung-Bi Shih wrote:
+> After applying 3a1d61dc3202 ("platform/chrome: cros_kbd_led_backlight:
+> Remove OF match"), cros_kbd_led_backlight no longer depends on CROS_EC
+> directly.
+> 
+> Remove the redundant dependency.
+> 
+> Fixes: 3a1d61dc3202 ("platform/chrome: cros_kbd_led_backlight: Remove OF match")
+> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
-  fb1f2fdbcf36 ("btrfs: fix invalid inode pointer after failure to create r=
-eloc inode")
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
 
-Fixes tag
+Thanks.
 
-  Fixes: 00aad5080c51 ("btrfs: make btrfs_iget() return a btrfs inode inste=
-ad")
+> ---
+>  drivers/platform/chrome/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/chrome/Kconfig b/drivers/platform/chrome/Kconfig
+> index f523ae3d3be0..1614b9d3c5c2 100644
+> --- a/drivers/platform/chrome/Kconfig
+> +++ b/drivers/platform/chrome/Kconfig
+> @@ -161,7 +161,7 @@ config CROS_EC_PROTO
+>  
+>  config CROS_KBD_LED_BACKLIGHT
+>  	tristate "Backlight LED support for Chrome OS keyboards"
+> -	depends on LEDS_CLASS && (ACPI || CROS_EC || MFD_CROS_EC_DEV)
+> +	depends on LEDS_CLASS && (ACPI || MFD_CROS_EC_DEV)
+>  	help
+>  	  This option enables support for the keyboard backlight LEDs on
+>  	  select Chrome OS systems.
 
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: b204e5c7d4dc ("btrfs: make btrfs_iget() return a btrfs inode instead=
-")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/CC3AWSz0vs6WylPUwgyQX1B
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmf9h2UACgkQAVBC80lX
-0Gxr4Qf/TOlQWvxxWQQqsDBqj9ZgxOTJqaSOX0iKcqpH9HlvvJF1kzNZHevk1ir1
-C+D3TWLr9vbR1kvsj0vBMQxrhi25UEQ9iNxsu0BxDgegg9W6gl157Viw9FU0vKYU
-gMFas+Qh1x6jaGv8S9xtu7nRrbEqi6P80f+UaAkLE7pQeA+CE2KndH6Ie/FnXsXH
-ymfB4XlKRfOHRWaBj5lSNQcs61ivEr5n9POGgEQBvUMtzlDrgJHRp4TQ+IJu6s18
-yLiwNnoIQd7oPF3c6hbfSMgPRKqdIUYKoUvZgkcg6Ae5fEwbqrurL4wOn9lsZUce
-d5ap0QW8HaxT6Hghe8xqNz5vA4/bFQ==
-=sx+e
------END PGP SIGNATURE-----
-
---Sig_/CC3AWSz0vs6WylPUwgyQX1B--
+-- 
+~Randy
 

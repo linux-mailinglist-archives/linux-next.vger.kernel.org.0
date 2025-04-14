@@ -1,93 +1,89 @@
-Return-Path: <linux-next+bounces-6210-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6211-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C804DA876A7
-	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 06:14:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 363C8A876E1
+	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 06:23:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D23D51667AB
-	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 04:14:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DB69188FD3E
+	for <lists+linux-next@lfdr.de>; Mon, 14 Apr 2025 04:23:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAEA3199E84;
-	Mon, 14 Apr 2025 04:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25BD61925BC;
+	Mon, 14 Apr 2025 04:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HN6IPRCX"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PiMfB+HK"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951ABF9FE;
-	Mon, 14 Apr 2025 04:14:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 827E317A586;
+	Mon, 14 Apr 2025 04:23:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744604064; cv=none; b=Yd74YKoK5CGIX5l568sDcgxdec9s4zE3NxsF96E+myXKQHm+ZJzVrJgkGiFzALhQdW79F/pUB0PJYUvwRvNOKqZ+FxPVY/UWgs507cO9Tha2Lc3lYOklOzvdYxq56GzwJxkgTaul3Ylhr7sOSbpwIqX7LsD8peQ4smRsbKnn2EY=
+	t=1744604593; cv=none; b=eOocPuPgdjw6BGKRGcwDaYACf5HhTgZKT+GgOEoo0rE2lo5thhX8QYbUp8kqeRLufoR48Xx7PG92ohUEXrYIdykcpUr1+6MKXBKHYcUdi3aNw9rCRo0gf6JeIW0mzmbuKzlRlhQfZK1jh48Ii5PFLZUZsFOR5jvtJAe21XO7QhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744604064; c=relaxed/simple;
-	bh=9ycSAGCn/N7lHXI00aJ49NEF/zfU6sodzqjJrT6h6Lw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=bR4lmZshICPcDSMZw1ut0S3c/XOtXzGjmhbqDzELlJqq2JGoxrdSTmb/bPJNPT9l5Pqs+/bVzWUO0OjRakoD4Cj8j0TtU06cXppGrz46voYWTg1SVcpM7fB7Lws8XQl2P7WZ0Xi1vNp6H7MlZbBwz0jc936xNcEdorPoT88Jn5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HN6IPRCX; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1744604593; c=relaxed/simple;
+	bh=SI/yMIbrU5RJMbKvNS2C9js5QNV6MNoDwN8h2gvaqxc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=O2vVDmxDNZtGMym2pfc7/bgW55G8sG6YWH7DRKHVBUGXHLNAp1NBL97aEwPa3cDzeCzpKHMzjIcxjyJk7mHIgeziOHsVKJhDBvoZpsjx+/YAf3Oi8Sd3e7zHYm3dvpwaYlls4FL90kE+l6wLzw+dzWpVxYAfaP+7tGQ/hAzjG54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=PiMfB+HK; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1744604054;
-	bh=+W04DPVRK/5aBuiIFsxv0Q9xp/bifT9N7ci3BNtR8oQ=;
+	s=202503; t=1744604588;
+	bh=CyarvyjTtLMRhzYDsLNbSCVGVbO9qlGbtamPzbN+qNM=;
 	h=Date:From:To:Cc:Subject:From;
-	b=HN6IPRCX9Q+zAxm9iIgtg+x3BldQum1YUaay2DEmtrB88goNETQck4100TT25o6ZL
-	 H7JPBoiPARz/7+8KjvlrnPtfyGtvK9N4q15U/1o4dDGOfymDrHpv+fh6THaNsI370Z
-	 3AfPotLKZ3FUGsyAIqCl+p77AL3w4hfJM95uBQCnsGTNDeOrmsFNEycA3KPtA1H66d
-	 DQ3Fsg9YW+KLAyL4ErCz6RWtqaCOMIKsxhzROv6HvulzJ9BE8XqwT6AUop0eielSm6
-	 IXFJ71RCJzolFbJSSFaYFmcy+5qYrJP2g/aAEpn5vhCt6mxMZOy99lc4cahjVmPN8Z
-	 IYJ7Lp0wCoVAw==
+	b=PiMfB+HKenf/60lR4m9+JEQ9PN33iP5iF88RLVMGobFyZ1R4xV595n+KRm5yEAA0H
+	 gTKx4gEKX/DAqbge7obKZPC16P1Lte9boQT+H4PJd1DjJpKrGsDNli5XNydqljT3Yc
+	 JgkTh3GGAB1DQV/2atPvyFofuTt0QzCmhhRPYTtJaGOQeyjRDG5XnElVOMhkVvdPiU
+	 eMX2VzlAqWMuhAeaIPxselLVgHxzor9CsE8Sxd0DxXbsx2FvPQS9lLp/z7q7lF5BbM
+	 TataLUR+tRyUgFQ+XNsQeSSYZMUozkTvJBeWqvuJe47xKXgWNiBXWAZSO977/27KZX
+	 EyzTXs1+6GxWA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZbYnw1YcMz4wbr;
-	Mon, 14 Apr 2025 14:14:12 +1000 (AEST)
-Date: Mon, 14 Apr 2025 14:14:11 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZbZ0C5vWCz4wbb;
+	Mon, 14 Apr 2025 14:23:07 +1000 (AEST)
+Date: Mon, 14 Apr 2025 14:23:07 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin"
- <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Adrian Hunter <adrian.hunter@intel.com>, Binbin Wu
- <binbin.wu@linux.intel.com>, Ingo Molnar <mingo@kernel.org>, KVM
- <kvm@vger.kernel.org>, Linux Kernel Mailing List
+To: Greg KH <greg@kroah.com>
+Cc: Fedor Pchelkin <pchelkin@ispras.ru>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the kvm tree with the tip tree
-Message-ID: <20250414141411.469e897f@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Xu Yang <xu.yang_2@nxp.com>
+Subject: linux-next: manual merge of the usb tree with the usb.current tree
+Message-ID: <20250414142307.7df3443d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nSJ+XbEAEFZjcicWsadWvu3";
+Content-Type: multipart/signed; boundary="Sig_/QTB6j2jdEf+9OAfWRawRpEu";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/nSJ+XbEAEFZjcicWsadWvu3
+--Sig_/QTB6j2jdEf+9OAfWRawRpEu
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm tree got a conflict in:
+Today's linux-next merge of the usb tree got a conflict in:
 
-  arch/x86/kvm/vmx/vmx.c
+  drivers/usb/chipidea/ci_hdrc_imx.c
 
-between commits:
+between commit:
 
-  c435e608cf59 ("x86/msr: Rename 'rdmsrl()' to 'rdmsrq()'")
-  78255eb23973 ("x86/msr: Rename 'wrmsrl()' to 'wrmsrq()'")
+  8cab0e9a3f3e ("usb: chipidea: ci_hdrc_imx: fix call balance of regulator =
+routines")
 
-from the tip tree and commit:
+from the usb.current tree and commit:
 
-  7172c753c26a ("KVM: VMX: Move common fields of struct vcpu_{vmx,tdx} to a=
- struct")
+  ee0dc2f7d522 ("usb: chipidea: imx: add wakeup interrupt handling")
 
-from the kvm tree.
+from the usb tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -100,75 +96,50 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/x86/kvm/vmx/vmx.c
-index cd0d6c1fcf9c,ef2d7208dd20..000000000000
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@@ -1335,10 -1337,10 +1337,10 @@@ void vmx_prepare_switch_to_guest(struc
-  		savesegment(fs, fs_sel);
-  		savesegment(gs, gs_sel);
-  		fs_base =3D read_msr(MSR_FS_BASE);
-- 		vmx->msr_host_kernel_gs_base =3D read_msr(MSR_KERNEL_GS_BASE);
-+ 		vt->msr_host_kernel_gs_base =3D read_msr(MSR_KERNEL_GS_BASE);
-  	}
- =20
- -	wrmsrl(MSR_KERNEL_GS_BASE, vmx->msr_guest_kernel_gs_base);
- +	wrmsrq(MSR_KERNEL_GS_BASE, vmx->msr_guest_kernel_gs_base);
-  #else
-  	savesegment(fs, fs_sel);
-  	savesegment(gs, gs_sel);
-@@@ -1382,10 -1384,10 +1384,10 @@@ static void vmx_prepare_switch_to_host(
-  #endif
-  	invalidate_tss_limit();
-  #ifdef CONFIG_X86_64
-- 	wrmsrq(MSR_KERNEL_GS_BASE, vmx->msr_host_kernel_gs_base);
- -	wrmsrl(MSR_KERNEL_GS_BASE, vmx->vt.msr_host_kernel_gs_base);
-++	wrmsrq(MSR_KERNEL_GS_BASE, vmx->vt.msr_host_kernel_gs_base);
-  #endif
-  	load_fixmap_gdt(raw_smp_processor_id());
-- 	vmx->guest_state_loaded =3D false;
-+ 	vmx->vt.guest_state_loaded =3D false;
-  	vmx->guest_uret_msrs_loaded =3D false;
+diff --cc drivers/usb/chipidea/ci_hdrc_imx.c
+index 4f8bfd242b59,c34298ccc399..000000000000
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@@ -336,13 -338,16 +338,23 @@@ static int ci_hdrc_imx_notify_event(str
+  	return ret;
   }
  =20
-@@@ -1393,8 -1395,8 +1395,8 @@@
-  static u64 vmx_read_guest_kernel_gs_base(struct vcpu_vmx *vmx)
+ +static void ci_hdrc_imx_disable_regulator(void *arg)
+ +{
+ +	struct ci_hdrc_imx_data *data =3D arg;
+ +
+ +	regulator_disable(data->hsic_pad_regulator);
+ +}
+ +
++ static irqreturn_t ci_wakeup_irq_handler(int irq, void *data)
++ {
++ 	struct ci_hdrc_imx_data *imx_data =3D data;
++=20
++ 	disable_irq_nosync(irq);
++ 	pm_runtime_resume(&imx_data->ci_pdev->dev);
++=20
++ 	return IRQ_HANDLED;
++ }
++=20
+  static int ci_hdrc_imx_probe(struct platform_device *pdev)
   {
-  	preempt_disable();
-- 	if (vmx->guest_state_loaded)
-+ 	if (vmx->vt.guest_state_loaded)
- -		rdmsrl(MSR_KERNEL_GS_BASE, vmx->msr_guest_kernel_gs_base);
- +		rdmsrq(MSR_KERNEL_GS_BASE, vmx->msr_guest_kernel_gs_base);
-  	preempt_enable();
-  	return vmx->msr_guest_kernel_gs_base;
-  }
-@@@ -1402,8 -1404,8 +1404,8 @@@
-  static void vmx_write_guest_kernel_gs_base(struct vcpu_vmx *vmx, u64 data)
-  {
-  	preempt_disable();
-- 	if (vmx->guest_state_loaded)
-+ 	if (vmx->vt.guest_state_loaded)
- -		wrmsrl(MSR_KERNEL_GS_BASE, data);
- +		wrmsrq(MSR_KERNEL_GS_BASE, data);
-  	preempt_enable();
-  	vmx->msr_guest_kernel_gs_base =3D data;
-  }
+  	struct ci_hdrc_imx_data *data;
 
---Sig_/nSJ+XbEAEFZjcicWsadWvu3
+--Sig_/QTB6j2jdEf+9OAfWRawRpEu
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmf8i5MACgkQAVBC80lX
-0GzeIwgAnzRzSi2V66oIYBWxZD4sIyBa2SGobBMhHPkR8v10wuPt3U3Tqj7EQ0pr
-PKXY+6Yn+6qRpbce9eMFJvGwKf8IfeT6/pvCm6Skv+QAZMHTJ4Fa1HItT5nltvyB
-4+APOrzYjg7CMyXtVWPQlyA08FgH5O3c4VheP3tapvsjCz7NF+nUtQZkgWWyCfly
-yIfmq1PWrVGB1Jf+B3j7U7AFhzBHIjEodxh2/1X276Hu2oCHXzf+9t9MFF2cGLlM
-tPkBrCGxxQ2bvQzAld9rPU+f0tRyE1jpBP3+W9JuzZYW3HPCbYdrXd6Qxcvav0ED
-DJfzmKAq99fbx/PDEIq47MiBSfVLSw==
-=U3sT
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmf8jasACgkQAVBC80lX
+0Gx4CQgApiqKDqgJK4H7NS4rSHd8G0aRkhGs4QKueKzaylXUD63pYlvpf/QvsSVB
+rP9YCjfs5AAb0yKUe3hNEFRr+ymuKF2f94ka2sIAZU4izpLeqJpOLyLmovkCYHKS
+O1aRiLsWEFotMGGgXsyO2YDnmarRw5NI+QiwRokagglEbt4gNMTucGvLBxG+CWCU
+T1emAMkF40DWYwr0bON1+m68LLBqbLqU9nq9xIl2+3pOvq1TILtAXPS05Q/fRhEI
+Z46/1vzgU2r41+Mib3HeDNEDJINbajQ+IigQl1Fy2kp7kU/gFrmUkRogMuoq40OL
+AlI4W98owiPCDu3ojnp86D7vNUHioQ==
+=AnX4
 -----END PGP SIGNATURE-----
 
---Sig_/nSJ+XbEAEFZjcicWsadWvu3--
+--Sig_/QTB6j2jdEf+9OAfWRawRpEu--
 

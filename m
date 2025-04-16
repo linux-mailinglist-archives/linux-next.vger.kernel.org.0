@@ -1,109 +1,103 @@
-Return-Path: <linux-next+bounces-6268-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6269-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A57D7A906A4
-	for <lists+linux-next@lfdr.de>; Wed, 16 Apr 2025 16:39:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05B0DA906DD
+	for <lists+linux-next@lfdr.de>; Wed, 16 Apr 2025 16:46:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1226C3B2A49
-	for <lists+linux-next@lfdr.de>; Wed, 16 Apr 2025 14:38:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA353166309
+	for <lists+linux-next@lfdr.de>; Wed, 16 Apr 2025 14:46:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C241B424E;
-	Wed, 16 Apr 2025 14:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F2837E110;
+	Wed, 16 Apr 2025 14:46:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bWZurPw4"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="lOqae2tD"
 X-Original-To: linux-next@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA981AE005;
-	Wed, 16 Apr 2025 14:38:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4816B2F2A;
+	Wed, 16 Apr 2025 14:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744814339; cv=none; b=fB2BYZxqDIVzLNP8ey9S4YqzteTBPVajI/jrvrCxkB4x55BJ5K6sz5lIadaaoDySoiB/2/6ToVyHehWVedh+MdS6pG2L8Y9pfOijX492e8c2ooc+n8BD0LsMWN9Tt8IQwQs7yVybl9NWRGeQyMpsQCKd1e4vGciffUS6qm15H6Q=
+	t=1744814772; cv=none; b=BHdvy01jSTRKCZaSzB1IzckHWC2UzpM/Dw86/6VGwjk2AxcrT9phIwoRnmAXQOWjTW9jeuPaMr1fg6cWbKq0CaOZaD/drfgzM8RkxiALLVuV7d9AySszeg/WvNd7zNRpXd08dxhoYkuNlmnAgrqWH4BbleE5McSun0fmY7gQq78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744814339; c=relaxed/simple;
-	bh=renL6LwoceAbF24fMo71EZU0slhxf/A+Y4NCyzeYny0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=gah6jyR1baE9wagh4h4zIzceE7v1U5vRdedNwX3MmyjktsbMMK45OpkljEWxEevKWIfz4LwXIlQt8tuRBm9Z2433p0ELAg/NYkx1MFLdhbXnGn/iA2ArB4bRScCKzsHOlYtelH8BSNRfEK3ecNVAntljU5Ug2CXP2yj88wGnOZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bWZurPw4; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A8FA143992;
-	Wed, 16 Apr 2025 14:38:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744814334;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wp9rOD25RXguEAHoeSU9OVeZEEl5lBTpFq9oWJbz6T4=;
-	b=bWZurPw4ObLFXQWshYgyR4EdyznxKElKhO4BdMzLhSebx/HZKsy1KEr5Fe7OQuHFuJv7c2
-	SHQOUN7mxmaQ9Ai6V0JKsjZbfTVkeMHuzT78A0+LF/zGa5F1KtESX28NYgFST7wzzRf1My
-	Rt1+0jlKrNCGPZLEEbU5M0VpKIsQeg1gkk0t9wBWIaU8RAjtrGgUIFHpcgmgyePFZN+sJK
-	7ydJazwJbCsFq6LeKo3teCUB1UiTWic9zwEbkgSBKT2Gl/uUstVps0JQUE3Omt+xz6BMJp
-	t2f2cyFpcxQwTSFcwBRvPK2IexYS/Q5WdQ9I5JZ1lyuKmT5zOdRLFdsdk/WhkA==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin"
- <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Jason Cooper
- <jason@lakedaemon.net>, Andrew Lunn <andrew@lunn.ch>
-Cc: ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the tip tree
-In-Reply-To: <20250416132151.3b0448d0@canb.auug.org.au>
-References: <20250416132151.3b0448d0@canb.auug.org.au>
-Date: Wed, 16 Apr 2025 16:38:52 +0200
-Message-ID: <87a58ggohv.fsf@BLaptop.bootlin.com>
+	s=arc-20240116; t=1744814772; c=relaxed/simple;
+	bh=ui7Cckhd2zl/9mwpLGv7Txtc4zSG4a5R6KRg5miHZos=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=eqG8l6tALyT8304T3at+Hz3Oeomig6dK1jsybHW7e/3LhIyFzxm+xKZVst9P2PNUbDBSDnDMpFd3okFtA7uJJZmkC2P6f9O59QPpAX2+SVtae/9Y9MeNYSgoGb2S0pnRF+29ciKkp70p9IBOibpOZagt5B/TmLcYCl9Je1YwqBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=lOqae2tD; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=lN2iV
+	L33wu9qpv/0o4THMYGRmulwERkWbPQaO7U+fTo=; b=lOqae2tDnVyOzrX5WpfV+
+	rwDzxAlhU4GDuIAAqXL0vgkfVP47UFBl/LJXBfHJfiArYXtJfGK44pAOL5HjMlXb
+	doI9rPWGjp0cgE5ZA/KYWMA3Cn/pdC4ndUEg0q5Hy+C5Ppjxa8m+CPMA6DJk/JtS
+	pOgQ5jhKe9FKpD1yBZCkGI=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wD3P3Newv9nDEUVAQ--.40599S4;
+	Wed, 16 Apr 2025 22:45:04 +0800 (CST)
+From: David Wang <00107082@163.com>
+To: hare@suse.de
+Cc: Ankit.Soni@amd.com,
+	hare@kernel.org,
+	hch@lst.de,
+	kbusch@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-next@vger.kernel.org,
+	sagi@grimberg.me,
+	sraithal@amd.com,
+	vasant.hegde@amd.com
+Subject: nvme nvme0: Failed to get ANA log  after suspend/resume
+Date: Wed, 16 Apr 2025 22:44:46 +0800
+Message-Id: <20250416144446.4394-1-00107082@163.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <e1f2ac49-25f4-4b2c-b67c-10782b4e3455@suse.de>
+References: <e1f2ac49-25f4-4b2c-b67c-10782b4e3455@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvdeiieefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufgjfhffkfggtgfgsehtqhertddttdejnecuhfhrohhmpefirhgvghhorhihucevnffgoffgpffvuceoghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgffhgedvhefgtdejvdethfdvieekgfetuefhueekteetgfdvueeutedttdekgeevnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgdtrgemfegutgemvggvkedtmeejfehfsgemieelkeejmegsieehvdemieguvgeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmeefuggtmegvvgektdemjeeffhgsmeeileekjeemsgeihedvmeeiuggvkedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhepghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidruggvpdhrtghpthhtohepmhhinhhgohesrhgvughhrghtrdgto
- hhmpdhrtghpthhtohephhhprgesiiihthhorhdrtghomhdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehjrghsohhnsehlrghkvggurggvmhhonhdrnhgvthdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrgh
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3P3Newv9nDEUVAQ--.40599S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Wr47Zr4DGw4kKF1xtw17GFg_yoW3CFc_u3
+	y5XFs2ka10934vgr45WFs3uryvka90vwn7Ca1Ut3yfuFyYgry5J3s2vrnxG34fJw1vvr9x
+	Gw1DKF12ya1YyjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUjiID3UUUUU==
+X-CM-SenderInfo: qqqrilqqysqiywtou0bp/1tbiqAMxqmf-vqxzbAAAsl
 
-Hi Stephen,
+Hi,
 
-> Hi all,
+On 4/14/2025 4:39 PM, Hannes Reinecke wrote:
+> Can you try this?
 >
-> The following commit is also in the mvebu tree as a different commit
-> (but the same patch):
->
->   73989a38268d ("ARM: orion/gpio:: Convert generic irqchip locking to gua=
-rd()")
->
-> This is commit
->
->   5b49e7ff76b7 ("ARM: orion/gpio:: Convert generic irqchip locking to gua=
-rd()")
->
-> in the mvebu tree.
+> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+> index 78963cab1f74..425c00b02f3e 100644
+> --- a/drivers/nvme/host/core.c
+> +++ b/drivers/nvme/host/core.c
+> @@ -4455,7 +4455,7 @@ static void nvme_scan_work(struct work_struct 
+> *work)
+>         if (test_bit(NVME_AER_NOTICE_NS_CHANGED, &ctrl->events))
+>                 nvme_queue_scan(ctrl);
+>  #if CONFIG_NVME_MULTIPATH
+> -       else
+> +       else if (ctrl->ana_log_buf)
+>                 /* Re-read the ANA log page to not miss updates */
+>                 queue_work(nvme_wq, &ctrl->ana_work);
+>  #endif
+
+I notice a new nvme warning kernel log introduced in 6.15-rc2 when
+ suspend/resume my system:
+
+	nvme nvme0: Failed to get ANA log: 16649
+
+And apply the patch can fix it.
 
 
-Thank you for the notice. I will remove the commit from my branch now. I
-didn't realize it had already been merged.
+Just FYI
+David.
 
-Thanks,
-
-Gregpry
-
->
-> --=20
-> Cheers,
-> Stephen Rothwell
-
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
 

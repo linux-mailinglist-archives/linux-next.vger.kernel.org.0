@@ -1,152 +1,151 @@
-Return-Path: <linux-next+bounces-6278-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6279-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C12BDA911A7
-	for <lists+linux-next@lfdr.de>; Thu, 17 Apr 2025 04:26:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 584B2A9120C
+	for <lists+linux-next@lfdr.de>; Thu, 17 Apr 2025 05:43:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5915C3B8A68
-	for <lists+linux-next@lfdr.de>; Thu, 17 Apr 2025 02:26:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4ECC03AFA18
+	for <lists+linux-next@lfdr.de>; Thu, 17 Apr 2025 03:43:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EB3E1ADC8D;
-	Thu, 17 Apr 2025 02:26:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DB551C84D4;
+	Thu, 17 Apr 2025 03:43:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="XoExxfSG"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="GAmlPfmF"
 X-Original-To: linux-next@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E4F4C91;
-	Thu, 17 Apr 2025 02:26:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4E13D994;
+	Thu, 17 Apr 2025 03:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744856808; cv=none; b=H4vTq3fRmxN6D4FO7a1Hh2JZSyKze7XKPsgKxN5HTDh7iKQzDGXwfdF6CJuogxtKhC0TnLBuLHl58VFB4alIhwJRUp3s+v8Q+xQGctuATKXklIljrsxyjQ/k69FzkaLPRbwPEKHv4/x+Nva6dQXjHtATllx90pvvtJ+Xr09Dn2M=
+	t=1744861407; cv=none; b=iewSzIj1sqqqBp0EJOmW219LQ2Fq309tgQi+YPa3tkLrYTBO+DKvoCXOqY9au3ldOVK7YynWxVkI9lPdpbXWrOqUqaJzRJkUrKpp3/N31NRdqZwUiWdsp6InY/s6UGQ9kT5Rc57MFLz+Ehe1GkTOXBwUaOwW+lI0CfzmmZLWDSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744856808; c=relaxed/simple;
-	bh=uAl0/bX1bo/E8cYxxBa99UHbh98ErTeMCNf3j7GsGNg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lUemN0DAxLc2pjSy+Ukf2/YYSZgmHgo5DDp7s1VL2HwFzwLGUcR/5A9sa+H5/g+xb1hvwH+atRtglnYEppNK2bOh/cY+eVhN3JepRhkTXSroH/+rM6UX/A0460735QHzVk8iU/0ZjnxLgrgucAG346y6jIMi6UDmLT3l85CS16Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=XoExxfSG; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=+cJH1NNz3aSIiKeY3vly5wDD6i9k8qaw7IDZWgMMWfs=; b=XoExxfSGdrIeSwoQv99XAFWZ4s
-	CxrxVvlbQ03AcN6vBEpUrOq0H5gfseJI2R4Dg46H5BoXWhKLDvVoMmkoVJCe4lOFwY2ms1zjvzLyB
-	tbPXWlCst5Edt6OaTMoptFHYQqa/yebOgNCW84vodVug59FhnfUO7IgKV1fFi9yonN3YArZDhqN38
-	un4iJMI1Lk9ENgftEqIgD25RsbkEDtyoQ7x+h68oltSA9If22/X4ux4R1rhtp7SuSNAmYlFhAtAOM
-	EdWlFD+BzJUUzUjzJYnrf0EJpd553jldNuVxF7iRgaTbVHEo5cfWGtK0GZLBaYQpWgxUzRJp/nBSX
-	WPqND9bA==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1u5ExQ-00GMgW-2r;
-	Thu, 17 Apr 2025 10:26:29 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 17 Apr 2025 10:26:28 +0800
-Date: Thu, 17 Apr 2025 10:26:28 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: [PATCH] powerpc/crc: Include uaccess.h and others
-Message-ID: <aABm1F_dvMhakYVt@gondor.apana.org.au>
-References: <cover.1744356724.git.herbert@gondor.apana.org.au>
- <c2a0a6a3467c6ff404e524d564f777fad31c9ebc.1744356724.git.herbert@gondor.apana.org.au>
- <20250416170943.GB189808@quark.localdomain>
+	s=arc-20240116; t=1744861407; c=relaxed/simple;
+	bh=5YsPtHQVET6UOmT0G9jLviPcM3Ddk/H757x+xvnX5/g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=RtYw7MqJ24yyJmRLKVb98HpZpYSKCbhBcKpxtHzQHj4jGMWbv8QoyBx3XXZEB5AR7tGbZs89wN796VaCBRuRIh1xICtiIHvVL1moVrA7kaWdg9Kh0Qjrl51i8y1tLR/1qlh36sL8kf80sK8hF1HYECgMxcJHEkZi7o5EIA5kobE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=GAmlPfmF; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1744861395;
+	bh=GPP/Lmjt4MiPH1Wde/+yE8U14WRwTq5UhBb2MQrmlkE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=GAmlPfmF/ytlX2Mjdqd5w1KEZgd1E69odH1rGwS0q+/qNQ5S9nYq3xlyE6Fkfm9cD
+	 xNzMoxuZ63pIwvrY4U+OViANuMwbePIBKdI2Hh4d4ddMhX5ogAhy6GPoRBTaxKbzHq
+	 LZr55AAJt6ta1aUPVUMATTocs245Z/p4iLfZncV4xOfUpYcgp7TsoGQBmACFffSBvQ
+	 V6nM1Lcto/QsYSbUnwk7bJHxGVPZHXCYGUoJ3gd4Fc3A2x57Km+No/UTSFXED7hEJH
+	 pXjodPxyntCgSO5unU0cocq7PPn40qgDJEzVXgS0jl4Bqm+AZ3MAj6bmPydgdI79+R
+	 wX55xCEl3xLeg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZdNyn5r2tz4xRB;
+	Thu, 17 Apr 2025 13:43:13 +1000 (AEST)
+Date: Thu, 17 Apr 2025 13:43:12 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Ingo Molnar <mingo@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "Rafael J. Wysocki"
+ <rafael.j.wysocki@intel.com>, Viresh Kumar <viresh.kumar@linaro.org>
+Subject: linux-next: manual merge of the tip tree with the pm tree
+Message-ID: <20250417134312.6892d237@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250416170943.GB189808@quark.localdomain>
+Content-Type: multipart/signed; boundary="Sig_/WUW=oNglpiXE1jIpo=9zSLl";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, Apr 16, 2025 at 10:09:43AM -0700, Eric Biggers wrote:
-> 
-> This patch broke the powerpc build:
-> 
-> ../arch/powerpc/lib/crc32-glue.c: In function 'crc32c_arch':
-> ../arch/powerpc/lib/crc32-glue.c:44:17: error: implicit declaration of function 'pagefault_disable'; did you mean 'preempt_disable'? [-Wimplicit-function-declaration]
->    44 |                 pagefault_disable();
+--Sig_/WUW=oNglpiXE1jIpo=9zSLl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, I should've done a grep for asm/simd.h.
+Hi all,
 
----8<---
-The powerpc crc code was relying on pagefault_disable from being
-pulled in by random header files.
+Today's linux-next merge of the tip tree got a conflict in:
 
-Fix this by explicitly including uaccess.h.  Also add other missing
-header files to prevent similar problems in future.
+  drivers/cpufreq/acpi-cpufreq.c
 
-Reported-by: Eric Biggers <ebiggers@kernel.org>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: 7ba8df47810f ("asm-generic: Make simd.h more resilient")
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+between commit:
 
-diff --git a/arch/powerpc/lib/crc-t10dif-glue.c b/arch/powerpc/lib/crc-t10dif-glue.c
-index f411b0120cc5..fa988e249f01 100644
---- a/arch/powerpc/lib/crc-t10dif-glue.c
-+++ b/arch/powerpc/lib/crc-t10dif-glue.c
-@@ -6,15 +6,15 @@
-  * [based on crc32c-vpmsum_glue.c]
-  */
- 
--#include <linux/crc-t10dif.h>
--#include <crypto/internal/simd.h>
--#include <linux/init.h>
--#include <linux/module.h>
--#include <linux/string.h>
--#include <linux/kernel.h>
--#include <linux/cpufeature.h>
--#include <asm/simd.h>
- #include <asm/switch_to.h>
-+#include <crypto/internal/simd.h>
-+#include <linux/cpufeature.h>
-+#include <linux/crc-t10dif.h>
-+#include <linux/jump_label.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/preempt.h>
-+#include <linux/uaccess.h>
- 
- #define VMX_ALIGN		16
- #define VMX_ALIGN_MASK		(VMX_ALIGN-1)
-diff --git a/arch/powerpc/lib/crc32-glue.c b/arch/powerpc/lib/crc32-glue.c
-index dbd10f339183..28450fe04e86 100644
---- a/arch/powerpc/lib/crc32-glue.c
-+++ b/arch/powerpc/lib/crc32-glue.c
-@@ -1,12 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0-only
--#include <linux/crc32.h>
--#include <crypto/internal/simd.h>
--#include <linux/init.h>
--#include <linux/module.h>
--#include <linux/kernel.h>
--#include <linux/cpufeature.h>
--#include <asm/simd.h>
- #include <asm/switch_to.h>
-+#include <crypto/internal/simd.h>
-+#include <linux/cpufeature.h>
-+#include <linux/crc32.h>
-+#include <linux/jump_label.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/preempt.h>
-+#include <linux/uaccess.h>
- 
- #define VMX_ALIGN		16
- #define VMX_ALIGN_MASK		(VMX_ALIGN-1)
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+  395b8b5c8f67 ("cpufreq: ACPI: Don't enable boost on policy exit")
+
+from the pm tree and commit:
+
+  78255eb23973 ("x86/msr: Rename 'wrmsrl()' to 'wrmsrq()'")
+
+from the tip tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/cpufreq/acpi-cpufreq.c
+index 85b5a88f723f,8bc08f3b0d5d..000000000000
+--- a/drivers/cpufreq/acpi-cpufreq.c
++++ b/drivers/cpufreq/acpi-cpufreq.c
+@@@ -108,17 -107,25 +108,17 @@@ static void boost_set_msr_each(void *p_
+  		msr_mask =3D MSR_K7_HWCR_CPB_DIS;
+  		break;
+  	default:
+ -		return -EINVAL;
+ +		return;
+  	}
+ =20
+- 	rdmsrl(msr_addr, val);
++ 	rdmsrq(msr_addr, val);
+ =20
+  	if (enable)
+  		val &=3D ~msr_mask;
+  	else
+  		val |=3D msr_mask;
+ =20
+- 	wrmsrl(msr_addr, val);
++ 	wrmsrq(msr_addr, val);
+ -	return 0;
+ -}
+ -
+ -static void boost_set_msr_each(void *p_en)
+ -{
+ -	bool enable =3D (bool) p_en;
+ -
+ -	boost_set_msr(enable);
+  }
+ =20
+  static int set_boost(struct cpufreq_policy *policy, int val)
+
+--Sig_/WUW=oNglpiXE1jIpo=9zSLl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgAeNAACgkQAVBC80lX
+0Gx4oAf/X5Qan91RaoZ1l6h8Foky2fCb0eKrOFnPwu2mvLD1TXlIiwo2o5bSECld
+j4WdpE93n0c9thyhDuC/0fQPY1DVDlu1T0Afd7xLm4nK7Q1X9uORWMAT6dMH1Nwk
+GF12xH6YXWKGhzo714qusmcKWktwmi0ot10uvOjHW/s10TlrdtoRcofWq669M01n
+M72T55/SN/XEIN6UNv8tZl9MYNGsfRvmbmgYJ0vHUiXeGR+9SiHF8LPiN6iTjTgN
+M4TsUzvsXUzqkwX37F1t1zOWtlaSQEWHgo4PlGEjJOVaTEkHiFUj6xOCKTxmXN4X
+bwhhEF6HFZnD0X/xE8f/PiCtpuVh3Q==
+=DCBF
+-----END PGP SIGNATURE-----
+
+--Sig_/WUW=oNglpiXE1jIpo=9zSLl--
 

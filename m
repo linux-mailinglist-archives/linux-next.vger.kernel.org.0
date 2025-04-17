@@ -1,155 +1,117 @@
-Return-Path: <linux-next+bounces-6281-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6282-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 859BFA91237
-	for <lists+linux-next@lfdr.de>; Thu, 17 Apr 2025 06:26:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03FD6A91257
+	for <lists+linux-next@lfdr.de>; Thu, 17 Apr 2025 06:46:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB4FB5A200D
-	for <lists+linux-next@lfdr.de>; Thu, 17 Apr 2025 04:26:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FC284444A0
+	for <lists+linux-next@lfdr.de>; Thu, 17 Apr 2025 04:46:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 180431C5F1B;
-	Thu, 17 Apr 2025 04:26:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B16A1DD526;
+	Thu, 17 Apr 2025 04:46:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TKGLnctk"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IdoC2tUy"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4AB42065;
-	Thu, 17 Apr 2025 04:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E64119ABC6;
+	Thu, 17 Apr 2025 04:46:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744864006; cv=none; b=l3WZyR83fVr778wfTg7jUUDOxI07bUcuIeLN/F0m+PRdqC26EbKR7kYx5ggvi8MAIfNdawb0wLQ+4n48SZfHpbAYfcaUPJ4NAOgdTvfeGbK8AVl+A+Cr9dSG2foHE2gGiY8J1l/tcwAFym0v2SXjtFVfi8F/s+TX9dh4Er8hRGk=
+	t=1744865195; cv=none; b=ZMIM69Zzmja/Rwz19QzoO21NWIJHN5bcv9MRPpFnDLAoe7AYFdI7kD1YS/GrkfUeb+XxQw5PvzHY0akz7ZedViTeU2uCqFOv53kSmmZSVZ2eXLMhVQPtc756kC75wZhojPFmBPGNaIlMSJQhNCJ75HDGyCldM1AcmEJMuAq1gqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744864006; c=relaxed/simple;
-	bh=i+L8jTjPD0ik2pCvSNzTyOooHNoLje8NKu436vjLZgU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Q1MmUPr3HOARYTFKw9Q5HMcDYEHtOxLttZDBnuzeKFipOrjoq0RQw+mVsKcbV8cIu4A6kD/gUT8o+CjSOzTNodWi8QQzsqCZou5UTvqU3XBJlOAcT+LZVzOY5CkRKwPaa8X5bPkoXmS6CAc3QSMnzwHJ8TZRvaBGDwE827tvyHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=TKGLnctk; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1744865195; c=relaxed/simple;
+	bh=K8SkiHxrCKzwTq/mZJ96qvMfgq/dZJsgw3ghWUVqKug=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ld4SRiWH6gBLvrqvZ/WuZoeCL4c2wBkq5vRbdPlsGxG2hOejkNjtQi6xPoA/xQcmjVLI74ycJE8AKB6+sc4VblXCJZ2z7fh7F7b1MyaJLb5hC/za5imJx0PjZnr9bu3tvcocYXsQAfOmf7yjbcFsKYMiylRK+W+ehKM3JsVhRQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IdoC2tUy; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1744863998;
-	bh=+3m97MTJ+N0KGqyOod6LMCb1XHbHUgGTPA6db0+tFsE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=TKGLnctk2CoXrf+IYCywZ/wEfLg7KP1dXMBpj5TBPSG3fazpZs0UJ0qAgFij/GCvZ
-	 HFvYecPowWVS3Kwb5pRlwQoxbX422KNhvEAVy8WljoUinM4CFZws9pM6wzcZiNmKLt
-	 oP8jcXCFD9PPlBe3E3FNVjvs7bReqcwACAMyfhmZArAwd9t3+AEFDckauQrHaN4sey
-	 t7JJg0ivbAOQjhZDs8+I3K6LeklNQGtriu3lIbMkGU19foa1uYh/ZMMjqzdOuTEc2p
-	 XFrToLk3DbeXHgtSusIEWBDlEk+9x17E2k6nCMrhOF+4w2SKClmVAcXdv2insOi3qz
-	 1Hw1LKcGAkSrg==
+	s=202503; t=1744865188;
+	bh=W4Eno2aLkiyV8ghB33/W6zz5PT3dWlL4c69V39DVBL0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=IdoC2tUyU5VryngxRsqKjnUr/BM2r+AOctincFaW9awNT2XqWZiMxessCfIa63qsu
+	 kSh5m+FW2Gppx2UYDPzgQ08ZGugWxxc+Ql6ATXfpK3BUctue55ffU9gF0mirZfek5o
+	 j6KYsqHdrzvBDlnj3fN7sM7Kc/zCaoD1aIK7Sy62sc05ybNiGnOhSSTuuOxXt24gfu
+	 b+xzSE4ZUhvSEnYrEstmiKdnOn3C2S58PF7p+xkDjEk3/3ftBwKTgwWWQwvKm34Ybl
+	 FnMhfC6JAeDjQ7Qt/7n3y5FOmdv0T2wjWcWwmm9QM5W8JnIuFjPleKFcQWcwxQBswD
+	 8B7QR0N7IG9BQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZdPws3gRyz4xM1;
-	Thu, 17 Apr 2025 14:26:37 +1000 (AEST)
-Date: Thu, 17 Apr 2025 14:26:36 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZdQMk6PcLz4x8b;
+	Thu, 17 Apr 2025 14:46:26 +1000 (AEST)
+Date: Thu, 17 Apr 2025 14:46:25 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Tejun Heo <tj@kernel.org>
-Cc: Tamir Duberstein <tamird@gmail.com>, Benno Lossin
- <benno.lossin@proton.me>, Alice Ryhl <aliceryhl@google.com>, Andreas
- Hindborg <a.hindborg@kernel.org>, Linux Kernel Mailing List
+To: Greg KH <greg@kroah.com>, Rob Herring <robh@kernel.org>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the workqueues tree
-Message-ID: <20250417142636.0e73728a@canb.auug.org.au>
-In-Reply-To: <Z_50QbWczACrwL5f@slm.duckdns.org>
-References: <20250415140116.13544ac6@canb.auug.org.au>
-	<CAJ-ks9kUBCX6PjOeOSVQNXYGcy9gkYw++BEmHZ0eFbsyZeBZcQ@mail.gmail.com>
-	<Z_50QbWczACrwL5f@slm.duckdns.org>
+ <linux-next@vger.kernel.org>, Wolfram Sang
+ <wsa+renesas@sang-engineering.com>
+Subject: linux-next: manual merge of the tty tree with the devicetree tree
+Message-ID: <20250417144625.4be32ba7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hqcHcv.5R_L3Wd9f_o/DOYV";
+Content-Type: multipart/signed; boundary="Sig_/s4P5Egj6WZVdiIqMz_C.n=E";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/hqcHcv.5R_L3Wd9f_o/DOYV
-Content-Type: text/plain; charset=UTF-8
+--Sig_/s4P5Egj6WZVdiIqMz_C.n=E
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Tejun,
+Hi all,
 
-On Tue, 15 Apr 2025 04:59:13 -1000 Tejun Heo <tj@kernel.org> wrote:
->
-> On Tue, Apr 15, 2025 at 09:24:32AM -0400, Tamir Duberstein wrote:
-> > On Tue, Apr 15, 2025 at 12:01=E2=80=AFAM Stephen Rothwell <sfr@canb.auu=
-g.org.au> wrote: =20
-> > >
-> > > After merging the workqueues tree, today's linux-next build (x86_64
-> > > allmodconfig) failed like this:
-> > >
-> > > error[E0308]: mismatched types =20
-> > >    --> rust/kernel/lib.rs:204:9 =20
-> > >     |
-> > > 204 |           ptr.sub(offset) as *const $type
-> > >     |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ types differ in mutab=
-ility
-> > >     |
-> > >    ::: rust/kernel/workqueue.rs:495:18
-> > >     |
-> > > 495 |               ) -> *mut Self {
-> > >     |                    --------- expected `*mut ClosureWork<T>` bec=
-ause of return type
-> > > ...
-> > > 505 | / impl_has_work! {
-> > > 506 | |     impl{T} HasWork<Self> for ClosureWork<T> { self.work }
-> > > 507 | | }
-> > >     | |_- in this macro invocation
-> > >     |
-> > >     =3D note: expected raw pointer `*mut ClosureWork<T>`
-> > >                found raw pointer `*const ClosureWork<T>`
-> > >     =3D note: this error originates in the macro `$crate::container_o=
-f` which comes from the expansion of the macro `impl_has_work` (in Nightly =
-builds, run with -Z macro-backtrace for more info)
-> > >
-> > > error: aborting due to 1 previous error
-> > >
-> > > For more information about this error, try `rustc --explain E0308`.
-> > >
-> > > Caused by commit
-> > >
-> > >   345e029b561e ("rust: workqueue: remove HasWork::OFFSET")
-> > >
-> > > I have used the workqueues tree from next-20250414 for today. =20
-> >=20
-> > HI Stephen, I believe Tejun plans to back this out. See
-> > https://lore.kernel.org/all/CAJ-ks9k2FEfL4SWw3ThhhozAeHB=3DUe9-_1pxb9XV=
-PRR2E1Z+SQ@mail.gmail.com/. =20
->=20
-> Yeah, sorry about that. It was in the tree only for a couple hours and th=
-en
-> got rewound, but we got a bit unfortunate with linux-next pulling. Should=
- be
-> okay today.
+Today's linux-next merge of the tty tree got a conflict in:
 
-I am still seeing this failure.  Forgot to push out?
+  Documentation/devicetree/bindings/serial/snps-dw-apb-uart.yaml
+
+between commit:
+
+  672da444fccd ("dt-bindings: remove RZ/N1S bindings")
+
+from the devicetree tree and commit:
+
+  0ed228275485 ("dt-bindings: serial: snps-dw-apb-uart: Simplify DMA-less R=
+Z/N1 rule")
+
+from the tty tree.
+
+I fixed it up (Ijust used the latter) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/hqcHcv.5R_L3Wd9f_o/DOYV
+--Sig_/s4P5Egj6WZVdiIqMz_C.n=E
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgAgvwACgkQAVBC80lX
-0Gx4kAf8CyyGLJI3BHnCKvjA32ifhppP8teDbmxVK3F7OQi2cR+d5bzcZf40BCA0
-k4K3PpcE9XyGHwHk0Bd+KXnwXN6G/Yy5pa14oAknhjgWDbfxNDxp7KWdQ2ZOPSc4
-W559x7PKZ0Lg9Xb8lqytAotF4kz448Ctq7WqwkOAXOzPeKtWARss5koayqxIj2dZ
-ylGeuvDSPrxrkblfxnTCXrvIGWp1zEem4+Xjrj9ZMMHaSLRgQScHrSnLkaJxyh72
-66TyKiij5Y3NvpFRfFFhxz76nate5G71DbU3THXDiWwstpi2EBAQVsZmqdtSPyY5
-nNzTR7crwQwP2MueLsWIJpJOzHoX6g==
-=ar5p
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgAh6EACgkQAVBC80lX
+0GyDZwf9E27ZmXgD26/S0yb5AwL4MkGUxbw4cxfg3XoW6g+o+PpaZ35gupJKf2kL
+I5m8dnF57c9erInfaW3vnO/gBsftrAnaarpD4PBxHLfLQOCgnQVmD5TJAYOrSSYV
+cNkYnf8a9H/iBn8LvlEeGUvYb6Qf2TisQwKb4bIYfIp00fkYUmvU1pGOnzBZkS5G
+IbYeLQ+bdlvvZDUl3Da2Rl8OQFuOeLObHHn2DF+bxVyymdboRYRqTZ4qvjyEIYvy
+mFPQcAl96kxjquyAnQuiZVqKBuQZ5msiy10MYfGZ4gyY7/1EL3bkRrgstHPD0ZbX
+Wx80fk2sWVo++B8YQehl1zzECOvKhQ==
+=zIiW
 -----END PGP SIGNATURE-----
 
---Sig_/hqcHcv.5R_L3Wd9f_o/DOYV--
+--Sig_/s4P5Egj6WZVdiIqMz_C.n=E--
 

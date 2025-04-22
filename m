@@ -1,175 +1,142 @@
-Return-Path: <linux-next+bounces-6305-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6306-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5615CA95D14
-	for <lists+linux-next@lfdr.de>; Tue, 22 Apr 2025 06:43:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7CDDA95D8A
+	for <lists+linux-next@lfdr.de>; Tue, 22 Apr 2025 07:51:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90C49177CEB
-	for <lists+linux-next@lfdr.de>; Tue, 22 Apr 2025 04:43:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE9511895682
+	for <lists+linux-next@lfdr.de>; Tue, 22 Apr 2025 05:51:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AEE81A5B95;
-	Tue, 22 Apr 2025 04:43:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39C031E47A3;
+	Tue, 22 Apr 2025 05:51:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="caMLxa+y"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jSszM141"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2DA84037;
-	Tue, 22 Apr 2025 04:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B264E7603F;
+	Tue, 22 Apr 2025 05:51:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745297009; cv=none; b=JeZmnkKfpevIp7n1Ps50FfwQLrf92O8+bhZMTvw2fm+uuLBAcumBVTkH+tU+xRzgpgEc4eYDGjJ+eQOMR1bPxNb4kCUs97fq9T0kYuFMbsa/Qc6BR2wMc5M+78uOuCMu3vMWINqGk2b+QFXc+5624AjNwO9HIZSpJr4nhoBBXDw=
+	t=1745301068; cv=none; b=WrzZHyDSC3mcXw7wFdATH3eWJqAaAsWmKhCGTbw4atwCiRt1JVKccmHep/jb+08Gry5MUSDtD4JKB4uOsb1LeqX/deiHAe9hsqMD/iISY7M9HphtlUXI3xqq4f36B8NpbktFgxf4o6riUi18zjo+mVAnxqYnqDG20k+GHNCDvyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745297009; c=relaxed/simple;
-	bh=cIJNzMEIDKoryJ+eYDRjEgaB0KWn13DZftu4jSYcsDE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dLpTat/fMCWAGwMKGgmOmuCIsUFYmg/Wb9F0GNsURJ01DxiAhrHAoZ8BTaeirk9ZpIHjrDOA00ZJuD4Iz/+LX9Jdkbi1nIINnfCumZ4nLmHTsMPAP4WaX55lr9RXuNLFvTMeq4s2fsxzKiv/iBvmUmdKEy/6532gCJoDZzJzdrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=caMLxa+y; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1745297004;
-	bh=x/V8mgLMaM86zSbH6IOCdZUmXJC7Sa7oNTQpygjxKR0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=caMLxa+yEYNWUGis7sS8V+sue03q5/EPhxJiiQEUYFQTjJs+VPo5wLmf08qPP8FzL
-	 gfilNZYZ7UwVoCbC40CcpW28Y0TYd8OWDiAemRO8daKuwWZFt06mEl1z4wOjEaPJs6
-	 DHVAaL9RbgonQ28D0ezdTlwILj/wm3WVQCmwn7uwKdmzdSutImIC2qJBbQb7YT5C/J
-	 NlPoL03J94JpNQLQF0ysIgxjm4KMU+sDTIdEBXPI3f9oAhwJUtLO1XLmZ6aJSA8Jjf
-	 15AQzyHFt8ZeTedcLrpe/9ej1ZFrymeUjpWfkRhPGJLQEXzB8b74sdkvJU0VUpBMpq
-	 7zzjFP2fsLrBg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZhV3t5LRTz4wbv;
-	Tue, 22 Apr 2025 14:43:22 +1000 (AEST)
-Date: Tue, 22 Apr 2025 14:43:21 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Steffen Klassert <steffen.klassert@secunet.com>, David Miller
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>
-Cc: Networking <netdev@vger.kernel.org>, Cosmin Ratiu <cratiu@nvidia.com>,
- Jedrzej Jagielski <jedrzej.jagielski@intel.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>, Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: linux-next: manual merge of the ipsec-next tree with the net-next
- tree
-Message-ID: <20250422144321.3879d891@canb.auug.org.au>
+	s=arc-20240116; t=1745301068; c=relaxed/simple;
+	bh=iJCqUJkW8D6OFp6xKXydkggM3cqITguTKW2WleMle/g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G3Q85U4jiBgZP5ZtkTGiLPddRpiykLMBr6RDSyfNIU6/UZDKqeuJE86IAWYMmPUBv5M+6c3HAdsNrQbMg8ofWqTwwMgWaodaXnWusCoI3i/sv/40fJjIpdvWj6/O6CSAZPrigg0Raye54r/XIBu1XLl7gAd7ezmC7Y8cHMovge0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=jSszM141; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53M3c96M012729;
+	Tue, 22 Apr 2025 05:50:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=enDXSh
+	NfnEmJVkGX61Z+kj65b/uMcCnQ7YFwYBBahVg=; b=jSszM141aPJt1B263R5h+j
+	N8lfXRFxVU48/J+JuyYgMxmdgstTNbvEwWARAYUrafiCOIh58BNpcsykZKtwue+2
+	XmaH+8oJ/Ta9OZIZMbopfVhZ/apjKedjovBJYs0llJ51Hj3OHuIa3euazPfsyrpG
+	LlGdE21k0Lr7o49t20Z2sbFProvTGizvrNV7eKdLik95YEfXwnL9c5oUF+f1tQv0
+	qL4eStRg/DNJbxx4oAOigMWYK4Pg6SV7ywlAmAbTI6udtVm+0l74WBwek+lqBW0s
+	O6EpyPc4g9sbqD9kxmG0qeEJ36b/KyuTjnrJa3rAMD/DvCIeRQVLwW1j8fFQIqug
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4663c40dyu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 22 Apr 2025 05:50:46 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53M4CeSY027827;
+	Tue, 22 Apr 2025 05:50:45 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 464rv2153b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 22 Apr 2025 05:50:45 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53M5oi8U31130218
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 22 Apr 2025 05:50:45 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CBC7C5805C;
+	Tue, 22 Apr 2025 05:50:44 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 55C9E5805A;
+	Tue, 22 Apr 2025 05:50:41 +0000 (GMT)
+Received: from [9.43.89.251] (unknown [9.43.89.251])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 22 Apr 2025 05:50:40 +0000 (GMT)
+Message-ID: <157256be-d77d-427e-8feb-77d1373b0c00@linux.ibm.com>
+Date: Tue, 22 Apr 2025 11:20:38 +0530
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KAlLMN++vdMLUAeZRmSCexe";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build warnings after merge of the powerpc-fixes tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20250422114720.480cea29@canb.auug.org.au>
+Content-Language: en-US
+From: Madhavan Srinivasan <maddy@linux.ibm.com>
+In-Reply-To: <20250422114720.480cea29@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: x8ti_XGGpedLplUvLhkXPCn81AHLR7MB
+X-Proofpoint-ORIG-GUID: x8ti_XGGpedLplUvLhkXPCn81AHLR7MB
+X-Authority-Analysis: v=2.4 cv=HeEUTjE8 c=1 sm=1 tr=0 ts=68072e36 cx=c_pps a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=UQvLyEPbrtOJaqGAD5MA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1095,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-04-22_03,2025-04-21_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 spamscore=0
+ clxscore=1011 adultscore=0 suspectscore=0 mlxlogscore=999
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 malwarescore=0
+ bulkscore=0 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
+ definitions=main-2504220041
 
---Sig_/KAlLMN++vdMLUAeZRmSCexe
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the ipsec-next tree got a conflict in:
+On 4/22/25 7:17 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the powerpc-fixes tree, today's linux-next build
+> (powerpc_ppc64_defconfig) produced these warnings:
+> 
+> arch/powerpc/boot/wrapper: 237: [: 0: unexpected operator
+> ld: warning: arch/powerpc/boot/zImage.epapr has a LOAD segment with RWX permissions
+> arch/powerpc/boot/wrapper: 237: [: 0: unexpected operator
+> ld: warning: arch/powerpc/boot/zImage.pseries has a LOAD segment with RWX permissions
+> arch/powerpc/boot/wrapper: 237: [: 0: unexpected operator
+> ld: warning: arch/powerpc/boot/zImage.pmac has a LOAD segment with RWX permissions
+> arch/powerpc/boot/wrapper: 237: [: 0: unexpected operator
+> ld: warning: arch/powerpc/boot/dtbImage.ps3 has a LOAD segment with RWX permissions
+> 
 
-  drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
+I cant recreate this in both my x86_64 cross build and ppc64 build with dash.
+I tried both ppc64_defconfig and pseries_le_defconfig compilation.
 
-between commit:
+x86_64 dash version : dash-0.5.12-3.fc40.x86_64
+powerpc dash version : dash-0.5.12-4.fc41.ppc64le
 
-  fd5ef5203ce6 ("ixgbe: wrap netdev_priv() usage")
+Can you share the dash version 
 
-from the net-next tree and commit:
+Maddy
 
-  43eca05b6a3b ("xfrm: Add explicit dev to .xdo_dev_state_{add,delete,free}=
-")
+> Introduced by commit
+> 
+>   b2accfe7ca5b ("powerpc/boot: Check for ld-option support")
+> 
+> POSIX shell (in particular dash) does not recognise "&>" - you need to
+> use ">/dev/null 2>&1".  (My /bin/sh is /bin/dash)
+> 
 
-from the ipsec-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
-index 648a7c618cd1,796e90d741f0..000000000000
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
-@@@ -473,12 -474,13 +474,13 @@@ static int ixgbe_ipsec_parse_proto_keys
- =20
-  /**
-   * ixgbe_ipsec_check_mgmt_ip - make sure there is no clash with mgmt IP f=
-ilters
-+  * @dev: pointer to net device
-   * @xs: pointer to transformer state struct
-   **/
-- static int ixgbe_ipsec_check_mgmt_ip(struct xfrm_state *xs)
-+ static int ixgbe_ipsec_check_mgmt_ip(struct net_device *dev,
-+ 				     struct xfrm_state *xs)
-  {
-- 	struct net_device *dev =3D xs->xso.real_dev;
- -	struct ixgbe_adapter *adapter =3D netdev_priv(dev);
- +	struct ixgbe_adapter *adapter =3D ixgbe_from_netdev(dev);
-  	struct ixgbe_hw *hw =3D &adapter->hw;
-  	u32 mfval, manc, reg;
-  	int num_filters =3D 4;
-@@@ -559,11 -562,11 +562,11 @@@
-   * @xs: pointer to transformer state struct
-   * @extack: extack point to fill failure reason
-   **/
-- static int ixgbe_ipsec_add_sa(struct xfrm_state *xs,
-+ static int ixgbe_ipsec_add_sa(struct net_device *dev,
-+ 			      struct xfrm_state *xs,
-  			      struct netlink_ext_ack *extack)
-  {
-- 	struct net_device *dev =3D xs->xso.real_dev;
- -	struct ixgbe_adapter *adapter =3D netdev_priv(dev);
- +	struct ixgbe_adapter *adapter =3D ixgbe_from_netdev(dev);
-  	struct ixgbe_ipsec *ipsec =3D adapter->ipsec;
-  	struct ixgbe_hw *hw =3D &adapter->hw;
-  	int checked, match, first;
-@@@ -752,12 -755,12 +755,12 @@@
- =20
-  /**
-   * ixgbe_ipsec_del_sa - clear out this specific SA
-+  * @dev: pointer to device to program
-   * @xs: pointer to transformer state struct
-   **/
-- static void ixgbe_ipsec_del_sa(struct xfrm_state *xs)
-+ static void ixgbe_ipsec_del_sa(struct net_device *dev, struct xfrm_state =
-*xs)
-  {
-- 	struct net_device *dev =3D xs->xso.real_dev;
- -	struct ixgbe_adapter *adapter =3D netdev_priv(dev);
- +	struct ixgbe_adapter *adapter =3D ixgbe_from_netdev(dev);
-  	struct ixgbe_ipsec *ipsec =3D adapter->ipsec;
-  	struct ixgbe_hw *hw =3D &adapter->hw;
-  	u32 zerobuf[4] =3D {0, 0, 0, 0};
-
---Sig_/KAlLMN++vdMLUAeZRmSCexe
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgHHmkACgkQAVBC80lX
-0GxfTwf/Tp5JFrCRD3u1I2Gxi6078i2u9lI6bwoUeDXv990pGj636CulyOfb5LAt
-ybQbM8HvehnLlEYBb9bydE8jvtXqwilQTO3bcV1GtsS+rfS7ZrEGkA9npTu3my/A
-u5GulN8s1pLZy5zdkp58+QYRT8lWblGVFmcdgUx/sbD24dZyNxDkkScJXHsPun0n
-DUV0aOVbwXZYP+6r7TBFC0zj1Onmk4I4w61D3HKcQOMtztmLzVZq74uQB5MIbcFS
-nbn76ScwIqro5UP/Zse6OH/+14h34UVWulqc7lDJw+FmqjGQ3VWz+WnkL/rR1yWZ
-ua1JJL9D8z2zl2LH5/uKh+zqHa8TbQ==
-=BrvK
------END PGP SIGNATURE-----
-
---Sig_/KAlLMN++vdMLUAeZRmSCexe--
 

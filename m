@@ -1,106 +1,85 @@
-Return-Path: <linux-next+bounces-6319-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6320-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51F02A96608
-	for <lists+linux-next@lfdr.de>; Tue, 22 Apr 2025 12:34:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0B06A9664A
+	for <lists+linux-next@lfdr.de>; Tue, 22 Apr 2025 12:46:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7390016C828
-	for <lists+linux-next@lfdr.de>; Tue, 22 Apr 2025 10:33:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC653188FE1E
+	for <lists+linux-next@lfdr.de>; Tue, 22 Apr 2025 10:47:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6397A17A30D;
-	Tue, 22 Apr 2025 10:33:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AD3F20B801;
+	Tue, 22 Apr 2025 10:46:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cBIKsacz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VzDM05GJ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CEA213B59B;
-	Tue, 22 Apr 2025 10:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F082E202960;
+	Tue, 22 Apr 2025 10:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745318025; cv=none; b=WG91tqKFV1c8R1XBI5zA7ferw+BWUaQx4HPq+YL/A9jX0ZCSP9ILJWbJd28hVjGLI0Z8bmJ/kQzLN0csgfXxsFKo8yDXbwlGdD5+ja0AnCCHT9mw09XD0jnHbkX3v03bJisdIsJpekL4DxjRe3kNOn/3DW6s/aP+fK28tCEsC9g=
+	t=1745318808; cv=none; b=iNE61tA1IAK7k1lQgsTZXG3M5MQGTcIN1rfDpu5Y+7hLvYFfeFxhuNLMqFN5z1BDaevShkPPnuiixybiigT/Rrbn/tlg6zGvI6K8vuHzWxxEypSWUqxpc1yYv/6yGZVULtahTaGqImhUcAtiJr9sdEybzWeGbKBKdi+ppbjb4ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745318025; c=relaxed/simple;
-	bh=RQmHOPXhl+cT1Q7qQmz5urJeUX82pkpUae6vl1eCtD4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=A/N4Y/iO18UFzjcX8snusay4kwQJ4W0Reokm8K6fJTjDcEvV3/wm087FQhx3AFHe6pLprZdvZSK/vyBAtZKJnJ+yk6G9HoQQ6UmVAGOBt3OEXrhZvsbIs1PeS9y4uf6jfGCGlC6mXFAZoLB/zd85NMJ3QSmiWK1LDcc2+XfKwoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cBIKsacz; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1745318018;
-	bh=BkEo3n+Opvw7/TrpdnLeOc0N1MM2AlzwF5qEPUIc3Vo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=cBIKsaczhUy5WE4yckx30jWv7D9+gBELiI26kcnAYjazVzRIjQAFuc1fBmRZWkjiA
-	 q2GrmFRcm6JfbPywk9X+dabLaCl2/0e3Oqs2HZoDgqDvS52E3k5BhL0aVg1L4y794C
-	 QtE/UP0ftHFnxpOJFICPxW7TzAtP66FVV1VUL8RjiVE/xnKK5WdMvklGZLn0qThW8O
-	 doF8UtEyhPNR+AWqrelyOvBAXVIbADEbvLyJM1Jdydoe7GukIt/kRTu9JyZ5afs+s9
-	 tiroHArBTq/XUp9WQysdRXau2NesKDsnzvIEREl6j8efROE1c0dubX1B4T7pnEPxtk
-	 mAuQSmxRSk80A==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zhdr262ydz4wbr;
-	Tue, 22 Apr 2025 20:33:38 +1000 (AEST)
-Date: Tue, 22 Apr 2025 20:33:38 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alex Deucher <alexdeucher@gmail.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>, Yihan Zhu <Yihan.Zhu@amd.com>,
- Zaeem Mohamed <zaeem.mohamed@amd.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the amdgpu tree
-Message-ID: <20250422203338.3ff1ce14@canb.auug.org.au>
+	s=arc-20240116; t=1745318808; c=relaxed/simple;
+	bh=6S8MBhu1kpCDnC27VHFmrsYpuAfYYwn7A3ZWLh+rQfY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YzkwH18pPXCTz5LngYjm5Xdv3i+ZnzX7KWfIsEGGv0P6sJ9sVjkiVYtAt18AmKgxDPLOjH7na0BlkIzhiSC9DkDLiwrRQ+N4jy7T3mcaM7VbY+o0I8AillS7Wru7rROGnNILIqHlDzhM8wzBoimLvzFewlQPAP8pEROMIAHc/dE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VzDM05GJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C85FCC4CEEA;
+	Tue, 22 Apr 2025 10:46:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745318807;
+	bh=6S8MBhu1kpCDnC27VHFmrsYpuAfYYwn7A3ZWLh+rQfY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VzDM05GJA3WHp0lRJv9wyhO/rVZ2dcobYVX7Ml+TrBKVnk4qfHKgp1RSn/TaqZY6T
+	 vGaEWvkKpBEhyJcRFwVCST+krl+IN0qYxvfRRMyrkNPOKA+QP6bT4G0HBdyRbkjUBQ
+	 zGJbVOzw42gL5WDwVRo+WLnWfdjWFWA3JOX16OhiGaktM+a8kqX/KZmlEC1kLd39xJ
+	 i82mpmitwHGUKgutesYIlwl21lv2SBTvYQJUJ06BLDD5vWCvBXty1WN8Uwjo4AcF5F
+	 CfZSYHHDrClKNcehqlejspPmZfxfHYC8n+6ZQbrqtf4qCkcaPmwc5NB7B49tyrhpON
+	 w6kuizEaFpwcQ==
+Date: Tue, 22 Apr 2025 12:46:42 +0200
+From: Carlos Maiolino <cem@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org, 
+	Hans Holmberg <Hans.Holmberg@wdc.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the xfs tree
+Message-ID: <huc7jw3retrx5i2szvngci23vwh6z5ve5a4oiyjvjewg4d5ien@2h2j3qpgkk3c>
+References: <95VzqAdwXL6uADPxQWGQV9LD2OtK9bUX7if_opYIYTcdIroqe7176LhnAst-sIYFTfU2tgwJknumIwzvYvxyTQ==@protonmail.internalid>
+ <20250422202517.4f224463@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pLuk+mNc049c71LOJZYoVKk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250422202517.4f224463@canb.auug.org.au>
 
---Sig_/pLuk+mNc049c71LOJZYoVKk
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Apr 22, 2025 at 08:25:17PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the xfs tree, today's linux-next build (htmldocs) produced
+> this warning:
+> 
+> Documentation/admin-guide/xfs.rst:576: WARNING: duplicate label admin-guide/xfs:zoned filesystems, other instance in Documentation/admin-guide/xfs.rst [autosectionlabel.admin-guide/xfs]
+> 
+> Introduced by commit
+> 
+>   c7b67ddc3c99 ("xfs: document zoned rt specifics in admin-guide")
+> 
 
-Hi all,
+Thanks, I'll take a look into it
 
-After merging the amdgpu tree, today's linux-next build (htmldocs)
-produced this warning:
 
-WARNING: drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:1068 struct member 'mc=
-m' not described in 'mpc_funcs'
-WARNING: drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:1068 struct member 'rm=
-cm' not described in 'mpc_funcs'
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-Introduced by commit
 
-  652968d996d7 ("drm/amd/display: DCN42 RMCM and MCM 3DLUT support")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/pLuk+mNc049c71LOJZYoVKk
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgHcIIACgkQAVBC80lX
-0GyU4Qf9HcH7ui0rvZvy6V1pAIr52OJCa9srKR/B9BzPbwmw2azYfX2bPjqzBf1r
-/l91SnFQiDHumWMQYZD6cE1U646c0FL5KmUQrSeW9pcE6FX4VC1HnyYRBIqoVAc1
-+mzF8dF2ZjxrMwEsK+LD+3yqmOhE9KHJII2G7tZ5BYX9o0GsF1LcBXgehzfp3lvq
-BwxoVIz4CE7fDLdp5nA+Go5uBPFu1E9K7yyJlaZXl3sFNIQG7SqRYxueQQeIYGry
-XEI42+LvZvBgnRJaFHPJHATfjZEREqIpaWUSnvn2jq8GzF1RM02FJXg3j5qgTa7R
-3BVgxQ97m0+C2d20HOD1z1VjOg7vZw==
-=xOCo
------END PGP SIGNATURE-----
-
---Sig_/pLuk+mNc049c71LOJZYoVKk--
 

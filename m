@@ -1,157 +1,177 @@
-Return-Path: <linux-next+bounces-6303-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6304-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C86FA95C48
-	for <lists+linux-next@lfdr.de>; Tue, 22 Apr 2025 04:44:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BC2EA95CFE
+	for <lists+linux-next@lfdr.de>; Tue, 22 Apr 2025 06:30:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6868416C48A
-	for <lists+linux-next@lfdr.de>; Tue, 22 Apr 2025 02:44:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E5931898587
+	for <lists+linux-next@lfdr.de>; Tue, 22 Apr 2025 04:30:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 625FF8634A;
-	Tue, 22 Apr 2025 02:44:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03B11171CD;
+	Tue, 22 Apr 2025 04:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="klMqPDLF"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="RueXbjEm"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BC1E6DCE1;
-	Tue, 22 Apr 2025 02:44:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6374BEC5;
+	Tue, 22 Apr 2025 04:30:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745289848; cv=none; b=TUz+NgCM2jII5lVkerSQmFXyNSJuYwVrzAArRKB4YDx2TSyE9Xi2diYZns26qGz0R8rv/oo3wXe+foQcQnXV5e8Sdw5uQhYdMitv5DyRHideuLcoAWAcDFdbul91l+JLIO4nK6NVMJHeUR2pIjsA7Gnbstwxx9OFVDee8p61xpM=
+	t=1745296227; cv=none; b=SycdBLaNnHpeyS1CvDOS3dBFGDUBz5I+NvjtEhIgU/LwklTryL/ZBXKp49fm+7xDV/doMTFUTCeXOV8GV1IqduWu8Zqyp05qAmruGwD5KN7RaZzTD5Pj2hGPdVyCkVILZUNfESKOHX/8PKcqnH5o5etlOqryOfpP/nqvd2lrvsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745289848; c=relaxed/simple;
-	bh=s44alH5hPjK2Gefh1TQEn8UKPGMiG3Z9tG4G+qwTgfw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=P+8bnXVtEKp1raSo3EeFUHP48V2gs+fj/Zp5aMjVS8zRBv/ULiKqeOZ7i9nWCOnXMQCiKrkGX7G5Gtvsq7gAN8cZuDKoaxmTIa3MbytZbsJduGRctiZ2mEGy5vnoHS81/rUUg8/l3WMnb3zjtD1xdoqMswiuVn8fsRGW/JGP0As=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=klMqPDLF; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1745296227; c=relaxed/simple;
+	bh=V4QB+xgTy8ClDZy7S3/vUXGI9Uxh9R5+J1mS5EEk/s8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=QseDQvcfuBo3LZeMrGMg+W3Sd1BGhHeDerh8eHv/GJ7JPJlH0xLqmmyqnQLQOUhGj4Jr2rdj2LrdZyOkiof+DjYPT6vocpdLvHxCiGbF9pMB+h88ycyVfXMlDxCVdIE3r+Lqei/aBMTnpbrsc3VrNgSzodPMkX9vc0+JChS78hM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=RueXbjEm; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1745289843;
-	bh=/RE1MQNTvfKl06CaGtYl0HbZyTjcSdvmmrxQ2kVUrq4=;
+	s=202503; t=1745296221;
+	bh=pOm/obCQ+A4qWgxrmcU73eoA6pKhDAmfoHxSQU9wufc=;
 	h=Date:From:To:Cc:Subject:From;
-	b=klMqPDLFcPjPsJ1u1O8DjTqJOFND61arOa/pOgaEqFbhim3bgVJql97jCdmnfJwgx
-	 ChdPzZLvaPSRDSs5VCs/X3xDjTV3xsxMNwtuyjZedQnnHm9zfl+6TZLahtlbTDkT8x
-	 vSPFfkByWKf8kcY33veOin9EDk/iTTi3aOco/P8clBIm0V/YDN5002Dl02iW3vL0va
-	 uRZGS2Ug4R6KjZjk6xwcV73Udi3iAiCIBng38JBG5RD/e94+kXowJsEqLN4IEywMyh
-	 om6xcOzjmsiX7r3V77yXSOR+10lCK2GacjrF4dGpOrPdrLEaIzIiIg+Mpyf1mULwRH
-	 tHdbXeilxI5+Q==
+	b=RueXbjEmXo1qtY/aHN+JRj9U6lc4TBRBt724HtE3r3lc0mKZKeplEqo1awdDdQmbi
+	 MUVckn9hV7QUmgYcPLvySl33jxKIYApPkJlYkcUg+SNmS5uinolK+jde4OeacgulkB
+	 VW+8ju1QP8HGTBZN6pC2QC3W+IPskBL0OQ2mRXdHR6a8NiMu5zfuOWI9mQvVZaDsp4
+	 jZBnR/ix2fDRyA3KSF9jnuDUohKgs6ToHHHJt0lKcOzn90nOihb7/+0cX4L2U8U5yM
+	 3rMCLbKNpzi9XhMJfSEkL9gD2+6imxLMPp38RHIKCyw1u1a8/yOWw+i9N6cr27yCf3
+	 D0cpP+3mbvVOA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZhRQC0mMdz4wnp;
-	Tue, 22 Apr 2025 12:44:02 +1000 (AEST)
-Date: Tue, 22 Apr 2025 12:44:02 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZhTmr4l5Nz4x1w;
+	Tue, 22 Apr 2025 14:30:20 +1000 (AEST)
+Date: Tue, 22 Apr 2025 14:30:19 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin"
- <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Alexander Graf <graf@amazon.com>, Changyuan Lyu <changyuanl@google.com>,
- Ingo Molnar <mingo@kernel.org>, Linux Kernel Mailing List
+To: Jason Gunthorpe <jgg@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>
+Cc: Daisuke Matsuda <matsuda-daisuke@fujitsu.com>, Jason Gunthorpe
+ <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, Li Zhijian
+ <lizhijian@fujitsu.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Subject: linux-next: manual merge of the mm-unstable tree with the tip-fixes
- tree
-Message-ID: <20250422124402.4b891d14@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the rdma tree with Linus' tree
+Message-ID: <20250422143019.500201bd@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qUc2LQFQGpw/usxMr3jV2Mj";
+Content-Type: multipart/signed; boundary="Sig_/wcPNa1+QDp9RqpSUw=8EKgm";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/qUc2LQFQGpw/usxMr3jV2Mj
+--Sig_/wcPNa1+QDp9RqpSUw=8EKgm
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the mm-unstable tree got a conflict in:
+Today's linux-next merge of the rdma tree got conflicts in:
 
-  arch/x86/kernel/e820.c
+  drivers/infiniband/sw/rxe/rxe_mr.c
+  drivers/infiniband/sw/rxe/rxe_resp.c
 
 between commit:
 
-  83b2d345e178 ("x86/e820: Discard high memory that can't be addressed by 3=
-2-bit systems")
+  1b2fe85f3cf1 ("RDMA/rxe: Fix null pointer dereference in ODP MR check")
 
-from the tip-fixes tree and commit:
+from Linus' tree and commits:
 
-  5a64fe1a39e7 ("x86: add KHO support")
+  6703cb3dced0 ("RDMA/rxe: Enable ODP in RDMA FLUSH operation")
+  b84001ad0cee ("RDMA/rxe: Enable ODP in ATOMIC WRITE operation")
 
-from the mm-unstable tree.
+from the rdma tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
+I fixed it up (see below - and some changed code from the latter was
+removed in the former) and can carry the fix as necessary. This is now
+fixed as far as linux-next is concerned, but any non trivial conflicts
+should be mentioned to your upstream maintainer when your tree is
+submitted for merging.  You may also want to consider cooperating with
+the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/x86/kernel/e820.c
-index 9920122018a0,7d1c74681c61..000000000000
---- a/arch/x86/kernel/e820.c
-+++ b/arch/x86/kernel/e820.c
-@@@ -1299,14 -1299,24 +1299,32 @@@ void __init e820__memblock_setup(void
-  		memblock_add(entry->addr, entry->size);
-  	}
+diff --cc drivers/infiniband/sw/rxe/rxe_mr.c
+index 432d864c3ce9,1a74013a14ab..000000000000
+--- a/drivers/infiniband/sw/rxe/rxe_mr.c
++++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+@@@ -468,6 -458,28 +458,28 @@@ static int rxe_mr_flush_pmem_iova(struc
+  	return 0;
+  }
  =20
- +	/*
- +	 * 32-bit systems are limited to 4BG of memory even with HIGHMEM and
- +	 * to even less without it.
- +	 * Discard memory after max_pfn - the actual limit detected at runtime.
- +	 */
- +	if (IS_ENABLED(CONFIG_X86_32))
- +		memblock_remove(PFN_PHYS(max_pfn), -1);
- +
-+ 	/*
-+ 	 * At this point with KHO we only allocate from scratch memory.
-+ 	 * At the same time, we configure memblock to only allow
-+ 	 * allocations from memory below ISA_END_ADDRESS which is not
-+ 	 * a natural scratch region, because Linux ignores memory below
-+ 	 * ISA_END_ADDRESS at runtime. Beside very few (if any) early
-+ 	 * allocations, we must allocate real-mode trapoline below
-+ 	 * ISA_END_ADDRESS.
-+ 	 *
-+ 	 * To make sure that we can actually perform allocations during
-+ 	 * this phase, let's mark memory below ISA_END_ADDRESS as scratch
-+ 	 * so we can allocate from there in a scratch-only world.
-+ 	 *
-+ 	 * After real mode trampoline is allocated, we clear scratch
-+ 	 * marking from the memory below ISA_END_ADDRESS
-+ 	 */
-+ 	memblock_mark_kho_scratch(0, ISA_END_ADDRESS);
++ int rxe_flush_pmem_iova(struct rxe_mr *mr, u64 start, unsigned int length)
++ {
++ 	int err;
 +=20
-  	/* Throw away partial pages: */
-  	memblock_trim_memory(PAGE_SIZE);
++ 	/* mr must be valid even if length is zero */
++ 	if (WARN_ON(!mr))
++ 		return -EINVAL;
++=20
++ 	if (length =3D=3D 0)
++ 		return 0;
++=20
++ 	if (mr->ibmr.type =3D=3D IB_MR_TYPE_DMA)
++ 		return -EFAULT;
++=20
+ -	if (mr->umem->is_odp)
+++	if (is_odp_mr(mr))
++ 		err =3D rxe_odp_flush_pmem_iova(mr, start, length);
++ 	else
++ 		err =3D rxe_mr_flush_pmem_iova(mr, start, length);
++=20
++ 	return err;
++ }
++=20
+  /* Guarantee atomicity of atomic operations at the machine level. */
+  DEFINE_SPINLOCK(atomic_ops_lock);
+ =20
+diff --cc drivers/infiniband/sw/rxe/rxe_resp.c
+index 5d9174e408db,fd7bac5bce18..000000000000
+--- a/drivers/infiniband/sw/rxe/rxe_resp.c
++++ b/drivers/infiniband/sw/rxe/rxe_resp.c
+@@@ -753,7 -749,16 +749,16 @@@ static enum resp_states atomic_write_re
+  	value =3D *(u64 *)payload_addr(pkt);
+  	iova =3D qp->resp.va + qp->resp.offset;
+ =20
+- 	err =3D rxe_mr_do_atomic_write(mr, iova, value);
++ 	/* See IBA oA19-28 */
++ 	if (unlikely(mr->state !=3D RXE_MR_STATE_VALID)) {
++ 		rxe_dbg_mr(mr, "mr not in valid state\n");
++ 		return RESPST_ERR_RKEY_VIOLATION;
++ 	}
++=20
+ -	if (mr->umem->is_odp)
+++	if (is_odp_mr(mr))
++ 		err =3D rxe_odp_do_atomic_write(mr, iova, value);
++ 	else
++ 		err =3D rxe_mr_do_atomic_write(mr, iova, value);
+  	if (err)
+  		return err;
  =20
 
---Sig_/qUc2LQFQGpw/usxMr3jV2Mj
+--Sig_/wcPNa1+QDp9RqpSUw=8EKgm
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgHAnIACgkQAVBC80lX
-0GzNggf/SK32T88vQ/qrbtWbPVWhsvrtJLvLPX4vBBXFiU4LZzVGWKGMuyeIbMKJ
-ea1686XIk7VkKH5EC6S+sN/CQHKX9qsKTAIewmOnF6OlTg8qax5RxkKWlaYJMcL9
-HeT6ciySSQJk0TLsnGgaJTs/+AA4nn4tqIwtm+ZqHasRRwQTJMbXWHivOlf0JMrg
-NETkknV9A745z3qyS+UpC9mMdQ8r0iTTh5c4FLpAFWfc+qWJjM0/Ca9xI8KADqIa
-pAwqMJbegJ5TKmIQqHfAQbmSJGv5fUG7QlffFHXdtQABKgGW75D1kTyap516YV7P
-fJxvvAvruARuCTF5+rEqz3b4w2c71Q==
-=aoOK
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgHG1sACgkQAVBC80lX
+0GwJzwgAisvxjuDtFA4Xp+usEWHb43bzM2FYY2jA5IEswfWKks34WET8PELo1ax2
+HTtr2CZxREijFhthTFB6mwu+9y0uCWKEROqTB2Oa1pcp9DCf4FAb778dEgNdLhLb
+eL56kl8Oiup40ptqVNcsWCSF3gS1PRzDwmZ5yY1zhi+RgZdbXAlpk8dM69Gjbew2
+Cp3vDZOagcqBFx0QbQ/J+kTxtK4b0y7GraZ41sCv/3a9ias/sSVs/3ZNC6yQyvqK
+IFH1d1Ob5iMs5db89u1aeCjpKYcE6A33E0dNlXirKhKnyeWoBH5YvsOZ9PsoQWQW
+6Sd3g9EOZyIIH7gjcYCJWeVv6tGO/A==
+=uyE8
 -----END PGP SIGNATURE-----
 
---Sig_/qUc2LQFQGpw/usxMr3jV2Mj--
+--Sig_/wcPNa1+QDp9RqpSUw=8EKgm--
 

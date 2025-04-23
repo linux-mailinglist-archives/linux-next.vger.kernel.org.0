@@ -1,97 +1,89 @@
-Return-Path: <linux-next+bounces-6349-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6350-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFB43A97C81
-	for <lists+linux-next@lfdr.de>; Wed, 23 Apr 2025 03:51:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A0F4A97CC9
+	for <lists+linux-next@lfdr.de>; Wed, 23 Apr 2025 04:25:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20B5A167E99
-	for <lists+linux-next@lfdr.de>; Wed, 23 Apr 2025 01:52:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 116441B6235A
+	for <lists+linux-next@lfdr.de>; Wed, 23 Apr 2025 02:25:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 012B5263C8A;
-	Wed, 23 Apr 2025 01:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A47125D558;
+	Wed, 23 Apr 2025 02:25:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="f1eS3Hnh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zg5BiUc0"
 X-Original-To: linux-next@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22331AB531;
-	Wed, 23 Apr 2025 01:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210D62701B0;
+	Wed, 23 Apr 2025 02:25:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745373057; cv=none; b=rjCq0kWa4Q+fWts09BAQy1lg1n2moGxyM1u6Jc7cpn9csyRdu1fL3XQLNROGE0Qk+SrrFdr5XqACRinMprkq5iaUsWpAUFy5nY8QQ4ihewGT8XXDZaOI0sdFVFhxshmgwAhyEu8QsQ/du7+uCfIBMAuUdWpIndmkmNXI9RJfP0k=
+	t=1745375103; cv=none; b=Dj8d4KQ5w5AImumZYN6T7ybxuOXMwp/9ZajNCwKubG+KocN1G4+Sa6Psm5JWPZOBvlijMRj//DlYJz533O6ex4rWK/27/ldQC5kCnZZSXD3YNXb7L9RTmMuBCmX0S9Dl3LuEX/WY5XmNr2GryLxGWC1QAt06bO1Gj6NyiL0Is1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745373057; c=relaxed/simple;
-	bh=6R4WwuGJQJq5HvrJ2/kuGeJvc41TbQnsdhIRQmsPQsE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GGGrUbNZF3ZbOHsV6ckT07m0Vn4JBdYOxjZjeLWouxZ9DHG3P6DZs74KTOgIvgxK/ZaISficdssxp+1n8/1v6Y9lEvq498JeHibCujRX7rIOeaPHVcd66/2WLTZuz2fabA7sjmwuvIMVkEpdwy8ocNhRGeCMLHdUlJMebc9As2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=f1eS3Hnh; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=Fy3qz1uFkZb+AL/yG6A3s9Izi4qPXtaKdWPYBlXrJwM=; b=f1eS3HnhYf/lVfjkmlw9N00TJ3
-	MoH9Q1LNu0a8MBPDdrVThATKvb9F3ej8PGzTmZwCywSuZMRnB0U0oZnaqYTesfaKYaiJIWOKfHhxB
-	NVnYyWvHqs6aPv86MLRp+scFBECxCiddJF4eMilkpzCFqX2vsfS5mRsi+ozgYfsDF20doISyi8hIJ
-	nfoKhQYJOen+SM5u9YThmSDsrdS+V1ViQqwy1HvKQOIQB0DOOYujy848qu5xILYfZpZ1PqhRwuroW
-	RkSqxoWgrpNurt6/0WBG8IYN1thHGRUo/FA/86wTlzP+zNHimU/HCO/Wq7CNzZOr6NDIb+uqVNTHo
-	Ml0BPVlQ==;
-Received: from [50.39.124.201] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1u7PGF-00000006ipK-2Xkf;
-	Wed, 23 Apr 2025 01:50:52 +0000
-Message-ID: <8ba27b19-6259-49d3-a77f-84bfa39aa694@infradead.org>
-Date: Tue, 22 Apr 2025 18:50:47 -0700
+	s=arc-20240116; t=1745375103; c=relaxed/simple;
+	bh=AilAM9Ytp0iA5/r8FspfeC7RTf3NdBHqULiO9UUQk68=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y3jisuAMLla299HAyENthKsVxsi20rTtxsTRMBA3I4jZCp2HD2pCEzXBb2Y7FTs4l6v5TcE2dlrzUgxGLzORt5JScvhocNwU7qpv7SFPmp3lYAiRbJgLswUKtepu6tryckPNHxW48SdM0czb1cO5WCXoYZ/uAGHPFGlEtpieWTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zg5BiUc0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BF16C4CEE9;
+	Wed, 23 Apr 2025 02:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745375102;
+	bh=AilAM9Ytp0iA5/r8FspfeC7RTf3NdBHqULiO9UUQk68=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Zg5BiUc0qdAF1LAdAOGpgOktGNJlQ2RBKat4+8dB+FZRtWcUWTTJ7iTNC+6Q0pcfo
+	 XxZGN9gZcL6qr1Jev+f+JF+1onYodHvk7XGYH0lXxZgVm67q11sgGc3wdQo4ZpxgC1
+	 KJm7CBjxAyEaYyJKjJr1napCL4dpwNwKkOk6m9J9uijSQXQEKCnWdzGtIdhBAFN3nf
+	 4ED8qdXxU4dh4cZ8ztnA6A6JUC+yRQwd448R1yxw1Ng59A7C13A17cYipJs8tpC7jo
+	 OZFpfO50DA7PbhnZ9386r5JzMeyCSdTZru/CxGbM8QMJdsYiqzYOe819LW+06Xt2H2
+	 30/wzJNdqfSVg==
+Date: Tue, 22 Apr 2025 19:24:59 -0700
+From: Kees Cook <kees@kernel.org>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Apr 22 (drivers/eisa/)
+Message-ID: <202504221922.E262C1AC8E@keescook>
+References: <20250422210315.067239d3@canb.auug.org.au>
+ <4a8ba1d0-d2d9-41f8-abf1-d45ec8996d10@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Apr 22
- (drivers/net/ethernet/broadcom/bnxt/bnxt.c)
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- netdev@vger.kernel.org, Michael Chan <michael.chan@broadcom.com>,
- Pavan Chebbi <pavan.chebbi@broadcom.com>
-References: <20250422210315.067239d3@canb.auug.org.au>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250422210315.067239d3@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4a8ba1d0-d2d9-41f8-abf1-d45ec8996d10@infradead.org>
 
-
-
-On 4/22/25 4:03 AM, Stephen Rothwell wrote:
-> Hi all,
+On Tue, Apr 22, 2025 at 03:28:27PM -0700, Randy Dunlap wrote:
 > 
-> News: there will be no linux-next release this coming Friday.
 > 
-> Changes since 20250417:
+> On 4/22/25 4:03 AM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > News: there will be no linux-next release this coming Friday.
+> > 
+> > Changes since 20250417:
+> > 
 > 
+> on i386:
+> 
+> ld: vmlinux.a: member drivers/eisa/devlist.h in archive is not an object
+> 
+> on any .config file with CONFIG_EISA=y
 
-on x86_64:
+This is surely dd09eb0e2cc4 ("EISA: Increase length of device names")
+(and I assume why I'm on CC)
 
-when # CONFIG_DETECT_HUNG_TASK is not set
-
-so CONFIG_DEFAULT_TASK_TIMEOUT is not set/defined:
-
-../drivers/net/ethernet/broadcom/bnxt/bnxt.c: In function 'bnxt_hwrm_ver_get':
-../drivers/net/ethernet/broadcom/bnxt/bnxt.c:10188:28: error: 'CONFIG_DEFAULT_HUNG_TASK_TIMEOUT' undeclared (first use in this function)
-10188 |             max_tmo_secs > CONFIG_DEFAULT_HUNG_TASK_TIMEOUT) {
-      |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
+I'll need to study how to use "if_changed" without adding to the obj
+list. I'll work on it...
 
 -- 
-~Randy
-
+Kees Cook
 

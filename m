@@ -1,277 +1,316 @@
-Return-Path: <linux-next+bounces-6378-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6379-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90FBFA9B122
-	for <lists+linux-next@lfdr.de>; Thu, 24 Apr 2025 16:38:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7848BA9B156
+	for <lists+linux-next@lfdr.de>; Thu, 24 Apr 2025 16:43:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A9C0194147B
-	for <lists+linux-next@lfdr.de>; Thu, 24 Apr 2025 14:38:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03C575A3CBB
+	for <lists+linux-next@lfdr.de>; Thu, 24 Apr 2025 14:43:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EA6F85270;
-	Thu, 24 Apr 2025 14:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD68E18859B;
+	Thu, 24 Apr 2025 14:43:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kfW0uE0g"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fsH5c5Yz"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 613E3142E86;
-	Thu, 24 Apr 2025 14:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B268D5695;
+	Thu, 24 Apr 2025 14:43:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745505490; cv=none; b=fT2uf8qpJIeGsCEtoJATfMAHEBYoTxjpxOF6mTWV+nb7KEvioBdHP9I081W0ZiGnWVG8AHHB3Wzb7mSU+Y2eU9cYdG0/jgDLl7FkAQyPeKu6G+iUSH2Shl0lnzWcWd17PnLjGoO2YpPvwjlucqBBqK2NV8Ype8JBb8bYlDr3lBs=
+	t=1745505819; cv=none; b=ZEq3K1EawtiBoBsKx2r2QVKAMttgLuq0gDpohBzxfT6P2HBx1skx7p7AIxL3+EVJDv53w2nrqr7chO79bjwJSsExyZYwSitaj3KvP8p3kcCZtJcXYMl7fuFfZO8DBNgXs7XwjVmyDRMxYYB0iwp5fYa6e1YOP/F6AcLuVVgS3pA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745505490; c=relaxed/simple;
-	bh=AnRDlp5kom6oTiGhX/PG6a7PF/KVK/ygHQYaGt5onKQ=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=Q7mbwxO78yPAQ1wA/VqahgdeR3I3o6qBlNFlKrsWW+mX5efPHn2WRbmTtb4DaCszTFoPjbcJk/Yz+2m0R4Kc0PF9JIgahTUt94tvpv1HXWqBCEQGPGy+DoaC+s/zjpTWLaMuITPAbcxmKaHuUm/ku+NjveS2eEaMDX38hvyqSdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kfW0uE0g; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53O9EseU028733;
-	Thu, 24 Apr 2025 14:37:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=gINj6k
-	Hdp6yE61erOQe+wI33IqtxuCsZBUz42mylwxE=; b=kfW0uE0gruTJFs6yiUgsoJ
-	vFpR4mRww7P8wkF4lsn09QwbeBmpuxs2sxfEpZZgWxX+oxRfvbAX39HX7fgiQaxu
-	NSB9cB6de+JThwg7mntWCLF0bPT3e/8JL0alg90/zJhROvpWN6+7ipqZ/bfXHxUv
-	hmRb8S56S4xoRKstoR8sd1ThXjAwwQ13rNWe5R79x4PlzuKZhCwDQubLaWto+TDs
-	I2TNqfo/SCiYXT2BKbGiZrrOFFJSCfM0bA4+U5i573u/VXglMGYkpBKvRaEJF4wf
-	R0O++Fmhdw/nouKIIWJzUwcilADi7j1gjz2WaY1op3LzY1EP26SRkX6EOs//752A
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4678aac5re-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Apr 2025 14:37:47 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53OBD5cA005861;
-	Thu, 24 Apr 2025 14:37:46 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 466jfxgmem-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 24 Apr 2025 14:37:46 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53OEbgD923068980
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 24 Apr 2025 14:37:42 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2F14120040;
-	Thu, 24 Apr 2025 14:37:42 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 77CD420049;
-	Thu, 24 Apr 2025 14:37:37 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.61.255.99])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu, 24 Apr 2025 14:37:37 +0000 (GMT)
-Content-Type: text/plain;
-	charset=utf-8
+	s=arc-20240116; t=1745505819; c=relaxed/simple;
+	bh=haTsVyL6icLCcdfS8saM05W0XIrG15THpFXntbBmkvw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MXi1+5gkotgo/peb3I7L/JWeV/NvniuN2rOaDT295RUHc5iJ0A//aQgbjsO4gUVg1XTyGaJcs3xoi0q7wP1bxqQth3/GXqFb0mKedS1+egRJYa+3dAyiCN8l+6OVgTwwPb5Sa26zbJkS3NpbPm34SqDOM6aEtwpf/H+tF8WnAvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fsH5c5Yz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EC76C4CEE3;
+	Thu, 24 Apr 2025 14:43:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745505819;
+	bh=haTsVyL6icLCcdfS8saM05W0XIrG15THpFXntbBmkvw=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=fsH5c5YzrTOflsXw1b1VSl5zK28dE05TJhpwrTC9Ley4NmtXTCvXbVqM+gNc85MGf
+	 R3+Bfed6E5Mg/jy1KnUI1FLMLy/GyfDSZMGjX4PjA6rxFSvB/Lp8fdCmmrePgLJRRH
+	 xrvS8uYUqW7N58y4ga63KFzx2m5u9dT5Eeek9M8y7gPhug2O805tJVdBb9984FhIlD
+	 k06G1bLd5oHwzAiuE/cyMluFDmnpLUoLnJM3kL0eAV1eTqgr+iwsK20+/wl4ZCmrzY
+	 O+kRCPiekTcFISH1T/kjGN7/HLjwD3mmVWgLaBDXifDzrWj+plrer7MToVcwAa+6EL
+	 6p/DDy80/9/Fg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id C94A5CE076F; Thu, 24 Apr 2025 07:43:38 -0700 (PDT)
+Date: Thu, 24 Apr 2025 07:43:38 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Petr Mladek <pmladek@suse.com>
+Cc: Bert Karwatzki <spasswolf@web.de>,
+	"Aithal, Srikanth" <sraithal@amd.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kuniyuki Iwashima <kuniyu@amazon.com>,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	John Ogness <john.ogness@linutronix.de>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	linux-kernel@vger.kernel.org,
+	Linux-Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: commit dd4cf8c9e1f4 leads to failed boot
+Message-ID: <f54c213e-b8e2-418f-b7f4-a2fa72f098b1@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20250423115409.3425-1-spasswolf@web.de>
+ <647b9aa4-f46e-4009-a223-78bfc6cc6768@amd.com>
+ <fa8dd394-45c1-48d3-881c-5f3d5422df39@paulmck-laptop>
+ <5a4a3d0d-a2e1-4fd3-acd2-3ae12a2ac7b0@amd.com>
+ <82ff38fc-b295-472c-bde5-bd96f0d144fb@paulmck-laptop>
+ <1509f29e04b3d1ac899981e0adaad98bbc0ee61a.camel@web.de>
+ <8ded350c-fc05-4bc2-aff2-33b440f6e2d6@paulmck-laptop>
+ <aAnp9rdPhRY52F7N@pathway.suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51\))
-Subject: Re: linux-next: build failure after merge of the tip tree
-From: Athira Rajeev <atrajeev@linux.ibm.com>
-In-Reply-To: <bb1f2928-617f-4943-bdd0-dfa74904ffb3@linux.ibm.com>
-Date: Thu, 24 Apr 2025 20:07:23 +0530
-Cc: Ingo Molnar <mingo@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <D66D1529-714C-4700-BD74-AC6AFA7C97A8@linux.ibm.com>
-References: <20250415133518.2c8d4325@canb.auug.org.au>
- <20250417134959.37204d48@canb.auug.org.au>
- <20250422163502.02ceeb0d@canb.auug.org.au>
- <bb1f2928-617f-4943-bdd0-dfa74904ffb3@linux.ibm.com>
-To: Shrikanth Hegde <sshegde@linux.ibm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-X-Mailer: Apple Mail (2.3776.700.51)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI0MDA5OSBTYWx0ZWRfX3oTqGrmny7qn n3HfInxvFIMEbmHYoWUgtwMdnQCr2lR715jxvnJgo7lYd+3iJMZCIDv6Ye6u9CsICII9pKHSPNa BxYOZawr2j9t6SkbKjDS+T1JKhrw+B4qRB4og0c25MjdNGdtz9pCxsKxvEZQW4cmEv9KrtE2uox
- 0NuxTwOofkJH78wuxlVFjij93OkIUpWXEHMyWbYpgAgtBppXH3oxCGH4qMgx4/rQ0bA2IvsmYxW Ym0AGbuP8GKvtCCdUteO8IV5RbC3QHhZ9gm1MIH+arsWfDy0Dg9bEmJFmAsD5Co0AnjaU3Jp1Gl 33DvmXXzQPHaVIUJNZLvvcB17ReQZW1+PvNtUC50OQ2KEi06mZHTTHXnngkrrcmv/T0iOMcCABC
- gkskLy+DwA/YRuhg1nzEdPXCFE9PZqdO1rHb2qZB2JOU/+bDwf8Hem/oRrFoGs+tKlZwsSqQ
-X-Proofpoint-ORIG-GUID: KTnl_KnMBrb51iIS-ZgmgdhGEknSxwYT
-X-Proofpoint-GUID: KTnl_KnMBrb51iIS-ZgmgdhGEknSxwYT
-X-Authority-Analysis: v=2.4 cv=KejSsRYD c=1 sm=1 tr=0 ts=680a4cbb cx=c_pps a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VnNF1IyMAAAA:8 a=rOUgymgbAAAA:8 a=zd2uoN0lAAAA:8 a=9GoLSl4O-BWiy-GYhlcA:9
- a=QEXdDO2ut3YA:10 a=MP9ZtiD8KjrkvI0BhSjB:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-04-24_06,2025-04-24_01,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 impostorscore=0 suspectscore=0 mlxscore=0 clxscore=1011
- mlxlogscore=999 phishscore=0 bulkscore=0 priorityscore=1501 spamscore=0
- adultscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504240099
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aAnp9rdPhRY52F7N@pathway.suse.cz>
 
+On Thu, Apr 24, 2025 at 09:36:22AM +0200, Petr Mladek wrote:
+> On Wed 2025-04-23 12:56:53, Paul E. McKenney wrote:
+> > On Wed, Apr 23, 2025 at 09:19:56PM +0200, Bert Karwatzki wrote:
+> > > Am Mittwoch, dem 23.04.2025 um 11:07 -0700 schrieb Paul E. McKenney:
+> > > > On Wed, Apr 23, 2025 at 08:49:08PM +0530, Aithal, Srikanth wrote:
+> > > > > On 4/23/2025 7:48 PM, Paul E. McKenney wrote:
+> > > > > > On Wed, Apr 23, 2025 at 07:09:42PM +0530, Aithal, Srikanth wrote:
+> > > > > > > On 4/23/2025 5:24 PM, Bert Karwatzki wrote:
+> > > > > > > > Since linux next-20250422 booting fails on my MSI Alpha 15 Laptop runnning
+> > > > > > > > debian sid. When booting kernel message appear on screen but no messages from
+> > > > > > > > init (systemd). There are also no logs written even thought emergency sync
+> > > > > > > > via magic sysrq works (a message is printed on screen), presumably because
+> > > > > > > > / is not mounted. I bisected this (from 6.15-rc3 to next-20250422) and found
+> > > > > > > > commit dd4cf8c9e1f4 as the first bad commit.
+> > > > > > > > Reverting commit dd4cf8c9e1f4 in next-20250422 fixes the issue.
+> > > > > > > 
+> > > > > > > 
+> > > > > > > Hello,
+> > > > > > > 
+> > > > > > > On AMD platform as well boot failed starting next-20250422, bisecting the
+> > > > > > > issue led me to same commit dd4cf8c9e1f4. I have attached kernel config and
+> > > > > > > logs.
+> > > > > > 
+> > > > > > Thank you all for the bisection and the report!
+> > > > > > 
+> > > > > > Please check out the predecessor of commit dd4cf8c9e1f4 ("ratelimit:
+> > > > > > Force re-initialization when rate-limiting re-enabled"):
+> > > > > > 
+> > > > > > 13fa70e052dd ("ratelimit: Allow zero ->burst to disable ratelimiting")
+> > > > > > 
+> > > > > > Then please apply the patch shown below, and let me know what happens?
+> > > > > > (Yes, I should have split that commit up...)
+> > > > > > 
+> > > > > > 							Thanx, Paul
+> > > > > > 
+> > > > > > ------------------------------------------------------------------------
+> > > > > > 
+> > > > > > diff --git a/lib/ratelimit.c b/lib/ratelimit.c
+> > > > > > index 04f16b8e24575..13ed636642270 100644
+> > > > > > --- a/lib/ratelimit.c
+> > > > > > +++ b/lib/ratelimit.c
+> > > > > > @@ -35,7 +35,7 @@ int ___ratelimit(struct ratelimit_state *rs, const char *func)
+> > > > > >   	unsigned long flags;
+> > > > > >   	int ret;
+> > > > > > -	if (!interval || !burst)
+> > > > > > +	if (interval <= 0 || burst <= 0)
+> > > > > >   		return 1;
+> > > > > >   	/*
+> > > > > 
+> > > > > 
+> > > > > I applied above patch on top of 13fa70e052dd ("ratelimit: Allow zero ->burst
+> > > > > to disable ratelimiting") [linux-20250423]. This is fixing the boot issue.
+> > > > > 
+> > > > > Tested-by: Srikanth Aithal <sraithal@amd.com>
+> > > > 
+> > > > Thank you both, and to Bert for intuiting the correct -next commit!
+> > > > 
+> > > > Could you please try the next increment, which is this patch, again
+> > > > on top of 24ff89c63355 ("ratelimit: Allow zero ->burst to > disable
+> > > > ratelimiting")?
+> > > > 
+> > > > In the meantime, I will expose the version you two just tested to
+> > > > -next.
+> > > > 
+> > > > 							Thanx, Paul
+> > > > 
+> > > > ------------------------------------------------------------------------
+> > > > 
+> > > > diff --git a/lib/ratelimit.c b/lib/ratelimit.c
+> > > > index 04f16b8e24575..8f6c54f719ef2 100644
+> > > > --- a/lib/ratelimit.c
+> > > > +++ b/lib/ratelimit.c
+> > > > @@ -35,8 +35,10 @@ int ___ratelimit(struct ratelimit_state *rs, const char *func)
+> > > >  	unsigned long flags;
+> > > >  	int ret;
+> > > >  
+> > > > -	if (!interval || !burst)
+> > > > +	if (interval <= 0 || burst <= 0) {
+> > > > +		ret = burst > 0;
+> > > >  		return 1;
+> > > > +	}
+> > > >  
+> > > >  	/*
+> > > >  	 * If we contend on this state's lock then just check if
+> > > 
+> > > If you set "ret = burst > 0", but "return 1" this will make no difference
+> > > (except in the case of a major compiler bug, probably), as I wrote in my other
+> > > email which overlapped yours, this fixes the issue in next-20250422:
+> > > 
+> > > diff --git a/lib/ratelimit.c b/lib/ratelimit.c
+> > > index b5c727e976d2..fc28f6cf8269 100644
+> > > --- a/lib/ratelimit.c
+> > > +++ b/lib/ratelimit.c
+> > > @@ -40,7 +40,7 @@ int ___ratelimit(struct ratelimit_state *rs, const char *func)
+> > >          * interval says never limit.
+> > >          */
+> > >         if (interval <= 0 || burst <= 0) {
+> > > -               ret = burst > 0;
+> > > +               ret = 1;
+> > >                 if (!(READ_ONCE(rs->flags) & RATELIMIT_INITIALIZED) ||
+> > >                     !raw_spin_trylock_irqsave(&rs->lock, flags))
+> > >                         return ret;
+> > 
+> > You are quite right, your patch does fix the issue that you three say.
+> 
+> Honestly, I do not understand what a ratelimit user could cause this
+> issue. And I am not able to reproduce it on my test system (x86_64,
+> kvm). I mean that my system boots and I see the systemd meesages.
 
+My bug was that interval==0 suppressed all ratelimited output, when
+it is instead supposed to never suppress it, as illustrated by the
+RATELIMIT_STATE_INIT_DISABLED() macro that I somehow managed to ignore.
+(Yes, I need more tests!  And I will do so.)
 
-> On 22 Apr 2025, at 3:26=E2=80=AFPM, Shrikanth Hegde =
-<sshegde@linux.ibm.com> wrote:
->=20
->=20
->=20
-> On 4/22/25 12:05, Stephen Rothwell wrote:
->> Hi all,
->=20
-> Hi Ingo, Stephen.
->=20
->> On Thu, 17 Apr 2025 13:49:59 +1000 Stephen Rothwell =
-<sfr@canb.auug.org.au> wrote:
->>>=20
->>> On Tue, 15 Apr 2025 13:35:18 +1000 Stephen Rothwell =
-<sfr@canb.auug.org.au> wrote:
->>>>=20
->>>> After merging the tip tree, today's linux-next build (native perf)
->>>> failed like this:
->>>>=20
->>>> diff: tools/arch/x86/include/asm/amd/ibs.h: No such file or =
-directory
->>>> In file included from util/amd-sample-raw.c:12:
->>>> tools/include/../../arch/x86/include/asm/amd/ibs.h:10:10: fatal =
-error: asm/msr-index.h: No such file or directory
->>>>    10 | #include <asm/msr-index.h>
->>>>       |          ^~~~~~~~~~~~~~~~~
->>>> compilation terminated.
->>>>=20
->>>> Maybe caused by commit
->>>>=20
->>>>   3846389c03a8 ("x86/platform/amd: Move the <asm/amd-ibs.h> header =
-to <asm/amd/ibs.h>")
->>>> or associated commits?
->>>>=20
->=20
-> Even i am running into this error when building tools/perf on ppc64le. =
-perf build works in 6.15-rc3,
-> but failed with tip/master.
->=20
-> Did git bisect
-> good: [9c32cda43eb78f78c73aee4aa344b777714e259b] Linux 6.15-rc3
-> bad: [1a11b5b80f46e4dff0b21cb07efab43dee049d61] Merge branch into tip =
-master: 'x86/sev'
-> ...
-> # first bad commit: [3846389c03a8518884f09056611619bd1461ffc7] =
-x86/platform/amd: Move the <asm/amd-ibs.h> header to <asm/amd/ibs.h>
+> > Unfortunately, it prevents someone from completely suppressing output
+> > by setting burst to zero.  Could you please try the patch below?
+> 
+> I wondered whether some code used a non-initialized struct ratelimit_state.
+> I tried the following patch:
+> 
+> diff --git a/lib/ratelimit.c b/lib/ratelimit.c
+> index b5c727e976d2..f949a18e9c2b 100644
+> --- a/lib/ratelimit.c
+> +++ b/lib/ratelimit.c
+> @@ -35,6 +35,10 @@ int ___ratelimit(struct ratelimit_state *rs, const char *func)
+>  	unsigned long flags;
+>  	int ret;
+>  
+> +	WARN_ONCE(interval <= 0 || burst <= 0,
+> +		  "Possibly using a non-initilized ratelimit struct with interval:%d, burst:%d\n",
+> +		  interval, burst);
+> +
+>  	/*
+>  	 * Non-positive burst says always limit, otherwise, non-positive
+>  	 * interval says never limit.
+> 
+> 
+> And it triggered:
+> 
+> [    2.874504] ------------[ cut here ]------------
+> [    2.875552] Possibly using a non-initilized ratelimit struct with interval:0, burst:0
+> [    2.876990] WARNING: CPU: 2 PID: 1 at lib/ratelimit.c:38 ___ratelimit+0x1e8/0x200
+> [    2.878435] Modules linked in:
+> [    2.879045] CPU: 2 UID: 0 PID: 1 Comm: swapper/0 Tainted: G        W           6.15.0-rc3-next-20250422-default+ #22 PREEMPT(full)  f5d77f8de4aec34e420e26410c34bcb56f692aae
+> [    2.881287] Tainted: [W]=WARN
+> [    2.882010] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.3-2-gc13ff2cd-prebuilt.qemu.org 04/01/2014
+> [    2.886452] RIP: 0010:___ratelimit+0x1e8/0x200
+> [    2.888405] Code: 00 00 e9 b5 fe ff ff 41 bc 01 00 00 00 e9 f2 fe ff ff 89 ea 44 89 e6 48 c7 c7 f8 40 eb 92 c6 05 b5 4d 0f 01 01 e8 28 a0 de fe <0f> 0b e9 71 ff ff ff 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00
+> [    2.891223] RSP: 0000:ffffcf1340013bd8 EFLAGS: 00010282
+> [    2.892033] RAX: 0000000000000000 RBX: ffff8a8cc2bfbaf0 RCX: 0000000000000000
+> [    2.893091] RDX: 0000000000000002 RSI: 00000000ffff7fff RDI: 00000000ffffffff
+> [    2.894158] RBP: 0000000000000000 R08: 00000000ffff7fff R09: ffff8a8d3fe3ffa8
+> [    2.895168] R10: 00000000ffff8000 R11: 0000000000000001 R12: 0000000000000000
+> [    2.896150] R13: ffffffff92e08d38 R14: ffff8a8cc369e400 R15: ffff8a8cc2e39f00
+> [    2.897138] FS:  0000000000000000(0000) GS:ffff8a8da6f3c000(0000) knlGS:0000000000000000
+> [    2.898224] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [    2.899181] CR2: 0000000000000000 CR3: 0000000153256001 CR4: 0000000000370ef0
+> [    2.901865] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> [    2.903516] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> [    2.906593] Call Trace:
+> [    2.907143]  <TASK>
+> [    2.907582]  __ext4_msg+0x6e/0xa0
 
-Before this commit, msr-index.h was present in =
-tools/arch/x86/include/asm/msr-index.h
-amd-ibs.h was present in tools/arch/x86/include/asm/amd-ibs.h
+Ths is the ->s_msg_ratelimit_state field of the ext4_sb_info structure,
+which is allocated via kzalloc().  It looks like these two statements:
 
-=46rom amd-ibs.h , it picks mss-index.h from :
+EXT4_RW_ATTR_SBI_PI(msg_ratelimit_interval_ms, s_msg_ratelimit_state.interval);
+EXT4_RW_ATTR_SBI_PI(msg_ratelimit_burst, s_msg_ratelimit_state.burst);
 
-# grep msr-index tools/arch/x86/include/asm/amd-ibs.h
-#include "msr-index.h=E2=80=9D
+Allow the sysadm to specify rate-limiting if desired, with the default of
+no rate limiting.  And zero-initialization seems like a reasonable thing
+to allow for a default-never-ratelimited ratelimit_state structure, not?
 
-After the commit,=20
-make initial logs shows missing =
-=E2=80=9Ctools/arch/x86/include/asm/amd/ibs.h=E2=80=9D
+So given Bert's survey of the users, would it make sense to have your
+WARN_ONCE(), but only if either burst or interval is negative?
 
-# make
-  BUILD:   Doing 'make -j24' parallel build
-diff: tools/arch/x86/include/asm/amd/ibs.h: No such file or directory    =
-                              =20
-Warning: Kernel ABI header differences:
-  diff -u tools/include/uapi/linux/bits.h include/uapi/linux/bits.h
-  diff -u tools/include/linux/bits.h include/linux/bits.h
-  diff -u tools/include/vdso/unaligned.h include/vdso/unaligned.h
-  diff -u tools/arch/x86/include/asm/cpufeatures.h =
-arch/x86/include/asm/cpufeatures.h
-  diff -u tools/arch/x86/include/asm/msr-index.h =
-arch/x86/include/asm/msr-index.h
-  diff -u tools/arch/x86/include/asm/amd/ibs.h =
-arch/x86/include/asm/amd/ibs.h
-  diff -u tools/arch/arm64/include/asm/cputype.h =
-arch/arm64/include/asm/cputype.h
+Unless you tell me otherwise, I will add that with your Signed-off-by,
+and noting Bert's good work.
 
-Build failure here is:
+							Thanx, Paul
 
-In file included from util/amd-sample-raw.c:12:0:
-/root/bug/tip/tools/include/../../arch/x86/include/asm/amd/ibs.h:10:10: =
-fatal error: asm/msr-index.h: No such file or directory
- #include <asm/msr-index.h>
-          ^~~~~~~~~~~~~~~~~
-compilation terminated.
-
-
-To fix, this needs change to add tools/arch/x86/include/asm/amd/ibs.h =
-and also update the msr-index.h like below:
-
-diff --git a/tools/arch/x86/include/asm/amd/ibs.h =
-b/tools/arch/x86/include/asm/amd/ibs.h
-index 3ee5903982c2..bcca5dcb9148 100644
---- a/tools/arch/x86/include/asm/amd/ibs.h
-+++ b/tools/arch/x86/include/asm/amd/ibs.h
-@@ -7,7 +7,7 @@
-  * 55898 Rev 0.35 - Feb 5, 2021
-  */
-  -#include <asm/msr-index.h>
-+#include <../msr-index.h>
-   /* IBS_OP_DATA2 DataSrc */
- #define IBS_DATA_SRC_LOC_CACHE                  2
-
-Similar change was done for tools/arch/x86/include/asm/amd-ibs.h as =
-well. Reference commit below:
-
-commit dde994dd54fbf84f8fd14230de3477d552e42470
-Author: Kim Phillips <kim.phillips@amd.com>
-Date:   Tue Aug 17 17:15:08 2021 -0500
-
-    perf report: Add tools/arch/x86/include/asm/amd-ibs.h
-         This is a tools/-side patch for the patch that adds the =
-original copy
-    of the IBS header file, in arch/x86/include/asm/.
-         We also add an entry to check-headers.sh, so future changes =
-continue
-    to be copied.
-         Committer notes:
-         Had to add this
-           -#include <asm/msr-index.h>
-      +#include "msr-index.h"
-         And change the check-headers.sh entry to ignore this line when =
-diffing
-    with the original kernel header.
-
-Shirkanth, Stephen, Venkat
-
-I will be sending a separate fix patch for this.
-
-Thanks
-Athira
-
->=20
->=20
-> It isn't able to find the file after rename. I did the below hack so =
-that ibs.h finds the msr-index.h
-> Likely there is better way. for me, this helps to build tools/perf.
->=20
-> ---
->=20
-> diff --git a/arch/x86/include/asm/amd/ibs.h =
-b/arch/x86/include/asm/amd/ibs.h
-> index 3ee5903982c2..ac3a36fc08b1 100644
-> --- a/arch/x86/include/asm/amd/ibs.h
-> +++ b/arch/x86/include/asm/amd/ibs.h
-> @@ -7,7 +7,7 @@
->  * 55898 Rev 0.35 - Feb 5, 2021
->  */
-> -#include <asm/msr-index.h>
-> +#include "../../asm/msr-index.h"
->  /* IBS_OP_DATA2 DataSrc */
-> #define IBS_DATA_SRC_LOC_CACHE                  2
-
-
-
-
-
+> [    2.908132]  ? lock_is_held_type+0xd8/0x130
+> [    2.908755]  ext4_check_feature_compatibility+0x15e/0x2c0
+> [    2.909427]  __ext4_fill_super+0x543/0x1480
+> [    2.910049]  ext4_fill_super+0xcc/0x280
+> [    2.910641]  ? setup_bdev_super+0xfc/0x200
+> [    2.911265]  ? __pfx_ext4_fill_super+0x10/0x10
+> [    2.911882]  get_tree_bdev_flags+0x13e/0x1e0
+> [    2.912485]  vfs_get_tree+0x29/0xe0
+> [    2.912958]  ? capable+0x3a/0x60
+> [    2.913407]  do_new_mount+0x176/0x360
+> [    2.913920]  init_mount+0x5a/0x90
+> [    2.914389]  do_mount_root+0xa2/0x130
+> [    2.914923]  mount_root_generic+0xdd/0x270
+> [    2.916127]  ? mount_root+0x147/0x190
+> [    2.917989]  prepare_namespace+0x1e0/0x230
+> [    2.919124]  kernel_init_freeable+0x1ec/0x200
+> [    2.920907]  ? __pfx_kernel_init+0x10/0x10
+> [    2.922113]  kernel_init+0x1a/0x130
+> [    2.922616]  ret_from_fork+0x31/0x50
+> [    2.923093]  ? __pfx_kernel_init+0x10/0x10
+> [    2.923612]  ret_from_fork_asm+0x1a/0x30
+> [    2.924110]  </TASK>
+> [    2.924433] irq event stamp: 1696665
+> [    2.924955] hardirqs last  enabled at (1696675): [<ffffffff913fa54e>] __up_console_sem+0x5e/0x70
+> [    2.926072] hardirqs last disabled at (1696686): [<ffffffff913fa533>] __up_console_sem+0x43/0x70
+> [    2.927149] softirqs last  enabled at (1696612): [<ffffffff9135134e>] handle_softirqs+0x32e/0x400
+> [    2.928221] softirqs last disabled at (1696591): [<ffffffff91351509>] __irq_exit_rcu+0xd9/0x150
+> [    2.929167] ---[ end trace 0000000000000000 ]---
+> [    3.003162] EXT4-fs (vda2): mounted filesystem 587ae802-e330-4059-9b48-d5b845e1075a ro with ordered data mode. Quota mode: none.
+> 
+> I guess that it happens because the structure is initialized too late,
+> see:
+> 
+> static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+> {
+> 
+> 	[ ... skipping a lot of initialization code ... ]
+> 
+> 	/* Enable message ratelimiting. Default is 10 messages per 5 secs. */
+> 	ratelimit_state_init(&sbi->s_err_ratelimit_state, 5 * HZ, 10);
+> 	ratelimit_state_init(&sbi->s_warning_ratelimit_state, 5 * HZ, 10);
+> 	ratelimit_state_init(&sbi->s_msg_ratelimit_state, 5 * HZ, 10);
+> 
+> 	[...]
+> }
+> 
+> I guess that it is on purpose. They most likely do not want to
+> ratelimit the _very initial messages_ printed when the initialization
+> fails.
+> 
+> Maybe, it is not a good idea to allow to disable the ratelimit by
+> zero burst.
+> 
+> Best Regards,
+> Petr
 

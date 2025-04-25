@@ -1,172 +1,108 @@
-Return-Path: <linux-next+bounces-6381-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6382-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A8BCA9B585
-	for <lists+linux-next@lfdr.de>; Thu, 24 Apr 2025 19:39:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7DE7A9BD9E
+	for <lists+linux-next@lfdr.de>; Fri, 25 Apr 2025 06:32:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50E339A2227
-	for <lists+linux-next@lfdr.de>; Thu, 24 Apr 2025 17:38:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41FA41BA37BE
+	for <lists+linux-next@lfdr.de>; Fri, 25 Apr 2025 04:33:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0FA128D85C;
-	Thu, 24 Apr 2025 17:38:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB560217F40;
+	Fri, 25 Apr 2025 04:32:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UgJ+lrlS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nC0h+B7S"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6C428935D
-	for <linux-next@vger.kernel.org>; Thu, 24 Apr 2025 17:38:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF3B4134CF;
+	Fri, 25 Apr 2025 04:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745516308; cv=none; b=nkTAuW5sErA6PucZUFCI7BJHvF9yqsXWZyFxpbG8sUoj1aynHL+xzO3CsWJPC4DXhjEECBc1KcSPs9aGTxhdKZ1KBLIR28PAuVHcW4icO57xs3Wewxq3ZX9f8RXHTWrWbSJySJ6alfGYBuss+zeqryLN/kVHgkJYwk7ZBEipW+k=
+	t=1745555559; cv=none; b=mwL1l0330CnWy3QSI1XALrKRh44BPXFZIVvmXJJYEurtZIFY/bL5pKwzvPYcB60Gf6x+mQq7pZl/sMFrVKq+wIOMxyZkwayeIVGtCGAoJotgFBdjzXzg08l49725nOB3UbPMox2Y3cXg/CDE/9h8q1mnc0vCllZNrQvqfgkQAQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745516308; c=relaxed/simple;
-	bh=+3qGCQZl/U0MkFm/X6EpDwwucSxPvMb3L7QjZX6gyww=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p0eI47cRahi/EFdIxWr+FrVgGnHekxnKuoz3BT5ccg29LOyP1PFIFznPc7HieP0y6451TIPJ/gYsIM8F82ZxkTH7LxxNrXt6kHJEBcmdwrR/q01RRC2mpW+UZO6V5gNweipeSv6gQSdso02yzicl7Qia25+DiemhnUUtR9uaFrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UgJ+lrlS; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745516306;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=M6iPlq0+lPq47ekL78NC2y1kZ/SereiKHjDQ5zOpW38=;
-	b=UgJ+lrlS2MS4TR8PGGedgYAphPSuP9L/j+pD/PAIjblvpGXowHvNdsG1VEtxt8VCWB+m/h
-	IGqTCbKe1B5bgR6HLXmX81Kdc2ftIN46tNl5pMacvXHvvyNJNqQYuIVlucSpqsL5+seppn
-	cFEFJsYIqdnVkcHH9OhekAHjv5pIXdw=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-202-0HF715h1PbKnvRVpPWw8Gw-1; Thu, 24 Apr 2025 13:38:24 -0400
-X-MC-Unique: 0HF715h1PbKnvRVpPWw8Gw-1
-X-Mimecast-MFC-AGG-ID: 0HF715h1PbKnvRVpPWw8Gw_1745516303
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3913b2d355fso463283f8f.1
-        for <linux-next@vger.kernel.org>; Thu, 24 Apr 2025 10:38:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745516303; x=1746121103;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M6iPlq0+lPq47ekL78NC2y1kZ/SereiKHjDQ5zOpW38=;
-        b=Hkx2BlXxMJc9Mudr4XcWpLrWe6YBUHRoTaSu2xUWgZpMBgvt69HhWH5BPeiEBZxxkR
-         Y0fnwiYRm5T31AttBcF9g97zZEiVCvms4Ps/cF/zPumS2OjjbPMazWji1BY8FoTL1r/r
-         SDYiyrfVpTPjVmiQNZT/dekwFCMdTJYHV7BHG3D4SdmnLMo5qj1iRm2mfQQW5nQu3u2E
-         gkKw/R1CLYd8kYjvx9AfyXOaMoIDpMrZN3D35RKrszdaUs0ayrowgKm7mFv/5+5ZPXFE
-         LGJ05QrlCTjXpsBXiJaDtmLuCq4g6oxI5u/X/BwocYtsv7XXNEqwLG2UlWDRhZ/gyTuT
-         zVEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUFoP1JagDGPryeEgWHW5zmAgP7T3hQqJVizB4IZ0Sa6z7jQ8mKNpB9Z6sdJ8f2LZQOrr4BbfD37kDz@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmhE3bD9C0dFaqRg0XeRB+Uz7fMBjVirS9dELlbCl6XTS0r4FG
-	CXA5uvqfbxa4+5mMgAnpP6Y3DnW9o8iQCAtNfPix7E1oVe+yknpOL0FZUQcvDKXlnERBIi/YozZ
-	klTbjE9ggTRsBeVIBWdxfAveoKoqs78TPhyswg/V6BYISa6HsX2KrUT0c9wQ=
-X-Gm-Gg: ASbGncsF7C1qKkfgxWy3juAM1Swv2Sr8A+7BICoQCcFwi3NJ17dWZlKR/rId7lr7F4O
-	N3cVzL0a0l8Xum2KqQr+0q7fudxDhTSoNsGG6RVnumf7nqXll8rwFGg2VIrJtvA2JW3v+XfOvTX
-	7vq7oHsyANClQugAXKuZfOSR5W6BPJysiEYKbMYRovMU7cCM23VTT9mwMiVQEgP6l83SgGu4AtJ
-	EXqVHvBJ5mkCzVqlXZbp3aybmRIRiX8SlJi6ohLHYqkUAtvYHNSFPtI0m5HgWbFH4e3AyCDtgW1
-	m1QG36T6KKl1
-X-Received: by 2002:a5d:47cd:0:b0:391:2fe3:24ec with SMTP id ffacd0b85a97d-3a072a85d1emr194604f8f.14.1745516303018;
-        Thu, 24 Apr 2025 10:38:23 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IG5D2IdhVkkhzZ2u4E9jNLM9y6rqvZsJQWcjcm75UgkS2t3YqrF/hXRwT+JfZpueEpjqert+g==
-X-Received: by 2002:a5d:47cd:0:b0:391:2fe3:24ec with SMTP id ffacd0b85a97d-3a072a85d1emr194592f8f.14.1745516302620;
-        Thu, 24 Apr 2025 10:38:22 -0700 (PDT)
-Received: from [192.168.1.84] ([93.56.161.39])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3a06d4a804fsm2858556f8f.10.2025.04.24.10.38.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Apr 2025 10:38:22 -0700 (PDT)
-Message-ID: <df3b44a7-70b8-4952-a7d7-231e69c8d3eb@redhat.com>
-Date: Thu, 24 Apr 2025 19:38:21 +0200
+	s=arc-20240116; t=1745555559; c=relaxed/simple;
+	bh=jwon6my1/h7fyJvMoj0jyEwXJg1ZkBYWbj5V0De48Zo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MV/C6Wdjg3l87GRUxFczOkPnD9EtfZSPtd1S0+k38nzSmgq4Bubt0/dgxfN7jbzoDnNzjObKWXnOlNp8wnBW6VpaFSUj6X0xaNKziyxgXB0OAF/y7LtlTTcIpC2TmksH/eOthO+lGV7hD4oZ45W9zKqpGkCvTNF/671prxEKeI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nC0h+B7S; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1745555558; x=1777091558;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jwon6my1/h7fyJvMoj0jyEwXJg1ZkBYWbj5V0De48Zo=;
+  b=nC0h+B7S1ZFaA4L04SNWVXkNRoQ3san/l86l9Y9WG8LOpvt7upb7X+lT
+   LOF83+sCN0BujkxiIBsr6CRBgp9yemO1EsoluLTG/5GQReXA3c44WmX9Q
+   fpZSdRvsZXzwrjvBnnWIme5nmBM0VpSUNYn1k6V/Vnr7RMgYlvRmjfWtI
+   6rjIrv/hfZskAgvH++WijTy6l2zPPwl/zBnt2mCswP/Gz3yxbImolf866
+   7CWbKd+f9bd8HPdKxeJ+VWxlLy+PVJ+QUsF8HpBczRdaaHGvKmpuN3R7J
+   Yf6JP6iujP5uI5A60GoFlrqoEmf4LbN+7edNcRo2FCZq2/ye4FnEn490h
+   w==;
+X-CSE-ConnectionGUID: OOfVveH7RpGBRwbCpOdEkw==
+X-CSE-MsgGUID: ULQEkWH4QIWQMPPKyUgvlw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11413"; a="34830385"
+X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
+   d="scan'208";a="34830385"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 21:32:37 -0700
+X-CSE-ConnectionGUID: ajgVh2KbRfetbXQBXDRp3w==
+X-CSE-MsgGUID: fZVX4imIQrejq1t+17KEVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
+   d="scan'208";a="132689040"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by fmviesa006.fm.intel.com with ESMTP; 24 Apr 2025 21:32:33 -0700
+Date: Fri, 25 Apr 2025 12:27:56 +0800
+From: Xu Yilun <yilun.xu@linux.intel.com>
+To: Marco Pagani <marco.pagani@linux.dev>
+Cc: Arnd Bergmann <arnd@kernel.org>,
+	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+	Xu Yilun <yilun.xu@intel.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>, linux-next@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>, Tom Rix <trix@redhat.com>,
+	Marco Pagani <marpagan@redhat.com>,
+	Russ Weight <russ.weight@linux.dev>, linux-fpga@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/10] fpga: tests: add module descriptions
+Message-ID: <aAsPTN4y2nf9q+ht@yilunxu-OptiPlex-7050>
+References: <20250324173242.1501003-1-arnd@kernel.org>
+ <20250324173242.1501003-4-arnd@kernel.org>
+ <6ab8b951-a2be-4434-8621-0b31d00608ad@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the kvm-fixes tree
-To: Sean Christopherson <seanjc@google.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: KVM <kvm@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20250422124310.2e9aee0d@canb.auug.org.au>
- <20250422173341.0901ebaf@canb.auug.org.au> <aAeg8A7DMvTAjqVO@google.com>
-From: Paolo Bonzini <pbonzini@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=pbonzini@redhat.com; keydata=
- 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
-In-Reply-To: <aAeg8A7DMvTAjqVO@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6ab8b951-a2be-4434-8621-0b31d00608ad@linux.dev>
 
-On 4/22/25 16:00, Sean Christopherson wrote:
-> On Tue, Apr 22, 2025, Stephen Rothwell wrote:
->> Hi all,
->>
->> On Tue, 22 Apr 2025 12:43:10 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>>
->>> After merging the kvm-fixes tree, today's linux-next build (x86_64
->>> allmodconfig) failed like this:
->>>
->>> ERROR: modpost: "kvm_arch_has_irq_bypass" [arch/x86/kvm/kvm-amd.ko] undefined!
->>>
->>> Caused by commit
->>>
->>>    73e0c567c24a ("KVM: SVM: Don't update IRTEs if APICv/AVIC is disabled")
->>>
->>> I have used the kvm-fixes tree from next-20250417 for today.
->>
->> I also had to use the kvm tree from next-20250417.
+On Tue, Mar 25, 2025 at 06:06:51PM +0100, Marco Pagani wrote:
 > 
-> It's a known issue[*], just waiting on Paolo to resurface.  :-/
-
-*bubbles noise*
-
-Done, pushed to kvm/master and will resend the PR to Linus as soon as 
-Stephen updates linux-next.
-
-Paolo
-
-> [*] https://lore.kernel.org/all/20250418171609.231588-1-pbonzini@redhat.com
+> On 2025-03-24 18:32, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > Modules without a description now cause a warning:
+> > 
+> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-bridge-test.o
+> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-mgr-test.o
+> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-region-test.o
+> > 
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > 
+> Reviewed-by: Marco Pagani <marco.pagani@linux.dev>
 
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+
+Applied to for-next.
 

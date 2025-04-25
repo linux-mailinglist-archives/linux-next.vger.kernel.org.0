@@ -1,108 +1,112 @@
-Return-Path: <linux-next+bounces-6382-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6383-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7DE7A9BD9E
-	for <lists+linux-next@lfdr.de>; Fri, 25 Apr 2025 06:32:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA7A9A9C2A8
+	for <lists+linux-next@lfdr.de>; Fri, 25 Apr 2025 11:02:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41FA41BA37BE
-	for <lists+linux-next@lfdr.de>; Fri, 25 Apr 2025 04:33:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 285813B4BFD
+	for <lists+linux-next@lfdr.de>; Fri, 25 Apr 2025 09:02:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB560217F40;
-	Fri, 25 Apr 2025 04:32:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E683824B34;
+	Fri, 25 Apr 2025 08:59:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nC0h+B7S"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fCMxucKu"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF3B4134CF;
-	Fri, 25 Apr 2025 04:32:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C99F22FF37
+	for <linux-next@vger.kernel.org>; Fri, 25 Apr 2025 08:59:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745555559; cv=none; b=mwL1l0330CnWy3QSI1XALrKRh44BPXFZIVvmXJJYEurtZIFY/bL5pKwzvPYcB60Gf6x+mQq7pZl/sMFrVKq+wIOMxyZkwayeIVGtCGAoJotgFBdjzXzg08l49725nOB3UbPMox2Y3cXg/CDE/9h8q1mnc0vCllZNrQvqfgkQAQY=
+	t=1745571552; cv=none; b=gGja+bkebp3zCa4NPviVSM1ovlFqhZlzSihtwOPJSukro5Icdifom7Hg+fdJxunC9ogO0cC61k6UBSPhZmB0p1IHWgXBVuy39zDZpauycqlmaU7odOiSiW5eZrZsALbNo59izERHwPkozHCIpCpF0ScJIWxxAuMdF339sQLxQHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745555559; c=relaxed/simple;
-	bh=jwon6my1/h7fyJvMoj0jyEwXJg1ZkBYWbj5V0De48Zo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MV/C6Wdjg3l87GRUxFczOkPnD9EtfZSPtd1S0+k38nzSmgq4Bubt0/dgxfN7jbzoDnNzjObKWXnOlNp8wnBW6VpaFSUj6X0xaNKziyxgXB0OAF/y7LtlTTcIpC2TmksH/eOthO+lGV7hD4oZ45W9zKqpGkCvTNF/671prxEKeI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nC0h+B7S; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1745555558; x=1777091558;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jwon6my1/h7fyJvMoj0jyEwXJg1ZkBYWbj5V0De48Zo=;
-  b=nC0h+B7S1ZFaA4L04SNWVXkNRoQ3san/l86l9Y9WG8LOpvt7upb7X+lT
-   LOF83+sCN0BujkxiIBsr6CRBgp9yemO1EsoluLTG/5GQReXA3c44WmX9Q
-   fpZSdRvsZXzwrjvBnnWIme5nmBM0VpSUNYn1k6V/Vnr7RMgYlvRmjfWtI
-   6rjIrv/hfZskAgvH++WijTy6l2zPPwl/zBnt2mCswP/Gz3yxbImolf866
-   7CWbKd+f9bd8HPdKxeJ+VWxlLy+PVJ+QUsF8HpBczRdaaHGvKmpuN3R7J
-   Yf6JP6iujP5uI5A60GoFlrqoEmf4LbN+7edNcRo2FCZq2/ye4FnEn490h
-   w==;
-X-CSE-ConnectionGUID: OOfVveH7RpGBRwbCpOdEkw==
-X-CSE-MsgGUID: ULQEkWH4QIWQMPPKyUgvlw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11413"; a="34830385"
-X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
-   d="scan'208";a="34830385"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2025 21:32:37 -0700
-X-CSE-ConnectionGUID: ajgVh2KbRfetbXQBXDRp3w==
-X-CSE-MsgGUID: fZVX4imIQrejq1t+17KEVQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,238,1739865600"; 
-   d="scan'208";a="132689040"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by fmviesa006.fm.intel.com with ESMTP; 24 Apr 2025 21:32:33 -0700
-Date: Fri, 25 Apr 2025 12:27:56 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Marco Pagani <marco.pagani@linux.dev>
-Cc: Arnd Bergmann <arnd@kernel.org>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-	Xu Yilun <yilun.xu@intel.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>, linux-next@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>, Tom Rix <trix@redhat.com>,
-	Marco Pagani <marpagan@redhat.com>,
-	Russ Weight <russ.weight@linux.dev>, linux-fpga@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 04/10] fpga: tests: add module descriptions
-Message-ID: <aAsPTN4y2nf9q+ht@yilunxu-OptiPlex-7050>
-References: <20250324173242.1501003-1-arnd@kernel.org>
- <20250324173242.1501003-4-arnd@kernel.org>
- <6ab8b951-a2be-4434-8621-0b31d00608ad@linux.dev>
+	s=arc-20240116; t=1745571552; c=relaxed/simple;
+	bh=IOqzftBT1fhDk9Pfp86NcMZ7N7yHJML7+rwuNQl2mhU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QXB7xRDwt11OChVYzRuoF2CXIh6xLbOOy5HlnzhQU0xUqZV9uFmXE8m7nLt3n+dEKmCHVzMCPyHw5ij7LLR08aELGnMFycIF8eynUh0o4UieSaLOeOpID+AK9Psonekpewdc4NYx9YGnP5TikVnf/2XhQDPy0sUuqWKRVmheoOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fCMxucKu; arc=none smtp.client-ip=209.85.161.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-60406de9cbfso750021eaf.3
+        for <linux-next@vger.kernel.org>; Fri, 25 Apr 2025 01:59:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1745571550; x=1746176350; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IOqzftBT1fhDk9Pfp86NcMZ7N7yHJML7+rwuNQl2mhU=;
+        b=fCMxucKuTwhSH89t7bQ3zQZc9aLykaT1SZ9AmgoVJNe7alamgxlQZteoj3TUfFJyBo
+         TT/iMmZGsNd4Z+KZTNzwkdPyGW4ALYsvgHAb78WnEsuxZVHLT44af71PcSkB7Gb2BE5H
+         pAadpPO8U72FXjLB1OpechqkySMJuKxh6b9RuN3P9dylMp4IlfZbKxi6QDda8xfcrNuK
+         I9b9O0XL/JV+siPaxK4uafB1I3F7Bt4Q8mN4glvQehvbWmmomYqUuTAXmtM4RBgNnjwd
+         fFYaOR0Z2h88Znzdp64mFciEYqkoxUaTFA4GEYtgNQZ2YjpKrOgbX0IYuiONrfNNQpWG
+         NvxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745571550; x=1746176350;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IOqzftBT1fhDk9Pfp86NcMZ7N7yHJML7+rwuNQl2mhU=;
+        b=d0C+1NA4fikUFi//gROvWYnXjBereCygS1upEy0P5spEkvSOAkMsF57u40x6FTLJl2
+         HIo6dOZ1EkYwxmse6UM1up5uvXoyJ0XfCDopb37p7sJ+4v2GwZSZTjJm0zkaTiD6ZoEa
+         6Kg76fcnskXJ3+JP6I5MgaCgNt5ZqjBil2Kv8VsyyFJjDk/ZpMB/ffDSOX2nYXQrxKzT
+         +z3E7x/X/mF0h1UOIZqNWgtojcdzns79Q8R7BS60SDB/0N670YvQoWZJM3X6eZanhnXB
+         0GqUqz+FAvjvkc2wN2a+c0UVe/oINsFamF/7nyO300NoNeQLxemZnIs0dw8j+C1cn7Y6
+         HvIw==
+X-Forwarded-Encrypted: i=1; AJvYcCXFgKbYob6kGvtaTTvXL+pxP9pAh8pcfwfgVDCe0YaO5nrscSLlBYvOPRXqinFNh6S3lmVG8QIzjNPw@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEPIUABXVl0J9pW4fxpYejdOteaZUR/Us2uxOmG6Y+4vaeD1yt
+	drDFv14+tojnAjnZcLWr30B8RlnsBdZSgp/0gIQ3QmwzY/j+BRc1oKYeTMSdrD3xc1aoAICYP4w
+	uEig4U7MirkLU75xZNl+yLWpypg9nGdMe4lrbS13kBk+Y8sNkugHY6w==
+X-Gm-Gg: ASbGnct3wUk/PqAXN0j1zGmdzgW7ldczJn8Dvedqm9GkvwrwP1SrqlwKjjt9nZ1r+Lr
+	SXCyzvIbUV032CnWqD7kqQy5x6WsFSh9BcrSFlXcxn6s+Ra3/W7KpxJhcl8ACwHAW2F9H2Asvxw
+	aKfztHuhlUbp87FLu72IexFDQ=
+X-Google-Smtp-Source: AGHT+IE2hTmDaLIEWoWHjzAzKcQZSSk0iqd5qSc1OBIVqIyuuWw7yE2s/ohjAh4xTMRsDhhphEOH96pCM/ubE++EDUs=
+X-Received: by 2002:a05:6870:fba7:b0:2b8:2f9c:d513 with SMTP id
+ 586e51a60fabf-2d99d8773d4mr950114fac.19.1745571550041; Fri, 25 Apr 2025
+ 01:59:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6ab8b951-a2be-4434-8621-0b31d00608ad@linux.dev>
+References: <20250417090436.1c58cd18@canb.auug.org.au>
+In-Reply-To: <20250417090436.1c58cd18@canb.auug.org.au>
+From: Jens Wiklander <jens.wiklander@linaro.org>
+Date: Fri, 25 Apr 2025 10:58:58 +0200
+X-Gm-Features: ATxdqUFB_IRMdNfH5punfBtnlp_3nHfUoeE_i4d3Trz5M8-dIsbmfZhtdJA9ZD8
+Message-ID: <CAHUa44GxOGGO_CQp=HGGT-gbX76aDNbzfvU2ZWgg5fRbdzP2aQ@mail.gmail.com>
+Subject: Re: linux-next: error fetching the tee tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 25, 2025 at 06:06:51PM +0100, Marco Pagani wrote:
-> 
-> On 2025-03-24 18:32, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > Modules without a description now cause a warning:
-> > 
-> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-bridge-test.o
-> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-mgr-test.o
-> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/fpga/tests/fpga-region-test.o
-> > 
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> 
-> Reviewed-by: Marco Pagani <marco.pagani@linux.dev>
+Hi Stephen,
 
-Acked-by: Xu Yilun <yilun.xu@intel.com>
+On Thu, Apr 17, 2025 at 1:04=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> Fetching the tee tree
+> (https://git.linaro.org/people/jens.wiklander/linux-tee.git/) fails
+> like this:
+>
+> fatal: unable to access 'https://git.linaro.org/people/jens.wiklander/lin=
+ux-tee.git/': The requested URL returned error: 503
 
-Applied to for-next.
+Thanks for the nudge. I've meant to move my tree to kernel.org for
+some time. My new tree is now at
+git://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git,
+please pull the "next" branch into linux-next and retire my old tree
+https://git.linaro.org/people/jens.wiklander/linux-tee.git.
+
+Cheers,
+Jens
 

@@ -1,254 +1,267 @@
-Return-Path: <linux-next+bounces-6385-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6386-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 185E1A9CE36
-	for <lists+linux-next@lfdr.de>; Fri, 25 Apr 2025 18:34:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A452CA9D7AA
+	for <lists+linux-next@lfdr.de>; Sat, 26 Apr 2025 07:21:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 582E716D654
-	for <lists+linux-next@lfdr.de>; Fri, 25 Apr 2025 16:34:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1DE79A241E
+	for <lists+linux-next@lfdr.de>; Sat, 26 Apr 2025 05:21:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C85019F462;
-	Fri, 25 Apr 2025 16:34:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8C9119B3EC;
+	Sat, 26 Apr 2025 05:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lwMApWRF"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ofJF6C9k"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B6512E1CD;
-	Fri, 25 Apr 2025 16:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD82086342;
+	Sat, 26 Apr 2025 05:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745598860; cv=none; b=fLiEPKo+0WbfY8I7Mazm8yIfcsHykn6qqZcF9RJZpMzbcLnGr4s8t7yIZZpUODP0irdLzyOSjHcLcmuMQ7wpVxo072/6zt7nQB37HmolBLXhh2Skv1uXbYdEfB4WhIDjkKiPRA5SmbW39KKVIYer7h4bqIQgUsMLbWKcmE9FuFA=
+	t=1745644906; cv=none; b=KWqdc4d7f2IeuPsYnxKHqc6zkdqgwMebgvSiZoW4weiFsBY8NTbCA4UpuOPsvVnPHVe7m80H+pASyxKkkLCa2Sf9sg4D1OewtWrMq/0ySOWVK3b+eEoq/nY5lhJq6yeMeCDDIXImEeCUTcE6vTj4YPeqKxgyEwpPlO2VqCeZN4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745598860; c=relaxed/simple;
-	bh=NLf4L/mFryv7v2dO5f8QNwCcsBzbDkljJQV/ykk+SXg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M+efjmTgXKq94DKyE0tyMG7EoOCL09sRXHY1dVk+nkuejJCTIFUjAfu5GyFFVmt32/mGI+cYnlVWYOXKI6qSlQaXh0vzjiJUoaV7KtDq9WxQXRkyRBalcIy2rI/GpAIHUzdVhhK1R5J8amKBO2SnwbsdqnZ+T2QLEnm5fojoUSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lwMApWRF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D9B8C4CEE4;
-	Fri, 25 Apr 2025 16:34:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745598857;
-	bh=NLf4L/mFryv7v2dO5f8QNwCcsBzbDkljJQV/ykk+SXg=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=lwMApWRF3j2XU/iqA817+9ZEKF1qN7K5sZisNvEnildy4wHsni1oihHnPJDg07Szk
-	 PoDuU0epqn4T+vDsaEOTe3RhQoudt9NrL1g8yMSGH2UsumIoxZInQ0vNoqW7tUxgLZ
-	 BdbipqtsbMDy5+Cf4CqJ2RmN455zjofc+UF3TZs0NxLOsS84SvV7RW1vsMpGbE2cFr
-	 fXP9UjxkgCbwNTJrNazg76SEPDU5GCQCiU9w0VRbuvM03wDxExYVitZx0tK8/lwCKg
-	 VPhWMckUxAgswyb5aYcsv1POgzOvhzDueU8A7enLXxrQnzOKjNMg0bw4LxJMNyxA+3
-	 fjp0iX/csQMJQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 37243CE0485; Fri, 25 Apr 2025 09:34:17 -0700 (PDT)
-Date: Fri, 25 Apr 2025 09:34:17 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Petr Mladek <pmladek@suse.com>
-Cc: Bert Karwatzki <spasswolf@web.de>,
-	"Aithal, Srikanth" <sraithal@amd.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Kuniyuki Iwashima <kuniyu@amazon.com>,
-	Mateusz Guzik <mjguzik@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	John Ogness <john.ogness@linutronix.de>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	linux-kernel@vger.kernel.org,
-	Linux-Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: commit dd4cf8c9e1f4 leads to failed boot
-Message-ID: <17441eac-1dcc-4ad0-9f51-096fcf2f79ce@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20250423115409.3425-1-spasswolf@web.de>
- <647b9aa4-f46e-4009-a223-78bfc6cc6768@amd.com>
- <fa8dd394-45c1-48d3-881c-5f3d5422df39@paulmck-laptop>
- <5a4a3d0d-a2e1-4fd3-acd2-3ae12a2ac7b0@amd.com>
- <82ff38fc-b295-472c-bde5-bd96f0d144fb@paulmck-laptop>
- <1509f29e04b3d1ac899981e0adaad98bbc0ee61a.camel@web.de>
- <8ded350c-fc05-4bc2-aff2-33b440f6e2d6@paulmck-laptop>
- <aAnp9rdPhRY52F7N@pathway.suse.cz>
- <f54c213e-b8e2-418f-b7f4-a2fa72f098b1@paulmck-laptop>
- <aAtXZPgcIlvdQKEq@pathway.suse.cz>
+	s=arc-20240116; t=1745644906; c=relaxed/simple;
+	bh=enQF22aY5mNtx7RUu/s0KIYropXdDX6uf4jswJ9dB2c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HWPL32wY4Fc2hLKb4JpTDTsmwMSobdO/BXBvhPLNK7JkFFqITJC1H7yR1lY22ZJqCti1v/PRrG6DUG+Nd0LKkC7ii2KetFLKKNmAlkzKc3toSRya+4sXyZWvpj+W4+0LRkx5Sm7AaLJ/0OHjq5zlOc8jmNYRoK2THODFbYgT22s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ofJF6C9k; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53Q3e1jh018859;
+	Sat, 26 Apr 2025 05:21:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=aSNXN4
+	vueWcNxoPQ65LE4WXR8kg0AdX2QbcmR/J+to8=; b=ofJF6C9kirjsPkayEiqxcl
+	LFDMZXl3bkmCQGWjqN5udHzOIetQfg/jBU8sYlqmp8OhPFCx6lOXtI7llnL+XpH7
+	3oCyxWHrIhG+frhbGl/XV8zcvzsg6QgvcYoyY4V6phWJF8NONttZOS3uxgx6LKte
+	VauFmsIAwq78I9Iut5cdCeRpb1HnEA1Lv1H4gnHjZFSqSzPgtHXgZFqIrpvX5PMu
+	NNIAgQqdCJDwljdpkx3kgBTzO7/eL9W7247FeS08AlIC6ya89/KlPe6bMO/GgOlg
+	wEC9DWVtw9LUYId7mJWllYRkemP/Jcyn/s2cDiDkv0DIpEaGzZjUr7QVbWLQUMvQ
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 468mwrrmnv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 26 Apr 2025 05:21:31 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53Q0p8IE004061;
+	Sat, 26 Apr 2025 05:21:30 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 466jg08pd6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 26 Apr 2025 05:21:30 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53Q5LTc349021214
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 26 Apr 2025 05:21:29 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5CE6058056;
+	Sat, 26 Apr 2025 05:21:29 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BB68E58050;
+	Sat, 26 Apr 2025 05:21:26 +0000 (GMT)
+Received: from [9.204.204.179] (unknown [9.204.204.179])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Sat, 26 Apr 2025 05:21:26 +0000 (GMT)
+Message-ID: <850ba4bc-a703-4e1e-b19f-ccf09b38b2cd@linux.ibm.com>
+Date: Sat, 26 Apr 2025 10:51:24 +0530
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aAtXZPgcIlvdQKEq@pathway.suse.cz>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [linux-next-20250422] Build failure: Wvla-larger-than=0 is
+ meaningless
+Content-Language: en-GB
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Kees Cook <kees@kernel.org>,
+        nathan@kernel.org, hch@lst.de,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <7780883c-0ac8-4aaa-b850-469e33b50672@linux.ibm.com>
+From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+In-Reply-To: <7780883c-0ac8-4aaa-b850-469e33b50672@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI2MDAzMCBTYWx0ZWRfX7zop/KE38L6q /uDVqqe1atu5BhqiyJCxqCfU6kZkfGnh8JyookRnBrwvLDJcHEyzn72Em0OpOnNJGbzxTrghKGF sW9s6pR+5txTuDP9HJaqsXLwpBuRyUkqpvN+xjXC8OEyOGG5mkoLiPYYKTXKxhdnP/DWcgk2BbU
+ rw1IRzh0hwOWVOpLCzQHNDPys7xrRdBhrkFEsIdqzpiJdWkgcdrqWOJy00HJCXiKNALn2Xh99Sg xF6XNibLd/oCrDekYBlYRli87IK9ekEAOqPrczV2PkSzAIt+dcyahV0qljk2mZd4zLJkAEW54kc oNtWybNzveWcaZypffvO+zoZZJD0Zw1ygsSH/iL+V12jU+CObg3mlkoyRPS9ml0TTXjor0VHFbM
+ ikAVIC3lm0nRibEbWuu5QZww2Z9bmAvSHjy8FeJMILDIA9kJpaXA8ftByzbRtyWDxjyU+Z94
+X-Authority-Analysis: v=2.4 cv=IMsCChvG c=1 sm=1 tr=0 ts=680c6d5b cx=c_pps a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=e5mUnYsNAAAA:8 a=NEAV23lmAAAA:8 a=VnNF1IyMAAAA:8
+ a=iVOyuGI5PMKcQA6MX0cA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=Vxmtnl_E_bksehYqCbjh:22
+X-Proofpoint-ORIG-GUID: VCcDIBeGdDpilvrL9HhoKNCBgfIQR8NM
+X-Proofpoint-GUID: VCcDIBeGdDpilvrL9HhoKNCBgfIQR8NM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-04-26_01,2025-04-24_02,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ impostorscore=0 mlxlogscore=999 mlxscore=0 clxscore=1015 suspectscore=0
+ malwarescore=0 spamscore=0 phishscore=0 bulkscore=0 adultscore=0
+ priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2504260030
 
-On Fri, Apr 25, 2025 at 11:35:32AM +0200, Petr Mladek wrote:
-> On Thu 2025-04-24 07:43:38, Paul E. McKenney wrote:
-> > On Thu, Apr 24, 2025 at 09:36:22AM +0200, Petr Mladek wrote:
-> > > On Wed 2025-04-23 12:56:53, Paul E. McKenney wrote:
-> > > > On Wed, Apr 23, 2025 at 09:19:56PM +0200, Bert Karwatzki wrote:
-> > > > > Am Mittwoch, dem 23.04.2025 um 11:07 -0700 schrieb Paul E. McKenney:
-> > > > > > On Wed, Apr 23, 2025 at 08:49:08PM +0530, Aithal, Srikanth wrote:
-> > > > > > > On 4/23/2025 7:48 PM, Paul E. McKenney wrote:
-> > > > > > > > On Wed, Apr 23, 2025 at 07:09:42PM +0530, Aithal, Srikanth wrote:
-> > > > > > > > > On 4/23/2025 5:24 PM, Bert Karwatzki wrote:
-> > > > > > > > > > Since linux next-20250422 booting fails on my MSI Alpha 15 Laptop runnning
-> > > > > > > > > > debian sid. When booting kernel message appear on screen but no messages from
-> > > > > > > > > > init (systemd). There are also no logs written even thought emergency sync
-> > > > > > > > > > via magic sysrq works (a message is printed on screen), presumably because
-> > > > > > > > > > / is not mounted. I bisected this (from 6.15-rc3 to next-20250422) and found
-> > > > > > > > > > commit dd4cf8c9e1f4 as the first bad commit.
-> > > > > > > > > > Reverting commit dd4cf8c9e1f4 in next-20250422 fixes the issue.
-> > > > > > > > > 
-> > > > > > > > > 
-> > > > > > > > > Hello,
-> > > > > > > > > 
-> > > > > > > > > On AMD platform as well boot failed starting next-20250422, bisecting the
-> > > > > > > > > issue led me to same commit dd4cf8c9e1f4. I have attached kernel config and
-> > > > > > > > > logs.
-> > > > > > > > 
-> > > > > 
-> > > > > diff --git a/lib/ratelimit.c b/lib/ratelimit.c
-> > > > > index b5c727e976d2..fc28f6cf8269 100644
-> > > > > --- a/lib/ratelimit.c
-> > > > > +++ b/lib/ratelimit.c
-> > > > > @@ -40,7 +40,7 @@ int ___ratelimit(struct ratelimit_state *rs, const char *func)
-> > > > >          * interval says never limit.
-> > > > >          */
-> > > > >         if (interval <= 0 || burst <= 0) {
-> > > > > -               ret = burst > 0;
-> > > > > +               ret = 1;
-> > > > >                 if (!(READ_ONCE(rs->flags) & RATELIMIT_INITIALIZED) ||
-> > > > >                     !raw_spin_trylock_irqsave(&rs->lock, flags))
-> > > > >                         return ret;
-> > > > 
-> > > > You are quite right, your patch does fix the issue that you three say.
-> > > 
-> > > Honestly, I do not understand what a ratelimit user could cause this
-> > > issue. And I am not able to reproduce it on my test system (x86_64,
-> > > kvm). I mean that my system boots and I see the systemd meesages.
-> > 
-> > My bug was that interval==0 suppressed all ratelimited output, when
-> > it is instead supposed to never suppress it, as illustrated by the
-> > RATELIMIT_STATE_INIT_DISABLED() macro that I somehow managed to ignore.
-> > (Yes, I need more tests!  And I will do so.)
-> 
-> Your code actually supported RATELIMIT_STATE_INIT_DISABLED().
-> ___ratelimit() returned 1 because the burst was 10 > 0 ;-)
 
-Sometimes I get lucky?  ;-)
+On 23/04/25 7:11 pm, Venkat Rao Bagalkote wrote:
+> Hello,
+>
+>
+> I am observing linux-next build failure on IBM Power8 server.
+>
+>
+> Repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>
+> Branch: master
+>
+> GCC: 8.5.0 20210514
+>
+> ldd (GNU libc) 2.28
+>
+> Attached is the .config file.
+>
+>
+> Build errors:
+>
+>
+> [[01m^[[Kcc1:^[[m^[[K ^[[01;36m^[[Knote: ^[[m^[[K-Wvla-larger-than=0 
+> is meaningless
+> ^[[01m^[[Kcc1:^[[m^[[K ^[[01;36m^[[Knote: ^[[m^[[K-Wvla-larger-than=0 
+> is meaningless
+> ^[[01m^[[Kcc1:^[[m^[[K ^[[01;36m^[[Knote: ^[[m^[[K-Wvla-larger-than=0 
+> is meaningless
+> ^[[01m^[[Kcc1:^[[m^[[K ^[[01;36m^[[Knote: ^[[m^[[K-Wvla-larger-than=0 
+> is meaningless
+> ^[[01m^[[Kcc1:^[[m^[[K ^[[01;36m^[[Knote: ^[[m^[[K-Wvla-larger-than=0 
+> is meaningless
+> make[1]: *** [/home/upstreamci/linux/Makefile:2011: .] Error 2
+> make: *** [Makefile:248: __sub-make] Error 2
+>
 
-> > > > Unfortunately, it prevents someone from completely suppressing output
-> > > > by setting burst to zero.  Could you please try the patch below?
-> > > 
-> > > I wondered whether some code used a non-initialized struct ratelimit_state.
-> > > I tried the following patch:
-> > > 
-> > > diff --git a/lib/ratelimit.c b/lib/ratelimit.c
-> > > index b5c727e976d2..f949a18e9c2b 100644
-> > > --- a/lib/ratelimit.c
-> > > +++ b/lib/ratelimit.c
-> > > @@ -35,6 +35,10 @@ int ___ratelimit(struct ratelimit_state *rs, const char *func)
-> > >  	unsigned long flags;
-> > >  	int ret;
-> > >  
-> > > +	WARN_ONCE(interval <= 0 || burst <= 0,
-> > > +		  "Possibly using a non-initilized ratelimit struct with interval:%d, burst:%d\n",
-> > > +		  interval, burst);
-> > > +
-> > >  	/*
-> > >  	 * Non-positive burst says always limit, otherwise, non-positive
-> > >  	 * interval says never limit.
-> > > 
-> > > 
-> > > And it triggered:
-> > > 
-> > > [    2.874504] ------------[ cut here ]------------
-> > > [    2.875552] Possibly using a non-initilized ratelimit struct with interval:0, burst:0
-> > > [    2.876990] WARNING: CPU: 2 PID: 1 at lib/ratelimit.c:38 ___ratelimit+0x1e8/0x200
-> > > [    2.878435] Modules linked in:
-> > > [    2.879045] CPU: 2 UID: 0 PID: 1 Comm: swapper/0 Tainted: G        W           6.15.0-rc3-next-20250422-default+ #22 PREEMPT(full)  f5d77f8de4aec34e420e26410c34bcb56f692aae
-> > > [    2.881287] Tainted: [W]=WARN
-> > > [    2.882010] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.3-2-gc13ff2cd-prebuilt.qemu.org 04/01/2014
-> > > [    2.886452] RIP: 0010:___ratelimit+0x1e8/0x200
-> > > [    2.888405] Code: 00 00 e9 b5 fe ff ff 41 bc 01 00 00 00 e9 f2 fe ff ff 89 ea 44 89 e6 48 c7 c7 f8 40 eb 92 c6 05 b5 4d 0f 01 01 e8 28 a0 de fe <0f> 0b e9 71 ff ff ff 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00
-> > > [    2.891223] RSP: 0000:ffffcf1340013bd8 EFLAGS: 00010282
-> > > [    2.892033] RAX: 0000000000000000 RBX: ffff8a8cc2bfbaf0 RCX: 0000000000000000
-> > > [    2.893091] RDX: 0000000000000002 RSI: 00000000ffff7fff RDI: 00000000ffffffff
-> > > [    2.894158] RBP: 0000000000000000 R08: 00000000ffff7fff R09: ffff8a8d3fe3ffa8
-> > > [    2.895168] R10: 00000000ffff8000 R11: 0000000000000001 R12: 0000000000000000
-> > > [    2.896150] R13: ffffffff92e08d38 R14: ffff8a8cc369e400 R15: ffff8a8cc2e39f00
-> > > [    2.897138] FS:  0000000000000000(0000) GS:ffff8a8da6f3c000(0000) knlGS:0000000000000000
-> > > [    2.898224] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > [    2.899181] CR2: 0000000000000000 CR3: 0000000153256001 CR4: 0000000000370ef0
-> > > [    2.901865] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > [    2.903516] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > [    2.906593] Call Trace:
-> > > [    2.907143]  <TASK>
-> > > [    2.907582]  __ext4_msg+0x6e/0xa0
-> > 
-> > Ths is the ->s_msg_ratelimit_state field of the ext4_sb_info structure,
-> > which is allocated via kzalloc().  It looks like these two statements:
-> > 
-> > EXT4_RW_ATTR_SBI_PI(msg_ratelimit_interval_ms, s_msg_ratelimit_state.interval);
-> > EXT4_RW_ATTR_SBI_PI(msg_ratelimit_burst, s_msg_ratelimit_state.burst);
-> > 
-> > Allow the sysadm to specify rate-limiting if desired, with the default of
-> > no rate limiting.  And zero-initialization seems like a reasonable thing
-> > to allow for a default-never-ratelimited ratelimit_state structure, not?
-> 
-> Exactly. I belive that ___ratelimit() should return 1 (always pass) when
-> the structure is zero-initialized. I was not clear enough.
+I am seeing this failure on 6.15.0-rc3-next-20250424 kernel as well. Can 
+someone please help in fixing this.
 
-Whew!!!  ;-)
 
-> It is not ideal from the semantic POV. It would make sense to use
-> "zero" burst for always limiting the output. But this does
-> not work in the zero-initialized case.
-> 
-> A solution would be to handle the corner cases (always pass, never
-> pass) using some flag, for example:
-> 
-> #define RATELIMIT_ALWAYS_PASS		BIT(2)
-> #define RATELIMIT_NEVER_PASS		BIT(3)
-> 
-> instead of some combinations of interval and burst values.
-> 
-> But I think that it is not worth it. I guess that most users
-> want to use ___ratelimit() for a real rate limiting. And
-> the only problem is the not-yet-initialized structure which
-> should just "pass".
+Regards,
 
-I agree that the current semantic is annoying, but appropriate given
-the history and current situation.  Of course, your suggested approach
-might well be what we eventually move to.  However, let's have a real
-problem before we try to solve it.  ;-)
+Venkat.
 
-> > So given Bert's survey of the users, would it make sense to have your
-> > WARN_ONCE(), but only if either burst or interval is negative?
-> 
-> It might make sense. It would help to catch a use of not-yet-initialized
-> and not-even-zeroed struct ratelimit_state which might produce random
-> results.
-> 
-> > Unless you tell me otherwise, I will add that with your Signed-off-by,
-> > and noting Bert's good work.
-> 
-> Feel free to use my SOB.
-
-Thank you very much!
-
-> Best Regards,
-> Petr
-> 
-> PS: I see that you have already sent v3 of the series. I am going to
->     look at it. I am not sure if I manage it today though.
-
-Absolutely no problem, especially given that it is probably already
-your weekend.
-
-Testing overnight went well, and I am now testing a new RCU branch from
-Joel and Boqun.  If that passes, I will rebase on that.  Otherwise,
-I keep the current branch, but expose the rest of my ratelimit series
-to -next.  Which probably won't have any effect until -next Monday,
-but that has the benefit of allowing for more feedback in the meantime.
-
-							Thanx, Paul
+>
+> Git bisect is pointing to first bad commit as: 
+> 4e5222bc2eef69252277f837880c876bf0ffee04
+>
+>
+> Git Bisect log:
+>
+>
+> git bisect start
+> # status: waiting for both good and bad commits
+> # good: [9c32cda43eb78f78c73aee4aa344b777714e259b] Linux 6.15-rc3
+> git bisect good 9c32cda43eb78f78c73aee4aa344b777714e259b
+> # status: waiting for bad commit, 1 good commit known
+> # bad: [2c9c612abeb38aab0e87d48496de6fd6daafb00b] Add linux-next 
+> specific files for 20250422
+> git bisect bad 2c9c612abeb38aab0e87d48496de6fd6daafb00b
+> # good: [d1da62193ce9715a3cd25a6007b32284aef3725e] Merge branch 
+> 'drm-next' of https://gitlab.freedesktop.org/drm/kernel.git
+> git bisect good d1da62193ce9715a3cd25a6007b32284aef3725e
+> # good: [165991dc7afd1eec364a4b980cf6befdfca84404] next-20250414/tip
+> git bisect good 165991dc7afd1eec364a4b980cf6befdfca84404
+> # good: [feaa817f7fbb1bb50f3c6b119098c5940c2e2532] Merge branch 
+> 'togreg' of git://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
+> git bisect good feaa817f7fbb1bb50f3c6b119098c5940c2e2532
+> # good: [b7d37856d1bddb8e79a7e27a8605dfbb82fe8e9a] Merge branch 
+> 'for-next' of 
+> git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git
+> git bisect good b7d37856d1bddb8e79a7e27a8605dfbb82fe8e9a
+> # good: [77fe94f0d068193c22ce8cfd7ee6317ab2f679c2] Merge branch 
+> 'kunit' of 
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
+> git bisect good 77fe94f0d068193c22ce8cfd7ee6317ab2f679c2
+> # good: [627d1af4ec321f81d7ca76f541aef908d5a0e4bd] Merge branch 
+> 'ntb-next' of https://github.com/jonmason/ntb.git
+> git bisect good 627d1af4ec321f81d7ca76f541aef908d5a0e4bd
+> # good: [f34fa2aef257678d9534cb3debbceaf453df02cc] Merge branch 
+> 'pin-init-next' of https://github.com/Rust-for-Linux/linux.git
+> git bisect good f34fa2aef257678d9534cb3debbceaf453df02cc
+> # good: [9b7c1e4703dbff94ee0a545445f706518fccb73a] Merge branch 
+> 'bitmap-for-next' of https://github.com/norov/linux.git
+> git bisect good 9b7c1e4703dbff94ee0a545445f706518fccb73a
+> # bad: [685b6cba6fcbdc4a3b1708ac70aef556f594907c] Merge branch 
+> 'for-next/kspp' of 
+> git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
+> git bisect bad 685b6cba6fcbdc4a3b1708ac70aef556f594907c
+> # good: [431f4fcea79ffe17f396c10cf42d226494d2f489] kunit/usercopy: 
+> Disable u64 test on 32-bit SPARC
+> git bisect good 431f4fcea79ffe17f396c10cf42d226494d2f489
+> # good: [89860db3b0405ccf4419e76eff487544aab4e4d4] overflow: Clarify 
+> expectations for getting DEFINE_FLEX variable sizes
+> git bisect good 89860db3b0405ccf4419e76eff487544aab4e4d4
+> # bad: [c5b45570cac5302cb650531a35142eab8231853c] mod_devicetable: 
+> Enlarge the maximum platform_device_id name length
+> git bisect bad c5b45570cac5302cb650531a35142eab8231853c
+> # bad: [4e5222bc2eef69252277f837880c876bf0ffee04] kbuild: Switch from 
+> -Wvla to -Wvla-larger-than=0
+> git bisect bad 4e5222bc2eef69252277f837880c876bf0ffee04
+> # first bad commit: [4e5222bc2eef69252277f837880c876bf0ffee04] kbuild: 
+> Switch from -Wvla to -Wvla-larger-than=0
+>
+>
+> I tried reverting the bad commit, but build fails with something like 
+> this.
+>
+>
+> Build Error after reverting the first bad commit
+>
+> kernel/watchdog.c: In function 'lockup_detector_reconfigure':
+> kernel/watchdog.c:936:2: error: too many arguments to function 
+> '__lockup_detector_reconfigure'
+>   __lockup_detector_reconfigure(false);
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> kernel/watchdog.c:926:13: note: declared here
+>  static void __lockup_detector_reconfigure(void)
+>              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> kernel/watchdog.c: In function 'lockup_detector_setup':
+> kernel/watchdog.c:940:2: error: too many arguments to function 
+> '__lockup_detector_reconfigure'
+>   __lockup_detector_reconfigure(false);
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> kernel/watchdog.c:926:13: note: declared here
+>  static void __lockup_detector_reconfigure(void)
+>              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> kernel/watchdog.c: In function 'proc_watchdog_update':
+> kernel/watchdog.c:962:2: error: too many arguments to function 
+> '__lockup_detector_reconfigure'
+>   __lockup_detector_reconfigure(thresh_changed);
+>   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> kernel/watchdog.c:926:13: note: declared here
+>  static void __lockup_detector_reconfigure(void)
+>              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> kernel/watchdog.c: At top level:
+> cc1: warning: unrecognized command line option 
+> '-Wno-unterminated-string-initialization'
+> make[3]: *** [scripts/Makefile.build:203: kernel/watchdog.o] Error 1
+> make[3]: *** Waiting for unfinished jobs....
+> make[2]: *** [scripts/Makefile.build:461: kernel] Error 2
+> make[2]: *** Waiting for unfinished jobs....
+> make[1]: *** [/root/linux-next/Makefile:2011: .] Error 2
+> make: *** [Makefile:248: __sub-make] Error 2
+>
+>
+> If you happen to fix this issue, please add below tag.
+>
+>
+> Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+>
+>
+> Regards,
+>
+> Venkat.
 

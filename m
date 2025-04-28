@@ -1,133 +1,129 @@
-Return-Path: <linux-next+bounces-6399-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6400-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FEACA9E5FF
-	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 03:57:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C61A2A9E64D
+	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 04:38:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 947AE16DF7E
-	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 01:57:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEDDC3B595F
+	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 02:38:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6397D14AD2B;
-	Mon, 28 Apr 2025 01:57:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87E01157E6B;
+	Mon, 28 Apr 2025 02:38:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Zb3cxNj/"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IUFsNo/g"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7063E3232;
-	Mon, 28 Apr 2025 01:57:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F75612B73;
+	Mon, 28 Apr 2025 02:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745805434; cv=none; b=el97nkBzXyPvqNe2dgoWz7zs4N/xT9MvAv2NzBWG1wAi+uaDQtPjNIsrw+4L4a4A4TM6RCuStIA3JNk8aLwEihC3Q9rHZoGpoXrxongjetoVGsuqY93IrxPvp5K9I5fwcnzgEGecomhKrw4pXDCuzizQJntTuMxpkwiH0j/IMgA=
+	t=1745807912; cv=none; b=RQMLCmjnZr9bF+679WyZdHrI5RR/0b1Qu5nUJgE+i/RffZevSSQdZJvmEiESFl3V8x3jIuntPWgxNM/Gd9Z6N/8UNWAaETp8no6bumxCJfRNvetCTP3WcSmopPHFgb9uoSM4lGJiI4b7gmUIMix7flDaq9y60bStqNUhlJDPmZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745805434; c=relaxed/simple;
-	bh=VeHo1+aFAnjzYXeatcFmvX7+OzhzSDeo7ETstgLJBzI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=mVoQyMjZ0+mOarXr44HcVyM/A2Xlyn5jZVD6desqigRtPIkMbCPMvCVBfBv2ncVCkgABoYPl9Hm1cdQN3QmjJvcekzWRstvl97d9bcNETL5vb1gaanyAge2qmVsn7SjWj7x6XAgB9n4kDm93QyWewLtq0lb2zndM3LSWTmqAwJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Zb3cxNj/; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1745807912; c=relaxed/simple;
+	bh=mHf/zw7mQSMZguicwqDXduGzfh4/U/r0pk7dYBh1O+w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ghmZ1zhaO+l39qXnfHLksPino+CamqPWl3zRC16k7uvR94YGGf5+cMNQETsvIgx5cZUyH9egFmVsTedDwTj1k3hlwYTSagovrVwYyvu3dvc6aqsFpUFy2V+56A4n+EMOEPu1uP+Vo+vwcn2YohBXP4MEIl10JmRnP4HDf3zzouM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IUFsNo/g; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1745805425;
-	bh=VBdhPLJItsSVgBV86GnCXyb1fY8WlT9bHY+yhqApIAA=;
+	s=202503; t=1745807906;
+	bh=3IVxS0/zvP44BT1vEJB/sgh1jgp6US0kzW5JEunxS8w=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Zb3cxNj/ZyP8PWUbKUJ/aBCf0dO6e+AiPQXINPFE/BSlL52+jNHu9TjJ72gSPEp6z
-	 +oTV9ZF02KU+/wfRh+nfzLyO+D3DA/WsCi4Ke6KJqBFbAL589FMjhaTwDIhVSzwlVJ
-	 J01pWPsGtXoNH8l6Qc27IiLvJ0xC5TK5jlSDger9KCni0jrWF81l/gWTMy3Oh1ehYV
-	 S2MtCdrF2waR/i4iPg28ONFfgAdyF/hQeUH0MxqgA79vumjRjGm6hMIoGMDgHuwBbC
-	 6Kr8w0gwjXK4L0zFiDySGWZTxyRF5xmklQ6hxGZd37xLtdwFOwclCyMMPU18gzsctm
-	 F1WUQCou39rqA==
+	b=IUFsNo/gLNOFGweF8gyTvEEEPo3Fzg/7vLDOC2K4mGA8a66jE4ZDjhLcGRwPHYE9P
+	 awYbtOIfsaqlE1ppbzgpsJpHgz7RjYVW8WdqilMjj2uSmVUfBOHPNgG8dAqxR3B5zq
+	 R6c0TXYI/cgMgFExH8nRuPShvQ8RWQcAuxwf4yi3KoRtff8YTOltEMUg0ywH/Hxp8v
+	 499MFdEV51bKj5YCD1gb9N0LQF4DvIHdWZ21ksKF9mXDtcGV50zzsitYPbWvXP4ldn
+	 q9oEwnTWWR6q1Tg9RwXnScWui3olUOVeNu4SNFBicfdytMXsmfGe/FZ0ecsEdXZrLe
+	 ZjY7JcwePh8pA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zm65F5mr4z4wy6;
-	Mon, 28 Apr 2025 11:57:05 +1000 (AEST)
-Date: Mon, 28 Apr 2025 11:57:04 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zm70y1mffz4w2Q;
+	Mon, 28 Apr 2025 12:38:26 +1000 (AEST)
+Date: Mon, 28 Apr 2025 12:38:25 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the cpufreq-arm tree
-Message-ID: <20250428115704.46e31d9c@canb.auug.org.au>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Asahi Lina <lina+kernel@asahilina.net>, FUJITA Tomonori
+ <fujita.tomonori@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Miguel Ojeda <ojeda@kernel.org>
+Subject: linux-next: manual merge of the drm-nova tree with Linus' tree
+Message-ID: <20250428123825.4acf2499@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pEz_Gj.tOQyyylCL7SZcaYO";
+Content-Type: multipart/signed; boundary="Sig_/DaiD9nHtSXgpD5Ab9QoQ4Qc";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/pEz_Gj.tOQyyylCL7SZcaYO
+--Sig_/DaiD9nHtSXgpD5Ab9QoQ4Qc
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the cpufreq-arm tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the drm-nova tree got a conflict in:
 
-error[E0308]: mismatched types
-   --> rust/kernel/cpufreq.rs:950:18
-    |
-950 |             Some(Self::update_limits_callback)
-    |             ---- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected fn pointer, fo=
-und fn item
-    |             |
-    |             arguments to this enum variant are incorrect
-    |
-    =3D note: expected fn pointer `unsafe extern "C" fn(*mut bindings::cpuf=
-req_policy)`
-                  found fn item `extern "C" fn(u32) {cpufreq::Registration:=
-:<T>::update_limits_callback}`
-help: the type constructed contains `extern "C" fn(u32) {cpufreq::Registrat=
-ion::<T>::update_limits_callback}` due to the type of the argument passed
-   --> rust/kernel/cpufreq.rs:950:13
-    |
-950 |             Some(Self::update_limits_callback)
-    |             ^^^^^----------------------------^
-    |                  |
-    |                  this argument influences the type of `Some`
-note: tuple variant defined here
-   --> /usr/lib/rustlib/src/rust/library/core/src/option.rs:580:5
-    |
-580 |     Some(#[stable(feature =3D "rust1", since =3D "1.0.0")] T),
-    |     ^^^^
+  rust/helpers/helpers.c
 
-error: aborting due to 1 previous error
+between commit:
 
-For more information about this error, try `rustc --explain E0308`.
+  c1b4071ec3a6 ("rust: helpers: Add dma_alloc_attrs() and dma_free_attrs()")
 
-Caused by commit
+from Linus' tree and commit:
 
-  c490d1f07bec ("rust: cpufreq: Extend abstractions for driver registration=
-")
+  be8d1a24798f ("rust: drm: gem: Add GEM object abstraction")
 
-I have used the cpufreq-arm tree from next-20250424 for today.
+from the drm-nova tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/pEz_Gj.tOQyyylCL7SZcaYO
+diff --cc rust/helpers/helpers.c
+index 0aea103c16be,6c205454a18e..000000000000
+--- a/rust/helpers/helpers.c
++++ b/rust/helpers/helpers.c
+@@@ -14,7 -15,7 +15,8 @@@
+  #include "cpumask.c"
+  #include "cred.c"
+  #include "device.c"
+ +#include "dma.c"
++ #include "drm.c"
+  #include "err.c"
+  #include "fs.c"
+  #include "io.c"
+
+--Sig_/DaiD9nHtSXgpD5Ab9QoQ4Qc
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgO4HAACgkQAVBC80lX
-0GzAVwf+Nk4oM8nAQ0jVM3LEg6XnJ15tWk92Kg9lsQROSYAkoCoMkF+gHYItBdAr
-PGivqwZN7vrV0Tj2nUzIryf/mXmtK0/4ibHU/8JcArY9o6jE+7ucXeeGHgtDbXdp
-nll6Uxx7HPSUg9v1vmBwq/PJeMm/uKaFlIv6OTohfb0sg53WP5fAnXaCZlOvyOD8
-A0Q6FwJCNviJ494iERXBD1cRwd1k2a69c8a2/uG+T4ETS+ORqP5qoHdnk2QQrvsk
-3YOHWEMxJRSyRa2zStsUpVgGAitpwo2SayW5T+aQEX6BG0THJeew+5CUvTtdvxmJ
-TE/6A9MOxiXIhTw5wdA4Zt8v0s6fqw==
-=Xe77
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgO6iEACgkQAVBC80lX
+0Gzzegf+NzdWRHFnhInSeRntLYKxwJQk3wnw1ggQVBuJkUkJpeT56ZDmzUS4IpcJ
+AVfmjXe242oglG7T/gamtDg8zBfquY6fgT83ppnYkuPH1iHQLxPGkxQgyqj9DD1G
+1pV8+yt1p2n915zaOCu1NV5eC1qW7ktL62cqgb9NLKlz0aw4aq6oDZWkyq+PtHYI
+XeJoFb7U2RPpjh0c8QGgVF/jQyctLhx746OTvxQi2zcMAZI9vzmSneCBTh6qKe1j
+lzeQ6JataERo4C0wQiZsgkEnt4KvibqYjOT7Txpp9q5pkphntzv4pWXFOIrkWkTT
+GorQmaEThU/YQa7qegzqeCdEONxtBA==
+=/Q7c
 -----END PGP SIGNATURE-----
 
---Sig_/pEz_Gj.tOQyyylCL7SZcaYO--
+--Sig_/DaiD9nHtSXgpD5Ab9QoQ4Qc--
 

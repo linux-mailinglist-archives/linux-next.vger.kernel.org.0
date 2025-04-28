@@ -1,116 +1,106 @@
-Return-Path: <linux-next+bounces-6402-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6403-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 301DCA9E6D4
-	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 05:57:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53227A9E6FC
+	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 06:24:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DD0C3BA491
-	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 03:57:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C574174522
+	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 04:24:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7916433A4;
-	Mon, 28 Apr 2025 03:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D74A155333;
+	Mon, 28 Apr 2025 04:24:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JQowgUfu"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fbxgmESZ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB6A1805E;
-	Mon, 28 Apr 2025 03:57:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B60E555;
+	Mon, 28 Apr 2025 04:24:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745812654; cv=none; b=GxQUpgIxI4DO6ESjpFRH2iFeZtR4xNoZFFWB7Xuh8mWywQ0nh86rez1QZvWu0wf5Mv0aM+7h2zjxelsf0Y+o5Oiql2fhR1a3UA3LNFikpkP1i1IpMMhFAjt+2ktO0ZSAcBk7Kt2XPtQ5wYp83BZnp6/l8DBQELUTzDLixuxZpLg=
+	t=1745814285; cv=none; b=RkfZHLMtXabKGslFUmMXXIoXFrgZkt1TV+ay/e1YpTLNKYfU24Sl4Vl9C02aMwAN7x1HrucHUe32WIStzFj4CKUQ0UMzljjNtGhlkxcExxLtcRGoLX6H2ebyJGYWUtOwYeqarrEbaqMDgnIdR9IV/hNXZlyvi/i/zSjiVADBCT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745812654; c=relaxed/simple;
-	bh=nXAfEBjP/ZnLJ8ly4ddWvyvzYHgLUAI5G9y8RP3MVE8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lH6dens6wJLBri38XNMLVhYmLnm7u+dXa+TguBnBbc6K7LdDaRtdtnqoJHOUZbVkejKc8SnIyW9lQNZj3U1ZRncXkV/D2i2mSGZSzkCc+c60TBRX3g2BLvBsFrXhU1DoKi9p//KmTziI+KezfKrvpjeFLF+ORCYO+Id1QHuj/Xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JQowgUfu; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ac7bd86f637so1024312766b.1;
-        Sun, 27 Apr 2025 20:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1745812651; x=1746417451; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zKkD3D5X64hOxLzMuTgRMOH6XEDwFgEjdPhu91sFJHo=;
-        b=JQowgUfu6kx+YsT3mMWGYrAFA91X6j71jSP2z//ls+9SaWzE99tKxZ4Ub8CYm25aAS
-         Ek0ZKQfMpBShoDVJx1b2GxLjQ7kbTB6y33CtdcIKDXf8GCc5QwQ+ggkC6ARXLcmEYv8R
-         qf3/BkJsKa1lWC0z/DE8XAowNxqWioOuSWyifds6G4MzABgKLiZaS5gy1xy9yajzaESQ
-         aPulUXjdUWz61sjuqCxOzI28hL0QQrPnq1J7JQ+kvVnoM/MUjR/p4VkMiLrVKzjNdWKO
-         RFPzQRmvgNxtUVa/0Oif3lsQ2YxYnQtei1wywPYMLLrh2KTE4joIoPPe/mlrGYuw3bq7
-         /siw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745812651; x=1746417451;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zKkD3D5X64hOxLzMuTgRMOH6XEDwFgEjdPhu91sFJHo=;
-        b=ubPHVhKljCESu1Hx5KR9W9tmcixMMyJtbS6yiHm+LE+Z+74gtmjddO/E0PBzFn2R+Z
-         DExWvPWxr3eJ9Xf/sBYYEXTkcSBDn5UvSfNLavPV70Fm2zSeXdG7sWgGaW17JVCD299l
-         FyUdjUwr6ytwtsKaseYKr3ZIHc45SHXFkvqm1HM+nLkfiMTyhIp9YCkFagFQPi7KjlN4
-         5kQKyQES3IVgo8ScPZ+vleEmMgFQqAgWPpJKOIMRrXLj6zK+9GogRLGFTYvjHTv45hwT
-         v26bWv7Mbjtc1V0bIZSLA1KNiaz7V5Q6AO5jFmCW9QNzP2/f1HWOHqXQnYx4lBztXFAp
-         PkCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUdg8YEK79Rbnr1gZND9g7NmV0QjBjt4nJVRz77wkdRVfr9lNIqR7fQ/Ryoj9V3LHrjgXY7EADhruc+0Q==@vger.kernel.org, AJvYcCWImgD1CwIADnCXxw1EE1VvDH7Vy4RbFBOeJXp1s6GYYdRfItFbcEeyjKOU3WbWLW2Nx7PaVcij2HM7+dM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUq0U0Lov8iA58hgfTpS/z1KoDiaD/GsQWRBC+U8oybN39WOOY
-	6IYKGGXOZQhwq/f4kpcZ3v3HaPZU0O9aNhKFF0V3Sram0NJh5eH9fkp5s43/VeNcq6SaTuy/Zit
-	MGYX4IThv4qal+WpWPuckp0ahxlc=
-X-Gm-Gg: ASbGncseOCSlm1e4Q/1EESi1zfSr5TATIm17YZEvaSWa1ik+DXra5CIBCdmarc1oHEc
-	Az/GSVUT3YiMfJ6fhMuohriYdt4E95KiQiBYSJC2cAtK/Mu+Oqt6qem1PTZaRfNjyBWoWcT7wWS
-	N2+L/gZ6/VyAD7qxa+oywIkHab2c2E/rQ=
-X-Google-Smtp-Source: AGHT+IGeCRKuuLFutFpPmOmuktV1/3ZxyYnFaVPtEpnPgQzg0Vb01czkv7Jp/OH3OipZQHIvx9LDfqU3TbW1bw38Dts=
-X-Received: by 2002:a17:907:26ce:b0:acb:37ae:619c with SMTP id
- a640c23a62f3a-ace7341c252mr905052866b.15.1745812651184; Sun, 27 Apr 2025
- 20:57:31 -0700 (PDT)
+	s=arc-20240116; t=1745814285; c=relaxed/simple;
+	bh=ITxCOvLfc7IqZdWthxkE0qufEXnjYLT1P7eL73ZCbhQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IxCYrazkYhilQnn7I45Up9HmITfMR7NeC3Ti8Uz5Dz9lGy+m/hr1mgDRngxHSUg1mTPJI+xOvd/AOG/RbzrX9sgwRS4scDlfGhvgk/2F8MQh8BemAIHh7N/i475i0wv0McsfPYjvyudWMhO2xZHbSXpRQQdCMvE+u1H8gjqe2xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fbxgmESZ; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1745814277;
+	bh=lalSLyZdMzTZKOT3UAq8T4mkftma20RRS1pZI8TpCgg=;
+	h=Date:From:To:Cc:Subject:From;
+	b=fbxgmESZYZa5aMEHbsvbs/vanmW+PTKjTpW9ldDJZu8tGi3OVQ6vEn2gTnfstcctH
+	 Rag4h5ZzXCLs8d6xu0UF2A/q1WCivoqBCgARTagYppW4FYm74Pn6e/1WI+dvn2A1HG
+	 TXqttiD9MKyNDldq0eLV/WNaBFZH2W5qXdxPy/TO/TaCRjSafEY0IybWAAQeqc3tQP
+	 UgrhCQw8EclMMeCfeGYalQ9pFRlD/jKBmwa4jO5z4nyD1pViBR4vqquDKnnj6IqZ4D
+	 5D/pbHjQXfu5zco7O0hpSz+0vzT4BROPI6lc4YO34rukzmrM/e7MMQs73G+AR7u3jc
+	 s7briY/l8j7nQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zm9MT4B1cz4wyh;
+	Mon, 28 Apr 2025 14:24:37 +1000 (AEST)
+Date: Mon, 28 Apr 2025 14:24:36 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Asahi Lina <lina+kernel@asahilina.net>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the drm-nova tree
+Message-ID: <20250428142436.4579b115@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250428133013.5ad6b6b7@canb.auug.org.au>
-In-Reply-To: <20250428133013.5ad6b6b7@canb.auug.org.au>
-From: Dave Airlie <airlied@gmail.com>
-Date: Mon, 28 Apr 2025 13:57:18 +1000
-X-Gm-Features: ATxdqUF1pnd1tgsz7ydsGeUkAO0Dc7dpPOkKeJcGLyMbMEHcikT6SBdM-TnbLXw
-Message-ID: <CAPM=9tw=fNm8JsaHJNayN_QLiE8sHpgC5VEevhJ-9qnD8hD=LA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the drm tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Dave Airlie <airlied@redhat.com>, DRI <dri-devel@lists.freedesktop.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/6ZV=ZrqxFCSH_FYgpw_JFIW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-> Hi all,
->
-> After merging the drm tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
->
-> In file included from drivers/gpu/drm/xe/xe_bo.c:3118:
-> drivers/gpu/drm/xe/tests/xe_bo.c: In function 'ccs_test_migrate':
-> drivers/gpu/drm/xe/tests/xe_bo.c:63:15: error: too many arguments to function 'xe_bo_evict'
->    63 |         ret = xe_bo_evict(bo, true);
->       |               ^~~~~~~~~~~
-> drivers/gpu/drm/xe/xe_bo.c:2939:5: note: declared here
->  2939 | int xe_bo_evict(struct xe_bo *bo)
->       |     ^~~~~~~~~~~
->
-> Caused by commit
->
->   55df7c0c62c1 ("drm/ttm/xe: drop unused force_alloc flag")
->
-> I have used the drm tree from next-20250424 for today.
+--Sig_/6ZV=ZrqxFCSH_FYgpw_JFIW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-My bad, dropped a patch on the list, I'll hopefully be fixed up for tomorrow.
+Hi all,
 
-Dave.
->
-> --
-> Cheers,
-> Stephen Rothwell
+After merging the drm-nova tree, today's linux-next build (KCONFIG_NAME)
+failed like this:
+
+x86_64-linux-gnu-ld: vmlinux.o: in function `rust_helper_drm_gem_object_put=
+':
+(.text+0x1b6cd15): undefined reference to `drm_gem_object_free'
+
+Caused by commit
+
+  be8d1a24798f ("rust: drm: gem: Add GEM object abstraction")
+
+I have used the drm-nova tree from next-20250414 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/6ZV=ZrqxFCSH_FYgpw_JFIW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgPAwQACgkQAVBC80lX
+0Gy0bAgAo1I/o8WVrC0aCM0mSqUSQbcz/dRkYfRo10GjGocnTbuvLCdeXN4/Vg8b
+cAWk3J8iv6JtjzdggHrb3OqcBYpxcUh3v0R9201kgh2p6T2HgH+SlypzFxHDJTBk
+CeL9rBhg2sL57h3iFUUmkRwfEgA2Px37rPuJjL6ND51iMlC3N2qiyCiSrxlcQyCq
+r0kCKRk4rJFL9pbq1yy21ipwhRXO2SInek+zixL5yu2PTxvmwKoRzIwU/ozt8wfP
+L9BZHkOWjxMc9JFMsvOiLnkHKdLrF8bmMcBQZTieMs54nRBf6SdmOVCcoKYXn84Z
+HPRZggEckNoIY0XEiiop1eZh2OzgzQ==
+=7/oS
+-----END PGP SIGNATURE-----
+
+--Sig_/6ZV=ZrqxFCSH_FYgpw_JFIW--
 

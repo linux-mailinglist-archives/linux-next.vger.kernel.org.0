@@ -1,131 +1,86 @@
-Return-Path: <linux-next+bounces-6410-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6411-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E718A9EAEA
-	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 10:38:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B904A9EB80
+	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 11:09:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B5CE179ED5
-	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 08:38:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1379F1895D4A
+	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 09:10:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A30AF25E471;
-	Mon, 28 Apr 2025 08:38:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B666C25DD1C;
+	Mon, 28 Apr 2025 09:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UH92gE26"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oY+VVALh"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2B0A253F02;
-	Mon, 28 Apr 2025 08:38:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BEDC623;
+	Mon, 28 Apr 2025 09:09:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745829506; cv=none; b=U+o9/z+GFW+xVeGfpW8W6gc4xweKb507DsgNL7rH8g5UQurFq6UAwgNLNe6VLYe0quTWX7++6lIqgpnYd/Gs8goiQKpodDGExaxUhiGBZG+u3PdAWWNfyCVtkpX4y6gtExDAx6qa/YmEV53dLyVaNy8wvNnvH20AKtFdeq5Ga8k=
+	t=1745831391; cv=none; b=mphsys6V72iqODYE+U1xY3/do4mRRNQi+a1Vm6gX0MBcY3/Y5LCPxtvxLg4Wl0jqM9RwkVts461nBq0ovz+fjRzXnoh9ejwH5Vbi1d0/6lxL8dYtgwXwduznVQtPST/8ckgnzKlTdqRPLdNSvDrzrS63tzqxbR5E2iZUYZQkSg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745829506; c=relaxed/simple;
-	bh=T1CqvJ1bqV0CsLeslskTg8ylge4lzLdILPvoFVmXlmg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=n1akph1ZzcfgvDcSttnGGPX0VMXS0Ob0V5uIjfXJomT01cNVV/ybs2DfxlHS7/CppBH53/vPe5o/GQis0na7pkLKMg6I8pFNhRUp5grF0EsDp87u6pn/2T2wK/QNn8vpNPOxTkqIRP8kS2mKZdLFsI2F0SUQ58CtDLuqWm+i+G4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=UH92gE26; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1745829501;
-	bh=7ekObu0vcatDYa+40ZeGkLU5xmQgqCAvyvzbtuJ+8bE=;
-	h=Date:From:To:Cc:Subject:From;
-	b=UH92gE26TshpDBfPIfhbnD1+6zw59FfbLHuJwCc2iyOGAyQernFgJMJE5nIxPc6GB
-	 SfuQSPevvZGXJzefCug1/hAwe3B46NfUmbtKa5Hkal6Vz/JvBba9+x/OIwLLO9sHAD
-	 CkgKqXMtGtMciN602leQOrOzjwjGqjTpJQrNALkD1XM7zgXP2QhGu6KI8GEFe4alj4
-	 /S6wTDMgGYqoGdbMmDvFdywamOjAiFCxyrKu6ihVmzmyrvhwL7NqGJOzHA4DGJINrS
-	 aEIi/uSscC/Scj9RmPLfyPuKnJW26EesLWhEfwRWIhGlDjoRaPCp7O4AQgMjgSMCTp
-	 H1kItI9G1g00w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZmH0F0mFLz4wcy;
-	Mon, 28 Apr 2025 18:38:21 +1000 (AEST)
-Date: Mon, 28 Apr 2025 18:38:20 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <ukleinek@kernel.org>, Rob Herring
- <robh@kernel.org>
-Cc: Alexey Charkov <alchark@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the pwm tree with the devicetree tree
-Message-ID: <20250428183820.5f0ccfb5@canb.auug.org.au>
+	s=arc-20240116; t=1745831391; c=relaxed/simple;
+	bh=rY+UFh2mz9StRqBuhvYZkB1m2wM/4EduU8ucCaIo+mg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AeCe877B+7lIWrxBMPfznPdk//iTmnoEHPtuMzdt5wOI9m9aO6BefjBaKSF/DRGbOkB67S7mvo4f38SWEuOouQ7QbUFRT9ejuGt5AKr84CevC+1PvWGFkwEtOsHc0TCgRTiitHFT6gUE3bH71OJciZlO8hBsoHVfzlTA7pD7lY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oY+VVALh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 097B2C4CEE4;
+	Mon, 28 Apr 2025 09:09:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745831391;
+	bh=rY+UFh2mz9StRqBuhvYZkB1m2wM/4EduU8ucCaIo+mg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oY+VVALhFod+AQ+no6rO6ikw6g5zDhGyRf07asd8wnHfvSNxE8XrGSzvw5kasWWY/
+	 M1BEoJn3FcsxI4EPh9+7qvgBBwRyBKIqKmVoTWHq/EPsfV6pFQVA9wxcd4O7pqj1e/
+	 MQspdB/0keW3RtFflUKKG/0J21KD5VlrSLyWb+Njlst5X876ofWM5iktW5CE5zpeWc
+	 Sd8L6JH/NZ3BrYcbUtKhg2Ql7RgGJYKpzXvyxSVoe4bYiLnNFqPEG7JLBuUene72Io
+	 PwV6m6iDAVDDgj0oovuEFB/qEljn32oMLH8Rvwxy1PCpXClY5MOboE1yWoXy0OXmwo
+	 RLRrLWkIXPPsQ==
+Date: Mon, 28 Apr 2025 11:09:47 +0200
+From: Danilo Krummrich <dakr@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Asahi Lina <lina+kernel@asahilina.net>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the drm-nova tree
+Message-ID: <aA9F2_yyIGqLFWKU@cassiopeiae>
+References: <20250428142436.4579b115@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/L713ZtHE0//Q67HueB2Dd4f";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250428142436.4579b115@canb.auug.org.au>
 
---Sig_/L713ZtHE0//Q67HueB2Dd4f
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On Mon, Apr 28, 2025 at 02:24:36PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the drm-nova tree, today's linux-next build (KCONFIG_NAME)
+> failed like this:
+> 
+> x86_64-linux-gnu-ld: vmlinux.o: in function `rust_helper_drm_gem_object_put':
+> (.text+0x1b6cd15): undefined reference to `drm_gem_object_free'
+> 
+> Caused by commit
+> 
+>   be8d1a24798f ("rust: drm: gem: Add GEM object abstraction")
+> 
+> I have used the drm-nova tree from next-20250414 for today.
 
-Today's linux-next merge of the pwm tree got a conflict in:
+This issue was caused by rust/helpers/drm.c not having the required CONFIG_DRM
+guards.
 
-  MAINTAINERS
+This is now fixed in nova-next; sorry for the inconvenience.
 
-between commit:
-
-  2b18eda58c86 ("dt-bindings: interrupt-controller: via,vt8500-intc: Conver=
-t to YAML")
-
-from the devicetree tree and commit:
-
-  b6b5683e9692 ("dt-bindings: pwm: vt8500-pwm: Convert to YAML")
-
-from the pwm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc MAINTAINERS
-index b5c2ce4cb560,26ef29a0c9bf..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -3453,7 -3428,7 +3453,8 @@@ M:	Krzysztof Kozlowski <krzk@kernel.org
-  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-  S:	Odd Fixes
-  F:	Documentation/devicetree/bindings/i2c/i2c-wmt.txt
- +F:	Documentation/devicetree/bindings/interrupt-controller/via,vt8500-intc=
-.yaml
-+ F:	Documentation/devicetree/bindings/pwm/via,vt8500-pwm.yaml
-  F:	arch/arm/boot/dts/vt8500/
-  F:	arch/arm/mach-vt8500/
-  F:	drivers/clocksource/timer-vt8500.c
-
---Sig_/L713ZtHE0//Q67HueB2Dd4f
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgPPnwACgkQAVBC80lX
-0Gzpnwf+LaDdn8sVhTred7zhPGh7MCsp02wMIg0zuyRNeHgdFai+Rf3Idj8EJGKO
-ro5Wnj3x+VKKdBvgokTMP8MhJghyllUstRQUSw6PCh5lfIYPNm4kpxY9dCDU/oCS
-WbJsaNy7IqeG2PBSQOaMmlqNVhm7GJ9sqdpyeP2lTB2VY/hzDsZOgUgSTSO8tRuC
-IQ7BNDUGK0UMhORqS2sh8tarhqHoEOotYisIOuNxBiQcwUwvwbenyUG48MO0Rwru
-8je9SsJ8jQ1QxQd6wJivD4AYGqHzh4Uj1anmQeKMsNWpZ6e1lYupE43a2vovAue+
-r37TGrWI48oEd2C3PkZIHf3lx7DW8w==
-=pJRX
------END PGP SIGNATURE-----
-
---Sig_/L713ZtHE0//Q67HueB2Dd4f--
+- Danilo
 

@@ -1,178 +1,105 @@
-Return-Path: <linux-next+bounces-6414-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6415-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C0AEA9EE1F
-	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 12:41:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 315E2A9EE82
+	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 13:04:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32DDB3AF928
-	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 10:40:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B7C718932DA
+	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 11:05:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0C9B25DCF5;
-	Mon, 28 Apr 2025 10:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B2EB25EF87;
+	Mon, 28 Apr 2025 11:04:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="NfuYgoI+"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Jcbqxn6h"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F3238F9C;
-	Mon, 28 Apr 2025 10:41:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF36B4A35;
+	Mon, 28 Apr 2025 11:04:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745836865; cv=none; b=RPUQ3+MpOFLjDqxjT3gl4rkpt49imw8Fye7W+Tw2Bsqw85sO9hZPl85PdJS4/j8hidEIqMqZ3Vndo8ApQTVGH/Zhp0XDr3WLkgURuq6wNlEqWdZg+Amk3TTQ94VRnL3cPNiYWx3bRFb0J2hnpfoxXwVNUcAnzPMG1prLhooTZes=
+	t=1745838290; cv=none; b=W1GXqgXWickKxwdcMAbIj3j9ck0b9lcSIo727O6BZWdgt8cbLJo+BNNLcl6n5xCwVY4a6DRq8X4l58GGhmncwTZrwgD+xxRYISF6epNcYedxEKlEV5JdF9Drzu1TywCN5+nOODcZbyZjyylJthspfXgX+E0VMRu/Na4sh12UGx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745836865; c=relaxed/simple;
-	bh=PMBvLS3NVHJ/ZDWYVnxFM6aJG4Z0dOe09lzY9xEGW68=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eXXCz9itaJkzxL80dDVJZ4eG/eh5OvtzL27F7TO+KbMJnptUjMwCLBQLDUd083rWlH0087EeUVnTG5KeHIlfCmVr4RR0nbRO2zH6ZIfwZ4pDfj/8c585XIZLXi3ViCPH5KesRWGGSpOiFXyvTJ1e7JnXh7J9dOlwyN1RqZh0Ejk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=NfuYgoI+; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1745838290; c=relaxed/simple;
+	bh=q5zZi0aUWe3r475rrXeK9cxriShpo9G2mmjL2HRBgDA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=fvctB074WOlTNGMnIBtHH84tmCYCC1hWMYccohMKuzxEbBLmQLb70ox1cfWWXlXW4wc6fY0CN1VZbl057X1FIBqVLX6QtaqZI0i+ay+4RWuf4GGvRz3sIkJQWwG+kYOvdOW20q5A81eBSsIHFRmg8YF6+LGI5dJm8sH/7MfXjBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Jcbqxn6h; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1745836862;
-	bh=LN6OprujhlffQ3dP86stsT+uKyfbXf3NGXxVcRnucAU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NfuYgoI+FIrT2eX6FEIfLPjYm2iN1snmlNQ4krOQVSdg4IHZhTCfddERXeK5LY8Lp
-	 Y5aufoiikI/R7srV6jTq6xrJSdgdbIERW3bxdjTUtPsmgdsPoVZgXPsjufnKWM7chw
-	 bD5F52UC1sxynHRqM/MJb4YGDQVPPxslzDqAkqgeI6pCVj0z28ETqg1Jabmvmhbv+L
-	 skdcfA12kdCPldJjx+if412iY4hmAnb6k1vC08/KLhbjmzwXUS6STTU45C6CJ4q9du
-	 LQjPPUs6uUCO9gfSul+PiTmyNbfIa6AtSiZKAXaWB4BnsXoFi32ppV6oYaJqPbRfpB
-	 mz7p3BikUSgSg==
+	s=202503; t=1745838283;
+	bh=IrY5kEdc+aYZpaufMFStyDcPI4cWFTKNnMwE6pAXdas=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Jcbqxn6hFHIPsTKqRYHxxRh1Q0in9sjX/9bPOZ+/syquXvVgM7OwsrxFEJnJ3hise
+	 bgwtb9BGQPluX4KUIwIluUqnGpObxi7XsmxZcZdmwVNtLe2kmDCtL6LVta3wwE9fpb
+	 m2++D74l/RkYyTBJkInSOFzwzHGvMfHAdFB1C3Egx9xSdeBwwFHY1v8JEPfrpECcd0
+	 TV1Ure3SXsoQqgKL5B6yc1WKxWCE4/bFuhkrJFuHyByB/4lPfHxNHkEqdxd9anzKal
+	 UdpxJE2qEQwYwjWMMo91l9/9KvACjPjJL5qbH1kwGdnYqy0PwJHy2UzWzxZSov++Pa
+	 ajJ7TmGPzDDhg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZmKjp13cSz4wbv;
-	Mon, 28 Apr 2025 20:41:02 +1000 (AEST)
-Date: Mon, 28 Apr 2025 20:41:01 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZmLF75cndz4wj2;
+	Mon, 28 Apr 2025 21:04:43 +1000 (AEST)
+Date: Mon, 28 Apr 2025 21:04:43 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andreas Hindborg <a.hindborg@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>, Danilo Krummrich <dakr@kernel.org>
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the rust-xarray tree
-Message-ID: <20250428204101.40a35c07@canb.auug.org.au>
-In-Reply-To: <20250428203943.51dd39d5@canb.auug.org.au>
-References: <20250428203943.51dd39d5@canb.auug.org.au>
+Subject: linux-next: duplicate patch in the memblock tree
+Message-ID: <20250428210443.72682a35@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/s=muqbsDHtO+QuD2OBv2cc1";
+Content-Type: multipart/signed; boundary="Sig_/2M_H_0NOnENxBkyAWu3EruD";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/s=muqbsDHtO+QuD2OBv2cc1
+--Sig_/2M_H_0NOnENxBkyAWu3EruD
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 28 Apr 2025 20:39:43 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the rust-xarray tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+The following commit is also in the mm-hotfixes tree as a different commit
+(but the same patch):
 
-error[E0308]: mismatched types
-  --> rust/kernel/auxiliary.rs:76:73
-   |
-55 | impl<T: Driver + 'static> Adapter<T> {
-   |      - found this type parameter
-...
-76 |                 unsafe { bindings::auxiliary_set_drvdata(adev.as_raw()=
-, data.into_foreign()) };
-   |                          -------------------------------              =
-  ^^^^^^^^^^^^^^^^^^^ expected `*mut c_void`, found `*mut T`
-   |                          |
-   |                          arguments to this function are incorrect
-   |
-   =3D note: expected raw pointer `*mut c_void`
-              found raw pointer `*mut T`
-note: function defined here
-  --> rust/bindings/bindings_helpers_generated.rs:5:12
-   |
-5  |     pub fn auxiliary_set_drvdata(adev: *mut auxiliary_device, data: *m=
-ut ffi::c_void);
-   |            ^^^^^^^^^^^^^^^^^^^^^
+  06eaa824fd23 ("mm/memblock: pass size instead of end to memblock_set_node=
+()")
 
-error[E0308]: mismatched types
-  --> rust/kernel/auxiliary.rs:92:47
-   |
-55 | impl<T: Driver + 'static> Adapter<T> {
-   |      - expected this type parameter
-...
-92 |         drop(unsafe { KBox::<T>::from_foreign(ptr) });
-   |                       ----------------------- ^^^ expected `*mut T`, f=
-ound `*mut c_void`
-   |                       |
-   |                       arguments to this function are incorrect
-   |
-   =3D note: expected raw pointer `*mut T`
-              found raw pointer `*mut c_void`
-note: associated function defined here
-  --> rust/kernel/types.rs:63:15
-   |
-63 |     unsafe fn from_foreign(ptr: *mut Self::PointedTo) -> Self;
-   |               ^^^^^^^^^^^^
+This is commit
 
-error[E0308]: mismatched types
-   --> rust/kernel/miscdevice.rs:256:66
-    |
-256 |         let device =3D unsafe { <T::Ptr as ForeignOwnable>::borrow(pr=
-ivate) };
-    |                               ---------------------------------- ^^^^=
-^^^ expected `*mut <... as ForeignOwnable>::PointedTo`, found `*mut c_void`
-    |                               |
-    |                               arguments to this function are incorrect
-    |
-    =3D note: expected raw pointer `*mut <<T as MiscDevice>::Ptr as Foreign=
-Ownable>::PointedTo`
-               found raw pointer `*mut c_void`
-    =3D help: consider constraining the associated type `<<T as MiscDevice>=
-::Ptr as ForeignOwnable>::PointedTo` to `c_void` or calling a method that r=
-eturns `<<T as MiscDevice>::Ptr as ForeignOwnable>::PointedTo`
-    =3D note: for more information, visit https://doc.rust-lang.org/book/ch=
-19-03-advanced-traits.html
-note: associated function defined here
-   --> rust/kernel/types.rs:98:15
-    |
-98  |     unsafe fn borrow<'a>(ptr: *mut Self::PointedTo) -> Self::Borrowed=
-<'a>;
-    |               ^^^^^^
+  94e4e8adbc0c ("mm: memblock: fix arguments passed to memblock_set_node()")
 
-error: aborting due to 3 previous errors
-
-For more information about this error, try `rustc --explain E0308`.
-
-> I don't know what caused this, but it is presumably an interaction
-> between this tree and the mm-unstable and drm-nova trees.
->=20
-> I have dropped the rust-xarray tree for today.
+in the mm-hotfixes-unstable branch of the mm-hotfixes tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/s=muqbsDHtO+QuD2OBv2cc1
+--Sig_/2M_H_0NOnENxBkyAWu3EruD
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgPWz0ACgkQAVBC80lX
-0GzSWggAoBG9ti+FfCoaqjh6jm57n/bqlzeOpqqJJceruvYLIPY+oFr2HSKn07T4
-MJ1+lliggTO2N1U9VBHyD5Ko3b/X7CZqaMsOrQipYZPwUbXR/+xgfmawQqM9O2Rq
-y9b81viLQkMmK2zamJKaRouovLSDrBoqlVcidBW69QURAcLvTDpHzgFZkzseLW8a
-0TvBw6FEwoCmDyCczOgi9ZQWiy5b47f4izA7BD8VeA+JeTzIOOvhf6tEnoihi+xE
-956YOVTNToWhZm6mMhbmhRf8yvNtFXt4QURVUh6XfwfFsXI/1/INezAtGK9UveIs
-InY19LJTD835+KDDBSYV7TPmMe81oQ==
-=iSoR
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgPYMsACgkQAVBC80lX
+0GyHwwgAlFnTDuINGEVRhMVL2avKh2SQBzosjEN1wi7Wy4YX48aTcTEC7XlLXYPV
+Zl3vwhHIMqQ7O2miwXVuHWYb5qmWvqTmQCUHVDdI0fBNicaOCmUfkf1VDNXnu2Fp
+J68h2Vd+nHMJa4HKbuzfk0RMpr1p4LEIR+qTyc36GnY3YD6ggpqC4g+2efWx2gxO
+BnnaZzGZetZ2RrFxvSjGOzHKib9At6zAsdYpLzx7VIpdcz3mYzasTILKRtM0I4pA
+fmD7KlEizMoLPUrNNza238WPnaFBFIHJqTxUh8IJH8LaGULpaC1nUdsIMdvN+lzp
+OgabcGDCukERYDTn9iIuk5XiPYQIVw==
+=sdqz
 -----END PGP SIGNATURE-----
 
---Sig_/s=muqbsDHtO+QuD2OBv2cc1--
+--Sig_/2M_H_0NOnENxBkyAWu3EruD--
 

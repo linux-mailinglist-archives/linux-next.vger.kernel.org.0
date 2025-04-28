@@ -1,177 +1,156 @@
-Return-Path: <linux-next+bounces-6405-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6406-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA4B8A9E80E
-	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 08:14:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C2E3A9E90B
+	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 09:19:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22DA316473F
-	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 06:14:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DF0777AB4CC
+	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 07:18:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C03B41BBBFD;
-	Mon, 28 Apr 2025 06:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC7521DE2DE;
+	Mon, 28 Apr 2025 07:19:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tuMS6B9z"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PF0WiXgd"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091C28F77;
-	Mon, 28 Apr 2025 06:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0824BE67;
+	Mon, 28 Apr 2025 07:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745820842; cv=none; b=dsmnD+CbbyfiJ2ER9OwKGX+nbBSmANkRPD+EK1qKEtO8TEheTkBiGcEm75suwWIokewa5yT6sXZ31fhkRQJGuKOUqGLBH8pW5es6c5lZ2WHipBCAglNekt+OIyhD0eb6l/MUIQJBbbnSkbQoyWGuc3Bmqs7hVpJ/+BX3o1os1x4=
+	t=1745824771; cv=none; b=Qcru2GqNW1fS91Q6IWwc2rjPf6jHXmQHbEcYsnvSwzAj9jGUezb7dqEOlbw8d3hBh3TpT/yafuZQTaemIDra90PGnDcRzrWoiF8WEB0+Is6QXd8L2mXwxt8VK3j+0Q3JrSqlsL/w3CJRq1LdITmz89A2lfVBvaxEZAZ3z1UZ520=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745820842; c=relaxed/simple;
-	bh=Jl1bKf+qQgVolMwnWqmPgRAHMMq0emPn8byhFiznNLQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bjVD5HO1OLVqPl4jgqq9lbdyVC+EfYPNq/YRzebten/CEq98I2R0kGDvkPivvWd8hlT2FXmSykbCIHPvplS58NynypJfGqOLNYIqkdAaVsacG/9Toaj3FEIBAxd1mMz5jBCCjdB8RlxYfhjUhVyDJc7/eJC5288LrwagvjI+yoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tuMS6B9z; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53RLe42x027532;
-	Mon, 28 Apr 2025 06:13:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=1UywGs
-	4iCOx0fuq/rbcL0VIfNn7u+J25m2Ol8HUPzzs=; b=tuMS6B9z3s/KDO8vT4bmth
-	mzi/eRV/8VMy0dGNaYYxdaJF13DHkY8RmZofXJLu1YeLQViYxKjGXd0K06myb9Ob
-	/BR79BvBncOy3+QrE5amuxsCgrfAfsriLO7cAuxAkWJpa7orSiF8Xf7WJft8HD9U
-	Uy1GvvfrpQszZtTgKibKIkwulX8C4niXXKkuMXGc0CsUVZYKkbWJ4z9BYUd3znpT
-	RF9qm+S//CYK0z96/dxZJjBmqzTk1nqKKgwhjgkb0eW97xw5MCNCb1H2LnO0hf3b
-	kqTrK3cpqMH0F8ATCpgQ5hLtYbSzurvkIHuPDEJOyjME/QlQrIddduptB+zAYPuQ
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 469vp8hefe-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Apr 2025 06:13:33 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53S4A3Kd024644;
-	Mon, 28 Apr 2025 06:13:32 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 469c1kvtmn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Apr 2025 06:13:32 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53S6DWkd13959682
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 28 Apr 2025 06:13:32 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0F0515805A;
-	Mon, 28 Apr 2025 06:13:32 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D78F158056;
-	Mon, 28 Apr 2025 06:13:28 +0000 (GMT)
-Received: from [9.204.204.179] (unknown [9.204.204.179])
-	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 28 Apr 2025 06:13:28 +0000 (GMT)
-Message-ID: <1aac242c-2d9f-46e6-8c1c-88822c97bfeb@linux.ibm.com>
-Date: Mon, 28 Apr 2025 11:43:27 +0530
+	s=arc-20240116; t=1745824771; c=relaxed/simple;
+	bh=SK4ddA8HzYC+KUfP2k0/WCmcI111NkEGUqOsBHoq1Bk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cQilZcCiuyaZH02c9imMF29cLsdXho/eFfx5+3ZGXkQ369CrBE8CNXQkp2ww4qKAFx9edkf9yPYnQvDgtSNvTV/DiaUGI7SRX04/wuKwD2MbEgoAV/2+KBB3gEB/T6y/edQBbwu51cDUOLDN4yct+FI6AudnYeS8bxrGq2pIXKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=PF0WiXgd; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1745824764;
+	bh=p5S7r+9+LrTkJDSOqXTMk9hxb/ouo5NJ7kDZBb+ZTeY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=PF0WiXgdfX9wZkNfUwDzNXtb0R4B0QqwqGxor9KYF6QR87o2XdiDft+bW571PaZof
+	 8ok3jwqukcmSVAaBIgIQz8tQ4QlG2B/vrmA7OfmCKOlM7hklEQI2bn+WtjxtlVy9Ya
+	 +AfcggWWBqVcvXyowQxR9UIhG9ZJQKMrifXxh+y4f54NPhddXVKCCRxeg7M34Q10XU
+	 o3ufXmQR8yMoesGUftV4CDD9GbAxdqrjpI6r9sNTS131HQowvUc1oHA5pvkPL0jHS6
+	 54xG8Riu13GG11Vq2+pLa7hZAVTl4rISEvLS5dvDTScQImV0ao2UYcyenIHyxfvKEJ
+	 +skbepmE+aPjw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZmFF7648tz4wcy;
+	Mon, 28 Apr 2025 17:19:23 +1000 (AEST)
+Date: Mon, 28 Apr 2025 17:18:52 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>
+Cc: Athira Rajeev <atrajeev@linux.ibm.com>, Shrikanth Hegde
+ <sshegde@linux.ibm.com>, Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Thomas Gleixner
+ <tglx@linutronix.de>, "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra
+ <peterz@infradead.org>, Namhyung Kim <namhyung@kernel.org>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20250428171852.36d8533a@canb.auug.org.au>
+In-Reply-To: <F5AD4FED-338E-4DC6-97BF-396F7EB73CA1@linux.ibm.com>
+References: <20250415133518.2c8d4325@canb.auug.org.au>
+	<20250417134959.37204d48@canb.auug.org.au>
+	<20250422163502.02ceeb0d@canb.auug.org.au>
+	<bb1f2928-617f-4943-bdd0-dfa74904ffb3@linux.ibm.com>
+	<D66D1529-714C-4700-BD74-AC6AFA7C97A8@linux.ibm.com>
+	<F5AD4FED-338E-4DC6-97BF-396F7EB73CA1@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [linux-next]Build Failure: kernel/watchdog.c:936:2: error: too
- many arguments
-Content-Language: en-GB
-To: Stephen Rothwell <sfr@canb.auug.org.au>, luogengkun@huaweicloud.com,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        dianders@chromium.org, joel.granados@kernel.org, song@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <339e2b3e-c7ee-418f-a84c-9c6360dc570b@linux.ibm.com>
- <20250428084117.31215b8c@canb.auug.org.au>
-From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-In-Reply-To: <20250428084117.31215b8c@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDI4MDA1MCBTYWx0ZWRfX/Wdv1rGYGlBR Fgo0EU9Swu26oq/T4tQ8Lcp8Gv1QCURlGbdNOzHDv6uKf60gyeNBhu3ElyLhyJe0kolLi1egwSp fLtTXQOpiWfqgqRDpHZqdKwTHTWtIhdgF8EmV3mgln3LkESqkeIgM40StvZwVrdnv1ylDXdhVSA
- 6PxWJ1fzDsWxb07G3UlRz5Fc+TrEPsrukhWbiU4n3XLT40DO2mgMnbZuXSD1cKBR6GZsTgE8QqK xzMHn0vp8zH/MuLnrY7HzfEn7LFWb6X014+9VNjZrZ6Wl13Zd3V04RWcwtu9qpm1RM8Pi7g57d2 aIOAL/XTvrEdhRApG971Fk7tcF1Zsw6H+61zdWcEKfxO8gvcOvIaQ1Q+ogZ3xQM3j5tYiQZRApP
- 6EfMdqUXr25Gaw+ThdV252Cn2kNBhPewBVRGjM4ntTKMo+UQ0sxWCeniRuR2Q0jZHTEC2oJ6
-X-Proofpoint-ORIG-GUID: cNvFujItDPuYrtgQZAFE1VQmfDgze5Qh
-X-Authority-Analysis: v=2.4 cv=R80DGcRX c=1 sm=1 tr=0 ts=680f1c8d cx=c_pps a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=flcYxCUImN8H2Fr_exYA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: cNvFujItDPuYrtgQZAFE1VQmfDgze5Qh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-04-28_02,2025-04-24_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 spamscore=0 phishscore=0
- mlxlogscore=999 bulkscore=0 suspectscore=0 clxscore=1015 adultscore=0
- mlxscore=0 malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504280050
+Content-Type: multipart/signed; boundary="Sig_/SEQCxJKfbwLlfkhccXJJfVY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/SEQCxJKfbwLlfkhccXJJfVY
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On 28/04/25 4:11 am, Stephen Rothwell wrote:
-> Hi all,
+Hi all,
+
+On Thu, 24 Apr 2025 22:03:05 +0530 Athira Rajeev <atrajeev@linux.ibm.com> w=
+rote:
 >
-> On Sat, 26 Apr 2025 20:39:26 +0530 Venkat Rao Bagalkote <venkat88@linux.ibm.com> wrote:
->> I am observing below build failure on IBM Power8 server with linux-next-20250424 repo.
->>
->> This issue seems to be introduced by the below commit. After reverting the below commit, kernel build is successful.
->>
->> Bad Commit: 6b07f9a0fa41 watchdog: fix watchdog may detect false positive of softlockup
->>
->> Note: To hit this issue, one should first resolve this [1] <https://lore.kernel.org/all/e8bf676e-7bf0-4896-b104-ac75e1b22d2e@linux.ibm.com/>
->>
->> Repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
->> Branch: master
->> GCC: 8.5.0 20210514
->> ldd (GNU libc) 2.28
->>
->> Attached is the .config file.
->>
->> Errors:
->>
->> kernel/watchdog.c: In function 'lockup_detector_reconfigure':
->> kernel/watchdog.c:936:2: error: too many arguments to function '__lockup_detector_reconfigure'
->>     __lockup_detector_reconfigure(false);
->>     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/watchdog.c:926:13: note: declared here
->>    static void __lockup_detector_reconfigure(void)
->>                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/watchdog.c: In function 'lockup_detector_setup':
->> kernel/watchdog.c:940:2: error: too many arguments to function '__lockup_detector_reconfigure'
->>     __lockup_detector_reconfigure(false);
->>     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/watchdog.c:926:13: note: declared here
->>    static void __lockup_detector_reconfigure(void)
->>                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/watchdog.c: In function 'proc_watchdog_update':
->> kernel/watchdog.c:962:2: error: too many arguments to function '__lockup_detector_reconfigure'
->>     __lockup_detector_reconfigure(thresh_changed);
->>     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> kernel/watchdog.c:926:13: note: declared here
->>    static void __lockup_detector_reconfigure(void)
->>                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>
->> If you happen to fix this, please add below tag.
->>
->> Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-> Yeah, the CONFIG_SOFTLOCKUP_DETECTOR unset version of
-> __lockup_detector_reconfigure() was not updated :-(
+> > On 24 Apr 2025, at 8:07=E2=80=AFPM, Athira Rajeev <atrajeev@linux.ibm.c=
+om> wrote:
+> >  =20
+> >> On 22 Apr 2025, at 3:26=E2=80=AFPM, Shrikanth Hegde <sshegde@linux.ibm=
+.com> wrote:
+> >>=20
+> >> On 4/22/25 12:05, Stephen Rothwell wrote: =20
+> >>  =20
+> >>> On Thu, 17 Apr 2025 13:49:59 +1000 Stephen Rothwell <sfr@canb.auug.or=
+g.au> wrote: =20
+> >>>>=20
+> >>>> On Tue, 15 Apr 2025 13:35:18 +1000 Stephen Rothwell <sfr@canb.auug.o=
+rg.au> wrote: =20
+> >>>>>=20
+> >>>>> After merging the tip tree, today's linux-next build (native perf)
+> >>>>> failed like this:
+> >>>>>=20
+> >>>>> diff: tools/arch/x86/include/asm/amd/ibs.h: No such file or directo=
+ry
+> >>>>> In file included from util/amd-sample-raw.c:12:
+> >>>>> tools/include/../../arch/x86/include/asm/amd/ibs.h:10:10: fatal err=
+or: asm/msr-index.h: No such file or directory
+> >>>>>   10 | #include <asm/msr-index.h>
+> >>>>>      |          ^~~~~~~~~~~~~~~~~
+> >>>>> compilation terminated.
+> >>>>>=20
+> >>>>> Maybe caused by commit
+> >>>>>=20
+> >>>>>  3846389c03a8 ("x86/platform/amd: Move the <asm/amd-ibs.h> header t=
+o <asm/amd/ibs.h>")
+> >>>>> or associated commits?
 >
-> This is now commit
->
->    45c4eb661074 ("watchdog: fix watchdog may detect false positive of softlockup")
->
-> in the mm-nonmm-unstable tree.
+> Posted the fix in mailing here: https://lore.kernel.org/linux-perf-users/=
+20250424163033.6601-1-atrajeev@linux.ibm.com/T/#u
+> Please share feedback if it fixes the compilation issue.
 
-Thanks Stephen for pointing me to this commit.
+OK, so to progress things ...
 
+Just reverting the changes to tools/perf in commit
 
-Regards,
+  3846389c03a8 ("x86/platform/amd: Move the <asm/amd-ibs.h> header to <asm/=
+amd/ibs.h>")
 
-Venkat.
+Allows perf to build again on ppc64el (and gets rid of the warning), so
+is that a reasonable thing to do - and leave the tools perf update to
+the perf guys?
 
+If so, can that partial revert be added to the tip tree, please?
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/SEQCxJKfbwLlfkhccXJJfVY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgPK9wACgkQAVBC80lX
+0GyBGgf8CvhUQl3Kd6I66RwI6x0BE4JTj41gBzuuE2A6hPKHypSEBIutoPTgruxK
+mp/TTcZHd027eDMCnyhsooovrwOZkhWNQ6zfZ4jHH9ZfpiryMXhwlsFzi3wvxQJa
+W3CQbLyPMnUGCGXdStheqoLWriK/RjzkiZurPBrg+5BapTAC5c4hHZ/EXbNKtG5C
+TMKRZOGyxzeg3J9HWXsLcPEMIANMmQp1TI7lC9c5svEvBYOOZQsSLJh16WXW9sbv
+gXv+YaLhsVflcdFkhxKeJhIjCXcITfNWLSozgqWCaJlEvTKRuOsuB9zxBtdxZymR
+OzQ08Vdvoam2ugQg4+6oWAtwCuXw5w==
+=4/IE
+-----END PGP SIGNATURE-----
+
+--Sig_/SEQCxJKfbwLlfkhccXJJfVY--
 

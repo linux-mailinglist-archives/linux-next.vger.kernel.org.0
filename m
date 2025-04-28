@@ -1,69 +1,69 @@
-Return-Path: <linux-next+bounces-6408-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6409-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48BCEA9EAD2
-	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 10:32:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67E40A9EAD4
+	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 10:32:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8FD57AA255
-	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 08:31:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEE32189B630
+	for <lists+linux-next@lfdr.de>; Mon, 28 Apr 2025 08:33:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9449253F02;
-	Mon, 28 Apr 2025 08:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEA6425D1F0;
+	Mon, 28 Apr 2025 08:32:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="iB9v5JmB";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KFYMvU5B"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="QWL+CQ1J";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="sJV9tOLy"
 X-Original-To: linux-next@vger.kernel.org
 Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E9001DF252;
-	Mon, 28 Apr 2025 08:32:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C52925E471;
+	Mon, 28 Apr 2025 08:32:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745829157; cv=none; b=YowLUTktMX82dwWV8OZBJffZZP7oJJ1J891uSp12wBwcvU//PG7NpkJOROngl/ravwIJ/FU24CvMxwEjh3697ACETGVu1TTwX50OrkzvCaHb0wxFXlcOtRNf/g/gqr5SSUM0NSYNAEpXwXUqwn2a4aL0cTrvG45cXasghj1hKls=
+	t=1745829166; cv=none; b=frMrnWxLurFw7oV0dTFQA41ZcFqLFA+tp0y0vfDDvhgbNsU4GnXrXysDNmtE4zWkr5RsBnE81gQqvtOMtc61zzsf7amFuB0BG89A9bI1DB0r0K8391WLBfydGRXAfMg9GZN3NnYN3Dg/u8dHQGvOS2xAa19niaKltTDk+V91lj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745829157; c=relaxed/simple;
-	bh=g1+7tlPvYWN7Tx631CXGRRZ9msbxpuAQZp0IUW9yAXU=;
+	s=arc-20240116; t=1745829166; c=relaxed/simple;
+	bh=VYIGYAzPWiB6IechB7rf7W/hwN4m0GLx1G4VKA0f7EQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NpqLLYdJpEQYpSaUl9ZCJUCaTa0VI6l+7du+PjRKqAT7lCbQ68cBZCaO+epWKWn2/S/21NzSzng6/wKK1/Lv/2rYlJZDFgEic14ABFXvzhRhyuNp7NPA4ALfBiwUHYnYqpcgF6nRWKHlIj+SHdNdxjeIkBQAKPtDKVY9LWC2o7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=iB9v5JmB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KFYMvU5B; arc=none smtp.client-ip=103.168.172.156
+	 Content-Type:Content-Disposition:In-Reply-To; b=FpV2rbV7kaMWNLS9QnVhmxQK/yfTCvDOl0elBbiyic+H+MhrzcsPiKb4zVem49t+N6ojX7JgWzUaioP07/13Y7PjdUWxKUvxSuqi6aNlDoQsOf9KovBknTtHRQi+ye8x5A+sNNApPKV9W8edLjAD0PaKVZJ0oWvJEKtgv4n7MRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=QWL+CQ1J; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=sJV9tOLy; arc=none smtp.client-ip=103.168.172.156
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 0A64E114013B;
-	Mon, 28 Apr 2025 04:32:33 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-03.internal (MEProxy); Mon, 28 Apr 2025 04:32:33 -0400
+Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 79185114013A;
+	Mon, 28 Apr 2025 04:32:43 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-08.internal (MEProxy); Mon, 28 Apr 2025 04:32:43 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
 	:cc:content-type:content-type:date:date:from:from:in-reply-to
 	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1745829153; x=1745915553; bh=kHwt8FJQAx
-	ssA8h+brFjrLhfWTfeC57mzi4Q8fgCGig=; b=iB9v5JmBq4h83Dh+MuvNP3ZG6t
-	5La6sUAZ1KogjBVNWbC7zdXmRh9867fYKNHv9vX4f1SBBBUoRG00GStB3EDrjXwo
-	5yD92FJCarkWLuGjkNU5oWisv/1ojwsX8DoTjm8R+xK/QWfrYDuetaEeigADVrQX
-	6vPbZtkEqAZjr3zdbiEaPm8L1JXKMyx2+l27s+j+3vjQSjxs/TMlWXD8D+ts/q98
-	b0A96T5/mk+5slyLiw2i077DL9kTn1xBSs2sLJrBHKlia80TReBT31AVy7ecdoK1
-	nenpWChWIUgtuVtce3ODLt55vjq5hkA6d3UpPPi5LDp+Nj0SrmNqHs7aUFFg==
+	:subject:to:to; s=fm3; t=1745829163; x=1745915563; bh=fUGKdEE1P/
+	KyC1z4PqewzwNp7GLhrY2uDJFiS8OfGSc=; b=QWL+CQ1JvvEtE+YnM83g2MMLUg
+	xEbEpALy42wBsWlfUfxAqkHVOs5S3UdLET0t9wyT1kmI0S9cXUJdPkFF6t3gEbuv
+	ZMmt/KnWf3kCsK/rWgwWoLbOrETmzS9P43a83VQW/N8kCs5xnuKs+dQ2KMeH7RQe
+	u2nbAxjumNl/xCm75gA9evfXyl35Lj1eNSfL73DHRf/FHsMWqsOYQhU5V6yuvVYX
+	CoRLjC8R/pGNRhcEFg8WlCOreEt0cTjfG1nYh5gchltF0s+SIi5oPUW1KmVKy15D
+	3sFJiVsqOUBq7QMTnTu7T7Q3isfKpVsdWQktCpqg94OcPLHQ+Fd9h42nP1iQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1745829153; x=1745915553; bh=kHwt8FJQAxssA8h+brFjrLhfWTfeC57mzi4
-	Q8fgCGig=; b=KFYMvU5BHyFOY2hQqthsPGeVgdlraqHnPW3xaavALmsKWpmoQCQ
-	Ahybd/DKsUUQRbnw2P7uXrpB1h2V5FlE6U2fycXswTkLbvOrOqwsn6C/BeQlicDY
-	ieoxc/Zr1liHiX53NkKjEpl3FfRZ46KqMD3MnXYbEP4X86QUmOfE/wvkHHdmydis
-	P3eqoKCMIpK7pQiULV3fIP7ih5O/Gy4j1dibgOzMl7WLVqG9rfk8dOaKdNDOFqRd
-	NKRl7xBFadDH1MGgp6LhoKyWK0QXeVeXuWlXEiUIq56NAjMlX2MazUJwmVjjazcN
-	x6C5ntpsD7z/N7WRhwMRweTLK/CXe3tgGng==
-X-ME-Sender: <xms:ID0PaLmuyzcLLLmXYWkvYHa7DTWuRxQtCt0WbY_oUq-zTpqpsICVaQ>
-    <xme:ID0PaO22NYn9FbIfhAb0EF1WgSzjScSLtsXSQp01gRgh1d2HNMT22GNQFAou_8DKu
-    YlwK6glHXRFPQ>
-X-ME-Received: <xmr:ID0PaBopFM66K5s_alPgaycYtn22v4gsDu0P9H5-4_Mltr0KVWUtRM4Gbw8n6epaNCyO2aaAshon3t1RAX8sRHhejbT2yzg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddviedtgeekucetufdoteggodetrf
+	1745829163; x=1745915563; bh=fUGKdEE1P/KyC1z4PqewzwNp7GLhrY2uDJF
+	iS8OfGSc=; b=sJV9tOLysCjtfR3+vAHF2tSbaMWq/AcAxA3bLqhN9gS91qBFgef
+	yz5I5ttzuWIIwn+keCbMWvBFbDGcevU/WSJ3zC1wGkunmZfq8lbb32w+COtUB1J2
+	o2X5z/5UoaVTuxIfTR7TbyEbvTNAr5qpmqwYEVO9qW/AHy/JPAI3rQu5LJ+nQKzE
+	rY2qANFLtgaAEeHv1e6ajMDO3bulyQNLu3YOuaVwPBQKFP9wA/A4k7R5g8gjVorE
+	AzZUBpYte082NoHe1B6tR+/bPZwsMS1N91nMSw5OaYgSGQTm79qRd3IV7fQnkGqK
+	DUSWkgtZhKpJferw7Ww8LF6VRBkwc1NCrZA==
+X-ME-Sender: <xms:Kz0PaNwZx0pfDDM2VT9p37yv1ozOyeDD0hQanfngSw1XKkcCMYEgdQ>
+    <xme:Kz0PaNTGx56JJP-2j47gzJTdGtUj0SX8enf9nAgfhH1mzyzvg3g2Qi2dHmQCMO70O
+    w_MjacMt-OMkw>
+X-ME-Received: <xmr:Kz0PaHV4gjKow3FKX-dLrTrss5ABtlfIGdvD3nOfC54DR6psna1eO1OPPpATZI2BqfDVacsJhpofw0jVoxCStLSsoA2vIvE>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddviedtgeejucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
     pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
     gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
@@ -72,29 +72,29 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddviedtgeekucetufdote
     fefhgfehkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
     homhepghhrvghgsehkrhhorghhrdgtohhmpdhnsggprhgtphhtthhopedutddpmhhouggv
     pehsmhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrg
-    hupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdho
-    rhhgpdhrtghpthhtoheplhhinhhugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorh
-    hgpdhrtghpthhtohepmhgrthhhihgrshdrnhihmhgrnheslhhinhhugidrihhnthgvlhdr
-    tghomhdprhgtphhtthhopehquhhitggpfigthhgvnhhgsehquhhitghinhgtrdgtohhm
-X-ME-Proxy: <xmx:ID0PaDlIXpBOnAk49NskSGdgFebawJhyOYUKrZPRjyLISEe3H8MCiw>
-    <xmx:ID0PaJ2612uf9v1mz8KFZUKMN8dSfzBRK2mAr4MTNmeQ1n3cIbtZdg>
-    <xmx:ID0PaCsfJmwSwNjkhlFAPs5ofgz6b-3HdukLYuOdAFQJbFxOGKWS1Q>
-    <xmx:ID0PaNV4fcTvgYnsRV01GwdLFanSGPl9T_2uzMve-rXF0gNDWfwgwA>
-    <xmx:IT0PaE3Yx_PSUKW5cxvm2LfCvQuOg1fMvWAwsqoQ8RLhV5Nm5o8SzTg6>
+    hupdhrtghpthhtohepphgthhgvlhhkihhnsehishhprhgrshdrrhhupdhrtghpthhtohep
+    lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
+    eplhhinhhugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    gihurdihrghnghgpvdesnhigphdrtghomh
+X-ME-Proxy: <xmx:Kz0PaPjThYAFwwusQLo4dibIFj4NvfXyi9mVO3iqp4qTDedbap0eXQ>
+    <xmx:Kz0PaPDUT6o1fkBZyC7qjUqjuUyrROATQh0SX3wNFizzBhbUlyGHCw>
+    <xmx:Kz0PaILmcyvOnvQHDM-kfaRHfPH7frLkqAmq5j30rPSVmkhJPkvzuw>
+    <xmx:Kz0PaOCC508OWGfGJNbrrSvaUanmt6M6VIjor-IgbGGDwcUbdKKHjA>
+    <xmx:Kz0PaPja-mWd0pjj-qpbASYvaumx6YJTJRyd6X0vvucTinzI3ycSZvGt>
 Feedback-ID: i787e41f1:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 28 Apr 2025 04:32:31 -0400 (EDT)
-Date: Mon, 28 Apr 2025 10:32:30 +0200
+ 28 Apr 2025 04:32:42 -0400 (EDT)
+Date: Mon, 28 Apr 2025 10:32:41 +0200
 From: Greg KH <greg@kroah.com>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+Cc: Fedor Pchelkin <pchelkin@ispras.ru>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Wesley Cheng <quic_wcheng@quicinc.com>
+	Xu Yang <xu.yang_2@nxp.com>
 Subject: Re: linux-next: manual merge of the usb tree with the usb.current
  tree
-Message-ID: <2025042823-manliness-drove-33af@gregkh>
-References: <20250414142740.550af271@canb.auug.org.au>
+Message-ID: <2025042832-bronco-rasping-3517@gregkh>
+References: <20250414142307.7df3443d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -103,34 +103,67 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250414142740.550af271@canb.auug.org.au>
+In-Reply-To: <20250414142307.7df3443d@canb.auug.org.au>
 
-On Mon, Apr 14, 2025 at 02:27:40PM +1000, Stephen Rothwell wrote:
+On Mon, Apr 14, 2025 at 02:23:07PM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
 > Today's linux-next merge of the usb tree got a conflict in:
 > 
->   drivers/usb/host/xhci.h
+>   drivers/usb/chipidea/ci_hdrc_imx.c
 > 
 > between commit:
 > 
->   bea5892d0ed2 ("xhci: Limit time spent with xHC interrupts disabled during bus resume")
+>   8cab0e9a3f3e ("usb: chipidea: ci_hdrc_imx: fix call balance of regulator routines")
 > 
 > from the usb.current tree and commit:
 > 
->   5beb4a53a1dd ("usb: host: xhci-mem: Cleanup pending secondary event ring events")
+>   ee0dc2f7d522 ("usb: chipidea: imx: add wakeup interrupt handling")
 > 
 > from the usb tree.
 > 
-> I fixed it up (they both added the same function, and the former added
-> another function, so I used that) and can carry the fix as necessary. This
+> I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
 > conflicts should be mentioned to your upstream maintainer when your tree
 > is submitted for merging.  You may also want to consider cooperating
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/usb/chipidea/ci_hdrc_imx.c
+> index 4f8bfd242b59,c34298ccc399..000000000000
+> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+> @@@ -336,13 -338,16 +338,23 @@@ static int ci_hdrc_imx_notify_event(str
+>   	return ret;
+>   }
+>   
+>  +static void ci_hdrc_imx_disable_regulator(void *arg)
+>  +{
+>  +	struct ci_hdrc_imx_data *data = arg;
+>  +
+>  +	regulator_disable(data->hsic_pad_regulator);
+>  +}
+>  +
+> + static irqreturn_t ci_wakeup_irq_handler(int irq, void *data)
+> + {
+> + 	struct ci_hdrc_imx_data *imx_data = data;
+> + 
+> + 	disable_irq_nosync(irq);
+> + 	pm_runtime_resume(&imx_data->ci_pdev->dev);
+> + 
+> + 	return IRQ_HANDLED;
+> + }
+> + 
+>   static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>   {
+>   	struct ci_hdrc_imx_data *data;
 
-This is now resolved in my tree, thanks.
+I've now resolved this in my tree, thanks.
 
 greg k-h
+
 

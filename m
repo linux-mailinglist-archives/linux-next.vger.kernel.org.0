@@ -1,155 +1,106 @@
-Return-Path: <linux-next+bounces-6438-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6439-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FCC6AA0AB4
-	for <lists+linux-next@lfdr.de>; Tue, 29 Apr 2025 13:51:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA27EAA108F
+	for <lists+linux-next@lfdr.de>; Tue, 29 Apr 2025 17:33:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D854C3B25BD
-	for <lists+linux-next@lfdr.de>; Tue, 29 Apr 2025 11:50:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6924B189D13E
+	for <lists+linux-next@lfdr.de>; Tue, 29 Apr 2025 15:34:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 273AE2D9990;
-	Tue, 29 Apr 2025 11:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8784321ABA6;
+	Tue, 29 Apr 2025 15:33:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="qO0gXZor"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IwCSOQuG"
 X-Original-To: linux-next@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4302D4B79;
-	Tue, 29 Apr 2025 11:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16145216386;
+	Tue, 29 Apr 2025 15:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745927192; cv=none; b=rtpK09U5Z6bvKta6uS3rA/QqrqNKc911jN5ex0yOq1X02fMoaSsYRZyXuYABTLMLxyDT69liUKko6RCpQ3NOMB1br7LxWq6k63YpdoZyeGhLk3AbUHB0ZG5NNh62SW/Yt6OZ2aLTbBfB2PEvFoFgYHJbok/b6ppjL/hzPv3PO+o=
+	t=1745940826; cv=none; b=RRBq9lCp+uYL3qYDhgW9MV6MagTpT3v3y4Fkp8epd1BeS+7EsLchul1ItM71OW0ilznBgs0phG3v0eGDEICT/iKJp5E3NEzwq+3MLgBNGU1JRh8DP/ypH7NnLwUzVHi5oQpmZx03VOQOlGnnU9lvVLDvUUKojwWaBZiCPnnHhXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745927192; c=relaxed/simple;
-	bh=KTAtU4yj15U90cJiCtm0L7dTLDIMSAa27/+94PyZbI4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=usIChWZGM5XmQ9H/OrIZu5OsZVDHCPvjMPgNF6iEBfULPDDTrl+2gcYmTDLimWeWbMyBrcqnAJzCJcnetZ8hawZveCbGujNzxp9K1oKHKHUcoI3f1aUzSqJ3bmPObmt4LJoUhLEL7bhyspOMBlYXfEQR2QdkHxVWOCQPjLQeS78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=qO0gXZor; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4782217D1;
-	Tue, 29 Apr 2025 13:46:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1745927182;
-	bh=KTAtU4yj15U90cJiCtm0L7dTLDIMSAa27/+94PyZbI4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qO0gXZorPc1fkwF6rtaGqeEOcPizhAWJh3rjotlLKUkSU1WnL9AdBWwXuwiWDjxRk
-	 UVeFEXn5NUueE0yfBayxotSCDq9PSFHSnZe1eNLGerEQoqNyW0FLPOrqeYulQDfju3
-	 ac1L1b+hNo8XJOzed2UK3j/ve2GOc0wUvZloy84k=
-Message-ID: <9918a4e1-e3fa-4577-ac06-46efeab12507@ideasonboard.com>
-Date: Tue, 29 Apr 2025 14:46:24 +0300
+	s=arc-20240116; t=1745940826; c=relaxed/simple;
+	bh=A+l+xI7Imok+VPDtns7qlBCebAAix1fE4zfWYe2kV2I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RAkO1Kzlg2a4BtCrXomW3qILH0So8L03cjMc5vl5k7ghPQJQDy6OsTCIeJKPF1fw4UVnk9Qry4NiCw2SyMa5zmjzwJvSFvcEXQH0JxXdYDzhbD4ChHxBM4B4xze21EHMjq4a8n8T5L21sbmMwDQJXTlrxYlpPcKILTsSpmTfDQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IwCSOQuG; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-b0459668101so407052a12.2;
+        Tue, 29 Apr 2025 08:33:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745940823; x=1746545623; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XZIKiIlFR4DQeDOYxtwwQdiHDCHP+QL8sXp+cVkdBOU=;
+        b=IwCSOQuG8dsGOLW396Z/52JxYX61bixG4DZ2ihJ+2DWnVTixS+6JzZ69Ya9UioGipm
+         7pjO+m5VV6d13e+FTlMSa4Pr0ar2oMS4rkOM59pP4jY0JnTRFMjwESBiLZ+wTRiGhTyK
+         cPvJUJDu9ynwq+J0BvcxJz4zx5vsOiG04urwXzHJOtjEpqNJMvH9D3tBQ+5zuhPDo+oJ
+         Yuvdx7zZcAL9Lyz/UUVQODfPnx3b2sBkTqqdbwuarHQ8/mbYyFUrHkDBkOnY2MAg2G8v
+         R9BZy3dfpQPXXWKxKJoENNd+O59tFUjORhzflt8oBttrnJDiQaI9S+8DU7xpqYBqczP2
+         n5Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745940823; x=1746545623;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XZIKiIlFR4DQeDOYxtwwQdiHDCHP+QL8sXp+cVkdBOU=;
+        b=JtAkxlPH/RANYs8K72Orbn1AWSsFcCvCTpx1EIpf0auOJO+oX82ULst+KY5O4Njmch
+         U2Nc06RZHNrzVdAMT+Cu/HGq+1SxuFSGBoZSr7GDSj+Vrj/wTLHAcFaAmzlaDYxX3beZ
+         ZLyxZSkwNi5tomh2Hqe4FY3uhvr8NIhCizzmiZMOSKfUZceBwPM09EFbPg8gwqOuNAjy
+         UxkKM9dzGyahgW3dWW8UkH64fbwMojQU97atZRehz/HtGBLUZWnp3S17XUKX5rEKuaVE
+         onEPe/fslZvQpj+NB/5uQzU60m/2vvWEXWocXPKSkAWP53+l6i/rX59pq8lz4pKJzPSv
+         YvbA==
+X-Forwarded-Encrypted: i=1; AJvYcCWmrVh/T4qiw8/zOrD5zFO86jNN5QiLoJ4ufoZFDddervkBzXL4HNskXQxmxGWjeM4Z2nekAePYFx0Pmvc=@vger.kernel.org, AJvYcCXNiYfVVZsCN34pRoaULwdL0zV4ju20S+AFiRYTkTmK1f8qfix1C0pcPOdNUQ2Sal/EafXouxqWP9b8JQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRvkvFzceWTOjvxWSqDSIUNVw2Gc43Nau7RqnJZGiDKppBJ38a
+	gXK+gUa31Q9r/BWhHTbSAeEkdyCGHuqUkCxp5E8p9mRRq+UcXMeo8e+vKRo4SsEZSe0WCIEcUre
+	SCSCbZClbu/uxey97dCkFCAfgPV/96Sg+JagbTg==
+X-Gm-Gg: ASbGncvbIenBYm1qDOk2bXAMa0hUm8m0bTqhinU2M3q2VwVw4Wup3/Vqe/iz8Un/wNq
+	mVflyd33RmxOMzcOP1hfMQLOIK1EWA9bHEUaoekQKbmWyheDgmJpHiMKmIkfGkQlr03AfhjOm8Z
+	VB9G0wSU7gcazyp62pmB0xhmtPgq1RL5hK
+X-Google-Smtp-Source: AGHT+IFjB+MW/kvKyLLyIFXEGRvt8nhF0yNYd8DjBFC2RtS6kaeAW1UsQcta96JBRJllwfrNaV8OrfyIUQVMAE2XXLA=
+X-Received: by 2002:a17:90b:4acb:b0:2ff:5759:549a with SMTP id
+ 98e67ed59e1d1-30a2205ed8dmr2081705a91.1.1745940823331; Tue, 29 Apr 2025
+ 08:33:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the v4l-dvb tree with the i2c tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Mauro Carvalho Chehab <mchehab@kernel.org>, Wolfram Sang <wsa@the-dreams.de>
-Cc: Hans Verkuil <hverkuil@xs4all.nl>,
- Jai Luthra <jai.luthra@ideasonboard.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Romain Gantois <romain.gantois@bootlin.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-References: <20250428104905.2b54643f@canb.auug.org.au>
- <20250428112200.6f5cf3bd@canb.auug.org.au>
- <20250428113052.38cf10da@canb.auug.org.au>
-Content-Language: en-US
-From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
- xsFNBE6ms0cBEACyizowecZqXfMZtnBniOieTuFdErHAUyxVgtmr0f5ZfIi9Z4l+uUN4Zdw2
- wCEZjx3o0Z34diXBaMRJ3rAk9yB90UJAnLtb8A97Oq64DskLF81GCYB2P1i0qrG7UjpASgCA
- Ru0lVvxsWyIwSfoYoLrazbT1wkWRs8YBkkXQFfL7Mn3ZMoGPcpfwYH9O7bV1NslbmyJzRCMO
- eYV258gjCcwYlrkyIratlHCek4GrwV8Z9NQcjD5iLzrONjfafrWPwj6yn2RlL0mQEwt1lOvn
- LnI7QRtB3zxA3yB+FLsT1hx0va6xCHpX3QO2gBsyHCyVafFMrg3c/7IIWkDLngJxFgz6DLiA
- G4ld1QK/jsYqfP2GIMH1mFdjY+iagG4DqOsjip479HCWAptpNxSOCL6z3qxCU8MCz8iNOtZk
- DYXQWVscM5qgYSn+fmMM2qN+eoWlnCGVURZZLDjg387S2E1jT/dNTOsM/IqQj+ZROUZuRcF7
- 0RTtuU5q1HnbRNwy+23xeoSGuwmLQ2UsUk7Q5CnrjYfiPo3wHze8avK95JBoSd+WIRmV3uoO
- rXCoYOIRlDhg9XJTrbnQ3Ot5zOa0Y9c4IpyAlut6mDtxtKXr4+8OzjSVFww7tIwadTK3wDQv
- Bus4jxHjS6dz1g2ypT65qnHen6mUUH63lhzewqO9peAHJ0SLrQARAQABzTBUb21pIFZhbGtl
- aW5lbiA8dG9taS52YWxrZWluZW5AaWRlYXNvbmJvYXJkLmNvbT7CwY4EEwEIADgWIQTEOAw+
- ll79gQef86f6PaqMvJYe9QUCX/HruAIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRD6
- PaqMvJYe9WmFD/99NGoD5lBJhlFDHMZvO+Op8vCwnIRZdTsyrtGl72rVh9xRfcSgYPZUvBuT
- VDxE53mY9HaZyu1eGMccYRBaTLJSfCXl/g317CrMNdY0k40b9YeIX10feiRYEWoDIPQ3tMmA
- 0nHDygzcnuPiPT68JYZ6tUOvAt7r6OX/litM+m2/E9mtp8xCoWOo/kYO4mOAIoMNvLB8vufi
- uBB4e/AvAjtny4ScuNV5c5q8MkfNIiOyag9QCiQ/JfoAqzXRjVb4VZG72AKaElwipiKCWEcU
- R4+Bu5Qbaxj7Cd36M/bI54OrbWWETJkVVSV1i0tghCd6HHyquTdFl7wYcz6cL1hn/6byVnD+
- sR3BLvSBHYp8WSwv0TCuf6tLiNgHAO1hWiQ1pOoXyMEsxZlgPXT+wb4dbNVunckwqFjGxRbl
- Rz7apFT/ZRwbazEzEzNyrBOfB55xdipG/2+SmFn0oMFqFOBEszXLQVslh64lI0CMJm2OYYe3
- PxHqYaztyeXsx13Bfnq9+bUynAQ4uW1P5DJ3OIRZWKmbQd/Me3Fq6TU57LsvwRgE0Le9PFQs
- dcP2071rMTpqTUteEgODJS4VDf4lXJfY91u32BJkiqM7/62Cqatcz5UWWHq5xeF03MIUTqdE
- qHWk3RJEoWHWQRzQfcx6Fn2fDAUKhAddvoopfcjAHfpAWJ+ENc7BTQROprNHARAAx0aat8GU
- hsusCLc4MIxOQwidecCTRc9Dz/7U2goUwhw2O5j9TPqLtp57VITmHILnvZf6q3QAho2QMQyE
- DDvHubrdtEoqaaSKxKkFie1uhWNNvXPhwkKLYieyL9m2JdU+b88HaDnpzdyTTR4uH7wk0bBa
- KbTSgIFDDe5lXInypewPO30TmYNkFSexnnM3n1PBCqiJXsJahE4ZQ+WnV5FbPUj8T2zXS2xk
- 0LZ0+DwKmZ0ZDovvdEWRWrz3UzJ8DLHb7blPpGhmqj3ANXQXC7mb9qJ6J/VSl61GbxIO2Dwb
- xPNkHk8fwnxlUBCOyBti/uD2uSTgKHNdabhVm2dgFNVuS1y3bBHbI/qjC3J7rWE0WiaHWEqy
- UVPk8rsph4rqITsj2RiY70vEW0SKePrChvET7D8P1UPqmveBNNtSS7In+DdZ5kUqLV7rJnM9
- /4cwy+uZUt8cuCZlcA5u8IsBCNJudxEqBG10GHg1B6h1RZIz9Q9XfiBdaqa5+CjyFs8ua01c
- 9HmyfkuhXG2OLjfQuK+Ygd56mV3lq0aFdwbaX16DG22c6flkkBSjyWXYepFtHz9KsBS0DaZb
- 4IkLmZwEXpZcIOQjQ71fqlpiXkXSIaQ6YMEs8WjBbpP81h7QxWIfWtp+VnwNGc6nq5IQDESH
- mvQcsFS7d3eGVI6eyjCFdcAO8eMAEQEAAcLBXwQYAQIACQUCTqazRwIbDAAKCRD6PaqMvJYe
- 9fA7EACS6exUedsBKmt4pT7nqXBcRsqm6YzT6DeCM8PWMTeaVGHiR4TnNFiT3otD5UpYQI7S
- suYxoTdHrrrBzdlKe5rUWpzoZkVK6p0s9OIvGzLT0lrb0HC9iNDWT3JgpYDnk4Z2mFi6tTbq
- xKMtpVFRA6FjviGDRsfkfoURZI51nf2RSAk/A8BEDDZ7lgJHskYoklSpwyrXhkp9FHGMaYII
- m9EKuUTX9JPDG2FTthCBrdsgWYPdJQvM+zscq09vFMQ9Fykbx5N8z/oFEUy3ACyPqW2oyfvU
- CH5WDpWBG0s5BALp1gBJPytIAd/pY/5ZdNoi0Cx3+Z7jaBFEyYJdWy1hGddpkgnMjyOfLI7B
- CFrdecTZbR5upjNSDvQ7RG85SnpYJTIin+SAUazAeA2nS6gTZzumgtdw8XmVXZwdBfF+ICof
- 92UkbYcYNbzWO/GHgsNT1WnM4sa9lwCSWH8Fw1o/3bX1VVPEsnESOfxkNdu+gAF5S6+I6n3a
- ueeIlwJl5CpT5l8RpoZXEOVtXYn8zzOJ7oGZYINRV9Pf8qKGLf3Dft7zKBP832I3PQjeok7F
- yjt+9S+KgSFSHP3Pa4E7lsSdWhSlHYNdG/czhoUkSCN09C0rEK93wxACx3vtxPLjXu6RptBw
- 3dRq7n+mQChEB1am0BueV1JZaBboIL0AGlSJkm23kw==
-In-Reply-To: <20250428113052.38cf10da@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <tAJ0jyptJ0jLaRp9siDw8y2iw3S7GeuC05Uncum-qihlIKfCfEVhQbGNuTengQ0kWpnNp7OoTITxbEdf6nDTCw==@protonmail.internalid>
+ <20250428203943.51dd39d5@canb.auug.org.au> <877c344gmp.fsf@kernel.org> <20250429174451.42a368af@canb.auug.org.au>
+In-Reply-To: <20250429174451.42a368af@canb.auug.org.au>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 29 Apr 2025 17:33:29 +0200
+X-Gm-Features: ATxdqUF9NEpaCi69-Y7quv9-_Gz4JnLUBrCegSEmODyKPmFo2JEAcqd-gJA7Xxc
+Message-ID: <CANiq72kSReDcMU=eezmgsREL5+1FSnq9_VuEd-8AtU86W6UoNA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the rust-xarray tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andreas Hindborg <a.hindborg@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Tue, Apr 29, 2025 at 9:44=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> I have applied that from today and it all builds fine.  Thanks.
 
-On 28/04/2025 04:30, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Mon, 28 Apr 2025 11:22:00 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> On Mon, 28 Apr 2025 10:49:05 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>>
->>> Today's linux-next merge of the v4l-dvb tree got a conflict in:
->>>
->>>    drivers/media/i2c/ds90ub960.c
->>>
->>> between commits:
->>>
->>>    3ec29d51b546 ("media: i2c: ds90ub960: Protect alias_use_mask with a mutex")
->>>    818bd489f137 ("i2c: use client addresses directly in ATR interface")
->>>
->>> from the i2c tree and commits:
->>>
->>>    24868501a744 ("media: i2c: ds90ub9xx: Add err parameter to read/write funcs")
->>>    2ca499384e98 ("media: i2c: ds90ub960: Add RX port iteration support")
->>>
->>> from the v4l-dvb tree.
->>>
->>> I fixed it up (see below) and can carry the fix as necessary. This
->>> is now fixed as far as linux-next is concerned, but any non trivial
->>> conflicts should be mentioned to your upstream maintainer when your tree
->>> is submitted for merging.  You may also want to consider cooperating
->>> with the maintainer of the conflicting tree to minimise any particularly
->>> complex conflicts.
->>
->> The actual resolution is below ...
-> 
-> I hit the wrong key :-(   Resolution below.
+It seems a couple spaces got removed when applying, so `rustfmtcheck`
+fails in next-20250429.
 
-I came up with the same resolution, so looks correct to me.
+Would it be possible to run `make ..... rustfmt` as a merge/build step?
 
-  Tomi
+Thanks!
 
+Cheers,
+Miguel
 

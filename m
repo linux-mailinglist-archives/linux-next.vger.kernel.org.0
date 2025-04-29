@@ -1,98 +1,155 @@
-Return-Path: <linux-next+bounces-6437-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6438-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 576FBAA090C
-	for <lists+linux-next@lfdr.de>; Tue, 29 Apr 2025 12:59:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FCC6AA0AB4
+	for <lists+linux-next@lfdr.de>; Tue, 29 Apr 2025 13:51:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 963E81B65F81
-	for <lists+linux-next@lfdr.de>; Tue, 29 Apr 2025 10:58:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D854C3B25BD
+	for <lists+linux-next@lfdr.de>; Tue, 29 Apr 2025 11:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76AFD2BF3D1;
-	Tue, 29 Apr 2025 10:58:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 273AE2D9990;
+	Tue, 29 Apr 2025 11:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="mjt8FXMC"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="qO0gXZor"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991392C1094;
-	Tue, 29 Apr 2025 10:58:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4302D4B79;
+	Tue, 29 Apr 2025 11:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745924316; cv=none; b=SCwe1rE4SYvWdOq81/jAW7YndVLKEnctoRfe9r1avikuWVZ9Lz+DtO5R90ZTG5zoU16EeN8pYmuURft6Eqh1tRcnA9gpmqAnCoIS37/zf9ITcrQKe5Ckv5hqBtBb7h8xHKcrYZWiU1Lg+O2Cp3qkVIPRFP8gI2DaI3YSFIdGqZQ=
+	t=1745927192; cv=none; b=rtpK09U5Z6bvKta6uS3rA/QqrqNKc911jN5ex0yOq1X02fMoaSsYRZyXuYABTLMLxyDT69liUKko6RCpQ3NOMB1br7LxWq6k63YpdoZyeGhLk3AbUHB0ZG5NNh62SW/Yt6OZ2aLTbBfB2PEvFoFgYHJbok/b6ppjL/hzPv3PO+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745924316; c=relaxed/simple;
-	bh=sZtYlDyCf9LBR0wpfPows2BaUT53GO7cWkMRlRfjanI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GFJcznxo0edhr1m9P+yujoU53so+RJFX4xZB4OgWjm3CzJfQHw0hpXf0iRYyY8GcuMKBGH8J5SJJH6/EzoT08pOo32P7nSO6zMlZOl4RGLqLM1aHGY5T+G7XH3/dUWwh+6xU54ULoG3+7wNjwcyxExohf0WDvVDBMVCiLitxWQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=mjt8FXMC; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=+ZwTtt25w4JfIxZTiE/CfuZUa15Rpbc/gd4V1VkSgIU=; b=mjt8FXMCYVjHzw3AZvQMRj4jMj
-	FXipMu7G8qDmdwzIGHKTJ2+XlJOfMJA75kddgC93Bn2TqKjgXDAdFHcOhGIE5nXyBg2Uz1QDU9EeD
-	wcKVqTWGOkbfBw9nms6TQ1PhoD1Oi62W0tJAowKGxiMhP9/7F2FC4blMlJ+TvKrkqp3z8jOzMO7e4
-	iFqTok+/UniruKVR4ZCmHj4WQEhsPGNSiCE06GuL7DNjUkkhKZ/L+2lEbOQfPawDurb9k7Xij/Z/T
-	6aCthcOjcSvMHUfyb3yrLNiBe8E53Uzaz+MtRUrrlRfuCJZ1YVjrDxvzvLpOGSVFyuNvnM53c3VGq
-	fvEqQoHw==;
-Received: from 179-125-79-234-dinamico.pombonet.net.br ([179.125.79.234] helo=quatroqueijos)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1u9if5-000HM2-H3; Tue, 29 Apr 2025 12:58:19 +0200
-Date: Tue, 29 Apr 2025 07:58:13 -0300
-From: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the char-misc tree
-Message-ID: <aBCwxfksf8bCqPwz@quatroqueijos>
-References: <20250429155404.2b6fe5b1@canb.auug.org.au>
+	s=arc-20240116; t=1745927192; c=relaxed/simple;
+	bh=KTAtU4yj15U90cJiCtm0L7dTLDIMSAa27/+94PyZbI4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=usIChWZGM5XmQ9H/OrIZu5OsZVDHCPvjMPgNF6iEBfULPDDTrl+2gcYmTDLimWeWbMyBrcqnAJzCJcnetZ8hawZveCbGujNzxp9K1oKHKHUcoI3f1aUzSqJ3bmPObmt4LJoUhLEL7bhyspOMBlYXfEQR2QdkHxVWOCQPjLQeS78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=qO0gXZor; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from [192.168.88.20] (91-158-153-178.elisa-laajakaista.fi [91.158.153.178])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4782217D1;
+	Tue, 29 Apr 2025 13:46:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1745927182;
+	bh=KTAtU4yj15U90cJiCtm0L7dTLDIMSAa27/+94PyZbI4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=qO0gXZorPc1fkwF6rtaGqeEOcPizhAWJh3rjotlLKUkSU1WnL9AdBWwXuwiWDjxRk
+	 UVeFEXn5NUueE0yfBayxotSCDq9PSFHSnZe1eNLGerEQoqNyW0FLPOrqeYulQDfju3
+	 ac1L1b+hNo8XJOzed2UK3j/ve2GOc0wUvZloy84k=
+Message-ID: <9918a4e1-e3fa-4577-ac06-46efeab12507@ideasonboard.com>
+Date: Tue, 29 Apr 2025 14:46:24 +0300
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250429155404.2b6fe5b1@canb.auug.org.au>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: manual merge of the v4l-dvb tree with the i2c tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Wolfram Sang <wsa@the-dreams.de>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>,
+ Jai Luthra <jai.luthra@ideasonboard.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Romain Gantois <romain.gantois@bootlin.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>
+References: <20250428104905.2b54643f@canb.auug.org.au>
+ <20250428112200.6f5cf3bd@canb.auug.org.au>
+ <20250428113052.38cf10da@canb.auug.org.au>
+Content-Language: en-US
+From: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Autocrypt: addr=tomi.valkeinen@ideasonboard.com; keydata=
+ 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
+In-Reply-To: <20250428113052.38cf10da@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Apr 29, 2025 at 03:54:04PM +1000, Stephen Rothwell wrote:
+Hi,
+
+On 28/04/2025 04:30, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the char-misc tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
+> On Mon, 28 Apr 2025 11:22:00 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> On Mon, 28 Apr 2025 10:49:05 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>>
+>>> Today's linux-next merge of the v4l-dvb tree got a conflict in:
+>>>
+>>>    drivers/media/i2c/ds90ub960.c
+>>>
+>>> between commits:
+>>>
+>>>    3ec29d51b546 ("media: i2c: ds90ub960: Protect alias_use_mask with a mutex")
+>>>    818bd489f137 ("i2c: use client addresses directly in ATR interface")
+>>>
+>>> from the i2c tree and commits:
+>>>
+>>>    24868501a744 ("media: i2c: ds90ub9xx: Add err parameter to read/write funcs")
+>>>    2ca499384e98 ("media: i2c: ds90ub960: Add RX port iteration support")
+>>>
+>>> from the v4l-dvb tree.
+>>>
+>>> I fixed it up (see below) and can carry the fix as necessary. This
+>>> is now fixed as far as linux-next is concerned, but any non trivial
+>>> conflicts should be mentioned to your upstream maintainer when your tree
+>>> is submitted for merging.  You may also want to consider cooperating
+>>> with the maintainer of the conflicting tree to minimise any particularly
+>>> complex conflicts.
+>>
+>> The actual resolution is below ...
 > 
-> ERROR: modpost: "init_mknod" [drivers/misc/misc_minor_kunit.ko] undefined!
-> ERROR: modpost: "init_unlink" [drivers/misc/misc_minor_kunit.ko] undefined!
-> 
-> Caused by commit
-> 
->   45f0de4f8dc3 ("char: misc: add test cases")
-> 
-> I have used the char-misc tree from next-20250428 for today.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+> I hit the wrong key :-(   Resolution below.
 
-Hi, Stephen, thanks for bringing this up.
+I came up with the same resolution, so looks correct to me.
 
-I fixed a similar issue, because the functions calling init_mknod and
-init_unlink were not __init functions. But it seems those symbols are not
-exported, so I might need to restrict the test module to be built-in.
+  Tomi
 
-Let me test that and get back to you.
-
-Cascardo.
 

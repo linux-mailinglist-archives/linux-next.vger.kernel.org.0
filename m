@@ -1,102 +1,91 @@
-Return-Path: <linux-next+bounces-6443-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6444-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EE6FAA3BCF
-	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 00:56:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F16ADAA3BEE
+	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 01:09:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F69F7B3DF8
-	for <lists+linux-next@lfdr.de>; Tue, 29 Apr 2025 22:55:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA9AC3A6EC0
+	for <lists+linux-next@lfdr.de>; Tue, 29 Apr 2025 23:08:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E88B12BCF7E;
-	Tue, 29 Apr 2025 22:55:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35DD729E04F;
+	Tue, 29 Apr 2025 23:09:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PZIziWJo"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="icC5TCMl"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32B5C2BCF6F;
-	Tue, 29 Apr 2025 22:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9880913A3F7;
+	Tue, 29 Apr 2025 23:09:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745967350; cv=none; b=L5OHFRButuuK/a1oSE5hEk48eFOEwVNDt7bJIFQynkqP+J2+T/UAb6IfEWi0Z5KSoz4leXKveDFvpJXYw6k1/1SVo4IZp4G2nZSMBS0i2K5FGe9/BHDTPbD3WXU/J/OsbOVU53VIbsivJlqW4/8aqXuvM5kTUfQwozNQbV6PssY=
+	t=1745968151; cv=none; b=mrUDfzQZg4hh9PHeWs4Hge9fCyVI/Ii5JsOInVR9uTnqqpZx5vCk+3XHYTqtFStmbPcDk8+vHzhccHXD8nFx6ovjZMe4sHVj5GUN5J0qcXewgVvY+0puS4TRErA2SxiTSlX/FLfT1aY1p1RaxQY4CZevVFjdEj7YUgeRFS7wYvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745967350; c=relaxed/simple;
-	bh=cmDD9nZkKiuvoeAoctremY+s4vI9owYTLd0fLgS3suM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=T+yj7VpAUcJaiziz8VSNbdaUxo8ArV0U8xySMew0dMz7VADuEggHYHY6JKxYl8YUAjEe1D2Zf0+AwJGV1c7C90rkQZ6xNLXvW/fpHgACakxM0jTew+FzJc6CXC28o44XuNrVYsrx7eniLZa8aGpWp2d9pHJhoScTEUTd+AhpwpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=PZIziWJo; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1745967346;
-	bh=E7X0PsI1cNSqC+zIK0Zagf58PwciAh49hlXlAKQyDi8=;
-	h=Date:From:To:Cc:Subject:From;
-	b=PZIziWJoaELc3LYT/Elfz8M3eYnqzBFCnt5RLByyVpO6IEDt6ve34M8weC/g1AuSz
-	 UE2ZXPSbgpqVG1qVZ49OLXQlbgxpkcs7X/43yZe1jxYrdIa02wi4iMjNQVql5ty4Kh
-	 dO38czgzZu3k+4dfzjXgH/OU4+fGalv4fXT6bLlRsSxjGe2J9tClLjihzVhKESpMaD
-	 oIrL514f916dMIU3lQc484ihsrc7slLH4xHe2NiaJnAnU4vOFa1KtyrmEpvKXA5XaX
-	 zIWE/zFSV3L9tax3CrEvbNPfqZeTdh9ns0Qlsc+1sd4jmt6DNYhkvMexCH1zxrRfHD
-	 1PdBSD4zXBnWQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZnFz54kZqz4wcd;
-	Wed, 30 Apr 2025 08:55:45 +1000 (AEST)
-Date: Wed, 30 Apr 2025 08:55:44 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: gldrk <me@rarity.fan>, Kees Cook <kees@kernel.org>, Tamir Duberstein
- <tamird@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the pm tree
-Message-ID: <20250430085544.12800bdd@canb.auug.org.au>
+	s=arc-20240116; t=1745968151; c=relaxed/simple;
+	bh=dIRkIdP8Z44tW6zZHd8j3NQ9ye0+DYRrqgdRaCl21sc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dfkB5npuRmk6leLDqdxJcU6KWZKDI5mZsq3frvoqgDbHqybAtChMv7EBh3hfzyH5nZA11MRGZDI2CeQRJnfuSIS+i4APDID53fcMWMlWnZx4EFtGH/JEee2SNPLZBlFZs0Gtz/i2EfeeAyrLdDP/I8vku5pbSCyueh3I+JyDWH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=icC5TCMl; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=Zdw5sEyqpxaObOxyn99wwjf95ztYB6hERorXY44QetY=; b=icC5TCMlM1zR4wBE/pqMPoTOKR
+	nOxfidUdlKfWIlO3AuZhvdFjXs/uuK5Z7GNnzR5AEqmUsT4xTwTlr5uk5Z5+gqqfyS5Bs4x8UboZs
+	9H0qf9qjjTTLxAwfEKRzQjBpQG1a9vbuWftLWMfEWTq8Ospwsd7coOvRg2K77ozamK5W5LSQL94Vz
+	mcAXV9Ce7KXtGKFSwdo+WH80UlsEVFi6jwQVT7WR0ab22BNigIDKiiikaJ3Q/6K9+CYR++M/9kbC6
+	Jvn8tvVZI8y+1z0FcxFQZ+YxcwZLUlanruIW9+K/8vrZPviZRaM5MN/fcVIpxs8nTtXcUxWrcgZ5Z
+	WwDc2qtw==;
+Received: from [50.39.124.201] (helo=[192.168.254.17])
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1u9u4X-00000007qMN-2tia;
+	Tue, 29 Apr 2025 23:09:06 +0000
+Message-ID: <da98aa13-fc14-4bb5-9292-d784ad832a6e@infradead.org>
+Date: Tue, 29 Apr 2025 16:09:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/v50sv44HBJeM_HZahlnDO+m";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Apr 29 (drivers/gpu/drm/xe/xe_devcoredump.c)
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Matthew Brost <matthew.brost@intel.com>, intel-xe@lists.freedesktop.org,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+References: <20250429190259.1cc2d649@canb.auug.org.au>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250429190259.1cc2d649@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---Sig_/v50sv44HBJeM_HZahlnDO+m
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Commits
+On 4/29/25 2:02 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20250428:
+> 
 
-  9eef70365d71 ("ACPICA: Introduce ACPI_NONSTRING")
-  ac9334785c75 ("ACPICA: utilities: Fix overflow check in vsnprintf()")
-  5de20bc939b0 ("ACPICA: Apply pack(1) to union aml_resource")
+on i386:
 
-are missing a Signed-off-by from their authors.
+ERROR: modpost: "__moddi3" [drivers/gpu/drm/xe/xe.ko] undefined!
 
---=20
-Cheers,
-Stephen Rothwell
+due to
++       memcpy(buffer, ss->read.buffer +
++              (offset % XE_DEVCOREDUMP_CHUNK_MAX), byte_copied);
 
---Sig_/v50sv44HBJeM_HZahlnDO+m
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+in commit c4a2e5f865b7 ("drm/xe: Add devcoredump chunking").
 
------BEGIN PGP SIGNATURE-----
+-- 
+~Randy
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgRWPEACgkQAVBC80lX
-0GwCmwf9E0964nVOKWtxwGwQmhRA93tvzKUbToG+qw/k6yEvxP9Xdb9sJqzo2qyG
-tcs/eA0z3K2QoOjeYMOv8ydtYOD9bBofMyy1lyLbkCowJLTMbaqKiI03Y5kL/Mdq
-NlziiLV5TNUU6PuZyoLMdtBuTRt1qh8E3hGAmmtG5GYMB/cv+g9TlY6cF7EJa4ep
-Kzzm4T7z+N4lB19RA2A0KiXsOhR2vVfuBbENXqQEtvbC/AMKB1FI6xByvYAO9hPL
-rP+Ke89j+3XOawa7iXvoUnmswRV1A+uVmoOB7KyONxBuIAnXJyUuIRNit96Pi78d
-1KjRawJurOhfoq3fIAfDi6LKry61bg==
-=XzVW
------END PGP SIGNATURE-----
-
---Sig_/v50sv44HBJeM_HZahlnDO+m--
 

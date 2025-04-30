@@ -1,118 +1,187 @@
-Return-Path: <linux-next+bounces-6463-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6464-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A388AA493D
-	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 12:51:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7234AA4944
+	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 12:55:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C56D7173F88
-	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 10:51:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97FAB98040F
+	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 10:54:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58AF021ADB0;
-	Wed, 30 Apr 2025 10:51:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A0EB2343CF;
+	Wed, 30 Apr 2025 10:55:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="yIw+v3Wl"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IQMq9WfL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE8C140E34;
-	Wed, 30 Apr 2025 10:51:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE5AA23506F;
+	Wed, 30 Apr 2025 10:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746010298; cv=none; b=LURvirLYWQGvLcvpA03Gxf7TBwfnH74KXACOKx7Y+AK2HAmC5/+vO2VRRbazXWlWEhLcuTCQBcgU2OTg2bD6Zs7BBSrGhJ7OBX/Y+hwqdQWxJr529QjVgmpztVM9wb/29IqA42C2n2k8G2pO1qAnXgyGim+OuIijYMKC5PZgvFE=
+	t=1746010510; cv=none; b=ngGsHthm3ZTQbUL/BIq2Jr70S7NgPSelMdh9UIp1svGJQNzIth4mPtmjxMEEU0Ka7/1gQc8clOAIe7H7bjIQlHY8CPo+98j9X2ufUZrpXGIiXQQbhuoklxTdybA/sfYFZRryj9OPvirLA7HOcBSuRXXkJxSKvKZ+VC0hWLvFLTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746010298; c=relaxed/simple;
-	bh=V7iAPQqOmoF/O1OXq1Sbzh8qpXPEsRZ8ROMvqXj81CY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BHHcMfagB7WneUSCZQVmabWpoI/o8v8qazG9fKuXmHNRC5DIscf4YbghLiR99abXs6aAL3sy1saLdNPRQa4HEOfzft+9m8zyDGVSv5BTjAZjGOer+1LyGU3RZb0qEJvfOnVDRrqVLgYdy3VhSXB6V4rhBNTavQOdg5S9zb9TPro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=yIw+v3Wl; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 22A3D2E08E8D;
-	Wed, 30 Apr 2025 13:51:23 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1746010286;
-	bh=9wWeGTwck9cQKoXA+Cw29FQixCUyMz9GrplRuEXpa9M=;
-	h=Received:From:Subject:To;
-	b=yIw+v3Wliwt0Qub10E0ZqaZll5wbFrmzo8RBWeqFDEgdEc/4nw/cbyFPpRwfWzf1L
-	 JYmWSPLEud7QRbYRlb2khky7sUdEe/BNhGyni/oLncsMtZOCvmz+92uEh66oi/tbvW
-	 706sBoBMqYUweyJtH35X4KJ0R/TRUDQu1gokJrVg=
-Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.208.175) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f175.google.com
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f175.google.com with SMTP id
- 38308e7fff4ca-30c416cdcc0so70102751fa.2;
-        Wed, 30 Apr 2025 03:51:23 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCVmF9ise3yimweXd7wcXhZhjd8rXt33K4BH64MBiobJDq9UEkr8+RYpRF+0vpdfwkHoDNVHQWYM/C1y2k4=@vger.kernel.org,
- AJvYcCXjZjcktDJIOgghQWSIxeP4iN1U3m+6Ld3Yxw1Jl2xmkvuVBcFnxXDE3KcNUlW59OsZD4iIbEeZHnmj5Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyx+ph2xJIw/SlHilphvh7RGoH+H764vhH1CQnWMeN5GjrHubJg
-	EYZMVdEXJt3n2oMX7m7zbLt5skyNf2HkTNYeva8f5kf53TJjRzSda+ag364ObVpWQa2H1WhJECM
-	hlg5YfDt+Pju9G/y5oBkXXEi+y+w=
-X-Google-Smtp-Source: 
- AGHT+IGvRFag6/+N/X79gcDNxA2yVgOBaG5b1ppkZPLX4ucqtLNThMNUkYfMcEIH8do8abXCew3SECz5KE4DhOAQRms=
-X-Received: by 2002:a05:651c:19a1:b0:30b:bdb0:f09d with SMTP id
- 38308e7fff4ca-31ea45ca5bemr7927481fa.32.1746010282517; Wed, 30 Apr 2025
- 03:51:22 -0700 (PDT)
+	s=arc-20240116; t=1746010510; c=relaxed/simple;
+	bh=zxME15EebRVsIvX/fz64swPwb6igKI40zmDzxT7+w3c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bCEq8bLaA4afgt0iiZIspKhrqbbZ/l24ke9U6gIfJqRbH+pPaHcUnKpRD0TNGqRKHoIeeDSPaofVCU917JFdMJzJi3BQJuFDjlrwW61iqvJbxoFYhgDGSl5amZjVp4TE1HhmeuY3YAIIFxqL3t3FxT6m/CfWdORozw4pvVTIIUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IQMq9WfL; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1746010504;
+	bh=0MBspg0Ro0uJeWy92hfImYAIv5ZNp9nMlurNTZPV5WI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=IQMq9WfLLQ+aJ/iOEg9mmzEpGR7QOxmjjTF/BaSuesZ34tbXXYpE35eKbVQAXeq56
+	 GLmXoswRDPKb60ICcPKkAw1q5YhhA0NXIBzSaEfcVxowbVhHgTWBJRvOHE9hUGI7rP
+	 XM+hMoMKTebDqlO0E0+JI8ayTLzKPwymVsVdcH5ZM6JxVuweQmrxBd/1moucplo+JA
+	 NAioDmeeIPUnhUXw7K75VTdAl3763OUzvm/LwJYx/CrmlxM4bz3f+GJjKyxRn3xiy9
+	 MCHrpvWBLLieUF9SVfPjTQKmRVJYhqX1KsOZgOAva3c/TKgMMNeBRsNGL4NvjY7rsG
+	 CBdMWXAXFq/rg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZnYx367GVz4x8W;
+	Wed, 30 Apr 2025 20:55:03 +1000 (AEST)
+Date: Wed, 30 Apr 2025 20:55:03 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Cc: luogengkun@huaweicloud.com, Andrew Morton <akpm@linux-foundation.org>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>, LKML
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, dianders@chromium.org,
+ joel.granados@kernel.org, song@kernel.org, Thomas Gleixner
+ <tglx@linutronix.de>
+Subject: Re: [linux-next]Build Failure: kernel/watchdog.c:936:2: error: too
+ many arguments
+Message-ID: <20250430205503.4a316f48@canb.auug.org.au>
+In-Reply-To: <562a79d1-e8a4-4d8f-a576-47c017aadf93@linux.ibm.com>
+References: <339e2b3e-c7ee-418f-a84c-9c6360dc570b@linux.ibm.com>
+	<20250428084117.31215b8c@canb.auug.org.au>
+	<33aabaae-5789-4b67-bd06-06b79d03ea38@linux.ibm.com>
+	<562a79d1-e8a4-4d8f-a576-47c017aadf93@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250430204517.75d88615@canb.auug.org.au>
-In-Reply-To: <20250430204517.75d88615@canb.auug.org.au>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Wed, 30 Apr 2025 12:51:11 +0200
-X-Gmail-Original-Message-ID: 
- <CAGwozwEd3B3H4iKjn5YrLOzHpXajqsPVEVVmzHc=wEAz23AR4g@mail.gmail.com>
-X-Gm-Features: ATxdqUH0_kwmRpdLRoxQnxD51z3-ZdL5e_QuBRF0VLpQPuo1p8Vw9XfP0y7ApnM
-Message-ID: 
- <CAGwozwEd3B3H4iKjn5YrLOzHpXajqsPVEVVmzHc=wEAz23AR4g@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the drivers-x86 tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-PPP-Message-ID: 
- <174601028353.15909.12244521786516013348@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
+Content-Type: multipart/signed; boundary="Sig_/AozVZ7CvelvBtRXQa7Sc_o5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, 30 Apr 2025 at 12:45, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/AozVZ7CvelvBtRXQa7Sc_o5
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Hi Venkat,
+
+On Wed, 30 Apr 2025 11:57:12 +0530 Venkat Rao Bagalkote <venkat88@linux.ibm=
+.com> wrote:
 >
-> Hi all,
->
-> After merging the drivers-x86 tree, today's linux-next build (htmldocs)
-> produced this warning:
->
-> Documentation/hwmon/index.rst:19: WARNING: toctree contains reference to nonexisting document 'hwmon/oxpec' [toc.not_readable]
->
-> Introduced by commit
->
->   fe812896e55d ("platform/x86: oxpec: Move hwmon/oxp-sensors to platform/x86")
+> On 28/04/25 3:11 pm, Venkat Rao Bagalkote wrote:
+> >
+> > On 28/04/25 4:11 am, Stephen Rothwell wrote: =20
+> >>
+> >> On Sat, 26 Apr 2025 20:39:26 +0530 Venkat Rao Bagalkote >> <venkat88@l=
+inux.ibm.com> wrote: =20
+> >>> I am observing below build failure on IBM Power8 server with >>> linu=
+x-next-20250424 repo.
+> >>>
+> >>> This issue seems to be introduced by the below commit. After >>> reve=
+rting the below commit, kernel build is successful.
+> >>>
+> >>> Bad Commit: 6b07f9a0fa41 watchdog: fix watchdog may detect false >>> =
+positive of softlockup
+> >>>
+> >>> Note: To hit this issue, one should first resolve this [1] >>> <https=
+://lore.kernel.org/all/e8bf676e-7bf0-4896-b104-ac75e1b22d2e@linux.ibm.com/>
+> >>>
+> >>> Repo: >>> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-=
+next.git
+> >>> Branch: master
+> >>> GCC: 8.5.0 20210514
+> >>> ldd (GNU libc) 2.28
+> >>>
+> >>> Attached is the .config file.
+> >>>
+> >>> Errors:
+> >>>
+> >>> kernel/watchdog.c: In function 'lockup_detector_reconfigure':
+> >>> kernel/watchdog.c:936:2: error: too many arguments to function >>> '_=
+_lockup_detector_reconfigure'
+> >>> =C2=A0 =C2=A0 __lockup_detector_reconfigure(false);
+> >>> =C2=A0 =C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>> kernel/watchdog.c:926:13: note: declared here
+> >>> =C2=A0 =C2=A0static void __lockup_detector_reconfigure(void)
+> >>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>> kernel/watchdog.c: In function 'lockup_detector_setup':
+> >>> kernel/watchdog.c:940:2: error: too many arguments to function >>> '_=
+_lockup_detector_reconfigure'
+> >>> =C2=A0 =C2=A0 __lockup_detector_reconfigure(false);
+> >>> =C2=A0 =C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>> kernel/watchdog.c:926:13: note: declared here
+> >>> =C2=A0 =C2=A0static void __lockup_detector_reconfigure(void)
+> >>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>> kernel/watchdog.c: In function 'proc_watchdog_update':
+> >>> kernel/watchdog.c:962:2: error: too many arguments to function >>> '_=
+_lockup_detector_reconfigure'
+> >>> =C2=A0 =C2=A0 __lockup_detector_reconfigure(thresh_changed);
+> >>> =C2=A0 =C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>> kernel/watchdog.c:926:13: note: declared here
+> >>> =C2=A0 =C2=A0static void __lockup_detector_reconfigure(void)
+> >>> =C2=A0 =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >>>
+> >>> If you happen to fix this, please add below tag.
+> >>>
+> >>> Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com> =20
+> >> Yeah, the CONFIG_SOFTLOCKUP_DETECTOR unset version of
+> >> __lockup_detector_reconfigure() was not updated :-( =20
+> > =20
+>=20
+> Hello Stephen,
+>=20
+>=20
+> Will this be fixed, or from now on we will have to set the SOFTLOCKUP_DET=
+ECTOR always in the .config file.
+>=20
+>=20
+> Trying to understand the way forward.
 
-Hm,
-after removing the documentation I might have left an erroneous oxcec
-entry in the documentation file.
+Yeah, it is still not fixed today :-(  hopefully soon.
 
-In some previous versions of the series the hwmon doc file was renamed
-but in the final one it is removed. So this file should not be introduced.
+This is caused by commit
 
-Should I do a fixup commit?
+  4ab274088f03 ("watchdog: fix watchdog may detect false positive of softlo=
+ckup")
 
+in the mm-nonmm-unstable tree.  I have reverted it today.
 
-Antheas
+--=20
+Cheers,
+Stephen Rothwell
 
->
-> --
-> Cheers,
-> Stephen Rothwell
+--Sig_/AozVZ7CvelvBtRXQa7Sc_o5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgSAYcACgkQAVBC80lX
+0GyMJQf/a2ML4aSxdL3xgsweb58kulLB2+PpoWlAvezJiNw7yZBa5Uwd1ucVY+k1
+GTAJPNeOnkJ/RPCNXm6fdTDnwKOZ12B46kEIR0W1K63kqAcpXCDZUaxB3tDMw8m9
+/66QFt/njcmuk70d1pAm2IlgMWCr8aWasZEdXUv53zTLD0yd+MCf9GPHMAdyz45P
+6cKTaqxgK0+1QGye2aoRICxcUfsCmRVKur31idDVu2g+qhKFwcChGajC/v/meQFg
+pnnhrvhbHAwRGHqf1ApeMYhvrgRIq4PSahtF+fxvZrOz/4rvyogE0JxT61MQ+9jA
++9uCiecyrRRvReQJQH3BvIc99eSYzA==
+=5OVw
+-----END PGP SIGNATURE-----
+
+--Sig_/AozVZ7CvelvBtRXQa7Sc_o5--
 

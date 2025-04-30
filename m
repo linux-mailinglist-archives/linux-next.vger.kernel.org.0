@@ -1,97 +1,112 @@
-Return-Path: <linux-next+bounces-6470-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6471-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B5AAAA4E17
-	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 16:09:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48CEEAA51BE
+	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 18:37:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0C3E1C07B0D
-	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 14:09:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19A669A7C9F
+	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 16:36:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD26B25D8E7;
-	Wed, 30 Apr 2025 14:09:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9EA32609C8;
+	Wed, 30 Apr 2025 16:37:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kSlL9UnE"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="XWDxr3A8"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7F625B1FA;
-	Wed, 30 Apr 2025 14:09:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26D32DC768;
+	Wed, 30 Apr 2025 16:37:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746022153; cv=none; b=bANmVTYAuO8RnVXc/0P9ck0VBJur79hg8syCzxIkIsxB14Bvmgltqq8JtSXBZ/eGBv4O4815ixppaxXqDTo6U3AMvsMhBXgOamU4wupuEN8MrEODoFPWvfKERFc6U9yS7hLOi0ZAG16x2TPymuCmwmFPbmNjBJAaanKhjdPVx7g=
+	t=1746031024; cv=none; b=WskO5wwanB+Inm5bdsez0RBAIY6nbU2dlUg+b9XIdyeMmGcTggXsXyJNqw09VVVeUXcJiaZmCe+P0LQS38ElH6eMFzsS03RZC8X1kGkPusr++MDtPdGGVhZEpi8DAWQvVSyU2MwnFcqQ784ItERFSyCT4Gg3z2Cq9eMrLsYo+9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746022153; c=relaxed/simple;
-	bh=qSvClyEYovJAb3lRfwo32bMDUBI2+an2AsNphJP59TQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SnrDnQA3mh4d0FfqXq8MKRRkol2DS08R8kLzwoAO4myBu2+aeWK0W5D+++9jbNwJjo9tzf7N73LwWtPmDNees8MzVikAdC6y6gDCpUrS1I9sgrdZXi4piAWYVUYGSKcgFGTSSnZyHPs7yTIP0mKfdJrE9JSkZLZbHrw/MeJVydQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=kSlL9UnE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9461BC4CEE7;
-	Wed, 30 Apr 2025 14:09:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1746022153;
-	bh=qSvClyEYovJAb3lRfwo32bMDUBI2+an2AsNphJP59TQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kSlL9UnEuPGUwpf8KdEhoZaO01dnTbJApFDoWHhBh0iBjVJqkHqHBZFL2Z55Jbpu4
-	 LGNEnI4Hnm7EdpCgcjhTp7UV05dENMZhsL+z3Mdu75RmFCGtijfZB2lfEvqb4FhfGo
-	 ik0xTbqXEpUVxVFD3defXql4w734RNXzIAdk9VN4=
-Date: Wed, 30 Apr 2025 16:09:10 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: linux-next: build failure after merge of the char-misc tree
-Message-ID: <2025043040-hypocrite-coveted-cf9e@gregkh>
-References: <20250429155404.2b6fe5b1@canb.auug.org.au>
- <aBIUuIVJvdcUm9yz@quatroqueijos>
+	s=arc-20240116; t=1746031024; c=relaxed/simple;
+	bh=9geV/FjB9jog23wCw1W/StqQ0myuqQkS4rykbVNxuNY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YcM+otHB7ppoCerZxfrdV+t+vQPsA5Z9ZdLxBjQvgRbgPokMFNstukIU3X43uyyCSW4t3BI7J99yMs1Cy2bgkFzf2mW0HwqHVTSISKoC0gPpUCXOrYRhu1lCNY43mrqOotTltoGC+Hrtu0aJeO64/Tjaa5JhpW7xjSjwy3lukqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=XWDxr3A8; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Cc:To:Message-Id:Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Subject:Date:From:Sender:Reply-To:Content-ID:Content-Description
+	:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=u7nNGcfk3YS6f+K/g0woe4Rifi6nim8UCZ/niqDjLko=; b=XWDxr3A8XsgDAvBFCigLA/7cz3
+	w9RO3KlsJ4ye37LnsnEv68WCDp/3huEwve9yG43vzEUmOLexUixvFbgWt1HsCytHU9EQDE6t36VDA
+	UOo5F35Qq/JI1VSPlVJeJ3hruYY0XxDHX7KQ/ckv72u2WeJi9o8Dlqq1PbsscqOnXXM522skTIS16
+	NmMiRZwHWGRcX3MV72zN+juudrcMJAvUicdVcY4oShlJwoWoqGDpayx8N7fjeJ+RL+AaFQTdGE8jU
+	JRzkaaIITHZezOctm4HR1UOoHjO7Kn0schnWAvkTAd66SOhj09cS700j0Lm6V4OxRIvnNTz7I8oI4
+	00Cv9Arw==;
+Received: from 179-125-79-234-dinamico.pombonet.net.br ([179.125.79.234] helo=[192.168.67.187])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1uAAPT-000zis-3o; Wed, 30 Apr 2025 18:36:43 +0200
+From: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
+Date: Wed, 30 Apr 2025 13:36:28 -0300
+Subject: [PATCH] char: misc: make miscdevice unit test built-in only
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aBIUuIVJvdcUm9yz@quatroqueijos>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250430-misc-test-fixup-v1-1-6f39ed6c733d@igalia.com>
+X-B4-Tracking: v=1; b=H4sIAItREmgC/x2MywqAIBAAfyX23IKaHupXooPYWnvogVsRiP+ed
+ ByGmQxCiUlgaDIkelj42CvotoGw+n0h5LkyGGWcsp3CjSXgRXJh5Pc+sVfB+RhIz9pCrc5EVfz
+ HcSrlA9LHNjVhAAAA
+X-Change-ID: 20250430-misc-test-fixup-90c5afce1d14
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Arnd Bergmann <arnd@arndb.de>
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
+ Stephen Rothwell <sfr@canb.auug.org.au>, 
+ Andrew Morton <akpm@linux-foundation.org>, kernel-dev@igalia.com, 
+ kernel test robot <lkp@intel.com>, 
+ Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
+X-Mailer: b4 0.14.2
 
-On Wed, Apr 30, 2025 at 09:16:56AM -0300, Thadeu Lima de Souza Cascardo wrote:
-> On Tue, Apr 29, 2025 at 03:54:04PM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the char-misc tree, today's linux-next build (powerpc
-> > ppc64_defconfig) failed like this:
-> > 
-> > ERROR: modpost: "init_mknod" [drivers/misc/misc_minor_kunit.ko] undefined!
-> > ERROR: modpost: "init_unlink" [drivers/misc/misc_minor_kunit.ko] undefined!
-> > 
-> > Caused by commit
-> > 
-> >   45f0de4f8dc3 ("char: misc: add test cases")
-> > 
-> > I have used the char-misc tree from next-20250428 for today.
-> > 
-> > -- 
-> > Cheers,
-> > Stephen Rothwell
-> 
-> Hi, Greg.
-> 
-> I have a fix for this one. How stable is char-misc-next? Should I include a
-> Fixes: line referring to this commit ID? Or is there a chance
-> char-misc-next would be rebased or the commit dropped, making the ID
-> invalid?
+Since it uses __init symbols, it cannot be a module. Builds with
+CONFIG_TEST_MISC_MINOR=m will fail with:
 
-It does not get rebased, so send a fix, otherwise if you:
+ERROR: modpost: "init_mknod" [drivers/misc/misc_minor_kunit.ko] undefined!
+ERROR: modpost: "init_unlink" [drivers/misc/misc_minor_kunit.ko] undefined!
 
-> Or would you rather that I submit a v5?
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Closes: https://lore.kernel.org/linux-next/20250429155404.2b6fe5b1@canb.auug.org.au/
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202504160338.BjUL3Owb-lkp@intel.com/
+Fixes: 45f0de4f8dc3 ("char: misc: add test cases")
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
+---
+ lib/Kconfig.debug | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Do that then I need to do a revert, and then add you v5.  So a fix would
-be simplest, thanks!
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index f9051ab610d54358b21d61c141b737bb345b4cee..0117b852bd131b8a585dc02d8225e2e8c0740077 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2512,7 +2512,7 @@ config TEST_IDA
+ 	tristate "Perform selftest on IDA functions"
+ 
+ config TEST_MISC_MINOR
+-	tristate "miscdevice KUnit test" if !KUNIT_ALL_TESTS
++	bool "miscdevice KUnit test" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
+ 	default KUNIT_ALL_TESTS
+ 	help
 
-greg k-h
+---
+base-commit: 4f822ad5ee944ffafc21937a32dd055f1df5c28d
+change-id: 20250430-misc-test-fixup-90c5afce1d14
+
+Best regards,
+-- 
+Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
+
 

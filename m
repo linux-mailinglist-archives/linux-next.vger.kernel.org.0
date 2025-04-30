@@ -1,95 +1,164 @@
-Return-Path: <linux-next+bounces-6458-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6459-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AC4EAA473F
-	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 11:33:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0385BAA4835
+	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 12:23:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D24324E04F8
-	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 09:33:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D24979A45ED
+	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 10:23:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95F4B230BE8;
-	Wed, 30 Apr 2025 09:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D652238171;
+	Wed, 30 Apr 2025 10:23:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="xLV+PhFY"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Reb2KxWu"
 X-Original-To: linux-next@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6CA9215764;
-	Wed, 30 Apr 2025 09:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17DE236421;
+	Wed, 30 Apr 2025 10:23:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746005569; cv=none; b=ByuaTcFQDAsGvtPx7aEWrHLDiwiQZFPt2B85up86FDOhiAo1UAI3YAygT7a0msVFVa0RVNqF5OM4puXf/XsJbVIFqjVy1xoQi7rTauuc917GxzOjG+2UDW7E+U20nIgMm12NI3x9MSsh+tSjn6dWNp1ZfFE7s74PmX2lICdnLR4=
+	t=1746008606; cv=none; b=daHdtdugBtFf2WEsh8SJHQdO79PrUc1ieSiVRMSNsMmg6QkFnyZZ/P6h9yLVH9xKPJpIn+hvyx+m2jYX1HOW/wm10dVQ33Oa74VYiHlZHs0DBKmy/HjYQ69SMXvVITFv78ZHQxuruYXapwmu8K9qz0GKncUJW5gB5qCtzrDyrs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746005569; c=relaxed/simple;
-	bh=8WnOM9om3a8aY/8sdAN1c1P0u7wut4DH5PitZitNZ44=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=sdIlgjD7cxZIbEYf2BWapl/wIKHCnDrbJtDvn3ZCvXIegvXT3xfncUvKYAh9iDejW8lTU03lDfpj6DTTk7pwGEwWZO68ZTFOwGIVsvdUXPGh+PSOwxVgB9mfJqWtM8PL1oPRmMEf/bMXdspaMVSczgIg3jYvx3PP+NyVs1QeUb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=xLV+PhFY; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=10qVHHzbOA/Jbb/XIt7F7bPhOtPSgrjpSygZbUOdj7Q=;
-	t=1746005567; x=1747215167; b=xLV+PhFYGfYIjrQz+adaJm98qAKX3a/gTl/UJyIiES82bsG
-	C+twHC44QANjqy/43vztA+jZX2r8kt/Hi/CEL5zCwl1kmvjL1CBozr+uLq5ireRktFp7QSwiJTPbt
-	qf6tWNvqgOfJnJoM76Ip2OKIrLckmQoXLGqm/29JuQT1C0jrSTATvuynN4gLMnnOSNZXQHOBDnXi6
-	9OHPPH06iwcJz1SMGieTVYaYgcCJDnifnIa7N4IFfwRmp6Hdt+ZBjT+5ViX1FwTke9IB77mqeAApR
-	Mhut6gH4wM/3rTE4DCAMwPCnuV5J+j4eEVgYnAfzIQQXYv/8f1CGwc091V2KdMlA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.1)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1uA3nx-0000000DZ16-2krj;
-	Wed, 30 Apr 2025 11:32:37 +0200
-Message-ID: <2d3c5c2946e4356ba99edb4cca4fa205149c0356.camel@sipsolutions.net>
-Subject: Re: Introducing iwlwifi-next Tree
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: "Korenblit, Miriam Rachel" <miriam.rachel.korenblit@intel.com>, Wireless
-	 <linux-wireless@vger.kernel.org>, linux-next@vger.kernel.org
-Date: Wed, 30 Apr 2025 11:32:37 +0200
-In-Reply-To: <MW5PR11MB5810F9A009F45F1A58AC0E63A3832@MW5PR11MB5810.namprd11.prod.outlook.com>
-References: 
-	<MW5PR11MB5810F9A009F45F1A58AC0E63A3832@MW5PR11MB5810.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	s=arc-20240116; t=1746008606; c=relaxed/simple;
+	bh=PsytrW+F6fSslmgb1vPq1uiqbaYDXv5fielxCore7sc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=GhOhO+97MQoJOgaQKs2j5ynQHdH7BwFmkWb27fnV6nIm22/VBGUQl0mauB2JzpLjpFLjbNa6CjU+fYvNSr7UJHZX3tP2N5fo8X/gd7JL7gPBRmSj1+JC9M4u/KtK2Bkr/c8IMvQJS/WY06uO5t+5cQf7V1Ina6ueU0RNVs5QHTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Reb2KxWu; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1746008597;
+	bh=mOg+Eer5yYuAGIadjScLyl+ZuswDytsi2ugLrmc9rmQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Reb2KxWuR+E/qw5SJGQ3XJpurNgPKti21gDgphos6hGQPlf1rMl0Rx/6SLS6EYOcB
+	 NfeU9C+dEDV8NmdD3QhuPVh1hs4T20IfbRLWhv06AII2Ab5zcU2e0wta6fCQlHv4lk
+	 YFKzQf3nalAOz0QaGOD81sqQd+NJHZ0uxA4DWhPIl+fk+yq0JVQxucDGQ/XOSIKAqd
+	 bQBAGP6sUrxhiq6DPrT2y36OmmSpCOWHiofgV9sPKpTuY+5ei1Lnh+FJxxhKagt4xM
+	 WVOlry1p8HmBf+AgM8clrN5MLfc4Lhg4+dlDWgubtf1WI988/Wbqb1F6nGdcvig3W3
+	 71HqD0RSAqAIw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZnYDP60lCz4wnp;
+	Wed, 30 Apr 2025 20:23:16 +1000 (AEST)
+Date: Wed, 30 Apr 2025 20:23:15 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andreas Hindborg <a.hindborg@kernel.org>, Viresh Kumar
+ <viresh.kumar@linaro.org>
+Cc: Tamir Duberstein <tamird@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the rust-xarray tree
+Message-ID: <20250430202315.62bb1c1b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: multipart/signed; boundary="Sig_/h.XGZ+vmVX..EC58ryu1YHc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi Stephen,
+--Sig_/h.XGZ+vmVX..EC58ryu1YHc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 2025-04-30 at 08:52 +0000, Korenblit, Miriam Rachel wrote:
-> Hi,
->=20
-> This is to inform you that a dedicated tree, iwlwifi-next, will be used g=
-oing forward for development.
-> (instead of wireless/wireless-next)
->=20
-> The tree will have 2 branches:
-> 1. fixes =E2=80=93 only urgent fix that needs to go to wireless.
->      Patches for this branch should be sent with [PATCH iwlwifi-fixes] in=
- the subject
-> 2. next =E2=80=93 all the other patches.
->     Patches for this branch should be sent with [PATCH iwlwifi-next] in t=
-he subject
+Hi all,
 
-Could you please add this tree to linux-next?
+After merging the rust-xarray tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-https://git.kernel.org/pub/scm/linux/kernel/git/iwlwifi/iwlwifi-next.git/
+rror[E0308]: mismatched types
+   --> rust/kernel/cpufreq.rs:633:37
+    |
+633 |             Some(unsafe { T::borrow(self.as_ref().driver_data) })
+    |                           --------- ^^^^^^^^^^^^^^^^^^^^^^^^^ expecte=
+d `*mut <... as ForeignOwnable>::PointedTo`, found `*mut c_void`
+    |                           |
+    |                           arguments to this function are incorrect
+    |
+    =3D note: expected raw pointer `*mut <T as ForeignOwnable>::PointedTo`
+               found raw pointer `*mut c_void`
+note: associated function defined here
+   --> rust/kernel/types.rs:98:15
+    |
+98  |     unsafe fn borrow<'a>(ptr: *mut Self::PointedTo) -> Self::Borrowed=
+<'a>;
+    |               ^^^^^^
+help: consider constraining the associated type `<T as ForeignOwnable>::Poi=
+ntedTo` to `c_void`
+    |
+628 |     pub fn data<T: ForeignOwnable<PointedTo =3D c_void>>(&mut self) -=
+> Option<<T>::Borrowed<'_>> {
+    |                                  ++++++++++++++++++++
 
-with "next" and "fixes" branches.
+error[E0308]: mismatched types
+   --> rust/kernel/cpufreq.rs:660:62
+    |
+660 |                 unsafe { <T as ForeignOwnable>::from_foreign(self.as_=
+ref().driver_data) },
+    |                          ----------------------------------- ^^^^^^^^=
+^^^^^^^^^^^^^^^^^ expected `*mut <... as ForeignOwnable>::PointedTo`, found=
+ `*mut c_void`
+    |                          |
+    |                          arguments to this function are incorrect
+    |
+    =3D note: expected raw pointer `*mut <T as ForeignOwnable>::PointedTo`
+               found raw pointer `*mut c_void`
+note: associated function defined here
+   --> rust/kernel/types.rs:63:15
+    |
+63  |     unsafe fn from_foreign(ptr: *mut Self::PointedTo) -> Self;
+    |               ^^^^^^^^^^^^
+help: consider constraining the associated type `<T as ForeignOwnable>::Poi=
+ntedTo` to `c_void`
+    |
+653 |     fn clear_data<T: ForeignOwnable<PointedTo =3D c_void>>(&mut self)=
+ -> Option<T> {
+    |                                    ++++++++++++++++++++
 
-Thanks,
-johannes
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0308`.
+
+Caused by commit
+
+  a68f46e83747 ("rust: types: add `ForeignOwnable::PointedTo`")
+
+interacting with commit
+
+  254df142ab42 ("rust: cpufreq: Add initial abstractions for cpufreq framew=
+ork")
+
+from the cpufreq-arm tree.
+
+I don't know how to fix this up, so I have dropped the rust-xarray tree
+for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/h.XGZ+vmVX..EC58ryu1YHc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgR+hMACgkQAVBC80lX
+0GySRAf/WW7rzTeHA3l0ZAB5B1EQrNsW2tSajnni4V8fSJjxEkabNXSLMeav92cP
+gbW72/VJPXipxV+6QvCdvJiIGje3PIYuI8oqI6CeofVKr19pF3U6WXUwr5rp8ibK
+UwX4FbFDwYmLFYld6RAJsZdh9jnNPSpjmxOnjiHyZtUJhjqsY6aSkXhCXIEItoct
+vRredz7CpFlViN0BsUU6FlKKJshxROwtstf/UFu3oYfFT4rdiMHRslnyeIEvmvp/
+lsBpj7VLn+zXOCKd6VfUB6MliKRvGANinD/7ngBv/+f5XQmvkt7tUh6N9T/GPW+T
+13GVxKkKcSaHFLHsd+keEqspyXTkwg==
+=cGNP
+-----END PGP SIGNATURE-----
+
+--Sig_/h.XGZ+vmVX..EC58ryu1YHc--
 

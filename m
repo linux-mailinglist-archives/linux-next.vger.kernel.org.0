@@ -1,134 +1,144 @@
-Return-Path: <linux-next+bounces-6448-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6449-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9456AA4119
-	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 04:44:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55AA2AA41CE
+	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 06:23:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E29E9A554E
-	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 02:44:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE3671C018B1
+	for <lists+linux-next@lfdr.de>; Wed, 30 Apr 2025 04:23:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AF2D1C7005;
-	Wed, 30 Apr 2025 02:44:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A681129CE6;
+	Wed, 30 Apr 2025 04:23:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="C7naWY54"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="qIfk/1e2"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1601C5F10;
-	Wed, 30 Apr 2025 02:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9753017BCE;
+	Wed, 30 Apr 2025 04:23:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745981081; cv=none; b=ITZEybG8DUm+HqCRUvGnPY/zJ8Z2bRwDoUs3Qx6w0eIdvFkY+93aTiMfD1jFLeJ5jWTS6CCkCxT1H2sk6EmB/OU/DqUPqd6UXVUSkJ+kJuYseDUDivcvx13RpGG938f0wictQQRtzN2yj/bhWSeJuCWKF0Z1G1H/SX8m54hjAIg=
+	t=1745987020; cv=none; b=ZvmttkSeefhIuDNu1wYsUrfJ6qWgC0aE9eeCKlPhkBIfwduASnWh/R+eFcSMO64vce7QfblGa7HhWaxMvgcyCvdWnImY/C0xbKnfIoaTbbvgAA1gvDQJFpt5gKA7kczKtKYHL1mxjhWLN87NW/KzveKOpVE6nudurBarhYm9p9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745981081; c=relaxed/simple;
-	bh=J+J35anbmnrnMyVjMxvi3WhdrFRIMNrtrGsd33Rriz4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=XfAf3KZRNpKdJR1jhV7VIvVrAaoofkdG30KxFgu3QyN8r9aimTtFcxGrMz4RwCScf9+bDL0UjK9jWylEXoDFKhwh1jo77G5DY1qVwBHJmFcJ8z+nyYKP60Y6KFnfQQ4GeIOaPgKPmznzGPEFzsfCbiWQfF7wGpcjOKKKG9b/b2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=C7naWY54; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1745987020; c=relaxed/simple;
+	bh=O98FWOskzEjhv8AsCbD58NyRKD6v9QMlVURgUwTo2+U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=B/0QQZaZFA8FRrlLg+d8miuxrMWuUpZCTmtZhEPwWTP9j5zqNXzEONUHdm0zTUrDUNZu5uqWTI5R1ODZ0yKVoF/2LnC0DPngZKYlws6TfwoqeXZNh/4ey+wBprnhA02+5aPuhG580qv01LgV9DStx0WVYTL75OxyLLpWERpn4Bo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=qIfk/1e2; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1745981075;
-	bh=3wqzx6kzxn2d3pLgU76Ab9T5xbNZ4uAOQwc26w5fXzE=;
+	s=202503; t=1745987012;
+	bh=ZSeiAmQnv3iJLnl+NkZtlIkDMhPpBo8ssW9VuZMAzZE=;
 	h=Date:From:To:Cc:Subject:From;
-	b=C7naWY54bCQ0idAKSZPQDjdJbCmS4nVLoPK1o1s7l6v/9L37QOcUWD3GsLp25GLAA
-	 1sZ28go6O3OvFAsjo2ZdhshC5OiL+jNLSIa4We9YT4sUi09cxZbHeuO8pOhNpUXCqD
-	 YOJtrm59XfGCUdOzGZfrUyw+Y6OsOzggawHHJm0fBILuYAQjGwAEwC3E0WA7cYmHew
-	 Vv/hszy7PujAZR+vFWhuy1f8RcoP03T1VQykFUqfo0SM2FNI+vu0Ws+OxyAk8tJYW2
-	 +IQWZ6h3REkVbjV8YwyVJFWv9NYHb9MU5y3iAB7OP9MPMsrHf9EVU9kVhzs11ReN6g
-	 lexF1is3mWz4A==
+	b=qIfk/1e2Zmo+qcAiK2i0qxlKrlv8pjASU9VSaBpRwBWPTl7NZNIlG/UV/5bt2t9+Z
+	 PIC1F2nhNzm9BB0YWxMfWhHlH8f06KJWHdC5dCMWr0fCKm0+BomUEXpwvkjRBQyYc5
+	 C56pw9YSUOiFqfxJ6xS8+xzfYCrMRBy8dGBhPelBcnyZXkb/GqX/8e7mOd2+RsZwXJ
+	 xRTNmly+DJjYO7K6jl1kT5eVWZ1X/k1uWQSjSnnV6G5zwa44MsF5aLc7BwjfoIWQfY
+	 TlVXpfd5W4CmioGDzzU+FDVUWHz0EMwkasAnV8T3IEmFh4H20WPRt7A2lha6hKHrJM
+	 9ivXFgE19rWUw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZnM361fPkz4wcr;
-	Wed, 30 Apr 2025 12:44:34 +1000 (AEST)
-Date: Wed, 30 Apr 2025 12:44:33 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZnPFJ2J00z4wvb;
+	Wed, 30 Apr 2025 14:23:32 +1000 (AEST)
+Date: Wed, 30 Apr 2025 14:23:31 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
- <johan.hedberg@gmail.com>, David Miller <davem@davemloft.net>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
+To: Mimi Zohar <zohar@linux.vnet.ibm.com>, Dmitry Kasatkin
+ <dmitry.kasatkin@gmail.com>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Eric Biggers <ebiggers@google.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the bluetooth tree
-Message-ID: <20250430124433.6b432a10@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, Steven Chen
+ <chenste@linux.microsoft.com>, Tushar Sugandhi
+ <tusharsu@linux.microsoft.com>
+Subject: linux-next: manual merge of the integrity tree with the
+ mm-nonmm-unstable tree
+Message-ID: <20250430142331.468074f1@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+=FxjpuO3HXJl_P+.ZmgCqM";
+Content-Type: multipart/signed; boundary="Sig_/3ZSz2RhNa+53.6kQ_tTaDlE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/+=FxjpuO3HXJl_P+.ZmgCqM
+--Sig_/3ZSz2RhNa+53.6kQ_tTaDlE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in the net tree as different commits
-(but the same patches):
+Today's linux-next merge of the integrity tree got a conflict in:
 
-  60b82ca5d6bc ("Bluetooth: L2CAP: copy RX timestamp to new fragments")
-  ac1f44f12090 ("Bluetooth: btintel_pcie: Add additional to checks to clear=
- TX/RX paths")
-  e0af21b30c82 ("Bluetooth: btmtksdio: Do close if SDIO card removed withou=
-t close")
-  04c96a7ace25 ("Bluetooth: btmtksdio: Check function enabled before doing =
-close")
-  a9d1f7313df5 ("Bluetooth: btusb: avoid NULL pointer dereference in skb_de=
-queue()")
-  16b4f97defef ("Bluetooth: btintel_pcie: Avoid redundant buffer allocation=
-")
-  c3b6a7cfa98c ("Bluetooth: hci_conn: Fix not setting timeout for BIG Creat=
-e Sync")
-  58ddd115fe06 ("Bluetooth: hci_conn: Fix not setting conn_timeout for Broa=
-dcast Receiver")
+  kernel/kexec_file.c
 
-These are commits
+between commit:
 
-  3908feb1bd7f ("Bluetooth: L2CAP: copy RX timestamp to new fragments")
-  1c7664957e4e ("Bluetooth: btintel_pcie: Add additional to checks to clear=
- TX/RX paths")
-  0b6d58bc6ea8 ("Bluetooth: btmtksdio: Do close if SDIO card removed withou=
-t close")
-  07e90048e356 ("Bluetooth: btmtksdio: Check function enabled before doing =
-close")
-  0317b033abcd ("Bluetooth: btusb: avoid NULL pointer dereference in skb_de=
-queue()")
-  d1af1f02ef86 ("Bluetooth: btintel_pcie: Avoid redundant buffer allocation=
-")
-  024421cf3992 ("Bluetooth: hci_conn: Fix not setting timeout for BIG Creat=
-e Sync")
-  6d0417e4e1cf ("Bluetooth: hci_conn: Fix not setting conn_timeout for Broa=
-dcast Receiver")
+  912e32afb858 ("kexec_file: use SHA-256 library API instead of crypto_shas=
+h API")
 
-in the net tree.
+from the mm-nonmm-unstable tree and commit:
+
+  9ee8888a80fe ("ima: kexec: skip IMA segment validation after kexec soft r=
+eboot")
+
+from the integrity tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+=FxjpuO3HXJl_P+.ZmgCqM
+diff --cc kernel/kexec_file.c
+index ac915eabb901,0adb645072aa..000000000000
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@@ -762,7 -800,17 +786,14 @@@ static int kexec_calculate_store_digest
+  		if (ksegment->kbuf =3D=3D pi->purgatory_buf)
+  			continue;
+ =20
++ 		/*
++ 		 * Skip the segment if ima_segment_index is set and matches
++ 		 * the current index
++ 		 */
++ 		if (check_ima_segment_index(image, i))
++ 			continue;
++=20
+ -		ret =3D crypto_shash_update(desc, ksegment->kbuf,
+ -					  ksegment->bufsz);
+ -		if (ret)
+ -			break;
+ +		sha256_update(&state, ksegment->kbuf, ksegment->bufsz);
+ =20
+  		/*
+  		 * Assume rest of the buffer is filled with zero and
+
+--Sig_/3ZSz2RhNa+53.6kQ_tTaDlE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgRjpEACgkQAVBC80lX
-0Gy81wf+N2Mlxf8oHs+Tkwv2gbJ6l12mOduR7SubPnIwWDDYknVR9zBipr5nd951
-Sl/KHPgtGq4g6UkWUpE9ttc8Y1BzZlufu6JjOdG4XnkZYyZC8gv5BkqKp2T32CzK
-FDEx91I+7WjH+m05HlG5GcTXMJufFUtbQKSkRLhgth5MrnbgOP90GDknGn1tZzo0
-cWZvcsyQZ9YySZNVMXAENYTjiOZ5PUm9EJ0ckPOvAJUPu+rDoJTHRhi5tSK3deei
-LbiKE4sg/6Ao8NngWIE90ZNbxTYnoFLammxhSIqdodX3AlXjmsMtiagPwmaSAfGp
-/a+u7eNoJN/trgNiWvwgFsAFPoX/9Q==
-=0301
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgRpcMACgkQAVBC80lX
+0GyH0ggAoV8adaVX1n15ldi8UwqpTLfaa/UmDJXr29jyr1tkIQifHAqaxvPNrr7S
+wK2MnyyrvBdBllmza9piChbH9oSkdTVtFf39PGg2X3zfkYiQT/xkHgalt3ZrCL7c
+oLHaCMo7smA+KK3PSFUFStq5kPLeHiXrCibpM4B2C9ePbmEwrrZgANzVgzVofyN/
+zPuXiuh5JzDguDqikVj50WZ6ec9ojHqAwCldmnw1uJVyBXaxQ8D07QYcnBiPuFVE
+31qH81o5EPD4SB5nHPy9/40b/uRSckxmg2ezxTgI8v3bQkAyNmHx9vdjEN4tfIgQ
+X6mCpr06xj+I2VB/GKnagSwUhXHaxw==
+=QEfJ
 -----END PGP SIGNATURE-----
 
---Sig_/+=FxjpuO3HXJl_P+.ZmgCqM--
+--Sig_/3ZSz2RhNa+53.6kQ_tTaDlE--
 

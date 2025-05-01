@@ -1,153 +1,118 @@
-Return-Path: <linux-next+bounces-6484-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6485-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97A27AA5C25
-	for <lists+linux-next@lfdr.de>; Thu,  1 May 2025 10:30:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC4FEAA5C26
+	for <lists+linux-next@lfdr.de>; Thu,  1 May 2025 10:32:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 471427ABDC2
-	for <lists+linux-next@lfdr.de>; Thu,  1 May 2025 08:29:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8419E1B650AF
+	for <lists+linux-next@lfdr.de>; Thu,  1 May 2025 08:32:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E9DC19E98B;
-	Thu,  1 May 2025 08:30:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9CA61DE3A5;
+	Thu,  1 May 2025 08:32:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Kcf5ZiFJ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kxH5wg7Z"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2711E9B1F;
-	Thu,  1 May 2025 08:30:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B74B1411DE;
+	Thu,  1 May 2025 08:32:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746088207; cv=none; b=VW15QuxtptgkPNb9GDdCCqQ0Si9S4t/L9W9bjRwoqCVIHuIpYaS8uwSeNgc39RJJTmObFzOPNh3yXQWl6spYdwEElBzwbpM2foBaalFBNNMzT869YzOMwytbY/GP5Wv0t8IoxEX5HuhFi+XyY+xyEbZSP4BECgXPoF5BtaKACXM=
+	t=1746088335; cv=none; b=iMUDyKdi24p6upI653Mau2E45TXeVxfoKtaxqVHktvwGuezlxKBHHaD44KdozYuDuO4UAmlr20cZ+KZEE7m5IzB18/PAMMk9DHjZOPBZneRPbWissHU+OPViRZQxX+BqFDMpx7H/zuWT3gCXHUq8sDxOVUxWYZukTOy9TsAyjxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746088207; c=relaxed/simple;
-	bh=R6eIpa2lZf15T2N49GWLTpKxSvaPSgfPxYQcLuZpIIE=;
+	s=arc-20240116; t=1746088335; c=relaxed/simple;
+	bh=wAH+GD/swgqBgMz4hNB4V9u4CWycVBO2eNNzQwowcng=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tq3bI7nzMMPAXrUWn4pxuaK3BYwRKY9FsdHjeQ/MDgBYtFm5DlItmlEnZgrfYPe13G6FHFCM3y/N7Ku6rRHJM1dzJaklRYwlV92PQ1FlG9nkVD+IJ4SyOVC++Cx++HLiqaR65+kO6g5EC/wUloriwLJgED4q0GIiohAe9/Z6vFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Kcf5ZiFJ; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=FCh9P1FsKrGO7uqHEA3ywGc1RQM9vjK0bfUrJigUkbn9BzbomCwcOiHp61d71bW9QRiBwVABgPtI5U3Rzlx/fHSMvzLaeEsL9F8pmflh/0Ez3C8C65VSrtuBR7LWztb8xw4WLAyo/ds5/zw0Si68SkCh0MRFacvA43xJwYIjtJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=kxH5wg7Z; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1746088201;
-	bh=kvA22Nl85FWKJNReOuWUe6xaTzhaLKDDqM5V++hK/3c=;
+	s=202503; t=1746088331;
+	bh=4WePGuwQi1sTWSiKaivarIWJT3Pd/qAmO5EFwFWhXpY=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Kcf5ZiFJUcj5UqWKzpD2pmySYQ9Gvou0zqkQt2A4JXoimyoNYqKxB6ip6ZJXJJHDy
-	 CLmzdkIwxL91Sz9eY+yhAHckpB13k3Ag50jI+nMnt4k6UiE7DKwqQ3VoUNMz0woAe4
-	 HXpv6p2iKXlCmq3OpJhC9yAAiA1Imxk8WA3P3qs3MKPTWGnft1PH1CNshuHMWqUwWT
-	 EEnYrKXA8tZ6smYwO22HQS/ZmoZoMa0XQ9GqI+XBHiVowkEgoJRZlzumK+tk1AfpMq
-	 ZJRfsTY/aQrOyTHfichG27Mwe36ANYeAJbF1nl3w2VxT+wvrYCKij1mmN7OfatOc8g
-	 CsIWnY/wDB+UA==
+	b=kxH5wg7ZrEOH//tO6x7aYiqht2kaJpsuXZtC1eX/Fypsf/tbB0CahYOm6/+kMGwTH
+	 QSUpGPx+vLgqVjPJbPqYNdoadVCV7rqrQN5N6sdSe8EvFT+/0NyhdlDM3o29cfznXR
+	 i6D1DjV2gbq1bm7fiy5LD2HwKWBUOVGM/srJ861Y0XV9ZwMJY/ciijq+3IcUpMUtHp
+	 GS0mRBa1d7MCO4PCN7e3m/+LfxFgzn/dbUbGTx6K/dUY2TAlpcg7U2oDDzFvZeCeWs
+	 ZQYP9U2aLjPGvXTLZBj68xQLQcHUqmUPbI6xK5Z2nb3qUAmZqbVxGGklskCGwxBtmT
+	 JTCg8dvs9C9sg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zp6gD6qdwz4wcj;
-	Thu,  1 May 2025 18:30:00 +1000 (AEST)
-Date: Thu, 1 May 2025 18:29:58 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zp6jl2X6yz4x07;
+	Thu,  1 May 2025 18:32:11 +1000 (AEST)
+Date: Thu, 1 May 2025 18:32:10 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Andreas Hindborg <a.hindborg@kernel.org>, Tamir Duberstein
- <tamird@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Andreas Hindborg <a.hindborg@kernel.org>, Andrew Morton
+ <akpm@linux-foundation.org>, Danilo Krummrich <dakr@kernel.org>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the rust-xarray tree
-Message-ID: <20250501182958.110abc0b@canb.auug.org.au>
-In-Reply-To: <20250430104234.dmwnn5ih232kfk4z@vireshk-i7>
-References: <20250430202315.62bb1c1b@canb.auug.org.au>
-	<20250430104234.dmwnn5ih232kfk4z@vireshk-i7>
+Message-ID: <20250501183210.639f9abf@canb.auug.org.au>
+In-Reply-To: <CANiq72kSReDcMU=eezmgsREL5+1FSnq9_VuEd-8AtU86W6UoNA@mail.gmail.com>
+References: <tAJ0jyptJ0jLaRp9siDw8y2iw3S7GeuC05Uncum-qihlIKfCfEVhQbGNuTengQ0kWpnNp7OoTITxbEdf6nDTCw==@protonmail.internalid>
+	<20250428203943.51dd39d5@canb.auug.org.au>
+	<877c344gmp.fsf@kernel.org>
+	<20250429174451.42a368af@canb.auug.org.au>
+	<CANiq72kSReDcMU=eezmgsREL5+1FSnq9_VuEd-8AtU86W6UoNA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vzDzLMEci=oePFLw=JnP7qC";
+Content-Type: multipart/signed; boundary="Sig_/HE9EWZrJ7Q4ZMJR=OkxM7c+";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/vzDzLMEci=oePFLw=JnP7qC
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/HE9EWZrJ7Q4ZMJR=OkxM7c+
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi Viresh,
+Hi Miguel,
 
-On Wed, 30 Apr 2025 16:12:34 +0530 Viresh Kumar <viresh.kumar@linaro.org> w=
-rote:
+On Tue, 29 Apr 2025 17:33:29 +0200 Miguel Ojeda <miguel.ojeda.sandonis@gmai=
+l.com> wrote:
 >
-> On 30-04-25, 20:23, Stephen Rothwell wrote:
-> > Caused by commit
-> >=20
-> >   a68f46e83747 ("rust: types: add `ForeignOwnable::PointedTo`")
-> >=20
-> > interacting with commit
-> >=20
-> >   254df142ab42 ("rust: cpufreq: Add initial abstractions for cpufreq fr=
-amework")
-> >=20
-> > from the cpufreq-arm tree.
-> >=20
-> > I don't know how to fix this up, so I have dropped the rust-xarray tree
-> > for today. =20
+> On Tue, Apr 29, 2025 at 9:44=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.o=
+rg.au> wrote:
+> >
+> > I have applied that from today and it all builds fine.  Thanks. =20
 >=20
-> Probably this:
+> It seems a couple spaces got removed when applying, so `rustfmtcheck`
+> fails in next-20250429.
 >=20
-> diff --git a/rust/kernel/cpufreq.rs b/rust/kernel/cpufreq.rs
-> index 49246e50f67e..82d20b999e6c 100644
-> --- a/rust/kernel/cpufreq.rs
-> +++ b/rust/kernel/cpufreq.rs
-> @@ -630,7 +630,7 @@ pub fn data<T: ForeignOwnable>(&mut self) -> Option<<=
-T>::Borrowed<'_>> {
->              None
->          } else {
->              // SAFETY: The data is earlier set from [`set_data`].
-> -            Some(unsafe { T::borrow(self.as_ref().driver_data) })
-> +            Some(unsafe { T::borrow(self.as_ref().driver_data.cast()) })
->          }
->      }
->=20
-> @@ -657,7 +657,7 @@ fn clear_data<T: ForeignOwnable>(&mut self) -> Option=
-<T> {
->              let data =3D Some(
->                  // SAFETY: The data is earlier set by us from [`set_data=
-`]. It is safe to take
->                  // back the ownership of the data from the foreign inter=
-face.
-> -                unsafe { <T as ForeignOwnable>::from_foreign(self.as_ref=
-().driver_data) },
-> +                unsafe { <T as ForeignOwnable>::from_foreign(self.as_ref=
-().driver_data.cast()) },
->              );
->              self.as_mut_ref().driver_data =3D ptr::null_mut();
->              data
->=20
->=20
-> Andreas, is your xarray-next branch immmutable ? I can rebase over the
-> change then.
+> Would it be possible to run `make ..... rustfmt` as a merge/build step?
 
-I have applied that as a merge fix up for the rust-xarray tree merge
-from today.  (This time running "make rustftmcheck" :-))
+I will try to remember to run 'make rustfmtcheck' whenever I do a merge
+fix up on rust code.
+
+(hmmm, no leading tab characters - who knew :-))
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/vzDzLMEci=oePFLw=JnP7qC
+--Sig_/HE9EWZrJ7Q4ZMJR=OkxM7c+
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgTMQcACgkQAVBC80lX
-0GzgxwgAkSp5GY7NLlWJrtiNANxA9ea0VEVBmRDu7OeBJ277gnOlathV299Z2Y0Z
-m2oIB74SgSxyS64zI8IbdKostQp5YTI2n5CG5VsmEonGZpRGUzO41pX8baLna/Rp
-Jo+cm5Sf7Z6V8ZZGdhPi8VhVZCCLlAOyXGObLKXWGfALuphiX60U7bvumG9rng8B
-Z2esIwKq91NjJi81qTIwMGGFbj260c3vpA8wcP50V92GJ7J8lKSfv5OZ1VzSKdaP
-Utws2OsFCvHlPX0e9N2WjFR4r/BSKEsZTotZIbfSPyGNrwF3wUn1w1hkEp/vNSyt
-9Eikspib4XQSO9qyZ3NCaXcC1s32iA==
-=Z4RL
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgTMYoACgkQAVBC80lX
+0Gy6xwgAm8JBkI2eAKcLpAc/hyatkot5sl0StzG3o6h8Jeem/ECBp1VLg6Xj7Mz4
+uaE4AtvAEGYJAXbWDb3Kovitei5GmE57Y09oOKifTqkfKYpRn88CaJbettPLqfyN
+LyZdqreZ6IcJHmsO3+2SUVo7tGmDDyMPPaI7yHcBSI2oZfgUPjvDg7JEJ10g2L0f
+gjJwZes9igiRMi2c1IWv0w7akhgjw2gUt8B1HbgUV5dTG7n3T0SjSSMAIkeiH5X9
+8Aj5cCUoAWNbEsC7K2GgURpWDWTTc0E886/S/WhNxDo9AaTQA0CoKvq1o/DEGU/q
+1v0kTYJTjdgjvWBbK/K2QucULe58QA==
+=rtm9
 -----END PGP SIGNATURE-----
 
---Sig_/vzDzLMEci=oePFLw=JnP7qC--
+--Sig_/HE9EWZrJ7Q4ZMJR=OkxM7c+--
 

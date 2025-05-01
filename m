@@ -1,92 +1,88 @@
-Return-Path: <linux-next+bounces-6480-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6481-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07054AA5A19
-	for <lists+linux-next@lfdr.de>; Thu,  1 May 2025 05:58:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B567CAA5ABF
+	for <lists+linux-next@lfdr.de>; Thu,  1 May 2025 08:15:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 56B094C62B7
-	for <lists+linux-next@lfdr.de>; Thu,  1 May 2025 03:58:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 421C01BA51B4
+	for <lists+linux-next@lfdr.de>; Thu,  1 May 2025 06:15:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4D081EB1A9;
-	Thu,  1 May 2025 03:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DFEF230274;
+	Thu,  1 May 2025 06:15:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fKIgAsS2"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="e815NKQN"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A946E1EA7FF;
-	Thu,  1 May 2025 03:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E412DC774;
+	Thu,  1 May 2025 06:15:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746071921; cv=none; b=Dbe4pfcHDkbbWpzMa7zqzForI6t97DUGTh2+bGad3circqPi9qlgRplDRQVlJg05ZIuVEmqR3DCKTJ8UJ8Ch/mEVTJEA8DPa1Xi1HiX3Ne419M/16avZ8uHXyG2ZrpaA4zuUluCK36pUixYldoZolbbmkz7zgOUEAwFGs56wPZQ=
+	t=1746080125; cv=none; b=oet+v5+ff+I/d3iBxgNwc7JbhkvGmQP0R0yRjyeFPPaRkxIiyYa/Rq6fEvPqUcwz+S667ohev0FXfciBOwi+462MRZlKFPIgD6SttE/fWKDKXbIPiVVYZZlmvRKctOUCg+GYVzX4W4uiPW3GKXW635C5G+XTnzh46Bcm5rKSqGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746071921; c=relaxed/simple;
-	bh=G2aJ3pAbgLg5NHkEUdxI0e6wMcaBaf0HBWVsr9BnEks=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=sYCuUQKW/XRoW0sS3B4MbiwVGOjNhwX7dquBDMWVNT7UvazE3vPv2uv/FFBL+tRpXape/CWjSaL4qtIsE2RRF5hZ+d0+Zpmrdi4HNwrgPA59bQN4km+ffIGLNKfVyGuvaqlqqsapx7lsGZe1Q978qKfamtQWIJaEkN34oOkVh18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fKIgAsS2; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1746080125; c=relaxed/simple;
+	bh=8q+DspcIiW+WxgXnXGTipxx+/T32UgJFM6wKHdw/wZc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=T7XeY3L2I2bOcTdM8pTKdXskiRkTVXeWpjrsv9Trl8798ZXaJtMrY68MN64YgUZn8WhQawGF4mxIcANvc4tTxfFUOjntthUOtWfkHGBX5grLI8lyELlY2bHzaoqA79SnmR92EkojSrpWYxhjB+z3+Pl2pXt09NQbbxkAXGdV+Dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=e815NKQN; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1746071912;
-	bh=4n11SxoWN0YILonn/vSdJNJ6QM9m2hutHhrMAwj0avE=;
+	s=202503; t=1746080117;
+	bh=tQj/xSRoy2+0jwDjWjoHWqAxe6OY9vsWwEBAtcEdKQs=;
 	h=Date:From:To:Cc:Subject:From;
-	b=fKIgAsS2Oxnr7oRq0yLcqDOegGofhFteL0CLFYuHgqzG9ZDVc/qGvlJ2WpcrUuYB/
-	 kEZqiNECFVSetGxYCl5GxGYWXh0R37SDtTCPBGxjOx88BT2nu7bOXimloSmOzbeWWf
-	 9vmvUr5ivWfzbBOM2gmgxQrYl/ozXQOuz7d5dd9yT6F+8Cdyos+gx2aJ0oTDYlyVFZ
-	 gWnSZFSpe1Jt41IYgswA7bZLxR0JCzegXn6k8Q3du177iu88AFafjVFSTFHfc9+Ums
-	 LvjSKKuAwGakV1Ngrl+icgWgWVdcejd9dDKjzFvjBVR/x3RAOzZx5IbHU9CE0Lb23R
-	 geeFtsB+Uw2zw==
+	b=e815NKQN4VaNQBthWTumCDDlfBk74rABl2c8FUIeDuseN4Olg35KHviJ5x3Oek1B6
+	 OsSmpAzmwkEf8TRQKOSr7O0ckJCkSzKCs4OL9yE8H5C5qewT/nogns066TN8zhSOZA
+	 pq4A5CeVEoFqHI5CalPSTCfkbkFLiyENO2KnqpL0paEpZF9B8TSRsCLUhyaScpC6QA
+	 SK9X5fSAx066AVDfmNVoAhY1TIbaF9x3ebiBQYfk8cBkEUI8ojQW/1kYXVeawR37+W
+	 LY8V7us86RxTMmgyVvYDOFNV98wcDUymXcRMXsHzSHOsRAwv/NpbXCIoJxIV0ETupf
+	 orBio32ImhAsg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zp0dy5rpzz4wyR;
-	Thu,  1 May 2025 13:58:30 +1000 (AEST)
-Date: Thu, 1 May 2025 13:58:27 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zp3gm6yvWz4wcy;
+	Thu,  1 May 2025 16:15:16 +1000 (AEST)
+Date: Thu, 1 May 2025 16:15:15 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Ingo Molnar <mingo@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, "Rafael J. Wysocki"
- <rafael.j.wysocki@intel.com>, Srinivas Pandruvada
- <srinivas.pandruvada@linux.intel.com>
-Subject: linux-next: manual merge of the tip tree with the pm tree
-Message-ID: <20250501135827.214fac1f@canb.auug.org.au>
+To: Greg KH <greg@kroah.com>, Sebastian Reichel <sre@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Pengyu Luo <mitltlatltl@gmail.com>, Sebastian
+ Reichel <sebastian.reichel@collabora.com>
+Subject: linux-next: manual merge of the usb tree with the battery tree
+Message-ID: <20250501161515.21916747@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QK4ZxLifvzrnrQVIqsgEjSA";
+Content-Type: multipart/signed; boundary="Sig_/lS9=zAqD=dnHicff9FwfA9G";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/QK4ZxLifvzrnrQVIqsgEjSA
+--Sig_/lS9=zAqD=dnHicff9FwfA9G
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+Today's linux-next merge of the usb tree got a conflict in:
 
-  drivers/cpufreq/intel_pstate.c
+  MAINTAINERS
 
 between commit:
 
-  ac4e04d9e378 ("cpufreq: intel_pstate: Unchecked MSR aceess in legacy mode=
-")
+  cfe769670e82 ("power: supply: add Huawei Matebook E Go psy driver")
 
-from the pm tree and commit:
+from the battery tree and commit:
 
-  c435e608cf59 ("x86/msr: Rename 'rdmsrl()' to 'rdmsrq()'")
+  00327d7f2c8c ("usb: typec: ucsi: add Huawei Matebook E Go ucsi driver")
 
-from the tip tree.
+from the usb tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -99,38 +95,35 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/cpufreq/intel_pstate.c
-index 25830e5d76e8,2fc619ba6309..000000000000
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@@ -598,10 -598,7 +598,10 @@@ static bool turbo_is_disabled(void
-  {
-  	u64 misc_en;
+diff --cc MAINTAINERS
+index f7a8c23d211c,91279eaec446..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -10998,7 -10967,7 +10998,8 @@@ M:	Pengyu Luo <mitltlatltl@gmail.com
+  S:	Maintained
+  F:	Documentation/devicetree/bindings/platform/huawei,gaokun-ec.yaml
+  F:	drivers/platform/arm64/huawei-gaokun-ec.c
+ +F:	drivers/power/supply/huawei-gaokun-battery.c
++ F:	drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+  F:	include/linux/platform_data/huawei-gaokun-ec.h
  =20
- +	if (!cpu_feature_enabled(X86_FEATURE_IDA))
- +		return true;
- +
-- 	rdmsrl(MSR_IA32_MISC_ENABLE, misc_en);
-+ 	rdmsrq(MSR_IA32_MISC_ENABLE, misc_en);
- =20
-  	return !!(misc_en & MSR_IA32_MISC_ENABLE_TURBO_DISABLE);
-  }
+  HUGETLB SUBSYSTEM
 
---Sig_/QK4ZxLifvzrnrQVIqsgEjSA
+--Sig_/lS9=zAqD=dnHicff9FwfA9G
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgS8WMACgkQAVBC80lX
-0GwqQQgAji7W2d/lW1dfKsKfDPnBPWidJohW3z41s1EIRI9+FudLVKZJXd9pxJWW
-mZYIT00s8Xgz0mt2Vlv87MU2tFanXh/e+3v7ojVgeGhrM/NeXcwM0+cfyIpuj/m2
-Jvnx8PTlBg4U3/iSiYifAorXERvmbK6gangInEWNJ0xkp0cV9ls7KVRn2zG2/kTo
-vLxsdYVgVSA47mcD3RKVVONQJJYqDiIphmY6lFQ7E0kYUCyjYLjegPDObMiHUcwG
-rfnRJP5lQOfstULzPNtuG9/9Rsu8wzrh6GCa2cxxo/eFXWSUGyb7sF5hzfGK3V4P
-zi5RT7suqEuopCKW6o+eg4PHw3J7Qw==
-=sh4e
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgTEXMACgkQAVBC80lX
+0GyZ0wgAhZKCyPK+X8WEKcJe65ngZGWP1OPTO3snZBkY0Ft2eMKumnfb667PM4sx
+3RbjelMKQzmpoUJe+C2gxY410yApuAtbZp7qN6psPxW/Ifa71uK8ie8VOtwbvSg6
+EfT6tnnCcmGC+UZDS9r4Vnd260Mh3l0+DVPge0qodxgjkD6M9NsjI7L+8M4UeC7v
+l32J8njbt05hQIvI5KmH2dBYuEDDA4iHsucfwk77olomZqR0BGebgm6Al+Gf6ko+
+ftNp5RFHDCn5VrrPKVMWBpENZVLxC+aV0q8tA6Lay33/5zVh1xVU7RVB8yWAgo+F
+epOiqp8oeFz1i+5mZXVG53oaWoLYSg==
+=fUYm
 -----END PGP SIGNATURE-----
 
---Sig_/QK4ZxLifvzrnrQVIqsgEjSA--
+--Sig_/lS9=zAqD=dnHicff9FwfA9G--
 

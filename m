@@ -1,157 +1,107 @@
-Return-Path: <linux-next+bounces-6500-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6501-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 724CAAA6BCA
-	for <lists+linux-next@lfdr.de>; Fri,  2 May 2025 09:38:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FEFAAA6DC7
+	for <lists+linux-next@lfdr.de>; Fri,  2 May 2025 11:11:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 359841BA4773
-	for <lists+linux-next@lfdr.de>; Fri,  2 May 2025 07:38:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2ED549E0722
+	for <lists+linux-next@lfdr.de>; Fri,  2 May 2025 09:09:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED9512676E1;
-	Fri,  2 May 2025 07:38:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F6EC23182E;
+	Fri,  2 May 2025 09:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E/SrQc5g"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Z+tMKMcf"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A601CBA02
-	for <linux-next@vger.kernel.org>; Fri,  2 May 2025 07:38:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82743231846;
+	Fri,  2 May 2025 09:07:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746171485; cv=none; b=bB9gV6opkwCB9hJcqJqlfbiql9dsRD71ws3mjY8oxZpgJteWWm0/KILb3E+s6FpMCl06SkNrqhmsS+MTu50i7wJTWJQJ7/NCv2RTO36aYaQCtfCcS8K5KKijJCHsjRCXR8e6owOas4li6UrUKoB+N+srW5yk2+lAeUKPIkAOSfk=
+	t=1746176889; cv=none; b=NfT3wiwvhsFrpBehySnKxTm26KEZTT6f2HfOe1KeZ5FiyyCK3xm2UWyz9n583jIUOyDHb9NN9N71BSZ/EQKm6XyUaOyM5PDwrydq2H/9ZxVKEe+OptUCpdBT+1xoLojBLRW8EN2zTiRJ8ROfOio89Wsnu92kop7UFjrpqaj2HLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746171485; c=relaxed/simple;
-	bh=MLgar4accZ+UU4r7pZwt5ME29rYPcncQM6t8IfTDlH8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L09FaYIOH/ENfZE6R//t+6NT+NLIiRHowZc6B3yMqT5211/RUn/KXgtq/jjXpTumC0/HnhJPCcB8ukV9ZLptNuDTumzDZRnI2ur+P7g3abxYyzPEVvuJlureVULa9Shg4G7b6iyXcAvQ80nqb3B8X+o4CgvXcGdgzKpSd1huVm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E/SrQc5g; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-736ab1c43c4so1811013b3a.1
-        for <linux-next@vger.kernel.org>; Fri, 02 May 2025 00:38:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746171484; x=1746776284; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WIUUdyhk+vjr1/jIeHCt06X37I+JMP5uKdTdJjA4jRY=;
-        b=E/SrQc5gojQLzlcuV1vZ4RfeLIzZUz4nQYSfrHwnoSxI7HAJXOl1yakG8mxAFTKQkT
-         Z0PkGe1X1IdJKhWiBR0E8U6MbZxXJpwVJUNa5FWnQtZfMKyjbEGFl7ICikAaAfdgohMA
-         Ix21ttD4h0yypde2twjRtfU8giipKT29SPJeVywFSEMhNoMv/l96BmT9a8Tto8CGMBGu
-         +hGi6nTl6wJiU5TVe2x6eXz5LEibxj/k+LF1uyB9Wt/67n+9ZNdCKyredqO2Xb8VjEXV
-         l5LQ4eVuD9QmzZr4b6vqUiODhT5DOCjLaHCJhLoGBct8az7EVh8ceZupDzSgcDluFY9o
-         300Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746171484; x=1746776284;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WIUUdyhk+vjr1/jIeHCt06X37I+JMP5uKdTdJjA4jRY=;
-        b=dlS59rPvNZb+LomRYIJb5oV1EyBYC81D/WQqTgfKYFw88+QyE5xYiUnnIcxEmVY4KD
-         T19nOniszQc88cHjMbd17F2s0AL9h5GeoJUPh+CHnGK8YIErBxVxc5Uqdq9Y+2sC6be9
-         vPb4YC036RUk1/LxBRPbFHNn9gcGxHLrVD7RG0G4EHSvWXKoMu9CYtj8cNrlaMtucdQp
-         BYRfbpu2gqrGEnbwvJr3z/4uxRtRcPfWhq4OB+9jILoKvG1URr/Qd4KS1nWdzVEeK4z6
-         Y7hjtyywVBm8EuDBL7m7Fg9waI9dKYgLHMMemUbGPtKM1EkmLOQk+NlpRiDkCxYHC5P+
-         qkHA==
-X-Forwarded-Encrypted: i=1; AJvYcCXmzFEqrHLf7U4qH1ylILjTKkguTSXXM5185ZQwYTOVQLiZ3MMTMgs3TQuNwQZ5ssUiPSd9dEX/2a6q@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLC36aP3oawD7jZJxvbu+Q4pGvb8rSl7NQNZ6oi0S7si8AJ3xg
-	TMcqmbdSLseWKF7SYdMkU4sRiYI38LZDJ33Wl2QSdSHFjtimf7ZJuBDzpA==
-X-Gm-Gg: ASbGncs9ncdcG3xydcLkhQKlYvZv7VNiZ7N9tvwm3X0b1CT6fnYbDD+K7imwU8GJPbB
-	Ln51I+e9o7ujhjw4HNho4/Ic0eCHDAwdZ6zZhk/Sse5Xt18CpRIhixb6E+Xke/1XWz/N2wQsNJZ
-	hOWhSZNZPdScUB2hCFG1+cQNZexAiSCrDy6CecxNRaeVJ+m+I5neA1IeZJ1VHoQrpzGMd2xd/4F
-	zWwc/6v6bDHADVtV8yds5DGnPNUAEXkg7E6iRU4u7fEWXmyEFi9Ic7K9fOGfJcXa9INtqLZvZ/m
-	eHG6c+BLXaK6axXEKQ9i1yBdMB+iBzxX80TUKFa0
-X-Google-Smtp-Source: AGHT+IEkx5U45M+fmLoDrTtgXvtx/OHL0KLCFdrVje198BJ8SaCMdXadAKJcV3ecPgmXQZf/gd2R9w==
-X-Received: by 2002:a05:6a21:33a9:b0:1f5:8678:183d with SMTP id adf61e73a8af0-20cde9525b7mr2724388637.14.1746171483583;
-        Fri, 02 May 2025 00:38:03 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74058dbbcd0sm922663b3a.63.2025.05.02.00.38.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 May 2025 00:38:02 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 6C66D420A6AB; Fri, 02 May 2025 14:38:00 +0700 (WIB)
-Date: Fri, 2 May 2025 14:38:00 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Haren Myneni <haren@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org
-Cc: sfr@canb.auug.org.au, tyreld@linux.ibm.com, linux-next@vger.kernel.org,
-	hbabu@us.ibm.com
-Subject: Re: [PATCH] Documentation: Fix description format for powerpc RTAS
- ioctls
-Message-ID: <aBR2WF9VylGPSNlj@archie.me>
-References: <20250430022847.1118093-1-haren@linux.ibm.com>
- <aBHodTu4IjqzZeXb@archie.me>
- <5a23e0d7-f32a-4097-b3cc-dcccb7355778@linux.ibm.com>
+	s=arc-20240116; t=1746176889; c=relaxed/simple;
+	bh=R/f/0PpRRl12uL9hXEC0Bh2MUCLLMpgVcEN+eY3c5Ds=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=qAw4qOQUVbFMC1T5O9jcGzAUoeWl1I2c835cS/xqXAX/aqaV2npu+i627q3gyRFJnxu3sIfeTDdKhTl+VJZKxlC26fv0RP/dZu4zch4o3qLeIuqD/NpIfvQRVR6aHwxH4xoXr4OkYyHUc986it12Q/YhSn+NW1e3wNLmw2pUO2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Z+tMKMcf; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1746176877;
+	bh=pbmq+7IGU9/SNSn7Fm2+UuynPvmmeana33Zi7tIiSYc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Z+tMKMcf1GeW6OARiz+SoAWuDXF4qJcYp7TxFDu9IGsBCS2z9JZqTFPH3yaRBuMEN
+	 6jePCjQP5DMBK7TZ6H8xb1kg6MK/rW0g2hQbBuFXiJGyTCudLEuF4cTSjWvS32Uh9X
+	 urNtKAMys8RHQrj/oEKs1N1/NbhQ0ZXbECSorbQ2swicsvmF4GN99VSB8Mhp5DIjuu
+	 WLmfgjagsfITBhQbpH7vuzVExrGK4UGjnxez2rIbIKmb2HUS9op+Z80xlOBBOF0LGV
+	 yghuRdaNjcqQWdEVKZx77U/r9lRsgtm657GltHMBeyVyzHNNXURE9SF5uvPNCw+Tue
+	 HFVvgQH+JWWow==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZplSX71WXz4x3J;
+	Fri,  2 May 2025 19:07:56 +1000 (AEST)
+Date: Fri, 2 May 2025 19:07:55 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
+ <rui.zhang@intel.com>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the thermal tree
+Message-ID: <20250502190755.31379819@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="uhdSpaHqEo3xkb6N"
-Content-Disposition: inline
-In-Reply-To: <5a23e0d7-f32a-4097-b3cc-dcccb7355778@linux.ibm.com>
+Content-Type: multipart/signed; boundary="Sig_/LO937PrQosqz_Q5CBT7T5YT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-
---uhdSpaHqEo3xkb6N
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+--Sig_/LO937PrQosqz_Q5CBT7T5YT
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 02, 2025 at 09:42:37AM +0530, Madhavan Srinivasan wrote:
->=20
->=20
-> On 4/30/25 2:38 PM, Bagas Sanjaya wrote:
-> > On Tue, Apr 29, 2025 at 07:28:47PM -0700, Haren Myneni wrote:
-> >> Fix the description format for the following build warnings:
-> >>
-> >> "Documentation/userspace-api/ioctl/ioctl-number.rst:369:
-> >> ERROR: Malformed table. Text in column margin in table line 301.
-> >>
-> >> 0xB2  03-05 arch/powerpc/include/uapi/asm/papr-indices.h
-> >> powerpc/pseries indices API
-> >>                             <mailto:linuxppc-dev>
-> >> 0xB2  06-07 arch/powerpc/include/uapi/asm/papr-platform-dump.h
-> >> powerpc/pseries Platform Dump API
-> >>                             <mailto:linuxppc-dev>
-> >> 0xB2  08  arch/powerpc/include/uapi/asm/papr-physical-attestation.h
-> >> powerpc/pseries Physical Attestation API
-> >>                             <mailto:linuxppc-dev>"
-> >>
-> >=20
-> > Hi,
-> >=20
-> > FYI, I've also submitted the fix earlier at [1] (but different approach=
-).
-> > ppc maintainers, would you like taking this patch instead or mine?
->=20
-> Looked your patch (thanks for the link) and it is more of generic clean u=
-p.=20
-> I would prefer to take Haren patch now since it fixes the specific failure
-> case. But would encourage you to send it as generic cleanup patch.
+Hi all,
 
-Do you mean submitting the cleanup patch (essentially the same
-resulting table as my patch would) on top of Haren's patch?
+After merging the thermal tree, today's linux-next build (arm64 defconfig)
+produced this warning:
 
-Confused...
+drivers/thermal/mediatek/lvts_thermal.c:266:13: warning: 'lvts_debugfs_exit=
+' defined but not used [-Wunused-function]
+  266 | static void lvts_debugfs_exit(struct lvts_domain *lvts_td) { }
+      |             ^~~~~~~~~~~~~~~~~
+
+Introduced by commit
+
+  ef280c17a840 ("thermal/drivers/mediatek/lvts: Fix debugfs unregister on f=
+ailure")
 
 --=20
-An old man doll... just what I always wanted! - Clara
+Cheers,
+Stephen Rothwell
 
---uhdSpaHqEo3xkb6N
-Content-Type: application/pgp-signature; name=signature.asc
+--Sig_/LO937PrQosqz_Q5CBT7T5YT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaBR2WAAKCRD2uYlJVVFO
-o5EeAQDgZMzLaVa90fJIFN5X/wUO/RR6qiHLHkJlzXscE0f+QwEApjJtouQHYJtQ
-OY+IXAvOY7ZcKJQoR0c76S9eTZFnUgw=
-=J55u
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgUi2sACgkQAVBC80lX
+0GzwdQf7BKkrPp72zXuEI5SWYga1G9m5xLj00pAFUA3AFaTvXExoV4zqN0YD2Vcy
+o5RY5vhxhnCKwI7Dvkxy6L7GmAGuvLqOQD4zFr6xGKMOHVVZGIPUZFcc+0qaiF6S
+RLG2WQaIA/dYdr/yX/3vvcmaEuD1xB4CTIIjrB+jFBMFnE1xcj/iObvoZl4RuzQW
+2/W26yHC1jbZq1kOJwJR0oiozi3NJ3S/9R1VuMs0UF7sAx+kdvj0bpnlr00QHbPi
+ojL6zMKbyVGchYCo5HXLUWHe3O9o+XrWxxrDb2zJPC6rdcRGEcRscsLba0TZh8el
+F8d8/IeWDf2rhRWC4OKO4dJseeP8Wg==
+=Z/fD
 -----END PGP SIGNATURE-----
 
---uhdSpaHqEo3xkb6N--
+--Sig_/LO937PrQosqz_Q5CBT7T5YT--
 

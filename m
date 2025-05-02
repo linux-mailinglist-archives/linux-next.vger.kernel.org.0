@@ -1,107 +1,152 @@
-Return-Path: <linux-next+bounces-6497-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6498-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39070AA6A19
-	for <lists+linux-next@lfdr.de>; Fri,  2 May 2025 07:17:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AC9DAA6A63
+	for <lists+linux-next@lfdr.de>; Fri,  2 May 2025 08:06:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D21489C2F9C
-	for <lists+linux-next@lfdr.de>; Fri,  2 May 2025 05:17:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C02893B707E
+	for <lists+linux-next@lfdr.de>; Fri,  2 May 2025 06:06:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF2981ACEB0;
-	Fri,  2 May 2025 05:17:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69C061DE4E6;
+	Fri,  2 May 2025 06:06:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SW5QYz6V"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="U4st9TyL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512E9188907
-	for <linux-next@vger.kernel.org>; Fri,  2 May 2025 05:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28D61C6FE1;
+	Fri,  2 May 2025 06:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746163065; cv=none; b=goUxzAaGAuhIbYD6WQPoNFl0x6Jbsta7BzSJX4P0zRPq3gsM2wiJbCsjW4PS1ozgTkE7oybnBdQBaehP+hVqihzuA7fAuG3pT2V8pHZGWxV66MgP4uEdFC9kSE9APzOAeJQFfkKfBq0nZ1TUG/h4YAut7RLHmxzQXrCSRScz9yw=
+	t=1746166004; cv=none; b=HBR4J8QXOv//w39itTzadN48uusrEuAxnTCqsPJOeXXJMyG6aUOV1MoHC3vfwet4QAbCfz3ZSAtb6t0X/+IQ9Xlm9/dFZA4/XjiYGjKvDAJzcFuZpejVTzFvuX/gA4FS4Q7Q8bRkMCBPaoguwG9wGBKuNLpt9JfrRRujVCn0EG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746163065; c=relaxed/simple;
-	bh=Tn0Na7X3gzYJqXuQE25AJK/YZhEKlFsKU73wzI8Jb5Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GA1x3jpBIMQPAZAH6b/I1bIziEhB0sXg9LOIFCclgR1JSZex7m2WSft2bQXIhFRmBGLuO0Sh3Pimp2fw2ASv9390SWPLDUleErNjRyjrpK2KNXcdUjt65FoAz4Sbl3VtJAf1e8djFOMGOcVUJP2Vb44cyHHKiC6wXSpztBEz1pA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SW5QYz6V; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-223fd89d036so19758225ad.1
-        for <linux-next@vger.kernel.org>; Thu, 01 May 2025 22:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1746163062; x=1746767862; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xnngx+crBMNjpxjPvIvBmDP5Ck45rikGrRu1GyUpDTQ=;
-        b=SW5QYz6VIwWAQUfprBjVsKIHcpx4/ckn3CMas+V3CxYV3dtQFLGpljiJqJ+LXrap+L
-         7nfm4h/lQP2hzVUxQ6+A0XqDz0fEhsLPPH44/fCQds0LdC3JYsTo3X3EJITNuLm1WLtk
-         t75D7Y47TU48cPsJlbslKmqp4vGwDIVaVUom+WP1YGntlm3aj2uhyI4FmpFDef2Z6vla
-         DSJw99XYFVrR5PVmAyinzYitcdkVOiYr3Dv60H/pri8bF6bOSYeTII8+bjZ/Eh6SPFQ+
-         UZ9tfE7XKASCNQty6C75ziS8lw5Oese4NGkeLHaI74Xp5B28Zz4WBVKrmZIoi/wt4yrV
-         t+Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746163062; x=1746767862;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xnngx+crBMNjpxjPvIvBmDP5Ck45rikGrRu1GyUpDTQ=;
-        b=ffrIwYna1CPag500q+s9B16YafgdNARSrDOILDr43SslYpbEn9TR/3Kpdw0pcc7LEd
-         T45Q6JZ/GIfZMElGzV2XwTkgCzkKvuoqog731OKIZ8Z8mHGq3M84QJTFlMVibqRSfBaw
-         XhZF7dXBFgdJlX0NEoO2n9dKTJfzymnp14Jv1m/I/woio6yRcTzmrbH+F1R0sc372+lp
-         zccke4RTnYR5kEp/aQUdRBh3PjDMZrmTmOSsCQpT1IprFE2eBTiQqU33IL+zsNGeErPX
-         U50zCMI2sw+kGbO6U9HlUkzk5fp7iI4OXkKQ3DRGBRWulztTFoQsMg24D9FYTzSMvOa9
-         AnQg==
-X-Forwarded-Encrypted: i=1; AJvYcCWkriZYnZ+noOM6b7AwN+WtFO4+hYe3lBhjIwB7DeMxbz3frw/pUimasKTmw1Qi/Oc5u+IYwQHWWrrT@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnNB5dzNJXmHqDNVRc3wGo5a5Zg71ZlW/DbC6gdlUcQR6Inaq3
-	pBIXpz3f8e9q711Co+UKZvkiIfalNex1Z/lpkXZgYblrphqKxy72rVQE5R7UpDs=
-X-Gm-Gg: ASbGncvnJVK8HpidmevJXxHAkrkXPkx3cLj/Q68/2Zurm5eWFUudoUscRqc98UI771N
-	W4yfYWb4/nCsJuk4oEI/kTY6Vv/HKD8bWRS7SE7/b1nHMy+Xi0+gCWqCp9RYJcPzCTWb6vOhk26
-	C1bfRW2Qj/zWtPALYIZcBtNJp/I0WFwA0dYHlDX26uq46HkuYs4sNo47B1sdoRkAGMrQIyvaLS6
-	L8vZDCso7tzhjdS0Abq+fvRRGq0rvxFW3zc+7uz8CEfxDUb0zSjBa6bwe3S+0Olqg1d0HxtvHqA
-	XWjIh/AhGpFDnZ46m11m52ELh9aiFidFQ1aWbSw6NQ==
-X-Google-Smtp-Source: AGHT+IH0IRvfkSM8mpH4viXHOvhnL42FJ9fjj9CjAMUg3CpBdjiOxPHs0LObz/jU2wlHtEdIsfH6Ew==
-X-Received: by 2002:a17:903:2405:b0:224:584:6eef with SMTP id d9443c01a7336-22e1038286bmr29293335ad.41.1746163062625;
-        Thu, 01 May 2025 22:17:42 -0700 (PDT)
-Received: from localhost ([122.172.83.32])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e10942d07sm5463145ad.259.2025.05.01.22.17.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 May 2025 22:17:42 -0700 (PDT)
-Date: Fri, 2 May 2025 10:47:39 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andreas Hindborg <a.hindborg@kernel.org>,
-	Tamir Duberstein <tamird@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the rust-xarray tree
-Message-ID: <20250502051739.d5ge6ajr2utwn4av@vireshk-i7>
-References: <20250430202315.62bb1c1b@canb.auug.org.au>
- <2xUHqc3nyQdHW2SNbAQvQwy1mR4qz-vdR0UF8fVwFvm-rDtaJmhOUqJJvNWkneTh1XD58UlvoBT3umKbMjNlYw==@protonmail.internalid>
- <20250430104234.dmwnn5ih232kfk4z@vireshk-i7>
- <87selo1xdh.fsf@kernel.org>
- <CAKohponC_E9Ah4wXNNg0YVSo0UuRn+hNq+hxjrccbjeNKWH6Rw@mail.gmail.com>
- <20250501221958.00788306@canb.auug.org.au>
+	s=arc-20240116; t=1746166004; c=relaxed/simple;
+	bh=Ko9F8N+zSPoEZwy8bx/ngZm72qTMS1KTcz8AUXdK5wc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=RoEtA75u03Sf0hO2cz+6a/iQ1mMMZ2aWgH2vcflEKMdALeobT/ESeNPfsAYhClUH4tPcDelo3dBvlvgTaf9viyNJV7FUOk1qpIOWchV3fs95yYg3pZXRFt8Ye6Xu7S3FHTM3kyBpSeMlhtQ0LUtTcJsGi3Zzo4U7w1D5zGKP0T8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=U4st9TyL; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1746165991;
+	bh=7KDiv+Y4VlK9mNT9noGQ2GwQatfVZudbbTQhZiRAUUw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=U4st9TyLXcW/yg/5Y0tQupnYUkvteyGo0AgYVZc7UiORdP2pLwAlX2g3FzZNCcThC
+	 Bcj3ZqTQvX1y4sDFaBBQ9j4i9+baYgv68/0GkUbEdSPil9+uBH9nmsIvhhgOzvVXmo
+	 JDk117OAFedfHnrSsV41NZ49ffxJ/I/rXVZUBgs7XeLVaVZH7jqYO+F0EB1WxDhh+X
+	 cEYXlkER5SsOBBKjo9sjZQSx06xkuVZt+K8ZcZzT4cBP5/UBDuYbfTcvkLxxEZgQb7
+	 4upQMIrXanY/uKMtG518cGnnpYXd1+3EkJJFzC5hLNVCkUR0Fwcrq9ZJQIBaSI7aqf
+	 J1AHBJAx3dz3Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZpgRB2Ywkz4x21;
+	Fri,  2 May 2025 16:06:30 +1000 (AEST)
+Date: Fri, 2 May 2025 16:06:12 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Corey Minyard <corey@minyard.net>
+Cc: Corey Minyard <cminyard@mvista.com>, Ingo Molnar <mingo@kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Thomas Gleixner
+ <tglx@linutronix.de>
+Subject: linux-next: manual merge of the ipmi tree with Linus' tree
+Message-ID: <20250502160521.202cdc0e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250501221958.00788306@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/WHfAzOgnRTWsbPSKsM0AKP+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 01-05-25, 22:19, Stephen Rothwell wrote:
-> Tags like "Acked-by" etc in the commit message will change the SHA.
+--Sig_/WHfAzOgnRTWsbPSKsM0AKP+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I misunderstood what he meant earlier, Of course SHA will change with
-this.
+Hi all,
 
--- 
-viresh
+Today's linux-next merge of the ipmi tree got conflicts in:
+
+  drivers/char/ipmi/ipmi_msghandler.c
+  drivers/char/ipmi/ipmi_ssif.c
+
+between commit:
+
+  8fa7292fee5c ("treewide: Switch/rename to timer_delete[_sync]()")
+
+from Linus' tree and commits:
+
+  7b1ee7900db5 ("ipmi:msghandler: Move timer handling into a work queue")
+  55c5befa949a ("ipmi:ssif: Fix a shutdown race")
+
+from the ipmi tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/char/ipmi/ipmi_msghandler.c
+index 3ba9d7e9a6c7,ece6aa95fbb5..000000000000
+--- a/drivers/char/ipmi/ipmi_msghandler.c
++++ b/drivers/char/ipmi/ipmi_msghandler.c
+@@@ -5538,7 -5577,8 +5577,8 @@@ static void __exit cleanup_ipmi(void
+  		 * here.
+  		 */
+  		atomic_set(&stop_operation, 1);
+ -		del_timer_sync(&ipmi_timer);
+ +		timer_delete_sync(&ipmi_timer);
++ 		cancel_work_sync(&ipmi_timer_work);
+ =20
+  		initialized =3D false;
+ =20
+diff --cc drivers/char/ipmi/ipmi_ssif.c
+index 0b45b07dec22,b016fabaac68..000000000000
+--- a/drivers/char/ipmi/ipmi_ssif.c
++++ b/drivers/char/ipmi/ipmi_ssif.c
+@@@ -1268,12 -1266,10 +1266,10 @@@ static void shutdown_ssif(void *send_in
+  		schedule_timeout(1);
+ =20
+  	ssif_info->stopping =3D true;
+ -	del_timer_sync(&ssif_info->watch_timer);
+ -	del_timer_sync(&ssif_info->retry_timer);
+ +	timer_delete_sync(&ssif_info->watch_timer);
+ +	timer_delete_sync(&ssif_info->retry_timer);
+- 	if (ssif_info->thread) {
+- 		complete(&ssif_info->wake_thread);
++ 	if (ssif_info->thread)
+  		kthread_stop(ssif_info->thread);
+- 	}
+  }
+ =20
+  static void ssif_remove(struct i2c_client *client)
+
+--Sig_/WHfAzOgnRTWsbPSKsM0AKP+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgUYNQACgkQAVBC80lX
+0Gz89Qf+JYwPbGgX9g4ASo9NgnVs9jnKl0lknyUf1WBps8PAVFkiVDyi6lrOZt8b
+B8D8XTq4CZyiiWoxPC6g77Ay3dQ5TfKtX7S9U+WxGUSdVo0QVYsATbN177Ir/0y6
+YXcYCwZ8DxDalyob0l0YZhFG9nLWUZj6C7YCuvF5ABMUCxBS+HWv8sHzHCkhD7BI
+Eb14WlHU3pf8j1hbErWgvPPrX8pKSEOKETzyUv5cEk6dXBARsppAmGa784ZYmC7C
+xSleUMEr0tBSzdcyhN0qAdJUNYdVdtV17IoXH23t3uNaWJkYHvpAhyV9yCF5xSda
+W+vFlWwGkHrFX50KFKptHzOwpQq0rQ==
+=Fxdt
+-----END PGP SIGNATURE-----
+
+--Sig_/WHfAzOgnRTWsbPSKsM0AKP+--
 

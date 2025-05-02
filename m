@@ -1,154 +1,157 @@
-Return-Path: <linux-next+bounces-6499-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6500-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E12C2AA6AB2
-	for <lists+linux-next@lfdr.de>; Fri,  2 May 2025 08:20:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 724CAAA6BCA
+	for <lists+linux-next@lfdr.de>; Fri,  2 May 2025 09:38:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58C9F17D5F4
-	for <lists+linux-next@lfdr.de>; Fri,  2 May 2025 06:20:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 359841BA4773
+	for <lists+linux-next@lfdr.de>; Fri,  2 May 2025 07:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 567221E5B93;
-	Fri,  2 May 2025 06:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED9512676E1;
+	Fri,  2 May 2025 07:38:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="FXdPTY1L";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ujPcTrex"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E/SrQc5g"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267E41B4231;
-	Fri,  2 May 2025 06:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A601CBA02
+	for <linux-next@vger.kernel.org>; Fri,  2 May 2025 07:38:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746166838; cv=none; b=EGY2JdjUNJxdKU0cEAYTvGQVRPUTbNr3UwHX9TdPGwnZgQ0H5MGs2gJFmjeJ/ugOGV0ZOfqmBRy63Ej+5JVMsNmFcWSzncjAeN5naLjZkjGIr2EMgNLwFwt/XLl0nrKvjDFwUV/hyVNB1iOZRbD4PEcaT2SX5uhOpKsqYsBcLO8=
+	t=1746171485; cv=none; b=bB9gV6opkwCB9hJcqJqlfbiql9dsRD71ws3mjY8oxZpgJteWWm0/KILb3E+s6FpMCl06SkNrqhmsS+MTu50i7wJTWJQJ7/NCv2RTO36aYaQCtfCcS8K5KKijJCHsjRCXR8e6owOas4li6UrUKoB+N+srW5yk2+lAeUKPIkAOSfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746166838; c=relaxed/simple;
-	bh=WvuPt5RdAVARTfYOxm0Wmhk/DhsvsRamVJN5qy5+S9s=;
+	s=arc-20240116; t=1746171485; c=relaxed/simple;
+	bh=MLgar4accZ+UU4r7pZwt5ME29rYPcncQM6t8IfTDlH8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tPyYAlgPLEKN7tE64os4/bHTtyvOHW1p/2Isb62NlWhNH9hbtD7KzvoBP0xQAqUcfBKeDsa3NdWunS6X2ks2ihfYJRBM0fFp8NserAuPnohPtCFWR2uaQrIOfwykSA0gSETOXmsq4QMm/rr7fNdriU+PFVtKyaiMyYYQsLSRj04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=FXdPTY1L; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ujPcTrex; arc=none smtp.client-ip=103.168.172.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfout.phl.internal (Postfix) with ESMTP id EB32013801CD;
-	Fri,  2 May 2025 02:20:34 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-11.internal (MEProxy); Fri, 02 May 2025 02:20:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1746166834; x=1746253234; bh=EGToxZctGt
-	PORdHrRC19/O8b5uQYvPDPBokXEfm3l4I=; b=FXdPTY1LnJNC0YYiru4tx3rOaB
-	gB5Z6A8FuaNaHQDmFj7acOL/AkjNB42eCJXw+haeu5vj5zPFOGgG+bk7gd3di4wh
-	/mVoQvyEYwHS7knJFU8058Zy9yCD2MqCMEPQXN47yMaZsVTXP4Tb4dVPMPat1GWE
-	+dsoh4H0Y2TgX1ELiBoc3CjomieV8dKnCrin8oW41t0I6jquyapja76t/9TY8ywp
-	D9g8Ie3IQYC11PpKetPcZWatq+FjqIjqo2yvmdc8n9Sgjfjg1af1Q0C3m6N+S9p/
-	amyiVU7gylSd8Kh5Kz4Xq6dCYCiemGgvhUeFcweVDyOCTzBjscQkH5nPbg1g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1746166834; x=1746253234; bh=EGToxZctGtPORdHrRC19/O8b5uQYvPDPBok
-	XEfm3l4I=; b=ujPcTrex5pB9ZNmn9vUoBY2uPyfhxXSFWG4D6Nkm7kt7LqHpQLz
-	U1YjzdGrtLqgC5VjJ/bv4J0SqVd/2vlDWRmV3qKA9ceKgHIZd2xeyI0NluFsp5S8
-	yfrlMXCgfdNP6uuv5XKxyQypRrHLehKApy3YMamCv51nI+Du0RIhtOdAWvIZZr18
-	XB4UOfuuCOvtQ7zgEXj7o2NdeRoeIVkVXrazgUR4nV4z6pukLQcXdF9EgK4S/k9Q
-	cJlOiTT9B9GLEfQbzgu3XNQsIYdZvYzPGXX6oAdAdvn4uh/tjniOcSZZz03Rsarq
-	Ge3gSJi77Lc8Wyvmv37KG5Nxk+8QwbUPtzw==
-X-ME-Sender: <xms:MmQUaO_vtCo5kC7AtOCWSZ3jGMgK28GPRXn7gdg_4UTVKZDMpLmC6w>
-    <xme:MmQUaOv-5HiRdwjgZO97-iNM9TXAiR9XoufLsivjIWTaZ73IrYMDoUMFoNgEUhQYK
-    NB0Nqdj46ZWfg>
-X-ME-Received: <xmr:MmQUaEAEjPjxlL6QJ0MtsQBC19u5vhya4g8oqzuX9P_2Sqw2jOVHyR6qErC2kqAD2kRKr6M6ehlBaAT5ifApHLmeKdfh1EQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvjedujeduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    vdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecugg
-    ftrfgrthhtvghrnhepheegvdevvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeu
-    fefhgfehkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepghhrvghgsehkrhhorghhrdgtohhmpdhnsggprhgtphhtthhopeduvddpmhhouggv
-    pehsmhhtphhouhhtpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrg
-    hupdhrtghpthhtohepshhrvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhu
-    gidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinh
-    hugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhithhl
-    thhlrghtlhhtlhesghhmrghilhdrtghomhdprhgtphhtthhopehsvggsrghsthhirghnrd
-    hrvghitghhvghlsegtohhllhgrsghorhgrrdgtohhm
-X-ME-Proxy: <xmx:MmQUaGe7Uk-U6UOPZIvbpBDOmcmcDAr26VcaoJJZ6gp7qB1ZwQv4EA>
-    <xmx:MmQUaDMZ0GtcDOumI1zvi_7jB8C1rZgCDDzSUnf4eXvcvjMpyMcepA>
-    <xmx:MmQUaAkpKdTJ9RZZJuaw0BswtweKhBzn7LXBrtlkvMXEprVG36E5lw>
-    <xmx:MmQUaFsgTmXFOeCKh7no1Oh1asfmCt6FyVj9sIDhPgAP3G4pXSJL_w>
-    <xmx:MmQUaG5w1N0XBj3B22eu0Hl-E68nxCwV_lIrBBH40EtoqH-YRaty-Oz7>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 2 May 2025 02:20:34 -0400 (EDT)
-Date: Fri, 2 May 2025 08:20:28 +0200
-From: Greg KH <greg@kroah.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Pengyu Luo <mitltlatltl@gmail.com>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: linux-next: manual merge of the usb tree with the battery tree
-Message-ID: <2025050219-whoopee-duplicity-f859@gregkh>
-References: <20250501161515.21916747@canb.auug.org.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=L09FaYIOH/ENfZE6R//t+6NT+NLIiRHowZc6B3yMqT5211/RUn/KXgtq/jjXpTumC0/HnhJPCcB8ukV9ZLptNuDTumzDZRnI2ur+P7g3abxYyzPEVvuJlureVULa9Shg4G7b6iyXcAvQ80nqb3B8X+o4CgvXcGdgzKpSd1huVm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E/SrQc5g; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-736ab1c43c4so1811013b3a.1
+        for <linux-next@vger.kernel.org>; Fri, 02 May 2025 00:38:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746171484; x=1746776284; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WIUUdyhk+vjr1/jIeHCt06X37I+JMP5uKdTdJjA4jRY=;
+        b=E/SrQc5gojQLzlcuV1vZ4RfeLIzZUz4nQYSfrHwnoSxI7HAJXOl1yakG8mxAFTKQkT
+         Z0PkGe1X1IdJKhWiBR0E8U6MbZxXJpwVJUNa5FWnQtZfMKyjbEGFl7ICikAaAfdgohMA
+         Ix21ttD4h0yypde2twjRtfU8giipKT29SPJeVywFSEMhNoMv/l96BmT9a8Tto8CGMBGu
+         +hGi6nTl6wJiU5TVe2x6eXz5LEibxj/k+LF1uyB9Wt/67n+9ZNdCKyredqO2Xb8VjEXV
+         l5LQ4eVuD9QmzZr4b6vqUiODhT5DOCjLaHCJhLoGBct8az7EVh8ceZupDzSgcDluFY9o
+         300Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746171484; x=1746776284;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WIUUdyhk+vjr1/jIeHCt06X37I+JMP5uKdTdJjA4jRY=;
+        b=dlS59rPvNZb+LomRYIJb5oV1EyBYC81D/WQqTgfKYFw88+QyE5xYiUnnIcxEmVY4KD
+         T19nOniszQc88cHjMbd17F2s0AL9h5GeoJUPh+CHnGK8YIErBxVxc5Uqdq9Y+2sC6be9
+         vPb4YC036RUk1/LxBRPbFHNn9gcGxHLrVD7RG0G4EHSvWXKoMu9CYtj8cNrlaMtucdQp
+         BYRfbpu2gqrGEnbwvJr3z/4uxRtRcPfWhq4OB+9jILoKvG1URr/Qd4KS1nWdzVEeK4z6
+         Y7hjtyywVBm8EuDBL7m7Fg9waI9dKYgLHMMemUbGPtKM1EkmLOQk+NlpRiDkCxYHC5P+
+         qkHA==
+X-Forwarded-Encrypted: i=1; AJvYcCXmzFEqrHLf7U4qH1ylILjTKkguTSXXM5185ZQwYTOVQLiZ3MMTMgs3TQuNwQZ5ssUiPSd9dEX/2a6q@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLC36aP3oawD7jZJxvbu+Q4pGvb8rSl7NQNZ6oi0S7si8AJ3xg
+	TMcqmbdSLseWKF7SYdMkU4sRiYI38LZDJ33Wl2QSdSHFjtimf7ZJuBDzpA==
+X-Gm-Gg: ASbGncs9ncdcG3xydcLkhQKlYvZv7VNiZ7N9tvwm3X0b1CT6fnYbDD+K7imwU8GJPbB
+	Ln51I+e9o7ujhjw4HNho4/Ic0eCHDAwdZ6zZhk/Sse5Xt18CpRIhixb6E+Xke/1XWz/N2wQsNJZ
+	hOWhSZNZPdScUB2hCFG1+cQNZexAiSCrDy6CecxNRaeVJ+m+I5neA1IeZJ1VHoQrpzGMd2xd/4F
+	zWwc/6v6bDHADVtV8yds5DGnPNUAEXkg7E6iRU4u7fEWXmyEFi9Ic7K9fOGfJcXa9INtqLZvZ/m
+	eHG6c+BLXaK6axXEKQ9i1yBdMB+iBzxX80TUKFa0
+X-Google-Smtp-Source: AGHT+IEkx5U45M+fmLoDrTtgXvtx/OHL0KLCFdrVje198BJ8SaCMdXadAKJcV3ecPgmXQZf/gd2R9w==
+X-Received: by 2002:a05:6a21:33a9:b0:1f5:8678:183d with SMTP id adf61e73a8af0-20cde9525b7mr2724388637.14.1746171483583;
+        Fri, 02 May 2025 00:38:03 -0700 (PDT)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74058dbbcd0sm922663b3a.63.2025.05.02.00.38.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 May 2025 00:38:02 -0700 (PDT)
+Received: by archie.me (Postfix, from userid 1000)
+	id 6C66D420A6AB; Fri, 02 May 2025 14:38:00 +0700 (WIB)
+Date: Fri, 2 May 2025 14:38:00 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Haren Myneni <haren@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org
+Cc: sfr@canb.auug.org.au, tyreld@linux.ibm.com, linux-next@vger.kernel.org,
+	hbabu@us.ibm.com
+Subject: Re: [PATCH] Documentation: Fix description format for powerpc RTAS
+ ioctls
+Message-ID: <aBR2WF9VylGPSNlj@archie.me>
+References: <20250430022847.1118093-1-haren@linux.ibm.com>
+ <aBHodTu4IjqzZeXb@archie.me>
+ <5a23e0d7-f32a-4097-b3cc-dcccb7355778@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="uhdSpaHqEo3xkb6N"
 Content-Disposition: inline
-In-Reply-To: <20250501161515.21916747@canb.auug.org.au>
+In-Reply-To: <5a23e0d7-f32a-4097-b3cc-dcccb7355778@linux.ibm.com>
 
-On Thu, May 01, 2025 at 04:15:15PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the usb tree got a conflict in:
-> 
->   MAINTAINERS
-> 
-> between commit:
-> 
->   cfe769670e82 ("power: supply: add Huawei Matebook E Go psy driver")
-> 
-> from the battery tree and commit:
-> 
->   00327d7f2c8c ("usb: typec: ucsi: add Huawei Matebook E Go ucsi driver")
-> 
-> from the usb tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc MAINTAINERS
-> index f7a8c23d211c,91279eaec446..000000000000
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@@ -10998,7 -10967,7 +10998,8 @@@ M:	Pengyu Luo <mitltlatltl@gmail.com
->   S:	Maintained
->   F:	Documentation/devicetree/bindings/platform/huawei,gaokun-ec.yaml
->   F:	drivers/platform/arm64/huawei-gaokun-ec.c
->  +F:	drivers/power/supply/huawei-gaokun-battery.c
-> + F:	drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
->   F:	include/linux/platform_data/huawei-gaokun-ec.h
->   
->   HUGETLB SUBSYSTEM
 
-Looks good to me, thanks!
+--uhdSpaHqEo3xkb6N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-greg k-h
+On Fri, May 02, 2025 at 09:42:37AM +0530, Madhavan Srinivasan wrote:
+>=20
+>=20
+> On 4/30/25 2:38 PM, Bagas Sanjaya wrote:
+> > On Tue, Apr 29, 2025 at 07:28:47PM -0700, Haren Myneni wrote:
+> >> Fix the description format for the following build warnings:
+> >>
+> >> "Documentation/userspace-api/ioctl/ioctl-number.rst:369:
+> >> ERROR: Malformed table. Text in column margin in table line 301.
+> >>
+> >> 0xB2  03-05 arch/powerpc/include/uapi/asm/papr-indices.h
+> >> powerpc/pseries indices API
+> >>                             <mailto:linuxppc-dev>
+> >> 0xB2  06-07 arch/powerpc/include/uapi/asm/papr-platform-dump.h
+> >> powerpc/pseries Platform Dump API
+> >>                             <mailto:linuxppc-dev>
+> >> 0xB2  08  arch/powerpc/include/uapi/asm/papr-physical-attestation.h
+> >> powerpc/pseries Physical Attestation API
+> >>                             <mailto:linuxppc-dev>"
+> >>
+> >=20
+> > Hi,
+> >=20
+> > FYI, I've also submitted the fix earlier at [1] (but different approach=
+).
+> > ppc maintainers, would you like taking this patch instead or mine?
+>=20
+> Looked your patch (thanks for the link) and it is more of generic clean u=
+p.=20
+> I would prefer to take Haren patch now since it fixes the specific failure
+> case. But would encourage you to send it as generic cleanup patch.
+
+Do you mean submitting the cleanup patch (essentially the same
+resulting table as my patch would) on top of Haren's patch?
+
+Confused...
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--uhdSpaHqEo3xkb6N
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaBR2WAAKCRD2uYlJVVFO
+o5EeAQDgZMzLaVa90fJIFN5X/wUO/RR6qiHLHkJlzXscE0f+QwEApjJtouQHYJtQ
+OY+IXAvOY7ZcKJQoR0c76S9eTZFnUgw=
+=J55u
+-----END PGP SIGNATURE-----
+
+--uhdSpaHqEo3xkb6N--
 

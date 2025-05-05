@@ -1,142 +1,141 @@
-Return-Path: <linux-next+bounces-6517-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6518-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AE4EAA8CEB
-	for <lists+linux-next@lfdr.de>; Mon,  5 May 2025 09:21:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71146AA8D2D
+	for <lists+linux-next@lfdr.de>; Mon,  5 May 2025 09:39:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56F61188EB83
-	for <lists+linux-next@lfdr.de>; Mon,  5 May 2025 07:21:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F2443B3D46
+	for <lists+linux-next@lfdr.de>; Mon,  5 May 2025 07:39:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E28DA1ACEAC;
-	Mon,  5 May 2025 07:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BCC21CB337;
+	Mon,  5 May 2025 07:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="EM/VRuNJ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B679214B965;
-	Mon,  5 May 2025 07:21:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0022B14AA9;
+	Mon,  5 May 2025 07:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746429691; cv=none; b=L+8cLYlAGO9ExmSQvtDz+7jho5sWwcjLpcQQS6M09emF41zM1DbU8NLT/M0HEmW9f2IyqNv6sSGD098C01Ii3FXxK/qENTx0l3WjIsKVYq1+4fwKmUSK0M/7u+aqUQwBbW2Ly7NK/ovcpA4oDYxii1aWbkegS3Pfw+LFOdaujVk=
+	t=1746430756; cv=none; b=Fhz0mx9mbX/JVWG+zYWwndiE9v1PwtAcGq4XzyvJBhjBpCGul8YHI1X9HNK/bv0/ImkDbFpIz4NWBdXnpFe+JN7ia3VpmHRiPTWHcXlgyRiLbiBrBh92JcMlqYA9aS/Uk5mGDCjA6BAe1zJ+i8l+HHNnCKn6UoRDNQ58eXfk9zo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746429691; c=relaxed/simple;
-	bh=9uFZoV3PpCUETRaPKf7nDphlzzExlnttykCSW+wfLKY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qvz4I/jwuUIiR6gJKp7APNjHYhGyXHGDy7TKEYAeeyNUwfvkWqsmInmQNohW/wCnXBm69yc00jtL/ITGg7DqEgUKrzLaLQ7EsmirVONLdFZ2AY8+4sk1T7F9mrusG9cUx4eCs8MvWSSD9WRM+BHeSgRrpA6VekmIVbSwhfUXlWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-86715793b1fso984665241.0;
-        Mon, 05 May 2025 00:21:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746429688; x=1747034488;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mTcqx3y1Zv7wXrZGjPmDovC5D6K+j6ESgW83IpDDNQQ=;
-        b=Q6L6Wu7sYTdtYZ8zJYS06JMdEfjjmN6LaOiExh9KSvoR0cUdpAvyTPkbHe8tj9+Wha
-         HXjvmgn4rUfRgWEIhfq7UzctUDZsZydjd+aNgj1uaRH9jHC8wRb0FW2G8rsBit2/iAXq
-         F8aDoA9NdcsjfpPge8X4Capo3r0OX3tyg0UlP31dxkifkKPtd+hY6kbVaEG9zebyzMSH
-         TDdbtc9a1cLKlbu/Id+GiNUh/m7eUOfr4NEwvUvgyMDg/HLD/A/7hF2741lWRdtXnbAK
-         y551tOdZnFA4G93xqL8ZVSuEa/It84dFpQPKAyEu+/jaBxgVPIzf/nYoM5DFNjr81fEP
-         E8FA==
-X-Forwarded-Encrypted: i=1; AJvYcCWncPIL7lpBonspuhdzl1MrCO1TlJjiVW1K52OIhUWzCABbV8NhuK2dNly71mGWXMLQ5+Zydwlutqghgg==@vger.kernel.org, AJvYcCWo97Qn4FaHsEAKalikVx/1LshCOjFe3kT8cM5gyb7ox1G8y6thjcJxeaF3EX8+y24gUirsfsRPS5G8AL8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzv23SCY70hpSyTERIu8+A9soBrgVeAhvjz1J9yacLcRN6zYuOd
-	n9J6diLFMT3qsQC1MiuchhN6qRjYrjWiyO4Hvyw4gnQjuQOiXBQtOEyZ1SG/
-X-Gm-Gg: ASbGncvj3kz/tR+8xlTNL97ZkBWxD14AZbhaphd2T4SjcxLGCJsTRb0PC3LcsdeWOqB
-	b74IXhlxEE/11qldBkumZF9FupQPtCvVjU1OyyJzlwGueEWrp9tOUWk1Xa+WIskAUNAboCTxWZ0
-	kBbzCx1Y7TaHn513Gn8v6SQvTDOoB8l7yuGXPGE1Dg4SlqQ+sgJSnGHIuG7Z6BD5cgusrDW4Ydd
-	wsv2JSgr8Dk8WD6Sxj0Gki5p6TmvP6zRc754qdYgsX1te1N99beUm8RSBKNSap8J3eqke8knUT9
-	1xRKg7TvctroSkz1XXP9s1PTVTLDMklmzvKaYTytSK1BfHBQuC55C/b8+owOJev28CHtPBxtlMp
-	JyeQ=
-X-Google-Smtp-Source: AGHT+IEwBxkQfwmjeEsEwT7lsjw85js0L3qfu6ljwpKNa8AK/o5Hs+e7LycJzQqHySMuG6V+OFxl4g==
-X-Received: by 2002:a05:6102:4b18:b0:4c1:774b:3f7a with SMTP id ada2fe7eead31-4db149174d0mr2435354137.16.1746429688168;
-        Mon, 05 May 2025 00:21:28 -0700 (PDT)
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4daf26062b0sm1304781137.19.2025.05.05.00.21.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 May 2025 00:21:28 -0700 (PDT)
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-877c48657f9so662113241.1;
-        Mon, 05 May 2025 00:21:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUOFMo6swkwkW9X6zDHDlV1OgFWUbkjfZHe23YWq9l66FoAySA/1KG4Qf181u6QKjpLyi3DOcP4U+FLWhc=@vger.kernel.org, AJvYcCUoRgrZ/bMhYL88pg09bkmovsmIIqdn63cBdL9OSsP+lvpltEBOhS4QSyFxGxlpXJ14MWSWT6esRz6/1Q==@vger.kernel.org
-X-Received: by 2002:a05:6102:2c02:b0:4c4:e018:326f with SMTP id
- ada2fe7eead31-4db147cc599mr2885872137.10.1746429687842; Mon, 05 May 2025
- 00:21:27 -0700 (PDT)
+	s=arc-20240116; t=1746430756; c=relaxed/simple;
+	bh=1KP4mAI19Zk1amrAS0hjHJvbX0fHpJxaad8PMwQ5Vt0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eam4PSpzMN/lR/v0TScB/EKxsqaA7WSawGVApc2tC4p+0/JqviLuM3kORHnqpgR4rYWA1ai0mHO7TdWOOhcRHM32M2ImeCymfiCXMWA9hUHYXJeQiOhHjY1hs/kWmrxjMbIUFsraF6D4wvGDgUileilDYm4QDlb/rpTyJV4c0Zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=EM/VRuNJ; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1746430751;
+	bh=1KP4mAI19Zk1amrAS0hjHJvbX0fHpJxaad8PMwQ5Vt0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EM/VRuNJci79q1yA7wuBSWS9ZDqm4Wx7NzH8Rc2FLZPr+xNjcoK32pjLCqYyvRNR5
+	 KW0D50qLub6HetV59S05OXi8+ZPJA3iPNma+REXs4g9blO5r0aDlLxR5wOXL5m/Ieg
+	 J5Ds+Gb0P/RUsDBME4wNrvywsPVzcQU+Kalq5BJk=
+Date: Mon, 5 May 2025 09:39:10 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Naman Jain <namjain@linux.microsoft.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the char-misc tree
+Message-ID: <2b57638f-82e3-4eec-a64d-fdde782f1ddb@t-8ch.de>
+References: <20250505160831.73e797b7@canb.auug.org.au>
+ <20250505161215.58a03af0@canb.auug.org.au>
+ <20250505171425.0d4169e2@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250430-misc-test-fixup-v1-1-6f39ed6c733d@igalia.com>
-In-Reply-To: <20250430-misc-test-fixup-v1-1-6f39ed6c733d@igalia.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 5 May 2025 09:21:15 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUk4UqmZV9zyzRz3S6n6+6vRQOcFymR_5J1A=JxAXUsSw@mail.gmail.com>
-X-Gm-Features: ATxdqUHvcAtG0So1qYVnS8CrzGCWjt_LpzMvW1LAaPVMH4RFAZw14bvBUN7h9d4
-Message-ID: <CAMuHMdUk4UqmZV9zyzRz3S6n6+6vRQOcFymR_5J1A=JxAXUsSw@mail.gmail.com>
-Subject: Re: [PATCH] char: misc: make miscdevice unit test built-in only
-To: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Andrew Morton <akpm@linux-foundation.org>, kernel-dev@igalia.com, 
-	kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250505171425.0d4169e2@canb.auug.org.au>
 
-Hi Thadeu,
+Hi Stephen,
 
-On Wed, 30 Apr 2025 at 18:53, Thadeu Lima de Souza Cascardo
-<cascardo@igalia.com> wrote:
-> Since it uses __init symbols, it cannot be a module. Builds with
-> CONFIG_TEST_MISC_MINOR=m will fail with:
->
-> ERROR: modpost: "init_mknod" [drivers/misc/misc_minor_kunit.ko] undefined!
-> ERROR: modpost: "init_unlink" [drivers/misc/misc_minor_kunit.ko] undefined!
->
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Closes: https://lore.kernel.org/linux-next/20250429155404.2b6fe5b1@canb.auug.org.au/
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202504160338.BjUL3Owb-lkp@intel.com/
-> Fixes: 45f0de4f8dc3 ("char: misc: add test cases")
-> Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@igalia.com>
+On 2025-05-05 17:14:25+1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Mon, 5 May 2025 16:12:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > On Mon, 5 May 2025 16:08:31 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > >
+> > > After merging the char-misc tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > > 
+> > > drivers/hv/vmbus_drv.c:1893:22: error: initialization of 'const struct bin_attribute * const*' from incompatible pointer type 'struct bin_attribute **' [-Wincompatible-pointer-types]
+> > >  1893 |         .bin_attrs = vmbus_chan_bin_attrs,
+> > >       |                      ^~~~~~~~~~~~~~~~~~~~
+> > > drivers/hv/vmbus_drv.c:1893:22: note: (near initialization for 'vmbus_chan_group.<anonymous>.bin_attrs')
+> > > 
+> > > Caused by commit
+> > > 
+> > >   f31fe8165d36 ("uio_hv_generic: Fix sysfs creation path for ring buffer")
+> > > 
+> > > interacting with commit
+> > > 
+> > >   9bec944506fa ("sysfs: constify attribute_group::bin_attrs")
+> > > 
+> > > from the driver-core tree.
+> > > 
+> > > I have applied the following merge fixup for today.  
+> > 
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Mon, 5 May 2025 15:56:12 +1000
+> > Subject: [PATCH] uio_hv_generic: constify bin_attribute definitions
+> > 
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  drivers/hv/vmbus_drv.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+> > index e3d51a316316..857109bb99a0 100644
+> > --- a/drivers/hv/vmbus_drv.c
+> > +++ b/drivers/hv/vmbus_drv.c
+> > @@ -1815,7 +1815,7 @@ static int hv_mmap_ring_buffer_wrapper(struct file *filp, struct kobject *kobj,
+> >  	return channel->mmap_ring_buffer(channel, vma);
+> >  }
+> >  
+> > -static struct bin_attribute chan_attr_ring_buffer = {
+> > +static const struct bin_attribute chan_attr_ring_buffer = {
+> >  	.attr = {
+> >  		.name = "ring",
+> >  		.mode = 0600,
+> > @@ -1841,7 +1841,7 @@ static struct attribute *vmbus_chan_attrs[] = {
+> >  	NULL
+> >  };
+> >  
+> > -static struct bin_attribute *vmbus_chan_bin_attrs[] = {
+> > +static const struct bin_attribute *vmbus_chan_bin_attrs[] = {
 
-Thanks for your patch, which is now commit 20acf4dd46e4c090 ("char:
-misc: make miscdevice unit test built-in only") in char-misc-next.
+An additional "const" would be a bit better:
 
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2512,7 +2512,7 @@ config TEST_IDA
->         tristate "Perform selftest on IDA functions"
->
->  config TEST_MISC_MINOR
-> -       tristate "miscdevice KUnit test" if !KUNIT_ALL_TESTS
-> +       bool "miscdevice KUnit test" if !KUNIT_ALL_TESTS
->         depends on KUNIT
->         default KUNIT_ALL_TESTS
++static const struct bin_attribute *const vmbus_chan_bin_attrs[] = {
 
-This means "default y" if KUNIT_ALL_TESTS=m, which is IMHO not
-what we want.
+Otherwise looks good in general.
 
-Perhaps
+> >  	&chan_attr_ring_buffer,
+> >  	NULL
+> >  };
+> > -- 
+> > 2.47.2
 
-    default KUNIT_ALL_TESTS=y
+> It occurred to me that the above patch could be applied directly to the
+> char-misc tree if vmbus_chan_bin_attrs was assigned to .bin_attrs_new
+> instead of .bin_attrs (later in the file), right?
 
-?
-
->         help
+Yes, that would also work. It will require adaption of the future patch
+removing .bin_attrs_new again, but that shouldn't be an issue.
 
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Thomas
 

@@ -1,110 +1,106 @@
-Return-Path: <linux-next+bounces-6527-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6528-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00DF6AA97AE
-	for <lists+linux-next@lfdr.de>; Mon,  5 May 2025 17:43:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B1F4AA9E4F
+	for <lists+linux-next@lfdr.de>; Mon,  5 May 2025 23:43:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FE7518986D5
-	for <lists+linux-next@lfdr.de>; Mon,  5 May 2025 15:43:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40B8E3A1CBE
+	for <lists+linux-next@lfdr.de>; Mon,  5 May 2025 21:42:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F42B25DD11;
-	Mon,  5 May 2025 15:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 668762741B9;
+	Mon,  5 May 2025 21:43:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="HP7Z397R"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Gmk+PpCl"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C8D1DFF7
-	for <linux-next@vger.kernel.org>; Mon,  5 May 2025 15:43:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56C5207A25;
+	Mon,  5 May 2025 21:42:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746459793; cv=none; b=YNrs6RNu1jTVf5e6by3JW6NEkiecmuZ1uOVClcYvXvbkT6aS7mu/p/kCzzjeJm8NQ/7okJCAsiJrt99jOvzMDl9E9mQ/WTdsHOKiO3B8SSidhC/+rpHXfie0JdbHnpmD953B3tTsfP+DDneh3NyWqNjoJBAPuaPhN9MxKd22hPw=
+	t=1746481380; cv=none; b=Y67sHXhyrTW5UJWeU/LDyNMtmUo5fH58rSL52/qMWudYTD0mp9AYw/NIuR4aJXfTifUxtvIUc4QjaEU6glpqXAuN/D2nddMWmowg+qBoh1FQdmhGHM1xK5l9RYhTWYhfIjFJ6f4mYW/592xMOXDCcxv3UGb8B/lIdBeJwNh0+B8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746459793; c=relaxed/simple;
-	bh=QRTbxv6zAHeMDzXhqL8aw35yYIDNThc5twhBqvEaco4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ugiqqtc7ptqg05df32k0rs6QG5ftVhD6P+8Z1GnXbJosEwty456FwqRuYaKmDro7YGlBZlXGgTYeTsJB0O4bt4nJDqTe+vpWdUpb2WIoaar05xD5cMpXXwoGJNBgwd68NREb9eWWo28xzSi26zWL9GMipzNl1/+a3S7lUZX5ibg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=HP7Z397R; arc=none smtp.client-ip=209.85.161.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-605ff8aa9d2so1135034eaf.0
-        for <linux-next@vger.kernel.org>; Mon, 05 May 2025 08:43:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1746459790; x=1747064590; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jADEHGiMlecVFngKrds8KPNTRKyJX4Rr2PqMnmh5p04=;
-        b=HP7Z397RXibyRH45OVZiWscWZnLDnQIKIkOEAj86AHCkuMW8RT1kxo360dsr1bcdOg
-         udG2Bv+vZHR6yaMcwOUavh174fAv7bbYH5gYOBu/CLnyyv4J3nWkgDK+VyRtuXaoPW2A
-         5lSVIqrod4kVYyR9jBeywUqmqez/ULw8UXXBTIthF60acb6lFRvFPDlnnMCwF00wM9nY
-         X7jrOK4TMBpsELHthudUtJzrZ7SaY/qd3CooyIEQrp485JS+Jquj3P7TrHIQv4lxosww
-         y0Y1NlFMWFaa290hv29txP6Q5Atv6vM/kckxMYqtQMywv5igP/avxoJorXI8tmUfAW1O
-         xsrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746459790; x=1747064590;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jADEHGiMlecVFngKrds8KPNTRKyJX4Rr2PqMnmh5p04=;
-        b=Cr5hq5mFxjXslODLw6JOseh19eM3IugGBeqWvJ9Gq8wcRYB4ShobmDiLA1jXqQNUDB
-         JX/lkCL/tHYd2ygMUwe+Bzlbqk0MHlbETI+vdVNmxi43c6ha56tRf6/7bs4r6k7GQtRb
-         JrfHq2py9ZXHJt4P9GKgOW7rH/j1Eh3r6wySSwZCxo3X1+7gb13S8SGr/MzsZGkn2MDo
-         MYYRMJeFRCqAEeGAVcKk2VX4G1ogyI4l/lC11VFax3qqL/OnGw1x+vRHB8R7TOs5sih2
-         aLYvtkVI9aGUKJnqu3yaMXDhh5di1yMZxGLR3CoXoxz+8Hj9Yuq5AVCZEorJTsoPiKCi
-         +JWw==
-X-Forwarded-Encrypted: i=1; AJvYcCXxJcjZg+3y5CRqE7gq+6eMsC/9wgUvbQsBUQn6hu+rKQuZITDLPIBGkE/mFSOJH+5/M71nqj8HyS1L@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIZUR3hswnx6dd4zcnjwpzjtED9QbZjO4cvCi0qm4XnOMUd8rR
-	PBXWmu4oUuoho6PR1/o2ykr3zfZp+XcGVf8hoUA0PRoukWl25wspkVVWC8PMTvD/HrN6hh7p5er
-	h
-X-Gm-Gg: ASbGncuI841+aAkTO70KjUXeEbXK5HACKTRQQyLWt7JKcPxQhvencgcVX6etQFv3Qfo
-	wgcdqlwebSy8Ig+MLkZDbtzMBSoRPPaHJmGsWfUzQAD1RUITIyTRBR5p2Uc0PEgOtfMo5fjLmDx
-	Or2NNP284YNMsiQsbjPtkg/ybV3u05/gMdd7NTovne47gkXFuqOq9tLCI3qjuYCsz8VHwK+w8hr
-	hcA573dqZ2thsAE4/43Fl5iEhLycSYv+EvcRKggmaRye/MC+EcxWRdaoDVtI9IccMXXLDLX4pxs
-	vrTJ/KzP8onNIVFAefumcpUuQBMw5a+NA2nJnuYoRVx0rv3EoVpvW8sSi+lLp9cgDQl+Jb4+2aT
-	1WryTDxzny9Nktp8=
-X-Google-Smtp-Source: AGHT+IFL2btLIVQtJx76CsbwyLNK829LBAKSDjNc/uTEdqP95tY4Xs4YkW2YjtftOF3WDWyRbGLvmg==
-X-Received: by 2002:a05:6820:1f11:b0:5fe:9edb:eafe with SMTP id 006d021491bc7-6080030c637mr4626794eaf.5.1746459790013;
-        Mon, 05 May 2025 08:43:10 -0700 (PDT)
-Received: from ?IPV6:2600:8803:e7e4:1d00:2151:6806:9b7:545d? ([2600:8803:e7e4:1d00:2151:6806:9b7:545d])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-607e7db20f9sm1668000eaf.16.2025.05.05.08.43.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 May 2025 08:43:09 -0700 (PDT)
-Message-ID: <a8f47109-f370-49db-abe8-955ba287ab0c@baylibre.com>
-Date: Mon, 5 May 2025 10:43:08 -0500
+	s=arc-20240116; t=1746481380; c=relaxed/simple;
+	bh=5DQRiMbqOlbNLqDsV7G1/knRAM2sWBKLUyVgqn3zpBI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=RFa6MWRbVzfhg9YM/APEObJDUwHi2DkEcfYO+vYETZCRa6Fo14AtafKOBZaayxSu8wIGqDwi0I2VcjL1GKoXeNQnJuus58On2kZDCgu8P30vBew2YZoXq5u0YciXB5ts4LaHpZVzx+MwMPMV/rqE3ptDHRXF4ApF6HTdzm59x/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Gmk+PpCl; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1746481371;
+	bh=QYjGLIWEwz2N9pWVJYFxaupWDDBj9r6QlnGZAXoaanM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Gmk+PpCluhoEn8tK8mLwjk4d/XsjAprdrzu1oQ5ulD665dGAv2tCI8eQyWDiJRddS
+	 AIntapSDhZio5EIg8aNvybjB7fB48t87Xa7BTZSmBwr0W0gVW2expW8bNqgEveriJ8
+	 P0ti5j5I0+KKehUftbZZpYAakH/92Vb2tKDiyjdhQjGiB2hmhPw9uIxttfI3my7Hzn
+	 Kcp3Rof6ertZLZI0D0rD8dlW/laogQF64HpMUUSMRi8jvlyRipt9rsATaj6Y+RyFel
+	 BzQs4tUAXfeAicreoxC5R6f4ZMjKTDvPWk6j06dSFCGE2KWFKPpl945W72Kge9mHRb
+	 Wl5Vd59WqwYwQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zrw4C1Bgxz4wbr;
+	Tue,  6 May 2025 07:42:50 +1000 (AEST)
+Date: Tue, 6 May 2025 07:42:50 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Miriam Rachel Korenblit <miriam.rachel.korenblit@intel.com>, Johannes
+ Berg <johannes@sipsolutions.net>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the iwlwifi-next tree
+Message-ID: <20250506074250.506755af@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Signed-off-by missing for commit in the iio tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20250505074801.258da03a@canb.auug.org.au>
-From: David Lechner <dlechner@baylibre.com>
-Content-Language: en-US
-In-Reply-To: <20250505074801.258da03a@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/gAWsFch9eJ1eKfP1E/khmNm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 5/4/25 4:48 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commit
-> 
->   1a521690c060 ("iio: adc: ad7606: explicit timestamp alignment")
-> 
-> is missing a Signed-off-by from its author.
-> 
+--Sig_/gAWsFch9eJ1eKfP1E/khmNm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for reporting this. The oversight has been fixed.
+Hi all,
 
+The following commits are also in the iwlwifi tree as different commits
+(but the same patches):
+
+  eabceff21b2b ("wifi: iwlwifi: mld: fix BAID validity check")
+  e213f0470edf ("wifi: iwlwifi: back off on continuous errors")
+
+These are commits
+
+  60d418e85404 ("wifi: iwlwifi: mld: fix BAID validity check")
+  d49437a6afc7 ("wifi: iwlwifi: back off on continuous errors")
+
+in the iwlwifi tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/gAWsFch9eJ1eKfP1E/khmNm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgZMNoACgkQAVBC80lX
+0GzjUwgAotC8X1bAx1xm2b3x63/iLRT6qCq6irJS1GvUTStaxWAIH3HJ4w21h6hm
+3n2GcrWiUvdraj/DuQ6TsrCUPpmjlcFmn8AEG3cpEHs/CJ1ztKXq5VGOI02qPYQZ
+zvYuGGIv30GFkxL6Jr5bc00XM10kBlj8ywR0/0NWlg48yEMqLrIw4AdQ7mDym67r
+uvsrnMVlmhkjiGT4ZYOdqLf9ABxCNboU2w1TvZODg8AoIkTtSTsZCSEDlCsLx2Wa
+8wY17bGpbMb2I3XhJUJlMbH53uRTAEOQFQRlNOUlnNSRBdak9tkrWctoN00boWHI
+7DaZkXSiHNQWBEBpDh8vb5xo6u7JAw==
+=+cYn
+-----END PGP SIGNATURE-----
+
+--Sig_/gAWsFch9eJ1eKfP1E/khmNm--
 

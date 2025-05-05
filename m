@@ -1,157 +1,120 @@
-Return-Path: <linux-next+bounces-6513-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6514-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E437FAA8B5E
-	for <lists+linux-next@lfdr.de>; Mon,  5 May 2025 05:57:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EF65AA8C14
+	for <lists+linux-next@lfdr.de>; Mon,  5 May 2025 08:08:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C8CA171498
-	for <lists+linux-next@lfdr.de>; Mon,  5 May 2025 03:57:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 827BF3AA7C6
+	for <lists+linux-next@lfdr.de>; Mon,  5 May 2025 06:08:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71C18E55B;
-	Mon,  5 May 2025 03:57:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9508A15574E;
+	Mon,  5 May 2025 06:08:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CohAnNTo"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VIPq3GuR"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE7F29B0;
-	Mon,  5 May 2025 03:57:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D509C7D3F4;
+	Mon,  5 May 2025 06:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746417429; cv=none; b=Ge5JqNmYAYgSxROqjHQRUP7F6ak+Iygg/m2sl2SJ5gPBBshdjkJdXHbErSVaLdDQ6LDp3ILiP6pD2leYVbH3ES+s4kryqQrxSM2nD1HtJQeHeqCC595YNRLGeJxYzHlJ+NaPdvZufwsWJ9ks57N+rvYD5pc842tN4QLhOyojQc4=
+	t=1746425322; cv=none; b=UZJB4uuag7EuluxHgRS6f0O0iZBSnKOQvIyqBeSw58Rjoo9nlKrNJ5quOOWpgKTVeyJe3TS4qSgVDAwmxN0ZH6Ffd2Gvsc4CfyWjJsomkd3fT+bpseqiXVjZHYBZeXJmCDPSX1uRA3WhSPt+LcRJIuZo6Pmm6n0XJkheWCi6ixc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746417429; c=relaxed/simple;
-	bh=nI8SdfJMgfl/bA4c24Lfkjf7p31ZnaxNiYdfeX7R9QY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=n2HoDf9N8yq1WWTsFeOt2NZRLOLKcyNLrdV8DScMl9P1jp/y8qC5arijE5KAYMPYcZfHEf5pk/aMp06URGZmAhf3pCbtBLcX6KRiD2UU5/OzChhxcZkrMqIw5Otvy5CkoOM4fwNoqK1XmaL/Xbnx0eEo5q2AD6tffdFyKil99WM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CohAnNTo; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1746425322; c=relaxed/simple;
+	bh=dxadrVdNhP19del1n4qzWfOieZZNfrkSoNMHSbs79L0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=XoNH80xKSCo6gxHNPGNN+AaMA/RiZswqAkwx6RmZLsDyzpv2rSD/Q0DHJDJcptA5yiix1O6aqyte9gwDdDvIRDH08aGBtiA0c6JAyyVcslKIQQVtDaKdsNj/PyNAHJZCsAoPbd7JfnwIqHdhpK3Amt34zJ+yd6p4HUn/Y0PWTMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=VIPq3GuR; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1746417423;
-	bh=qcQOZLOvfy3bUBGaS+hBBQoeSH2J2iRN8vC1MNsRWSk=;
+	s=202503; t=1746425315;
+	bh=UHSmpTlpcxFizkGJ884sLienNu54x81UBaqYBVI2tw4=;
 	h=Date:From:To:Cc:Subject:From;
-	b=CohAnNToextQ4nYBDyxOY8o4UsMtlz9pxvVJpotsZgSNSrArKrBUqIWgESM8hDZDE
-	 ONG1DS8lJIcgNR5U95hbllonHcclArk8FVXMhJRMqG6B0Pk4IFIrIDOXy3WdMSHoHb
-	 FCupfoRgmWshsAWYSaxRBofhwNEFzxYVDUn85BHnqKjoiIlFIyk4a62Y1qtGAFidPd
-	 bxI/SLjkBtlaAX2HiNXJD/X68pSPwCUrlMAfime2d7sikHTda9gNirsBFRL6PkZRHz
-	 GqSlf0sDDzP6putBYkEy9HUUsefOsdZuHnTmVDBcCxpjLnwu8MaOUvkDFTvXfInqoQ
-	 icWP7s1TFAp0Q==
+	b=VIPq3GuRGKH9eeUnUYuE1XQNrgk7ozwdrG8VDPx8daOtK2wuleJra1jiUjBIeSP9Y
+	 dT2DWLR/wy9lQ4I8kPSp8xf7l6sTnYm67hmVepAvInIQYMzbaCn4/PWa1whrgMXDLS
+	 ux5PUe4v6PDReO+HAETCsfzkABoGcX51YEb0Mv36KNX1bhdaSHPni57+nG16xlPa51
+	 x8sLa1MLNB8x3SOlIr+hQzAKLaFdGhr5khsuVF90C0xyigDQaMSdVQjY0CQ0WnrWW9
+	 8e/lpMM6dYyVQ4TLng8lxLX8Mi5KP679rPQNLIFi2mxqxK4npSua7j/MvZKIElsZBv
+	 Lp+tsJt3Nqr8g==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZrSQM1QWhz4x3p;
-	Mon,  5 May 2025 13:56:59 +1000 (AEST)
-Date: Mon, 5 May 2025 13:56:58 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZrWL95xYVz4x0t;
+	Mon,  5 May 2025 16:08:33 +1000 (AEST)
+Date: Mon, 5 May 2025 16:08:31 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Huacai Chen <chenhuacai@loongson.cn>
-Cc: Charlie Jenkins <charlie@rivosinc.com>, Huacai Chen
- <chenhuacai@kernel.org>, Linux Kernel Mailing List
+To: Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Naman Jain
+ <namjain@linux.microsoft.com>, Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?=
+ <linux@weissschuh.net>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Youling Tang <tangyouling@kylinos.cn>
-Subject: linux-next: manual merge of the tip tree with the loongarch tree
-Message-ID: <20250505135658.65332342@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the char-misc tree
+Message-ID: <20250505160831.73e797b7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FecqIuZuEVZV/4ys3/p4gOL";
+Content-Type: multipart/signed; boundary="Sig_/1TCQhpT7V4rWPOeBOIk1Ui7";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/FecqIuZuEVZV/4ys3/p4gOL
+--Sig_/1TCQhpT7V4rWPOeBOIk1Ui7
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+After merging the char-misc tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  arch/loongarch/kernel/entry.S
+drivers/hv/vmbus_drv.c:1893:22: error: initialization of 'const struct bin_=
+attribute * const*' from incompatible pointer type 'struct bin_attribute **=
+' [-Wincompatible-pointer-types]
+ 1893 |         .bin_attrs =3D vmbus_chan_bin_attrs,
+      |                      ^~~~~~~~~~~~~~~~~~~~
+drivers/hv/vmbus_drv.c:1893:22: note: (near initialization for 'vmbus_chan_=
+group.<anonymous>.bin_attrs')
 
-between commit:
+Caused by commit
 
-  d62879a8b16c ("LoongArch: Enable HAVE_ARCH_STACKLEAK")
+  f31fe8165d36 ("uio_hv_generic: Fix sysfs creation path for ring buffer")
 
-from the loongarch tree and commit:
+interacting with commit
 
-  7ace1602abf2 ("LoongArch: entry: Migrate ret_from_fork() to C")
+  9bec944506fa ("sysfs: constify attribute_group::bin_attrs")
 
-from the tip tree.
+from the driver-core tree.
 
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I have applied the following merge fixup for today.
+
+
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/loongarch/kernel/entry.S
-index 77f6fb9146a2,2abc29e57381..000000000000
---- a/arch/loongarch/kernel/entry.S
-+++ b/arch/loongarch/kernel/entry.S
-@@@ -78,25 -77,21 +78,23 @@@ SYM_CODE_START(handle_syscall
-  SYM_CODE_END(handle_syscall)
-  _ASM_NOKPROBE(handle_syscall)
- =20
-- SYM_CODE_START(ret_from_fork)
-+ SYM_CODE_START(ret_from_fork_asm)
-  	UNWIND_HINT_REGS
-- 	bl		schedule_tail		# a0 =3D struct task_struct *prev
-- 	move		a0, sp
-- 	bl 		syscall_exit_to_user_mode
-+ 	move		a1, sp
-+ 	bl 		ret_from_fork
- +	STACKLEAK_ERASE
-  	RESTORE_STATIC
-  	RESTORE_SOME
-  	RESTORE_SP_AND_RET
-- SYM_CODE_END(ret_from_fork)
-+ SYM_CODE_END(ret_from_fork_asm)
- =20
-- SYM_CODE_START(ret_from_kernel_thread)
-+ SYM_CODE_START(ret_from_kernel_thread_asm)
-  	UNWIND_HINT_REGS
-- 	bl		schedule_tail		# a0 =3D struct task_struct *prev
-- 	move		a0, s1
-- 	jirl		ra, s0, 0
-- 	move		a0, sp
-- 	bl		syscall_exit_to_user_mode
-+ 	move		a1, sp
-+ 	move		a2, s0
-+ 	move		a3, s1
-+ 	bl		ret_from_kernel_thread
- +	STACKLEAK_ERASE
-  	RESTORE_STATIC
-  	RESTORE_SOME
-  	RESTORE_SP_AND_RET
-
---Sig_/FecqIuZuEVZV/4ys3/p4gOL
+--Sig_/1TCQhpT7V4rWPOeBOIk1Ui7
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgYNwoACgkQAVBC80lX
-0GyP1wf/c5T3B4zrwq/CFzmrsLm/Dc3Ee5ye3/ipssJJed/WnORU5xOotNPbgRkp
-dY3uwj3GYWym7jeUcRkoo8fatS5aAxTUGKpN4RBfPJUB/x/txUsTNbMLN+MUWipB
-bDeKfg1nj8GbubCgcEW4JKFR0GF4qAJZWDoegpCbcMey1/C6rSwBLAtr0/pWqv9f
-hdYo0//Y5+EOZN/No6e/6F46Ny/AECxiK7DB3l+EfySEyXXA6CJhgfiMtxHeXtP3
-3thWnpVYpsUaSHHbf74nX9N5hCnA7VqxbMe5tYEvQ6jiv37oN9WucY7cOfvNwFEW
-iplHNwIKXCUPfnA7KJk/Nqusd8K9fA==
-=fPIO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgYVd8ACgkQAVBC80lX
+0GyzZQf5AdQ1g2zO2a3za56Zv++dmurRBGQ9xTszAVWbZ8t2bhVRJ9ehgsrP27kD
+AhfVgqPNkE5qNowelaPH98GH+nLrxf1yrWCTnb0R0e89esGvwbqv08VmkeoH/lNv
+eJJWZ3pC3J/buiFj9uoXXWS2HPFl723rJ4MUKeqLMO8fbOG8SaCVgHYtR3zgsc67
+dgmWwqMM2ifL3wJMK5pKHW3Wu8PvnJ9aMMlR8G1VZhoJd4+erbPbUF+WR7fT6Nxi
+b33KHuAcu294ateHbmxFGvwyy47KRhsLw8ls4ViNqH+6ZjHemgVQDuxk8qDfWjk8
+4bv09r2EzEQ8kNsQzoOo+iqMvbkUZw==
+=g8TH
 -----END PGP SIGNATURE-----
 
---Sig_/FecqIuZuEVZV/4ys3/p4gOL--
+--Sig_/1TCQhpT7V4rWPOeBOIk1Ui7--
 

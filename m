@@ -1,106 +1,81 @@
-Return-Path: <linux-next+bounces-6547-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6548-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61421AAC284
-	for <lists+linux-next@lfdr.de>; Tue,  6 May 2025 13:26:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD258AAC308
+	for <lists+linux-next@lfdr.de>; Tue,  6 May 2025 13:47:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B8163A4E20
-	for <lists+linux-next@lfdr.de>; Tue,  6 May 2025 11:26:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C27AA189DA05
+	for <lists+linux-next@lfdr.de>; Tue,  6 May 2025 11:47:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5BB727AC23;
-	Tue,  6 May 2025 11:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72E94221D93;
+	Tue,  6 May 2025 11:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VvyW678R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uU/IQUu2"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F5E27A457;
-	Tue,  6 May 2025 11:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48ACEB665;
+	Tue,  6 May 2025 11:47:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746530758; cv=none; b=gcQo0d7cEV44cC23fxapHW/1fUI+fdOliW0cFUXJJKZCPUOMOQN+fceeTbRXO9WYE/TF9rblWJwCY7acAkrKT6qr3T+07o0PtCsYQz8FAICJPouCHOnS8FQLB1o58karSMKzdQyYTjDi6Frwm7Po/Mt+nPzcf4bXacrpaFW0qco=
+	t=1746532032; cv=none; b=C2fePGz1yfliNMRbT6l0bfC0iRZ5GbfYeRLYchpG64ANFIhe/VAlRfc9lMJyetzkDIm0MgGhz/ycizqtNcrBlKFln5ZuVJbxCHEz4t4XPAXvN1eX7++ZjYlvEMHqhhKn9li5gfpn08aWgdUc+CDIeEzgmJRK9FF6LlVGaOo86Ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746530758; c=relaxed/simple;
-	bh=XgTcwR/r+H6X7/Vl3b1xNmXP3hP0XvRCLfIkPJ8BL94=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=V2PbV9dcFh5i7vrxaQ0lhjYA4C2Pr1/tRV+koooR+fMsGSu1m0klarPV5DrOoo9t1EkGtmWVEzgav4pwo6FXG5BB1e5laX+2EEsQtgazey1dJgXB6rc6D9PpkPkDpTJz1f28jRXOh0if54Jm2zgwGTxSDTJCFdzx8gFCvT1wtR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VvyW678R; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746530758; x=1778066758;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=XgTcwR/r+H6X7/Vl3b1xNmXP3hP0XvRCLfIkPJ8BL94=;
-  b=VvyW678RCMmcVy+g9N6ul4LaULTWoBpIAYk4/jPaynTVJFwUNFl/TDWz
-   Ghku7z8pqKDkueLDRhQ9m8zundcsxv4bGDtYIQESdxGm3I+kuJesv7LvH
-   7skrcZJ4fT4X5RZJMSryz+gbaw4SPaSUHyc0eoT2POVe4Z3EERuOEuwWM
-   AW6O3YAB55gDshgM3JSHPltG2H+GPy+E3SvRkkS/WsfJo+GUn3eZqcApz
-   xOEKCuBZjFFfg16L+NUlzEVpduzKj5ejiJ3ryceGC53tPPe6t62gK6N1R
-   wD1nRxxvv0nUsobKaXZz/kuIwo0gEjRjMtU7RVPX8wentZTpT7Q8LqZvU
-   A==;
-X-CSE-ConnectionGUID: UeJShn9IScWbG/+GOIq+sw==
-X-CSE-MsgGUID: Ek9DgO0JQ165FY0VVIjEKw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11424"; a="48100769"
-X-IronPort-AV: E=Sophos;i="6.15,266,1739865600"; 
-   d="scan'208";a="48100769"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2025 04:25:57 -0700
-X-CSE-ConnectionGUID: qzo0UWuWQwK0jmC1MsNUog==
-X-CSE-MsgGUID: 7/ub2ltuQVaMlzkbDRaidA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,266,1739865600"; 
-   d="scan'208";a="135973628"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.207])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 May 2025 04:25:54 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 6 May 2025 14:25:51 +0300 (EEST)
-To: Randy Dunlap <rdunlap@infradead.org>
-cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
-    Linux Next Mailing List <linux-next@vger.kernel.org>, 
-    Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-    linux-pci@vger.kernel.org
-Subject: Re: linux-next: Tree for May 5 (drivers/pci/pcie/bwctrl.c)
-In-Reply-To: <0ab5fe5d-feda-4a3a-8803-92eb4e52e3b4@infradead.org>
-Message-ID: <cbd7bfaf-613e-631b-db39-b63864049f4b@linux.intel.com>
-References: <20250505184148.210cf0aa@canb.auug.org.au> <0ab5fe5d-feda-4a3a-8803-92eb4e52e3b4@infradead.org>
+	s=arc-20240116; t=1746532032; c=relaxed/simple;
+	bh=pgme4db0HVf3ULte0O2xM3spLwKaE8qC/9jXQdHimkc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Adg9MgCZfP7+PWPcz23OqwPPx/Z3krUpMVkKWAgESEtvZn+Ig+w5VqTu8cURcRrzQt/XQVIQkbZL3/R0BCoYkjQiJ3eXxRnggLtchqtDfjhRr7PNcYr5a+1LMVUGYM0Rzlm1cf9kyY6ur4TQ/Mp4FfzUNoTnTY6b2vXaW0SlQYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uU/IQUu2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3833EC4CEEE;
+	Tue,  6 May 2025 11:47:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746532031;
+	bh=pgme4db0HVf3ULte0O2xM3spLwKaE8qC/9jXQdHimkc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uU/IQUu2uTLP4EgDx2Z4TlXN+bQ11NA00hH+kcCNVSCHI9d3zOyKXkS+xQmVuYJK9
+	 v6Kx/voZMzLCELx0rC8IGf4IYnMd0vAs10GPd9tvbzZrlzNEcUkPA58aCb59RiGEuH
+	 HEIyiAuP7cmFciIAJBOzOwwC8gJtpv+26U7qelksZx6S18uGu52PTXzvJ6AilPG0dd
+	 RgKuxSSnP7B3t1/WGm64ggA3QywsS72lYqpFX7v5S0gF1gI48Lwqqsph9dSpkEvFcH
+	 9ykwjllTdcaNoP/24Z3tkisTs9+mW0Ji1YaA7CsRoBcvL4x5wrDRuK24YrqQhfy2pL
+	 1YT/t2Wx/EHrA==
+Date: Tue, 6 May 2025 13:47:08 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: "Yo-Jung (Leo) Lin" <leo.lin@canonical.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the i2c-host tree
+Message-ID: <bxojzupzygifyhvjj4wwneyzvsbe5nr6fqsvy2xzjyxyban34p@756t6bmzutro>
+References: <20250506191114.1809d6ba@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250506191114.1809d6ba@canb.auug.org.au>
 
-On Mon, 5 May 2025, Randy Dunlap wrote:
+Hi Stephen,
 
+On Tue, May 06, 2025 at 07:11:14PM +1000, Stephen Rothwell wrote:
+> After merging the i2c-host tree, today's linux-next build (i386 defconfig)
+> failed like this:
 > 
-> 
-> On 5/5/25 1:41 AM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20250502:
-> > 
-> 
-> on x86_64:
-> 
-> drivers/pci/pcie/bwctrl.c:56:22: warning: 'pcie_bwctrl_lbms_rwsem' defined but not used [-Wunused-variable]
->    56 | static DECLARE_RWSEM(pcie_bwctrl_lbms_rwsem);
->       |                      ^~~~~~~~~~~~~~~~~~~~~~
-> include/linux/rwsem.h:153:29: note: in definition of macro 'DECLARE_RWSEM'
->   153 |         struct rw_semaphore lockname = __RWSEM_INITIALIZER(lockname)
->       |                             ^~~~~~~~
+> drivers/i2c/busses/i2c-i801.c: In function 'i801_probe_optional_targets':
+> drivers/i2c/busses/i2c-i801.c:1180:54: error: 'struct i801_priv' has no member named 'mux_pdev'
+>  1180 |         if (!IS_ENABLED(CONFIG_I2C_I801_MUX) || !priv->mux_pdev) {
 
-Thank for the heads up, I don't know what I was thinking. I remove all 
-code related to that rwsem but forgot to remove the rwsem itself. I'll 
-send a patch once our build tester has had the opportunity to check it.
+uh yes, priv->mux_pdev is defined under CONFIG_I2C_I801_MUX.
 
--- 
- i.
+Thanks Stephen! I will add this conditional compile test in my
+flow.
 
+I will revert the commit for now, as well.
+
+Thank you,
+Andi
 

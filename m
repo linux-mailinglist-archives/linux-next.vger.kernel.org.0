@@ -1,139 +1,112 @@
-Return-Path: <linux-next+bounces-6539-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6540-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EC3FAABBE9
-	for <lists+linux-next@lfdr.de>; Tue,  6 May 2025 09:51:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D32FDAABB1C
+	for <lists+linux-next@lfdr.de>; Tue,  6 May 2025 09:35:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 423363B361A
-	for <lists+linux-next@lfdr.de>; Tue,  6 May 2025 07:32:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 764424628A3
+	for <lists+linux-next@lfdr.de>; Tue,  6 May 2025 07:31:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 954932222B2;
-	Tue,  6 May 2025 06:04:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8692D23BCFA;
+	Tue,  6 May 2025 06:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="snruClU0"
 X-Original-To: linux-next@vger.kernel.org
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644A3215F56
-	for <linux-next@vger.kernel.org>; Tue,  6 May 2025 06:04:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F40A23D2B7;
+	Tue,  6 May 2025 06:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746511483; cv=none; b=owS1abTxc+AmsznG029d4vpoHAYvAVg+sM5ZmrRK2Nvd9ZASPymK8HWsOEaMgh8kEktG853nCWeMGa70Z9Y3UgkYqOUSf5xo7LAj4BknB5G2+Gh4JLhHAMjjrbSoESHfuWE/8p/d2MzlNFzYwimx5WyziE+TnkGeF56L1KZ6wow=
+	t=1746512537; cv=none; b=J/iGp55rq/5jQ5t5zYs5YWYXGcbNgDnoE01hLt5YJcFoG8v6uyEg9g8qA9bBr6ai4A9bZb67JfU6C3HIUH3m4Te1ijfY0IZHuSqeDt63HtlKs9cnT1JlaKJNBx2ytZ8qJjUcJC75aDOpX+QMgYZJjD36/qRxcH5855Oy57+DkaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746511483; c=relaxed/simple;
-	bh=qqKps+n0LRRLxShYnCmSmbPZWcxbol6xXJh54a3P+v8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=mb3f9zNoYJfDAaRTRy3fWGJvZAAbckDYIldKD7LOPPAZs9o9n72D7k23Rrn0ghahagH8/eI3+r3dIN/XxgC6uZpjFmm20xB7kBJOrHPx1FrnVzK19zsQxjPkUqMMN5lzqT0GWEd9xHjMLLivGu5PBHDJ/Ile/eUleANXdgWB0x8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Zs7BV1zt4zsTHy;
-	Tue,  6 May 2025 14:04:02 +0800 (CST)
-Received: from kwepemf100018.china.huawei.com (unknown [7.202.181.17])
-	by mail.maildlp.com (Postfix) with ESMTPS id E00A8140257;
-	Tue,  6 May 2025 14:04:35 +0800 (CST)
-Received: from [10.67.120.168] (10.67.120.168) by
- kwepemf100018.china.huawei.com (7.202.181.17) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 6 May 2025 14:04:35 +0800
-Message-ID: <ac171cd6-82a8-e3b6-addc-c1c515470c9f@hisilicon.com>
-Date: Tue, 6 May 2025 14:04:34 +0800
+	s=arc-20240116; t=1746512537; c=relaxed/simple;
+	bh=bVW0yWoo7Cy8L7af25rANEL41vXAv3yJuQx+e90o7SY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=t5X7np03WiXckA55PHfi2eBLuXCxSxwxa0Y3xvmv8E08TzjyC2Qn1fX9YuFaJFbJWLtMte7nia1DTEPs+FrG3VzCZ/1DTmfS2OcsnbZvzH5oH6/lqVgDGfBQAF48NhbTNjokzmJHTgdfDgS92+GJFiEN0lXFGkoa+HDY30G9HoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=snruClU0; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1746512531;
+	bh=xiiJ4HgmgUy/Q2z4qx9pS1/GtAjQ68UkIyXdDJOZ5Nk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=snruClU0WCjBsEv11zTjRE7FPtQLnf9Bl7zWPqFn/nQCyhrkRjRlYgCYzvWZ/13p1
+	 fZT7nNQnw/hP0XLqgAfyHCiAiqC1wfKAZlYQ518oAIuyEzreTURhUMy7Gxqoia8d1b
+	 5q+Utok2o012hiFc366MR2NZY+tvnVVQ/LFSE8DfTql7DSJRwAgoFPJzE6+FyFRJ8F
+	 ZebrWTJ6wgx4JilfV8VHxsWi/vMe1brYaAGHhe1vX7iQXWdk3Y2L/k/aLjlO75eBF8
+	 FQHsrq8RpQZbm3QFWwMlJD53AA+mMAVxmUa+OCiilYc9CCNFnG+g3Yo1dPHCQw9Jas
+	 KjmTMo9ujzUwA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zs7bR0PcHz4x0L;
+	Tue,  6 May 2025 16:22:10 +1000 (AEST)
+Date: Tue, 6 May 2025 16:22:10 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Chanwoo Choi <cw00.choi@samsung.com>
+Cc: Svyatoslav Ryhel <clamor95@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the extcon tree
+Message-ID: <20250506162210.4a0b0139@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [BUG] allmodconfig build failure in hns_roce_trace.h
-Content-Language: en-US
-To: <paulmck@kernel.org>, Leon Romanovsky <leon@kernel.org>
-CC: Stephen Rothwell <sfr@canb.auug.org.au>, <linux-next@vger.kernel.org>
-References: <0ea657ca-71cb-498d-a5d5-43300f30523d@paulmck-laptop>
-From: Junxian Huang <huangjunxian6@hisilicon.com>
-In-Reply-To: <0ea657ca-71cb-498d-a5d5-43300f30523d@paulmck-laptop>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemf100018.china.huawei.com (7.202.181.17)
+Content-Type: multipart/signed; boundary="Sig_/sgEOaJh0hOXU7OV.5r6.aux";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/sgEOaJh0hOXU7OV.5r6.aux
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 2025/5/6 5:50, Paul E. McKenney wrote:
-> Hello!
-> 
-> I ran into an allmodconfig build error in next-20250505 and a few of
-> its predecessors on x86.  The patch shown below makes it build without
-> errors, and might even be a proper patch.
-> 
-> An alternative fix might be to use the "-I" compiler command-line argument
-> to inform it of this additional place to look for include files.
-> 
-> 							Thanx, Paul
-> 
-> ------------------------------------------------------------------------
-> 
-> hns: Fix hns_roce_trace.h allmodconfig build failure
-> 
-> When doing an allmodconfig build next-20250505 and a few of its predecessors on x86, I
-> get the following build error:
-> 
-> In file included from drivers/infiniband/hw/hns/hns_roce_trace.h:213,
->                  from drivers/infiniband/hw/hns/hns_roce_hw_v2.c:53:
-> ./include/trace/define_trace.h:110:42: fatal error: ./hns_roce_trace.h: No such file or directory
->   110 | #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
->       |                                          ^
-> compilation terminated.
-> 
-> This appears to have been introduced by this commit:
-> 
-> 02007e3ddc07 ("RDMA/hns: Add trace for flush CQE")
-> 
-> Fix (or at least suppress) this by adding the path needed to find the
-> include file.
-> 
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> 
-> ---
-> 
-> diff --git a/drivers/infiniband/hw/hns/hns_roce_trace.h b/drivers/infiniband/hw/hns/hns_roce_trace.h
-> index 23cbdbaeffaa4..bec69b6dca5da 100644
-> --- a/drivers/infiniband/hw/hns/hns_roce_trace.h
-> +++ b/drivers/infiniband/hw/hns/hns_roce_trace.h
-> @@ -207,7 +207,7 @@ DEFINE_EVENT(cmdq, hns_cmdq_resp,
->  #endif /* __HNS_ROCE_TRACE_H */
->  
->  #undef TRACE_INCLUDE_FILE
-> -#define TRACE_INCLUDE_FILE hns_roce_trace
-> +#define TRACE_INCLUDE_FILE ../../../drivers/infiniband/hw/hns/hns_roce_trace
+After merging the extcon tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Hi Paul, thanks for the report.
+drivers/extcon/extcon-max14526.c: In function 'max14526_probe':
+drivers/extcon/extcon-max14526.c:252:74: error: conversion from 'long unsig=
+ned int' to 'unsigned int' changes value from '18446744073709551614' to '42=
+94967294' [-Werror=3Doverflow]
+  252 |         regmap_write_bits(priv->regmap, MAX14526_CONTROL_2, USB_DET=
+_DIS, ~USB_DET_DIS);
+cc1: all warnings being treated as errors
 
-I'd prefer not to change this part as it is the standard definition of
-trace headers. Can you please test the patch below?
+Caused by commit
 
-Thanks,
-Junxian
+  0367e6929cf6 ("extcon: Add basic support for Maxim MAX14526 MUIC")
 
-diff --git a/drivers/infiniband/hw/hns/Makefile b/drivers/infiniband/hw/hns/Makefile
-index 7917af8e6380..baf592e6f21b 100644
---- a/drivers/infiniband/hw/hns/Makefile
-+++ b/drivers/infiniband/hw/hns/Makefile
-@@ -4,6 +4,7 @@
- #
+18446744073709551614 is 0xFFFFFFFFFFFFFFFE.
 
- ccflags-y :=  -I $(srctree)/drivers/net/ethernet/hisilicon/hns3
-+ccflags-y +=  -I $(src)
+I have used the extcon tree from next-20250505 for today.
 
- hns-roce-hw-v2-objs := hns_roce_main.o hns_roce_cmd.o hns_roce_pd.o \
-        hns_roce_ah.o hns_roce_hem.o hns_roce_mr.o hns_roce_qp.o \
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/sgEOaJh0hOXU7OV.5r6.aux
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
->  #undef TRACE_INCLUDE_PATH
->  #define TRACE_INCLUDE_PATH .
->  #include <trace/define_trace.h>
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgZqpIACgkQAVBC80lX
+0GyV9Af+IPx/LicfhmbAP124YUrRFrYWr2ZFcnK5CuPTpeGRUHA/aDUuBwfjzLJ/
+MB7zbcUbsivT9i4fSCcJe8uX+WJfzkfzmGxM5nvy88S7ouI+lI9kK2Q7pEISHne8
+j/pIWTPRvl9JwPUB6hnSswmh4wzLWt1BpLiiNDyVLz2hPiRgWnpzWpr/siZ8Gm0b
+U3BqH+wc413BB12MQ616wkyRAHPeelD1dyR6N2/laUB7q7c06FC4BnVl9szWIpiS
+4Sy/iCXF74TK9TJqJ4c5TZNt1qm9XAN8a8rGgqgGlRiuYUyoSz5fVQWML9Zositl
+WanjWD33gcya6fJ3m+gBXOpfOibmPA==
+=XkcJ
+-----END PGP SIGNATURE-----
+
+--Sig_/sgEOaJh0hOXU7OV.5r6.aux--
 

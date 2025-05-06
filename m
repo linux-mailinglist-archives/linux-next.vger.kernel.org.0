@@ -1,58 +1,61 @@
-Return-Path: <linux-next+bounces-6551-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6552-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E623AACB01
-	for <lists+linux-next@lfdr.de>; Tue,  6 May 2025 18:31:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15507AACC6E
+	for <lists+linux-next@lfdr.de>; Tue,  6 May 2025 19:43:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94C651BC505B
-	for <lists+linux-next@lfdr.de>; Tue,  6 May 2025 16:29:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0349D1C07052
+	for <lists+linux-next@lfdr.de>; Tue,  6 May 2025 17:43:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFF3B284B21;
-	Tue,  6 May 2025 16:29:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A8E2853EE;
+	Tue,  6 May 2025 17:43:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dg1gnr+K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RTm3H1Tn"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC09327BF8D
-	for <linux-next@vger.kernel.org>; Tue,  6 May 2025 16:29:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED94284688;
+	Tue,  6 May 2025 17:43:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746548977; cv=none; b=A4aTMd6TrD1sgoE5gm1ObZwuUoYfwa4Ss+LHZFV9I8gDMeKQUnem+wBraJ3SYyS8y++sxY8cB0HR6ra+9tLUkLstg4/SE4kl5/56OwDUzu1seGRnCkE/x8K5+emPWVOqSMQjtA1hpC9x+Kk0yVod8pVwAtfjeaSyTa02XeUk1/8=
+	t=1746553400; cv=none; b=juFnX39VLwGCN1vlBSN+1TV8l/fGy1W+/wz07WWTZjiVCi8vI/lnttult7q7cnmPWVsKKtQDvXhZWaFlqUqOpqmID/b2U42IV+z0ZIJl4cgwSezi8uQzMlb4+kVxHJEvKg1WaeyOYlppu/WEY3bsRlv+F/ztmVPKveGaVs11z2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746548977; c=relaxed/simple;
-	bh=7R3zVpyXS5fgKY6xCyXq5lr4YHcqbAFg1ZerIx8Ypdw=;
+	s=arc-20240116; t=1746553400; c=relaxed/simple;
+	bh=CRthFCPhXNLTuBI+2jWNK26SYqt8KMUsO9ao51g0fhY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=djESfoKGroXLxG6q3m39laMlqD/crmFh6olnpsbi4JHH5wUbYpV6oaTK/BW89MpoZnMjtnlHA11TwoEkbK575sbgOTVWIkC1H3ad0Jf41TaveSqRnoUDdn9n0/0zWAgIa9qCvje0ehx22o4IG09YmzgV343jLuuHED5ScSZMe6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dg1gnr+K; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30701C4CEE4;
-	Tue,  6 May 2025 16:29:37 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=OuJuleIy8xrVEoKXCNv1Q5eCFnO8bPL3MfGygANb+VS6E8H0WA4ffz/AyJYU6apn80/KOgw1cH5eBmUWFewiuySBNiZyvssggJMhQAdaWqXzdzgoewqa+zqj3rzIheTMbejeKh4qdExYQe3T5w8pHEZDpK+tZeB0pUYZBtjDsLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RTm3H1Tn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C3AC4CEE4;
+	Tue,  6 May 2025 17:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746548977;
-	bh=7R3zVpyXS5fgKY6xCyXq5lr4YHcqbAFg1ZerIx8Ypdw=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=Dg1gnr+KYRv0ul8CQeKblsvc1B3KnJUtzAPL/uE7pNGpfyxkbAjqXWIItUrNBhw9F
-	 zOaSeNPoCdw9IfJ3uwBhGJNs8C53IOnvNlvzFmdKubnqcbKY/5pBkOunrebn4RVNOu
-	 han/GNZU4u3u7rWisj2Fn+246kbpzyEXrAytPBCxxCD09hqXUBIN2PUHf2AE2DXotv
-	 v9kIMYTk0XCZVCJC5U1nqecr/eSY5zKb7id5HG2vTnc/vUd80OMUOw8JT0duvmp/74
-	 pszuHRhjAhIJ/0SPhFwAWH6boTW+pLe4oRKf8Qrv3cts7+FeeLWnQq6Q6rxcc7vc1l
-	 IoecUTK7T5/Ng==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id CE36ACE1FCA; Tue,  6 May 2025 09:29:36 -0700 (PDT)
-Date: Tue, 6 May 2025 09:29:36 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Junxian Huang <huangjunxian6@hisilicon.com>
-Cc: Leon Romanovsky <leon@kernel.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>, linux-next@vger.kernel.org
-Subject: Re: [BUG] allmodconfig build failure in hns_roce_trace.h
-Message-ID: <b7dd4dda-37d8-47e4-8d78-b6585be21cfd@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <0ea657ca-71cb-498d-a5d5-43300f30523d@paulmck-laptop>
- <ac171cd6-82a8-e3b6-addc-c1c515470c9f@hisilicon.com>
+	s=k20201202; t=1746553400;
+	bh=CRthFCPhXNLTuBI+2jWNK26SYqt8KMUsO9ao51g0fhY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RTm3H1TnBz6POPh+UjIekX4fvLjPp1pHU5Bj8rzdbNw0P8FAanGvaHu7scGfGqbdU
+	 v1HwrDhmoVAVThiof+tyRBf6+yCqAk335BOlC6+QVm5I4sSOdNSzaW/4t1eLw0L4Lr
+	 YgZdu6Emf4q8OwxQPwq6kybnOXa087rhzn959U695gO1Er+bi+rah6GkqDSJzxIDAb
+	 +WhRmaahNVFHzicsfHvSNalqGsiCH8tPQsuRwtILuPdvgqGRIHKSpgaAVJbkY7A2p2
+	 I3Rvfsvr+iHNyzMu1zQTS4AshDpRs2WTRwiik8Uz5q/ahPDohtty0F+34+nwFQPtu6
+	 jHt5XgJLsjLRA==
+Date: Tue, 6 May 2025 19:43:15 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: Re: linux-next: manual merge of the tip tree with the pm tree
+Message-ID: <aBpKM62SYYW_B6Nx@gmail.com>
+References: <20250501135827.214fac1f@canb.auug.org.au>
+ <68b54a90-b87c-4b74-a24d-0faaf0f76e2d@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -61,83 +64,39 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ac171cd6-82a8-e3b6-addc-c1c515470c9f@hisilicon.com>
+In-Reply-To: <68b54a90-b87c-4b74-a24d-0faaf0f76e2d@intel.com>
 
-On Tue, May 06, 2025 at 02:04:34PM +0800, Junxian Huang wrote:
-> 
-> 
-> On 2025/5/6 5:50, Paul E. McKenney wrote:
-> > Hello!
-> > 
-> > I ran into an allmodconfig build error in next-20250505 and a few of
-> > its predecessors on x86.  The patch shown below makes it build without
-> > errors, and might even be a proper patch.
-> > 
-> > An alternative fix might be to use the "-I" compiler command-line argument
-> > to inform it of this additional place to look for include files.
-> > 
-> > 							Thanx, Paul
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > hns: Fix hns_roce_trace.h allmodconfig build failure
-> > 
-> > When doing an allmodconfig build next-20250505 and a few of its predecessors on x86, I
-> > get the following build error:
-> > 
-> > In file included from drivers/infiniband/hw/hns/hns_roce_trace.h:213,
-> >                  from drivers/infiniband/hw/hns/hns_roce_hw_v2.c:53:
-> > ./include/trace/define_trace.h:110:42: fatal error: ./hns_roce_trace.h: No such file or directory
-> >   110 | #include TRACE_INCLUDE(TRACE_INCLUDE_FILE)
-> >       |                                          ^
-> > compilation terminated.
-> > 
-> > This appears to have been introduced by this commit:
-> > 
-> > 02007e3ddc07 ("RDMA/hns: Add trace for flush CQE")
-> > 
-> > Fix (or at least suppress) this by adding the path needed to find the
-> > include file.
-> > 
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > 
-> > ---
-> > 
-> > diff --git a/drivers/infiniband/hw/hns/hns_roce_trace.h b/drivers/infiniband/hw/hns/hns_roce_trace.h
-> > index 23cbdbaeffaa4..bec69b6dca5da 100644
-> > --- a/drivers/infiniband/hw/hns/hns_roce_trace.h
-> > +++ b/drivers/infiniband/hw/hns/hns_roce_trace.h
-> > @@ -207,7 +207,7 @@ DEFINE_EVENT(cmdq, hns_cmdq_resp,
-> >  #endif /* __HNS_ROCE_TRACE_H */
-> >  
-> >  #undef TRACE_INCLUDE_FILE
-> > -#define TRACE_INCLUDE_FILE hns_roce_trace
-> > +#define TRACE_INCLUDE_FILE ../../../drivers/infiniband/hw/hns/hns_roce_trace
-> 
-> Hi Paul, thanks for the report.
-> 
-> I'd prefer not to change this part as it is the standard definition of
-> trace headers. Can you please test the patch below?
 
-Looks better to me as well, and even better yet, it works.  ;-)
+* Wysocki, Rafael J <rafael.j.wysocki@intel.com> wrote:
 
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
+> >    ac4e04d9e378 ("cpufreq: intel_pstate: Unchecked MSR aceess in legacy mode")
+> 
+> This one has been merged into 6.15-rc5.
+> 
+> 
+> > from the pm tree and commit:
+> > 
+> >    c435e608cf59 ("x86/msr: Rename 'rdmsrl()' to 'rdmsrq()'")
+> 
+> So this one will clash with the mainline now.
 
-> diff --git a/drivers/infiniband/hw/hns/Makefile b/drivers/infiniband/hw/hns/Makefile
-> index 7917af8e6380..baf592e6f21b 100644
-> --- a/drivers/infiniband/hw/hns/Makefile
-> +++ b/drivers/infiniband/hw/hns/Makefile
-> @@ -4,6 +4,7 @@
->  #
-> 
->  ccflags-y :=  -I $(srctree)/drivers/net/ethernet/hisilicon/hns3
-> +ccflags-y +=  -I $(src)
-> 
->  hns-roce-hw-v2-objs := hns_roce_main.o hns_roce_cmd.o hns_roce_pd.o \
->         hns_roce_ah.o hns_roce_hem.o hns_roce_mr.o hns_roce_qp.o \
-> 
-> 
-> >  #undef TRACE_INCLUDE_PATH
-> >  #define TRACE_INCLUDE_PATH .
-> >  #include <trace/define_trace.h>
+Yeah - and I resolved it in tip:x86/msr:
+
+  commit 570d58b12fbf7bae0ba72d929ccf914a4df5ca7c (HEAD -> x86/msr)
+  Merge: 502ad6e5a619 92a09c47464d
+  Author: Ingo Molnar <mingo@kernel.org>
+  Date:   Tue May 6 19:42:00 2025 +0200
+
+    Merge tag 'v6.15-rc5' into x86/msr, to pick up fixes and to resolve conflicts
+    
+     Conflicts:
+            drivers/cpufreq/intel_pstate.c
+    
+    Signed-off-by: Ingo Molnar <mingo@kernel.org>
+
+So all should be good at this stage.
+
+Thanks,
+
+	Ingo
 

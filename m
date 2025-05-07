@@ -1,53 +1,53 @@
-Return-Path: <linux-next+bounces-6572-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6573-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8E17AADCC2
-	for <lists+linux-next@lfdr.de>; Wed,  7 May 2025 12:50:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9675BAADCC9
+	for <lists+linux-next@lfdr.de>; Wed,  7 May 2025 12:56:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D79E16BFF3
-	for <lists+linux-next@lfdr.de>; Wed,  7 May 2025 10:50:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 938E63B099E
+	for <lists+linux-next@lfdr.de>; Wed,  7 May 2025 10:56:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8C04214221;
-	Wed,  7 May 2025 10:50:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C4782147FD;
+	Wed,  7 May 2025 10:56:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="oFYAFE6t"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="U4+VqKjE"
 X-Original-To: linux-next@vger.kernel.org
 Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B54204090;
-	Wed,  7 May 2025 10:50:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AADA1CAA65;
+	Wed,  7 May 2025 10:56:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746615044; cv=none; b=F9ZmeAjz1jKQePhRc10BX29ipZus1B3Og8ODGnrLW++v61mWU95qYfSo3ZaMU/9+sfd+ivruFuhDg1+lTIv9e8/g8quLPQVL8hycgmHQPOBdr5VXR/yuXgGW5naxkrut+PYph+0Pw/vDJzduMyOQf24xV9PUouaMSqC5WBFZucE=
+	t=1746615388; cv=none; b=R4RzGdb5+IDVhl3n9sFbVRJpO9x3ZaRsfBn79GRvuQ2RSyEt6ruSaGWFg2T9t2WlL8eJXdkdqLjjK8bSsskO3SL4T3gnkA2egJPfzdOCiTFVntLWjLgWzE6fNZskI9lURh7LLX9Ydq00sHfjAYTruSsps233qOKqGWaKVtbrdl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746615044; c=relaxed/simple;
-	bh=Ldo6Lsq6qpoBcAcvoEf/YxqJ9k7zFw7OaJuRkMKgvnA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C6OeFKprYbg25gcaSAr4G2m7mxLPRHWNZMSQlsxhE36xi1fOoMfSj5nj6Qj1IF/zFotm3TVJToBbrPhIm0X2pi/IrNGiaGq0h/LTfEGM0aBTgL42GO7I7PqBmAdt4J2odFA+MIcUZkrsd896kcil1+ZQvPTYdMQMigVcaEwsSHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=oFYAFE6t; arc=none smtp.client-ip=80.237.130.52
+	s=arc-20240116; t=1746615388; c=relaxed/simple;
+	bh=VbGahHBbQHGAfp0NSHhaKVjwoMUUxVmcx0p48VMKQac=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=bMe4cGh9WaBgfO5wMpGdVtA7GxlBtEcZYms0nxPuKK9BvacNFHjOFgKSYvTJUq4d0ahECpSIU2+zMfdUoomW8pmaJ1umhL8xb7vC6PjQHTR81lsu2Vllq7kZGgdcVDRf3qZ70Ta2cAqJZzPTSHRLF4FQBEx3b/i4a9fH44qz07c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=U4+VqKjE; arc=none smtp.client-ip=80.237.130.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
+	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:From:
 	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
 	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=AZvKfY2LfIvMiSyDUwvUiIzUFutdLak7XJbXHzgyZo4=; t=1746615042;
-	x=1747047042; b=oFYAFE6t9GKduDFWNdyyfj8R+dg3pIJwrKXMsDZlV31C1NoyS548fTUPkAZAe
-	Tg0XUeYFqxWKQgugQ6f8dFjNyRrq1XxSuzrTgytd0OgrTE5WnNzBxcyZkXMQMF7DLlz87OtcGFMhH
-	mCr+Pbf9+FxFwwvw2pfNvSQ/b2S1zIaC4C8wI1fvgZ3CNGSXgJZYaBdWsI1lARzE38rAfeOYgabLN
-	S+uPZ+V4rAklizMUj49KLKPF5crIvOvgUl+RvlDjyIw6Ew8TCsAOtxm3/vd3l8vwqPuc3K5EbzZS6
-	BusktWu9hUCSqVlnaCwD7rnl1mr939RYztICexUTVMJn6pU69w==;
+	References; bh=CnVletycVacmLNxjYLmMxvCz9mfImT/pg4PS+Ar/Chs=; t=1746615386;
+	x=1747047386; b=U4+VqKjE4bfVHkuZf1lBxKm/SHCb0VUnnu4Tm31jnG3BA4SKEBcLKadmSw5Eh
+	D4X3inJVi3iC5rJSAvRqp8JCOTlf/gW1/JdBKbNy4vgSqsuy/+Yx3YfQel4s9ymK0aAL73LqWlrao
+	MtXjj0AjsaYA0JAvrD5S+OFUOuH5b75UHLPGPMSWAHnybYp5WvuGFi8E6weyijWawwUFjOSHuv7+r
+	oRMHRnJnNtzRLcNNjeewe+g2yalU0kYkq6kMY5CG2qaWCI754avA1EHIMePqT7v03OaOrcg5+M5yg
+	+pM9aGrgrJxGOZHeAcnzk+9uz37IkwvEeRSgNf0wFaEUTnDEyQ==;
 Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
 	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	id 1uCcMK-000e19-0X;
-	Wed, 07 May 2025 12:50:40 +0200
-Message-ID: <fe4c8f86-17d9-4e00-96e9-9f24c22c58a2@leemhuis.info>
-Date: Wed, 7 May 2025 12:50:39 +0200
+	id 1uCcRr-000f17-0Q;
+	Wed, 07 May 2025 12:56:23 +0200
+Message-ID: <c4a017e9-0169-4f7a-99a1-7ae1bbee4a19@leemhuis.info>
+Date: Wed, 7 May 2025 12:56:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -57,12 +57,16 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [ebiggers:sha256-lib-v4 4/13] /tmp/ccoCWqTC.s: Error: local label
  `"3" (instance number 1 of a fb label)' is not defined
-To: kernel test robot <lkp@intel.com>, Eric Biggers <ebiggers@google.com>
+From: Thorsten Leemhuis <linux@leemhuis.info>
+To: Eric Biggers <ebiggers@google.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>
 Cc: oe-kbuild-all@lists.linux.dev, Ard Biesheuvel <ardb@kernel.org>,
  LKML <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+ kernel test robot <lkp@intel.com>
 References: <202505071811.yYpLUbav-lkp@intel.com>
-From: Thorsten Leemhuis <linux@leemhuis.info>
+ <fe4c8f86-17d9-4e00-96e9-9f24c22c58a2@leemhuis.info>
 Content-Language: de-DE, en-US
 Autocrypt: addr=linux@leemhuis.info; keydata=
  xsFNBFJ4AQ0BEADCz16x4kl/YGBegAsYXJMjFRi3QOr2YMmcNuu1fdsi3XnM+xMRaukWby47
@@ -107,37 +111,42 @@ Autocrypt: addr=linux@leemhuis.info; keydata=
  ysaCIZqWxrlhHWWmJMvowVMkB92uPVkxs5IMhSxHS4c2PfZ6D5kvrs3URvIc6zyOrgIaHNzR
  8AF4PXWPAuZu1oaG/XKwzMqN/Y/AoxWrCFZNHE27E1RrMhDgmyzIzWQTffJsVPDMQqDfLBhV
  ic3b8Yec+Kn+ExIF5IuLfHkUgIUs83kDGGbV+wM8NtlGmCXmatyavUwNCXMsuI24HPl7gV2h n7RI
-In-Reply-To: <202505071811.yYpLUbav-lkp@intel.com>
+In-Reply-To: <fe4c8f86-17d9-4e00-96e9-9f24c22c58a2@leemhuis.info>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1746615042;ad617d13;
-X-HE-SMSGID: 1uCcMK-000e19-0X
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1746615386;78ec4e01;
+X-HE-SMSGID: 1uCcRr-000f17-0Q
 
-On 07.05.25 12:25, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git sha256-lib-v4
-> head:   849682242c36727c23430b6cfed12e4422313931
-> commit: 9f2dd94847c914bb716be744e12cb02f175638db [4/13] crypto: arm64/sha256 - implement library instead of shash
-> config: arm64-randconfig-003-20250429 (https://download.01.org/0day-ci/archive/20250507/202505071811.yYpLUbav-lkp@intel.com/config)
-> compiler: aarch64-linux-gcc (GCC) 9.5.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071811.yYpLUbav-lkp@intel.com/reproduce)
+[+linux-crypto and +Herbert Xu, who committed that change that showed up
+in -next today; sorry for forgetting this earlier]
+
+On 07.05.25 12:50, Thorsten Leemhuis wrote:
+> On 07.05.25 12:25, kernel test robot wrote:
+>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git sha256-lib-v4
+>> head:   849682242c36727c23430b6cfed12e4422313931
+>> commit: 9f2dd94847c914bb716be744e12cb02f175638db [4/13] crypto: arm64/sha256 - implement library instead of shash
+>> config: arm64-randconfig-003-20250429 (https://download.01.org/0day-ci/archive/20250507/202505071811.yYpLUbav-lkp@intel.com/config)
+>> compiler: aarch64-linux-gcc (GCC) 9.5.0
+>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250507/202505071811.yYpLUbav-lkp@intel.com/reproduce)
+>>
+>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>> the same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes: https://lore.kernel.org/oe-kbuild-all/202505071811.yYpLUbav-lkp@intel.com/
+>>
+>> All errors (new ones prefixed by >>):
+>>
+>>    /tmp/ccoCWqTC.s: Assembler messages:
+>>>> /tmp/ccoCWqTC.s: Error: local label `"3" (instance number 1 of a fb label)' is not defined
 > 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202505071811.yYpLUbav-lkp@intel.com/
+> I ran into the same problem today when building -next rpms for arm64
+> Fedora using the approach and configuration used to build the kernel
+> rpms shipped in Fedora rawhide.
 > 
-> All errors (new ones prefixed by >>):
+> Full build log:
 > 
->    /tmp/ccoCWqTC.s: Assembler messages:
->>> /tmp/ccoCWqTC.s: Error: local label `"3" (instance number 1 of a fb label)' is not defined
+> https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/fedora-rawhide-aarch64/09006679-next-next-all/builder-live.log.gz
+> 
+> Ciao, Thorsten
 
-I ran into the same problem today when building -next rpms for arm64
-Fedora using the approach and configuration used to build the kernel
-rpms shipped in Fedora rawhide.
-
-Full build log:
-
-https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/fedora-rawhide-aarch64/09006679-next-next-all/builder-live.log.gz
-
-Ciao, Thorsten
 

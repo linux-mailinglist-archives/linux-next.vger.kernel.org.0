@@ -1,91 +1,84 @@
-Return-Path: <linux-next+bounces-6570-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6571-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7A3FAAD930
-	for <lists+linux-next@lfdr.de>; Wed,  7 May 2025 09:56:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0861BAADA82
+	for <lists+linux-next@lfdr.de>; Wed,  7 May 2025 10:50:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 830DA16D11E
-	for <lists+linux-next@lfdr.de>; Wed,  7 May 2025 07:56:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40A367B3959
+	for <lists+linux-next@lfdr.de>; Wed,  7 May 2025 08:49:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F97D221704;
-	Wed,  7 May 2025 07:55:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ReNxx6uj";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JiGqIm1O"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C7C01E3DFD;
+	Wed,  7 May 2025 08:50:47 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C07D223714;
-	Wed,  7 May 2025 07:55:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E8751E3DF4;
+	Wed,  7 May 2025 08:50:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746604516; cv=none; b=MEZvOC2Hf+5RCVKdmIGsBFKi5ljKTUpZG/ku/1eksX/H8BP7ubvRa/7CksREU+4CZRJkxiJmVEPSACMWkeIeuDWthGrxYoDsagytq7mQ9OltnyXK0WYvVZd2GiAxGaNVPDjDKlECGW+35LFZjOiozXwMCDTJYlWDT5kvTvlcPfU=
+	t=1746607847; cv=none; b=aWpFb1AZtQN0DXKYzFrpurzoOGk84BBu7HTP1YMFUp06eKfunZ7jeskqfFN16io/nn2YjziENLnYNsxFH6amEuLQrTxPL+sM+7V5fxI8GUOB8Ozt8dbPZqfyVFkIpgjEi9FpZiC9bZNglP5HLG64enC46chaVagNbWs+nlObPqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746604516; c=relaxed/simple;
-	bh=j4zwaV988Qe6aMB5L8k6UmCsLbXX3a72FZD72kZs3xc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=JkryB8jP+N8x2uyFaS+DAAcnn1vzCd9KLZsL94BdBamFTUGvYEBh8jM2zsQJ8L1ByMciuQAjKcVQ7+juQrfwUajy2VSg80+EEYuDhFNmyP4V7Oo5tqe1autXo7rn6yPGAQEuQ2WF9VQhO/paW3pE++Nok6sbh1awWzKwd03MXBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ReNxx6uj; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JiGqIm1O; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1746604506;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8WhJFG8YVaecQP8RT69+qhbWoUEjiVbQ8B+rAiila9c=;
-	b=ReNxx6ujSZ730BscGanYilr/KFZhpoyzzysJVoq7uXj5e4qOaIy2x7NGsQeNEpkokUydrH
-	JWBlDV7MR6bKel3hAfXroex6zomLxqDRStVuxG93UkVjeWwX3nISGpWT7elwy7wno+0fIB
-	d+q6oot4d/4DLofiihX+WPOG0L2PuLhH+HWil62McdcHKY6akOvXpTG9DcIXz6Q5TCjAvg
-	GDtDa3AE5JKn2yEknsUbtlvxFQA065jJiZwHTmRWEAn6zNs+y6QguQGPne4bEYxFnEG0ny
-	YtuDOrj82hjx5zBRTn5RtXCMg5wCdXg5FRbiDWURuekXXYz1Wb+O436tRZLS3w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1746604506;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8WhJFG8YVaecQP8RT69+qhbWoUEjiVbQ8B+rAiila9c=;
-	b=JiGqIm1OuN/oixW7CxtGDrmANlpPhfswybK5sFeshWlD1W7UJXo969d3AwYJcmySqgnb5F
-	C5GXg03A6yGPAnAw==
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Richard Weinberger <richard@nod.at>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the tip tree
-In-Reply-To: <20250507132247.3e3076e3@canb.auug.org.au>
-References: <20250507132247.3e3076e3@canb.auug.org.au>
-Date: Wed, 07 May 2025 09:55:06 +0200
-Message-ID: <87tt5wn9d1.ffs@tglx>
+	s=arc-20240116; t=1746607847; c=relaxed/simple;
+	bh=9v35JP5AWFvbqrYHICqK8U4kWbOGSmqao+G2X9obDIQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uFX6QLiotwpSeTUNJ9G9AARAfS2MsZewDewfgEs6D8Oao7hzLol5xbiXw+/EJBaP8bwvzzDV1v54OcqOwv/fla2MLX2jktTUMsARE14+XeRjML6Qdj5XuquyMAhlLIkAj0Nll3PkPlB8zMKC3foAi4xezqxyyZY4pqW+ppGWavM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8D3C92B;
+	Wed,  7 May 2025 01:50:34 -0700 (PDT)
+Received: from [10.1.197.1] (ewhatever.cambridge.arm.com [10.1.197.1])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EBDEF3F5A1;
+	Wed,  7 May 2025 01:50:43 -0700 (PDT)
+Message-ID: <100b0d95-7f9a-45e6-8cfc-33d9951f954c@arm.com>
+Date: Wed, 7 May 2025 09:50:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Fixes tag needs some work in the coresight tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Leo Yan <leo.yan@arm.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20250507070547.4249c806@canb.auug.org.au>
+Content-Language: en-US
+From: Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20250507070547.4249c806@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, May 07 2025 at 13:22, Stephen Rothwell wrote:
-> The following commit is also in the uml tree as a different commit
-> (but the same patch):
->
->   48199713a6a8 ("um: Use irq_domain_create_linear() helper")
->
-> This is commit
->
->   7633b8b1e793 ("irqdomain: um: use irq_domain_create_linear() helper")
->
-> in the uml tree.
+On 06/05/2025 22:05, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>    f42df204b53d ("coresight: replicator: Fix panic for clearing claim tag")
+> 
+> Fixes tag
+> 
+>    Fixes: 6f4c6f70575f ("coresight: Clear self hosted claim tag on probe")
+> 
+> has these problem(s):
+> 
+>    - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: 7cd6368657f1 ("coresight: Clear self hosted claim tag on probe")
+> 
 
-I zapped it from the irq/cleanups branch, which is the sink for all
-irqdomain cleanup patches which have not shown up in next.
 
-Thanks,
+Indeed, thanks for catching. I have now fixed this up.
 
-        tglx
+https://git.kernel.org/coresight/c/deeeaf6a5221
+
+Suzuki
 

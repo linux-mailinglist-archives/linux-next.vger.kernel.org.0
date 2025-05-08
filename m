@@ -1,34 +1,34 @@
-Return-Path: <linux-next+bounces-6601-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6602-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCD88AAF705
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 11:45:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF08AAAF721
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 11:50:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE8C11C074FB
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 09:45:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6818C17F39B
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 09:50:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B2D81DF24F;
-	Thu,  8 May 2025 09:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F15441DF24F;
+	Thu,  8 May 2025 09:49:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="HKg25dbL"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="nck3UzlB"
 X-Original-To: linux-next@vger.kernel.org
 Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4595F4B1E5E;
-	Thu,  8 May 2025 09:45:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13981E5B88;
+	Thu,  8 May 2025 09:49:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746697536; cv=none; b=A6AldDfUCwNvtkJHFmmbmssym/gnFLydOXozy85LhMxwykRp4kOlideBoxb7zIuWBtjgsMD0MGiJnxdeb9fGO63R0/oM/GLcW1c/ZyWOlNsLJQ3/SLMNU0LXU397cbMkFQzBrHEuQqEYHqr5bD3ONNTUZPCZD24i3aJbxldCBtk=
+	t=1746697798; cv=none; b=cKI7ffHrGHh5XPY4tHQ1172ZaB+IT6b4wud7e67B3rqyy7WE0rersO3Up4HCp7TyHXh+EJ/n2DOfA2bhGLMOu2zIXLgMFdP+9hhCmKHo/z5+izjc8aM83xJtQONDRQrpDNiX9W5iv8QeVy+N99jlG7cSW3ZNEABO3PWctwjnzfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746697536; c=relaxed/simple;
-	bh=LZ+We6RstvXrTAwLvGur5AxhkGHLHFMGK3WsmzgKcb4=;
+	s=arc-20240116; t=1746697798; c=relaxed/simple;
+	bh=FAWO0xeK1ciR41NKz574Ms/5eHTTFJcuxbTL4VEl0Rg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dTFvDfu0MJZn9HD3TxnNYrsRNnXJBoOjQykoSPkh9rXgWTnzRztwlyAdLFGDgN0ZzFtWAobEMXzSNvCd026u7904u/XDGH5AczzskP0PhGQRyLnzMqcYXwlLZ5OXjAioyf5UcijS0XIrDbBeO8SLQvKiJuZNhP8YXZOQZRh+M8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=HKg25dbL; arc=none smtp.client-ip=144.6.53.87
+	 Content-Type:Content-Disposition:In-Reply-To; b=UgmmFKnoNnKIVJ+nIa0N0oLjXNaSphFBVemhBorrttuANf75OC92kDV/IfoUqoZD/GKuKWFX2Qal/ig1tYpxqDxQh9lfa9c+Qk6deB3j6i3teac12gsSA5SV6HE+U4DIiARasj1GNqM+5tObZaP+1xV86S1E4bn8rrdP8h0HMwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=nck3UzlB; arc=none smtp.client-ip=144.6.53.87
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
@@ -37,18 +37,18 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=g/ccLz5dJiien7YjF9yF+p8cxGnmQqaozckhtdt2pR4=; b=HKg25dbLB4RO7H+OcPKBlfNEA6
-	AdV9Fq+OMVJRE99qHHkvZMQDGv46erC1CI8FA6/e0aQiPJdm+9e1eYvqWlsSATSZRTfFOQW0P6+27
-	eR6hOYxOFmio5ZBEmRAV2HwghegtrA0Z7XsuDMAI0vmtpK3Qiz2omfg56LLdYFArHb21B0awR3fv6
-	kCIpbReXZuCXhPRLjJbnMW3r6LUyngP8mEKRbO4L1kxB0p4GX5la7h0MXAI/i0uC1M9j9hnByrXG1
-	HXMzHJzmHgWODq8YabeNivmKKRDOHN/EYR2whZHT0Q6aKS/itpGmr24fDzYLVU9V1LpmwM7MDklE5
-	SerduPcw==;
+	bh=hcyLLY7yx3DPaHNwQl6cU6b3anMDZlyWXXRlSkTU1bM=; b=nck3UzlBhRY7F4ElwVJRKkeUEt
+	IP1Hc5sAszRsR1WYb64SKOZ/TqzqWzc0dcl/FsDecegPkMWbSjJ5fJkKYdIq38PWO5u7SZms2NwA+
+	d57mP3Qp1mOxKQ9T887whieB0Cl9dwEqdmWq9Fi2szh9PcYNupU9KmzZjSNLNPxaC/B5uI42tTsvB
+	NQz1KmEi3HRq34rB1Xg+0zYQk/xTZY8fmVnhwh6enEhbcMaXXwP/uyv/zsoDr+/koLkn1MFRndwmF
+	WeQ2JVEEMV0S5SdkGWZhdbZ1biYJVmMP+HGwHxTKNLk0KL8gxSjcf17dMgSJWtNFamTkiLOeKfC7J
+	h0yjVIqA==;
 Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
 	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1uCxom-004YI1-33;
-	Thu, 08 May 2025 17:45:30 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 08 May 2025 17:45:28 +0800
-Date: Thu, 8 May 2025 17:45:28 +0800
+	id 1uCxt2-004YLu-0Z;
+	Thu, 08 May 2025 17:49:53 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 08 May 2025 17:49:52 +0800
+Date: Thu, 8 May 2025 17:49:52 +0800
 From: Herbert Xu <herbert@gondor.apana.org.au>
 To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 Cc: Thorsten Leemhuis <linux@leemhuis.info>,
@@ -56,11 +56,9 @@ Cc: Thorsten Leemhuis <linux@leemhuis.info>,
 	LKML <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>,
 	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Eric Biggers <ebiggers@google.com>,
-	Danny Tsen <dtsen@linux.ibm.com>
+	Stephen Rothwell <sfr@canb.auug.org.au>
 Subject: Re: [PATCH] crypto: powerpc/poly1305 - Add missing poly1305_emit_arch
-Message-ID: <aBx9OAyiDx7MYAVs@gondor.apana.org.au>
+Message-ID: <aBx-QD04RPH03ikC@gondor.apana.org.au>
 References: <cover.1745815528.git.herbert@gondor.apana.org.au>
  <915c874caf5451d560bf26ff59f58177aa8b7c17.1745815528.git.herbert@gondor.apana.org.au>
  <242ebbf1-4ef0-41c3-83cb-a055c262ba4a@leemhuis.info>
@@ -78,16 +76,12 @@ In-Reply-To: <37cf099e-d5c2-40d8-bc31-77e1f9623b1c@linux.ibm.com>
 
 On Thu, May 08, 2025 at 02:46:06PM +0530, Venkat Rao Bagalkote wrote:
 >
-> I tested this patch by applying on next-20250507, though it fixes the build
-> issue, it has introduced a boot warning.
+> Warning:
 
-Looking at the history of this code it was never used as lib/crypto
-prior to commit 378a337ab40f88d63ba71d68ff578ead7f5ac8f1.  So either
-this code simply doesn't work as lib/crypto for some reason, or my
-subsequent blockhash change broke it.
+Please also run the Crypto API self-tests for chacha20poly1305.
+If you have built it as a module, then load it with
 
-Could you please revert back to commit 378a337ab40f and see if the
-lib/crypto chacha20poly1305 self-test passes with that?
+modprobe chacha20poly1305
 
 Thanks,
 -- 

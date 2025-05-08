@@ -1,72 +1,61 @@
-Return-Path: <linux-next+bounces-6594-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6595-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA762AAF630
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 11:00:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 983EDAAF656
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 11:08:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE21C4C8154
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 09:00:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F0AD3ADB16
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 09:08:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63843244698;
-	Thu,  8 May 2025 09:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D374B23D2AE;
+	Thu,  8 May 2025 09:08:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JeSX2aYI"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="P1AzCW+u"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B504C23C517;
-	Thu,  8 May 2025 09:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525C7EAF6;
+	Thu,  8 May 2025 09:08:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746694804; cv=none; b=DuavvVBCGxToZd32MvF32Vxadrf5aIfctkmMBpO9poWkdUlhqMKmB0Mq4/D3cenExLwpdjRaF5mNhFjpQChBFCGoOD5KiTHD7a7ApA+dA+hqCRrkMsU8ysfOrm4WVBUHLK0u6hjTeV/SyTE55+H3hsquX04DSZ/L5MmxfF/r27Y=
+	t=1746695333; cv=none; b=nMlRoYAGFU3U4sFtEQ8Ek52epwV9W/ccPnyWSduAacz7lCtq5brmk7aGi1MUC+01r+o+uNuxcAy+CKg0k8F2sRIFOpEoKSwciYucekanbVQSc1ROjTUmaf9dIqdW2/bxZZmlyrn/4V+SlGxtF98R4lCoG5irRRu5OXLSZ1W1fhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746694804; c=relaxed/simple;
-	bh=AaeWpi+yydjjAMPRH8AVWiTo86051eamAp/lfybEBio=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=QFPgJ0saWSHFGCUMQIbZFqXt5C9kvz5pfwjocNx5/ZTTz/NoJdqOvYxL+1jxce7WyWna23NEjZwSMRiLRi/p0AemOnIsX3Fy6kNGgE9Op8wl7nmRNBnMTkebpTCrWOIJYxL8gbyrddApkhgB4BKkRLGXZeWVE3YAYijySkJhg7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JeSX2aYI; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1746694803; x=1778230803;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=AaeWpi+yydjjAMPRH8AVWiTo86051eamAp/lfybEBio=;
-  b=JeSX2aYIaIA6yeLgSW9I4eYeLhCWqdCiDGo7gnnNA2ZfeoT9v7q2JokU
-   Qg/YzBqFAy8QEAA5bQtQgEhk/7RY1gvBlersXM8X3hBJZaiDosnkcq+EX
-   p0JKIUpT2IUG89oCZ+7znKBU7uiSwEmUZ5AK5kbdR+xKbeLSRoDJw0zdh
-   O1i11Y5B2RxT7JzbSZLQ6wHrc5vqaEkpzJBc4RblTQVxNp3ZBG4+1/Ivj
-   UfHMSlHHmfwDwklFHT6W4R8GTAm0kJgAGegoYleIpi+ZPLU0DuQiPFCVp
-   JTchMNYPGqRpT1wZYbiHugT2HO+Nc+fjgdPQkSLI1Il0hdDE3nyn7dt8A
-   w==;
-X-CSE-ConnectionGUID: 5QZ+qf1IRUqDXWQxPVUP0Q==
-X-CSE-MsgGUID: Dg6LD25/T6qds32myNC7kg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="48628718"
-X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
-   d="scan'208";a="48628718"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 02:00:02 -0700
-X-CSE-ConnectionGUID: YbfE/K9wQw+aMceyhwuuug==
-X-CSE-MsgGUID: IrS8fQ0mRyOfaUDqt1MDWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
-   d="scan'208";a="167164017"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.196])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 01:59:59 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 8 May 2025 11:59:56 +0300 (EEST)
+	s=arc-20240116; t=1746695333; c=relaxed/simple;
+	bh=8SkZUgZyYvBe6FFYuWQO+cRb9j2orVXbhXcmpKeqvUA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JQ1SpRo/RrIVtgrDXpmv0L1/1fISzDyOfzEZteGLg0tM5e+8wtDcCgLlMha/BQK465sdtW596D277HMgbo+euaFb94AF9H5Z1b/mbGxz+5MoN67F6dFZNZ2vAJPQ9NkkJWkHB90mPBbyvOWHNo97NOKHcucVH3FgDr1/L/zQVoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=P1AzCW+u; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1746695327;
+	bh=id4tiKZeuAnKN2fZO6welXUYOflEk+8g59ZcxNs4qH0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=P1AzCW+u4qMYXiIX5/BSQNbnUd39IPimyLd2ADJx/I5yqQIj7pIyQMUb4wRSgSLPz
+	 VSNfFer0Q7SoWRzQ9ZF/Q0NcWwf1zdhz5q1uIv65m0knDjVPD0YI0atE4+wqjPJ92j
+	 F2TJAePl9VPhw2H6/tPpOhIlOX8dKNrFnLUsirQ+9/Eoqg+ZmJdg4yG7ZAWKwrzR3P
+	 MH5Kkd/JJTU6ZduOcTvmmhcZSahBE55wTBb5GQ0qw7L2LdM0Q3OIsysH7B/GWAzq2T
+	 vSsiC2jmDbaNeaOxLHVvhd8/ivd+KHHu+2KrXmlP3F/S4jNwygF1mFITVhynGo8VuZ
+	 ca75gcqzuS++w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZtRBk5lbmz4x21;
+	Thu,  8 May 2025 19:08:46 +1000 (AEST)
+Date: Thu, 8 May 2025 19:08:45 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: "Paul E. McKenney" <paulmck@kernel.org>
-cc: bhelgaas@google.com, linux-pci@vger.kernel.org, kernel-team@meta.com, 
-    LKML <linux-kernel@vger.kernel.org>, sfr@canb.auug.org.au, 
-    linux-next@vger.kernel.org
+Cc: ilpo.jarvinen@linux.intel.com, bhelgaas@google.com,
+ linux-pci@vger.kernel.org, kernel-team@meta.com,
+ linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
 Subject: Re: [PATCH] PCI/bwctrl: Remove unused pcie_bwctrl_lbms_rwsem
+Message-ID: <20250508190845.4cae8b62@canb.auug.org.au>
 In-Reply-To: <3840f086-91cf-4fec-8004-b272a21d86cf@paulmck-laptop>
-Message-ID: <099859f7-6a27-ca1a-7e22-4facafc4b6c4@linux.intel.com>
 References: <3840f086-91cf-4fec-8004-b272a21d86cf@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
@@ -74,19 +63,18 @@ List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-1810519414-1746694529=:922"
-Content-ID: <178ae2f6-e5bf-ff7d-18f7-e740c101bee3@linux.intel.com>
+Content-Type: multipart/signed; boundary="Sig_/1f9.u.3IHguvBWiXX3dmh2T";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+--Sig_/1f9.u.3IHguvBWiXX3dmh2T
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
---8323328-1810519414-1746694529=:922
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <516b9215-2156-176f-cd2c-bed75f2e5277@linux.intel.com>
+Hi Paul,
 
-On Wed, 7 May 2025, Paul E. McKenney wrote:
-
+On Wed, 7 May 2025 15:04:57 -0700 "Paul E. McKenney" <paulmck@kernel.org> w=
+rote:
+>
 > PCI/bwctrl: Remove unused pcie_bwctrl_lbms_rwsem
 >=20
 > Builds with CONFIG_PREEMPT_RT=3Dy get the following build error:
@@ -116,15 +104,29 @@ EEN flag")
 >  static DECLARE_RWSEM(pcie_bwctrl_setspeed_rwsem);
 > =20
 >  static bool pcie_valid_speed(enum pci_bus_speed speed)
->=20
 
-I've a patch which removes not only the rwsem but also the comment details=
-=20
-related to it. I've just not sent it yet because lkp has been very cranky=
-=20
-recently to build test things in a reasonable time.
+I added that to linux-next today and will remove it when it is no
+longer needed.
 
 --=20
- i.
---8323328-1810519414-1746694529=:922--
+Cheers,
+Stephen Rothwell
+
+--Sig_/1f9.u.3IHguvBWiXX3dmh2T
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgcdJ0ACgkQAVBC80lX
+0GwJcQf8CE7RayjNx5JFc7duQEtmFdNwWH6ceqhtR7LbFMfp9hC0R1tw5auPKrfW
+rUzR0iZiLbfhOhnPg/oL8jiNLDAqU8ueMLYqW9qVzkgtOa2LN9aFvGxIoJhKxY/6
+Gpnyt6oqGJVLBxqMPHYwtDRNWHpEmp63Wr3EkxG3JJk0X8EK+eFhGs8Na9gM/bi1
+tHmusQAlIBpPngj7hMX55E9lz0m8/PSIAAFNJiyOCwaOv16dLe7zpDlkBt5MHYxe
+SN7zYr7EIBvvDL2DURFB1dPb4kpzCAUyq9bqzHV5eTDkquD9npoSlf2iiuVif8jD
+OM1Yah10nyEDCRjgx81qDiMqim/MkA==
+=4Bpa
+-----END PGP SIGNATURE-----
+
+--Sig_/1f9.u.3IHguvBWiXX3dmh2T--
 

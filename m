@@ -1,112 +1,92 @@
-Return-Path: <linux-next+bounces-6598-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6599-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFAE9AAF6B8
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 11:27:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4335DAAF6CC
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 11:32:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C91B99C4E7B
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 09:27:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CE5A1B644FD
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 09:32:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 156332571D7;
-	Thu,  8 May 2025 09:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DB151DE2DF;
+	Thu,  8 May 2025 09:32:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="etTWGR0W"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="X111kyzZ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BE52144A8;
-	Thu,  8 May 2025 09:27:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF66E5A79B;
+	Thu,  8 May 2025 09:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746696441; cv=none; b=BR6ZJnBnZBV8GDTRwNl3ILkvBKDcI7xa4JhORJBWzRNfxGn6z6O1TOrzYvGO2d7qqLYbO8I6jLDW+L75LwmNKduAVfxwSx5vYMZ6D1eyLmYtKMl0wodByRulCvw/Wv0Nkpi0NzZPO85FJWAiFXSD9v7jAQn8a7qP5KRaVQVxz6w=
+	t=1746696727; cv=none; b=ZgKIzNk8ewAnMqCsGJcDPhGsgtF3oVzDcgSddwaNcMA3dGqQ86PWv7GmeQexeehaNvzQ9/pCJfjXlJN+EACnFPCEKs8nuKQImcMJDraf7ss/jQjXEW5fsdNY0fke3TuhpK+Wjd6hk5yhPaMhZ3kaos5BZJrdht0NeWeaID9PkPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746696441; c=relaxed/simple;
-	bh=0erWkF40pUIGwAGypE58a7+XvzGDRJetEZCo9MO5foM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DCR1u4dib9YfJKo/afSK0H/mXrd6W4qpJjZ7VSVNHwfOj7FgQZfVz3IHsftY8RiKcbe1vVH6RFaWjcf6EcEAjVWkypxxf0I6xAsZ1rbMEVrUo/HzvuqVP91/Ug4H27hEaTCOe7/m9OvOu9jA5oqQWte6J3kTGHGr8iYVynO8sdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=etTWGR0W; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1746696435;
-	bh=0erWkF40pUIGwAGypE58a7+XvzGDRJetEZCo9MO5foM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=etTWGR0Wll5fBy9t5srO8h/sXmNhgcI4x8MxXW13utYR+H+IL+a7m0G66tUmeGjmI
-	 MDdp4PD0mYQ7CbsXjJ/4+mUJZbxbNPERBD8hISz8yPRah03psDg76Qv9W6zWhy1DI+
-	 Xpm6uqW6BB2YMai/7X0lkiolwnaS+Z0KiUU5Nh9Br4cq2i19KqVawgtrndLdiDh0rt
-	 sjiGobXikchTjZLnXMC1mp7kZyONAUw2F+KB24u7vpoubkkn/yfPiVI3NMDqg+D9Vh
-	 /JFt2cu0s7fQBaB4NDHGkc+eiMaREp8k3BYJct1TKDEqK0yzUipSqe42hXws8EgT62
-	 9waxKj3MJEY6A==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZtRc25qHhz4x89;
-	Thu,  8 May 2025 19:27:14 +1000 (AEST)
-Date: Thu, 8 May 2025 19:27:13 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Ozgur Kara <ozgur@goosey.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge all the trees
-Message-ID: <20250508192713.4fd440e4@canb.auug.org.au>
-In-Reply-To: <01100196af3237f3-279dac0b-ad07-4f5c-bbd7-0e0f2d14659a-000000@eu-north-1.amazonses.com>
-References: <20250508182504.418552ef@canb.auug.org.au>
-	<01100196af3237f3-279dac0b-ad07-4f5c-bbd7-0e0f2d14659a-000000@eu-north-1.amazonses.com>
+	s=arc-20240116; t=1746696727; c=relaxed/simple;
+	bh=mzJvlyVGHlRjxsqMJpN53ex7Qqv6i67QF7M9Sxr3gzg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gDTa18tWgXpGua3GiuT4nsTq89syLPiCEx3o9l67pv6X3QBJtoGmBnHoP7ek8f6oMqEZRbp5Wc5GjcCiEVbu0jT3fxQn0Pjo82LcKwVvL4vjtSupucQqUvTX/O0gY+0QlXhf/yO4E/mGAQ0e6eoLo4bZHg3/d5hT/ghXfhBi8tM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=X111kyzZ; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=/u4hUroWiR4CUV4mKLWgPe15CpB5sXH4FE5c7lscFJ4=; b=X111kyzZDqklOQ2dMTGxZpagk5
+	Tli3pN1DrjJS7bQEb32uUMh5OJw8HotxlANEPfi6vpedQz62urhhduOzRqvtazI4xmFhNwd6jjD+t
+	ZpvGKS+Aa1QDPVZIO5yEuWC+wwHHQMFFWwE5OvLRys9MFx2K248JkGfhS6aHM58bXpSWlphZ4F1du
+	/TUfuX08vMlkKYkzAu5J/WCVTF91b4P60kwe04e6j8r8dxrh0/qDwuQ/xOIMQjbxwocidgx8J1hAw
+	TGucSFxU+Fc+G3v4ZwAgVfZjkaiNEQ7SHyjr2h+FuXH/gqgM5O6z+jdvc+hoofHKpVwgdlMbfd4Kk
+	Dr2CXY+w==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1uCxbj-004Y8R-12;
+	Thu, 08 May 2025 17:32:00 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 08 May 2025 17:31:59 +0800
+Date: Thu, 8 May 2025 17:31:59 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Cc: Thorsten Leemhuis <linux@leemhuis.info>,
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH] crypto: powerpc/poly1305 - Add missing poly1305_emit_arch
+Message-ID: <aBx6DwsjDJmdHphy@gondor.apana.org.au>
+References: <cover.1745815528.git.herbert@gondor.apana.org.au>
+ <915c874caf5451d560bf26ff59f58177aa8b7c17.1745815528.git.herbert@gondor.apana.org.au>
+ <242ebbf1-4ef0-41c3-83cb-a055c262ba4a@leemhuis.info>
+ <aBtF2jVZQwxGiHVk@gondor.apana.org.au>
+ <37cf099e-d5c2-40d8-bc31-77e1f9623b1c@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VNRsE7+549brboJktW=gpak";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <37cf099e-d5c2-40d8-bc31-77e1f9623b1c@linux.ibm.com>
 
---Sig_/VNRsE7+549brboJktW=gpak
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Ozgur,
-
-On Thu, 8 May 2025 09:20:26 +0000 Ozgur Kara <ozgur@goosey.org> wrote:
+On Thu, May 08, 2025 at 02:46:06PM +0530, Venkat Rao Bagalkote wrote:
 >
-> Did you run this command before you got this error?
->=20
-> $ make htmldocs
->=20
-> but the error shows itself because index.rst is not in need requested
-> directory, please run:
->=20
-> $ git restore Documentation/index.rst
->=20
-> Can this solve it?
+> I tested this patch by applying on next-20250507, though it fixes the build
+> issue, it has introduced a boot warning.
+> 
+> 
+> Warning:
 
-Please see my second email.
+Can you post the complete boot up messages please?
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/VNRsE7+549brboJktW=gpak
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgcePEACgkQAVBC80lX
-0GyV2gf9F4QSC5T8YyDkghJMlrjWYKzoKDEaU1zZ/hxM8Q2EKy6w9oZhibUVZLbh
-jJBv1pIwfzdSFXORitr1a3J67oGD8DV9Mo0qhh+sy/4S9RFVm5CxMLj+M5/RKkSt
-rBST6WDc4hv1FPFEN3k+boGYWMy6FzPohB16yziFQj9FylTHTS83hzQYCF3teheT
-6VAkxgy9+jBJ+tlsj2fM6ncA4g4dS6rZh1ofZtuUxY6foAsvN551I5Ww+26jkEVf
-Ee91zfO/nuPoR59KL/CmBQUfAfGOK+ZlRzZkcixxyduRdvoDJhW5qoNwU9DsPwqC
-XtTPtCPtOwt3u5ce+DIHUN35uPohbw==
-=5KsZ
------END PGP SIGNATURE-----
-
---Sig_/VNRsE7+549brboJktW=gpak--
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 

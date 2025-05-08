@@ -1,138 +1,142 @@
-Return-Path: <linux-next+bounces-6611-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6612-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0BC8AAF9C5
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 14:24:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D176CAAF9D2
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 14:25:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E3839C334C
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 12:23:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE8E13B5BCA
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 12:25:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1979229B2D;
-	Thu,  8 May 2025 12:23:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EF291DED57;
+	Thu,  8 May 2025 12:25:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="shDe43Ga"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Ft5KV2yb"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B782A228CA5;
-	Thu,  8 May 2025 12:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 095EB2253EF;
+	Thu,  8 May 2025 12:25:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746707010; cv=none; b=Rl3mvVMYIQ9i1hH7JXLYkOcIfbLVfADpxF89ZydSuhjRa1/fkBeANV+tbdAqp+qKe7rq4AOQyr5riXVJywxF6G/cICmYLhI3lsqrgOXndg5TytEvmU6P1rb92Npg1wVw5qrHHDZfARxhP+0fbMe9Uk+kpWYkyG6hOB0cYlZ4I00=
+	t=1746707140; cv=none; b=KiOi8ongUGXdFeDZT/y/Mgp8pcVq98tzb6j6Xy04aUyZU9fKPKdaFOOLr/ey4BPNU2e0RJrCy5wjxUFPBJwQUIoE/FrieeFKzO/afHNvh29pkC/0O8j8XWyLonvzRzw/LtFU8FHdJImvifzFVm0G3oUfULmU9Hc5pKCZystqcMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746707010; c=relaxed/simple;
-	bh=khRm8o9rtuC/Kqz7HVLNsURFDUIIWd/hQlzDNdijMjU=;
+	s=arc-20240116; t=1746707140; c=relaxed/simple;
+	bh=gCHJQCcbRSYIN0cE1qeXoLD24QyVQtR5eGLVxoooMa4=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lEhBlCN7/UvgS0ZpvoU20KaLTcxh/02JQOYpekBq6n3xK1FSMsA2xmJbVqd1vtjYCMVpo2bX8PUntSYU3afZocjP+vUWtgbVOOhlpmFX5Y1MVVm2IwRdILMOWBQY0I6yucAwleMbVwy++uR7RbZMj04uXRsd9E4NxPBcBLQhL+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=shDe43Ga; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7175C4CEF1;
-	Thu,  8 May 2025 12:23:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746707010;
-	bh=khRm8o9rtuC/Kqz7HVLNsURFDUIIWd/hQlzDNdijMjU=;
+	 MIME-Version:Content-Type; b=V3mJB69tUglWmExN3zJP3rppLXvtF2qW172rRHsfcfSNQwPBafRxIDrPa/jJgrD1YgQPGxOyrIOzhY31IYJhwUpR1BrZRQh4XiVnFhdCmY1DhoALxl46Jg/I/kZ2h2D41mCHKHt90RCDktUtzwbPmw1kemk6N4PwXpOvoBGIpxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Ft5KV2yb; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1746707132;
+	bh=rX4s752VsscDbXgQ3qyovnmqZcwVFUdWxkbxxpSISF0=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=shDe43GaNWxwKkABYwVZjjgHZlrzjddeTmiv3+zS61TErbrR9GZfrysU5E+oiPjj/
-	 lMuZJ2rJijkyPOAIU16b2m/mytiIN3TMNY3OopPscGZ8WsmDyn0d62k4dFKKejqKYc
-	 8fbRTMwdc+0vxcFyLGWgp2m/gcNYkTvmaPLTzrP4jt9r5EBTaGfIFu79vOfoLXpAiZ
-	 17WH/HMhXMgU/aVASmxrH/lHCA69J+3qIlriqKcaM89bb6LSRH90xP9+Al0yBefRqS
-	 iqsqTJXu/4fxj51HXldwCwL8m5g2f6kTzZkf+KC48OaIw+lhy29Bbrt3r3YAc+fw/v
-	 4D2tU6wwf695A==
-Date: Thu, 8 May 2025 14:23:23 +0200
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Ozgur Kara <ozgur@goosey.org>, Jonathan Corbet <corbet@lwn.net>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
+	b=Ft5KV2ybe9UIhy5WexFY9JbKtXSRWcmkCZl8H34ZmlI31pSJkWCQ/sVj2g3e5OBjL
+	 B0jxCDuxFU2l7umybj46W/Xq9pz/5me04Wz96B9zvg87Wqv2J/ZfzDLa464IqAulbw
+	 iOOzltwpiUfgGOWxjneLOSV+lx09pbhoaUzXtHCvmFGhrGYVh0h5KEQU9D94DEj4Py
+	 eu7oD/4FuoFZL8BLb5WbOoGbI0+KlfRyhaG5bYAZWZi39t/GFSKXcyFNqWETVuXDwh
+	 xcmhQc7/8ldfTPUJ1D8aypkCWLevsgA17vvMB4PcdcuHN5f7E9huYjI35BEgv9/MUG
+	 VfIDUxs9HqS3Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZtWYm14dyz4xQq;
+	Thu,  8 May 2025 22:25:32 +1000 (AEST)
+Date: Thu, 8 May 2025 22:25:31 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Akira Yokosawa <akiyks@gmail.com>
+Cc: corbet@lwn.net, linux-kernel@vger.kernel.org,
+ linux-next@vger.kernel.org, Mauro Carvalho Chehab
+ <mchehab+huawei@kernel.org>, Dan Williams <dan.j.williams@intel.com>
 Subject: Re: linux-next: build failure after merge all the trees
-Message-ID: <20250508142323.18538957@foz.lan>
-In-Reply-To: <20250508192713.4fd440e4@canb.auug.org.au>
-References: <20250508182504.418552ef@canb.auug.org.au>
-	<01100196af3237f3-279dac0b-ad07-4f5c-bbd7-0e0f2d14659a-000000@eu-north-1.amazonses.com>
-	<20250508192713.4fd440e4@canb.auug.org.au>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+Message-ID: <20250508222531.0e7fab9c@canb.auug.org.au>
+In-Reply-To: <3b35840a-7b87-44fc-8580-219ac78ad112@gmail.com>
+References: <20250508184839.656af8f6@canb.auug.org.au>
+	<3b35840a-7b87-44fc-8580-219ac78ad112@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/157dxLOm3ktKXpY3aCBwMf6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/157dxLOm3ktKXpY3aCBwMf6
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-Em Thu, 8 May 2025 19:27:13 +1000
-Stephen Rothwell <sfr@canb.auug.org.au> escreveu:
+Hi Akira,
 
-> Hi Ozgur,
-> 
-> On Thu, 8 May 2025 09:20:26 +0000 Ozgur Kara <ozgur@goosey.org> wrote:
-> >
-> > Did you run this command before you got this error?
-> > 
-> > $ make htmldocs
-> > 
-> > but the error shows itself because index.rst is not in need requested
-> > directory, please run:
-> > 
-> > $ git restore Documentation/index.rst
-> > 
-> > Can this solve it?  
-> 
-> Please see my second email.
-> 
+On Thu, 8 May 2025 19:54:08 +0900 Akira Yokosawa <akiyks@gmail.com> wrote:
+>
+> Please try:
+>=20
+>   make O=3D"$HOME/next/htmldocs" KERNELDOC=3Dscripts/kernel-doc.pl htmldo=
+cs
+>=20
+> , assuming your $HOME/next/next is the top of kernel source.
+>=20
+> I'm suspecting that the conflict resolution done in
+> c84724f2137f ("Merge branch 'for-6.16/tsm-mr' into tsm-next")
+> ended up in mismatching path names given to "kernel-doc::" somewhere.
+>=20
+> Looks like recent conversion of the kernel-doc script into python
+> has changed the behavior in such error conditions.
+> With the perl version, you'll see a couple of:
+>=20
+>     Error: Cannot open file <...>/linux/drivers/virt/coco/tsm-mr.c
+>=20
+> , but the doc build should complete.
 
-On a quick look, I noticed two build issues. See the enclosed diff.
-Feel free to split them on separate patches and/or merge hunks with
-the offending code from the original tree.
+OK, so, yes, the build completes.  I get the following message
+(multiple similar ones):
 
-Btw, if you're in doubt about what's causing doc build issues, you
-can now use V=1, as it will tell the kernel-doc command-line equivalent
-command:
+WARNING: kernel-doc 'scripts/kernel-doc.pl -rst -enable-lineno -export -exp=
+ort-file drivers/misc/mei/bus.c drivers/misc/mei/bus.c' processing failed w=
+ith: [Errno 2] No such file or directory: 'scripts/kernel-doc.pl'
 
-	$ make V=1 htmldocs
-	...
-	./scripts/kernel-doc.py -rst -enable-lineno -no-doc-sections ./drivers/cxl/core/pci.c
-	./scripts/kernel-doc.py -rst -enable-lineno -function 'cxl pmem' ./drivers/cxl/core/pmem.c
-	./scripts/kernel-doc.py -rst -enable-lineno -function 'cxl registers' ./drivers/cxl/core/regs.c
-	./scripts/kernel-doc.py -rst -enable-lineno ./kernel/irq/manage.c
-	...
+So, I used "KERNELDOC=3D$(pwd)/scripts/kernel-doc.pl" and tried again.
 
-(the execution itself is done via a Kernel-doc class, instead of via shell,
- but you can reproduce the results by calling kernel-doc with the shown syntax)
+I got these (new) messages:
 
-Thanks,
-Mauro
+Error: Cannot open file drivers/virt/coco/tsm-mr.c
+Error: Cannot open file drivers/virt/coco/tsm-mr.c
+WARNING: kernel-doc 'scripts/kernel-doc.pl -rst -enable-lineno -export driv=
+ers/virt/coco/tsm-mr.c' failed with return code 2
 
-[PATCH] Fix build issues with linux-next
+(and a few other innocuous ones)
 
-Address two issues causing issues during docs build on next:
-- a broken kernel-doc reference;
-- a non-reference listed as if it was a reference.
+So your guess is good.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+It would be nice to have the Python kernel-doc fixed as well as the
+devsec-tsm tree.
 
-diff --git a/Documentation/driver-api/coco/measurement-registers.rst b/Documentation/driver-api/coco/measurement-registers.rst
-index cef85945a9a7..962a44efa2c0 100644
---- a/Documentation/driver-api/coco/measurement-registers.rst
-+++ b/Documentation/driver-api/coco/measurement-registers.rst
-@@ -8,5 +8,5 @@ Measurement Registers
- .. kernel-doc:: include/linux/tsm-mr.h
-    :internal:
- 
--.. kernel-doc:: drivers/virt/coco/tsm-mr.c
-+.. kernel-doc:: drivers/virt/coco/guest/tsm-mr.c
-    :export:
-diff --git a/Documentation/virt/kvm/x86/intel-tdx.rst b/Documentation/virt/kvm/x86/intel-tdx.rst
-index de41d4c01e5c..fa5efd970146 100644
---- a/Documentation/virt/kvm/x86/intel-tdx.rst
-+++ b/Documentation/virt/kvm/x86/intel-tdx.rst
-@@ -252,4 +252,4 @@ control flow is as follows:
- References
- ==========
- 
--.. [1] https://www.intel.com/content/www/us/en/developer/tools/trust-domain-extensions/documentation.html
-+[1] https://www.intel.com/content/www/us/en/developer/tools/trust-domain-extensions/documentation.html
+Thanks.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/157dxLOm3ktKXpY3aCBwMf6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgcorsACgkQAVBC80lX
+0Gxqtgf6AqxTVAVlo03cWs5oBXUAohOPXubxx7PsIP4HmVUWkJerRHcYi2HFV7xF
+3cHtzJngRGnFMwd9k0Adwktilr6O1NdA0EVj6Sjn7HyrSsDiSoFYYgkfqOwaKv6+
+t88dClMmY7meMzy9BktUqgMHzHdihtclHQuKCGrLbsr8D/my++nT5wyRqc30kgzN
+wGTZ/55StgsE0cwkPSs4T0L81oiae7A4bUiy3t1I2WeThMdD+z3cxz1vKB01dUgS
++OF8rLQujNdbzwWW2dWQkeWJET/XuPUMkrqY8jejcWRSTOai4Vfu6/YcwTup5p1S
+/IbZ5tvPCSZaOysjrQBMvNt9u+4Yfw==
+=4/Y1
+-----END PGP SIGNATURE-----
+
+--Sig_/157dxLOm3ktKXpY3aCBwMf6--
 

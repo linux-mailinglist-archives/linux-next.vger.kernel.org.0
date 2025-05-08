@@ -1,128 +1,94 @@
-Return-Path: <linux-next+bounces-6605-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6606-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42B33AAF85E
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 12:54:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CD90AAF87D
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 13:10:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C03B7B3A2B
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 10:53:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEB834A7115
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 11:10:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DC181F4CAE;
-	Thu,  8 May 2025 10:54:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1E9820F09A;
+	Thu,  8 May 2025 11:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kiTnPny/"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="rT3KkXL6"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3244B1E78;
-	Thu,  8 May 2025 10:54:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184EF13635C;
+	Thu,  8 May 2025 11:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746701655; cv=none; b=H8MOC7q1NLhWqCBTgzrPMDwAiUlGd9w+oZBiWf0Fw4NinY9gLDkRX4xT0/9ilM69J2S6wd1FDJFed4rep3Zy85ZxgpbnSKUQz1ugSOeENPcrbuVC5lIPpQX1+Z6pV20+Y/HNrP4vIUwsHHiQWQEGEKGYgUJGla8OdQTWKUuZTpU=
+	t=1746702634; cv=none; b=RTyCmcS325Wk1ivr51KtwFMfjM+UhSl1pavV4DuEykuy4rk3scS7ru5Cbfha33CGvL5CsPajO9Z9xII04DDpqzZxi4ptpvuDH18l19qVzd2ZdQHr2P84jIZWjBWWIvqSKVP0CHxvfRZMO07JlMs4riBo/uIIGnv/U9r80a3zgS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746701655; c=relaxed/simple;
-	bh=X3UksTYOVHm8B+ZOXaMzzqudmeL3PAsZDR+aV6A8GH4=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=kWJ1AJI5aIoA8xOzDjVqqPuV+9NukfuPyv8cQ6z/Yk1o4licRMWa2eVz3gr8OO1Wy7/9k3gu8i4EEUbsrNnPHbTzfBAb2UzQJZdcw/Gr63lbTprrxrLXMSPhYBD/qXDJo8W+GxxLr6B3E9l2XG3PXxiPrmcKu/l2Ev0pxn6ux5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kiTnPny/; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-22fa28c761dso4149255ad.2;
-        Thu, 08 May 2025 03:54:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746701653; x=1747306453; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CEusxefEvuohqfQtlfsyFtEEHjXPJ9IrggtjDDOP+0M=;
-        b=kiTnPny/gh39ZmTScxhREw0QC/74IhJPKMtuOWrc1K7GR7zbxhTxcTuDLDre11p/q5
-         nRI+TAv3cWSi3c5btoVBitYqpTN21K/8NWnEWJNyeYS9WSDwzZ/1chtJdNgrjEruwiZq
-         DbPKaIoRGAyevEQh5Byz37QcwmkoKVRPf4jXC/W7AUiWxIGavTI89DCzcHxnLe3gAo/x
-         3pjtBFPHjQ3rmNeRfa8xDHexfGOmDqSpbkIjWMGGGEMrJCEs0ivf6cTrs2CWabsomfyo
-         rHdEfO9AdAlto3NWygPqakTaYBfUZ55qLrwL8DS7GWG7bAksukGm4vBKYIQgTurlI3Ee
-         sEpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746701653; x=1747306453;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CEusxefEvuohqfQtlfsyFtEEHjXPJ9IrggtjDDOP+0M=;
-        b=e3EKaiP2ENbGvfa0YJ8jRsDpdIXNrfhkPvt5BfMgZJgARjSk/0BvCvGYFwJMwn85dK
-         DzZKORpYW4aZbDg5qN0rzjR9mbxHp/RUhOn310LHO8YohFStRj8A9+4Xb1x31nqQZ7qy
-         nTScfm++cuHuF5BcjgdxpbWAEVuN3oPMFEJFRf76nBkMKBQZFz8Nck7DsaJ5ZbJL+eRb
-         A2RzcwK615NeKUG9VQpVDahKlEEPXbhsvMsf8oYE6vpgKY0tLhrk3SDGRdrYLHFXUXzq
-         4E2mOnjjyw0fmHu0ZCCAqRwZ5RGeYON9Zwal92+0VVc+7MKQGmFNNQLo3V8BFv4hg3Nj
-         g77Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVY/abkREyMLYcErR1RBxu+Qc85QuWYAfD2I5eYseruKO4TBCswovfeatq2HHSHpfMAzip6ZcP4UnjJMiI=@vger.kernel.org, AJvYcCWTzKCZpMhywcThdl58tUzEufrHue1GEjGogF4/k6YdcaDOWBPrj6wcaIJeYon3k7R4PQgH88+wy5TgvQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+hngPJ+NoUX54O9vZ5bJNgJXVxW6ET++ugvjyDZ1MIObMVi4s
-	uoc5VlZi0Z7EYwMeKhqNmvJ15G2tXfLmsir9igerzHu2w4pDCUFz/4k9N38n
-X-Gm-Gg: ASbGncs/VnP73nKPt3+97K6k5UnfkXVDPfDgQLP3wY7FFT/sGYI8EWnq5KGjaB0jlSb
-	Zkj+QPdfhqUiKw1vPF81a4/1wrJlwIRtDZeIEGjX8SsVn7VkBxgGTFUsmsYDPmh0bbkk/uhWkOs
-	/v/G1QJO0x7y8jU7ignn6oHGnLo3Fc4nl0EKpMRtz0OLbFeu0fgzUVPY3Ok1PjCCr3tqsy7TXiV
-	9FTbqvYGJoEhaoLPpc3FvtIi+mC4zxBJ6Q0OsX0OZCG4Ggmnp/AlSS7zlbRrar+i0h6eDO5x/NF
-	M4Ec2C1Ck5INQs9mqjTs3m6eayES/YBTK3yaLG/UvuojreZjir2Hohh4Po8DisKc8AQwbp3fXwM
-	/l06iL+yPRVE=
-X-Google-Smtp-Source: AGHT+IHka/4iLzM65cY0fw7qKKRLRgrJDhrMgH4b2rg9j9EtsdgIUjZ704FigjYt/W1FnIFNmK5ECw==
-X-Received: by 2002:a17:902:e849:b0:22c:33b2:e40e with SMTP id d9443c01a7336-22e5ea1d4d6mr100254235ad.2.1746701652965;
-        Thu, 08 May 2025 03:54:12 -0700 (PDT)
-Received: from [10.0.2.15] (KD106167137155.ppp-bb.dion.ne.jp. [106.167.137.155])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22e151e95dbsm109376325ad.64.2025.05.08.03.54.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 May 2025 03:54:12 -0700 (PDT)
-Message-ID: <3b35840a-7b87-44fc-8580-219ac78ad112@gmail.com>
-Date: Thu, 8 May 2025 19:54:08 +0900
+	s=arc-20240116; t=1746702634; c=relaxed/simple;
+	bh=apzDazRApc8L184ZCd+kMTXpfPKpEbT8IDs20ODUeAw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oExGPL5LWeauyIfBsf78UygxzRH7u3/fRsGYjzELSZpN+pWMNe/VlzxyQB9TVbD75pV49rWsE/RN0v5OovyJ4usF8EX5Uh/fWbMqC66T9xYaqrAWofsFMvxJQyhoJn9rpXvsFXu0tKPWJIyOF9Id5ZGBozxVV3wXaliCmId+TXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=rT3KkXL6; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=B5PgKdWYwmTvZP+vXKi5TVXR3KLYo3HXJNEjM9zMT6I=; b=rT3KkXL6muj9CdLOMCIyrNzOT6
+	jKoUS74jTWHoQgNJc+SMJonOWlJVMqsc/EvfGpq9AWm6vQr94Fepi1OmZKhzLPQrSJ/4gQVgNh2K+
+	AiVnLg2MhmYGdIRfqZAkM5ZiRlnlCQu2AzUitWC3PUyNFcM3mTkzUr6160ikecihS4e2xReGF4KXw
+	FpqOyhfKfzJ6EPJDVZleATz9A3zfGtfy5MJhMEOmEwW5sxHjFdUTfktxKMVv1wznKiOqVMUEMBQWp
+	BY+wnYEV18ZH/9RJU28Mq+Te49bK206jU3itLYxq8l+flsExZ1dQVQKgV/TjvPDilkrns3I6Y4vlm
+	IZDOdgHA==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1uCz8z-004ZRI-2M;
+	Thu, 08 May 2025 19:10:26 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 08 May 2025 19:10:25 +0800
+Date: Thu, 8 May 2025 19:10:25 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Cc: Thorsten Leemhuis <linux@leemhuis.info>,
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH] crypto: powerpc/poly1305 - Add missing poly1305_emit_arch
+Message-ID: <aByRIfXmkvZ4ZfCs@gondor.apana.org.au>
+References: <cover.1745815528.git.herbert@gondor.apana.org.au>
+ <915c874caf5451d560bf26ff59f58177aa8b7c17.1745815528.git.herbert@gondor.apana.org.au>
+ <242ebbf1-4ef0-41c3-83cb-a055c262ba4a@leemhuis.info>
+ <aBtF2jVZQwxGiHVk@gondor.apana.org.au>
+ <37cf099e-d5c2-40d8-bc31-77e1f9623b1c@linux.ibm.com>
+ <aBx6DwsjDJmdHphy@gondor.apana.org.au>
+ <7b491c56-0f2d-4805-a763-0a46233b8640@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: sfr@canb.auug.org.au
-Cc: corbet@lwn.net, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
- Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
- Dan Williams <dan.j.williams@intel.com>
-References: <20250508184839.656af8f6@canb.auug.org.au>
-Subject: Re: linux-next: build failure after merge all the trees
-Content-Language: en-US
-From: Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20250508184839.656af8f6@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7b491c56-0f2d-4805-a763-0a46233b8640@linux.ibm.com>
 
-[+CC: Mauro & Dan]
+On Thu, May 08, 2025 at 03:31:25PM +0530, Venkat Rao Bagalkote wrote:
+>
+> Attached is the complete boot up logs.
 
-Hi,
+Thanks.  Can you please try the Crypto API chacha20poly1305 and
+see what happens there? If you have it built as a module you can
+load it with
 
-Stephen Rothwell wrote:
-> The commands I use are:
-> 
-> cd $HOME/next/next
-> make O="$HOME/next/htmldocs" htmldocs
+	modprobe chacha20poly1305
 
-Please try:
-
-  make O="$HOME/next/htmldocs" KERNELDOC=scripts/kernel-doc.pl htmldocs
-
-, assuming your $HOME/next/next is the top of kernel source.
-
-I'm suspecting that the conflict resolution done in
-c84724f2137f ("Merge branch 'for-6.16/tsm-mr' into tsm-next")
-ended up in mismatching path names given to "kernel-doc::" somewhere.
-
-Looks like recent conversion of the kernel-doc script into python
-has changed the behavior in such error conditions.
-With the perl version, you'll see a couple of:
-
-    Error: Cannot open file <...>/linux/drivers/virt/coco/tsm-mr.c
-
-, but the doc build should complete.
-
-HTH,
-Akira
-
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 

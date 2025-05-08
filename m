@@ -1,137 +1,130 @@
-Return-Path: <linux-next+bounces-6593-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6594-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ECA3AAF5FB
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 10:48:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA762AAF630
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 11:00:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E18E3AAAD4
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 08:48:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE21C4C8154
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 09:00:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 877FA21FF47;
-	Thu,  8 May 2025 08:48:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63843244698;
+	Thu,  8 May 2025 09:00:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="J0q7mrTt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JeSX2aYI"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B534121E0A8;
-	Thu,  8 May 2025 08:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B504C23C517;
+	Thu,  8 May 2025 09:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746694125; cv=none; b=egbzj+GhWSvfbk5Ka6S5yz4+8zPISgKS2xg7A3SJjm3jP7JtAOX6VYBsxWq3pSo1B22DFnmLFV1b6ixu9SFY9aBMgrDMZ60hGGw/OCxkY5jGaJvXTCrjwq3Hlvgbp5QHMvARltmTOO5RJICNRGLKixAN/bbfmrYUWKfq80WgFg4=
+	t=1746694804; cv=none; b=DuavvVBCGxToZd32MvF32Vxadrf5aIfctkmMBpO9poWkdUlhqMKmB0Mq4/D3cenExLwpdjRaF5mNhFjpQChBFCGoOD5KiTHD7a7ApA+dA+hqCRrkMsU8ysfOrm4WVBUHLK0u6hjTeV/SyTE55+H3hsquX04DSZ/L5MmxfF/r27Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746694125; c=relaxed/simple;
-	bh=mNdg4312pZlS17BJvWLbZ/F0D4ryjw/eaLuJ8yYH4x0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RDphDjb0CxErZRLAL0nCv7xv9XAtl3L16/oWehNIGGJTWo0y+zb5xKvyLsMHbhpDKzs/fDawN+AhAWcvB+OKz+Lk3olT1nR27vNc5M5VI7sO1daDdRq3LCXxcx1lERSnLBpeaRd5g+B0/OixyF0aFXVpcj5nyoRe2Cbah0CIug8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=J0q7mrTt; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1746694121;
-	bh=TpFxIdd/Kbq0P+5+2Yj1o4onzJVZA1DsE34XUYtIVcQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=J0q7mrTtWb9yB9INxFayIvYj1uEjaYMXtj9Mhz/qolWdJdwtH9VVh/ZDiX8VwzzwT
-	 S4wXFlF1XtEnLzl9HzuT75baUpdWq3yvzhV1PF56GTLIKx94pQVis4QYoN1syY5Ybw
-	 1ASdLX2RZesPzpqEJ3rjZUqDOfYjNILTJSeJy+ng+oG1FDTJePpFFbAj0hJFmspLwV
-	 G1zfgJVIqetrRrt/7jJoHsyvleUUfsMQmzPPEzeS9clKzPYYK2xIss4E6zDKHU7nYS
-	 TVizlTohtjs3s2x1OnRMtx7tEZ0pDX5evQcFXajJi8nPY4JwutWsvBUvXNpJi2J8WY
-	 ScU9b+pavemwg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZtQlX5yLfz4x8P;
-	Thu,  8 May 2025 18:48:40 +1000 (AEST)
-Date: Thu, 8 May 2025 18:48:39 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge all the trees
-Message-ID: <20250508184839.656af8f6@canb.auug.org.au>
-In-Reply-To: <20250508182504.418552ef@canb.auug.org.au>
-References: <20250508182504.418552ef@canb.auug.org.au>
+	s=arc-20240116; t=1746694804; c=relaxed/simple;
+	bh=AaeWpi+yydjjAMPRH8AVWiTo86051eamAp/lfybEBio=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=QFPgJ0saWSHFGCUMQIbZFqXt5C9kvz5pfwjocNx5/ZTTz/NoJdqOvYxL+1jxce7WyWna23NEjZwSMRiLRi/p0AemOnIsX3Fy6kNGgE9Op8wl7nmRNBnMTkebpTCrWOIJYxL8gbyrddApkhgB4BKkRLGXZeWVE3YAYijySkJhg7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JeSX2aYI; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1746694803; x=1778230803;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=AaeWpi+yydjjAMPRH8AVWiTo86051eamAp/lfybEBio=;
+  b=JeSX2aYIaIA6yeLgSW9I4eYeLhCWqdCiDGo7gnnNA2ZfeoT9v7q2JokU
+   Qg/YzBqFAy8QEAA5bQtQgEhk/7RY1gvBlersXM8X3hBJZaiDosnkcq+EX
+   p0JKIUpT2IUG89oCZ+7znKBU7uiSwEmUZ5AK5kbdR+xKbeLSRoDJw0zdh
+   O1i11Y5B2RxT7JzbSZLQ6wHrc5vqaEkpzJBc4RblTQVxNp3ZBG4+1/Ivj
+   UfHMSlHHmfwDwklFHT6W4R8GTAm0kJgAGegoYleIpi+ZPLU0DuQiPFCVp
+   JTchMNYPGqRpT1wZYbiHugT2HO+Nc+fjgdPQkSLI1Il0hdDE3nyn7dt8A
+   w==;
+X-CSE-ConnectionGUID: 5QZ+qf1IRUqDXWQxPVUP0Q==
+X-CSE-MsgGUID: Dg6LD25/T6qds32myNC7kg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11426"; a="48628718"
+X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
+   d="scan'208";a="48628718"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 02:00:02 -0700
+X-CSE-ConnectionGUID: YbfE/K9wQw+aMceyhwuuug==
+X-CSE-MsgGUID: IrS8fQ0mRyOfaUDqt1MDWg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,271,1739865600"; 
+   d="scan'208";a="167164017"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.196])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2025 01:59:59 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 8 May 2025 11:59:56 +0300 (EEST)
+To: "Paul E. McKenney" <paulmck@kernel.org>
+cc: bhelgaas@google.com, linux-pci@vger.kernel.org, kernel-team@meta.com, 
+    LKML <linux-kernel@vger.kernel.org>, sfr@canb.auug.org.au, 
+    linux-next@vger.kernel.org
+Subject: Re: [PATCH] PCI/bwctrl: Remove unused pcie_bwctrl_lbms_rwsem
+In-Reply-To: <3840f086-91cf-4fec-8004-b272a21d86cf@paulmck-laptop>
+Message-ID: <099859f7-6a27-ca1a-7e22-4facafc4b6c4@linux.intel.com>
+References: <3840f086-91cf-4fec-8004-b272a21d86cf@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vq.R5Crb2ylyqXwa1YE4ZFN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/mixed; BOUNDARY="8323328-1810519414-1746694529=:922"
+Content-ID: <178ae2f6-e5bf-ff7d-18f7-e740c101bee3@linux.intel.com>
 
---Sig_/vq.R5Crb2ylyqXwa1YE4ZFN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Hi all,
+--8323328-1810519414-1746694529=:922
+Content-Type: text/plain; CHARSET=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <516b9215-2156-176f-cd2c-bed75f2e5277@linux.intel.com>
 
-On Thu, 8 May 2025 18:25:04 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> In my after merge build tests, today's linux-next build (htmldocs)
-> failed like this:
+On Wed, 7 May 2025, Paul E. McKenney wrote:
+
+> PCI/bwctrl: Remove unused pcie_bwctrl_lbms_rwsem
 >=20
-> make[1]: Entering directory '/home/sfr/next/htmldocs'
->   PARSE   include/uapi/linux/dvb/ca.h
->   PARSE   include/uapi/linux/dvb/dmx.h
->   PARSE   include/uapi/linux/dvb/frontend.h
->   PARSE   include/uapi/linux/dvb/net.h
->   PARSE   include/uapi/linux/videodev2.h
->   PARSE   include/uapi/linux/media.h
->   PARSE   include/uapi/linux/cec.h
->   PARSE   include/uapi/linux/lirc.h
-> Using alabaster theme
-> Using Python kernel-doc
-> /home/sfr/next/next/Documentation/virt/kvm/x86/intel-tdx.rst:255: WARNING=
-: Footnote [1] is not referenced. [ref.footnote]
+> Builds with CONFIG_PREEMPT_RT=3Dy get the following build error:
 >=20
-> Sphinx error:
-> Sphinx is unable to load the master document (/home/sfr/next/next/Documen=
-tation/index.rst). The master document must be within the source directory =
-or a subdirectory of it.
-> make[3]: *** [/home/sfr/next/next/Documentation/Makefile:123: htmldocs] E=
-rror 2
-> make[2]: *** [/home/sfr/next/next/Makefile:1804: htmldocs] Error 2
-> make[1]: *** [/home/sfr/next/next/Makefile:248: __sub-make] Error 2
-> make[1]: Leaving directory '/home/sfr/next/htmldocs'
-> make: *** [Makefile:248: __sub-make] Error 2
+> drivers/pci/pcie/bwctrl.c:56:22: error: =E2=80=98pcie_bwctrl_lbms_rwsem=
+=E2=80=99 defined but not used [-Werror=3Dunused-variable]
 >=20
-> I have no idea what caued this :-(
+> Therefore, remove this unused variable.  Perhaps this should be folded
+> into the commit shown below.
+>=20
+> Fixes: 0238f352a63a ("PCI/bwctrl: Replace lbms_count with PCI_LINK_LBMS_S=
+EEN flag")
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: "Ilpo J=C3=A4rvinen" <ilpo.jarvinen@linux.intel.com>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: <linux-pci@vger.kernel.org>
+>=20
+> diff --git a/drivers/pci/pcie/bwctrl.c b/drivers/pci/pcie/bwctrl.c
+> index fdafa20e4587d..841ab8725aff7 100644
+> --- a/drivers/pci/pcie/bwctrl.c
+> +++ b/drivers/pci/pcie/bwctrl.c
+> @@ -53,7 +53,6 @@ struct pcie_bwctrl_data {
+>   * (using just one rwsem triggers "possible recursive locking detected"
+>   * warning).
+>   */
+> -static DECLARE_RWSEM(pcie_bwctrl_lbms_rwsem);
+>  static DECLARE_RWSEM(pcie_bwctrl_setspeed_rwsem);
+> =20
+>  static bool pcie_valid_speed(enum pci_bus_speed speed)
+>=20
 
-$ ls -l $HOME/next/next/Documentation/index.rst=20
--rw-r--r-- 1 sfr users 3274 May  8 10:55 /home/sfr/next/next/Documentation/=
-index.rst
-
-The commands I use are:
-
-cd $HOME/next/next
-make O=3D"$HOME/next/htmldocs" htmldocs
+I've a patch which removes not only the rwsem but also the comment details=
+=20
+related to it. I've just not sent it yet because lkp has been very cranky=
+=20
+recently to build test things in a reasonable time.
 
 --=20
-Cheers,
-Stephen Rothwell
-
---Sig_/vq.R5Crb2ylyqXwa1YE4ZFN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgcb+cACgkQAVBC80lX
-0Gysdgf/QBuUELzPj6X7oDxh7leZXNiGprZB50HXo64h16czxxz9p/Z7SDUQWpNi
-0NKkY++hBnWr7asroM9FLThHZScPIqJpg7yflISSUiGfUgIoIpbsMx9onXMNJCjs
-ygowMkZVSphLqHwwRiexxGwDFg7W6DEQxr4wiXQKWcux/YUfFimN6Em69lacG35v
-ziXS7QYqxrhQBAzWIHd4zYtwbQeY96tLxDElzLaDpMLsOShXsRs7l9kHrvVYpD3/
-Q016MGMTVxtOpccluv9OmOSqOZNE8CPuxmCQ/nz0BvZKIs2Qtybc5hNDbR/pd6GE
-m6z49mGs881sOdXJMX5BzJIClhj/IQ==
-=c5Te
------END PGP SIGNATURE-----
-
---Sig_/vq.R5Crb2ylyqXwa1YE4ZFN--
+ i.
+--8323328-1810519414-1746694529=:922--
 

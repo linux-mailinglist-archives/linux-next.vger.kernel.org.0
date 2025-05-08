@@ -1,163 +1,110 @@
-Return-Path: <linux-next+bounces-6614-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6615-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53C2CAAFEA5
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 17:13:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA1D7AAFF06
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 17:22:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62CA518865F1
-	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 15:11:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07B73987E04
+	for <lists+linux-next@lfdr.de>; Thu,  8 May 2025 15:18:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B9A4286D64;
-	Thu,  8 May 2025 15:06:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 598CF278775;
+	Thu,  8 May 2025 15:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="o3pZSYpy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gk1M7IYK"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C76A27AC3E;
-	Thu,  8 May 2025 15:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D08526D4EE;
+	Thu,  8 May 2025 15:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746716815; cv=none; b=tCykZ+lLUsPkq/2Wbu+zKEjTm4VKPxZYjqnVzyxt9+T/mZbIemChxA3//6XkIwUBMxAUgcDIj8eCiD3AfTBC72uWIsw3DD8JWvUndoN+zqUVq1ll+wscfZtnyzWR68TAZ+U1IVwdHEnIdZ14g175EtuT7xSByuev7ohH5CWN+WM=
+	t=1746717248; cv=none; b=trsc8khbqxDtuCJJPUbVAXtTOxL2hOpQSrDY/4qjM7Fu8bMwQ0cUAHY6kUGaC70Q7OQaEzFdtUS6JvsfYdarmgmJ0PpdgcfBu6pCYXCf1F5QuJDeYlIMmou3KPhcOhQ+6KV2eLPP2MSbwo0aS94AcJYTlOW27fkgaS/9TD4CSco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746716815; c=relaxed/simple;
-	bh=hbTb4Ycr/d1ecNihiUJ856JR7dFexe12ufHLYP7hyIs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VpHOScAio6IPrh61xK+KjX/TVDc2kbzoVubNkDBNRuVfujltHO1lOk0aJvvrbo9vNJ+FkFFQ8fXkmDCgNNYqMcQPiZfXkev3UDxkIZPpQh4XJ/+ncdXsOWUuq54qzmzVeapXZhREQdl35D2XPDjF9fhaNF3S/IFC8rqlfCLJFRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=o3pZSYpy; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 548AfMCG013187;
-	Thu, 8 May 2025 15:06:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=BSmgeN
-	5HB91N9M1jV8w7LDYBEzoqBnjFqxH7vD60Jig=; b=o3pZSYpyppVLqGAAUptfXc
-	bvJG4AHVxvooB+S7GP3sZxoyJyvNIZRSXhA9MFfULyvu7wIv/UiBiwvp32mP4T9i
-	fWP1juZkev8fWrVPpkKJjC+PU8xjQxdXVzK3jLEAWDGzjncaphwrVWHGOsbibSfs
-	/FWGM1y/BRa7oNJfQq9Uw8zsXniPxup2Yb7NQH/0s87A3uTkaoM4uCSQiJH8qOts
-	zYRD2esuvznadVpOFfagXVL+z6/Yc2eyMcMec6oJCMURt+WZseJ9Dk/w4eWGI/MZ
-	JI5hx4ArMFt3yHkr9ZHF+9dxAuWaPq2GNj+iVu/Cusy01ynwiPhxGNxHZ1vGz74Q
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46gu2t1a0b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 08 May 2025 15:06:10 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 548B03tu013880;
-	Thu, 8 May 2025 15:05:52 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([172.16.1.4])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 46e062nyg9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 08 May 2025 15:05:52 +0000
-Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
-	by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 548F5qlA27918960
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 8 May 2025 15:05:52 GMT
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0B47358055;
-	Thu,  8 May 2025 15:05:52 +0000 (GMT)
-Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F37EA58043;
-	Thu,  8 May 2025 15:05:49 +0000 (GMT)
-Received: from [9.61.251.83] (unknown [9.61.251.83])
-	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  8 May 2025 15:05:49 +0000 (GMT)
-Message-ID: <1d2c2fdc-5c36-4d4e-8b25-8289b865726d@linux.ibm.com>
-Date: Thu, 8 May 2025 20:35:48 +0530
+	s=arc-20240116; t=1746717248; c=relaxed/simple;
+	bh=yormhUEt8XHC3PTbUAynHNQJAL9v5mh6z/cnwi7mQzw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NPzUoJy36ug9sm/HIzAw2s1KRbovs56/y1tRgwAkWx5uFK/hKGuBQanxf/qCGR1+DKw4BNXCsv8FGYPBh5hqjUHb+H3kGM1pD+HL92v6e1NffYvvQxdY9baJuJnx5T9cY6T+xelMyK17QUEUqHqZxdWxl9o/oACL9RyhYmZYL/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gk1M7IYK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 951F7C4CEE7;
+	Thu,  8 May 2025 15:14:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746717247;
+	bh=yormhUEt8XHC3PTbUAynHNQJAL9v5mh6z/cnwi7mQzw=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=gk1M7IYKExGjljdTpf1IfU5ou08bIjcdhIiSuSenW0kyxV2GExk7zCpzcFkUxNb0p
+	 KXEEVwNdsaPukq/3O0umdNvXm5oxqmsLPMc8r3l7gC1JpNqi554/Z4hx3vxAMxJclV
+	 +5Pp50KoPyPfgv17a2+Cl+75XGzCvajXBZVAaT1WYUG8BMIyl8cIfdZjE36dqQPT7T
+	 s0R0XKsDqFUXMEVnGFksZaxpVpItRsErtGP3v84yXDsL9JOiTjPlvJkgw4CiWCuFOc
+	 z0tLw2RoxVLCkp6hLHS8l/9oIAkDtpfn7tAJsmxW7A+B7VyHTq9Re5ATdBtjHTU3La
+	 LCHMt5et1bI6w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 38DC2CE076F; Thu,  8 May 2025 08:14:07 -0700 (PDT)
+Date: Thu, 8 May 2025 08:14:07 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: ilpo.jarvinen@linux.intel.com, bhelgaas@google.com,
+	linux-pci@vger.kernel.org, kernel-team@meta.com,
+	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: [PATCH] PCI/bwctrl: Remove unused pcie_bwctrl_lbms_rwsem
+Message-ID: <606a5ead-1fcf-43a4-94d3-5d8c1e70dd92@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <3840f086-91cf-4fec-8004-b272a21d86cf@paulmck-laptop>
+ <20250508190845.4cae8b62@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] crypto: powerpc/poly1305 - Restore crypto_simd_usable
- test
-Content-Language: en-GB
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Thorsten Leemhuis <linux@leemhuis.info>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <cover.1745815528.git.herbert@gondor.apana.org.au>
- <915c874caf5451d560bf26ff59f58177aa8b7c17.1745815528.git.herbert@gondor.apana.org.au>
- <242ebbf1-4ef0-41c3-83cb-a055c262ba4a@leemhuis.info>
- <aBtF2jVZQwxGiHVk@gondor.apana.org.au>
- <37cf099e-d5c2-40d8-bc31-77e1f9623b1c@linux.ibm.com>
- <aByX_Y64C6lVRR8M@gondor.apana.org.au>
- <f66620e2-77e3-4713-a946-ddb2c8a0bccb@linux.ibm.com>
- <aByiNZNxqyTerdYG@gondor.apana.org.au>
-From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-In-Reply-To: <aByiNZNxqyTerdYG@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=NLnV+16g c=1 sm=1 tr=0 ts=681cc862 cx=c_pps a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=FNyBlpCuAAAA:8 a=48bIoUrBYIooDiy4U3IA:9 a=QEXdDO2ut3YA:10
- a=RlW-AWeGUCXs_Nkyno-6:22
-X-Proofpoint-ORIG-GUID: FP_6_i-DOA52SaRGfd5Doiu48ydWtB-2
-X-Proofpoint-GUID: FP_6_i-DOA52SaRGfd5Doiu48ydWtB-2
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA4MDEzMCBTYWx0ZWRfXz90klTix6jhx 4ku7tsJP+/6Ssabv4huefVsKUMqL+8l6vB6qri0KCBidPVx6gqu7f7tBsyI5nMBNvdpseExL5Yz tcmbxR/9gdwOtJgylYYTqOGcUZ/OwyC6Kf3oGi4u3ABRL2rt0Hny+CHnbTUtG8uFoFN/6Mt3cKD
- zke5EIrb7r8lX3jHSdl5rNYmVxucnfYb7JcKr7sqXc500enzJti9+6oWQVj0mR3I+ROyzyEOCAD NSWT204LLoJgH1Z9m8tBUQSPRBY2bWgQ9MhJ3kA4r1lR7sfTN57mm0K+fKGsH90QaCBCZ6MaTgq MXzI+j6+wzRYsvN1HanlCJ9X1/hH/mBUeCim/ZTLDkT2p6pUnFCQNrYKD9hD+GISBzW3ZvNMXCp
- CqrhKnQPYt5ndNmfFzbI+IhHViXLZfaNE4jwX5QFlxf9lohHV57EppSoH6TMX3bzckrX+9Bf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-08_05,2025-05-07_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- mlxlogscore=909 phishscore=0 mlxscore=0 impostorscore=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- adultscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2505080130
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250508190845.4cae8b62@canb.auug.org.au>
 
+On Thu, May 08, 2025 at 07:08:45PM +1000, Stephen Rothwell wrote:
+> Hi Paul,
+> 
+> On Wed, 7 May 2025 15:04:57 -0700 "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> >
+> > PCI/bwctrl: Remove unused pcie_bwctrl_lbms_rwsem
+> > 
+> > Builds with CONFIG_PREEMPT_RT=y get the following build error:
+> > 
+> > drivers/pci/pcie/bwctrl.c:56:22: error: ‘pcie_bwctrl_lbms_rwsem’ defined but not used [-Werror=unused-variable]
+> > 
+> > Therefore, remove this unused variable.  Perhaps this should be folded
+> > into the commit shown below.
+> > 
+> > Fixes: 0238f352a63a ("PCI/bwctrl: Replace lbms_count with PCI_LINK_LBMS_SEEN flag")
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: "Ilpo Järvinen" <ilpo.jarvinen@linux.intel.com>
+> > Cc: Bjorn Helgaas <bhelgaas@google.com>
+> > Cc: <linux-pci@vger.kernel.org>
+> > 
+> > diff --git a/drivers/pci/pcie/bwctrl.c b/drivers/pci/pcie/bwctrl.c
+> > index fdafa20e4587d..841ab8725aff7 100644
+> > --- a/drivers/pci/pcie/bwctrl.c
+> > +++ b/drivers/pci/pcie/bwctrl.c
+> > @@ -53,7 +53,6 @@ struct pcie_bwctrl_data {
+> >   * (using just one rwsem triggers "possible recursive locking detected"
+> >   * warning).
+> >   */
+> > -static DECLARE_RWSEM(pcie_bwctrl_lbms_rwsem);
+> >  static DECLARE_RWSEM(pcie_bwctrl_setspeed_rwsem);
+> >  
+> >  static bool pcie_valid_speed(enum pci_bus_speed speed)
+> 
+> I added that to linux-next today and will remove it when it is no
+> longer needed.
 
-On 08/05/25 5:53 pm, Herbert Xu wrote:
-> On Thu, May 08, 2025 at 05:27:13PM +0530, Venkat Rao Bagalkote wrote:
->> Yes, its was on the same machine, next-20250506 passed.
-> OK I found one bug in my patches, I incorrectly removed the simd
-> tests for powerpc.  Does this patch help?
->
-> ---8<---
-> Restore the crypto_simd_usable test as powerpc needs it.
->
-> Fixes: 14d31979145d ("crypto: powerpc/poly1305 - Add block-only interface")
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
->
-> diff --git a/arch/powerpc/lib/crypto/poly1305-p10-glue.c b/arch/powerpc/lib/crypto/poly1305-p10-glue.c
-> index 7cea0ebcc6bc..154eced0bf9e 100644
-> --- a/arch/powerpc/lib/crypto/poly1305-p10-glue.c
-> +++ b/arch/powerpc/lib/crypto/poly1305-p10-glue.c
-> @@ -6,6 +6,7 @@
->    */
->   #include <asm/switch_to.h>
->   #include <crypto/internal/poly1305.h>
-> +#include <crypto/internal/simd.h>
->   #include <linux/cpufeature.h>
->   #include <linux/jump_label.h>
->   #include <linux/kernel.h>
-> @@ -51,7 +52,7 @@ void poly1305_blocks_arch(struct poly1305_block_state *state, const u8 *src,
->   	if (!static_key_enabled(&have_p10))
->   		return poly1305_blocks_generic(state, src, len, padbit);
->   	vsx_begin();
-> -	if (len >= POLY1305_BLOCK_SIZE * 4) {
-> +	if (crypto_simd_usable() && len >= POLY1305_BLOCK_SIZE * 4) {
->   		poly1305_p10le_4blocks(state, src, len);
->   		src += len - (len % (POLY1305_BLOCK_SIZE * 4));
->   		len %= POLY1305_BLOCK_SIZE * 4;
+Thank you, Stephen!
 
+Ilpo, I look forward to seeing this patch replaced by your improved
+version with better comments.
 
-Unfortunately, above patch dosent fix the boot warning.
-
-
-Regards,
-
-Venkat.
-
+							Thanx, Paul
 

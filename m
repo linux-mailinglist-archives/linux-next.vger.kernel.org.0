@@ -1,80 +1,136 @@
-Return-Path: <linux-next+bounces-6628-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6629-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E007DAB0A4E
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 08:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FDD5AB0A8A
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 08:24:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60CC54C3585
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 06:12:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3CAE4E0F86
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 06:24:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B987526A08E;
-	Fri,  9 May 2025 06:12:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F35F26A0BD;
+	Fri,  9 May 2025 06:24:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zjso23WF";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="m2elasvB"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="RZ2kBzVv"
 X-Original-To: linux-next@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA1C6264A84;
-	Fri,  9 May 2025 06:12:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10464269CF1;
+	Fri,  9 May 2025 06:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746771126; cv=none; b=iZ7HgJD1ujNm676cB+wZQfD5t2M2fIYKxqP0tIV0csqPhr+rX1ZR8AKArvpCKmwpQpDi0NOTm8JFt0Bm5b2WUDi4UdYSuS5i9hFl+bWl1GsOWevzynw6ji1IwM6EhLTw1aXUIR+RN1tmcANsUVz60+M4CxdpqYHLN+N8pW3P9Cc=
+	t=1746771858; cv=none; b=g7xXzPh8AjU+eDo8fnLMLRpxt5bNnBq1gACO9V21erAT4K3PACM0CUA3ZoaH2Xkkf8v3u8MbE9y0hm9v68XOTna7KdYBSNZr2CVDygDvIYIr4wCEmgcddWwL6wXF2WuStJUZg7hNmPnIsiSRk/eIjUa103uYobw3fI42Ew/0NMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746771126; c=relaxed/simple;
-	bh=EBOGrAw4Os2phUDIo9oV+zsZr3pz5AX/0UCC8ECPHYw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=YcBXTimb5bfVLv1k8M0+EmUVWAIOrTD9aOvpYcRCAVF1g1Em2g9YnNJQcJDchXkjozdp39zsA1y5dEW09y/Z1X6KAiPM98Zw2SAznrsJ2z7Yw6ClGN+/bVv6LCMshuxx+kTAnzYI8XSds1/7eAbxFX+7yZJ0370A+EH4gpu0kvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zjso23WF; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=m2elasvB; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1746771122;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gQhL/zyL49irqKyovfJLz1V1udPg6T5kLoJ7hlE7PeI=;
-	b=zjso23WFgU+4rv7GJc1BegpJV1XWNNfeHwWdBJA2bcQLX/CMDLGUxO1ikiWwzQ93b95YVH
-	xuXG/hiDYQ241qAsp8SjLBGB+zIUOnXSusBXoD4I62ut2avhIrjOb1wOuxwemNNPo3wu+f
-	r6jv7G5Lglk8tEfJJKrbpELXKs4PHGvPANsP4tXadf3fT+XIfzzkIqNwBAEbJYSxjm1hy/
-	N2UGYQlQRxnIG5wCqF8HI792lbWAsEvRg8o+QAQQc47L+6x6yMaue0W2QvOeJQu0qPkMLb
-	8oZtht5XVVC+86p1nmYCFhCAb0qdLxJTC2ZXgxhrZ8WroDFtrls1cU1Wy8rqgA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1746771122;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gQhL/zyL49irqKyovfJLz1V1udPg6T5kLoJ7hlE7PeI=;
-	b=m2elasvBKh2AfN0UtHut/CqU7Sz7jTdXh7jTgiapvsVYZztb4k6aFVFctg7HMdeZe1poux
-	s+AZ9+ozns00CECw==
-To: paulmck@kernel.org
-Cc: Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
- Stephen Rothwell <sfr@canb.auug.org.au>, linux-next@vger.kernel.org,
- kernel-team@meta.com
-Subject: Re: [BUG] Lockdep warning from "genirq/cpuhotplug: Convert to lock
- guards"
-In-Reply-To: <a6f59b64-1604-4186-8a75-8ad776974a65@paulmck-laptop>
-References: <a6f59b64-1604-4186-8a75-8ad776974a65@paulmck-laptop>
-Date: Fri, 09 May 2025 08:12:01 +0200
-Message-ID: <87plgil3da.ffs@tglx>
+	s=arc-20240116; t=1746771858; c=relaxed/simple;
+	bh=3pCHYV5dd/XlAQ6W1527MXkbxAcUuZ5lPzQDfaBQcsQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OzobD2+HCZvbd42gsYK0jPOale/OR6B2B0mFPnOl7ceLebGPYQojjBnbg2OfsqyGkQJ10jRX2a2Cr61LEAiOLlETZ6AGS9XZWiS1GY3hiuglC3QnuH9nKMfXlW0gSRU59U8J93e5goBxHYauaOKNidXxmC+aEPlMV9X7m+AX1Es=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=RZ2kBzVv; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1746771851;
+	bh=7YWWfVTnLCfDAxKoS9Yl3oLGOs9FgUWThDFCavbDZRM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=RZ2kBzVvq9v3Y8ACPhgrFrB7Qq/r7pPLQif3kICGKDTJSZgrlycS2gssYSN6W546q
+	 TTaLeYAN5CDljsm7oKBTjNcZAS18BVRIhVymLBmS0nQGhrgxga0MKZlaUk/QZ1qGaV
+	 ztkB2JwWfQuVxNoLm0eD+gqNoaki6MQd3sZGPReoF2Fnd8D3kYgnfPhQ9D+Psr1vgV
+	 Mh0ywKnBy46trGtdTB87L4Ra0EMNCmsUfm+BJ38Zb6wNs8EYyDPr6gh+Cvw0aPp14o
+	 9ai2xEXo3RtZqn+ZS4Ocmdbe2gniPMMEc71rF19/kMUgnX6EtNkfPmcGr04YojHhtJ
+	 N6ej9g9ylj0NA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZtzVL3KXTz4wbv;
+	Fri,  9 May 2025 16:24:10 +1000 (AEST)
+Date: Fri, 9 May 2025 16:24:09 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>
+Cc: Ilpo =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "Luke D. Jones" <luke@ljones.dev>, Pavel
+ Nikulin <pavel@noa-labs.com>
+Subject: linux-next: manual merge of the drivers-x86 tree with Linus' tree
+Message-ID: <20250509162409.586abb02@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/zAJ=rGvYzYfprKVKM6hJi=N";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, May 08 2025 at 15:29, Paul E. McKenney wrote:
-> Testing next-20250508 with lockdep enabled got a splat that is shown in
-> all its glory below.  Reverting this commit makes the problem go away:
->
-> 88a4df117ad6 ("genirq/cpuhotplug: Convert to lock guards")
+--Sig_/zAJ=rGvYzYfprKVKM6hJi=N
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=irq/core
+Hi all,
+
+Today's linux-next merge of the drivers-x86 tree got a conflict in:
+
+  drivers/platform/x86/asus-wmi.c
+
+between commit:
+
+  77bdac73754e ("platform/x86: asus-wmi: Disable OOBE state after resume fr=
+om hibernation")
+
+from Linus' tree and commit:
+
+  feea7bd6b02d ("platform/x86: asus-wmi: Refactor Ally suspend/resume")
+
+from the drivers-x86 tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/platform/x86/asus-wmi.c
+index 47cc766624d7,27f11643a00d..000000000000
+--- a/drivers/platform/x86/asus-wmi.c
++++ b/drivers/platform/x86/asus-wmi.c
+@@@ -4724,9 -4780,6 +4781,7 @@@ static int asus_wmi_add(struct platform
+  	asus->egpu_enable_available =3D asus_wmi_dev_is_present(asus, ASUS_WMI_D=
+EVID_EGPU);
+  	asus->dgpu_disable_available =3D asus_wmi_dev_is_present(asus, ASUS_WMI_=
+DEVID_DGPU);
+  	asus->kbd_rgb_state_available =3D asus_wmi_dev_is_present(asus, ASUS_WMI=
+_DEVID_TUF_RGB_STATE);
+ +	asus->oobe_state_available =3D asus_wmi_dev_is_present(asus, ASUS_WMI_DE=
+VID_OOBE);
+- 	asus->ally_mcu_usb_switch =3D acpi_has_method(NULL, ASUS_USB0_PWR_EC0_CS=
+EE)
+- 						&& dmi_check_system(asus_ally_mcu_quirk);
+ =20
+  	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_MINI_LED_MODE))
+  		asus->mini_led_dev_id =3D ASUS_WMI_DEVID_MINI_LED_MODE;
+
+--Sig_/zAJ=rGvYzYfprKVKM6hJi=N
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgdn4kACgkQAVBC80lX
+0GyGegf+KcUSkgRHAWU/cUoWvsjkbJBjogA3iJMxIe1jySBR3SkwAVB9dHqBD+/J
+3Qrr4vRXrsgr9WKW1ti01xq4N0Purv99knIOFnmLCcBCW0NsSvgZrU8Q9eSwg3wG
+dMYkO1pZlWEukD9SqMs0liwHzSeRf0ot5/9317hv2TQsdmlsn4PluZv9s6kvYqxo
+G8dRN7XVveN/ptKGflIqbKmLX/NZIzYYo70OVdhpQT43zulcZR1gmzHQC0/c0wPZ
+qYbvZH8smmOOPVYAdRt5UPICHMtjOLy5nYUKbbdzodZlv3NPR45p0buZo11ve+6J
+lLZrOxCiaZ34IGDkmfRNbxbtX9oGMQ==
+=E/IU
+-----END PGP SIGNATURE-----
+
+--Sig_/zAJ=rGvYzYfprKVKM6hJi=N--
 

@@ -1,118 +1,98 @@
-Return-Path: <linux-next+bounces-6630-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6631-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0646AB0A91
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 08:29:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B3EAAB0AB0
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 08:38:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5127C4E0A11
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 06:29:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 438E49E7AB0
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 06:38:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA04C26A1DA;
-	Fri,  9 May 2025 06:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E192B238D3A;
+	Fri,  9 May 2025 06:38:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oNWobCd1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ihBMTySM"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BDD269CF1;
-	Fri,  9 May 2025 06:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B913A28F4;
+	Fri,  9 May 2025 06:38:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746772147; cv=none; b=cKKrIeYFJbiszP/o7EomoB9Ub20DEs6xwQeThtqAzLCePCfaFTQX7EchXoXHn9xxgqr0KoU56ApoakgVVPuK5RuQ+HcDSF8tdOLYaxcxqe6NmD5AP1oVKdzJoz+t30MxGdq8mSPdtaB3kQtkJXcR49rVEX5qDrfe9sn1rW4ZmAc=
+	t=1746772703; cv=none; b=i57xaurZowQ7yISXcVF7upLvozhsb2aFpPCUkdDfqmoAqN/z4qvvWS2yt7ztfOK0YyES1OgDtwF7tXyOuZxlpgCmQ8vMkxZ2fq6DDLg6Cdr+ISpyFd+/C/ZqIU22XGU/rI4X4LSTCKysxBhjxA960iamcJQ7o6VdKCOKO7sVb8g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746772147; c=relaxed/simple;
-	bh=kywdu2FXas4L3YPLsGAb8UCDtG5332pxZOYw7Oll8z0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=E2HIc6IMtLvc15uUVGmMhPiPQzYHoW9EGXzDKmEQi5GIZIE4T90mK+76SSez/zsmx/BlGQsWjUtNCJLctZq3uv1MiA2cUuwRtOdF0NFdjP/ZOZN/gms3jrVvNDF1GUF1JIjCysQAXcrphYzQW+mifWkVLMpIPH0n7sozkK5BHFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oNWobCd1; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1746772143;
-	bh=K2UlQfpU195Tsm7cO9w1Iim7hnaVu9KQM1cXlkewGeI=;
-	h=Date:From:To:Cc:Subject:From;
-	b=oNWobCd1Uvv774IqCFxCExJjwSzyIY4vlQP3o8Bquv8wkszezzChiFugl8pF4QPCA
-	 bsgyEozws8opPbhHvfbvba3c7pEi7E1iJSPyAvr0um5G83+1z860/n8+fbkX4bvSaJ
-	 YsE8NXuIxsJLYSsOehYVQoqjX8d/DxI/ElIFk1vOFNfv/sYWJrZ9E85Iebc3Qb+FCm
-	 k5lTNpal5ymrSEvZYlfgEIIeXEfT/nJ5i52OKkB8B1GA0SlQny91yxSk9gi1tXcmJb
-	 10Ggn7JtzZNknOqvr0dHK7RJkodfG8SHQYBbf5E6fPUlfpE7lDnzrdcWanHwCv+Alq
-	 w/8cz2pM38eIQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Ztzby0ypSz4wj2;
-	Fri,  9 May 2025 16:29:02 +1000 (AEST)
-Date: Fri, 9 May 2025 16:29:01 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, "H.
- Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Ilpo =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Srinivas Pandruvada
- <srinivas.pandruvada@linux.intel.com>
-Subject: linux-next: manual merge of the drivers-x86 tree with the tip tree
-Message-ID: <20250509162901.79e269a5@canb.auug.org.au>
+	s=arc-20240116; t=1746772703; c=relaxed/simple;
+	bh=DijmGR4CReVDiWNuWA3tbBM8VuHHMl+HFeLCqD0jOkY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UmaePxg5kWLJDFxonlwTIwxNkvPuuoYg35mogzIla72pY7VVASp8C3772QRxwxe9UJKbWGmm/e2ap/X5VI2jCOIr6pWbBJVw8meLjtL4Y2zYnwMHDZu8k8U65hOsMf80ZhSzgmiQwvKx/YdCizM3g7a+KAcao4zwXw87viEXIwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ihBMTySM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C24C4CEE4;
+	Fri,  9 May 2025 06:38:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746772703;
+	bh=DijmGR4CReVDiWNuWA3tbBM8VuHHMl+HFeLCqD0jOkY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ihBMTySMNi0Q0hIgKK1LyO0M9lKYu3oaShiHal1xYZ9dkRF2ZaqKOtxsNaX1LNdDe
+	 GjjlJrK14Jwaeovr18Bo17oyM4K+8Dk61NTigpn9+kAEwUdjIOjZzagvlkobf6OHGx
+	 WPiYD/qSkqzYuGZ9nAMx0mXQumZiPJupB6sHdxmKyhVe+UOZXtad7/id4CG11ufHXb
+	 /NRNr01YZ2WaiHBYXtJoOaGMokubxhQXbcQEgMto0C+GLxVGXB3xG8fpigQ2O/rL2F
+	 KkAi3My9wBpLidClSN0PF++VT0kdYO70Px4xpdBPGbk06P0jKlt4rsNV6Y8BCw7dyf
+	 8T7RGPFCa0YOg==
+Date: Fri, 9 May 2025 08:38:18 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: Re: linux-next: manual merge of the drivers-x86 tree with the tip
+ tree
+Message-ID: <aB2i2oVeGwhaauIU@gmail.com>
+References: <20250509162901.79e269a5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=JRMuB4F/LvhXRL.6+_GiZb";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250509162901.79e269a5@canb.auug.org.au>
 
---Sig_/=JRMuB4F/LvhXRL.6+_GiZb
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Today's linux-next merge of the drivers-x86 tree got a conflict in:
+> Hi all,
+> 
+> Today's linux-next merge of the drivers-x86 tree got a conflict in:
+> 
+>   drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+> 
+> between commit:
+> 
+>   6fa17efe4544 ("x86/msr: Rename 'wrmsrl_safe()' to 'wrmsrq_safe()'")
+> 
+> from the tip tree and commit:
+> 
+>   c935ddfe65da ("platform/x86: ISST: Do Not Restore SST MSRs on CPU Online Operation")
+> 
+> from the drivers-x86 tree.
+> 
+> I fixed it up (the latter removed the code that the former updated) and
+> can carry the fix as necessary. This is now fixed as far as linux-next
+> is concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the conflicting
+> tree to minimise any particularly complex conflicts.
 
-  drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+LGTM, thanks!
 
-between commit:
-
-  6fa17efe4544 ("x86/msr: Rename 'wrmsrl_safe()' to 'wrmsrq_safe()'")
-
-from the tip tree and commit:
-
-  c935ddfe65da ("platform/x86: ISST: Do Not Restore SST MSRs on CPU Online =
-Operation")
-
-from the drivers-x86 tree.
-
-I fixed it up (the latter removed the code that the former updated) and
-can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/=JRMuB4F/LvhXRL.6+_GiZb
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgdoK0ACgkQAVBC80lX
-0GzbtQf7BHMiEjcdOtdKOf2C/QXQOPujVIQZu7fUVrrlWBCH9776zASAXBdke8jB
-XyCj6C4OgLIgedHvptKDjh9xuEmw2JEkcb8L234G+7oE7MOjK7mN51r8nVZR2x09
-Y5s7s/uV2gmQAf5RFbMtNPbAonAjbeU60r+44fjwQzB/eVk0wlqOC0uUXwhrVLSr
-nIrPEn1/TDsN8V6BoFRMny3zOOIKeut91bp2YwRiwqgJErKdURmKI3clgFfnxYMo
-4chtNXPk7a3CfDjZl5siKx+/XliBkMqv76DE5v/9RNXEiyGZvJEcMmd4BwgZOfQD
-Qfp+1AX65TWGFZZOjNdyJynwnyB2KA==
-=aA/N
------END PGP SIGNATURE-----
-
---Sig_/=JRMuB4F/LvhXRL.6+_GiZb--
+	Ingo
 

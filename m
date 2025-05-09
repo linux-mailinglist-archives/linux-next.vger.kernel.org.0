@@ -1,170 +1,139 @@
-Return-Path: <linux-next+bounces-6633-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6634-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C18BAB0B56
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 09:13:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E234FAB0C91
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 10:05:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F36577BE14B
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 07:11:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B055DA00FD8
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 08:05:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B4BF26FDB8;
-	Fri,  9 May 2025 07:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF1F7270ECD;
+	Fri,  9 May 2025 08:05:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="De4Qdiac";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XPEi+DT/"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fhPRxT2C"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30E1268C69;
-	Fri,  9 May 2025 07:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B76EF26A1DA;
+	Fri,  9 May 2025 08:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746774782; cv=none; b=FrqKM1iwu61Aw24p/P5z+B6ZNpInpyYG7AD33ByGr9/DVfcb45zp8xtxVvjcOVA/j4C0JQQ816uTCH1CP35cTXte2a7cRWCYcL441Y4P5IvT+uv3Vj2xv6e1GJxxC7ykQaXRkCtxl30GEg9v5U3YMbScTJVXQN2NTW/QaXIpn1o=
+	t=1746777944; cv=none; b=QO5dOV4BjxHm8HBVs8bXCcdWGoKNv+7OAaQE5ISRlgGJEArpM8PNIRTF7dSkOWg/a24z4K5/uTzbNUDL2HhD8jMppNRiioMKgLz+amOxGfoQuS1LOdRaqeA4NsGyrJ8hLBUsSLx0PTZx9bmShX/SYKtv1lva1+Zn+cmhf/ZxNfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746774782; c=relaxed/simple;
-	bh=spjjPgVue+f67cgJZxO2lXkg3FIJCuHP+wo6LqIKcVU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iIN4i8ZC4XAcSSi2FJCGrJDf7gOgkfUEutjiCNMLt7kqoamBxv5MTHSITQpcrDrIXsXhvC9VjmWtYWZcddR1UOOFV1iKpmJ1G5H2iFFjIAud+lmFmY9YwjgrLsRxLsD0jFiTcZTs8u/gM9V7mgAeqBweFKNNkoNPzyKLb2pmk4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=De4Qdiac; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=XPEi+DT/; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-08.internal (phl-compute-08.phl.internal [10.202.2.48])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id BBE5D11400A9;
-	Fri,  9 May 2025 03:12:57 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-08.internal (MEProxy); Fri, 09 May 2025 03:12:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1746774777; x=1746861177; bh=xsqp4yF/qF
-	kbSJodQdzkj/nkOzXF56kikPLgbGmwsF4=; b=De4QdiacN1Oe5McaoTpqfLAc+6
-	X2v/NDsbImG+G5teX2N+ADkEZZnmmm8YZN1Ww/NubYjvQA5ETBtC0u4X4WYCpf6D
-	Bi5zL2xKpxF+hY5ku5AW37Qi+Lo5SLsrZmrOSsSk+e/g0vjBYg1YfCATBiJLGZto
-	58z6EiKZGW6RxX6+MIo5gGK+mbrtfS5kcYDoKXkW3tZjc26/5o3yd8A0V4ynf/qD
-	VvYeN7u2P9UIgTEtGRH0ptkqpr2xRk2zeiPEvsbig/0woyWJldwAJ25Y4KU37Ku6
-	uVt2t4dYBnev0TWtti1Mv3sxBBA/VezdSsXIM2VT9O/PfNnykGilS2jb8R8Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1746774777; x=1746861177; bh=xsqp4yF/qFkbSJodQdzkj/nkOzXF56kikPL
-	gbGmwsF4=; b=XPEi+DT/TDNw4WecPuthn5AslVk3FMKtsGU2r77uGm6W84X70e2
-	22xLTHQK5faf4vQf6E6KmoqzFf8WOPW8bBe8J9UKhKGVMQFkbdFVl36gkz78QAG8
-	Yl9E1CDDa+yjyes9hX4vyVxkd8GZ34GiOnooE9eTQvDzp0qPyUNpLf/Xj+ti7cnw
-	uM8dpkCEFmotMuINpNKPBtk0TFhXJDHJpVFOu8t6W/pUol/AVlludmse1vEyCb3l
-	VZg3u9fRe0JVBfyagDAuupDixMXdTwxub9x/pWiAPaCL5Ga78ljcJj1bZJ2a8Gof
-	GIzGdm+Y0+OdqPvz3JN7Xxbcz2sMBeNMaFw==
-X-ME-Sender: <xms:96odaIgAhEhNTZgBo9ay1hWzE-h4LEp4HRNpCaU2jIs0zYjOjFGi4w>
-    <xme:96odaBCGBC7ae3_TMNC7wQBnQoF3w4dYLqedbutEtUrSXpZg3GB2e0vkZdM2uALw4
-    A4QNSHhj5EXIw>
-X-ME-Received: <xmr:96odaAHNfxYvGzfbojG29k2Gbem4DvxePP4QATk5s1wfAwYL0CjMgMLO38DRAckTFbL4CQGcasnkPjaNWQdNi9DGzT2p0bs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvleduleelucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddt
-    vdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecugg
-    ftrfgrthhtvghrnhepheegvdevvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeu
-    fefhgfehkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepghhrvghgsehkrhhorghhrdgtohhmpdhnsggprhgtphhtthhopedviedpmhhouggv
-    pehsmhhtphhouhhtpdhrtghpthhtohepuggrnhdrjhdrfihilhhlihgrmhhssehinhhtvg
-    hlrdgtohhmpdhrtghpthhtohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupdhr
-    tghpthhtohepshgrthhhhigrnhgrrhgrhigrnhgrnhdrkhhuphhpuhhsfigrmhihsehlih
-    hnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohephihilhhunhdrgihusehinhhtvghl
-    rdgtohhmpdhrtghpthhtohepshgrmhgvohesrhhivhhoshhinhgtrdgtohhmpdhrtghpth
-    htoheprghikhesrghmugdrtghomhdprhgtphhtthhopehsuhiiuhhkihdrphhouhhlohhs
-    vgesrghrmhdrtghomhdprhgtphhtthhopehsthgvvhgvnhdrphhrihgtvgesrghrmhdrtg
-    homhdprhgtphhtthhopehluhhkrghsseifuhhnnhgvrhdruggv
-X-ME-Proxy: <xmx:96odaJSbaIYhmMmuQzU2pM6O8EAKkElHmapXemxcw-viWKCfmUpmkg>
-    <xmx:96odaFz6BDeTwkAQgGltbe-Bgtuu3wrTwL5TdY8L1PSsNdM9vLcI1Q>
-    <xmx:96odaH7dw_spqr77-ZxGAGPk7W_WlZ9DQSlgO5m0QmWcjo5KydhLeA>
-    <xmx:96odaCwUKhKmIvsSZGKp8LCxAfmjYRhdITUPuzFUQlrt4Ap7h0bSIw>
-    <xmx:-aodaHBpXsffGnfoz6RqA215EhuOT0628sUQ410LGKkoz5zEjBtdOZ2N>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 9 May 2025 03:12:55 -0400 (EDT)
-Date: Fri, 9 May 2025 09:12:53 +0200
-From: Greg KH <greg@kroah.com>
-To: Dan Williams <dan.j.williams@intel.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	sathyanarayanan.kuppuswamy@linux.intel.com, yilun.xu@intel.com,
-	sameo@rivosinc.com, aik@amd.com, suzuki.poulose@arm.com,
-	steven.price@arm.com, lukas@wunner.de,
-	Cedric Xing <cedric.xing@intel.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the devsec-tsm tree
-Message-ID: <2025050909-muscular-lanky-48ac@gregkh>
-References: <20250508181032.58fc7e5b@canb.auug.org.au>
- <681d4e5584d46_1229d6294d6@dwillia2-xfh.jf.intel.com.notmuch>
+	s=arc-20240116; t=1746777944; c=relaxed/simple;
+	bh=WHM+7QSkADPwouihR3kxeKC2Rp2Nl+hApzRG6PEQ5zI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=KfTfkKr+OflTsg4cVJKMV/4LlhlCOZ6XHA/q11W0SEuq4Ovso5QpNg5C9+GUJwVhwYlH9Su8IQIl/R2bOadp7IXIaHy3Yn3UxNaVUtmWOTEf31YkDNjMIWWuuVLBbmf/7t6Si9xep8a7e7oPFEp76XurUS/PrCRYjA+xQfC1KIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fhPRxT2C; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1746777936;
+	bh=SCv+knZHxvT6YM0mguSr1nEuEIMHrbnm24UlJJbmTSk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=fhPRxT2CTkZxpODVfwdGhRQDLS6WmrssavqbVAA7I10g9fL8F9hH9OwYaB422Nm1T
+	 swRz8DkylHZYB5kYQVZW0KGgEAbnjHjysl9tStWssZFfExtMtqBthFa7m18gS3YZmx
+	 4fQ2MgSUvxnToyacIimd6G2yW8RQRJMJLtWXkjKXHwahXFT1rGf4bcPsOJiULFiNDt
+	 T8Std+iMo3gL9bAnK6cs8gec93NwJ+R58x6FfF1rNMe/2q8yazWJ8glqgeIwpRj1gT
+	 oqZB0l0d2nNlQ96mRXcdR62prc5ZJy+csu7oNYZBGAUc1454SO1VxsmmknezDRxpL0
+	 Y6ASQmV6SbCfA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zv1lN2PSkz4x3q;
+	Fri,  9 May 2025 18:05:36 +1000 (AEST)
+Date: Fri, 9 May 2025 18:05:35 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <ukleinek@kernel.org>, Rob Herring
+ <robh@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, Krzysztof Kozlowski
+ <krzk@kernel.org>
+Cc: Alexey Charkov <alchark@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the pwm tree with the i2c-host,
+ devicetree trees
+Message-ID: <20250509180535.01c4c249@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <681d4e5584d46_1229d6294d6@dwillia2-xfh.jf.intel.com.notmuch>
+Content-Type: multipart/signed; boundary="Sig_//yHdG6MxoZi2TSwhkKipw6o";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, May 08, 2025 at 05:37:41PM -0700, Dan Williams wrote:
-> Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the devsec-tsm tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> > 
-> > drivers/virt/coco/guest/tsm-mr.c: In function 'tsm_mr_create_attribute_group':
-> > drivers/virt/coco/guest/tsm-mr.c:228:29: error: assignment to 'const struct bin_attribute * const*' from incompatible pointer type 'struct bin_attribute **' [-Wincompatible-pointer-types]
-> >   228 |         ctx->agrp.bin_attrs = no_free_ptr(bas);
-> >       |                             ^
-> > 
-> > Caused by commit
-> > 
-> >   29b07a7b8f41 ("tsm-mr: Add TVM Measurement Register support")
-> > 
-> > interacting with commit
-> > 
-> >   9bec944506fa ("sysfs: constify attribute_group::bin_attrs")
-> > 
-> > from the driver-core tree.
-> > 
-> > I have applied the following merge resolution for today (there must be
-> > a better solution).
-> 
-> Indeed.
-> 
-> So it looks like while there are plenty of dynamic binary attribute
-> creation users (see sysfs_bin_attr_init() callers). There are zero that
-> attempt to assign dynamically allocated attributes to be registered by a
-> static @groups.
-> 
-> The @groups publishing model is preferable because the lifetime rules
-> are all handled by the driver core at device add/del time.
-> 
-> So, while there is still casting involved, I think a better solution is
-> to make the allocation const and then cast for init ala incremental
-> patch below. Cedric, if this looks ok to you I'll send out another
-> partial-reroll to get this fixed up so the build breakage stays out of
-> bisection runs.
+--Sig_//yHdG6MxoZi2TSwhkKipw6o
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ick, yeah, that seems ok.
+Hi all,
 
-But what are these binary files for?  I looked in the documentation and
-found this entry:
-	/sys/devices/virtual/misc/tdx_guest/measurements/rtmr[0123]:sha384
-is that these binary files?
+Today's linux-next merge of the pwm tree got a conflict in:
 
-Why is sysfs being used to expose binary "registers" and not done
-through the ioctl api instead?  That's an internal kernel-computed
-structure, not coming from the hardware, or am I mistaken?
+  MAINTAINERS
 
-thanks,
+between commits:
 
-greg k-h
+  785eb0bca34b ("dt-bindings: i2c: i2c-wmt: Convert to YAML")
+  2b18eda58c86 ("dt-bindings: interrupt-controller: via,vt8500-intc: Conver=
+t to YAML")
+  47cbd5d8693d ("ARM: vt8500: MAINTAINERS: Include vt8500 soc driver in mai=
+ntainers entry")
+
+from the i2c-host, devicetree and dt-krzk trees and commit:
+
+  b6b5683e9692 ("dt-bindings: pwm: vt8500-pwm: Convert to YAML")
+
+from the pwm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index a7e1980b6b15,26ef29a0c9bf..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -3469,9 -3427,8 +3469,10 @@@ M:	Alexey Charkov <alchark@gmail.com
+  M:	Krzysztof Kozlowski <krzk@kernel.org>
+  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+  S:	Odd Fixes
+ -F:	Documentation/devicetree/bindings/i2c/i2c-wmt.txt
+ +F:	Documentation/devicetree/bindings/hwinfo/via,vt8500-scc-id.yaml
+ +F:	Documentation/devicetree/bindings/i2c/wm,wm8505-i2c.yaml
+ +F:	Documentation/devicetree/bindings/interrupt-controller/via,vt8500-intc=
+.yaml
++ F:	Documentation/devicetree/bindings/pwm/via,vt8500-pwm.yaml
+  F:	arch/arm/boot/dts/vt8500/
+  F:	arch/arm/mach-vt8500/
+  F:	drivers/clocksource/timer-vt8500.c
+
+--Sig_//yHdG6MxoZi2TSwhkKipw6o
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgdt08ACgkQAVBC80lX
+0GxA9gf+Nm/F0OxKAVgwnfwQIlbBNUeN46TNSdvUcJBc/U3UDObB3jyOFao9AAad
+Kojxcmkh8fOhARGIOfckSpsvfVEA3IlZ3O6PxBnZA47l4GdCVfsyw5fHPfG4v70W
+5MNuCfga6W6OmGHWbp/IU1Qj4Yq/Chz4M9bgIb4HbnEO4fs915Ljm/WPE5gXwFWZ
+5auk/SrSNgfAImSF5jxseO1Cd8Vc9uCeDt37Vtx/adfmRTiffCfe33d+oo/R5aQz
+SAiy9JJMmB6V7t7Xnh65zfe4E0RFAy7vSbcNyu6PQBvCEuqapzldJXXhYyGduzqM
+p8/6Bq6vd7j9j4gIpOx6yUdUU3i6Rg==
+=9ZAs
+-----END PGP SIGNATURE-----
+
+--Sig_//yHdG6MxoZi2TSwhkKipw6o--
 

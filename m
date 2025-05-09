@@ -1,139 +1,114 @@
-Return-Path: <linux-next+bounces-6651-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6652-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDE15AB1B39
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 19:04:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB169AB1C44
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 20:25:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCEE9A01BB7
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 17:04:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39AF71C02FB7
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 18:26:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CB71239E8F;
-	Fri,  9 May 2025 17:04:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8494E23D2A2;
+	Fri,  9 May 2025 18:25:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YSIuZxOx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z5dwTCOC"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68DF238175;
-	Fri,  9 May 2025 17:04:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449D81E9B2A;
+	Fri,  9 May 2025 18:25:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746810273; cv=none; b=F1uiGjTIs5tjXamUAEnO6U8awZuDfeiSjkf8mcioooaLTGE7aJL4jZGbzs6bxc7d4r6hmWz0I3+XoA/sq7k6GhqddVtPOYX4I515E4xMntheEM/dPhzaKwcjlvhz3b9c+i9jqlr7JUtrf3CMqaiGkOQSrkmBwGmVXm9rlngJec0=
+	t=1746815153; cv=none; b=gYRrQLisEJ0C8kK5Vck9UOH02S1V7K0pVoZH04/v6OB2KquiFoa23seo5fegMpuBtyHS//ezq9AjH0THkueDdPCm0wR/OnZ6DpZRSDPl2iYtomiVjwU/QeUtWFrG+BYTQCXL6S2ogSgogokEAtvyxVCDwRPDw4KxZ1Tnz2+WeO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746810273; c=relaxed/simple;
-	bh=FmqJE5CaWwRF+fvQUgtrkJzaKV7CEKJVosSM6sK0Jwk=;
+	s=arc-20240116; t=1746815153; c=relaxed/simple;
+	bh=/S5/2X8AbB/pNFoxjHsyadCSPGuOCM0nt3xfn3LCHqI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DqZitxJAc1Aw2bXN8mLT2Fl8ChlgbBdDx74LnxzseDvGfCk+ed9uXewbnKr9F7Su5zI1KtEAP9ad8bJde5MD7OIMBAoqq5bzNyelcNAanwfhB+oXqS9ekNVJ6NY7dNlorfWNG7SXdKP2EMD59hZGGNioWRUYLSCh3a+Ib3FW7w8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YSIuZxOx; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-441c99459e9so15626775e9.3;
-        Fri, 09 May 2025 10:04:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746810270; x=1747415070; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g9FGoOFxXhMGTP5ls91WbfqbKMEzNeTHiP62ZYlEVbw=;
-        b=YSIuZxOxOxCux9JGDbrZehQfglACGaNUOddYVUFA7m5rxIUp/9TXsm7n6LsrDDeQh8
-         KSOJ8+3wdrrhaBrXkcHFrvMucGDfgnE1YuYUwPi4WJxkfIAUlHPuhlYt3I/V354zzUmX
-         ScomsTb/C/M85SC5fLdb0Bmfqn5R2HEO+H1rEZluIeSmkWUpkrijs01cGZqr3VSBW6H1
-         +HlQ28dUr9YQb/HFp8Bjb8TPAL9jydRpy/wlAH5VqaEwWU1Cvrwgo26vdZ4XvC5cOFys
-         FPSbTgobbgupuZuoXYnfvxW1CV82pcghcC6hmKa4VbD2tq6A8JbdREcbE8Wj5TDcqhO3
-         yoxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746810270; x=1747415070;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g9FGoOFxXhMGTP5ls91WbfqbKMEzNeTHiP62ZYlEVbw=;
-        b=hUumGZk5NzBPEMGeJGkkpwRGCe58o5xgoZVl9ooqBTEhFb54AuJGumnCZT7iPAhuYi
-         5eDmjYbexSPOqx+tR1rL5C/3wUXFyhQ4ZYD1sqEdq+UO2DTs+mwgfAx1NBElXuu01So9
-         FRVl6764Cf2DGLZIhr5yGI5p5rqsItda4TVelzXCmPNQ2k3DNB+b3T+f69iwsqZekyLo
-         2BPCbhtnLOPUQvWxUrwTm+Csw0GLzPOiYWsZ4mclOZFK6JPXo1YpiE5J5YuFHD9Q06MI
-         r3VkitFyXXspldJlnuIIInl618kWr8G9v94hJGLwr35lsZUiNpG18tX0vI3skvbejoS9
-         GCug==
-X-Forwarded-Encrypted: i=1; AJvYcCWVWwtRhvG0DqAsJul7yj/WS0UgJyKeiuZJgWpw+uizgquPG7T4FPEQDqg0Xc6l/CRtRwSIDUsvAAc/XJcx7Br1@vger.kernel.org, AJvYcCXDePP+B9SCBFhFaYfyNuL0XLDoR3RWKrOXvgCvuL1OXdKsN6xCoKHD1wYcHGYdixCp0NTeboiqrMQLGho=@vger.kernel.org, AJvYcCXapVp/CvNAp+d8ur1o3qUUm0wP4dCoTQb5OEWFmcwtnsuwxlCF5IvQp1vW2+QzJ5lZx/S2fIMvajYEcA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBJq6OasMgy4Pxvp+GMAsqu4EhZxMvqdfPTz9OX2HVXXcRcnT8
-	KR3+ANb603Rx46qRnvEF4z0zoUiiW14RiA3H++KLB4xgF+ddnikIbul6Su/KSgFBdmMYSuOG1u5
-	9zNV6YSABVxDCoykbpEGOUupc0XE=
-X-Gm-Gg: ASbGncsEd6vyiUoiivdqmgt97qX3yNoSaBWxqBfy3e62g10pGyESMjXa47TIBfGpSLR
-	5rrDzkPIoQ0upckPkf1yvbn5e1bQnFjvWUGQLIs0aktC5nz/g3OoPizaXWqwcxmeur4VAj7dbIW
-	GBfOIaNM52tvjG7SAt2+ZceDaQzzFO79MaJ7vS4A==
-X-Google-Smtp-Source: AGHT+IFnBYqhXbjNCF8NTXyLF6urD2/hEu6wcbrtnXUvS6VeJLvXHUVn+vYN/eT8TSsjCML7ULcEftXd3SA1OPWI14w=
-X-Received: by 2002:a05:600c:64c4:b0:43c:fe15:41e1 with SMTP id
- 5b1f17b1804b1-442d6d18bc6mr39356315e9.4.1746810269524; Fri, 09 May 2025
- 10:04:29 -0700 (PDT)
+	 To:Cc:Content-Type; b=lpO1daaW1b7pnyv8TGGT98MEvwknWBrIQ3ku5rSfdawov/Svcuj3wOwW3f4XU2eFAnBTVKmmTcVoW1dCbr+aTsS+36wn3SflATr75g8orKVrjRHnEl5yYFgl9LZDttDZ/uBcOKM4jZRac16cvLNxys7bxeetDLCGAgZzR7K7lUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z5dwTCOC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6EEEC4CEE9;
+	Fri,  9 May 2025 18:25:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746815152;
+	bh=/S5/2X8AbB/pNFoxjHsyadCSPGuOCM0nt3xfn3LCHqI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Z5dwTCOCxfWjLjcHTfsnKMf0qT/NFdSEwKvc0tXxVcqRaOx6sGvaV8Zd69JEieICG
+	 Yqm1FBQt36eIcCF8CBNun2aImppfTj25JxYs2dF5muW9x8QCZi13Ts3hOipH44i/p8
+	 WlNWuAsI4tFUt5fWUdJ95BzGKuA4QI2t2PYLPKqg8uWRpevGzYvbwK0Zk+nypjxsPA
+	 BOhQFgLZ0ba5p1UnarJUjWVKsFFajv6fdvWbH4EaEK56WqGgC40Yf4UICyep+sbXlB
+	 fkH+h3COlIAHNr3t63HDTNnLoahrzQteFHSzHp1Sa5BMlRWAYeOaKFXV788T+fC4ma
+	 VeKlEpOCuNP+A==
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5fbf0324faaso4764596a12.1;
+        Fri, 09 May 2025 11:25:52 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUSGjCF5LZaGCcxrWxIA+mpRWSuFH1uWDJ1JSD3eKY/o8Lbu4BRbbTkOI54M7HKJVlV13kl44qSYh7ggA==@vger.kernel.org, AJvYcCUYWY/PxJak0wN0ND296cwzipyWoaCRfUpRSW96Ht4D1PugFxVv8W7A7h/FZBnOgnij+VO2JK8F5fhvsg==@vger.kernel.org, AJvYcCUqzwNns7Ohyn38MmzVDOkOJfKt3kZ2mamQ+1gxBltY48Y8+UpmDqaZjLeesJzRpkcunta58K3yuwtkja06pEsC64IW@vger.kernel.org, AJvYcCWA1V+XvD0tco86RVQghuixiifJAEGLNltUleU31bGmdEdvVKT8JuUsiC70JWE4VKMc+Vej9N9KwDT6lb+Q@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy39h5mu5XhkJiBW9ENrtvftpCduwMNIHOMQmsbHlx8yufI6pU/
+	hJngR49BFq5+R0pnQKDmxDttqkgknpsf+5q1hdpeih4SdSuYUMhJySU3q2K4yAhGgzsYgrG6+gm
+	O3cBiVmV488cI6ZZf5oFC4yatbA==
+X-Google-Smtp-Source: AGHT+IEcIMbpkScLHgHgxaAzEqTSRT+fIcmeokOsQ0WUYhs+OzquHc3VvXBWePDg0cjwD1dWL/+vCyq0j+CeAikC1Bk=
+X-Received: by 2002:a17:906:f255:b0:ad2:23fb:59fc with SMTP id
+ a640c23a62f3a-ad223fb7c5fmr236260766b.21.1746815151271; Fri, 09 May 2025
+ 11:25:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250509122348.649064-1-skb99@linux.ibm.com>
-In-Reply-To: <20250509122348.649064-1-skb99@linux.ibm.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 9 May 2025 10:04:18 -0700
-X-Gm-Features: AX0GCFtGvd38TEcBIzgZXpP366MKGCZNb_SZxydI264Su3mUoJ1EjhzLUKYHED8
-Message-ID: <CAADnVQKBQqur68RdwbDVpRuAZE=8Y=_JaTFo-36d_4vr2DNVyw@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Fix bpf selftest build error
-To: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-Cc: bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	linux-stm32@st-md-mailman.stormreply.com, 
-	Linux-Next Mailing List <linux-next@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Hari Bathini <hbathini@linux.ibm.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Mykola Lysenko <mykolal@fb.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+References: <20250506192033.77338015@canb.auug.org.au> <CAMuHMdX_K7EA4kE2mqxv+BkfR_oQmcpek2B3LxiYxMjSMfwjAw@mail.gmail.com>
+In-Reply-To: <CAMuHMdX_K7EA4kE2mqxv+BkfR_oQmcpek2B3LxiYxMjSMfwjAw@mail.gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 9 May 2025 13:25:40 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJRw18vN+gXL1H11hMRNQ-6HGS1z2533z7Rb293tSvW6g@mail.gmail.com>
+X-Gm-Features: AX0GCFtBENcHB_I9zSrzCsGWPQZu3qXpNFL7bfKn_iQj-3IH77pSHD1aprn9u8I
+Message-ID: <CAL_JsqJRw18vN+gXL1H11hMRNQ-6HGS1z2533z7Rb293tSvW6g@mail.gmail.com>
+Subject: Re: linux-next: build warnings after merge of the renesas tree
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, 
+	Devicetree Compiler <devicetree-compiler@vger.kernel.org>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 9, 2025 at 5:24=E2=80=AFAM Saket Kumar Bhaskar <skb99@linux.ibm=
-.com> wrote:
+On Tue, May 6, 2025 at 5:05=E2=80=AFAM Geert Uytterhoeven <geert@linux-m68k=
+.org> wrote:
 >
-> On linux-next, build for bpf selftest displays an error due to
-> mismatch in the expected function signature of bpf_testmod_test_read
-> and bpf_testmod_test_write.
+> Hi Stephen,
 >
-> Commit 97d06802d10a ("sysfs: constify bin_attribute argument of bin_attri=
-bute::read/write()")
-> changed the required type for struct bin_attribute to const struct bin_at=
-tribute.
+> On Tue, 6 May 2025 at 11:20, Stephen Rothwell <sfr@canb.auug.org.au> wrot=
+e:
+> > After merging the renesas tree, today's linux-next build (arm64 defconf=
+ig)
+> > produced these warnings:
+> >
+> > arch/arm64/boot/dts/renesas/r8a779g0.dtsi:1269.24-1283.5: Warning (spi_=
+bus_bridge): /soc/spi@e6ea0000: incorrect #address-cells for SPI bus
+> >   also defined at arch/arm64/boot/dts/renesas/r8a779g3-sparrow-hawk.dts=
+:463.9-478.3
+> > arch/arm64/boot/dts/renesas/r8a779g0.dtsi:1269.24-1283.5: Warning (spi_=
+bus_bridge): /soc/spi@e6ea0000: incorrect #size-cells for SPI bus
+> >   also defined at arch/arm64/boot/dts/renesas/r8a779g3-sparrow-hawk.dts=
+:463.9-478.3
+> > arch/arm64/boot/dts/renesas/r8a779g3-sparrow-hawk.dtb: Warning (spi_bus=
+_reg): Failed prerequisite 'spi_bus_bridge'
+> >
+> > Introduced by commit
+> >
+> >   c29748ccad88 ("arm64: dts: renesas: sparrow-hawk: Add MSIOF Sound sup=
+port")
 >
-> To resolve the error, update corresponding signature for the callback.
->
-> Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-> Closes: https://lore.kernel.org/all/e915da49-2b9a-4c4c-a34f-877f378129f6@=
-linux.ibm.com/
-> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-> ---
->  tools/testing/selftests/bpf/test_kmods/bpf_testmod.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index 2e54b95ad898..194c442580ee 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> @@ -385,7 +385,7 @@ int bpf_testmod_fentry_ok;
->
->  noinline ssize_t
->  bpf_testmod_test_read(struct file *file, struct kobject *kobj,
-> -                     struct bin_attribute *bin_attr,
-> +                     const struct bin_attribute *bin_attr,
->                       char *buf, loff_t off, size_t len)
+> Thanks, this is a known conflict between SPI bus bindings and dtc:
+>   - Serial engines that can be SPI controllers must use "spi" as their
+>     node names,
+>   - Dtc assumes nodes named "spi" are always SPI controllers.
 
-You didn't even compile it :(
+I think you can disable 'spi_bus_bridge' warning by overriding or
+appending DTC_FLAGS in arch/arm64/boot/dts/renesas/Makefile.
 
-Instead of fixing the build, it breaks the build.
-
-pw-bot: cr
+Rob
 

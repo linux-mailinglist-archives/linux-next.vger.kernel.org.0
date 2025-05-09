@@ -1,95 +1,132 @@
-Return-Path: <linux-next+bounces-6624-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6625-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FF6FAB0752
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 02:53:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CBBEAB0758
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 02:58:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33E249C6145
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 00:53:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06F2F9873A7
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 00:57:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2F3D208AD;
-	Fri,  9 May 2025 00:53:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CBBF208AD;
+	Fri,  9 May 2025 00:58:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="Rt1Qb/aT"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FMQO2vcd"
 X-Original-To: linux-next@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9D6182D7;
-	Fri,  9 May 2025 00:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8F6D53C;
+	Fri,  9 May 2025 00:57:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746751999; cv=none; b=kLulpU4gJU31o9J+bpEXw4BqG2kzKe5FGK11I0/PcpauAgndEBqyYMnHgLo5EbDRllHreypaAd0PGQAHTSlBGDA3bAp+XFwgkA10bZvts6rOWWjZZJ2L6+TAcGlAesIofv8J2GoEh2YpsZWorgzIVLVtNg+NXHjVdYKrqdyK2tA=
+	t=1746752280; cv=none; b=p0T1hHV8rxNiWiDbrDC79vwCbV+kQq4m71SoTW+oMXkbV+jIDe0mx37mLsb1Lbw+U6eM0crMroMtzaxPvrl7eoBuviw8EGvkUujas1enOjA+SBoub2ox+n+aM127PRMH6nRoRp+9ogTLy5rvdS6GBYjw/22j7OH5U0/WXufkkus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746751999; c=relaxed/simple;
-	bh=7tI/QR0WcvB+2PsIli1CD4nwjW4vq1lR0fYJi7u2MyI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k4cGcb9Zgcid6mXKiWu9XIfkPyk2wV0fWBqsTagE8IBuGel9wUZFA4CicgCmnuFAv/tNYvVVVIFDiWFK4G0Hpy026QxknHe4uDbiVev0N6hvAt32YPupLt1i+sLgx+po15jxBvpzrivcXJKyz6/Xl1mc2YFMiZXmyCftq0PRTrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=Rt1Qb/aT; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=zA9GVEDdxoja+P718OpSN889xJ4reyChIzkHQopHvjk=; b=Rt1Qb/aTe3ekyQswjV0W+4iq0G
-	Qoha1i3aG1xkEVffqfd+y8bSkAg46HbGCdr+2LGJlDzYmoamGppNZJ1P2+EQLkzPuawPYbsUMFCbF
-	WenC65o5DCGxF7RETTgpzSDS+8qMdAc3Q6Ga/fCbsC8GxQkKb+b+gyogg1NJeeJckGD2AU3vT7wSH
-	VKfpGLqPzkSJF60xIUrUKkt/DcQKGd58Og4fdU29UUniBV7FHYvaUeZ8IpOZb0mN2T+BX+UvT/LoZ
-	tY6l6f9FdkolK9arSy053oaxIEvZrG3/LN0bTMAWQwebCtRBkl3l1ylBOA7ZdXybQ76eo9mGwVT/5
-	OOJY5d9w==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1uDBz7-004jGW-0l;
-	Fri, 09 May 2025 08:53:06 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 09 May 2025 08:53:05 +0800
-Date: Fri, 9 May 2025 08:53:05 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
-	Thorsten Leemhuis <linux@leemhuis.info>,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Danny Tsen <dtsen@linux.ibm.com>
-Subject: Re: [PATCH] crypto: powerpc/poly1305 - Add missing poly1305_emit_arch
-Message-ID: <aB1R8eIdc3ZA5rCo@gondor.apana.org.au>
-References: <cover.1745815528.git.herbert@gondor.apana.org.au>
- <915c874caf5451d560bf26ff59f58177aa8b7c17.1745815528.git.herbert@gondor.apana.org.au>
- <242ebbf1-4ef0-41c3-83cb-a055c262ba4a@leemhuis.info>
- <aBtF2jVZQwxGiHVk@gondor.apana.org.au>
- <37cf099e-d5c2-40d8-bc31-77e1f9623b1c@linux.ibm.com>
- <aBx9OAyiDx7MYAVs@gondor.apana.org.au>
- <20250508162954.GB1218@sol>
+	s=arc-20240116; t=1746752280; c=relaxed/simple;
+	bh=mWFdlRRM4jRGfBmwqi9EQaNKTtJrxnW6x1dKYH3EknY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lUsh7ebgCwmgPd1pOXPnaFLaY7pyuBvnQHoe1M1xzhy4CWsv2ePm14mPUqglTKmcCQJt2h9bLSJb7DdNmIXKRbP+Cpig8N/SR2brJD0CqvTHHCRldX83fVHx+J8FQ4vvCvtRqKjaiv1o7Eteaq8Oc42qr/Y24/vIcF9APjNev8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=FMQO2vcd; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1746752273;
+	bh=jcFHEwyxgrD8Utocm/9XgWW3rJ70ly1l4RrMUJqOXLo=;
+	h=Date:From:To:Cc:Subject:From;
+	b=FMQO2vcdyvlKogxUquGNnueNSwzB6l7MnBxGoNC0nV1G3dn824BR1i2LM4Zuq3d0J
+	 PwyYUMexeeTi/KUo5LU68A/glJTqvdU+CAQZ3aAG4vuQE25IVJl1t4WM5jdiliMOBY
+	 Y9QsVzxhbqIidmFzzfUDXnzkIM3zhkdXKibiURwfVwySAZuxXyAdQ/BD+ILgU27a7E
+	 mmb5qt9U0OLjBjUNLT2OeHDLjonY1MMFxc0iT+1p4HJQlJHJKTGr9+5XAIWZ9BV+63
+	 2lsBcSZcGJ5EnQyVBNup5vKbW7lgIYJQqrQs40qVTos8lvbuSOS4wDn8FVy4bRFLpS
+	 OrlgjdsCStRPQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZtrFr2Gwxz4x2g;
+	Fri,  9 May 2025 10:57:51 +1000 (AEST)
+Date: Fri, 9 May 2025 10:57:50 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Miklos Szeredi <miklos@szeredi.hu>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Joanne Koong <joannelkoong@gmail.com>, Kairui Song <kasong@tencent.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Miklos Szeredi
+ <mszeredi@redhat.com>
+Subject: linux-next: manual merge of the fuse tree with the mm-unstable tree
+Message-ID: <20250509105750.6281e2ab@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250508162954.GB1218@sol>
+Content-Type: multipart/signed; boundary="Sig_/EVKl1/5oNbTuYyFyT+S90D6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, May 08, 2025 at 09:29:54AM -0700, Eric Biggers wrote:
->
-> My patchsets "Remove per-architecture poly1305 shash glue code" and
-> "Finish disentangling ChaCha, Poly1305, and BLAKE2s from CRYPTO", which included
-> commit 378a337ab40f, passed testing with qemu-system-ppc64 with -M pseries and
-> -cpu in [POWER7, POWER8, POWER9, Power10].  These issues, both the build failure
-> and test failure, were introduced by your patchset
-> "crypto: lib - Add partial block helper".
+--Sig_/EVKl1/5oNbTuYyFyT+S90D6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks.  I'll try to reproduce this.
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Hi all,
+
+Today's linux-next merge of the fuse tree got a conflict in:
+
+  fs/fuse/file.c
+
+between commit:
+
+  47fa73bbc9d5 ("fuse: drop usage of folio_index")
+
+from the mm-unstable tree and commit:
+
+  0c58a97f919c ("fuse: remove tmp folio for writebacks and internal rb tree=
+")
+
+from the fuse tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/fuse/file.c
+index 6f19a4daa559,e203dd4fcc0f..000000000000
+--- a/fs/fuse/file.c
++++ b/fs/fuse/file.c
+@@@ -2349,7 -2091,7 +2091,7 @@@ static bool fuse_writepage_need_send(st
+  		return true;
+ =20
+  	/* Discontinuity */
+- 	if (data->orig_folios[ap->num_folios - 1]->index + 1 !=3D folio->index)
+ -	if (ap->folios[ap->num_folios - 1]->index + 1 !=3D folio_index(folio))
+++	if (ap->folios[ap->num_folios - 1]->index + 1 !=3D folio->index)
+  		return true;
+ =20
+  	/* Need to grow the pages array?  If so, did the expansion fail? */
+
+--Sig_/EVKl1/5oNbTuYyFyT+S90D6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgdUw4ACgkQAVBC80lX
+0Gw11Qf9F7OmKMjbUqWfNQ6cBOXfVvWiOfi4ov4uGNCowWS4yXw71yMWGVmUGlb9
+Ms7XGSPOHFidPRQarmu3jnxIXx8cgCNBnQiCsB78iKSZBlgHx0qKeuSSm3sk8oPa
+AuklpF6AF4uy5l432IdfkJQXY9Vk7sy93xAb5m9/lSAiX4ad8HqGxFvoM462F+MM
+aDNTw1MLiEaH65v5rIjyqifGr3kY5/GnsVTPXVeV7sLIOIDA2GeuUMQxPMB945A+
+JS9tVofVmjntFYap+d1wRWGKAK1/tko+s8jfGXK7vNrfcR804SxLvs0jTpkE9lAq
+/hfbzijSzwnHvoLKhaMafWtPTLMuWA==
+=FEKW
+-----END PGP SIGNATURE-----
+
+--Sig_/EVKl1/5oNbTuYyFyT+S90D6--
 

@@ -1,154 +1,131 @@
-Return-Path: <linux-next+bounces-6643-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6644-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 116F1AB133F
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 14:24:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F702AB135B
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 14:29:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1AC111BC81BC
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 12:25:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 433493AA65F
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 12:29:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7056628FA81;
-	Fri,  9 May 2025 12:24:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2717290D90;
+	Fri,  9 May 2025 12:29:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="amXmW6E4"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="PHQ44vc9"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B767228FFD8;
-	Fri,  9 May 2025 12:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42583272E44;
+	Fri,  9 May 2025 12:29:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746793479; cv=none; b=YRkTuA9t+ghcbQ9383WSudYTDZubFwoRo2+qVl1ytiCdXS9WbC/H+Kyg8ZVNWdurDB+OzBe5guuR0HMnIIPGU0ss+45O0AIxxKA1ulC6VkwqT2jdohtoQn/NOubhpfQvXISe6oJ3Sjki/HOObj9jRdepehDTnoThpHlV9/P8vi4=
+	t=1746793756; cv=none; b=K3ltYYirvgegtyf1ib8LsGK2NvFvIfdA01zhbNdHt6DjpqbeQXfoY+7YpCTUtSjih1RrcDz6dp1pn39c6vV/j95gfOpJAscg82x1i+P/u7Em8ykDOakRk9kh78Gi3v6sam3Nq8ptS2UXql6BAKu4yIOfVgE/BKfdejHzeT150nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746793479; c=relaxed/simple;
-	bh=m+uUAXXGE4Lr9Okw8z3WDklkWM6X4LF6ceFNaNvBI+o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tgFlOy+5OgTmWl4r0rFIWz9Ut86nhahDPce7bmTC3l+heql56V0xxYuc5UfO+3rYCSnlW6+U1oU+k91yg1nAB3acBZmV30E2KimhE6SzugLQBOEdYOMPua/Ukdug0KZaWIASNEfybEFY9JioLwl9f9uSXv39imdtEITRzDEPXGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=amXmW6E4; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5494Bwcx029454;
-	Fri, 9 May 2025 12:24:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=BIWzfxgWixiWNzTzbbOf2zuEQuUDcbIqjDgQNNpK+
-	VQ=; b=amXmW6E4eMCuwJxWMOUI7XURM4xDKTx0o4nd6jfRW+UKXHEZh+noqZBB0
-	v6uzBXx9sqpaKwhdKlHpoAQVRzN+bqOMCjJVQJnhHQXprwC2IzpUHXaUmEY31MLZ
-	Ekts88oAoiwvtajHQKXJSQiigbmn+EuhywZjmohiiq3Hfkc/d8K479cmhKtEWib+
-	g9sG0b69LYNLdsr6H85g7hUpWa0o8cc43F2huk3HQNM5IVBXNNQ1iXbKkMrLYCnp
-	Z1kHJLjK4BE9iw7juJKE+X9DB30UYemRWZIHYB6H46ILDhZaAlLl/XqRQ8YE0hGw
-	XzxvF398V7yEgnD2B+4SsxFL/wIPQ==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46h6k0k745-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 09 May 2025 12:24:02 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 549CO2h0027104;
-	Fri, 9 May 2025 12:24:02 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46h6k0k743-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 09 May 2025 12:24:02 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 549AFS7L013861;
-	Fri, 9 May 2025 12:24:01 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 46e062tx06-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 09 May 2025 12:24:01 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 549CNvgx33555104
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 9 May 2025 12:23:57 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9E09A2009B;
-	Fri,  9 May 2025 12:23:57 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EA26120099;
-	Fri,  9 May 2025 12:23:51 +0000 (GMT)
-Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.ibm.com.com (unknown [9.43.107.211])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  9 May 2025 12:23:51 +0000 (GMT)
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com, linux-next@vger.kernel.org
-Cc: ast@kernel.org, hbathini@linux.ibm.com, maddy@linux.ibm.com,
-        andrii@kernel.org, daniel@iogearbox.net, mykolal@fb.com,
-        martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
-        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org
-Subject: [PATCH] selftests/bpf: Fix bpf selftest build error
-Date: Fri,  9 May 2025 17:53:48 +0530
-Message-ID: <20250509122348.649064-1-skb99@linux.ibm.com>
-X-Mailer: git-send-email 2.43.5
+	s=arc-20240116; t=1746793756; c=relaxed/simple;
+	bh=3eoQG3YvVxmlJYDaiEVItGucK+HKphFxx9vtxG+0HxY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N5sFGw17zcl5T8MRdu5/JOr/XnY11tjGc6OZr6DNL1ImIS9O04YO+5TK6vqDvqAvsSpJUhz28HqvhxS7WTXEZrVZNLNy9FPHOjwwxEEXlqd1YaWpqjdAxEwudOH8UhnoY2QM7j/fuSecpzGnwDajZIvrSO4MWhh69LU8NwuNvXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=PHQ44vc9; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=Nfy+p2+K50BeVO/KsNOia7LPtjZvYn6v3ybzTty3Vcc=; b=PHQ44vc9GqAsj0AvgjLkpbBLMw
+	Mj2eHzXFbfkyWWx9vTvJ6vAj6A5mBvq+zobNJhmonvOSH/QQAqPNhw7SfBWXRa9aWVe41sP5PmQ+Q
+	30FJYaXMWBtiLHdi0LmfKrPFEy9CUArRDIRRFbSpjwRXB2I50DPsBBnWBQhMn7Mi1d0XdqQq4mDBx
+	C4QLt2DeHJsceW9vAL5B2qktgzHlbZBZJWnZpPRabZbF6bvSSLye8lERq7GO14KApivJtpTpQAAO8
+	OxuesOvrJ91V9wR4bzc9Q72J/PWtizSDxLYQZSzmW8+U5RT6ZjBqu+il5V/JXk8R+VqaPM8Dzkmtv
+	sM8wrksA==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1uDMqa-004qxm-2T;
+	Fri, 09 May 2025 20:29:01 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 09 May 2025 20:29:00 +0800
+Date: Fri, 9 May 2025 20:29:00 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Cc: Thorsten Leemhuis <linux@leemhuis.info>,
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH] crypto: powerpc/poly1305 - Fix input mixup in
+ poly1305_emit_arch
+Message-ID: <aB31DI4QBBZuQObQ@gondor.apana.org.au>
+References: <cover.1745815528.git.herbert@gondor.apana.org.au>
+ <915c874caf5451d560bf26ff59f58177aa8b7c17.1745815528.git.herbert@gondor.apana.org.au>
+ <242ebbf1-4ef0-41c3-83cb-a055c262ba4a@leemhuis.info>
+ <aBtF2jVZQwxGiHVk@gondor.apana.org.au>
+ <37cf099e-d5c2-40d8-bc31-77e1f9623b1c@linux.ibm.com>
+ <aByX_Y64C6lVRR8M@gondor.apana.org.au>
+ <f66620e2-77e3-4713-a946-ddb2c8a0bccb@linux.ibm.com>
+ <aByiNZNxqyTerdYG@gondor.apana.org.au>
+ <1d2c2fdc-5c36-4d4e-8b25-8289b865726d@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: i5SEaNzYtik8Y7JXup7kYmp9eCCzylWM
-X-Proofpoint-ORIG-GUID: b_ML1_eoJUq3_Toq-K4bzpjQu5N0dnqS
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA5MDExOCBTYWx0ZWRfX0ffVYNaLjUR4 ELARAE7ViwMsTSdlETP+ZMrMWO1v8K/aJT4JUhLJwWe4ja7fSeu2C48q+t2X+vu7ZnademuQrAo UXRh/Ma8UthKWI+ZeWa365a7a73o3D1xVUVRl2yW9775b1oJ/gc64UQkEm6CQgfs3bj492CUgcO
- OWisNVxz+gKsG/v7AJ2phqIAR7UZS6JqRXaPay7vJchxmgBfv3juhbjx/nUazgZBdMJGOpUe4L9 E95zqFGoyYkcKZKD8WVtkgSErf+n6GS4mYyT7AOcviw+k6jqHFDkDTarbVdNs5aH+I4aVhNXl34 9ju68rjmvWOz/cRxYignETqHB+p0Q+5nsFEXDFkBcGbb6ef3G1CjnuCu4mW+QK2pGfT5sYoi1uH
- ZvsZr/4jIj0n16ckWGlu1iJXfGlFiaFT69yuS4VcTDicFXYx68NLf9MrMi3IhEYAQ+6w/z54
-X-Authority-Analysis: v=2.4 cv=OcCYDgTY c=1 sm=1 tr=0 ts=681df3e2 cx=c_pps a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=jh_1Je4BJys6wSEZv6QA:9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-05-09_04,2025-05-08_04,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 phishscore=0 spamscore=0 bulkscore=0 impostorscore=0
- malwarescore=0 clxscore=1011 mlxscore=0 priorityscore=1501 adultscore=0
- mlxlogscore=800 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2505090118
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d2c2fdc-5c36-4d4e-8b25-8289b865726d@linux.ibm.com>
 
-On linux-next, build for bpf selftest displays an error due to
-mismatch in the expected function signature of bpf_testmod_test_read
-and bpf_testmod_test_write.
+On Thu, May 08, 2025 at 08:35:48PM +0530, Venkat Rao Bagalkote wrote:
+>
+> Unfortunately, above patch dosent fix the boot warning.
 
-Commit 97d06802d10a ("sysfs: constify bin_attribute argument of bin_attribute::read/write()")
-changed the required type for struct bin_attribute to const struct bin_attribute.
+This works for me:
 
-To resolve the error, update corresponding signature for the callback.
+---8<---
+Swap the order of the arguments in poly1305_emit_arch to match
+the prototype.
 
-Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Closes: https://lore.kernel.org/all/e915da49-2b9a-4c4c-a34f-877f378129f6@linux.ibm.com/
-Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
----
- tools/testing/selftests/bpf/test_kmods/bpf_testmod.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Fixes: 14d31979145d ("crypto: powerpc/poly1305 - Add block-only interface")
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index 2e54b95ad898..194c442580ee 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -385,7 +385,7 @@ int bpf_testmod_fentry_ok;
+diff --git a/arch/powerpc/lib/crypto/poly1305-p10le_64.S b/arch/powerpc/lib/crypto/poly1305-p10le_64.S
+index 2ba2911b8038..5b368baf96d2 100644
+--- a/arch/powerpc/lib/crypto/poly1305-p10le_64.S
++++ b/arch/powerpc/lib/crypto/poly1305-p10le_64.S
+@@ -1027,7 +1027,7 @@ Out_no_poly1305_64:
+ SYM_FUNC_END(poly1305_64s)
  
- noinline ssize_t
- bpf_testmod_test_read(struct file *file, struct kobject *kobj,
--		      struct bin_attribute *bin_attr,
-+		      const struct bin_attribute *bin_attr,
- 		      char *buf, loff_t off, size_t len)
- {
- 	struct bpf_testmod_test_read_ctx ctx = {
-@@ -465,7 +465,7 @@ ALLOW_ERROR_INJECTION(bpf_testmod_test_read, ERRNO);
+ #
+-# Input: r3 = h, r4 = s, r5 = mac
++# Input: r3 = h, r4 = mac, r5 = s
+ # mac = h + s
+ #
+ SYM_FUNC_START(poly1305_emit_arch)
+@@ -1051,14 +1051,14 @@ SYM_FUNC_START(poly1305_emit_arch)
+ 	mr	12, 8
  
- noinline ssize_t
- bpf_testmod_test_write(struct file *file, struct kobject *kobj,
--		      struct bin_attribute *bin_attr,
-+		      const struct bin_attribute *bin_attr,
- 		      char *buf, loff_t off, size_t len)
- {
- 	struct bpf_testmod_test_write_ctx ctx = {
+ Skip_h64:
+-	ld	6, 0(4)
+-	ld	7, 8(4)
++	ld	6, 0(5)
++	ld	7, 8(5)
+ 	addc	10, 10, 6
+ 	adde	11, 11, 7
+ 	addze	12, 12
+ 
+-	std	10, 0(5)
+-	std	11, 8(5)
++	std	10, 0(4)
++	std	11, 8(4)
+ 	blr
+ SYM_FUNC_END(poly1305_emit_arch)
+ 
 -- 
-2.43.5
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 

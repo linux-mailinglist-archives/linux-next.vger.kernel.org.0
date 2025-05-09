@@ -1,131 +1,156 @@
-Return-Path: <linux-next+bounces-6644-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6645-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F702AB135B
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 14:29:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A0F1AB1397
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 14:38:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 433493AA65F
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 12:29:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44A811B646E3
+	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 12:39:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2717290D90;
-	Fri,  9 May 2025 12:29:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD9922900A1;
+	Fri,  9 May 2025 12:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="PHQ44vc9"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Z7WWvaY4"
 X-Original-To: linux-next@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42583272E44;
-	Fri,  9 May 2025 12:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100AD1482F5;
+	Fri,  9 May 2025 12:38:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746793756; cv=none; b=K3ltYYirvgegtyf1ib8LsGK2NvFvIfdA01zhbNdHt6DjpqbeQXfoY+7YpCTUtSjih1RrcDz6dp1pn39c6vV/j95gfOpJAscg82x1i+P/u7Em8ykDOakRk9kh78Gi3v6sam3Nq8ptS2UXql6BAKu4yIOfVgE/BKfdejHzeT150nM=
+	t=1746794329; cv=none; b=fK2utmLAE2MyytF/h83lxAtjKRQSIxCdP5dj5xtG0OuMgFaJ8qXaUY8ZDWnHqgr9VuTtSYjoQpejBCA/O5kvVtxBD7XE5kenjP6uII/3xphXCBhR4gomdWGiV6F6DMKX/bzjLQ1UWnOyVvQitSImCGj/KiVuWuZB4ICqYx/er4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746793756; c=relaxed/simple;
-	bh=3eoQG3YvVxmlJYDaiEVItGucK+HKphFxx9vtxG+0HxY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N5sFGw17zcl5T8MRdu5/JOr/XnY11tjGc6OZr6DNL1ImIS9O04YO+5TK6vqDvqAvsSpJUhz28HqvhxS7WTXEZrVZNLNy9FPHOjwwxEEXlqd1YaWpqjdAxEwudOH8UhnoY2QM7j/fuSecpzGnwDajZIvrSO4MWhh69LU8NwuNvXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=PHQ44vc9; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=Nfy+p2+K50BeVO/KsNOia7LPtjZvYn6v3ybzTty3Vcc=; b=PHQ44vc9GqAsj0AvgjLkpbBLMw
-	Mj2eHzXFbfkyWWx9vTvJ6vAj6A5mBvq+zobNJhmonvOSH/QQAqPNhw7SfBWXRa9aWVe41sP5PmQ+Q
-	30FJYaXMWBtiLHdi0LmfKrPFEy9CUArRDIRRFbSpjwRXB2I50DPsBBnWBQhMn7Mi1d0XdqQq4mDBx
-	C4QLt2DeHJsceW9vAL5B2qktgzHlbZBZJWnZpPRabZbF6bvSSLye8lERq7GO14KApivJtpTpQAAO8
-	OxuesOvrJ91V9wR4bzc9Q72J/PWtizSDxLYQZSzmW8+U5RT6ZjBqu+il5V/JXk8R+VqaPM8Dzkmtv
-	sM8wrksA==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1uDMqa-004qxm-2T;
-	Fri, 09 May 2025 20:29:01 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 09 May 2025 20:29:00 +0800
-Date: Fri, 9 May 2025 20:29:00 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Cc: Thorsten Leemhuis <linux@leemhuis.info>,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH] crypto: powerpc/poly1305 - Fix input mixup in
- poly1305_emit_arch
-Message-ID: <aB31DI4QBBZuQObQ@gondor.apana.org.au>
-References: <cover.1745815528.git.herbert@gondor.apana.org.au>
- <915c874caf5451d560bf26ff59f58177aa8b7c17.1745815528.git.herbert@gondor.apana.org.au>
- <242ebbf1-4ef0-41c3-83cb-a055c262ba4a@leemhuis.info>
- <aBtF2jVZQwxGiHVk@gondor.apana.org.au>
- <37cf099e-d5c2-40d8-bc31-77e1f9623b1c@linux.ibm.com>
- <aByX_Y64C6lVRR8M@gondor.apana.org.au>
- <f66620e2-77e3-4713-a946-ddb2c8a0bccb@linux.ibm.com>
- <aByiNZNxqyTerdYG@gondor.apana.org.au>
- <1d2c2fdc-5c36-4d4e-8b25-8289b865726d@linux.ibm.com>
+	s=arc-20240116; t=1746794329; c=relaxed/simple;
+	bh=qilA77jmGaVhK0ChWSp1KyvYj5Xbbeq7sn/IHxqa5zQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ruAQm1PAEAVREHjDKh+1vJH0LA9woQQBnkg9s7YMWe8viGytIK0aV6zPuGfB0te15sf8IqskdtaxTtwJQh6pUJe05/0DKRaQKBQw+OqKfbbkw9xKdqHCbIrZbsbRFpbi36+S2qI5UocH9VKk0Eow9SpfbePVcXsRDAuLEQlx3dU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Z7WWvaY4; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5494BvKT017144;
+	Fri, 9 May 2025 12:38:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=1GxsOSHaEZ3WauZ1cTkJRldsvonqkn4VH/52jeaGU
+	m4=; b=Z7WWvaY4g6eCXiYUiUlKyClENxdQjuQkp9700lVVUOkAkssBbj096LEru
+	GjOG+tquLK40lDeyNh3vMAWmYfddtqfUhqj6yhS6rF/stF6URVRpIBeferkYor0y
+	JiYuQwAvyf3xk5tSwvxjxkP9i2BAzvfjMV7lOP3VcCPlkXHnmnl7Nl5tvtnR8SCI
+	QLzVOcLBlNtJeZu7jfyZEu4yZkWVeQGgiX+XaFyeRZEeh+qoJMQSTGuh0QxvJUMs
+	2lCUqUNr4KgMoWza0dhiUloHAqh4/zj3api+8zV31DzvNqPbpXmVGuy3LUy/Pw8X
+	NEYSnzligZH6q8pgIt/r8Nvbh6isw==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46h46kusy5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 09 May 2025 12:38:16 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 549CLItO014654;
+	Fri, 9 May 2025 12:38:16 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46h46kusy3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 09 May 2025 12:38:16 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 549C6iZa004650;
+	Fri, 9 May 2025 12:38:14 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46fjb2fy1d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 09 May 2025 12:38:14 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 549CcAws39322032
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 9 May 2025 12:38:10 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 88F75200E6;
+	Fri,  9 May 2025 12:38:10 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9EFA7200E4;
+	Fri,  9 May 2025 12:38:05 +0000 (GMT)
+Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.ibm.com.com (unknown [9.43.107.211])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  9 May 2025 12:38:05 +0000 (GMT)
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-next@vger.kernel.org
+Cc: hbathini@linux.ibm.com, maddy@linux.ibm.com, venkat88@linux.ibm.com,
+        daniel@iogearbox.net, mykolal@fb.com, yoong.siang.song@intel.com,
+        martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org
+Subject: [PATCH] selftests/bpf: Fix bpf selftest build warning
+Date: Fri,  9 May 2025 18:08:02 +0530
+Message-ID: <20250509123802.695574-1-skb99@linux.ibm.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1d2c2fdc-5c36-4d4e-8b25-8289b865726d@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=LaM86ifi c=1 sm=1 tr=0 ts=681df738 cx=c_pps a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=QyXUC8HyAAAA:8 a=rV7urDwo7b39epbSBP8A:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTA5MDEyMyBTYWx0ZWRfX98i5fCsNXz65 vEK61wvfV2yQXLF/PG5XhanzoMmpVJUPXj4/McsweqYJxpVwcEBk6gzFfPWdzMji1adaZ/yNs/i k9ah1V554nsBjL1dh429MK5eBC6qdvSWeN2zp6pe9JGdR4kFtkm/I13sjxjummNxKl4hzv4Hqcu
+ 9hmpNGk3wR5PZsE5K6Dp0TM8dkIxA/VTewFnzH9bdLG9qYP6JKYW6ZLbZ16BNZSWwahr4SEWP8j 71r+R6Kqm9j21WYIIKqmbV/UrP1HLhdiN/NWXb3OscsCeKEK5hYW2IQx5KOLTaICu5XvveBYRX1 XQfoFWIngz5yQD5diwQAlnBvwjcBwpRvS/4Nri9klJ+ix93TOM+cz+IJyngNyISISD6QAEiGf26
+ RjPl6+OFBjjkz2303QBaxkyTH6iM6syy8GqREPTmUnxHYcJq+dw1ncLeNlawKqJ4AypLV0/C
+X-Proofpoint-ORIG-GUID: cOPeE_N3CccJrHFznoIfflPq4YPJqSuH
+X-Proofpoint-GUID: K-YC-2hFpvEpO7YRJnr9fxDNdKaIviEO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-09_05,2025-05-08_04,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ clxscore=1011 bulkscore=0 priorityscore=1501 adultscore=0
+ lowpriorityscore=0 impostorscore=0 spamscore=0 suspectscore=0
+ mlxlogscore=703 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2505090123
 
-On Thu, May 08, 2025 at 08:35:48PM +0530, Venkat Rao Bagalkote wrote:
->
-> Unfortunately, above patch dosent fix the boot warning.
+On linux-next, build for bpf selftest displays a warning:
 
-This works for me:
+Warning: Kernel ABI header at 'tools/include/uapi/linux/if_xdp.h'
+differs from latest version at 'include/uapi/linux/if_xdp.h'.
 
----8<---
-Swap the order of the arguments in poly1305_emit_arch to match
-the prototype.
+Commit 8066e388be48 ("net: add UAPI to the header guard in various network headers")
+changed the header guard from _LINUX_IF_XDP_H to _UAPI_LINUX_IF_XDP_H
+in include/uapi/linux/if_xdp.h.
 
-Fixes: 14d31979145d ("crypto: powerpc/poly1305 - Add block-only interface")
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+To resolve the warning, update tools/include/uapi/linux/if_xdp.h
+to align with the changes in include/uapi/linux/if_xdp.h
 
-diff --git a/arch/powerpc/lib/crypto/poly1305-p10le_64.S b/arch/powerpc/lib/crypto/poly1305-p10le_64.S
-index 2ba2911b8038..5b368baf96d2 100644
---- a/arch/powerpc/lib/crypto/poly1305-p10le_64.S
-+++ b/arch/powerpc/lib/crypto/poly1305-p10le_64.S
-@@ -1027,7 +1027,7 @@ Out_no_poly1305_64:
- SYM_FUNC_END(poly1305_64s)
+Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Closes: https://lore.kernel.org/all/c2bc466d-dff2-4d0d-a797-9af7f676c065@linux.ibm.com/
+Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+---
+ tools/include/uapi/linux/if_xdp.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/tools/include/uapi/linux/if_xdp.h b/tools/include/uapi/linux/if_xdp.h
+index 42869770776e..44f2bb93e7e6 100644
+--- a/tools/include/uapi/linux/if_xdp.h
++++ b/tools/include/uapi/linux/if_xdp.h
+@@ -7,8 +7,8 @@
+  *	      Magnus Karlsson <magnus.karlsson@intel.com>
+  */
  
- #
--# Input: r3 = h, r4 = s, r5 = mac
-+# Input: r3 = h, r4 = mac, r5 = s
- # mac = h + s
- #
- SYM_FUNC_START(poly1305_emit_arch)
-@@ -1051,14 +1051,14 @@ SYM_FUNC_START(poly1305_emit_arch)
- 	mr	12, 8
+-#ifndef _LINUX_IF_XDP_H
+-#define _LINUX_IF_XDP_H
++#ifndef _UAPI_LINUX_IF_XDP_H
++#define _UAPI_LINUX_IF_XDP_H
  
- Skip_h64:
--	ld	6, 0(4)
--	ld	7, 8(4)
-+	ld	6, 0(5)
-+	ld	7, 8(5)
- 	addc	10, 10, 6
- 	adde	11, 11, 7
- 	addze	12, 12
+ #include <linux/types.h>
  
--	std	10, 0(5)
--	std	11, 8(5)
-+	std	10, 0(4)
-+	std	11, 8(4)
- 	blr
- SYM_FUNC_END(poly1305_emit_arch)
+@@ -180,4 +180,4 @@ struct xdp_desc {
+ /* TX packet carries valid metadata. */
+ #define XDP_TX_METADATA (1 << 1)
  
+-#endif /* _LINUX_IF_XDP_H */
++#endif /* _UAPI_LINUX_IF_XDP_H */
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.43.5
+
 

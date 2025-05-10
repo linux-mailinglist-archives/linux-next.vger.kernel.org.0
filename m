@@ -1,115 +1,155 @@
-Return-Path: <linux-next+bounces-6654-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6655-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05A68AB2075
-	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 02:19:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D448AB20A6
+	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 03:05:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A535E3AB240
-	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 00:18:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF48E523DC0
+	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 01:05:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0926A35897;
-	Sat, 10 May 2025 00:18:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B06625F7BB;
+	Sat, 10 May 2025 01:05:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NrnMwztr"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="pJP9HTEm"
 X-Original-To: linux-next@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37251D6AA;
-	Sat, 10 May 2025 00:18:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4FE134D4;
+	Sat, 10 May 2025 01:05:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746836337; cv=none; b=i6Ll6UWYWsr3JE1Ebo6Cz4veubXJ1KUEb9CfUY4VPcgTi9gSPKEtcbIoDO/XWNsTUUfp2+NsR1fFtOf+/Nosz16gy7A22/mUW/iufFRahcIh2LAFFjDuQUNtHTKGwzwlwqA5MGc0E1HnfeE3245Ov1A48ID3K0p93MkJjngX+UQ=
+	t=1746839108; cv=none; b=k0nHebENBvqUAQ0JoPuBGBFXW6sspCaPKHVx1AGnDM+f0CBT/3CCyNCLdvPSNdZZ8gczfV5U0Wr99bzvORsz1FpbFSK311kW4aNCB3XzDTyTL17neGB7Z1xY1aSw0uHvAk6zsx2gxaPHX6+NPihRlbv/k1P4p2rsnQWSJW3LVH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746836337; c=relaxed/simple;
-	bh=lsLtnFSVphBZGRaEOpHYnW/43K3L3GszCrMpsXdOAAU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cb3/FtmR3dpfSKCxfba0XQ8KSCGSS5YfeI4mrTpze4G06IfuZbaaS53RqYGF4dlCwppvKDi12VnCBnfEDn1yR7FtjOFt/5FHgaTcc2Dj5XGfq8HjI8EbQMIyaN7itTL/+reyJURhgJUyPa/izRZrq//9cgeyVsHDW4qFOMvLFoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=NrnMwztr; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=JxEjBAQahXn7jOCRVGcyOqQ96R/5yhjHGXWRQR573Kg=; b=NrnMwztrylTNvdmJfJ9q0Qh+I6
-	K8qZyCmISUX3nEEtgcOFP1QVwEkkU7Vn3JE5kkZvfjsSlYFUtC3rZrbwhmD7AkH+FFenzHL8sfF+y
-	hdHgK/hqqNxe+pLxAaSXg0g5i5XI5DhKGudPqXbfQ2pLuG1Ed7rYl8AKWdc6vgiSzeZT5H6fMtXLg
-	74mAF3AbRGaZsXoVPKK1tP4v9ADylxl3mcO1b7DJqP6VKQoIDpfAZy4vUt7NA1f2CIDomqVT2ssK9
-	MuuhwTXyWAtics6zMrlC27a9SF/y1896pKxCbh3OMohIp+f7e7llOWbcs+Lwc3eK1D+Ku30oATR5A
-	nZptyVvw==;
-Received: from [50.39.124.201] (helo=[192.168.254.17])
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1uDXvU-0000000GO9z-0NBe;
-	Sat, 10 May 2025 00:18:48 +0000
-Message-ID: <a4e821f9-9daa-4a65-b41a-200a6da85191@infradead.org>
-Date: Fri, 9 May 2025 17:18:40 -0700
+	s=arc-20240116; t=1746839108; c=relaxed/simple;
+	bh=msKNnWRtmNES3mhPLoAXNUbWW5k32La15cy+3ceDkho=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pdOBn/n5WyyMXAPCQDVTfUXu19FNGSPvkRV5QGwwkCwH1+izWNXYaElLYVuDU7nCumLvqySAXcc0pik7JB5F3ON4yAv5gpq9vWpVIPA4QvSWXiFOaY4i2M/JTIyuGq1XHPDx9B2tD2Mp7Q2dsYmJs8JrsCULcAzbw1HpWMo37s8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=pJP9HTEm; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1746839099;
+	bh=BcDMEWZprG7/4QiD24tVvS5LuwgJ/uimoKaiXsdNfwY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=pJP9HTEmz5FOEBM56qol0g5N6SUdMlFbFZpCq3ExXL/74Sz1avpmYzT0KTq2bdrGV
+	 cIRC0a+W8UtU3SQ/QluU+rLoISJzQPmI9VMVwtINra9qUcOdXYugqnZIThnmzhrrzP
+	 j0puo3324XuwgSFJzqa1RFOMTagCJ2Shmu1weWpmnAncqrB+H6i5LsA6twye3v70J2
+	 PnkxpFIFN9X2jRIv7kIlXeRI82WD+yL3HwdFBzEc3Cakz1jTCyZ05jMEkc2TbQrP6p
+	 vOxc0gRD2vPSwSnWshNnZ9ZRPCynyZbCMD2InxVh7NknZd/OFS5X38uSVFryvpxQz1
+	 2mdNUYWOM6C6A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZvSMY6BwVz4x5k;
+	Sat, 10 May 2025 11:04:57 +1000 (AEST)
+Date: Sat, 10 May 2025 11:04:55 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Saket Kumar Bhaskar <skb99@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, linux-arm-kernel
+ <linux-arm-kernel@lists.infradead.org>,
+ linux-stm32@st-md-mailman.stormreply.com, Linux-Next Mailing List
+ <linux-next@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, Hari
+ Bathini <hbathini@linux.ibm.com>, Madhavan Srinivasan
+ <maddy@linux.ibm.com>, Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Mykola Lysenko <mykolal@fb.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+ <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, Greg KH <greg@kroah.com>
+Subject: Re: [PATCH] selftests/bpf: Fix bpf selftest build error
+Message-ID: <20250510110455.10c72257@canb.auug.org.au>
+In-Reply-To: <CAADnVQKBQqur68RdwbDVpRuAZE=8Y=_JaTFo-36d_4vr2DNVyw@mail.gmail.com>
+References: <20250509122348.649064-1-skb99@linux.ibm.com>
+	<CAADnVQKBQqur68RdwbDVpRuAZE=8Y=_JaTFo-36d_4vr2DNVyw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for May 9 (i2c/busses/i2c-mlxbf.c)
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Khalil Blaiech <kblaiech@nvidia.com>, Asmaa Mnebhi <asmaa@nvidia.com>,
- linux-i2c@vger.kernel.org
-References: <20250509195816.7f0a67a3@canb.auug.org.au>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250509195816.7f0a67a3@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/993WEPoqNjDikEmM0EjdhpP";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/993WEPoqNjDikEmM0EjdhpP
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
+Hi Alexei,
 
+On Fri, 9 May 2025 10:04:18 -0700 Alexei Starovoitov <alexei.starovoitov@gm=
+ail.com> wrote:
+>
+> On Fri, May 9, 2025 at 5:24=E2=80=AFAM Saket Kumar Bhaskar <skb99@linux.i=
+bm.com> wrote:
+> >
+> > On linux-next, build for bpf selftest displays an error due to
+> > mismatch in the expected function signature of bpf_testmod_test_read
+> > and bpf_testmod_test_write.
+> >
+> > Commit 97d06802d10a ("sysfs: constify bin_attribute argument of bin_att=
+ribute::read/write()")
+> > changed the required type for struct bin_attribute to const struct bin_=
+attribute.
+> >
+> > To resolve the error, update corresponding signature for the callback.
+> >
+> > Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+> > Closes: https://lore.kernel.org/all/e915da49-2b9a-4c4c-a34f-877f378129f=
+6@linux.ibm.com/
+> > Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+> > ---
+> >  tools/testing/selftests/bpf/test_kmods/bpf_testmod.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/too=
+ls/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> > index 2e54b95ad898..194c442580ee 100644
+> > --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> > +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> > @@ -385,7 +385,7 @@ int bpf_testmod_fentry_ok;
+> >
+> >  noinline ssize_t
+> >  bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+> > -                     struct bin_attribute *bin_attr,
+> > +                     const struct bin_attribute *bin_attr,
+> >                       char *buf, loff_t off, size_t len) =20
+>=20
+> You didn't even compile it :(
+>=20
+> Instead of fixing the build, it breaks the build.
+>=20
+> pw-bot: cr
 
-On 5/9/25 2:58 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20250508:
-> 
+This patch is only needed in linux-next.  It should be applied to the
+driver-core tree - since that includes commit 97d06802d10a.  It should
+also have a Fixes tag referencing commit 97d06802d10a.
+--=20
+Cheers,
+Stephen Rothwell
 
-on i386:
+--Sig_/993WEPoqNjDikEmM0EjdhpP
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-ld: drivers/i2c/busses/i2c-mlxbf.o: in function `mlxbf_i2c_set_timings':
-i2c-mlxbf.c:(.text+0x67): undefined reference to `__udivdi3'
-ld: i2c-mlxbf.c:(.text+0x8a): undefined reference to `__udivdi3'
-ld: i2c-mlxbf.c:(.text+0xc7): undefined reference to `__udivdi3'
-ld: i2c-mlxbf.c:(.text+0xeb): undefined reference to `__udivdi3'
-ld: i2c-mlxbf.c:(.text+0x112): undefined reference to `__udivdi3'
+-----BEGIN PGP SIGNATURE-----
 
-ld: drivers/i2c/busses/i2c-mlxbf.o: in function `mlxbf_i2c_calculate_freq_from_tyu':
-i2c-mlxbf.c:(.text+0x194): undefined reference to `__udivdi3'
-ld: drivers/i2c/busses/i2c-mlxbf.o: in function `mlxbf_i2c_calculate_freq_from_yu':
-i2c-mlxbf.c:(.text+0x1e0): undefined reference to `__udivdi3'
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgepjcACgkQAVBC80lX
+0GxVWwf/ZkvwI39VdsR9Cc6eDfSrM4MHj5NBvGGV6tUNoYclSENR/DyT+68SZ798
+AzGX3tpbarQ3OT/LAbWpSMAl62GzV22LVn3R5+6W/067tygXXF97X7tmEr6kPIfH
+csvUrXewvX7QLH0BO1MTMRHHdjlgydBY86wPmMWi7HOuxDRJhzGCeit3hWfCEdA7
+OyKyOwzemjv7PrRwe/ybaZXnq2tdLYF1YNiFqUVsVrGu2WMCfnkE6nBaCT5+cUbX
+biLx1adyPWW5NMo4wf0gMwF24JvcS8IjcRZcL2e3UfWMhaGLGZ7EN4aOYX9bq0mL
+EtYXBv74Qm7vWGhjtommtPMxlU2ILg==
+=yAPB
+-----END PGP SIGNATURE-----
 
-These come fromm using '/' instead of one of the kernel's DIV macros when using
-u64 or ULL  data types.
-
-in mlxbf_i2c_get_ticks():
-
-	ticks = (nanoseconds * frequency) / MLXBF_I2C_FREQUENCY_1GHZ;
-
-in mlxbf_i2c_calculate_freq_from_yu():
-
-	corepll_frequency = (MLXBF_I2C_PLL_IN_FREQ * core_f) / MLNXBF_I2C_COREPLL_CONST;
-	corepll_frequency /= (++core_r) * (++core_od);
-
-in mlxbf_i2c_calculate_freq_from_tyu():
-
-	core_frequency /= (++core_r) * (++core_od);
-
-
-commit 37f071ec327b0 ("i2c: mlxbf: Fix frequency calculation")
-
-
--- 
-~Randy
-
+--Sig_/993WEPoqNjDikEmM0EjdhpP--
 

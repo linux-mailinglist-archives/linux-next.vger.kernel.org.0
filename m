@@ -1,105 +1,95 @@
-Return-Path: <linux-next+bounces-6656-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6657-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 589D0AB20CB
-	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 03:36:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B50BCAB212C
+	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 06:45:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B96C04A807C
-	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 01:36:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78905A00C99
+	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 04:44:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 828AE23A9BE;
-	Sat, 10 May 2025 01:36:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FC3B1B6CE0;
+	Sat, 10 May 2025 04:44:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="L+npKzXq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lKG4nV5N"
 X-Original-To: linux-next@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FCAF1EB5E3;
-	Sat, 10 May 2025 01:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E90139B;
+	Sat, 10 May 2025 04:44:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746840960; cv=none; b=LYvodlLnt0fMXBGrOBVwDEQ9492SwnIYUmkVy2iWSg8RvaCN8k1/MjW65Cp1G95pr5JKGSsGOYQ8Q6CZjM/NQ8GPMpix20AJObRjejNq2s1u/a4S7YdoVBpVcCLPmYL6ergjypxNgrQDZLpgUZn/3fsj4dT2+IQ5MIu1+EWQ4Jk=
+	t=1746852298; cv=none; b=cX73EK8YeaSHeEmocnjggV8M+r93A7syoRTSDmq/WNJ0GKHl01sd58EsRRXXtXcMaEEW5//FZ64bqbxoSfNG5seEXuNOSirQuR4qy+djcfWEEdrbtnZMtc7/d6tnUfiVrA0K6HEiqTzhhhQAZCJ/DL2Ei4vuhTFQ+DIbm1MPqvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746840960; c=relaxed/simple;
-	bh=XqMD8wNZrmoCiV2gzLvREdKhFywTyDuGBIYB3XlhsBU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=erJgXj5tuuL3F2QDJqgjyQr5VJSwqYeguoUJeKADFA5zZ6/2ArRcbuWy4ZsFJENyRqphkOhYVjibUihL1JkKHeHj334i+OOwhzgXtlFNumGuOqYDF+DtCk5QADGXNy1rQUGatFcwiB9wdzUvHPoiBhTkcwwj476AGzrmcCZAaoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=L+npKzXq; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=8/WILxu11hrOlxr88vOwZbwA0FfG3mAKSy1H5uSBCnM=; b=L+npKzXqIRQEg1MUKnO3kslVK7
-	Q0CfjlpQO1Dmestmcm5OPbglFlMlaFHkgxAwANl4qE/OqRDAh7NJu6BU2nm4/4FVZ0jaHEk2ec8rT
-	qpS4CVyRWTEAorXmC3sCTPE+7Y59LbUrJ0wPn0BiyKsSX+pF2qe7ROtCvmO/sleNpkvPacdZGRKJt
-	nnDp0yB2mLxVVAs85MYuqLGBZlORrVseR8dDyprhVhTJpvNaNYlbaB/VDBJgPkFi0kMrLcbrew5Qa
-	8LgOyRxZj2DUNyxLJ2p686xTUXHl7o0H5QcfyC5QsYFPxdcvYlHTinKsT44o3a01FtpMT9Yr62125
-	UxaPOfkw==;
-Received: from [50.39.124.201] (helo=[192.168.254.17])
-	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
-	id 1uDZ7w-0000000GOZf-2NXu;
-	Sat, 10 May 2025 01:35:46 +0000
-Message-ID: <a1d9134f-0567-4a53-a1e7-a55cd6b189a9@infradead.org>
-Date: Fri, 9 May 2025 18:35:29 -0700
+	s=arc-20240116; t=1746852298; c=relaxed/simple;
+	bh=kh4sjLq5JF+8Y2rGuukJ83uDaRTovVpc65OIA0JKgFg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yl7W7hpKT6WoFCC+A9ONmgan1WN1z0zpJn7hg8V8u8jTu8ndlI+nGPXAVDn6yN78MLeae4k7NAppo9hxe+PRMhQUtfcurqm1+ezS/xPez1qu1MVx6zQVqwZ5o90s2rihQKtH6kl24p/nGF4Y9k2a+L5WlyZ3pZDqCFPge0DlDJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lKG4nV5N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72B64C4CEE2;
+	Sat, 10 May 2025 04:44:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746852297;
+	bh=kh4sjLq5JF+8Y2rGuukJ83uDaRTovVpc65OIA0JKgFg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lKG4nV5NFMIcqqUBDecvoGiwskeK/rIJKv4tYDYE3tiTW2b3hWExmEySN8HuyrZrV
+	 UV/HWqoafoGBRjCAgFzDrhI+ZkcZIJE+s55SEqTA48B4ljBjcf1H9NxdLNQEaT4wS1
+	 XQVEGdGQPMdabCj4S9fr7D6JrzEWc19v5No11pIQNHCKdQJyTek5CEqEF0ucONvT6w
+	 VPpEEntRtHWR8XZKIGbRWoO0s0wbca3ybEm6gD6GvYOKePLoh14FPquyZw/VPn59bJ
+	 0YrQSNEJq3+khNbYmUAt7HobSf4RHYFR/ReGtHqjzQKWqzN16affoObLWHhybhBuiw
+	 tvcUC8gFxdhiw==
+Date: Fri, 9 May 2025 21:44:50 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
+	Thorsten Leemhuis <linux@leemhuis.info>,
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH] crypto: powerpc/poly1305 - Fix input mixup in
+ poly1305_emit_arch
+Message-ID: <20250510044450.GA505731@sol>
+References: <cover.1745815528.git.herbert@gondor.apana.org.au>
+ <915c874caf5451d560bf26ff59f58177aa8b7c17.1745815528.git.herbert@gondor.apana.org.au>
+ <242ebbf1-4ef0-41c3-83cb-a055c262ba4a@leemhuis.info>
+ <aBtF2jVZQwxGiHVk@gondor.apana.org.au>
+ <37cf099e-d5c2-40d8-bc31-77e1f9623b1c@linux.ibm.com>
+ <aByX_Y64C6lVRR8M@gondor.apana.org.au>
+ <f66620e2-77e3-4713-a946-ddb2c8a0bccb@linux.ibm.com>
+ <aByiNZNxqyTerdYG@gondor.apana.org.au>
+ <1d2c2fdc-5c36-4d4e-8b25-8289b865726d@linux.ibm.com>
+ <aB31DI4QBBZuQObQ@gondor.apana.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for May 9
- (drivers/platform/x86/tuxedo/nb04/wmi_ab.o)
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Werner Sembach <wse@tuxedocomputers.com>,
- platform-driver-x86@vger.kernel.org,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-References: <20250509195816.7f0a67a3@canb.auug.org.au>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250509195816.7f0a67a3@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aB31DI4QBBZuQObQ@gondor.apana.org.au>
 
-
-
-On 5/9/25 2:58 AM, Stephen Rothwell wrote:
-> Hi all,
+On Fri, May 09, 2025 at 08:29:00PM +0800, Herbert Xu wrote:
+> On Thu, May 08, 2025 at 08:35:48PM +0530, Venkat Rao Bagalkote wrote:
+> >
+> > Unfortunately, above patch dosent fix the boot warning.
 > 
-> Changes since 20250508:
+> This works for me:
 > 
+> ---8<---
+> Swap the order of the arguments in poly1305_emit_arch to match
+> the prototype.
+> 
+> Fixes: 14d31979145d ("crypto: powerpc/poly1305 - Add block-only interface")
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-When CONFIG_HID is not set:
+This fixes "-cpu Power10", but older CPUs (e.g. "-cpu POWER9") are still
+failing.
 
-ld: drivers/platform/x86/tuxedo/nb04/wmi_ab.o: in function `tux_remove':
-wmi_ab.c:(.text+0x29): undefined reference to `hid_destroy_device'
-ld: drivers/platform/x86/tuxedo/nb04/wmi_ab.o: in function `tux_probe':
-wmi_ab.c:(.text+0x6a): undefined reference to `hid_allocate_device'
-ld: wmi_ab.c:(.text+0xbc): undefined reference to `hid_add_device'
-ld: wmi_ab.c:(.text+0xf3): undefined reference to `hid_destroy_device'
-ld: drivers/platform/x86/tuxedo/nb04/wmi_ab.o: in function `tux_ll_parse':
-wmi_ab.c:(.text+0x46e): undefined reference to `hid_parse_report'
-
-When CONFIG_ACPI or CONFIG_ACPI_WMI is not set:
-
-ld: drivers/platform/x86/tuxedo/nb04/wmi_ab.o: in function `tuxedo_nb04_wmi_tux_init':
-wmi_ab.c:(.init.text+0x20): undefined reference to `__wmi_driver_register'
-ld: drivers/platform/x86/tuxedo/nb04/wmi_ab.o: in function `tuxedo_nb04_wmi_tux_exit':
-wmi_ab.c:(.exit.text+0x9): undefined reference to `wmi_driver_unregister'
-ld: drivers/platform/x86/tuxedo/nb04/wmi_util.o: in function `__wmi_method_buffer_out.constprop.0':
-wmi_util.c:(.text+0x3a): undefined reference to `wmidev_evaluate_method'
-
-
-
--- 
-~Randy
-
+- Eric
 

@@ -1,99 +1,115 @@
-Return-Path: <linux-next+bounces-6653-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6654-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD58BAB1E64
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 22:34:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05A68AB2075
+	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 02:19:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B50381889294
-	for <lists+linux-next@lfdr.de>; Fri,  9 May 2025 20:32:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A535E3AB240
+	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 00:18:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 065D725EFA0;
-	Fri,  9 May 2025 20:31:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0926A35897;
+	Sat, 10 May 2025 00:18:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="HU8nDiSg"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NrnMwztr"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873F425E477;
-	Fri,  9 May 2025 20:31:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37251D6AA;
+	Sat, 10 May 2025 00:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746822687; cv=none; b=FZLT/aAtIsvl0Ei9xYmXeeh3cgJiActOmwvK3tfIK3yQIWgJ0I4GIHobAY5FgEEjQ1MIcp7P6HNyRUPAQYTEwAccDUiCVYLddZzG/dyKjdqtY1ocCafgC4mltb3G4BIVtWhZSljmT7m9RWPXm4KVCJDD1lT+UKIPw9Z5e/hat5Q=
+	t=1746836337; cv=none; b=i6Ll6UWYWsr3JE1Ebo6Cz4veubXJ1KUEb9CfUY4VPcgTi9gSPKEtcbIoDO/XWNsTUUfp2+NsR1fFtOf+/Nosz16gy7A22/mUW/iufFRahcIh2LAFFjDuQUNtHTKGwzwlwqA5MGc0E1HnfeE3245Ov1A48ID3K0p93MkJjngX+UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746822687; c=relaxed/simple;
-	bh=SoFlmO7Jj0/G4IWxkuc4o9mywnX6JIgpx7RMvcDitWI=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=DDxMXLAZP4Endc2UM+x5o8mXJxTnn4f2BaDETr+9zYbCi5cEWZrMOf8USIxAZ/20RsWLMnjB5Y4dOmntAGX8OK8YR7s4a78QYBx5PYWEOPXJJpRhkmeYrxfBCF7TZHJ/wz+DL/MYQ+EUwWyk/1tCvqzoOz/m4ZsMDD/mn7/dJ5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=HU8nDiSg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C68EEC4CEE4;
-	Fri,  9 May 2025 20:31:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1746822686;
-	bh=SoFlmO7Jj0/G4IWxkuc4o9mywnX6JIgpx7RMvcDitWI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=HU8nDiSgP+teIzyBe2aZfFGy2yDOomfPG2Bcr97GNhvtouWuDAw5ZKekihRkPtKwe
-	 Bp4p+FlIGM1zw7LWBFoMUXnUlCs+syf9sxhBMox/dG2vNDfKoIbGZeF03Ng9qUB8b/
-	 6O6FEU58DdY1lEVwzKtoC6KHqh4TtcJPVE18QVGc=
-Date: Fri, 9 May 2025 13:31:26 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Juan Yescas <jyescas@google.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the mm-unstable tree
-Message-Id: <20250509133126.7ceafbcc662a7fde291b6f60@linux-foundation.org>
-In-Reply-To: <20250509194336.3c1baa34@canb.auug.org.au>
-References: <20250509194336.3c1baa34@canb.auug.org.au>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1746836337; c=relaxed/simple;
+	bh=lsLtnFSVphBZGRaEOpHYnW/43K3L3GszCrMpsXdOAAU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Cb3/FtmR3dpfSKCxfba0XQ8KSCGSS5YfeI4mrTpze4G06IfuZbaaS53RqYGF4dlCwppvKDi12VnCBnfEDn1yR7FtjOFt/5FHgaTcc2Dj5XGfq8HjI8EbQMIyaN7itTL/+reyJURhgJUyPa/izRZrq//9cgeyVsHDW4qFOMvLFoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=NrnMwztr; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=JxEjBAQahXn7jOCRVGcyOqQ96R/5yhjHGXWRQR573Kg=; b=NrnMwztrylTNvdmJfJ9q0Qh+I6
+	K8qZyCmISUX3nEEtgcOFP1QVwEkkU7Vn3JE5kkZvfjsSlYFUtC3rZrbwhmD7AkH+FFenzHL8sfF+y
+	hdHgK/hqqNxe+pLxAaSXg0g5i5XI5DhKGudPqXbfQ2pLuG1Ed7rYl8AKWdc6vgiSzeZT5H6fMtXLg
+	74mAF3AbRGaZsXoVPKK1tP4v9ADylxl3mcO1b7DJqP6VKQoIDpfAZy4vUt7NA1f2CIDomqVT2ssK9
+	MuuhwTXyWAtics6zMrlC27a9SF/y1896pKxCbh3OMohIp+f7e7llOWbcs+Lwc3eK1D+Ku30oATR5A
+	nZptyVvw==;
+Received: from [50.39.124.201] (helo=[192.168.254.17])
+	by desiato.infradead.org with esmtpsa (Exim 4.98.1 #2 (Red Hat Linux))
+	id 1uDXvU-0000000GO9z-0NBe;
+	Sat, 10 May 2025 00:18:48 +0000
+Message-ID: <a4e821f9-9daa-4a65-b41a-200a6da85191@infradead.org>
+Date: Fri, 9 May 2025 17:18:40 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for May 9 (i2c/busses/i2c-mlxbf.c)
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Khalil Blaiech <kblaiech@nvidia.com>, Asmaa Mnebhi <asmaa@nvidia.com>,
+ linux-i2c@vger.kernel.org
+References: <20250509195816.7f0a67a3@canb.auug.org.au>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250509195816.7f0a67a3@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Fri, 9 May 2025 19:43:36 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
+
+On 5/9/25 2:58 AM, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the mm-unstable tree, today's linux-next build (powerpc64
-> allnoconfig) produced this warning:
-> 
-> In file included from include/vdso/const.h:5,
->                  from include/linux/const.h:4,
->                  from include/linux/bits.h:5,
->                  from include/linux/ratelimit_types.h:5,
->                  from include/linux/printk.h:9,
->                  from include/asm-generic/bug.h:22,
->                  from arch/powerpc/include/asm/bug.h:116,
->                  from include/linux/bug.h:5,
->                  from include/linux/mmdebug.h:5,
->                  from include/linux/mm.h:6,
->                  from mm/sparse.c:5:
-> mm/sparse.c: In function 'usemap_size':
-> include/linux/mmzone.h:1815:15: warning: left shift count is negative [-Wshift-count-negative]
->  1815 |         ((1UL << (PFN_SECTION_SHIFT - pageblock_order)) * NR_PAGEBLOCK_BITS)
->       |               ^~
-> include/uapi/linux/const.h:51:40: note: in definition of macro '__KERNEL_DIV_ROUND_UP'
->    51 | #define __KERNEL_DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
->       |                                        ^
-> mm/sparse.c:301:16: note: in expansion of macro 'BITS_TO_LONGS'
->   301 |         return BITS_TO_LONGS(SECTION_BLOCKFLAGS_BITS) * sizeof(unsigned long);
->       |                ^~~~~~~~~~~~~
-> mm/sparse.c:301:30: note: in expansion of macro 'SECTION_BLOCKFLAGS_BITS'
->   301 |         return BITS_TO_LONGS(SECTION_BLOCKFLAGS_BITS) * sizeof(unsigned long);
->       |                              ^~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Probably introduced by commit
-> 
->  ("mm: add CONFIG_PAGE_BLOCK_ORDER to select page block order")
+> Changes since 20250508:
 > 
 
-Yes, thanks, I'll drop this version of the patch.
+on i386:
+
+ld: drivers/i2c/busses/i2c-mlxbf.o: in function `mlxbf_i2c_set_timings':
+i2c-mlxbf.c:(.text+0x67): undefined reference to `__udivdi3'
+ld: i2c-mlxbf.c:(.text+0x8a): undefined reference to `__udivdi3'
+ld: i2c-mlxbf.c:(.text+0xc7): undefined reference to `__udivdi3'
+ld: i2c-mlxbf.c:(.text+0xeb): undefined reference to `__udivdi3'
+ld: i2c-mlxbf.c:(.text+0x112): undefined reference to `__udivdi3'
+
+ld: drivers/i2c/busses/i2c-mlxbf.o: in function `mlxbf_i2c_calculate_freq_from_tyu':
+i2c-mlxbf.c:(.text+0x194): undefined reference to `__udivdi3'
+ld: drivers/i2c/busses/i2c-mlxbf.o: in function `mlxbf_i2c_calculate_freq_from_yu':
+i2c-mlxbf.c:(.text+0x1e0): undefined reference to `__udivdi3'
+
+These come fromm using '/' instead of one of the kernel's DIV macros when using
+u64 or ULL  data types.
+
+in mlxbf_i2c_get_ticks():
+
+	ticks = (nanoseconds * frequency) / MLXBF_I2C_FREQUENCY_1GHZ;
+
+in mlxbf_i2c_calculate_freq_from_yu():
+
+	corepll_frequency = (MLXBF_I2C_PLL_IN_FREQ * core_f) / MLNXBF_I2C_COREPLL_CONST;
+	corepll_frequency /= (++core_r) * (++core_od);
+
+in mlxbf_i2c_calculate_freq_from_tyu():
+
+	core_frequency /= (++core_r) * (++core_od);
+
+
+commit 37f071ec327b0 ("i2c: mlxbf: Fix frequency calculation")
+
+
+-- 
+~Randy
+
 

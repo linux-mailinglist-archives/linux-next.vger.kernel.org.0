@@ -1,70 +1,55 @@
-Return-Path: <linux-next+bounces-6662-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6663-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA406AB2168
-	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 08:02:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF79DAB21A1
+	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 09:06:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93B02A04EE7
-	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 06:02:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 174937ACD30
+	for <lists+linux-next@lfdr.de>; Sat, 10 May 2025 07:04:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CAB51A38F9;
-	Sat, 10 May 2025 06:02:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2F0A1E5702;
+	Sat, 10 May 2025 07:05:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NV/viZqF"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="SB5DbBmx"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC492A1BB;
-	Sat, 10 May 2025 06:02:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CAD91BD035;
+	Sat, 10 May 2025 07:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746856946; cv=none; b=VyiUl1Fez+4KcP5LMZxrBZqLOgGwaX+n0dsNJLTE7pQ9zxi+mnRNgnKU+5sAPeUVBGRZG/oj4BlZ8RWCbHDLhFckq3kIgaISbVN5R6nRBjvZX1hwImkeCTOezII1YQ60+hI5xmYlCx4PdDpKJAumgcD1d9S6sx7WSszLxgmAUzw=
+	t=1746860757; cv=none; b=C+ipTyevv9iaGPk7lDJA3ADrLHzlX3LiEJ2U5j4wY/HobrIkvJOA/IRDJYUy9QEM2q/QNc1HQwwRc4birJNDk7pX57cR7x4Wnl1vDjyKYeejdT6Hga6+yAZyaIbylpf9TOyXjz0VtzrjZA9VUAzjOOJPHumudBrJheuiLz+vAyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746856946; c=relaxed/simple;
-	bh=JlSsQetcX37kb+C7A/7Zl2d7NI2PP1OhBJ4yWdB2dq8=;
+	s=arc-20240116; t=1746860757; c=relaxed/simple;
+	bh=60psAXT3n4qmQ2xRNIm1GGtIZMipVivzHqpM4vk64QQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VpDEL2DqoBL6fWnm2MKmtkkVqif+jlFePROreyy/Z6VQrRUOHQ+cJ7FKQmeWsk2+8wZPlCfonCJdHvrbKl5DYiaJqhYAWTwpO7j49LVK+ZxwsUTB2Fy2EF0FU/LoFhCWRbLojis7NlDbg0sZdIsvvOxlY31Tmb9qwhyvTuqFuSs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NV/viZqF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 597E0C4CEE2;
-	Sat, 10 May 2025 06:02:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746856945;
-	bh=JlSsQetcX37kb+C7A/7Zl2d7NI2PP1OhBJ4yWdB2dq8=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=n71dfon+GQ5QeErGtO0HWQGa3TzPnN/w98Qo66QuW9z6bkeKd1H5nIcqpygHxCjkS8sV/sjNlH2C8Dpe7QV9C04myi2si2djsaq2KhIw2Iok+clS2f/JNqNTw1Fc6MBBdwAQ8kegS4qTtPtLo2XIEaU8q1esnCw8qyz+icav1IU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=SB5DbBmx; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1746860753;
+	bh=60psAXT3n4qmQ2xRNIm1GGtIZMipVivzHqpM4vk64QQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NV/viZqFlgmeYeOd+a37GQMGj2Wdbb597buCO2CHtoo5e9okzB+Nv34A5uSb9yT7U
-	 T0U8EAQfSlJcGSLoQOiuuV37BPT2TZRRLYdrZg+Bf1h7FYKPqevWoI2XGpD7ZFv4Y1
-	 ji3riEIa4f44hkK9/0xN6sFKUXg5wiWnmmFl9xRPL/L7AtODj4a9jdbpPx1Gq9lCsD
-	 3NmTdIov3AhWHgJXT9gSdmYwd8K0vCiZ1fGQSnLiBRc1cFDJzHiEKcW4xcfQR011fO
-	 rKOMjmaAad2EKQDQN4zhH6H5qvV8zabd6dfFzqfBG7IPuskgqzzU9ah2fg91EEzKSy
-	 /t2IFMZsxRXRA==
-Date: Fri, 9 May 2025 23:02:19 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
-	Thorsten Leemhuis <linux@leemhuis.info>,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Danny Tsen <dtsen@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [v2 PATCH] crypto: powerpc/poly1305 - Add poly1305_emit_arch
- wrapper
-Message-ID: <20250510060219.GC505731@sol>
-References: <aByX_Y64C6lVRR8M@gondor.apana.org.au>
- <f66620e2-77e3-4713-a946-ddb2c8a0bccb@linux.ibm.com>
- <aByiNZNxqyTerdYG@gondor.apana.org.au>
- <1d2c2fdc-5c36-4d4e-8b25-8289b865726d@linux.ibm.com>
- <aB31DI4QBBZuQObQ@gondor.apana.org.au>
- <20250510044450.GA505731@sol>
- <aB7fvi_FBdnmLUON@gondor.apana.org.au>
- <20250510053308.GB505731@sol>
- <aB7o2SiwNLfBTgQk@gondor.apana.org.au>
- <aB7pCuT2wfEe_xby@gondor.apana.org.au>
+	b=SB5DbBmxu0wcPkpleLGXJ0XNFcZA1kSew7sFd2PcTvqbmHIgbpOL3AGWJIvYGR335
+	 3jI3t9VqqgyvJHcTrzi+Pph0kbAlxGlML9kUEujDbTnpZPZo+A1ssS3mJZyLPHNZPz
+	 PG2yZVSYIg8Sr460TfB8ZfNFLiymHSGHm+UJbZ/s=
+Date: Sat, 10 May 2025 09:05:52 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Dan Williams <dan.j.williams@intel.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
+	sathyanarayanan.kuppuswamy@linux.intel.com, yilun.xu@intel.com, sameo@rivosinc.com, aik@amd.com, 
+	suzuki.poulose@arm.com, steven.price@arm.com, lukas@wunner.de, Greg KH <greg@kroah.com>, 
+	Cedric Xing <cedric.xing@intel.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the devsec-tsm tree
+Message-ID: <6e5559f3-29b3-45d0-b475-cc021b90b1c2@t-8ch.de>
+References: <20250508181032.58fc7e5b@canb.auug.org.au>
+ <681d4e5584d46_1229d6294d6@dwillia2-xfh.jf.intel.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -73,20 +58,58 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aB7pCuT2wfEe_xby@gondor.apana.org.au>
+In-Reply-To: <681d4e5584d46_1229d6294d6@dwillia2-xfh.jf.intel.com.notmuch>
 
-On Sat, May 10, 2025 at 01:50:02PM +0800, Herbert Xu wrote:
-> On Sat, May 10, 2025 at 01:49:13PM +0800, Herbert Xu wrote:
-> >
-> > Did I do something wrong?
+Hi Dan,
+
+On 2025-05-08 17:37:41-0700, Dan Williams wrote:
+> Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the devsec-tsm tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> > 
+> > drivers/virt/coco/guest/tsm-mr.c: In function 'tsm_mr_create_attribute_group':
+> > drivers/virt/coco/guest/tsm-mr.c:228:29: error: assignment to 'const struct bin_attribute * const*' from incompatible pointer type 'struct bin_attribute **' [-Wincompatible-pointer-types]
+> >   228 |         ctx->agrp.bin_attrs = no_free_ptr(bas);
+> >       |                             ^
+> > 
+> > Caused by commit
+> > 
+> >   29b07a7b8f41 ("tsm-mr: Add TVM Measurement Register support")
+> > 
+> > interacting with commit
+> > 
+> >   9bec944506fa ("sysfs: constify attribute_group::bin_attrs")
+> > 
+> > from the driver-core tree.
+> > 
+> > I have applied the following merge resolution for today (there must be
+> > a better solution).
 > 
-> OK perhaps it's just that the qemu emulation being slow.
+> Indeed.
+> 
+> So it looks like while there are plenty of dynamic binary attribute
+> creation users (see sysfs_bin_attr_init() callers). There are zero that
+> attempt to assign dynamically allocated attributes to be registered by a
+> static @groups.
+>
+> The @groups publishing model is preferable because the lifetime rules
+> are all handled by the driver core at device add/del time.
+> 
+> So, while there is still casting involved, I think a better solution is
+> to make the allocation const and then cast for init ala incremental
+> patch below. Cedric, if this looks ok to you I'll send out another
+> partial-reroll to get this fixed up so the build breakage stays out of
+> bisection runs.
 
-Yes, non-native QEMU usually isn't any good for benchmarking the
-architecture-optimized code, due to the instructions it uses having to be
-emulated.  Just to give another random example, in (non-native) QEMU the RISC-V
-CRC code is much slower than the generic CRC code.  But when run on an actual
-RISC-V processor it's much faster.
+Take a look at nvmem_populate_sysfs_cells() in drivers/nvmem/core.c.
+It uses an intermediary non-const pointer for the initialization and
+works without any casts.
 
-- Eric
+Could you then also use .bin_attrs_new?
+.read_new and .write_new are already used.
+
+
+Thomas
 

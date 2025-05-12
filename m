@@ -1,169 +1,187 @@
-Return-Path: <linux-next+bounces-6682-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6683-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85B6CAB2EFA
-	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 07:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 38676AB2F04
+	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 07:26:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10922178999
-	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 05:23:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A843E1675A5
+	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 05:26:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10FB725485B;
-	Mon, 12 May 2025 05:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CDBF2550A6;
+	Mon, 12 May 2025 05:26:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ewX9wEjL"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="pz/SPIB/"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F01083D76;
-	Mon, 12 May 2025 05:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A3D4A23;
+	Mon, 12 May 2025 05:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747027412; cv=none; b=Trx8zxrx9SdJ0XWny1EJRVZHXPc2I4LxBguRoM6dOK3JzjARgnTd+xg5JhkSfFIoc1560iyxZG8S4B9n3XM6u0Wb7tB9Ub8AcnD7K3WmPGGoBOSqudvhvdiGfFgzHbbs9Hhqag5WwPHbDgHw/ekQRTsqWUCrCHF+pQebyXCK8+o=
+	t=1747027610; cv=none; b=DrJKitIjx+xafHLqrIuoT287hUYzy4gu1osBFyuEpWSSdGP0HO4EBf+RF+Y5qnD5EoGZ7M3y83VUs5sVZIDGlBcgFi1bqmgLY+MgW1N4BB/THLL11miFjaWNBt8MM290LbCIO2PhaXgxARRMtqGCziOZdAZv+zE89En7m20313A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747027412; c=relaxed/simple;
-	bh=udnN0My/n57iTRoHBTXmg/wWZKP/eI2kpqLTdjffcMY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=U6gwymY7hawG/URwshsjdYt7D0qyaSU0wXGJMlTFJ6GLANAcB6gALsS6OIE2TC+7sqROShs4GOtXaPQtja9R4oSI01D634GRwT+RS++I4en55F+cYP6HksI9fGrcYNIgsbk/pumXZzfLY2CDJaDcg12yTJNRpDY0Os2OSxQU2f4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ewX9wEjL; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1747027406;
-	bh=jF1dIlvIfgi1b4uOi6zgS+c8Uo/oS2AetOzTauYI8hs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ewX9wEjLJCUSbmmMRPgezhopbu9wgrkZsDaO+T253ddyFLxRokC12FKXAjWffhy7c
-	 AGUwTmJSpyqVO12Gsh+Ee3veZ5m4siru3Aay0WQ8bE/rBtPz6Zeh4DCOXyeHPjWa24
-	 KuVpXA+WmUHxAXep4Db9gn2Zy02auG97QdtMYzjUS1A0f8vPRvZj47bzEnTN//Dmj2
-	 OywZ6UQbvo/zUvPx6L/06tAxF+xwfXvRM36V5iae2m17Ex6G1pi0lWP6ZNQXGG1Vne
-	 SoUJWevIyerBB5I6vU5QxL0V/J8b9jcno7a9DOrmCpWZUHyrDSHA855tVCf+yffnE7
-	 glkkcMa/HhHtw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zwp0t5TTWz4wnp;
-	Mon, 12 May 2025 15:23:26 +1000 (AEST)
-Date: Mon, 12 May 2025 15:23:26 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: linux-next: manual merge of the tip tree with the pm tree
-Message-ID: <20250512152326.3f2f0226@canb.auug.org.au>
-In-Reply-To: <20250512145517.6e0666e3@canb.auug.org.au>
-References: <20250512145517.6e0666e3@canb.auug.org.au>
+	s=arc-20240116; t=1747027610; c=relaxed/simple;
+	bh=dR2TchfJNywNbkGmVzpshtFyI8C+FF02+Db6NuBY52w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tBBnES7ljv/cefofzuX7gr7uTrRfl8neMjpYnP+p4U2UuZCVh2/EK/WCCNHSy46osMkLQGGaJMYJauXC7tA8PAmds3oUtzsw4bUrNvYhezutr+O6dCQ1Hvjy1wKiu56V+lTW3DmyNs1VZsz86wFGAV+QUl1KN8v6EW4txODCeAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=pz/SPIB/; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54BMhEAT023729;
+	Mon, 12 May 2025 05:26:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=2at7qq
+	hU5esJ06sT8kotxmCJGy7Nu/9DF9wojUpF83c=; b=pz/SPIB/Q1bE/pt0RmGEo/
+	D0ljHvI+AKzNroeeljQvGdNz7Os7MTsKtV7kfjG14KdVDCWfIJGUMe2JAA1aS+/q
+	s3GmwI3YY/LGdHbHHiQUGtcUOxurDgae/2MA8kkrHdte4KQXjx+FT47FrAkNxosg
+	7wkZnSROMmBmcD111r00ELtWj/x+zByS1yohOrr+mmqxfw6ZCoq9MP+jI2EjStuG
+	RIa/6NqAa6YgwIaY0FySYKLkm62yttlDt8Pm9kZrc8AMMi9dXnxGAIvQTAPN8a2/
+	yPpc8GXkxSMEbW25V7mAw/yJAgOzgarvl4/9cV/dSIugDhd5Hs06tzilCyjUkAdg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46jw42t3wd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 May 2025 05:26:11 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54C5QA5f010031;
+	Mon, 12 May 2025 05:26:10 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46jw42t3w9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 May 2025 05:26:10 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54C0sLZi003815;
+	Mon, 12 May 2025 05:26:09 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 46jkbkc8mm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 May 2025 05:26:09 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54C5Q6md42664284
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 12 May 2025 05:26:06 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EEF5920049;
+	Mon, 12 May 2025 05:26:05 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CE62D20040;
+	Mon, 12 May 2025 05:26:01 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.109.219.153])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon, 12 May 2025 05:26:01 +0000 (GMT)
+Date: Mon, 12 May 2025 10:55:59 +0530
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Greg KH <greg@kroah.com>
+Subject: Re: [PATCH] selftests/bpf: Fix bpf selftest build error
+Message-ID: <aCGGZ9gApo+QwSMD@linux.ibm.com>
+References: <20250509122348.649064-1-skb99@linux.ibm.com>
+ <CAADnVQKBQqur68RdwbDVpRuAZE=8Y=_JaTFo-36d_4vr2DNVyw@mail.gmail.com>
+ <20250510110455.10c72257@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dEx+tYqfZCo5uwsjTWLPV2I";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250510110455.10c72257@canb.auug.org.au>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTEyMDA1MiBTYWx0ZWRfX6PAao8iRodZj UUE+qgT+lDeH8UKRJ35gSDPgj8cT2qCVR0zMG3vXzFs7wbOWXfqo1KcXalLFUHkeeHgzeajIpOu GebwXRqG7xujIrvOsOdZuC/SNUkF6ymr9oYVfV/PYoix3CbHQKbJsH6daJ34BBqMUZnis3x5wRL
+ 1oZJC2MQD0QnREdB0sCv7PCYqGtAhjNlAzComfyrWzswh9/hUs8xeAtTCIWGFDHh5WKy53utmU0 dDsXXw8SMAioBER2vKDp2ieY77YP7ZQkdU8IuhctfCaMrjqtp06uf0igeX3Gos8dgQwNrLWgbqy Tn6THDeNT2RYjwbu7x2/unKBz4xQH3DwOSOrmTZBhnJOH48ePR6VxAcrEHufqj38yw38XI6GzlW
+ g63Psx+CoHdKaktaGTTFq7NvBIkpUJUDGnF8pAfOcIzDbpCRe8MYirZ0Cb0VrqQTVSpYQ+sg
+X-Proofpoint-ORIG-GUID: L7wPwis5KOaSpF8fo9uroFggy_iUJ9Cx
+X-Authority-Analysis: v=2.4 cv=UqJjN/wB c=1 sm=1 tr=0 ts=68218673 cx=c_pps a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17 a=IkcTkHD0fZMA:10 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=pGLkceISAAAA:8 a=jz50gl9ZvO4mUITzFMAA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: 5_qWnCPjlKW_qZJuRAUWEa0sM8S7BpV4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-12_01,2025-05-09_01,2025-02-21_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 priorityscore=1501 bulkscore=0 phishscore=0 adultscore=0
+ clxscore=1011 mlxlogscore=999 lowpriorityscore=0 spamscore=0
+ suspectscore=0 mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
+ definitions=main-2505120052
 
---Sig_/dEx+tYqfZCo5uwsjTWLPV2I
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sat, May 10, 2025 at 11:04:55AM +1000, Stephen Rothwell wrote:
+> Hi Alexei,
+> 
+> On Fri, 9 May 2025 10:04:18 -0700 Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Fri, May 9, 2025 at 5:24 AM Saket Kumar Bhaskar <skb99@linux.ibm.com> wrote:
+> > >
+> > > On linux-next, build for bpf selftest displays an error due to
+> > > mismatch in the expected function signature of bpf_testmod_test_read
+> > > and bpf_testmod_test_write.
+> > >
+> > > Commit 97d06802d10a ("sysfs: constify bin_attribute argument of bin_attribute::read/write()")
+> > > changed the required type for struct bin_attribute to const struct bin_attribute.
+> > >
+> > > To resolve the error, update corresponding signature for the callback.
+> > >
+> > > Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+> > > Closes: https://lore.kernel.org/all/e915da49-2b9a-4c4c-a34f-877f378129f6@linux.ibm.com/
+> > > Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+> > > ---
+> > >  tools/testing/selftests/bpf/test_kmods/bpf_testmod.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> > > index 2e54b95ad898..194c442580ee 100644
+> > > --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> > > +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> > > @@ -385,7 +385,7 @@ int bpf_testmod_fentry_ok;
+> > >
+> > >  noinline ssize_t
+> > >  bpf_testmod_test_read(struct file *file, struct kobject *kobj,
+> > > -                     struct bin_attribute *bin_attr,
+> > > +                     const struct bin_attribute *bin_attr,
+> > >                       char *buf, loff_t off, size_t len)  
+> > 
+> > You didn't even compile it :(
+> > 
+> > Instead of fixing the build, it breaks the build.
+> > 
+> > pw-bot: cr
+> 
+> This patch is only needed in linux-next.  It should be applied to the
+> driver-core tree - since that includes commit 97d06802d10a.  It should
+> also have a Fixes tag referencing commit 97d06802d10a.
+> -- 
+> Cheers,
+> Stephen Rothwell
+Hi Stephen,
 
-Hi all,
+Apologies for missing the Fixes tag. Would you like me to resend the patch with the 
+Fixes tag included?
 
-On Mon, 12 May 2025 14:55:17 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the tip tree got a conflict in:
->=20
->   drivers/cpufreq/amd-pstate.c
->=20
-> between commit:
->=20
->   608a76b65288 ("cpufreq/amd-pstate: Add support for the "Requested CPU M=
-in frequency" BIOS option")
->=20
-> from the pm tree and commit:
->=20
->   d7484babd2c4 ("x86/msr: Rename 'rdmsrl_on_cpu()' to 'rdmsrq_on_cpu()'")
->=20
-> from the tip tree.
->=20
-> I fixed it up (the former removed a line updated by the latter) and can
-> carry the fix as necessary. This is now fixed as far as linux-next is
-> concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
-
-Actually it needed the fix up below.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/cpufreq/amd-pstate.c
-index d96bb3e202ee,66fdc74f13ef..0d4c0de89a00
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@@ -389,10 -389,9 +389,10 @@@ static inline int amd_pstate_cppc_enabl
-  static int msr_init_perf(struct amd_cpudata *cpudata)
-  {
-  	union perf_cached perf =3D READ_ONCE(cpudata->perf);
- -	u64 cap1, numerator;
- +	u64 cap1, numerator, cppc_req;
- +	u8 min_perf;
- =20
-- 	int ret =3D rdmsrl_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
-+ 	int ret =3D rdmsrq_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
-  				     &cap1);
-  	if (ret)
-  		return ret;
-@@@ -401,22 -400,6 +401,22 @@@
-  	if (ret)
-  		return ret;
- =20
-- 	ret =3D rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, &cppc_req);
-++	ret =3D rdmsrq_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, &cppc_req);
- +	if (ret)
- +		return ret;
- +
- +	WRITE_ONCE(cpudata->cppc_req_cached, cppc_req);
- +	min_perf =3D FIELD_GET(AMD_CPPC_MIN_PERF_MASK, cppc_req);
- +
- +	/*
- +	 * Clear out the min_perf part to check if the rest of the MSR is 0, if =
-yes, this is an
- +	 * indication that the min_perf value is the one specified through the B=
-IOS option
- +	 */
- +	cppc_req &=3D ~(AMD_CPPC_MIN_PERF_MASK);
- +
- +	if (!cppc_req)
- +		perf.bios_min_perf =3D min_perf;
- +
-  	perf.highest_perf =3D numerator;
-  	perf.max_limit_perf =3D numerator;
-  	perf.min_limit_perf =3D FIELD_GET(AMD_CPPC_LOWEST_PERF_MASK, cap1);
-
---Sig_/dEx+tYqfZCo5uwsjTWLPV2I
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmghhc4ACgkQAVBC80lX
-0GxA5QgAlDdKxbk5K1bzVy+FmATFf6I7nksE8BE1Ap9h4k2JmOFWBKTXNYIqWwCs
-NWLpGxAAf2Z/MJ7JKuHgrAE8/+K0O1Dozw7H9yJgsLHWDvZnry6H5WuLIGarv/yz
-UBp1BRm/5LiGpgDr58/Kr33P+ShXO+zS8NOZfCkK/v5HtzhTVPpePvnYtqEKqwL0
-Ix4CX74C/uHEKZKz0/XG6YmqnAHuba/Oub6vpNsk7s/g46vtCo1qU6A08W/sT+VD
-dsUaLwOiVHe6Pduv1pkfqtb/wpCEp5hdNznbyaktxtv1ei1HF2kZpMgtmT75tCe7
-A51BlUkIIxSQvtWaZd/p+6VldaBs6g==
-=SrOu
------END PGP SIGNATURE-----
-
---Sig_/dEx+tYqfZCo5uwsjTWLPV2I--
+Thanks,
+Saket
 

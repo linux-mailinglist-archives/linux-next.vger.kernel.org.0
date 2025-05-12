@@ -1,101 +1,83 @@
-Return-Path: <linux-next+bounces-6703-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6704-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AD05AB3DE6
-	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 18:43:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D27CAB3DF8
+	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 18:45:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62D96189E2FF
-	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 16:43:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 517F63B4F6A
+	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 16:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D1DD25332B;
-	Mon, 12 May 2025 16:43:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F67525395A;
+	Mon, 12 May 2025 16:45:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RmbxAO+0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ehaAJSSs"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB7A2528E1;
-	Mon, 12 May 2025 16:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77922253357;
+	Mon, 12 May 2025 16:45:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747068192; cv=none; b=DnTFek0MuimCVFmsZRPnT8qWLp8c6QBheY4W2fcbn9DsBjJJkl1LH5OGIA6nt68D3bceRhy9saLJVPWtWcqk5CODXAio+c5eGmRGTvwZHlwccZ4BIw+oHkkHGZNymuUn3rOKq3R/2OBXAWO8B1tJ7VPtjh56oMdakI7sUMkamn4=
+	t=1747068311; cv=none; b=kVY34gDvb/E1EEUV3TxmGlODGuQU/Js4jhSy5kOo/5yC7Q+0xveiSbNCLiyHAEHifAjfhfHiaaq6/9IlgfdbRLsu+PJ77zvm5o06H3xqB0c4lrhGSd2Jmu0Ddconp0zR6hJgY3LcOCGw5ysHhc4GbxiHsDOTeUk/G2rV27hKUB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747068192; c=relaxed/simple;
-	bh=RMZOeyUVTjxxGHD0RJ/ZxUZ9usVBuMihkAwtMWbtGxU=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=l4WoGqPDyWsqAd9jisNlJqiNdNs5WExBpe3w72RBI0722H3qxB0+kVBPfN82AgJwSCS6C7c4Vc4z53fzH3qXtGFy/AyWE0xSOpE8ZxRK8ycshfxqh7XDsmotsmQUxJ7Y27m48jUIvS4ZiaZEtOVsj9y1eAF4okRnooPuRYORJ2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RmbxAO+0; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747068190; x=1778604190;
-  h=from:to:cc:in-reply-to:references:subject:message-id:
-   date:mime-version:content-transfer-encoding;
-  bh=RMZOeyUVTjxxGHD0RJ/ZxUZ9usVBuMihkAwtMWbtGxU=;
-  b=RmbxAO+0IPMCUs3GHe1HcXyVclHmmHKcfirOoO/9PYUHKTE1iLTiVOJ8
-   cf5RB3nU4bvGGDob34OteX24mRuHbqwSygZce+XPhp4tUqpxGSu+ZlRxO
-   8AcenlVaygWjQF+WcuCtMujGvYONYsJWQVnXqAkh/9tSHNX0vyWFxuWc5
-   8V7QS8KJYE4uSmwWKhouD2CUTR2oEsQdWIAC0PEng9LU46hpIchfZC8Vw
-   yz4CseqkwOXSQiF+elhXpYi2UPJ0BfoikE0kd7tXx2Q1DSZjcIf7lY2Oh
-   ykRJpn4/WCeMiuI35aTe2RhsYW6P1O+onN6Q8W9nOvCahuCz+rW39e9r6
-   Q==;
-X-CSE-ConnectionGUID: ZdndPj1BTLyvaCmqPl+o4A==
-X-CSE-MsgGUID: W0kl+FPyT/WR1oBy39aaRg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11431"; a="52685888"
-X-IronPort-AV: E=Sophos;i="6.15,282,1739865600"; 
-   d="scan'208";a="52685888"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 09:43:10 -0700
-X-CSE-ConnectionGUID: 0Fb2bjWHQdGFPbajTKF8/g==
-X-CSE-MsgGUID: p7Hl3aCwSIyAE322x/DxFA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,282,1739865600"; 
-   d="scan'208";a="141483167"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.245])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 09:43:06 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: rdunlap@infradead.org, sfr@canb.auug.org.au, linux-next@vger.kernel.org, 
- W_Armin@gmx.de, Hans de Goede <hdegoede@redhat.com>, 
- Werner Sembach <wse@tuxedocomputers.com>
-Cc: platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20250512125450.31072-1-wse@tuxedocomputers.com>
-References: <20250512125450.31072-1-wse@tuxedocomputers.com>
-Subject: Re: [PATCH v2] platform/x86/tuxedo: Prevent invalid Kconfig state
-Message-Id: <174706818085.7789.4403463979505230195.b4-ty@linux.intel.com>
-Date: Mon, 12 May 2025 19:43:00 +0300
+	s=arc-20240116; t=1747068311; c=relaxed/simple;
+	bh=aAGYUL8koYoj8ZCGPoWjfVZ3Hv9KflDQDxDgaGZtqgk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EH/hK1LxyaPJ5YIOxtdJBlyRFs+etLEq/uMzVoN6U8fj1BtGpETTx5dO4qKJ1lU2fyh/REYXYvl9OLk8FZO6Yc0sWfXCoiQ/dc3aeqzVxRfhonIf48XZed07+CcE3q/UNNLb2GTNocSOXCY7/JTUqF+6vEDTG8/XNlJfynUbUAg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ehaAJSSs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0FCAC4CEE7;
+	Mon, 12 May 2025 16:45:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747068310;
+	bh=aAGYUL8koYoj8ZCGPoWjfVZ3Hv9KflDQDxDgaGZtqgk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ehaAJSSsiKfroiNX2JCf4ncWqlgbd8vGNJLCWMyZFzEJORsDV8CuatWrK3zHcnTSl
+	 Qv56Ov9PvwDKsAGVp33k0ZIB85UnGD5e6FCeljxk9NsOOr9O6qp26Y3GrCGppRPnNT
+	 SjYpmEeeAwFqPRuN8wltbCM5OGsLGcuOPPuP71GSocqrx3aqZJ45gWksPwMO2m7j2U
+	 7gFHEoaDpBzkJBYTll8+BQAtGWf//SiQuH0szrI+lbSCzghvptxljBKbcDe8Szbq+f
+	 ROdsj2otL+rQhqGthw65H2cZxrp0s85LQ2Z8v7m4P+dl+AjDmqSODUkBIDY4RGAcq6
+	 a6j32+fw2n6yg==
+Date: Mon, 12 May 2025 06:45:09 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the cgroup tree
+Message-ID: <aCIllQCIVygjQOF3@slm.duckdns.org>
+References: <20250512180753.2e6a5249@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250512180753.2e6a5249@canb.auug.org.au>
 
-On Mon, 12 May 2025 14:54:32 +0200, Werner Sembach wrote:
-
-> It was possible to create a uncompileable config, because of missing
-> "Depends on" statements in the new Kconfig of the TUXEDO platform driver.
+On Mon, May 12, 2025 at 06:07:53PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
+> The following commit is also in the vfs-bauner tree as a different commit
+> (but the same patch):
 > 
+>   c8e7e056366a ("include/cgroup: separate {get,put}_cgroup_ns no-op case")
+> 
+> This is comit
+> 
+>   79fb8d8d93e4 ("include/cgroup: separate {get,put}_cgroup_ns no-op case")
+> 
+> in the vfs-brauner tree.
 
+Will drop from cgroup tree.
 
-Thank you for your contribution, it has been applied to my local
-review-ilpo-next branch. Note it will show up in the public
-platform-drivers-x86/review-ilpo-next branch only once I've pushed my
-local branch there, which might take a while.
+Thanks.
 
-The list of commits applied:
-[1/1] platform/x86/tuxedo: Prevent invalid Kconfig state
-      commit: 4bba84f62a90a23d780cdad2c320f77d854a6e64
-
---
- i.
-
+-- 
+tejun
 

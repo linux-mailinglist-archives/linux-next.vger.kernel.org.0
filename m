@@ -1,96 +1,101 @@
-Return-Path: <linux-next+bounces-6702-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6703-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5BA6AB37E6
-	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 14:56:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AD05AB3DE6
+	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 18:43:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B05CC3B55BD
-	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 12:54:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62D96189E2FF
+	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 16:43:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 096DB293B6D;
-	Mon, 12 May 2025 12:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D1DD25332B;
+	Mon, 12 May 2025 16:43:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b="ULb2b1Gb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RmbxAO+0"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.tuxedocomputers.com (mail.tuxedocomputers.com [157.90.84.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EABA293B40;
-	Mon, 12 May 2025 12:54:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=157.90.84.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB7A2528E1;
+	Mon, 12 May 2025 16:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747054501; cv=none; b=HO+tOqJPwZ1sxMoULrW8jbxi7/3XocnbsR9dql6hRyDnhajMP2NXUIdSLLVf3DQxKQtA/SOzJzBkzpiw13Rs5OmeO39GUx0wR1IGpGCh+hkYWIWlDangbNH9V8XcDRnJLp4MN+/34t3Pjf33Sqi000xpbrhoxVGDqY/a1LfR6/Q=
+	t=1747068192; cv=none; b=DnTFek0MuimCVFmsZRPnT8qWLp8c6QBheY4W2fcbn9DsBjJJkl1LH5OGIA6nt68D3bceRhy9saLJVPWtWcqk5CODXAio+c5eGmRGTvwZHlwccZ4BIw+oHkkHGZNymuUn3rOKq3R/2OBXAWO8B1tJ7VPtjh56oMdakI7sUMkamn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747054501; c=relaxed/simple;
-	bh=DAHAC7+cSS89asssiM8NMoB8wPBdb24VsZMMRhGsp2s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hKusq9mRqgTaqqoCbRE8uvwfuGwbyVN3ej0na0hGsifuKLn4ndj4XmP8DzRW6MEHNxx5f4gL9o2DIjYNHYBxNLfT2bwaik7YQ/dd0s1yCyL2G9HXREw9oxXQ8GqW6f0iYf49ynKYki+T4omlWhaIre+mOdCPVYZHMpw4Vpw0Rb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com; spf=pass smtp.mailfrom=tuxedocomputers.com; dkim=pass (1024-bit key) header.d=tuxedocomputers.com header.i=@tuxedocomputers.com header.b=ULb2b1Gb; arc=none smtp.client-ip=157.90.84.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=tuxedocomputers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxedocomputers.com
-Received: from wse-pc.fritz.box (host-88-217-226-44.customer.m-online.net [88.217.226.44])
-	(Authenticated sender: wse@tuxedocomputers.com)
-	by mail.tuxedocomputers.com (Postfix) with ESMTPA id 04FCE2FC0059;
-	Mon, 12 May 2025 14:54:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuxedocomputers.com;
-	s=default; t=1747054494;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=MgQsyycv4ZImZTEg7/Y0AKPIQxZdhZfZk1U9Bevxy10=;
-	b=ULb2b1GbnwoN4CR6jHksvLgeuDPMy+tyv0zRlF72qvnR2JX5nR0B1l9Hzp4cuxk1Nv9o1o
-	UTsM00zYyDdK6CrEFOG7lHP3FWqfbRUApOvbrKJ2M7dR/1AGvvA0pGjJPC19HwK/kaLFaT
-	s+SGMp/5XQtJ2xq9b1VmwIqvckBFxjQ=
-Authentication-Results: mail.tuxedocomputers.com;
-	auth=pass smtp.auth=wse@tuxedocomputers.com smtp.mailfrom=wse@tuxedocomputers.com
-From: Werner Sembach <wse@tuxedocomputers.com>
-To: rdunlap@infradead.org,
-	sfr@canb.auug.org.au,
-	linux-next@vger.kernel.org,
-	W_Armin@gmx.de,
-	Werner Sembach <wse@tuxedocomputers.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: platform-driver-x86@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] platform/x86/tuxedo: Prevent invalid Kconfig state
-Date: Mon, 12 May 2025 14:54:32 +0200
-Message-ID: <20250512125450.31072-1-wse@tuxedocomputers.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1747068192; c=relaxed/simple;
+	bh=RMZOeyUVTjxxGHD0RJ/ZxUZ9usVBuMihkAwtMWbtGxU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=l4WoGqPDyWsqAd9jisNlJqiNdNs5WExBpe3w72RBI0722H3qxB0+kVBPfN82AgJwSCS6C7c4Vc4z53fzH3qXtGFy/AyWE0xSOpE8ZxRK8ycshfxqh7XDsmotsmQUxJ7Y27m48jUIvS4ZiaZEtOVsj9y1eAF4okRnooPuRYORJ2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RmbxAO+0; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747068190; x=1778604190;
+  h=from:to:cc:in-reply-to:references:subject:message-id:
+   date:mime-version:content-transfer-encoding;
+  bh=RMZOeyUVTjxxGHD0RJ/ZxUZ9usVBuMihkAwtMWbtGxU=;
+  b=RmbxAO+0IPMCUs3GHe1HcXyVclHmmHKcfirOoO/9PYUHKTE1iLTiVOJ8
+   cf5RB3nU4bvGGDob34OteX24mRuHbqwSygZce+XPhp4tUqpxGSu+ZlRxO
+   8AcenlVaygWjQF+WcuCtMujGvYONYsJWQVnXqAkh/9tSHNX0vyWFxuWc5
+   8V7QS8KJYE4uSmwWKhouD2CUTR2oEsQdWIAC0PEng9LU46hpIchfZC8Vw
+   yz4CseqkwOXSQiF+elhXpYi2UPJ0BfoikE0kd7tXx2Q1DSZjcIf7lY2Oh
+   ykRJpn4/WCeMiuI35aTe2RhsYW6P1O+onN6Q8W9nOvCahuCz+rW39e9r6
+   Q==;
+X-CSE-ConnectionGUID: ZdndPj1BTLyvaCmqPl+o4A==
+X-CSE-MsgGUID: W0kl+FPyT/WR1oBy39aaRg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11431"; a="52685888"
+X-IronPort-AV: E=Sophos;i="6.15,282,1739865600"; 
+   d="scan'208";a="52685888"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 09:43:10 -0700
+X-CSE-ConnectionGUID: 0Fb2bjWHQdGFPbajTKF8/g==
+X-CSE-MsgGUID: p7Hl3aCwSIyAE322x/DxFA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,282,1739865600"; 
+   d="scan'208";a="141483167"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.245])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2025 09:43:06 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: rdunlap@infradead.org, sfr@canb.auug.org.au, linux-next@vger.kernel.org, 
+ W_Armin@gmx.de, Hans de Goede <hdegoede@redhat.com>, 
+ Werner Sembach <wse@tuxedocomputers.com>
+Cc: platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20250512125450.31072-1-wse@tuxedocomputers.com>
+References: <20250512125450.31072-1-wse@tuxedocomputers.com>
+Subject: Re: [PATCH v2] platform/x86/tuxedo: Prevent invalid Kconfig state
+Message-Id: <174706818085.7789.4403463979505230195.b4-ty@linux.intel.com>
+Date: Mon, 12 May 2025 19:43:00 +0300
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-It was possible to create a uncompileable config, because of missing
-"Depends on" statements in the new Kconfig of the TUXEDO platform driver.
+On Mon, 12 May 2025 14:54:32 +0200, Werner Sembach wrote:
 
-Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Closes: https://lore.kernel.org/all/a1d9134f-0567-4a53-a1e7-a55cd6b189a9@infradead.org/
----
- drivers/platform/x86/tuxedo/nb04/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
+> It was possible to create a uncompileable config, because of missing
+> "Depends on" statements in the new Kconfig of the TUXEDO platform driver.
+> 
+> 
 
-diff --git a/drivers/platform/x86/tuxedo/nb04/Kconfig b/drivers/platform/x86/tuxedo/nb04/Kconfig
-index 411c46c9a1cf0..9e7a9f9230d1c 100644
---- a/drivers/platform/x86/tuxedo/nb04/Kconfig
-+++ b/drivers/platform/x86/tuxedo/nb04/Kconfig
-@@ -7,6 +7,8 @@
- 
- config TUXEDO_NB04_WMI_AB
- 	tristate "TUXEDO NB04 WMI AB Platform Driver"
-+	depends on ACPI_WMI
-+	depends on HID
- 	help
- 	  This driver implements the WMI AB device found on TUXEDO notebooks
- 	  with board vendor NB04. This enables keyboard backlight control via a
--- 
-2.43.0
+
+Thank you for your contribution, it has been applied to my local
+review-ilpo-next branch. Note it will show up in the public
+platform-drivers-x86/review-ilpo-next branch only once I've pushed my
+local branch there, which might take a while.
+
+The list of commits applied:
+[1/1] platform/x86/tuxedo: Prevent invalid Kconfig state
+      commit: 4bba84f62a90a23d780cdad2c320f77d854a6e64
+
+--
+ i.
 
 

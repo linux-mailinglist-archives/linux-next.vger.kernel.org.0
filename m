@@ -1,106 +1,166 @@
-Return-Path: <linux-next+bounces-6713-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6714-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57AEBAB47D3
-	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 01:18:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09E58AB4808
+	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 01:47:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B17FE8C3876
-	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 23:18:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92719463D4A
+	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 23:47:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3284258CFC;
-	Mon, 12 May 2025 23:18:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32FD12580FD;
+	Mon, 12 May 2025 23:47:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="U1cLe2Bm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KFF5XXF7"
 X-Original-To: linux-next@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A84512DD95;
-	Mon, 12 May 2025 23:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0925779D2;
+	Mon, 12 May 2025 23:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747091915; cv=none; b=eKneUhFcsoBPuEGZvDssBxRfAd4iEv300R3QqmyhfMFvu5G7vVy5qJAJgrVDrAZWfA3gD9PoAygG5xGceiX85eaRT9dGYrq1XgO+/WbojiCZqQnqd8BqlUhGnMQBoZ4Mn8Cykrx4ruWLiJ80uHuETP9A6YZ4ZMR557doec9kmF8=
+	t=1747093633; cv=none; b=vDAbeGJ1noeu3rxK/GWBxmimekclp2fzl+lV2GKaE9ebOn/Pm2SHSzLBlYbumiV21FnXroPdprF0iIRXiQPeIbpIH0haC2XKpEEVVmFLvpej8B3fpiyxkDu+uT8mi7dCc8J9r2WoqxyOzQ2b2Qz6VrZLtetgPhS+xRUbqbMW5tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747091915; c=relaxed/simple;
-	bh=55ZQCHRX9RURja9PPKvXr1sLLsEHoGU9L+Rqvc9U65c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cVU2nHWA+wcmAKRltQaVVjc8ElRRMq99+IxpEO7gMfxrAjConcvD0Lmt3tbuxHIY6HdcS0edaF759i0ETSZr2zxwXIiWFUUhLr2BoIRYyc4MYAJ6q6m9VoKMMclp/qxk2iczI//C6LIvxg58ible9FQj/zyD0J8LYJLADmnOjrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=U1cLe2Bm; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=SuA1oqc9N0BseUbUo7E4Thlp5QMwEC6vzTX2bMf7DYI=; b=U1cLe2Bm79TO9um+XmZZLn5GSt
-	6THAQESVkIpMcgysPTdZjllxB/FZl3hubKPkVjhnosOOZzepymjDiL4zoEa+jbATBP2vDMcdDwy7Q
-	szuaVbOwiaPQ2d80RnsxeKVyC5A3cjWfEYPTRLVEJkeGHm9DELV5gmzfmwz96DbC+wvCw5dzhRjAb
-	RjYqZ+80tLHRq6p4OPbDHUK5O39XX5K7ZNPlWMGwGWMYcuOLMGoNGNR4O9XzNIVoP4vlVicz3xsQn
-	zds6zygqXpw7PLBMQGjPW7/8XcKHU3x8ZsnNylkgEr2tTZLptJquQQlu/qu1rI0jFrxkUuHhKE8YL
-	zUkPHHtQ==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uEcPj-0000000AKsd-0sSh;
-	Mon, 12 May 2025 23:18:28 +0000
-Message-ID: <c79d60b3-3029-41ed-bde3-55acd2341da1@infradead.org>
-Date: Mon, 12 May 2025 16:18:23 -0700
+	s=arc-20240116; t=1747093633; c=relaxed/simple;
+	bh=7Zpo5c9qWjo1T46Pm/naZnA314vpTzFNCS+RqT/f1sI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CnzaQ04z5e+0KxNR6qm0LECeCy7SkfHIchBrlYxALtoSQSarkIDmMoItvOJQPYM2lMvVn4XSR8fOQDrImzed5jZeB2xVkHht+BAEzo+Pb0vbtQPWzUFrfBR2UGRuemHQN9CWzB54PBEN2KbTjbmYXLoIcSJO8FBsn+btkPzLuiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KFF5XXF7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63499C4CEE7;
+	Mon, 12 May 2025 23:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747093632;
+	bh=7Zpo5c9qWjo1T46Pm/naZnA314vpTzFNCS+RqT/f1sI=;
+	h=Date:From:To:Cc:Subject:Reply-To:From;
+	b=KFF5XXF7CyjOyoHzSsMD6uNKS/P8jAtGzsNilMLyFW+pOjfnW4leY6XDsfjldQzrd
+	 A9SvAvwQHAVmmila9TgHz1tOTtvaICs/8IIt0a9KqtuMRV3XB5Zs8NO3FvM3y3UP8+
+	 iZRDgX/C/kVwev74o6r5yWKqYHyu/aFfwQXlzmDnpP8b/+1TN5IOHABXeWb/+boTbi
+	 8+f84ohbp0KPYkLbCa9t5oWs1q9lZVwDOeLy1IRu86A6XWxg3asbf4w7Kl2oW3Js/z
+	 abySXkRxo4iLqhgBR6xVLLzpLrchyIsXAkEvrVP2fiox5zm1DAzBUozO2aqT+cV/NY
+	 iH/xAJNLnUAHg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 02A9ACE0857; Mon, 12 May 2025 16:47:12 -0700 (PDT)
+Date: Mon, 12 May 2025 16:47:11 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Thomas Gleixner <tglx@linutronix.de>, Marco Elver <elver@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Dmitry Vyukov <dvyukov@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com, Stephen Rothwell <sfr@canb.auug.org.au>,
+	linux-next@vger.kernel.org, linux-mm@kvack.org
+Subject: [BUG] sleeping function called from invalid context at
+ ./include/linux/sched/mm.h:321
+Message-ID: <a5c939c4-b123-4b2f-8a22-130e508cbcce@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] platform/x86/tuxedo: Prevent invalid Kconfig state
-To: Werner Sembach <wse@tuxedocomputers.com>, sfr@canb.auug.org.au,
- linux-next@vger.kernel.org, W_Armin@gmx.de,
- Hans de Goede <hdegoede@redhat.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250512125450.31072-1-wse@tuxedocomputers.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250512125450.31072-1-wse@tuxedocomputers.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
+Hello!
 
+The next-20250512 release got the following while running either of the
+rcutorture TINY02 and SRCU-T scenarios with strict KCSAN enabled:
 
-On 5/12/25 5:54 AM, Werner Sembach wrote:
-> It was possible to create a uncompileable config, because of missing
-> "Depends on" statements in the new Kconfig of the TUXEDO platform driver.
-> 
-> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Closes: https://lore.kernel.org/all/a1d9134f-0567-4a53-a1e7-a55cd6b189a9@infradead.org/
+BUG: sleeping function called from invalid context at ./include/linux/sched/mm.h:321
 
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
+This is the last line of this function:
 
-Thanks.
+	static inline void might_alloc(gfp_t gfp_mask)
+	{
+		fs_reclaim_acquire(gfp_mask);
+		fs_reclaim_release(gfp_mask);
 
+		might_sleep_if(gfpflags_allow_blocking(gfp_mask));
+	}
 
-> ---
->  drivers/platform/x86/tuxedo/nb04/Kconfig | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/tuxedo/nb04/Kconfig b/drivers/platform/x86/tuxedo/nb04/Kconfig
-> index 411c46c9a1cf0..9e7a9f9230d1c 100644
-> --- a/drivers/platform/x86/tuxedo/nb04/Kconfig
-> +++ b/drivers/platform/x86/tuxedo/nb04/Kconfig
-> @@ -7,6 +7,8 @@
->  
->  config TUXEDO_NB04_WMI_AB
->  	tristate "TUXEDO NB04 WMI AB Platform Driver"
-> +	depends on ACPI_WMI
-> +	depends on HID
->  	help
->  	  This driver implements the WMI AB device found on TUXEDO notebooks
->  	  with board vendor NB04. This enables keyboard backlight control via a
+The reproducer is as follows:
 
--- 
-~Randy
+tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 1m --configs TINY02 --kcsan --kmake-arg CC=clang
+
+I ran this on x86 with clang version 19.1.7 (CentOS 19.1.7-1.el9).
+
+See below for the full splat.  The TINY02 and SRCU-T scenarios are unique
+in setting both CONFIG_SMP=n and CONFIG_PROVE_LOCKING=y.
+
+Bisection converges here:
+
+c836e5a70c59 ("genirq/chip: Rework irq_set_msi_desc_off()")
+
+The commit reverts cleanly, but results in the following build error:
+
+kernel/irq/chip.c:98:26: error: call to undeclared function 'irq_get_desc_lock'
+
+Thoughts?
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+[    8.862165] BUG: sleeping function called from invalid context at ./include/linux/sched/mm.h:321 
+[    8.862706] in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 1, name: swapper
+[    8.862706] preempt_count: 0, expected: 0
+[    8.862706] 1 lock held by swapper/1:
+[    8.862706]  #0: ffff99018127a1a0 (&dev->mutex){....}-{4:4}, at: __driver_attach+0x189/0x2f0 
+[    8.862706] irq event stamp: 83979
+[    8.862706] hardirqs last  enabled at (83978): [<ffffffff8b01a83d>] _raw_spin_unlock_irqrestore+0x3d/0x60
+[    8.862706] hardirqs last disabled at (83979): [<ffffffff8b01a616>] _raw_spin_lock_irqsave+0x56/0xb0
+[    8.862706] softirqs last  enabled at (83749): [<ffffffff896e22d8>] __irq_exit_rcu+0x58/0xc0
+[    8.862706] softirqs last disabled at (83740): [<ffffffff896e22d8>] __irq_exit_rcu+0x58/0xc0
+[    8.862706] CPU: 0 UID: 0 PID: 1 Comm: swapper Not tainted 6.15.0-rc5-next-20250508-00001-g3d99c237b0d4-dirty #4043 NONE
+[    8.862706] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+[    8.862706] Call Trace:
+[    8.862706]  <TASK>
+[    8.862706]  dump_stack_lvl+0x77/0xb0
+[    8.862706]  dump_stack+0x19/0x24
+[    8.862706]  __might_resched+0x282/0x2a0
+[    8.862706]  __kmalloc_node_track_caller_noprof+0xa1/0x2a0
+[    8.862706]  ? _pcim_request_region+0x55/0x190
+[    8.862706]  ? __pfx_pcim_addr_resource_release+0x10/0x10
+[    8.862706]  __devres_alloc_node+0x4b/0xc0
+[    8.862706]  _pcim_request_region+0x55/0x190
+[    8.862706]  pcim_request_all_regions+0x37/0x260
+[    8.862706]  ahci_init_one+0x2f0/0x1750
+[    8.862706]  ? rpm_resume+0x48d/0xc30
+[    8.862706]  ? __pm_runtime_resume+0xa7/0xc0
+[    8.862706]  pci_device_probe+0xfc/0x1b0
+[    8.862706]  really_probe+0x1ba/0x500
+[    8.862706]  __driver_probe_device+0x137/0x1a0
+[    8.862706]  driver_probe_device+0x67/0x2d0
+[    8.862706]  __driver_attach+0x194/0x2f0
+[    8.862706]  ? __pfx___driver_attach+0x10/0x10
+[    8.862706]  bus_for_each_dev+0x17a/0x1d0
+[    8.862706]  driver_attach+0x30/0x40
+[    8.862706]  bus_add_driver+0x22a/0x380
+[    8.862706]  driver_register+0xcf/0x1c0
+[    8.862706]  __pci_register_driver+0xfc/0x120
+[    8.862706]  ? __pfx_ahci_pci_driver_init+0x10/0x10
+[    8.862706]  ahci_pci_driver_init+0x24/0x40
+[    8.862706]  ? __pfx_ahci_pci_driver_init+0x10/0x10
+[    8.862706]  do_one_initcall+0xfb/0x300
+[    8.862706]  ? prb_first_seq+0x1ba/0x1f0
+[    8.862706]  ? _prb_read_valid+0x627/0x660
+[    8.862706]  ? prb_read_valid+0x47/0x70
+[    8.862706]  ? console_unlock+0x179/0x1a0
+[    8.862706]  ? vprintk_emit+0x43d/0x480
+[    8.862706]  ? _printk+0x83/0xb0
+[    8.862706]  ? parse_args+0x24f/0x5a0
+[    8.862706]  do_initcall_level+0x91/0xf0
+[    8.862706]  do_initcalls+0x60/0xa0
+[    8.862706]  ? __pfx_kernel_init+0x10/0x10
+[    8.862706]  do_basic_setup+0x41/0x50
+[    8.862706]  kernel_init_freeable+0xb3/0x120
+[    8.862706]  kernel_init+0x20/0x200
+[    8.862706]  ret_from_fork+0x13e/0x1e0
+[    8.862706]  ? __pfx_kernel_init+0x10/0x10
+[    8.862706]  ret_from_fork_asm+0x19/0x30
+[    8.862706]  </TASK>
 

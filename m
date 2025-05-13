@@ -1,135 +1,123 @@
-Return-Path: <linux-next+bounces-6715-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6716-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1FB7AB4846
-	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 02:10:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8A9FAB4882
+	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 02:39:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C7DD1B4313E
-	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 00:09:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 216571B41F5C
+	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 00:39:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC3FE6FBF;
-	Tue, 13 May 2025 00:09:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E72354763;
+	Tue, 13 May 2025 00:39:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gUtZx3G9"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="OqE0Errf"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFC37482;
-	Tue, 13 May 2025 00:08:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B586D134D4;
+	Tue, 13 May 2025 00:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747094941; cv=none; b=tvPr+refxP/9BevvHTgfq3IRyMlNUzQo/Qxkz/NKBe8VGKveJ1A/w/tpUlUKgsUhlvZGtRwvuhQpU5xXKaFrZn4tlAZ0nNhnge8nsvYGkdnxAxPw00ZZdnof2S15yMwq2gzNeedwHwGbS5UKwmGBfFQVqqFxfH05S9QwYagZx28=
+	t=1747096758; cv=none; b=QNcCJyxLR4iSAlL8EyR2SIHpihSqUEWCJSjAVyvl1AtMCVNaySIm6Y0lyg/tkJhZOOKr+OPjstekqP7YxuXywyXgPBGhB/Zp/T8ZCPHf1K92EXEFXlGK2aEPQLjBxLYBt4hfhWsqkPzsR8J3cylcws5PfBX9ZeEGUEwPTIxAdwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747094941; c=relaxed/simple;
-	bh=btui7WTriYwWwDaipfsN6n9UimydyKvuy3FhpjdcGQw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O0NKgSUE8h/WHBwjALAg30eSC02kXfk4ppdtIRoh8oPZGwdLbrIlvPG2CbhIT5HC6TUjDEL8kPdgAarnwEz4TW0AvjB04yL1iPsCjJMBcd/vUzPFMKzerZt0n0PfoZG7X3Vx96V88o1bxwlDoEC/ttwI7FKuYb11qnQ3SZc8Yjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gUtZx3G9; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43cf680d351so35596305e9.0;
-        Mon, 12 May 2025 17:08:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747094937; x=1747699737; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z0usMcMWdY8lq5FVni3HwlJ8NWBna50dNtlKJxA0fhc=;
-        b=gUtZx3G9lD2AXSLkpq25clKd9O4oNGWhOPkW0W8346vFvSrHzp/3mIO6eKYpVORXN1
-         ArljCztyZfF1GaehiacKtjx+kRoBf/HGp3hWYlhnNryQVwi6dwIQzymL0YMcrHZiLKIq
-         PX5Z5Wue+jj/vetKMlEWQ1pfLtAhsU7AEiX0hEDviR7qeqGn1eC0EuaOUnKj5ESGa+9u
-         g5dD/M0TWccR5Y0wpKTt/wDKmRZ7F884jGRJrgLcRLMjMMnGZA4mSoQ7Q5VKiVjDd+ED
-         cKk/n3zw68exjOfB5fDuj36ADoBUYwFSafWlFyWNHWZF1PomdjTZEoB/y2dZmfFrpVWR
-         N4Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747094937; x=1747699737;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z0usMcMWdY8lq5FVni3HwlJ8NWBna50dNtlKJxA0fhc=;
-        b=Yv0jRlKcHIhAmHcL+6MTSi2w8WHKbY1EnM38jVvvsMoVnjcWqeHP7GCQZREtWiylxr
-         BX0zhW/NVdnz49h8DQeYUU0cO/Zv2/19hizJ/PUG9/oRS16Nq9GwZR3zTl+kVKOTAXNR
-         jJmZmL0EGR76vimL3RuLCD8vWQXdnp+CqeixcTsWwfyv22H3bPSaRzBRHUwGdKRCtavm
-         CNoNLzDvtUZe87q0RzPfdCcbvL3gBQJVo9M6gmAnIaXH7GJZeifI8S5amOclpDv4RP6+
-         BMUUGa/AuG5oSdeNtahMR3Yf3+1346mv/bjAc5FqIum5PjgqsfRi2aF054HoVKosbBp8
-         GntA==
-X-Forwarded-Encrypted: i=1; AJvYcCU2ThUkhw9lL6bFY8n7A2L/bbpOgVF53od1ealkxe6gQcRhxa98IvYCrsAJBZc1qFvgRGKa9NAP4c4lLx4LSPiz@vger.kernel.org, AJvYcCU8WI/zcKmaJ1pYVQT2bfj0QHPyQIMlm9xE8zMC9+G8ooHbCua3L4RCAsHj4NkdpDv/X1vI3URT@vger.kernel.org, AJvYcCUIDES5z9wJqsh+2pHKUSbg2vr22oOM0znXwoKP/r4Y8gtEruOkNaydGiqyLsaj2IIxMUdgHpiGBH0UKJv8@vger.kernel.org, AJvYcCUgudH/w2Ny81UXtWBgob5iTenFVOedRpwPEJxpgrsp49IHYk/e9dWTFMqFWMPs5+vc8gWz1ZPJj7vcEQ==@vger.kernel.org, AJvYcCWESUZFTtvz14Nsr4u3ZX8rH/1qP9si4sF7RhqrvBjHgQn36BTcdTOnNaPXnLeflFPnqic=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZslhwCbmwNAAma1rkptuOh82U626By0zyIvzMeeKtQIWGZnU/
-	hyJ6L/XeBRi4RHhciyfmgn5zXWxN12T14yuATjTd8HwavK60a8UgOYhmr8OF4KFvmzt3Zz8ju6S
-	+31XcztSyMqo8YNYumAq2CGJWRrE=
-X-Gm-Gg: ASbGncvU/zYt5Rfquo2IIdh1ywnoFQt1dQ+uN2LaKluXE270T+JESgf8+wKO83JNqxC
-	kchs8ZeYirqq/NPd8g5yEXo5hR5In9fVa8+QDTXed1I/5g5aTDf/JqCtDH/n4wM3noodwM2SaoD
-	LmDU68BqNVyJMpJPm7L3ckp4oZkDaZUrLuJ8Fh+ivt21y0aDNWYGOhevqPyx/P5XWKJ39oeuxR
-X-Google-Smtp-Source: AGHT+IG6Hz90vyaSCvuZEEStO56/EfmLm4jy+VPkC+7LSgTl2r4zMMUWiNmhZdoBi9DUh7+CwrGSoK2927YgvRKWh68=
-X-Received: by 2002:a05:6000:3110:b0:3a0:b817:2d7a with SMTP id
- ffacd0b85a97d-3a340d34576mr996553f8f.29.1747094936767; Mon, 12 May 2025
- 17:08:56 -0700 (PDT)
+	s=arc-20240116; t=1747096758; c=relaxed/simple;
+	bh=ekW3JULhLKljZiTKaS92uYzS61OVTNUlsMRWjOeogek=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dNQ0tm7IKQKqqxCFWHUifAMbf2ckOxaZoRjucdeNagofbPbgftSj//oZdou+YRVUVtfkl/giqU+xW2kaJdzCrDKKqytXLmdraALGTkvC3W2MH9RWbdnu2+KvfZ8rkZeDqpStrbV7gBmj8/fjLyvRriUceFgWd3DqSE98twbaYZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=OqE0Errf; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1747096748;
+	bh=1zD7WhWv9+wqXCSz3Zg9qE3ugmUDw3wIn8usYC6AA4Q=;
+	h=Date:From:To:Cc:Subject:From;
+	b=OqE0Errf3gJAdr5wBOXCMePbMXKj+mDHdTxHtSt+6gk0ZFkWjv3WqIJNKi+TT1ksP
+	 wLyq1490A6EYmDYIzSm0ifi/KpFmoxjDzZ+ibo29RTCR98SusVdSGvBordfY3ZN/A9
+	 YAasE2H890Ft6ztkuGugLPgA4Tjjf77aZEZMwT+7bWGu91iQkiuHg/Whb1v+b7p82T
+	 V350xBdLFNGwJ9h6xoKr/MZ058fyZB5ZakEKpYBqDmXJ9pnaKg88KRIYKg/Uz4OYSy
+	 S1Cpi++yqMa2SzWHECjcBww8D6xhF4Qmf4ls9f+6VaHvj9qqKx+MTis+7NZ8YiCuOV
+	 9BHkZqfgkVjSg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZxHfN4T02z4x3J;
+	Tue, 13 May 2025 10:39:08 +1000 (AEST)
+Date: Tue, 13 May 2025 10:39:07 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the kbuild tree
+Message-ID: <20250513103907.3aad5afd@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250512091511.2029269-1-skb99@linux.ibm.com> <2025051204-numbness-nephew-05f9@gregkh>
-In-Reply-To: <2025051204-numbness-nephew-05f9@gregkh>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 12 May 2025 17:08:45 -0700
-X-Gm-Features: AX0GCFtDKtwoUVfexcyHhD6lveCvM6KUQViwhMY0AsbIsdBYJejqhW-l-fzvCHU
-Message-ID: <CAADnVQLbkUGTdF6SpNp-LiPwuNSa_vtsSHwXucXa44ecShhstw@mail.gmail.com>
-Subject: Re: [RESEND PATCH] selftests/bpf: Fix bpf selftest build warning
-To: Greg KH <gregkh@linuxfoundation.org>, 
-	Network Development <netdev@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>
-Cc: Saket Kumar Bhaskar <skb99@linux.ibm.com>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux-Next Mailing List <linux-next@vger.kernel.org>, Hari Bathini <hbathini@linux.ibm.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Venkat Rao Bagalkote <venkat88@linux.ibm.com>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Mykola Lysenko <mykolal@fb.com>, "Song, Yoong Siang" <yoong.siang.song@intel.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/Isb599iTHaWarAbepJE+q5j";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/Isb599iTHaWarAbepJE+q5j
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 12, 2025 at 2:23=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Mon, May 12, 2025 at 02:45:11PM +0530, Saket Kumar Bhaskar wrote:
-> > On linux-next, build for bpf selftest displays a warning:
-> >
-> > Warning: Kernel ABI header at 'tools/include/uapi/linux/if_xdp.h'
-> > differs from latest version at 'include/uapi/linux/if_xdp.h'.
-> >
-> > Commit 8066e388be48 ("net: add UAPI to the header guard in various netw=
-ork headers")
-> > changed the header guard from _LINUX_IF_XDP_H to _UAPI_LINUX_IF_XDP_H
-> > in include/uapi/linux/if_xdp.h.
-> >
-> > To resolve the warning, update tools/include/uapi/linux/if_xdp.h
-> > to align with the changes in include/uapi/linux/if_xdp.h
-> >
-> > Fixes: 8066e388be48 ("net: add UAPI to the header guard in various netw=
-ork headers")
-> > Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-> > Closes: https://lore.kernel.org/all/c2bc466d-dff2-4d0d-a797-9af7f676c06=
-5@linux.ibm.com/
-> > Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-> > Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-> > ---
-> >
-> > [RESEND]:
-> >  - Added Fixes and Tested-by tag.
-> >  - Added Greg as receipent for driver-core tree.
->
-> Why?  Commit 8066e388be48 ("net: add UAPI to the header guard in various
-> network headers") is not in that tree/branch, so why do I need it?
+Hi all,
 
-Certainly not driver-core.
+The following commits are also in the kbuild-current tree as different
+commits (but the same patches):
 
-Please resend with [PATCH net-next] and cc netdev.
+  188d818d66b7 ("init: remove unused CONFIG_CC_CAN_LINK_STATIC")
+  cece6e78ad37 ("um: let 'make clean' properly clean underlying SUBARCH as =
+well")
+  8d5f08b84e6e ("kbuild: Disable -Wdefault-const-init-unsafe")
+  e08558fae8dd ("kbuild: rpm-pkg: Add (elfutils-devel or libdw-devel) to Bu=
+ildRequires")
+  3a0a25a4cf18 ("kbuild: deb-pkg: Add libdw-dev:native to Build-Depends-Arc=
+h")
+  20511f5e38a5 ("usr/include: openrisc: don't HDRTEST bpf_perf_event.h")
+  32562a619812 ("kbuild: Require pahole <v1.28 or >v1.29 with GENDWARFKSYMS=
+ on X86")
+
+These are commits
+
+  d1b99cdf22e0 ("init: remove unused CONFIG_CC_CAN_LINK_STATIC")
+  ab09da75700e ("um: let 'make clean' properly clean underlying SUBARCH as =
+well")
+  d0afcfeb9e38 ("kbuild: Disable -Wdefault-const-init-unsafe")
+  5bd6bdd0f76e ("kbuild: rpm-pkg: Add (elfutils-devel or libdw-devel) to Bu=
+ildRequires")
+  657f96cb7c06 ("kbuild: deb-pkg: Add libdw-dev:native to Build-Depends-Arc=
+h")
+  56045757accf ("usr/include: openrisc: don't HDRTEST bpf_perf_event.h")
+  9520a2b3f0b5 ("kbuild: Require pahole <v1.28 or >v1.29 with GENDWARFKSYMS=
+ on X86")
+
+in the kbuild-current tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Isb599iTHaWarAbepJE+q5j
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgilKsACgkQAVBC80lX
+0GyOTQgAgI9dcSmFoXlgNSqNiSwkpUfVqEZM7Ofn8tfzTi1fNT/rIPOkWveVowZe
+B1ipagPn/Tv4aIdI4FzayS8xSd6NHloCsy4L+Gi2K34lqkyiVE4i/X2HgZmUgQrX
+NGqDm0gpeBVJaIuHOn7RDMmOOpHDUPWNO4JMtx3qSxEztioK/mqxFSDdbDz2xFis
+2xAyuUqMyTrYJsIpQAzVIPzsD8P7lPqyDGEVjCvnAzGY03oh4BdC8WJC4wFamd30
+ZC97DLNghDGfWv5/vpqHJ6q/O1W92xXOQCyEXKP433l8zK+rHinWMaj9767aXHYW
+m494TpCq/Ratk8XubRm3m/SI3hCUZw==
+=v3bo
+-----END PGP SIGNATURE-----
+
+--Sig_/Isb599iTHaWarAbepJE+q5j--
 

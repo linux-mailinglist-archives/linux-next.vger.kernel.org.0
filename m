@@ -1,134 +1,114 @@
-Return-Path: <linux-next+bounces-6728-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6729-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B943AB4C55
-	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 08:54:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94E08AB4CC5
+	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 09:31:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1016F19E7E7E
-	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 06:55:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9517B7AC908
+	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 07:30:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6E8F1EEA5E;
-	Tue, 13 May 2025 06:54:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96CE21F09BD;
+	Tue, 13 May 2025 07:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ZVTifdf8"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="au352SAD"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2321D1EEA27;
-	Tue, 13 May 2025 06:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B3431E3790
+	for <linux-next@vger.kernel.org>; Tue, 13 May 2025 07:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747119284; cv=none; b=PpjSSALhtGSUSqmsiQwmVnbaYyW6jLG0kZ4wxMOfa/aH539od4+UTHwI0h4HQ2MrkpA/3z7X2+CSblsG5pWoraXiBGbq+7NRw0kDksSiRoqzRKzn4PPb2zkfG7SdorbFcXDhkNLcCXL/Dsmy8cvrC0D2aDzj0V4EjU183MQj+Uw=
+	t=1747121496; cv=none; b=RABm6VzsPcyBquL5v8B8R4Br3IL79gc/CJ9OmowDqNz5tmX3cSSUcY1uBVXq6xyahClEBwIzpuWz2PHoAz0YR40mG6slCPop/Yc8yjNazyQQA6VgYJZZ1A2lsJrNfIhEQDjMYk3hlL2tc2x0lKU3GOs4WQLPwU9AYnp88TT40uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747119284; c=relaxed/simple;
-	bh=3lq2oL9GsVxb1GiLT60wR3AyAvnRalU2RVB6UUD+NzY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=P1A03fkvOu8mTxUrIgYNrgtYL5N93j1O70Zv05RLINCgVwyKvX+MfVawrvH3iv+3Zddl6K6elhWx51Z6gAmDo4FutdasJyUhNOoYH+00Ke85neXXI0cdpPvtKQQOPKufeYycsMMlr2D75NqS9JTji1lUyZxDuc3nOBpn4RapfQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ZVTifdf8; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1747119280;
-	bh=hvf5ATy0fFe52vTGcnpMAnQ0jfOolBYJyvtWRgw/ocM=;
-	h=Date:From:To:Cc:Subject:From;
-	b=ZVTifdf8nqWwz5HJSvhfbUwDNl/CsdEq2oL9bY6Gjd7Ca7evlqFzYI7/xjE6LKLKe
-	 X6hRI1FtKyD95rQMxoLdtIlpfCvswnRYt5gAEGC2i2KhhLgmVtFNiglr50tKe3/Ier
-	 OnIvuahHmJRcR+os9qVGqwCQvxDcFRt2ZJYPyjF9ejuKD6Op6bjLQa5CL55/7laL6n
-	 FH9sbkJphEmCqaqGbcytP3R5eQlP13cPwZmSbySH2OFNNZxHncgflG0ZFqfG0gg6jI
-	 fF177A+Tu2FiTvW0543kd8No+T+IpF7BvXlx53XQpe/HWP3aCACkvu0hWPOGT7mz8j
-	 bDWN2rRJruPKg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZxRzh08b4z4wcr;
-	Tue, 13 May 2025 16:54:39 +1000 (AEST)
-Date: Tue, 13 May 2025 16:54:39 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Pawan Gupta
- <pawan.kumar.gupta@linux.intel.com>
-Subject: linux-next: manual merge of the tip tree with Linus' tree
-Message-ID: <20250513165439.762fd52f@canb.auug.org.au>
+	s=arc-20240116; t=1747121496; c=relaxed/simple;
+	bh=9odgTkdLCas6jYuMTaJIc0B6Y2SJdn8562yIGJ420z4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KQqNIujmXaBWK3wJXhMkXEdlcir0MsP6oYWMeSQBwIzEiZPBB+/UM3nUBv02bWaj8ZymHh74kc6DNVB40PPrfwjfVwy83L3o9jVVU0KddtFpj8j7oVUUK1rGBoUTTog+wkPL4P/xkDlyXH8c925QZ1gJsDNKtTT7J3UPKmFmQeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=au352SAD; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5fbee929e56so9992443a12.0
+        for <linux-next@vger.kernel.org>; Tue, 13 May 2025 00:31:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1747121493; x=1747726293; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pmyTnoNmo8CKChb6T5xGX5uYcPPcN5SMIuL2HmFELKk=;
+        b=au352SADxvJQEUsjrHbyA60katGPMe/fM4mgU5c5vezLBAUhLXf2+sJETBo1Ut5CIO
+         UKBKZnRgESoGOR/jpbWg3Qa32eMGJXvl3xMmaKE6uuacco0d8tc4mSN3ie6ZSlUoKOsF
+         SXvCYN7QMyBj+7E+64C9iskwprYwbeAdId1JC1zdqzLhIRQvL2G+x39NcL2epJbWj9UV
+         opf3qyCxyEjYLyTUNmhcDXZrEUv7z3kJtTbOWqSO5jV/HZMODc8gE48V+DJIs1XqDISn
+         ncStnTWEsW/1NcuhRwN03dSsox7E4wQl52kgYtZY93eoaz+lIl20FFyNW9h9v+KYkOS+
+         /NGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747121493; x=1747726293;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pmyTnoNmo8CKChb6T5xGX5uYcPPcN5SMIuL2HmFELKk=;
+        b=MTQBXGypSZ/llX/ETNhVK1+nMUV+BdY4Ou2Db24G5zpbgkaRF+ajWRp/YURECGM+Cl
+         z3uaVIFtWsOi6e0fxEU+94j5y4tIC/G5tF/l43FdFnrv7KnxYFsGXc+Onycg51ke5LtE
+         aqVvi6Y5lD9bTlW1XeAmfcahw/Ejs/tI4BmpS4ZsvDWfgFFopNtr2AgdkvqVoNJKcIub
+         vOU/3XpyZvly41wuziLBdKCk9jfWWinTXSZ4kGKMHK/RZPh2J4uiPsyRBVf1kcJUiOuR
+         jAUKRWF4gzNk4cr4lzTDdu5nfAm4AJVWvSSWGpkEhxNrkEYw+t/JUkMkWsS8UPPRdl0Z
+         8MVA==
+X-Forwarded-Encrypted: i=1; AJvYcCVxV1wCmhLEGBqHt8aClYOJWzJ25vOuSEdoKRzcTCBeMsm8cb54wo4A9o11oHEG/FgDgYcfsnn9xG04@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7qYX3QR4glcJlNPFUZe2mk3SQKCTogVnH+ZpAO+xsIvChNQgD
+	0zHU5YWYyd+Paemre3mI96D3TJz9eUMIqytIKy8fA6gv2wVRE7FHhEeBvea8pKA=
+X-Gm-Gg: ASbGnctn8qibRQlIoPIFa+mR8bURkSZFlGOXMtjP6fsXjDC52KQf15sdH+EGo6u/98b
+	ezp8ugOPh+pm2NiBmaFTlYZF7m8uCsCWYtp9WJ2tT5+qh+wLz+cIaztOjkJiXqvmcROQyUKQKo9
+	MoVv7suJuo3uD1iNGYuFByib2ztw50TdQSEjHKitCTiNhpWexTv1rnzAu74t/1oCC0lZixJDQ/N
+	hjy6gtrvgTvD/oNuBtj0hja6GClyAMtklkXE3wN87UlQHKTc6aNTf34bZ2Nu9hY4nqa7Ja+tLBP
+	PW+EDOVTQoUfiTcJXF2vL81B4MO7eQTWg1Sh49rA2XcuzIi+NTxKKEOc1pY=
+X-Google-Smtp-Source: AGHT+IHYo5ZWNOMKOctGcx3IT4yhd2NNp54tPQ3YePoiduR8lNWblfaka6Ofu9rG8GuCsbQdjLrzOg==
+X-Received: by 2002:a05:6402:510d:b0:5fa:8737:387d with SMTP id 4fb4d7f45d1cf-5fca0759af7mr13997390a12.10.1747121492381;
+        Tue, 13 May 2025 00:31:32 -0700 (PDT)
+Received: from [192.168.50.4] ([82.78.167.50])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5fc9d73fdd0sm6880355a12.81.2025.05.13.00.31.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 May 2025 00:31:31 -0700 (PDT)
+Message-ID: <899031a3-6946-4cca-b2e7-a6caa9f840c6@tuxon.dev>
+Date: Tue, 13 May 2025 10:31:30 +0300
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=+.yWPI5UtgeTtcbpifk7Kz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Signed-off-by missing for commit in the at91 tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Nicolas Ferre <nicolas.ferre@atmel.com>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20250513072951.192e1213@canb.auug.org.au>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <20250513072951.192e1213@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---Sig_/=+.yWPI5UtgeTtcbpifk7Kz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi, Stephen,
 
-Hi all,
+On 13.05.2025 00:29, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>   7f0132d21261 ("ARM: dts: microchip: sama7g54_curiosity: Add fixed-partitions for spi-nor flash")
+> 
+> is missing a Signed-off-by from its committer.
+> 
 
-Today's linux-next merge of the tip tree got a conflict in:
+I fixed it. Thank you for reporting!
 
-  include/linux/cpu.h
+Claudiu
 
-between commit:
-
-  f4818881c47f ("x86/its: Enable Indirect Target Selection mitigation")
-
-from Linus' tree and commit:
-
-  4e2c719782a8 ("x86/cpu: Help users notice when running old Intel microcod=
-e")
-
-from the tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/cpu.h
-index 3aa955102b34,1f5cfc4cc04f..000000000000
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@@ -78,8 -78,8 +78,10 @@@ extern ssize_t cpu_show_gds(struct devi
-  extern ssize_t cpu_show_reg_file_data_sampling(struct device *dev,
-  					       struct device_attribute *attr, char *buf);
-  extern ssize_t cpu_show_ghostwrite(struct device *dev, struct device_attr=
-ibute *attr, char *buf);
- +extern ssize_t cpu_show_indirect_target_selection(struct device *dev,
- +						  struct device_attribute *attr, char *buf);
-+ extern ssize_t cpu_show_old_microcode(struct device *dev,
-+ 				      struct device_attribute *attr, char *buf);
- =20
-  extern __printf(4, 5)
-  struct device *cpu_device_create(struct device *parent, void *drvdata,
-
---Sig_/=+.yWPI5UtgeTtcbpifk7Kz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgi7K8ACgkQAVBC80lX
-0GyKLAf7BzpAeBOSCReyAWZNxjYLaG6J+ioHDria6Z1wT8BxObZ/JYZZ7WSvxEZW
-kTJEk1Aglt7Xkn+iHRXCZKraOL/A7fi17e4rwUHFlBNjmicmRDN0On3hG/3ugILI
-6zzHSAkEqRA7cigX+PQCvoAYpUYN+2gJpN8qgzjJ661Pfjdpcnu4u57zLcz7i2mK
-+++hM56ThK28aiFsdfSv0unTO8qz2OKGf18YF+iGnGGhgUP/42rzPe4ULrQDO9y2
-5P9jT06dKVwTleyyYNRMEPl9AH2PpcyBj+svk/6SeLAKuJze1LOgxJfI3JcMOjLY
-CGfth1SFV9eiWf3X3DQZ/mBMD5+UGw==
-=McRj
------END PGP SIGNATURE-----
-
---Sig_/=+.yWPI5UtgeTtcbpifk7Kz--
 

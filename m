@@ -1,52 +1,52 @@
-Return-Path: <linux-next+bounces-6726-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6727-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26538AB4C4E
-	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 08:49:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83A48AB4C52
+	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 08:52:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7B5753A5564
-	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 06:49:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F3EF19E73D7
+	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 06:53:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26CFA1EB1A1;
-	Tue, 13 May 2025 06:49:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 388DB1E885A;
+	Tue, 13 May 2025 06:52:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="YED6rAlb"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="a7BkOpEC"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F851624DE;
-	Tue, 13 May 2025 06:49:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8844B1A5BBC;
+	Tue, 13 May 2025 06:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747118992; cv=none; b=PBcvqheohypV1BDByS/YrO6gopTYab2KtlGX2lUXU03mhuUFp3OM1/r6UqIx92fZqJC7UDMjePItfIrQjjm+tqzKSycL35uahA41m8ggEUadvS6zIkY1HrBVfSHacgou1KGk0fnlMXEoMaxeLd1wpqAQIMoqvx7FuquryQa4jqs=
+	t=1747119168; cv=none; b=fqlF8q1wQ4NPMtK17gK16BWvENU3jIZmKPbzc7RvPkd+tTtQhYsjujhnPegXZpbKNmy+i2mvVdcBXhSd5QCOJZPuS5yXBdC3O5ZEUImptMKNaZetct3On//5yJ9qZMieaMfPeJfTdTELRr2GT/ch1OjpTTwF+uZyN8Nh9R3jdD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747118992; c=relaxed/simple;
-	bh=BXWB8zNavMAl3WMTjnI7LufQdPvdSW2k0ZKKtaKjfZg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=taUWmUZHVaR1PKnknYNZHWgsJ75BqHSn2uXRy/nitJVUoIOrghP2Z8TyEsBuNpf0n1uXGii522V6zgUjfGgcsNTk2H0I4SHrOXMlyhhONQJMSjdI9g8j9NwBO/tj5cFMA825dAKP5J7AbRDYTwhEmSFRyQ1jWWI1xWexfQqf27A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=YED6rAlb; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1747119168; c=relaxed/simple;
+	bh=+z/e+aboEOztJsWgaWpu1EcA/uHgHYW0ZV2vM+ess4k=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=uqmAQFOPTaGJnrb/Uw3nwBkKRpkQ6+L4zy9gvwI6Gstz/OTuufLFrw9KknJ2xlkLI4xHlm1KQo4Hvz8lt8qAXSAVaBMK8BmQkwyzH+bz+3evVoT2j8TrqJFI+OqU9cQ1gUIblmfYKJ+63QdRbKWtzpfdI155e1Rmx5xiUTIFvtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=a7BkOpEC; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1747118986;
-	bh=4EOFzNASd2caVAAQ1gSVE9u1ytolKtCfb8RI2m0uwDo=;
+	s=202503; t=1747119161;
+	bh=9OTQgj5muoWkxqojS3cZ5J286S4W1Edkg/LlrpDXOvE=;
 	h=Date:From:To:Cc:Subject:From;
-	b=YED6rAlb9YT/GIY774fqCXXqYC4qEj0BIVXHkfeVyy//ZwKJLbIYS2y0fAUJAf7EF
-	 V6QaqtGkl6KmGuH66JPrfwGeOlmsgb9Z8HTdWAD9wq6J0KV4nbJ/GXqjgHB7LnRgK9
-	 iVt8oo+HE4PJT5ErorenlNM0l1/IbWUn/M+HXYjfsnlfstpAACJwJVBP8VVpARAKeg
-	 Gqfw4JsRWOXbOrfMkCwW60hk1WAvaD5hn1jp5/99udsG0b07yDpZ031JPhAQfASCBJ
-	 HLA52VtiZKRy691dJkla5F575w2r/iI9Lb/kO9V1113qZjL29QG+703eqqSKgoNt8t
-	 8s+aQlKjVwbIQ==
+	b=a7BkOpEChD3ZcStCF3/WBJ3awxaKZjdBCyOcnuRztgtWkOsHJ/cAky3WIiLtwG/zo
+	 Dg4fCsEd4TGuhP6aO7vlSIn4GAuWopX0Hppz0C6FdeBF9VN/WqXy3QiKDyXiDGDFko
+	 Jjn2YOPIRGZXef2QHUWVLGmZJH6p1m966TupTPhAhTeXmfvOSZh+oPpZjcTCdWoYQf
+	 hGwBi/BrX/XwcZfQpG7lV2XslJmTts7wCvB9Q4a3nQcAyYX10axND2Nd64hntlMR9M
+	 KpsXab066kEzEOoABWUTOTnMXC814ipVko1lnm8n6WrwtN/x9Bc2WXAu6nBjPfWM4l
+	 JYKOsDQGAbP1A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZxRt163v1z4wbx;
-	Tue, 13 May 2025 16:49:45 +1000 (AEST)
-Date: Tue, 13 May 2025 16:49:44 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZxRxP4m8Yz4xN3;
+	Tue, 13 May 2025 16:52:41 +1000 (AEST)
+Date: Tue, 13 May 2025 16:52:41 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
  "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
@@ -55,17 +55,17 @@ Cc: Dave Hansen <dave.hansen@linux.intel.com>, Linux Kernel Mailing List
  <linux-next@vger.kernel.org>, Pawan Gupta
  <pawan.kumar.gupta@linux.intel.com>
 Subject: linux-next: manual merge of the tip tree with Linus' tree
-Message-ID: <20250513164944.462eec63@canb.auug.org.au>
+Message-ID: <20250513165241.41f9f20e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/cS1NLVhcu5+AeH+R=ZW56Vk";
+Content-Type: multipart/signed; boundary="Sig_/6c6yHfNi19lrI0_vcUcCLtk";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/cS1NLVhcu5+AeH+R=ZW56Vk
+--Sig_/6c6yHfNi19lrI0_vcUcCLtk
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -73,11 +73,11 @@ Hi all,
 
 Today's linux-next merge of the tip tree got a conflict in:
 
-  arch/x86/kernel/cpu/common.c
+  drivers/base/cpu.c
 
 between commit:
 
-  159013a7ca18 ("x86/its: Enumerate Indirect Target Selection (ITS) bug")
+  f4818881c47f ("x86/its: Enable Indirect Target Selection mitigation")
 
 from Linus' tree and commit:
 
@@ -97,95 +97,55 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/x86/kernel/cpu/common.c
-index 0ff057ff11ce,34efb9d2519a..000000000000
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@@ -1325,32 -1320,42 +1327,68 @@@ static bool __init vulnerable_to_rfds(u
-  	return cpu_matches(cpu_vuln_blacklist, RFDS);
-  }
+diff --cc drivers/base/cpu.c
+index 50651435577c,1c4359366cd7..000000000000
+--- a/drivers/base/cpu.c
++++ b/drivers/base/cpu.c
+@@@ -600,7 -600,7 +600,8 @@@ CPU_SHOW_VULN_FALLBACK(spec_rstack_over
+  CPU_SHOW_VULN_FALLBACK(gds);
+  CPU_SHOW_VULN_FALLBACK(reg_file_data_sampling);
+  CPU_SHOW_VULN_FALLBACK(ghostwrite);
+ +CPU_SHOW_VULN_FALLBACK(indirect_target_selection);
++ CPU_SHOW_VULN_FALLBACK(old_microcode);
  =20
- +static bool __init vulnerable_to_its(u64 x86_arch_cap_msr)
- +{
- +	/* The "immunity" bit trumps everything else: */
- +	if (x86_arch_cap_msr & ARCH_CAP_ITS_NO)
- +		return false;
- +	if (boot_cpu_data.x86_vendor !=3D X86_VENDOR_INTEL)
- +		return false;
- +
- +	/* None of the affected CPUs have BHI_CTRL */
- +	if (boot_cpu_has(X86_FEATURE_BHI_CTRL))
- +		return false;
- +
- +	/*
- +	 * If a VMM did not expose ITS_NO, assume that a guest could
- +	 * be running on a vulnerable hardware or may migrate to such
- +	 * hardware.
- +	 */
- +	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
- +		return true;
- +
- +	if (cpu_matches(cpu_vuln_blacklist, ITS))
- +		return true;
- +
- +	return false;
- +}
- +
-+ static struct x86_cpu_id cpu_latest_microcode[] =3D {
-+ #include "microcode/intel-ucode-defs.h"
-+ 	{}
-+ };
-+=20
-+ static bool __init cpu_has_old_microcode(void)
-+ {
-+ 	const struct x86_cpu_id *m =3D x86_match_cpu(cpu_latest_microcode);
-+=20
-+ 	/* Give unknown CPUs a pass: */
-+ 	if (!m) {
-+ 		/* Intel CPUs should be in the list. Warn if not: */
-+ 		if (boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_INTEL)
-+ 			pr_info("x86/CPU: Model not found in latest microcode list\n");
-+ 		return false;
-+ 	}
-+=20
-+ 	/*
-+ 	 * Hosts usually lie to guests with a super high microcode
-+ 	 * version. Just ignore what hosts tell guests:
-+ 	 */
-+ 	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
-+ 		return false;
-+=20
-+ 	/* Consider all debug microcode to be old: */
-+ 	if (boot_cpu_data.microcode & BIT(31))
-+ 		return true;
-+=20
-+ 	/* Give new microcode a pass: */
-+ 	if (boot_cpu_data.microcode >=3D m->driver_data)
-+ 		return false;
-+=20
-+ 	/* Uh oh, too old: */
-+ 	return true;
-+ }
-+=20
-  static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
-  {
-  	u64 x86_arch_cap_msr =3D x86_read_arch_cap_msr();
+  static DEVICE_ATTR(meltdown, 0444, cpu_show_meltdown, NULL);
+  static DEVICE_ATTR(spectre_v1, 0444, cpu_show_spectre_v1, NULL);
+@@@ -617,7 -617,7 +618,8 @@@ static DEVICE_ATTR(spec_rstack_overflow
+  static DEVICE_ATTR(gather_data_sampling, 0444, cpu_show_gds, NULL);
+  static DEVICE_ATTR(reg_file_data_sampling, 0444, cpu_show_reg_file_data_s=
+ampling, NULL);
+  static DEVICE_ATTR(ghostwrite, 0444, cpu_show_ghostwrite, NULL);
+ +static DEVICE_ATTR(indirect_target_selection, 0444, cpu_show_indirect_tar=
+get_selection, NULL);
++ static DEVICE_ATTR(old_microcode, 0444, cpu_show_old_microcode, NULL);
+ =20
+  static struct attribute *cpu_root_vulnerabilities_attrs[] =3D {
+  	&dev_attr_meltdown.attr,
+@@@ -635,7 -635,7 +637,8 @@@
+  	&dev_attr_gather_data_sampling.attr,
+  	&dev_attr_reg_file_data_sampling.attr,
+  	&dev_attr_ghostwrite.attr,
+ +	&dev_attr_indirect_target_selection.attr,
++ 	&dev_attr_old_microcode.attr,
+  	NULL
+  };
+ =20
 
---Sig_/cS1NLVhcu5+AeH+R=ZW56Vk
+--Sig_/6c6yHfNi19lrI0_vcUcCLtk
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgi64gACgkQAVBC80lX
-0GxYaAf+NdKpcNTo7rSBgTj3XHWhGBTcR8A0fASJY4jphE7sE5sVa6Y6MreMlpqI
-3lZ3+wHAwRYR67mf5RV75cbct37wcDO/w8SJUzb6x7OppOii/aOGStFZeYiOE0ik
-manfGTp0Yvs960eVt4MHM4QfK7yLBc8hXjZOBr662kRaw43tTTeoNyC4qQ5G6fH2
-a6OiRnvhFFxrmwm0t9LqYx/3S87tct7IiSMckV3PsweNduT0D6qSiCj99pqxPwMC
-egRZsF8HJx5DlxHuPWa1XCxWnqgtxW3rx+3VNZQx1IOiV8lpv6kDq7VQ7081F62n
-GazrDCRpHZozXS0oL51i7CGtJw74Ew==
-=YTnK
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgi7DkACgkQAVBC80lX
+0Gw6xggAlkxHimw8zY1LZEvt3ksFZCeZvCsCH8LEdiRDcHJdOxpLS7Y3UL6itRS5
+luO6bcSJhQG9puIFnEleIWOD5BJ+Fav3fYpkALH7t2f6U3hDAwkyYK09xZnc+7zT
+N9rH6TT3566kYjvVb5mkik0ylXy6fdTZVkAWl1FKW79NaQ8iYJ/vgaq6jXtPKe3k
+JaRKnkN4FKfnXwHRPMm3PCpoRB3QhRna/gvIONl+V5K4WjwG10ydHKq2aaZovq7N
+o5AsJuB68K1ki7fIN9UsYoBC5C0QNCeZuV50hZFySqCAnoNf5vIKknaXmY75i4oO
+7zhtOBZWRhdUlCdnXW8aGLQJWXlv3w==
+=eKRC
 -----END PGP SIGNATURE-----
 
---Sig_/cS1NLVhcu5+AeH+R=ZW56Vk--
+--Sig_/6c6yHfNi19lrI0_vcUcCLtk--
 

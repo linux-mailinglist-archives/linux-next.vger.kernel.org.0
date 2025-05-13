@@ -1,166 +1,135 @@
-Return-Path: <linux-next+bounces-6714-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6715-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09E58AB4808
-	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 01:47:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1FB7AB4846
+	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 02:10:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 92719463D4A
-	for <lists+linux-next@lfdr.de>; Mon, 12 May 2025 23:47:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C7DD1B4313E
+	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 00:09:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32FD12580FD;
-	Mon, 12 May 2025 23:47:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC3FE6FBF;
+	Tue, 13 May 2025 00:09:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KFF5XXF7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gUtZx3G9"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0925779D2;
-	Mon, 12 May 2025 23:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFC37482;
+	Tue, 13 May 2025 00:08:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747093633; cv=none; b=vDAbeGJ1noeu3rxK/GWBxmimekclp2fzl+lV2GKaE9ebOn/Pm2SHSzLBlYbumiV21FnXroPdprF0iIRXiQPeIbpIH0haC2XKpEEVVmFLvpej8B3fpiyxkDu+uT8mi7dCc8J9r2WoqxyOzQ2b2Qz6VrZLtetgPhS+xRUbqbMW5tk=
+	t=1747094941; cv=none; b=tvPr+refxP/9BevvHTgfq3IRyMlNUzQo/Qxkz/NKBe8VGKveJ1A/w/tpUlUKgsUhlvZGtRwvuhQpU5xXKaFrZn4tlAZ0nNhnge8nsvYGkdnxAxPw00ZZdnof2S15yMwq2gzNeedwHwGbS5UKwmGBfFQVqqFxfH05S9QwYagZx28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747093633; c=relaxed/simple;
-	bh=7Zpo5c9qWjo1T46Pm/naZnA314vpTzFNCS+RqT/f1sI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CnzaQ04z5e+0KxNR6qm0LECeCy7SkfHIchBrlYxALtoSQSarkIDmMoItvOJQPYM2lMvVn4XSR8fOQDrImzed5jZeB2xVkHht+BAEzo+Pb0vbtQPWzUFrfBR2UGRuemHQN9CWzB54PBEN2KbTjbmYXLoIcSJO8FBsn+btkPzLuiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KFF5XXF7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63499C4CEE7;
-	Mon, 12 May 2025 23:47:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747093632;
-	bh=7Zpo5c9qWjo1T46Pm/naZnA314vpTzFNCS+RqT/f1sI=;
-	h=Date:From:To:Cc:Subject:Reply-To:From;
-	b=KFF5XXF7CyjOyoHzSsMD6uNKS/P8jAtGzsNilMLyFW+pOjfnW4leY6XDsfjldQzrd
-	 A9SvAvwQHAVmmila9TgHz1tOTtvaICs/8IIt0a9KqtuMRV3XB5Zs8NO3FvM3y3UP8+
-	 iZRDgX/C/kVwev74o6r5yWKqYHyu/aFfwQXlzmDnpP8b/+1TN5IOHABXeWb/+boTbi
-	 8+f84ohbp0KPYkLbCa9t5oWs1q9lZVwDOeLy1IRu86A6XWxg3asbf4w7Kl2oW3Js/z
-	 abySXkRxo4iLqhgBR6xVLLzpLrchyIsXAkEvrVP2fiox5zm1DAzBUozO2aqT+cV/NY
-	 iH/xAJNLnUAHg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 02A9ACE0857; Mon, 12 May 2025 16:47:12 -0700 (PDT)
-Date: Mon, 12 May 2025 16:47:11 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Thomas Gleixner <tglx@linutronix.de>, Marco Elver <elver@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Dmitry Vyukov <dvyukov@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, Stephen Rothwell <sfr@canb.auug.org.au>,
-	linux-next@vger.kernel.org, linux-mm@kvack.org
-Subject: [BUG] sleeping function called from invalid context at
- ./include/linux/sched/mm.h:321
-Message-ID: <a5c939c4-b123-4b2f-8a22-130e508cbcce@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+	s=arc-20240116; t=1747094941; c=relaxed/simple;
+	bh=btui7WTriYwWwDaipfsN6n9UimydyKvuy3FhpjdcGQw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O0NKgSUE8h/WHBwjALAg30eSC02kXfk4ppdtIRoh8oPZGwdLbrIlvPG2CbhIT5HC6TUjDEL8kPdgAarnwEz4TW0AvjB04yL1iPsCjJMBcd/vUzPFMKzerZt0n0PfoZG7X3Vx96V88o1bxwlDoEC/ttwI7FKuYb11qnQ3SZc8Yjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gUtZx3G9; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43cf680d351so35596305e9.0;
+        Mon, 12 May 2025 17:08:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747094937; x=1747699737; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z0usMcMWdY8lq5FVni3HwlJ8NWBna50dNtlKJxA0fhc=;
+        b=gUtZx3G9lD2AXSLkpq25clKd9O4oNGWhOPkW0W8346vFvSrHzp/3mIO6eKYpVORXN1
+         ArljCztyZfF1GaehiacKtjx+kRoBf/HGp3hWYlhnNryQVwi6dwIQzymL0YMcrHZiLKIq
+         PX5Z5Wue+jj/vetKMlEWQ1pfLtAhsU7AEiX0hEDviR7qeqGn1eC0EuaOUnKj5ESGa+9u
+         g5dD/M0TWccR5Y0wpKTt/wDKmRZ7F884jGRJrgLcRLMjMMnGZA4mSoQ7Q5VKiVjDd+ED
+         cKk/n3zw68exjOfB5fDuj36ADoBUYwFSafWlFyWNHWZF1PomdjTZEoB/y2dZmfFrpVWR
+         N4Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747094937; x=1747699737;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z0usMcMWdY8lq5FVni3HwlJ8NWBna50dNtlKJxA0fhc=;
+        b=Yv0jRlKcHIhAmHcL+6MTSi2w8WHKbY1EnM38jVvvsMoVnjcWqeHP7GCQZREtWiylxr
+         BX0zhW/NVdnz49h8DQeYUU0cO/Zv2/19hizJ/PUG9/oRS16Nq9GwZR3zTl+kVKOTAXNR
+         jJmZmL0EGR76vimL3RuLCD8vWQXdnp+CqeixcTsWwfyv22H3bPSaRzBRHUwGdKRCtavm
+         CNoNLzDvtUZe87q0RzPfdCcbvL3gBQJVo9M6gmAnIaXH7GJZeifI8S5amOclpDv4RP6+
+         BMUUGa/AuG5oSdeNtahMR3Yf3+1346mv/bjAc5FqIum5PjgqsfRi2aF054HoVKosbBp8
+         GntA==
+X-Forwarded-Encrypted: i=1; AJvYcCU2ThUkhw9lL6bFY8n7A2L/bbpOgVF53od1ealkxe6gQcRhxa98IvYCrsAJBZc1qFvgRGKa9NAP4c4lLx4LSPiz@vger.kernel.org, AJvYcCU8WI/zcKmaJ1pYVQT2bfj0QHPyQIMlm9xE8zMC9+G8ooHbCua3L4RCAsHj4NkdpDv/X1vI3URT@vger.kernel.org, AJvYcCUIDES5z9wJqsh+2pHKUSbg2vr22oOM0znXwoKP/r4Y8gtEruOkNaydGiqyLsaj2IIxMUdgHpiGBH0UKJv8@vger.kernel.org, AJvYcCUgudH/w2Ny81UXtWBgob5iTenFVOedRpwPEJxpgrsp49IHYk/e9dWTFMqFWMPs5+vc8gWz1ZPJj7vcEQ==@vger.kernel.org, AJvYcCWESUZFTtvz14Nsr4u3ZX8rH/1qP9si4sF7RhqrvBjHgQn36BTcdTOnNaPXnLeflFPnqic=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZslhwCbmwNAAma1rkptuOh82U626By0zyIvzMeeKtQIWGZnU/
+	hyJ6L/XeBRi4RHhciyfmgn5zXWxN12T14yuATjTd8HwavK60a8UgOYhmr8OF4KFvmzt3Zz8ju6S
+	+31XcztSyMqo8YNYumAq2CGJWRrE=
+X-Gm-Gg: ASbGncvU/zYt5Rfquo2IIdh1ywnoFQt1dQ+uN2LaKluXE270T+JESgf8+wKO83JNqxC
+	kchs8ZeYirqq/NPd8g5yEXo5hR5In9fVa8+QDTXed1I/5g5aTDf/JqCtDH/n4wM3noodwM2SaoD
+	LmDU68BqNVyJMpJPm7L3ckp4oZkDaZUrLuJ8Fh+ivt21y0aDNWYGOhevqPyx/P5XWKJ39oeuxR
+X-Google-Smtp-Source: AGHT+IG6Hz90vyaSCvuZEEStO56/EfmLm4jy+VPkC+7LSgTl2r4zMMUWiNmhZdoBi9DUh7+CwrGSoK2927YgvRKWh68=
+X-Received: by 2002:a05:6000:3110:b0:3a0:b817:2d7a with SMTP id
+ ffacd0b85a97d-3a340d34576mr996553f8f.29.1747094936767; Mon, 12 May 2025
+ 17:08:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+References: <20250512091511.2029269-1-skb99@linux.ibm.com> <2025051204-numbness-nephew-05f9@gregkh>
+In-Reply-To: <2025051204-numbness-nephew-05f9@gregkh>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 12 May 2025 17:08:45 -0700
+X-Gm-Features: AX0GCFtDKtwoUVfexcyHhD6lveCvM6KUQViwhMY0AsbIsdBYJejqhW-l-fzvCHU
+Message-ID: <CAADnVQLbkUGTdF6SpNp-LiPwuNSa_vtsSHwXucXa44ecShhstw@mail.gmail.com>
+Subject: Re: [RESEND PATCH] selftests/bpf: Fix bpf selftest build warning
+To: Greg KH <gregkh@linuxfoundation.org>, 
+	Network Development <netdev@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>
+Cc: Saket Kumar Bhaskar <skb99@linux.ibm.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux-Next Mailing List <linux-next@vger.kernel.org>, Hari Bathini <hbathini@linux.ibm.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Venkat Rao Bagalkote <venkat88@linux.ibm.com>, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Mykola Lysenko <mykolal@fb.com>, "Song, Yoong Siang" <yoong.siang.song@intel.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello!
+On Mon, May 12, 2025 at 2:23=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Mon, May 12, 2025 at 02:45:11PM +0530, Saket Kumar Bhaskar wrote:
+> > On linux-next, build for bpf selftest displays a warning:
+> >
+> > Warning: Kernel ABI header at 'tools/include/uapi/linux/if_xdp.h'
+> > differs from latest version at 'include/uapi/linux/if_xdp.h'.
+> >
+> > Commit 8066e388be48 ("net: add UAPI to the header guard in various netw=
+ork headers")
+> > changed the header guard from _LINUX_IF_XDP_H to _UAPI_LINUX_IF_XDP_H
+> > in include/uapi/linux/if_xdp.h.
+> >
+> > To resolve the warning, update tools/include/uapi/linux/if_xdp.h
+> > to align with the changes in include/uapi/linux/if_xdp.h
+> >
+> > Fixes: 8066e388be48 ("net: add UAPI to the header guard in various netw=
+ork headers")
+> > Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+> > Closes: https://lore.kernel.org/all/c2bc466d-dff2-4d0d-a797-9af7f676c06=
+5@linux.ibm.com/
+> > Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+> > Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+> > ---
+> >
+> > [RESEND]:
+> >  - Added Fixes and Tested-by tag.
+> >  - Added Greg as receipent for driver-core tree.
+>
+> Why?  Commit 8066e388be48 ("net: add UAPI to the header guard in various
+> network headers") is not in that tree/branch, so why do I need it?
 
-The next-20250512 release got the following while running either of the
-rcutorture TINY02 and SRCU-T scenarios with strict KCSAN enabled:
+Certainly not driver-core.
 
-BUG: sleeping function called from invalid context at ./include/linux/sched/mm.h:321
-
-This is the last line of this function:
-
-	static inline void might_alloc(gfp_t gfp_mask)
-	{
-		fs_reclaim_acquire(gfp_mask);
-		fs_reclaim_release(gfp_mask);
-
-		might_sleep_if(gfpflags_allow_blocking(gfp_mask));
-	}
-
-The reproducer is as follows:
-
-tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 1m --configs TINY02 --kcsan --kmake-arg CC=clang
-
-I ran this on x86 with clang version 19.1.7 (CentOS 19.1.7-1.el9).
-
-See below for the full splat.  The TINY02 and SRCU-T scenarios are unique
-in setting both CONFIG_SMP=n and CONFIG_PROVE_LOCKING=y.
-
-Bisection converges here:
-
-c836e5a70c59 ("genirq/chip: Rework irq_set_msi_desc_off()")
-
-The commit reverts cleanly, but results in the following build error:
-
-kernel/irq/chip.c:98:26: error: call to undeclared function 'irq_get_desc_lock'
-
-Thoughts?
-
-						Thanx, Paul
-
-------------------------------------------------------------------------
-
-[    8.862165] BUG: sleeping function called from invalid context at ./include/linux/sched/mm.h:321 
-[    8.862706] in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 1, name: swapper
-[    8.862706] preempt_count: 0, expected: 0
-[    8.862706] 1 lock held by swapper/1:
-[    8.862706]  #0: ffff99018127a1a0 (&dev->mutex){....}-{4:4}, at: __driver_attach+0x189/0x2f0 
-[    8.862706] irq event stamp: 83979
-[    8.862706] hardirqs last  enabled at (83978): [<ffffffff8b01a83d>] _raw_spin_unlock_irqrestore+0x3d/0x60
-[    8.862706] hardirqs last disabled at (83979): [<ffffffff8b01a616>] _raw_spin_lock_irqsave+0x56/0xb0
-[    8.862706] softirqs last  enabled at (83749): [<ffffffff896e22d8>] __irq_exit_rcu+0x58/0xc0
-[    8.862706] softirqs last disabled at (83740): [<ffffffff896e22d8>] __irq_exit_rcu+0x58/0xc0
-[    8.862706] CPU: 0 UID: 0 PID: 1 Comm: swapper Not tainted 6.15.0-rc5-next-20250508-00001-g3d99c237b0d4-dirty #4043 NONE
-[    8.862706] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
-[    8.862706] Call Trace:
-[    8.862706]  <TASK>
-[    8.862706]  dump_stack_lvl+0x77/0xb0
-[    8.862706]  dump_stack+0x19/0x24
-[    8.862706]  __might_resched+0x282/0x2a0
-[    8.862706]  __kmalloc_node_track_caller_noprof+0xa1/0x2a0
-[    8.862706]  ? _pcim_request_region+0x55/0x190
-[    8.862706]  ? __pfx_pcim_addr_resource_release+0x10/0x10
-[    8.862706]  __devres_alloc_node+0x4b/0xc0
-[    8.862706]  _pcim_request_region+0x55/0x190
-[    8.862706]  pcim_request_all_regions+0x37/0x260
-[    8.862706]  ahci_init_one+0x2f0/0x1750
-[    8.862706]  ? rpm_resume+0x48d/0xc30
-[    8.862706]  ? __pm_runtime_resume+0xa7/0xc0
-[    8.862706]  pci_device_probe+0xfc/0x1b0
-[    8.862706]  really_probe+0x1ba/0x500
-[    8.862706]  __driver_probe_device+0x137/0x1a0
-[    8.862706]  driver_probe_device+0x67/0x2d0
-[    8.862706]  __driver_attach+0x194/0x2f0
-[    8.862706]  ? __pfx___driver_attach+0x10/0x10
-[    8.862706]  bus_for_each_dev+0x17a/0x1d0
-[    8.862706]  driver_attach+0x30/0x40
-[    8.862706]  bus_add_driver+0x22a/0x380
-[    8.862706]  driver_register+0xcf/0x1c0
-[    8.862706]  __pci_register_driver+0xfc/0x120
-[    8.862706]  ? __pfx_ahci_pci_driver_init+0x10/0x10
-[    8.862706]  ahci_pci_driver_init+0x24/0x40
-[    8.862706]  ? __pfx_ahci_pci_driver_init+0x10/0x10
-[    8.862706]  do_one_initcall+0xfb/0x300
-[    8.862706]  ? prb_first_seq+0x1ba/0x1f0
-[    8.862706]  ? _prb_read_valid+0x627/0x660
-[    8.862706]  ? prb_read_valid+0x47/0x70
-[    8.862706]  ? console_unlock+0x179/0x1a0
-[    8.862706]  ? vprintk_emit+0x43d/0x480
-[    8.862706]  ? _printk+0x83/0xb0
-[    8.862706]  ? parse_args+0x24f/0x5a0
-[    8.862706]  do_initcall_level+0x91/0xf0
-[    8.862706]  do_initcalls+0x60/0xa0
-[    8.862706]  ? __pfx_kernel_init+0x10/0x10
-[    8.862706]  do_basic_setup+0x41/0x50
-[    8.862706]  kernel_init_freeable+0xb3/0x120
-[    8.862706]  kernel_init+0x20/0x200
-[    8.862706]  ret_from_fork+0x13e/0x1e0
-[    8.862706]  ? __pfx_kernel_init+0x10/0x10
-[    8.862706]  ret_from_fork_asm+0x19/0x30
-[    8.862706]  </TASK>
+Please resend with [PATCH net-next] and cc netdev.
 

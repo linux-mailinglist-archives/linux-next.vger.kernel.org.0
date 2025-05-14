@@ -1,137 +1,170 @@
-Return-Path: <linux-next+bounces-6755-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6756-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24F96AB5FC8
-	for <lists+linux-next@lfdr.de>; Wed, 14 May 2025 01:09:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7E44AB6010
+	for <lists+linux-next@lfdr.de>; Wed, 14 May 2025 02:11:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 596ED860C1B
-	for <lists+linux-next@lfdr.de>; Tue, 13 May 2025 23:09:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C862464F66
+	for <lists+linux-next@lfdr.de>; Wed, 14 May 2025 00:11:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0883A1EB19B;
-	Tue, 13 May 2025 23:09:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614A21FDD;
+	Wed, 14 May 2025 00:11:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GabFUoqT"
+	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="A4eu4F4u"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEFE136337;
-	Tue, 13 May 2025 23:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83EE31C27;
+	Wed, 14 May 2025 00:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747177777; cv=none; b=rsBrtGdV8iBYccRS5+rtrKJ7dIsydL2iNb7I1hr7FUvrulD3taG0m5/PvH6wHAiCOEg98zzmBx/hJZVfTkrxZgWgPrAyB9RyM2cVfzTfFJwkT21876FwFxw8sqZxGdR98N1+5ykz03+4KcZy7TzROqMLtuDPo7AxvjZlR9j+C+U=
+	t=1747181472; cv=none; b=qOzt6Uhx5VVJtAz0CvlkN0+h9/vE1hxhsiX8DPVDHuGiAVkSBgW5MMzbvHp3lThLIROUSrOmL3JVr6x7GFTcUhH6DRBjGVgJas71bdIwCIYQKYoleIlpLhtrENRiyFQk+D80II2Nqnqs+75vVFn81zGyXbxjM48UafqjxBtce5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747177777; c=relaxed/simple;
-	bh=0uUSQkAKe1c8c9K4WhFW8meHssUZMjO6h9KlXfj/3pI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PNmj2mQpdmIDWWpzPE5hsuMT2aeME5OYlO3d9M1fpT+/cyrcEhpkANmoK3ns6MkIBmhfULw8mG2YvU3yQvLcPZ+Qztvw+GYQnCmIZZUNkI3SlO6VvKkfCsbnu0kE2kn7vQaJFsc4gyQYOm+RTTnlQvF4OqhzRiM45UoseB8egho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GabFUoqT; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-30a9718de94so5968439a91.0;
-        Tue, 13 May 2025 16:09:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747177776; x=1747782576; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R+mxhHcPr+TvZqZf0aVFhNrCdir+u6TUHiL5kEkrMXg=;
-        b=GabFUoqTpJ8XvPok34AwfZhkz9GzAlHuOsG02XC/8bnPa6kA6zTbTINjj8pz4K4Qrg
-         1mHH02pq6IQlQIWm9npWqagfetb5jFR53ZuxcolZlTNY7/Ef4A8T/k6bosWqJYqzQZNF
-         py2geUB2tYKbsN0SheUB9cpCsRoJhcqflw3JRUm3Cg33cVViY5iqP1FeOdPH3m7AXfF8
-         lxo5WyAlG8kYwh3yMd540kLqJwwjbFlQiIZNzy55OMICGJFoDbnRxMZHVGfmkanODuy9
-         sE4yaTQYufkDVjqXDZVWrLHpJUBs3DQlf/C5ACFwIutwn/ZcfgVjTY+X1Iw85Omf1fdT
-         J5hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747177776; x=1747782576;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R+mxhHcPr+TvZqZf0aVFhNrCdir+u6TUHiL5kEkrMXg=;
-        b=Y8oYJYCaLPC/idQ1Fu7ywdrGRvNNgGqe1SOt7rUEFzqoeFwUTI5u+2KORvYqjQx5LQ
-         j+bGsA041l/wpLvoo0/5oCLAYj5glOSvOLXfzJAcRBerkuU3qOZlcUMW1lkyQcDkpdHL
-         asSQK5ovD8wXWwJbIGhJuMQUs0I4Fbu/q+8qzPawoQpC0i9n9zzsLlyzeZMo+nLDdt17
-         KTU839oLyND2mNz6DFKCLZWCGbrTs5HJmPVWaYjw9STCui31+0W3YHhSlwMMYQ9BdRgL
-         pI9AIy5t3QlzYMEAigDSkVzhQde8Rddayi3XjSzcs5EhgDP/Im83rMlhgkk9SM++RAPx
-         Abyg==
-X-Forwarded-Encrypted: i=1; AJvYcCUs8o5LlhyoTj3AtiiymgNDAmhTrf0IAykppyedzVxHipSafaxVL80r+gP/JfaZuWVGLYEUaX9QrvdiC3g=@vger.kernel.org, AJvYcCVNwMZ26vzGqUHMSPUUTSAEOdjYV7K34mB9yZSzIQaUjEreDhUi0D7UoeIEs7vTtgSuGYzqyfEqzDbx2A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDV2aXGIJwRhDAx6WbSPbsekX5rqfMLdTBOIdIaLVL74MQYuOI
-	1mp5tIJInQ51F+koB8Pm4VKd6mmiweUDYZm0skG/TF4nuD8rG041
-X-Gm-Gg: ASbGncsPV6N3LcUPVZ3MzCoB2QJUbow/3X5RzVciZP10NCTSvb7OBW8giC6CzlZhL6Y
-	hLdQKuSlCR9avoXJAgkYEM3gzRsp/l9BuB2pStADB7iS2mKglJHxJWQSuy6kJJHk8SAnR25MMHR
-	N8c/yBTA5zhmmsW/kUA0ygSLGBZk+hBwB0IBMQHm5AlqyPC2dZdyHbM+XaDiDm2KGTruiWT8t47
-	dvz5PBjX0AwNjXB1tz0bflQxZIFcyTw6t/mGuoqF46U3CQjGYcQD1ZLx41W3BL9AutRE9KeHg95
-	VMBvtoTVgTgXEXE19Yh0r13myoVQZZMB68yXd0waHROq4BJZ/h8=
-X-Google-Smtp-Source: AGHT+IHrL8Z6RQnvzJXvyvY25K4u5b1f4H/BpBsbC5LnWuYDIGCWgBMC9bTkCAR9RY+qKFYik25qsw==
-X-Received: by 2002:a17:90a:d650:b0:2fa:157e:c790 with SMTP id 98e67ed59e1d1-30e2e5d6114mr1878597a91.5.1747177775412;
-        Tue, 13 May 2025 16:09:35 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30e3349d50bsm147145a91.45.2025.05.13.16.09.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 May 2025 16:09:34 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 41F1342439C7; Wed, 14 May 2025 06:09:32 +0700 (WIB)
-Date: Wed, 14 May 2025 06:09:32 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Subject: Re: linux-next: manual merge of the tip tree with Linus' tree
-Message-ID: <aCPRLHg46GP0_Pse@archie.me>
-References: <20250513154845.7c03dbe2@canb.auug.org.au>
+	s=arc-20240116; t=1747181472; c=relaxed/simple;
+	bh=wkfDB2oVIWKK1a5eXkQoWzJ/nlBkrw3GK1U6oYBNAQ8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VCZtkzFjTmvISy3kUhFFOdFxfgCLwJaowPgenh3DRz8hvl9DVmJXtJCeJ/SFv2fX6XlgJBoSkABJ2WFV87NdAoEyEtxCPMPnkDEhn1JBbEqE1q5wB2GxOIqyHEUHXrnaIrey4YnlmpLVt72wit8pbdVLgw5d9PjNnKshldHscz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=A4eu4F4u; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1747181467; x=1747786267; i=spasswolf@web.de;
+	bh=op1KZQkRCtc3+W3fATc0uPEXHj/b7P0Lr/rtvLPmTPU=;
+	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=A4eu4F4u1O16nrMqsqe6e9WO88QQRZIF8yaEzmoXMWG0cwkW1NkO5udkFzRPXcZP
+	 KDw0IutqvA5tyzcDgsWOo9b+lN71C4nVU+gB87NJN0QgUZ+gzWf0X0pYWEPsMU0Pe
+	 /VDN6bNnbQt/p3tXIxgA6Ns+RngP2WbiCekhEa9IzzKkvald6klTq41tFe2DWLNB3
+	 DVx56trOOk/Kl28CxJJoTciPclV28HCiS7avoiz6faZazmP2S8j6VVy6d1VgJbVvu
+	 KdlaGCjlrgjckCemMe/5NjmnD2D7HIvP4luJdnhdD37TZifI1FNXTAAqPgkAbel01
+	 HwY3/R//5IRd2Xf11g==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.0.101] ([95.223.134.88]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MjxeO-1uhTqV0nrE-00ndWS; Wed, 14
+ May 2025 02:11:07 +0200
+Message-ID: <7471a185adcc34a79c2ab8ce1e87ab922ae2232b.camel@web.de>
+Subject: Re: lockup and kernel panic in linux-next-202505{09,12} when
+ compiled with clang
+From: Bert Karwatzki <spasswolf@web.de>
+To: Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org
+Cc: linux-next@vger.kernel.org, llvm@lists.linux.dev, Johannes Berg
+	 <johannes.berg@intel.com>, spasswolf@web.de
+Date: Wed, 14 May 2025 02:11:05 +0200
+In-Reply-To: <87h61ojg3g.ffs@tglx>
+References: <20250513164807.51780-1-spasswolf@web.de> <87h61ojg3g.ffs@tglx>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.56.1-1 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="X6G5xsf+9iNdz6KE"
-Content-Disposition: inline
-In-Reply-To: <20250513154845.7c03dbe2@canb.auug.org.au>
-
-
---X6G5xsf+9iNdz6KE
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:oPtwMikyUfZ7uvY4o2qRU0Hn/RpJAD9cDevhup5xGQepFv6jujd
+ k+K2uv5LgzgIuo6gF6NZcAQ1WGBoS9WAeGwRD9W+qPfc8y66foFFjsZF6OqdjKno1E1HKn5
+ lO6AMZzZSqz0fym+JRnSG0e7YcZyS7ZQUQOARJg85gYolBBFcTtZjflgMOVu5/x48rxLUuY
+ RKn6eauM58n8PZvNW1uyA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:6H6/ew3cfHk=;Cc/dGYOQdL+WFhwqQKouJIiYS14
+ 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
+ aT8tyxcrwvObM=
 
-On Tue, May 13, 2025 at 03:48:45PM +1000, Stephen Rothwell wrote:
-> diff --cc Documentation/admin-guide/hw-vuln/index.rst
-> index ce296b8430fc,cf1511145927..000000000000
-> --- a/Documentation/admin-guide/hw-vuln/index.rst
-> +++ b/Documentation/admin-guide/hw-vuln/index.rst
-> @@@ -23,4 -23,4 +23,5 @@@ are configurable at compile, boot or ru
->      gather_data_sampling
->      reg-file-data-sampling
->      rsb
->  +   indirect-target-selection
-> +    old_microcode
+Am Mittwoch, dem 14.05.2025 um 00:33 +0200 schrieb Thomas Gleixner:
+> On Tue, May 13 2025 at 18:48, Bert Karwatzki wrote:
+> > >=20
+> > > I'll now start a bisection where I revert 76a853f86c97 where possibl=
+e in
+> > > order to find the remaining bugs.
+> >=20
+> > The second bisection (from v6.15-rc6 to next-20250512) is finished now=
+:
+> >=20
+> > This commit leads to lockups and kernel panics after
+> > watching ~5-10min of a youtube video while compiling a kernel,
+> > reverting it in next-20250512 is possible:
+> > 76a853f86c97 ("wifi: free SKBTX_WIFI_STATUS skb tx_flags flag")
+> > This commit leads to the boot failure, reverting leads to the
+> > compile error it is supposed to fix:
+> > 97f4b999e0c8 ("genirq: Use scoped_guard() to shut clang up")
+>=20
+> I really have a hard time to understand what you are trying to explain
+> here. 'This commit leads..' is so unspecified that I can't make any
+> sense of it.
+>=20
+> Also please make sure that you have commit b5fcb6898202 ("genirq: Ensure
+> flags in lock guard is consistently initialized") in your tree when
+> re-testing. That's fixing another subtle (AFAICT clang only) problem in
+> the guard conversion. If it's not in next yet, you can just merge
+>=20
+>    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
+>=20
+> into next or wait for the next next integration.
+>=20
+> Thanks
+>=20
+>         tglx
 
-The resolution LGTM.
 
-Thanks.
+I merged git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/cor=
+e into
+next-20250513 and this fixes the boot failure but the system still locks u=
+p
+after a few minutes (with flashing capslock). To solve this I need to reve=
+rt=20
+76a853f86c97 ("wifi: free SKBTX_WIFI_STATUS skb tx_flags flag")
 
---=20
-An old man doll... just what I always wanted! - Clara
+Also commit 97f4b999e0c8 did not actually cause the boot failure that was =
+a
+bisection error.
 
---X6G5xsf+9iNdz6KE
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaCPRJgAKCRD2uYlJVVFO
-o0uKAP4oOyW1A027V6px2VPwT/NHhkeU4xenNDfDE4URAiFyFwD/aI8SjAi5pyLL
-ByS/ClAeKhO61K5FIyGT89v0Icm3Vw8=
-=hfum
------END PGP SIGNATURE-----
-
---X6G5xsf+9iNdz6KE--
+Bert Karwatzki
 

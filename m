@@ -1,100 +1,107 @@
-Return-Path: <linux-next+bounces-6764-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6765-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C17A7AB6356
-	for <lists+linux-next@lfdr.de>; Wed, 14 May 2025 08:41:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D588DAB646B
+	for <lists+linux-next@lfdr.de>; Wed, 14 May 2025 09:31:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0714E3B373C
-	for <lists+linux-next@lfdr.de>; Wed, 14 May 2025 06:41:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DDFF189ADC4
+	for <lists+linux-next@lfdr.de>; Wed, 14 May 2025 07:31:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 018E01FECAF;
-	Wed, 14 May 2025 06:41:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7660E1C28E;
+	Wed, 14 May 2025 07:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="mZS/91Ua"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="hwWbh2qr"
 X-Original-To: linux-next@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451BCC2F2;
-	Wed, 14 May 2025 06:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B380B1DA31D;
+	Wed, 14 May 2025 07:30:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747204902; cv=none; b=KiciNAnZpuoTm8fTFh/aTKmgu0xIRUvvXIIYJC+be9MAJVU6Eqew0ZgSgvKS+f31RK3cvImfApAxn6fUf8ELePQH1NZhL2W3/ae0+vJ9MRefrnd8GFZmTE8+IdkSeZ5Tu0C38JFoDUGwkmVs4kXSNNTeF44ElxFYbNVBx/9vmyU=
+	t=1747207842; cv=none; b=RrIRCoucO0OnS0JpuNWURmAh9l9Piu7TfQEwGGW0pEV1ptWeNKKKJlSJep2Cp5whlatIlnLAL6T9TzgU/shiw74HJ9F1XAdl615uX4HV8QILaqkb/os/n5HX6G+JLBY8zfdUuX6gdHI4D9sGPqxsYemzmMDVBn+whLKJ3zroXxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747204902; c=relaxed/simple;
-	bh=pXpGTTsBM5hN6UrpUhonUG+zxf3mvGi7XQK2dwi2KE4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JfhftNJmAc6nzwW7TfE/clVbKNf4wpCSwD1hHs/zVbpk18CddEmwL53PZqBGCGqIuwhBpKsHgAJ12Ijut5bLZsmhMjfbOhOecw7Q+/liF+ck6Qe5DDEszWEvleBLRvbFFnEpaLk35Mi9cr2O3g3FIjlLvLD7myQfXIFcpenjrxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=mZS/91Ua; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=WpBd/LWCyMZR8JEkg8orJSH16WPBwgpXbBt/9i1YTMQ=;
-	t=1747204901; x=1748414501; b=mZS/91Uatkw5oIjjd7ITwfy98Svh937VyGeP9acovRCnX53
-	P5UT0kDOzk69YiMRmLaPcgEAiutpo2zrjP/cuamgv+JgUFF1eGPiJp36jmpHJWOvP/5/cwzJ6uyoR
-	Fookh7iJG5hGISgZzxAlakyQetB5jMNLZqyShfAQhFg9PFR39ndCncfpWH2x0zZOcCrwTR5MRUdwT
-	fbapaT/jjB/ucxEdk1uCZWnO8jAH2wAldzx5HWnXMM7PFl78/aoPxNgjcJjo7FD2yByROqEu5m6Cm
-	6svBAbiRmkLrgoANZKG0d/i2JgKhCOr4KePdlGzX3mt2WSzJeAxkl/XchtqlugDw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.1)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1uF5o8-00000007V8p-3r6F;
-	Wed, 14 May 2025 08:41:37 +0200
-Message-ID: <958ec4672d9263d23b1f47d8acd1047037e7ff25.camel@sipsolutions.net>
-Subject: Re: linux-next: manual merge of the iwlwifi-next tree with Linus'
- tree
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Miriam Rachel Korenblit <miriam.rachel.korenblit@intel.com>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Date: Wed, 14 May 2025 08:41:35 +0200
-In-Reply-To: <20250514125524.1528467f@canb.auug.org.au>
-References: <20250506114402.2f440664@canb.auug.org.au>
-		<f53576b21774ab6ba8294c5d1954f0528764f2fb.camel@sipsolutions.net>
-		<20250507111026.4700e392@canb.auug.org.au>
-		<3d5761da40d0ddf4109d10d6f3c3d2538c4d89d4.camel@sipsolutions.net>
-		<20250508132459.04bd8e70@canb.auug.org.au>
-		<20250514124131.15d0117f@canb.auug.org.au>
-	 <20250514125524.1528467f@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	s=arc-20240116; t=1747207842; c=relaxed/simple;
+	bh=CD4dJW+Gv+4m3iDMae7kIM/vg/0boHM3mQg6Gj/PAFo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=FBhFuE9dQ1kMcRcPkf41vYevVJlGAELwyPh5JyM1x7r1cJyUi5PYRwzFfqHrkNXcn0vfsKjOq4BSxy55itD9aw/ekc9aC7Z4bGxkbfE9NfM95bQAlBFNb0kDBaj5Z/BtHM2XHo7ar2YL49JP8sSc8sSGadFdzSC7cV0ER/GMrto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=hwWbh2qr; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1747207835;
+	bh=RRbMfXRZxB7U1lwx5jZiu9Md8X1fQf1+AbUlEL3dcUg=;
+	h=Date:From:To:Cc:Subject:From;
+	b=hwWbh2qrtJtWlmjom8KjQi/4yuqTvbGyiZacECjFDhkD6GWE9/VL6VvCFE2mvNAdx
+	 EpGGlbX06+VqvJ4gK74S0IcL8Z3t+7U0a1eGNUYM4ZXsy1rvvUgEDkLMPB2tZ9f2fx
+	 JJrOixg9fhXru4w8dY+ivj+gk432VsNt07WLQRZze7J71mc8BBsovdBqZ2gZ9YnT5d
+	 CkgOgPZ1AgAdphoXfnD2UwMUET0k4yoOaRcyr3J55uw4cEow1JAZ5YjHLec8V5JCz5
+	 oEA3E2uhFb3wczRfoghJD8KH0Ne9PiYMXcOsV+3Ve8KIsEiRWtsKe1YMCG9pmJDnXQ
+	 i7iPV0k94F8Mw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zy4kf5lWVz4xQg;
+	Wed, 14 May 2025 17:30:34 +1000 (AEST)
+Date: Wed, 14 May 2025 17:30:33 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier
+ <mathieu.poirier@linaro.org>, Greg KH <greg@kroah.com>, Arnd Bergmann
+ <arnd@arndb.de>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the rpmsg tree
+Message-ID: <20250514173033.647a4dd1@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: multipart/signed; boundary="Sig_//athPkFYMEJ2U6METMfXPvC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hi Stephen,
+--Sig_//athPkFYMEJ2U6METMfXPvC
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> > I keep getting more conflicts in the above files (each time one of them
-> > get modified in the iwlwifi-next tree.  Could you please merge commit
-> >=20
-> >  ebedf8b7f05b ("wifi: iwlwifi: add support for Killer on MTL")
-> >=20
-> > or the current net tree
-> > (git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git#main)
-> > into the iwlwifi-next tree and fix up the conflicts.  I believe that
-> > will clean up all the conflicts - that are really just between bug
-> > fixes for iwlwifi and the new development).
->=20
-> Or, of course, I assume the iwlwifi-next tree will be merged into the
-> net-next tree at some point soon ...
->=20
+Hi all,
 
-Yes, should be really soon now, though into wireless-next. But that's
-up-to-date with net, so would resolve all of these issues. In fact that
-was the plan all along, it's just been taking a bit longer than
-expected, sorry about that.
+The following commit is also in the char-misc tree as a different commit
+(but the same patch):
 
-johannes
+  317c69397867 ("rpmsg: qcom_smd: Fix uninitialized return variable in __qc=
+om_smd_send()")
+
+This is commit
+
+  77feb17c950e ("rpmsg: qcom_smd: Fix uninitialized return variable in __qc=
+om_smd_send()")
+
+in the char-misc tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_//athPkFYMEJ2U6METMfXPvC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgkRpkACgkQAVBC80lX
+0Gxykwf+JmkuecUAMSAjXbcFCEOH3gf39uyuY7wqPReHLBWaPkEvsk+VVJhg3vgy
+RWazQw01NcQ1U0jK+Hw7sXlT3FwDgWsZb/hlL9f8NWvBQ0i0DrdeudL/ptsMTlh0
++YlABGZsP/ioIqzgwb7Gbf4LLjWkqWcn4t1auGec48axKia6zv1rAshkTm0CxxKz
+aIXesZnaLb3k1HYEBMJMM1WsL1hNA7yCErRJwdgVAn9PBR+Lc4utGpZKpWaeNfsn
+6tEre8XxNKkFaGa5MmZWvt1+ajuSIQF4kBcQQZyVQfxV139hIe8b4fLkzEvL5VnV
+ujoKkszJJHEJ4mx5+uN7t19qzqjy5w==
+=4roA
+-----END PGP SIGNATURE-----
+
+--Sig_//athPkFYMEJ2U6METMfXPvC--
 

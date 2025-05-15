@@ -1,154 +1,116 @@
-Return-Path: <linux-next+bounces-6785-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6786-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10BFCAB8000
-	for <lists+linux-next@lfdr.de>; Thu, 15 May 2025 10:14:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AA69AB80E4
+	for <lists+linux-next@lfdr.de>; Thu, 15 May 2025 10:37:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC9551BA6E8E
-	for <lists+linux-next@lfdr.de>; Thu, 15 May 2025 08:14:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FCB74E2FDC
+	for <lists+linux-next@lfdr.de>; Thu, 15 May 2025 08:35:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F219284B4B;
-	Thu, 15 May 2025 08:14:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C63D12882D5;
+	Thu, 15 May 2025 08:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="F5AEXmFx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EHSfYGtH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD521E0E08;
-	Thu, 15 May 2025 08:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CE42882A8;
+	Thu, 15 May 2025 08:33:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747296863; cv=none; b=aCsIvU5FNOYpZh8ZtHpmDuVSisqOLl9x6rltckzMQ8S5L3ZenzG6YbTK2IbJILkRu7p2XgsmxRrJKDwZ/Id2ScZKYqawjkH6eWiI6mvA6hjt+7DNb29gCifQdN+RnaGSIZRouVMjNoRafxaTYcK9bzWnz1HtVxRMdhYq57JoZPg=
+	t=1747297982; cv=none; b=T+/Srkxn5SJVK/TdL+RGb4eO6F3b9+hGpd/7T4jde8wbadO4RAgCdqRSdXDauXQd1220Vhv7mKt+2KZUMYyT66Wd6Vf+VhluxBP9el3azGKnwrycvWc4LNguL+b4SiaTI/514vwfRxhJ4QJKAAWZ8RiW6Y2Hni5rJ6dJPYzgWAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747296863; c=relaxed/simple;
-	bh=XM1eqMpcg+t2ZtQwuWYYjSlAcLCEY9gs2OBdffgmX74=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ME3onp+duzt2urYmcO7TnRxarcF7Y39QJ+UpDqLI9DqOF1/J+oOLRQqFqrehEAoXw/pKuvlvqTA1wtEtiLb9HacrLR8+IjQDYy9hdyKdDWfmwco8n8qVqhbx4AcElyPeTvhLf9qUCvPuqkf6mpT7p6yu8i9ZtBJNFmclT3NjMVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=F5AEXmFx; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1747296856;
-	bh=Usb534oc0GkUVSDJGUUCLoGE2h4LZ1RiACjkJpJzRcY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=F5AEXmFxj9x+3Md5/yxuxrosRSGdFNG0GGWp8enb+T1I/Pfxy9d07XNAgrIDKUFhz
-	 epc5ivZjP0yQdrKozpKe88P20OmpSkQY37wbXyFc1JJjwfO7bdw1VJjer8dDTp1tEf
-	 OeN11FjIoSMZkrDX//9D2sc2iNTtBfnAUTOKzUEhKh0WMlS04We3oixEByeIIsVstJ
-	 sfaAw3MKVr4COKFutoGzp1xSTA9/eE5/yPz76RSnDBIzVvLP3W21mzDa548+JYGGjH
-	 gJRzkAm5aveL8TjTrDZrG2oXGv5lNyQpB8/5gN789c/u3jjfwQSTEsaJsCXbwHLR6T
-	 cHBsqgbE8X9+w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Zyjfb0wf2z4wcn;
-	Thu, 15 May 2025 18:14:15 +1000 (AEST)
-Date: Thu, 15 May 2025 18:14:14 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Wei Liu <wei.liu@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo
- Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra
- <peterz@infradead.org>
-Cc: Ashish Kalra <ashish.kalra@amd.com>, "Borislav Petkov (AMD)"
- <bp@alien8.de>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>, Roman Kisel
- <romank@linux.microsoft.com>
-Subject: linux-next: manual merge of the hyperv tree with the tip-fixes tree
-Message-ID: <20250515181414.354d8ef7@canb.auug.org.au>
+	s=arc-20240116; t=1747297982; c=relaxed/simple;
+	bh=6NRsKlPEJLGQR0EIbLTd7Yy+oRiBQo/LcI5cvx1skd0=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=buy3jA/lIuelDsrFftfaVwUihR8yLvJ0119Hs4iw8VVsR/Qu+dN++PanLiWnxg+RbpwtH9UF4JeA/YMUjvPP+lK9hl2mr7pVj0UcR9BF0bjF9CoIhmzNtCi0i2t8EKXu2i9tjJ3SAEYm5g1M11nKgVSu01tKZczPX80hqRhL6jA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EHSfYGtH; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747297981; x=1778833981;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=6NRsKlPEJLGQR0EIbLTd7Yy+oRiBQo/LcI5cvx1skd0=;
+  b=EHSfYGtHBXPifjq19vwQYO/TUY3CqwZvYSTOOT7SB9papwQsYpUp2ebO
+   zpud6ueyrkBaGeEKg3mhqdxM017BFkNOJQs7dXNyK/x9N35rljq6shTL/
+   jQ2t1PggUqHTu+RhaSwSozzRREcj1MjT3rNtedRnN7zqCr8j5gC9GzTNz
+   VYdFfePoWwKQsnWTi9vO3aE0wfMHpvDhaLhSspo19cWuZCR+0UPAJwpNZ
+   kMYlr+YMiYa5hUh53q2H5c3NkCw0Jr4XGaSJxtH9FnZ7Ju/tP+uBWDH+s
+   PrxLVBrNI2oLDGLA3+EbtoPIQCjGWIybvUh70m3qN+w9BRfP/cC3hNZ/U
+   A==;
+X-CSE-ConnectionGUID: SrMLDp4sRTK3HEpxJmaeWw==
+X-CSE-MsgGUID: 8XR+jLiSRl6ZPAhQFnNuQg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11433"; a="49157528"
+X-IronPort-AV: E=Sophos;i="6.15,290,1739865600"; 
+   d="scan'208";a="49157528"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 01:33:00 -0700
+X-CSE-ConnectionGUID: 1Oyy/5PVTe+K7w51lFPXcA==
+X-CSE-MsgGUID: DjREWa3HTga7QfxE+EMplA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,290,1739865600"; 
+   d="scan'208";a="139298073"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.157])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2025 01:32:56 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Thu, 15 May 2025 11:32:53 +0300 (EEST)
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Ingo Molnar <mingo@kernel.org>, 
+    PDx86 ML <platform-driver-x86@vger.kernel.org>, 
+    Suma Hegde <suma.hegde@amd.com>
+cc: Hans de Goede <hdegoede@redhat.com>, Mark Gross <markgross@kernel.org>, 
+    Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+    Linux Next Mailing List <linux-next@vger.kernel.org>, x86@kernel.org, 
+    Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>, 
+    Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: linux-next: build failure after merge of the drivers-x86 tree
+In-Reply-To: <20250515164620.071d70e3@canb.auug.org.au>
+Message-ID: <bce51c8f-56c2-3a44-b590-149627398b7a@linux.intel.com>
+References: <20250515164620.071d70e3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1li4/kuB_8W7c6j+4YPYNJ7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/1li4/kuB_8W7c6j+4YPYNJ7
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Thu, 15 May 2025, Stephen Rothwell wrote:
 
-Today's linux-next merge of the hyperv tree got a conflict in:
+> Hi all,
+> 
+> After merging the drivers-x86 tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> drivers/platform/x86/amd/hsmp/hwmon.c: In function 'hsmp_hwmon_write':
+> drivers/platform/x86/amd/hsmp/hwmon.c:38:16: error: implicit declaration of function 'hsmp_send_message' [-Wimplicit-function-declaration]
+>    38 |         return hsmp_send_message(&msg);
+>       |                ^~~~~~~~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   92c025db52bb ("platform/x86/amd/hsmp: Report power via hwmon sensors")
+> 
+> I have used the drivers-x86 tree from next-20250514 for today.
 
-  arch/x86/coco/sev/core.c
+Hi Stephen,
 
-between commit:
+This is a direct result of moving a pdx86 related header behind my back:
 
-  d2062cc1b1c3 ("x86/sev: Do not touch VMSA pages during SNP guest memory k=
-dump")
+https://lore.kernel.org/all/20250413084144.3746608-5-mingo@kernel.org/
 
-from the tip-fixes tree and commit:
+That change wasn't sent to the relevant MAINTAINERS entries (and obviously 
+then does not contain my ack either).
 
-  266a5698a408 ("arch/x86: Provide the CPU number in the wakeup AP callback=
-")
+Ingo, any suggestion how to deal with this breakage? Do you have e.g. an 
+IB which I could pull into pdx86 tree which has only these header moves?
 
-from the hyperv tree.
+-- 
+ i.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/x86/coco/sev/core.c
-index fae73ae5a486,7780d55d1833..000000000000
---- a/arch/x86/coco/sev/core.c
-+++ b/arch/x86/coco/sev/core.c
-@@@ -869,12 -1166,26 +869,12 @@@ static void *snp_alloc_vmsa_page(int cp
-  	return page_address(p + 1);
-  }
- =20
-- static int wakeup_cpu_via_vmgexit(u32 apic_id, unsigned long start_ip)
- -static void snp_cleanup_vmsa(struct sev_es_save_area *vmsa, int apic_id)
- -{
- -	int err;
- -
- -	err =3D snp_set_vmsa(vmsa, NULL, apic_id, false);
- -	if (err)
- -		pr_err("clear VMSA page failed (%u), leaking page\n", err);
- -	else
- -		free_page((unsigned long)vmsa);
- -}
- -
-+ static int wakeup_cpu_via_vmgexit(u32 apic_id, unsigned long start_ip, un=
-signed int cpu)
-  {
-  	struct sev_es_save_area *cur_vmsa, *vmsa;
- -	struct ghcb_state state;
-  	struct svsm_ca *caa;
- -	unsigned long flags;
- -	struct ghcb *ghcb;
-  	u8 sipi_vector;
-- 	int cpu, ret;
-+ 	int ret;
-  	u64 cr4;
- =20
-  	/*
-
---Sig_/1li4/kuB_8W7c6j+4YPYNJ7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmglolYACgkQAVBC80lX
-0GzUwwf/QFrrv7GG5ZzvxQBf6XLjQ9pVqV1IUwihbAmX+3AkiFpcC3eg9CKEOviN
-/PGn47/RnGt0QIFVOenIrslN78gXSpkIR05TABveEF0B2Bt7Lj9LPHsKXbcCAlnS
-IMwhFg+dpfZpNpXfJQcZronGNDc+PdCmd9rDFVdUDKkwqA3uTDgQCRpl4/h6Hs1T
-uxtacQzZELSn+bVcznwcnGcXgbUK/SllXkDoSuhRtRcCTESckZT40tkrlQwi2AKu
-kMEuRp1S75WLtEPcav8lb3BxaP8GPGTDquYzAXmPnGjlCRuVQZs4Hv5KYF2X14lt
-1m3AUyKrzPc+3DQ3ZhmVUgW6HxAjlA==
-=WFb0
------END PGP SIGNATURE-----
-
---Sig_/1li4/kuB_8W7c6j+4YPYNJ7--
 

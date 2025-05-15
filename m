@@ -1,127 +1,112 @@
-Return-Path: <linux-next+bounces-6794-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6795-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4F19AB8442
-	for <lists+linux-next@lfdr.de>; Thu, 15 May 2025 12:48:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4999EAB85FF
+	for <lists+linux-next@lfdr.de>; Thu, 15 May 2025 14:15:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A198E4A0330
-	for <lists+linux-next@lfdr.de>; Thu, 15 May 2025 10:48:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57F083AE184
+	for <lists+linux-next@lfdr.de>; Thu, 15 May 2025 12:13:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABAA229825A;
-	Thu, 15 May 2025 10:48:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977FF298CA6;
+	Thu, 15 May 2025 12:10:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FfTLTM9L"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cNxfbw7T"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D86A298255;
-	Thu, 15 May 2025 10:48:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3228298C36;
+	Thu, 15 May 2025 12:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747306102; cv=none; b=BpYN3HhRfCGoQVRJhCNYEsAqzvgsyVyQVxXtg7LSUHmqCBq2GjIkh8qjU4Xc4s61RSJ3oiNWUhIRR3Ae1V2pjN9xBnY4myzuQ/2ke8WlwjfMCg0KfgcBZM4F0KKu4NkgNhsvEe2s87glgY7Z063hpXZZdJpa4Mv1bb9ucD3063o=
+	t=1747311051; cv=none; b=hHhPDTHz2CtfWzOwqzHSYRMxVFqlAal3L1qg/oc3wTl3KEOFCTSLEFuPuDpwWzXifHl4PdBRJEX/1Dp/LL50DZ/GCI7urODrLYHppIQfQliFn7/5iECOFKpboai23TOT4VHd8vAKVEff2gyWevQs3h1kybZpG1vh8hVyX4kCQgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747306102; c=relaxed/simple;
-	bh=eBPgvvsvHseuwOOxm/fxnYlTjdO4X6W/Sa724t+OOxQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NLhYvcvlyyN/7B/6SPtjChDJ9o+6EGT8Z8Qa2r9z0N/jbk+wvIqFGWq9aRjcOtbBdW7dO/r87aXR48K2BV1AwoOzOYQMMTdP9xf4m81Hdp/Nb4nJheneWh12SIjW1jI6T1gmVPDrMNInF5DjV/Yo4ubaq49QzF+V6FftzGJ8LKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FfTLTM9L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92D8BC4AF09;
-	Thu, 15 May 2025 10:48:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747306102;
-	bh=eBPgvvsvHseuwOOxm/fxnYlTjdO4X6W/Sa724t+OOxQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FfTLTM9LTMC6SzJrgtYs00OrUofyFCHezGXXKViJVYeakcCCqqgEHbDdKFA4YWZ5/
-	 D4e8z6eujMyUzh9UDkfyRG6xci9BE2e5NELK0o2qkHEqyRgF4guWxYrDgMQ7mp6Jax
-	 dX9Al8qFAmCCDRt/IFsVADWDEmsPo47xycvazkQtEIHxKjD5uMkki8opEHo7rFtfeE
-	 tayB9CBSMBI+GXA/6/Uw9IYGDAFWUnxU5Q6Anl3Ol9yiWQuUWMR7pz/Mh9BUUFaghI
-	 /g6gdCG4HBB7chLiUq58JT+ctMJmwkR22aDRIqoZxUFbOev/PIQv54P1LibHnaVC4m
-	 LnaGTHKPOScFA==
-Date: Thu, 15 May 2025 11:48:19 +0100
-From: Vinod Koul <vkoul@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
-	dma <dmaengine@vger.kernel.org>
-Cc: Qiu-ji Chen <chenqiuji666@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the dmaengine-fixes tree
-Message-ID: <aCXGc21rVab7ZuDG@vaman>
-References: <20250515093325.4e29e8a6@canb.auug.org.au>
+	s=arc-20240116; t=1747311051; c=relaxed/simple;
+	bh=N6rMoCx2aOj/7ScMu7wI/CvU9gkdt/FPtQ4XvrgHyNQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=U0TqPXL3BqJ4gBsdrCqFz93WzszzaqsOb5K+U/qcxSnoyubJYSKlc/paUxeV/Ms7yOHlz732QJTxccm1miNIbArGsW6kvDOYxdPVvcBZ6q3akqc+FiIOX1xadpgljFcaoaB4bTgOcRc1/JVyAcn8Ah288SIfDJBqJqZysr+0d2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cNxfbw7T; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1747311043;
+	bh=N6rMoCx2aOj/7ScMu7wI/CvU9gkdt/FPtQ4XvrgHyNQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=cNxfbw7TKopOr76pqBt1IlHgj3jY6tDdQWO2HqbGadj/8zLsjU3p1kN0C5XMmqrpQ
+	 cBO/TMMAVMLnYHSgW7ZONwrpDg+4B7HkYAT4GLzoTokYBBgYNcS05IPGU00zRmk2uq
+	 FHhrGHSOd7iV/mQvPGlPiLEURUBIg/tchLc6edM+xg8/8I7PmeH1os2ltkZCCJc9JE
+	 +MrWvd8d3NvmLUxKgD+TIMsqf7dnpInOyNIfx4gblDDEqLcn8kznJ5AkpnmhXJhXjr
+	 IZNI0KVj6uM9X+B6MIVlDm/SCKcPYm1aRAvW+R6orUEVvYWmSkN0t9Sq088IEPRPiE
+	 U/onZH8FHZeuQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZypvR1dTxz4wvg;
+	Thu, 15 May 2025 22:10:43 +1000 (AEST)
+Date: Thu, 15 May 2025 22:10:42 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: error trying to fetch the clockevents tree
+Message-ID: <20250515221042.7471ffc9@canb.auug.org.au>
+In-Reply-To: <ba3ff719-ce60-4c0f-a215-fa332b614b82@linaro.org>
+References: <20250429082047.4af75695@canb.auug.org.au>
+	<db7fce1c-c051-41d9-9cf1-ef015b0f7fb4@linaro.org>
+	<ba3ff719-ce60-4c0f-a215-fa332b614b82@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250515093325.4e29e8a6@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/ub16.dQMbCW7_llv1o7P1SF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 15-05-25, 09:33, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the dmaengine-fixes tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/dma/mediatek/mtk-cqdma.c: In function 'mtk_cqdma_find_active_desc':
-> drivers/dma/mediatek/mtk-cqdma.c:423:23: error: unused variable 'flags' [-Werror=unused-variable]
->   423 |         unsigned long flags;
->       |                       ^~~~~
-> 
-> Caused by commit
-> 
->   157ae5ffd76a ("dmaengine: mediatek: Fix a possible deadlock error in mtk_cqdma_tx_status()")
-> 
-> I have used the dmaengine-fixes tree from next-20250514 for today.
+--Sig_/ub16.dQMbCW7_llv1o7P1SF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, I have fixed it up and applied below:
+Hi Daniel,
 
--- >8 --
+On Thu, 15 May 2025 11:20:01 +0200 Daniel Lezcano <daniel.lezcano@linaro.or=
+g> wrote:
+>
+> I had no time yet to migrate the git tree to kernel.org but the
+> servers seem to work correctly now.
+>=20
+> Is it possible to enable back the tree so its content gets some round
+> in linux-next before the PR ?
 
+Restored from tomorrow.
 
-From 811d6a923b40fc130f91abf49151f57cf9ac2a6f Mon Sep 17 00:00:00 2001
-From: Vinod Koul <vkoul@kernel.org>
-Date: Thu, 15 May 2025 11:42:13 +0100
-Subject: [PATCH] dmaengine: mediatek: drop unused variable
+Just to make sure - this is still
 
-Commit 157ae5ffd76a dmaengine: mediatek: Fix a possible deadlock error
-in mtk_cqdma_tx_status() fixed locks but kept unused varibale leading to
-warning and build failure (due to warning treated as errors)
+https://git.linaro.org/people/daniel.lezcano/linux.git#timers/drivers/next
 
-drivers/dma/mediatek/mtk-cqdma.c: In function 'mtk_cqdma_find_active_desc':
-drivers/dma/mediatek/mtk-cqdma.c:423:23: error: unused variable 'flags' [-Werror=unused-variable]
-  423 |         unsigned long flags;
-      |                       ^~~~~
+--=20
+Cheers,
+Stephen Rothwell
 
-Fix by dropping this unused flag
+--Sig_/ub16.dQMbCW7_llv1o7P1SF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: 157ae5ffd76a ("dmaengine: mediatek: Fix a possible deadlock error in mtk_cqdma_tx_status()")
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- drivers/dma/mediatek/mtk-cqdma.c | 1 -
- 1 file changed, 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/dma/mediatek/mtk-cqdma.c b/drivers/dma/mediatek/mtk-cqdma.c
-index e35271ac1eed..47c8adfdc155 100644
---- a/drivers/dma/mediatek/mtk-cqdma.c
-+++ b/drivers/dma/mediatek/mtk-cqdma.c
-@@ -420,7 +420,6 @@ static struct virt_dma_desc *mtk_cqdma_find_active_desc(struct dma_chan *c,
- {
- 	struct mtk_cqdma_vchan *cvc = to_cqdma_vchan(c);
- 	struct virt_dma_desc *vd;
--	unsigned long flags;
- 
- 	list_for_each_entry(vd, &cvc->pc->queue, node)
- 		if (vd->tx.cookie == cookie) {
--- 
-2.34.1
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgl2cIACgkQAVBC80lX
+0Gxscgf/azHtkJZK1c89SBx4lYCiPZV6uj6t5kgzKjXJV5qMg1bpvPbH7o3bfXA2
+B2d13bBIyCZ8vyvJdfsfUg22QrAD1c1bUWcvhiHxpNkI2Kle0kyH4rZ9kMIxLxDw
+Yu6aAxTzqh7XKjpHXOyopDoDVHlsU0ZzVsPW1Syevr+QZzCgplex/PMs/CIrbtph
+4hEWz4JbWuV6tx36zfJTDq+mwLYrr7EpPnGTxvINfP0wB5HoiFvtFA1MlN8KjOwx
+5kjEgZpbbTpYNkHGc55Tk4fNb4eMN9VNdo8ojiM38LM9hryPHKdbIQfAnP+fn9+U
+cP/A3L7sIj0ekE88PeDAPqHvryVuSQ==
+=3CMP
+-----END PGP SIGNATURE-----
 
-
--- 
-~Vinod
+--Sig_/ub16.dQMbCW7_llv1o7P1SF--
 

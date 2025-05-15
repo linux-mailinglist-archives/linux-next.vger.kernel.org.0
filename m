@@ -1,165 +1,157 @@
-Return-Path: <linux-next+bounces-6780-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6781-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96566AB7CDF
-	for <lists+linux-next@lfdr.de>; Thu, 15 May 2025 07:11:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D85CAB7E05
+	for <lists+linux-next@lfdr.de>; Thu, 15 May 2025 08:31:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 620CC4A8514
-	for <lists+linux-next@lfdr.de>; Thu, 15 May 2025 05:11:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 260BB4C0CF6
+	for <lists+linux-next@lfdr.de>; Thu, 15 May 2025 06:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C98A12853E3;
-	Thu, 15 May 2025 05:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C8622539C;
+	Thu, 15 May 2025 06:30:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Wbbx+Yhl"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="Y1hna2Vo"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F0C14B1E49;
-	Thu, 15 May 2025 05:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D8E1CFBC;
+	Thu, 15 May 2025 06:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747285880; cv=none; b=QsGWW7ymTkjO0InW0YGob4/sHqMfxFZhJckpJMFXHRANvsAXBNq1kZtyXiVVBgeznJe4znQfnE6twnRbJB9Fitl9g+7YOvrixLiy1Zkiv8atVrUgycNi0J5yiWK0acc/ztirTk7zV/qY9EhcgrMJmDBTFXmOW0rx9zmqIb1opD4=
+	t=1747290655; cv=none; b=Q0nm3hC1JnNYxWi01CLjkvDTMxoE828AvpFV6HHDTZT3llOPAkkzdENFeSsoHx7DOlbkfBOUdbVV7fXDLpwuBt6q5DBjC7lKmMnYya+LpoooSySj807Bphe7loNgHzOeqcGXNVPgLcOPk1NIZWoOjRvhSZ7mt1TI2j6vPsiXF68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747285880; c=relaxed/simple;
-	bh=UyCByibD79o8AQFvGvbDJw48A+QFK+7qUwqe8Kih4/A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=gP6BebVi4t/xRfu36vLakbmR9dw7Us8v4+nCrVeazB/PYq35fjXcMgRnRRqnWQlB2EuGZONXz22af/CHI2IKtEphTgagJj/ECufto75g0WSENRcCA/+zPWvnBRraA+wtqMAD6szqCZ3Lssb3iRmLFtjUnftesFwPu7bfYf691ao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Wbbx+Yhl; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1747285865;
-	bh=naIQdwB5C3q1qo6nZ1pcQoxrLu8WIjiBO/sXTkCZcF0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Wbbx+Yhl7jhzwtKyLLD4pjIO+r5orcP1Hr2XJdvPCVyPAmWaqdmgATNzZrYbUKa1I
-	 rrt2RWhUC7n+cBrzIYMngKzUqAlkOokkbGyQBSwZto5YhcqvMEY3qtSuTLEA2z/qmg
-	 kZoV5OR5hZQN9/h2EBc16T3giTYvoaW2/igrRWwA3lgTLV/bMNLuzu4dBu0II/Skr4
-	 XyORn7rwKgInc6sQdR4rp3OjXyQ9UXZItK0UUeh/wEgDVtGFb/j9oV2jDvLOw9tA0O
-	 CxAP9P8DdchWC+bhxPSZw3q3IRJqbzqJSwnlHMIJc8TsG9pBKgpPnEvr2qm9S0el+u
-	 sW2EFMiif7lfw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZydbD56kpz4x1w;
-	Thu, 15 May 2025 15:11:04 +1000 (AEST)
-Date: Thu, 15 May 2025 15:11:02 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Dan Williams <dan.j.williams@intel.com>, Dave Hansen
- <dave.hansen@linux.intel.com>, David Hildenbrand <david@redhat.com>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tip tree with the mm-unstable tree
-Message-ID: <20250515151102.5b0f9e4f@canb.auug.org.au>
+	s=arc-20240116; t=1747290655; c=relaxed/simple;
+	bh=jCueH2glao7FduKYS1PWXqjnvP3c1zoAtFN+O1aO+Xs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Qxb4DKuO77aHwx7AbsrLMzocJwmlLK2WG50vbWcxUf/2IrfC9qejezrIM1FLECmp+jdXD1eTztpN/OBwnIkKSBSRtf95SYJxhPxjs8hM094WT87s6cs0eUQWIyZ3EU7y+rvHjUHpnhnstPPaGgQkyATPeOMyLd+fzVUQatQbu4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=Y1hna2Vo; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=KvqrPFnT/M5tUerhMwh3HKF/Af24Nx/5fyc2diEVnYs=;
+	t=1747290653; x=1748500253; b=Y1hna2Vo12IOysARB+aeIsGu8tgh46IQLs7jlsh20eYFjUH
+	cqmfhFR8T/pXi+xJbhXz2mqZTzyuu7mTFL4E9dU3sUMZALAv/WNQFIVL6oBV2XoWlWDDXGoHWbz6l
+	f5TiBLrcFdywdX7zbfoICfjriY44wC+t7CUHpWtQ8Ypgf9qW46Po8Urk7okEQRj/MKZKjhojh0O86
+	z+wk8DgCS74GEKtm4Iu2wtfPLmcfE5JT1Fq4GUySt96I1YQ5a1TUI9jfiM7QiITL/aRFkkBHexz1c
+	I7Q+BN565TWQuGukilGPg+6OmmcZeq83PDp/n4t5Fnb5FEB4KMQ88bhZClApPcog==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.1)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1uFS7H-0000000AUU1-0IvF;
+	Thu, 15 May 2025 08:30:51 +0200
+Message-ID: <8684a2b4bf367e2e2a97e2b52356ffe5436a8270.camel@sipsolutions.net>
+Subject: Re: lockup and kernel panic in linux-next-202505{09,12} when
+ compiled with clang
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Bert Karwatzki <spasswolf@web.de>, "linux-kernel@vger.kernel.org"
+	 <linux-kernel@vger.kernel.org>
+Cc: "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>, 
+ "llvm@lists.linux.dev"
+	 <llvm@lists.linux.dev>, Thomas Gleixner <tglx@linutronix.de>, 
+	linux-wireless@vger.kernel.org
+Date: Thu, 15 May 2025 08:30:50 +0200
+In-Reply-To: <f8552d41fb7eae286803b78302390614179b33b0.camel@web.de>
+References: <20250513164807.51780-1-spasswolf@web.de> <87h61ojg3g.ffs@tglx>
+								 <7471a185adcc34a79c2ab8ce1e87ab922ae2232b.camel@web.de>
+							 <b644ff1714731cfb652d809d4864f0d178b24a97.camel@web.de>
+						 <2d8c1929bf5ab5260dacf9aa390456b3b49ce465.camel@sipsolutions.net>
+					 <2cad838b39f00d93319509d2a6a77a4c42c7fa92.camel@web.de>
+				 <a12c82c394e9676e32ede6b8312f821a16fef94b.camel@sipsolutions.net>
+	 <f8552d41fb7eae286803b78302390614179b33b0.camel@web.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MpjZ0GK=/qz8kDBP6jN=9h6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-malware-bazaar: not-scanned
 
---Sig_/MpjZ0GK=/qz8kDBP6jN=9h6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 2025-05-15 at 00:27 +0200, Bert Karwatzki wrote:
+> Am Mittwoch, dem 14.05.2025 um 20:56 +0200 schrieb Johannes Berg:
+> > >=20
+> > > I've split off the problematic piece of code into an noinline functio=
+n to simplify the disassembly:
+> > >=20
+> >=20
+> > Oh and also, does it even still crash with that? :)
+>=20
+> Yes, it still crashes when compiled with clang.
 
-Hi all,
+OK, just checking. :)
 
-Today's linux-next merge of the tip tree got a conflict in:
+FWIW, I'm not convinced at all that the code you were looking at is
+really the problem. The crash (see below) is happening on the status
+side. Of course it cannot crash on the status side if on the TX side we
+never enter anything into the IDR data structure, and never tag the SKB
+to look up in the IDR and therefore never try to create the status
+report on the status side.
 
-  arch/x86/mm/pat/memtype.c
+Basically what happens is this:
 
-between commit:
+- on TX, if we have a socket requesting status, create a copy of the
+  SKB, put it into the IDR, and put the IDR index into the original
+  skb->cb
+- then transmit the original skb, of course
+- on TX status report from the driver, see if the skb->cb is tagged with
+  the IDR value, if so, report the copy of the SKB back to the socket
+  with the status information
 
-  f387f960a89a ("x86/mm/pat: factor out setting cachemode into pgprot_set_c=
-achemode()")
+(The reason we need to make a copy is that the SKB could be encrypted or
+otherwise modified in flight, and we don't want to undo that, rather
+keeping a copy for the report.)
 
-from the mm-unstable tree and commit:
+>  [  267.339591][  T575] BUG: unable to handle page fault for address: fff=
+fffff51e080b0
+>  [  267.339598][  T575] #PF: supervisor write access in kernel mode
+>  [  267.339602][  T575] #PF: error_code(0x0002) - not-present page
+>  [  267.339606][  T575] PGD f1cc3c067 P4D f1cc3c067 PUD 0=20
+>  [  267.339613][  T575] Oops: Oops: 0002 [#1] SMP NOPTI
+>  [  267.339622][  T575] CPU: 0 UID: 0 PID: 575 Comm: napi/phy0-0 Not tain=
+ted
+> 6.15.0-rc6-next-20250513-llvm-00009-gec34cd07a425 #968 PREEMPT_{RT,(full)=
+}=20
+>  [  267.339629][  T575] Hardware name: Micro-Star International Co., Ltd.=
+ Alpha
+> 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
+>  [  267.339632][  T575] RIP: 0010:queued_spin_lock_slowpath+0x120/0x1c0
+...
+> [  267.339692][  T575] Call Trace:
+>  [  267.339701][  T575]  <TASK>
+>  [  267.339705][  T575]  _raw_spin_lock_irqsave+0x57/0x60
+>  [  267.339714][  T575]  rt_spin_lock+0x73/0xa0
+>  [  267.339720][  T575]  sock_queue_err_skb+0xdc/0x140
+>  [  267.339727][  T575]  skb_complete_wifi_ack+0xa9/0x120
+>  [  267.339737][  T575]  ieee80211_report_used_skb+0x541/0x6e0 [mac80211]
+>  [  267.339799][  T575]  ? srso_alias_return_thunk+0x5/0xfbef5
+>  [  267.339804][  T575]  ? start_dl_timer+0xcf/0x110
+>  [  267.339814][  T575]  ieee80211_tx_status_ext+0x3b3/0x870 [mac80211]
+>  [  267.339851][  T575]  ? raw_spin_rq_lock_nested+0x15/0x80
+>  [  267.339862][  T575]  ? srso_alias_return_thunk+0x5/0xfbef5
+>  [  267.339866][  T575]  ? rt_spin_lock+0x3d/0xa0
+>  [  267.339873][  T575]  ? mt76_tx_status_unlock+0x38/0x230 [mt76]
+>  [  267.339886][  T575]  mt76_tx_status_unlock+0x1e0/0x230 [mt76]
 
-  1b3f2bd04d90 ("x86/devmem: Remove duplicate range_is_allowed() definition=
-")
+Yeah so that's the crash on the status report as explained above, it
+kind of looks almost like the skb->sk was freed and somehow invalid now?
+But I don't see a general issue here (will keep digging), and how come
+it only shows up with clang?
 
-from the tip tree.
+Since it reproduces pretty reliably, maybe you could do with KASAN?
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Also could be interesting - what userspace are you running with wifi?
+What tool is even setting up the wifi status? If you don't really know
+maybe just put WARN_ON(1) into net/core/sock.s where SO_WIFI_STATUS is
+written (sk_setsockopt).
 
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/x86/mm/pat/memtype.c
-index ccc55c00b4c8,c97b527c66fe..000000000000
---- a/arch/x86/mm/pat/memtype.c
-+++ b/arch/x86/mm/pat/memtype.c
-@@@ -773,39 -775,6 +775,12 @@@ pgprot_t phys_mem_access_prot(struct fi
-  	return vma_prot;
-  }
- =20
-- #ifdef CONFIG_STRICT_DEVMEM
-- /* This check is done in drivers/char/mem.c in case of STRICT_DEVMEM */
-- static inline int range_is_allowed(unsigned long pfn, unsigned long size)
-- {
-- 	return 1;
-- }
-- #else
-- /* This check is needed to avoid cache aliasing when PAT is enabled */
-- static inline int range_is_allowed(unsigned long pfn, unsigned long size)
-- {
-- 	u64 from =3D ((u64)pfn) << PAGE_SHIFT;
-- 	u64 to =3D from + size;
-- 	u64 cursor =3D from;
--=20
-- 	if (!pat_enabled())
-- 		return 1;
--=20
-- 	while (cursor < to) {
-- 		if (!devmem_is_allowed(pfn))
-- 			return 0;
-- 		cursor +=3D PAGE_SIZE;
-- 		pfn++;
-- 	}
-- 	return 1;
-- }
-- #endif /* CONFIG_STRICT_DEVMEM */
--=20
- +static inline void pgprot_set_cachemode(pgprot_t *prot, enum page_cache_m=
-ode pcm)
- +{
- +	*prot =3D __pgprot((pgprot_val(*prot) & ~_PAGE_CACHE_MASK) |
- +			 cachemode2protval(pcm));
- +}
- +
-  int phys_mem_access_prot_allowed(struct file *file, unsigned long pfn,
-  				unsigned long size, pgprot_t *vma_prot)
-  {
-
---Sig_/MpjZ0GK=/qz8kDBP6jN=9h6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgld2YACgkQAVBC80lX
-0Gzm/gf/YlSM92R6fMKVBw8E8RIh8F9sKnEiUOwUyTujRmdsVWr5bdXcRIUFKqNG
-nsvRmN5lXJZD2BGs9Z60hQkUOqDiDP0E1AVPFQP74RM4OY+UVu6TpZl9/IPeUsql
-TkLukgCivKC3NRs2FbMXPlNEduqFLFKvH9vD73gGxu9EdwdC6hal6T09VWZnMW/J
-/4ver3QbAtprWwn9BodMWjqsyo+SKGX97RmOLAhu5duKoPhtVPZ8cHNJbgLGoE+q
-ZKUIW2MrKg7fQIqNlMF36ih+EcpzLqz89a8U8rJ+yVYywrkNXK7iPPu4qIK5wJnQ
-0AGojISLYPBUYgqE5U8KP17j9Vx1iA==
-=s5zr
------END PGP SIGNATURE-----
-
---Sig_/MpjZ0GK=/qz8kDBP6jN=9h6--
+johannes
 

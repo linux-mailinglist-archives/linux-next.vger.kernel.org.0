@@ -1,109 +1,85 @@
-Return-Path: <linux-next+bounces-6816-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6817-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4022CAB99A9
-	for <lists+linux-next@lfdr.de>; Fri, 16 May 2025 12:04:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62803AB99AD
+	for <lists+linux-next@lfdr.de>; Fri, 16 May 2025 12:07:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4F001638AC
-	for <lists+linux-next@lfdr.de>; Fri, 16 May 2025 10:04:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F5A01B67584
+	for <lists+linux-next@lfdr.de>; Fri, 16 May 2025 10:07:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7873381C4;
-	Fri, 16 May 2025 10:03:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1758323099C;
+	Fri, 16 May 2025 10:06:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LAQTVK1i"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4WkLPzi8";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0xLzWZ/c"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AB412222D1;
-	Fri, 16 May 2025 10:03:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4D1381C4;
+	Fri, 16 May 2025 10:06:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747389835; cv=none; b=nIS306Qf7kTNowpXBzMhcfwI/zApP9imNrIMKI/JIqimdCxKQ4GFJgbzcW94adNjfRVqI+Wsa3ymqwdOM6oEG0qSJU1oMLGPKM+v/iJhD4SKs5XzGWpLV+9OlbsWAsALRriI49jRFsojyXxKRTo01vRANwJyurfurPaTzQh8wxk=
+	t=1747390015; cv=none; b=pCFwESPGsMT1YGOODLO+8lSEX2VZXfx5C2D2hGBnU/PNQky+cMocwDaaPNengawpysSK/4X7p7mX5+T4wjcIUemuKWZIF273NakkQDks39/3PA3O4XQ2/6/RlLyjdL7WBiW6ZsBfKj0UBNTyyZRmOFQj94Jh9U5ieYVNhiatRSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747389835; c=relaxed/simple;
-	bh=j1HFc195+eHZzuDggmE7XnncQjiusCu9G2Sl9nJ9a5I=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dNho5Hqfm4p1hJedOmKUAaZLLZZi34bdXn6oKwIM88EogglmseBAO/ALJfhVMzLazRy18XylK4iCN9vabkInhuPifZlvpwahkPnYYuI1zXMIptGviVVnweC6EdBdp+/OhIl1YtSX1wz70arud2uhxzOwOqzicR2wTe6sg81wwpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LAQTVK1i; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1747389831;
-	bh=5muHxI7+rtsGX0iFhRBYfJ7R6jC0v7WtAJI7H8fCSYY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=LAQTVK1ij6JfaGnAaiu4Z3V+7mZTXJWbUbgNS5ElwB7gNkD0ZZkqUr1OW4WoQIkyz
-	 T/ydUVkkLhAJ113K9WXvh0ZR5eo+7RurgcneCjODtyU51qw80hSffnx8a9JAqFkkUD
-	 1GfOSgcGIKib4ay3ImnxgdhvhU/o4zbszAkdifQSDEP+npJBPGyHTU1WlSXyDuK8JV
-	 STuPnYS23NjFEpE3cpx8ZIlB0b1dsWzOhmF0arTxtQ9Rl9uofHWeXMSVHsOiz8CgYp
-	 wb+0bEhHcqGm6PSC+R/HizqfrSDzsAzfeg47mYGRJJzIeInhMZ6ChMCV20oPzpuhMU
-	 vJFM+p41yFoIg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZzN2b1MNlz4wcd;
-	Fri, 16 May 2025 20:03:51 +1000 (AEST)
-Date: Fri, 16 May 2025 20:03:50 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the tip tree
-Message-ID: <20250516200350.63be46cd@canb.auug.org.au>
+	s=arc-20240116; t=1747390015; c=relaxed/simple;
+	bh=3SDUzvYiouQGNLytfN97dXHVloGjMKf2/khNAky3hzk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dGSvA0w+Bk1G5i2PIt45Fr5mZE1a9Y3QwKXB8qdSR1k1T2wVe6mn+ii+B+alz3rRPAZAgbih7h9Sa4u90qCVcTZBgta9LHG+VlHdu9uwqgm7zR6ekwuQJpJmR4IlBj8CxiV0vUnxmBdc0xKpa1BMxShRySXF+HzsYcaf/uNJ14E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4WkLPzi8; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0xLzWZ/c; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Fri, 16 May 2025 12:06:50 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1747390011;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tjonFLoUd6TslWy/SNsvpKJdwUB6z9QztnuQbK4Wzx4=;
+	b=4WkLPzi8c4NXeT8Ose1t/IVOHlIT2H13L/sgEmGaZK7ldhOrpZw7JEdKhqb7A3Nk5XjzgS
+	+dQ7Fee5noG94BKY5WUjG1LhEtUpfDGQYpJJU2uahUdSDKA++qTLZtNGAzEiQP9i7KgpQz
+	DHqBS6W+2vkRAvT/eIDCQAIcXGP3MHXUcfvt46k4l52X2+SwcJeDESRGq45wmgXyKV9ORv
+	t96C/f6weyywG/QWzWzVwusShJIeOCH0WV6ES3EU9nKu5CwmAQcZgrMXkX89mkh8JVQXWh
+	L4LNKymZoHIrOMgx04xrsYrJtDaXzDFsD9VvuwUfNu31ePPDX9woh+MECfDutw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1747390011;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=tjonFLoUd6TslWy/SNsvpKJdwUB6z9QztnuQbK4Wzx4=;
+	b=0xLzWZ/cqnptXZzNw2Zx9a9t12e7Jk+B+F0hGGfA30oK9EZAzNNlq84teuafMpBUh+bBkS
+	/wgfVq4NVLx+RFBA==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the tip tree
+Message-ID: <20250516100650.DORnSyZx@linutronix.de>
+References: <20250516200350.63be46cd@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EGwe/Jgi0CUVylpY=6+ug/d";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250516200350.63be46cd@canb.auug.org.au>
 
---Sig_/EGwe/Jgi0CUVylpY=6+ug/d
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2025-05-16 20:03:50 [+1000], Stephen Rothwell wrote:
+> Hi all,
+> 
+> [This is actually from a few days ago]
 
-Hi all,
+I have good news for your. We have a patch in the tip tree since a few
+hours ago:
+	https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=locking/futex&id=bd59f6170968314c82e2b65f8bbaec55896b7a5f
 
-[This is actually from a few days ago]
-
-After merging the tip tree, today's linux-next build (htmldocs) produced
-this warning:
-
-kernel/futex/waitwake.c:343: warning: expecting prototype for futex_wait_qu=
-eue(). Prototype was for futex_do_wait() instead
-
-Introduced by commit
-
-  93f1b6d79a73 ("futex: Move futex_queue() into futex_wait_setup()")
-
-This warning only seems to be produced from the old Perl based htmldocs
-target.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/EGwe/Jgi0CUVylpY=6+ug/d
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgnDYYACgkQAVBC80lX
-0GxrBgf/dDVASSubUWgN6tCmtcWx1G/B1Nmv52PEasyhccxcEdwCv6v+NF4Ka2FN
-3dfq+SQWeUdetM2KLAY1Kl9+W0X1ljKHhwJmCedbWEKU+LVb8XcqX0VmzMXyM1W7
-htNX03LLtbc8a8f6l602gDSzFNmbZqqCHKhtGGpoqkFG65wk0dLgQO/ZhHB6aI4G
-K17TSG6bhE2d7yWMVgAqpTTGgFu1CWF6IH3/hRU+FptG/7w2QQG6cfdFUr6VZBNv
-VtkM3s8ktJoC+WoH6ipJF6auQXAHkVplo0I/+K1zqWXX8qk43QAnbTe8cU7PrLqM
-wPbeh6A9Va/zu96OSAofolrZWx4Eqw==
-=frNd
------END PGP SIGNATURE-----
-
---Sig_/EGwe/Jgi0CUVylpY=6+ug/d--
+Sebastian
 

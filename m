@@ -1,122 +1,127 @@
-Return-Path: <linux-next+bounces-6813-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6814-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3278AAB996A
-	for <lists+linux-next@lfdr.de>; Fri, 16 May 2025 11:53:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E596BAB9989
+	for <lists+linux-next@lfdr.de>; Fri, 16 May 2025 11:57:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C25D84E3186
-	for <lists+linux-next@lfdr.de>; Fri, 16 May 2025 09:53:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 526527B536E
+	for <lists+linux-next@lfdr.de>; Fri, 16 May 2025 09:54:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D3C5231849;
-	Fri, 16 May 2025 09:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B23BF233727;
+	Fri, 16 May 2025 09:54:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V/oHqzV5"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Vkudkfw+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732E9230BF9;
-	Fri, 16 May 2025 09:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6CBA231837;
+	Fri, 16 May 2025 09:54:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747389220; cv=none; b=nTMT7DfGW9qgv/1uoXQlVhOSiJ99CE4fDZ76elFWAxoB0lBkEb3BS9SzRPOMPnPlWMZMbFNyq+PNAdE0S3x3J6+24UBMX26WQVOL8kyhYeKaXGroSf3/EgfJ8YeXCUyJzVUxHNzpafKdNf6JgqBv/ZBBG5cmAByEwMMGTEUTi6o=
+	t=1747389292; cv=none; b=LkMGWC4P6O4nfxXJJK3mYM8jAq8Rw/Y/z91pdVVcau2+f/NRG1qLZ0tAZfbF6epGBnPmRXIwAw3PcQxcv+DAPYgFzOLPQRnzEDw/LwsMsfYh7oLVNbOlhi8pXTqHDQaM0vr1MoGJNs2YvXBH3b0AhZDLeeIoDDE2EthJCJy7Qrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747389220; c=relaxed/simple;
-	bh=kP/eP9CyFOzd2cYwS1iAvjzqmb3Swb4YgY0fKvf6BG4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EqScr49Xe/BcM9JfQ4a6xhM6c3cdZ+rNZXq/DUQGwV0i3JUTGCgy8jEpo0OB4qU4cJ0vc82OzMPc/ln110UHKNUud6lwQPsJyzTdRAmY9qHVjiWH5pgeF3qZfz9IEv0WuY2LFHcSbiI1z5lf1azLm7EcFtzjwdAk0RLFrwmcSRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V/oHqzV5; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747389220; x=1778925220;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kP/eP9CyFOzd2cYwS1iAvjzqmb3Swb4YgY0fKvf6BG4=;
-  b=V/oHqzV52NKBVvlGTDMPTpZy62BP/eUJb3X6/PxI/qi/jyvHevHkO51i
-   oamcrZkz5dDeZhnLF+xzo+Oiw0aJNJ4gsl3cFe/7CGkuYrAb3BAlSlngd
-   QTxHGy7yzcEBCwzhBVO1qECriJvzumTrp4PddWbgWfJzn4PzVFjohk8dJ
-   6VAvc25DDT2OBti6gp4LFrFvfXbkSovMODiRofgUjk1iJvEuZmQAHnY6a
-   P4lsvXUcUo8Kjy0capTrKjBdUkomlz4CRpGHHTfQaX6s9NgbmbUvD8ZZU
-   x9xi4Doi8TS5NMTR6eJz5IQK+RAwix+os9gW15/VYTlAYoZWjQCjaVngN
-   Q==;
-X-CSE-ConnectionGUID: YjI2E9wlT/OtQHt61wxyMA==
-X-CSE-MsgGUID: q1Lj2t4fRu+ah4m7UMVUEw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11434"; a="60744157"
-X-IronPort-AV: E=Sophos;i="6.15,293,1739865600"; 
-   d="scan'208";a="60744157"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2025 02:53:39 -0700
-X-CSE-ConnectionGUID: vU9s/vPYSHaj3tH7jQvyTw==
-X-CSE-MsgGUID: KhfnSGfJRCSRgwtVcV3uKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,293,1739865600"; 
-   d="scan'208";a="161957707"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 May 2025 02:53:37 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1uFrl1-000000026UO-2Wef;
-	Fri, 16 May 2025 12:53:35 +0300
-Date: Fri, 16 May 2025 12:53:35 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the gpio-intel tree
-Message-ID: <aCcLH25PSNqtPeSk@smile.fi.intel.com>
-References: <20250516193436.09bdf8cc@canb.auug.org.au>
- <aCcHKK8FflYRhx2m@smile.fi.intel.com>
- <20250516194237.03371ba7@canb.auug.org.au>
+	s=arc-20240116; t=1747389292; c=relaxed/simple;
+	bh=c0iIl7dJXWna8S1DBQZPoPO7ke8+5gOze/1BvGwFB/s=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eZjcpHIIUUShdeJiD7Ty9uFYKYEtw1rjRWdGW0VqWsNEPOMVZ3mA4Dy3WkddNezkVUE+aIrMdhxF7l9Dt1OH3LIK/CiRC/dLzo7yln16WND5XHtN7hsSwaAm8vRaYoZJDfOT2RufK76WKfpz7P4hiOPxYU34XKAs2Xv+lXBhru4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Vkudkfw+; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1747389287;
+	bh=jDeYi4hO2+10znc75difMvtZmuJ188y5tW3/0jbzEGk=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Vkudkfw+ldEnbtby5RDZRxhpw76cbq6ti2Rx10gvpcwcWcRM3xZnbUrhZXyR/jr3g
+	 5AWcKZt5S1I8A38xpWS8Uw8EJCOH+UINRoy6es3WCh/3xAba/5hUrCO1+KJ5Q4420W
+	 oeT7bdswOTv0ugFHZO/GVNygCYlwkQnAj/C3glPjYWT6OQNA+IJxIarbWaKQnHAwDi
+	 SU8lWcjNLMGjZmqpQSvU1c5/BNnDpbb3cp2hDcjQC/zNMGfrbPfcM5EWKT97BBHOs1
+	 njAfgNciLW0UAu6KBmyOjET0y52mfEjozShlHbBgVTOniouuk3DYj8DsPPniORixFR
+	 AnAHc2TN+mr4A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ZzMr65b6Nz4wcd;
+	Fri, 16 May 2025 19:54:46 +1000 (AEST)
+Date: Fri, 16 May 2025 19:54:46 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Ingo Molnar <mingo@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, "H. Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki"
+ <rjw@rjwysocki.net>, "Ahmed S. Darwish" <darwi@linutronix.de>, Artem
+ Bityutskiy <artem.bityutskiy@linux.intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "Rafael J. Wysocki"
+ <rafael.j.wysocki@intel.com>
+Subject: Re: linux-next: manual merge of the tip tree with the pm tree
+Message-ID: <20250516195446.1331ac06@canb.auug.org.au>
+In-Reply-To: <aCbvO5Q0B3yYxji4@gmail.com>
+References: <20250516161541.0cff29b8@canb.auug.org.au>
+	<aCbvO5Q0B3yYxji4@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250516194237.03371ba7@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: multipart/signed; boundary="Sig_/_wVQ2Q4E=Z6=pvU9HE0DJkb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Fri, May 16, 2025 at 07:42:37PM +1000, Stephen Rothwell wrote:
-> On Fri, 16 May 2025 12:36:40 +0300 Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > On Fri, May 16, 2025 at 07:34:36PM +1000, Stephen Rothwell wrote:
-> > > Hi all,
-> > > 
-> > > After merging the gpio-intel tree, today's linux-next build (htmldocs)
-> > > failed like this:
-> > > 
-> > > Error: Cannot open file /home/sfr/next/next/drivers/gpio/gpiolib-acpi.c
-> > > 
-> > > Caused by commit
-> > > 
-> > >   babb541af627 ("gpiolib: acpi: Move quirks to a separate file")
-> > > 
-> > > I have to run
-> > > 
-> > > make KERNELDOC=$(pwd)/scripts/kernel-doc.pl htmldocs
-> > > 
-> > > as the newer Python version dies without a useful error :-(  
-> > 
-> > Thanks for the report! And can you share the output of the above?
+--Sig_/_wVQ2Q4E=Z6=pvU9HE0DJkb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I have just sent 20250516095306.3417798-1-andriy.shevchenko@linux.intel.com, it
-should fix the error here.
+Hi Ingo,
 
-> This is already being discussed in another thread.
-> 
-> https://lore.kernel.org/all/20250508184839.656af8f6@canb.auug.org.au/
+On Fri, 16 May 2025 09:54:35 +0200 Ingo Molnar <mingo@kernel.org> wrote:
+>
+> So I don't think the <asm/cpuid.h> change is needed - the header still=20
+> fully exists:
+>=20
+>   starship:~/tip> ls -lh arch/x86/include/asm/cpuid/api.h arch/x86/includ=
+e/asm/cpuid.h =20
+>   -rw-rw-r-- 1 mingo mingo 6.1K May 16 09:34 arch/x86/include/asm/cpuid/a=
+pi.h
+>   -rw-rw-r-- 1 mingo mingo  149 May 16 09:34 arch/x86/include/asm/cpuid.h
 
+That change is in the tip tree and involved in the conflict, so I just
+used it as it was in the tip tree.  This is normal conflict resolution.
 
+> And the <linux/sysfs.h> addition is probably a build fix for the PM=20
+> tree? The <asm/cpuid.h> header's indirect header dependencies did not=20
+> change. Should probably not be carried in -next, as this masks a build=20
+> failure that will then trigger in Linus's tree?
 
--- 
-With Best Regards,
-Andy Shevchenko
+Well, it did not fail building yesterday (without the include) and
+looks like the commit is adding the first sysfs use in this file ..
 
+Mind you, if the sysfs.h include had been added a line or 2 higher up -
+or even if there was a blank line between the linux/ and asm/ includes,
+there may have been no conflict reported and git would have produced
+the resulting file with both changes all by itself.
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/_wVQ2Q4E=Z6=pvU9HE0DJkb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgnC2YACgkQAVBC80lX
+0Gwe7gf9E6XyrZUQ/x29fidSris5oEq8H+8IHMlQnVg69w5cmDnpAci+tXVbG7uH
+wjlxT1dNmtELA9s9KxPEqMTWtZvs0E/UwxxYkf5Q/leKR+tDS4DOz7bnBm0gml4z
++hEQam9ryMYYARwWdYWWsKcJt5UB9AcdS+jDUgwZRap3BxaX6AEiHcrhoyJzDy/r
+KunDG0l9//VQ5gtl2R2PPl1C0TixtGPUK81q/SFTeEa+wL8VeXSjsQmmsG10S/eu
+0hYp/ERPHIQT4efXz5VynC49SIjnbaIk7nZ/m7Otg8w3COJ/KQurqsVGULHT2MUU
+pTVC9kzUshus5R5BEP+mioGWbYIhgg==
+=sDmX
+-----END PGP SIGNATURE-----
+
+--Sig_/_wVQ2Q4E=Z6=pvU9HE0DJkb--
 

@@ -1,52 +1,52 @@
-Return-Path: <linux-next+bounces-6840-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6841-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DC35ABC7E0
-	for <lists+linux-next@lfdr.de>; Mon, 19 May 2025 21:33:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E93C9ABC85F
+	for <lists+linux-next@lfdr.de>; Mon, 19 May 2025 22:27:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF5303A8546
-	for <lists+linux-next@lfdr.de>; Mon, 19 May 2025 19:33:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7416189B2D3
+	for <lists+linux-next@lfdr.de>; Mon, 19 May 2025 20:27:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7CEA1F462F;
-	Mon, 19 May 2025 19:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2DF12165E9;
+	Mon, 19 May 2025 20:27:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VE6nigwP"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="CLscnDOK"
 X-Original-To: linux-next@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46191EB18A;
-	Mon, 19 May 2025 19:33:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB03218ABA;
+	Mon, 19 May 2025 20:27:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747683201; cv=none; b=MdaOBp5G5+KNlsMdmvTxDGBHXRzal387swydg2Yxv8Hwrk+/Lr6mYGl6m9IRmTlbr/qZvN7GXt0dei4GhXZmbh/IeUCETn1GVWSRHXAycgJ9ykNYDOiEeT1+A9Q4qsqAS6l8dNpWNR+aLwvTHiBP0Pg8aKALiSCSxEz+eiaFBYg=
+	t=1747686422; cv=none; b=X1cf8L5BIeAMimGGKCY01UTIkNMCGAxPBDIKa98iiSXTxmlhPCvQemU+LNLr6+oWkO1WEcF2NBBdeoFC7n5D54vTPo540wU0frj5Fld4CjH/7C7wh/eb5yjDrHAZetXIAPwulW3yrTrz0sbV07BmAPmJjaHxUXF07hkeN44v2yY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747683201; c=relaxed/simple;
-	bh=A0wQ3tP7Kt9+GSjmXRRUkxNxuXQE6aet64FxQJPc7Ao=;
+	s=arc-20240116; t=1747686422; c=relaxed/simple;
+	bh=l5upmzFVp75abDu6YqRT8MBIFAQxtBa3/aCt6W+nB2Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PgFrTyj4f+vPAlAZYDERihwmIEMfjUsFwLWnbxPVWl8dyc7tCmCrzJrn0B+bcZNZRd5aGVBtYbW10HL8zrH0HQC1h8pymcweaVq0w0XyjV48de2MdLuEeNg9F8TdJs07y1emYI1HaIastTLUSRWA/U552gc7S309IRp5GrNs9NQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=VE6nigwP; arc=none smtp.client-ip=90.155.50.34
+	 In-Reply-To:Content-Type; b=pfPnG6Dis7PSdhk8DYF7kOk5zQYOXGEkQUSTS7HH7iS4bDStMxK+mQs6K5NbN77svYgKf+keFNPk/VKBy8qKAlBmeeUI4FB+ZeQs5j1AnkfsmH7pWhu+dg7UyJ24G1UrwczXdZ7VUp7xRuRuyK5EJ2/isrYSJ35UJH3ltXcexkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=CLscnDOK; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description;
-	bh=InuXJoEHlMlH9HLxvIAMD1VL/vcfOh5/RbshItV4lp0=; b=VE6nigwP79v15FaeosO9qW8Wb7
-	U5KNQIzCRFkK/uk/hrv/hYcX1/dgBy9PwBVkQS874Ez/LkpNdbYaiMRDsH11A+DcBc3fSWPSnSoyQ
-	FDe6GEDB3Q5bxiXEsNsWCIbDzeP6qbfBRw2g4mWw98MZVvCYAywQVyURH7vq8Zyl0ndtEF/QyAwcx
-	favf2Rrhddyy6jQpBcw1RB/zNAHleaOPzEE46QllL6Goy660dpv2Tg5Fpc0UT63dM41HaNJm5xpQf
-	KtN3EK5FTa10pAJYqLprcENaGqbBk0cR148embdEjn+5CFV2CRzRMIpakVxiQ0cY8GU0vnU4YMatq
-	+sMVtNVw==;
+	bh=OdUPEKiubFLR9XRzcKGanx11EyQE8ZL6x7BAXWrg/PI=; b=CLscnDOKMkzEFZ5iGP70Ggp0PI
+	LbQG+GsCzcZ69OfvnoiAm7kcYMOTdLZPZ8UBx+UdqLb3HQbRmO5rJglxm4OL5B4BLJGcKic3421jV
+	zkYk7amFu6aj1s3+IVp+/b44zkJBZ/VEKRUyefCRyZ7Wik7ZQ/t2Tt8LHqIROBnb95bgb+1lVjFwk
+	Rs+R0ohgaer/95Phhg0JaIgsokrSgNjEgvtuSiIt+oAHK4nOt7tPVnsqi4x9xXgUgbPrUvUfWJiWW
+	fC1+8EoVhXrMOsog1exMDdkLYUD8YDqppmjrYx7cV7kPRN4sx/nOS2H/kM/TumkC4QswqiTpEBhM1
+	FbEP/WnA==;
 Received: from [50.53.25.54] (helo=[192.168.254.17])
 	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uH6EZ-00000002GyR-29fL;
-	Mon, 19 May 2025 19:33:11 +0000
-Message-ID: <0a6cbe7b-814b-407c-ac1c-96ab7b787d88@infradead.org>
-Date: Mon, 19 May 2025 12:33:03 -0700
+	id 1uH74Z-00000002LEv-0zCU;
+	Mon, 19 May 2025 20:26:55 +0000
+Message-ID: <d645a0a2-4ffd-4dc6-b8a9-522ec3d27d7f@infradead.org>
+Date: Mon, 19 May 2025 13:26:52 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -54,159 +54,120 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge all the trees
-To: Akira Yokosawa <akiyks@gmail.com>,
- Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: corbet@lwn.net, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
- Dan Williams <dan.j.williams@intel.com>, linux-doc@vger.kernel.org
-References: <20250508184839.656af8f6@canb.auug.org.au>
- <3b35840a-7b87-44fc-8580-219ac78ad112@gmail.com>
- <20250508222531.0e7fab9c@canb.auug.org.au> <20250508143911.5d7a77d4@foz.lan>
- <879b49f5-7350-48e8-a84e-2c580a5b0ca8@gmail.com>
+Subject: Re: linux-next: Tree for May 16 (security/landlock/ruleset.c)
+To: Kees Cook <kees@kernel.org>, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
+ <mic@digikod.net>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-security-module@vger.kernel.org, =?UTF-8?Q?G=C3=BCnther_Noack?=
+ <gnoack@google.com>
+References: <20250516202417.31b13d13@canb.auug.org.au>
+ <e3754f69-1dea-4542-8de0-a567a14fb95b@infradead.org>
+ <20250519.jiveise8Rau8@digikod.net> <202505191117.C094A90F88@keescook>
+ <20250519.ba8eoZu3XaeJ@digikod.net> <202505191212.61EE1AE80@keescook>
 Content-Language: en-US
 From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <879b49f5-7350-48e8-a84e-2c580a5b0ca8@gmail.com>
+In-Reply-To: <202505191212.61EE1AE80@keescook>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 
-On 5/14/25 7:33 PM, Akira Yokosawa wrote:
-> [+CC linux-doc]
+> From 6fbf66fdfd0a7dac809b77faafdd72c60112bb8d Mon Sep 17 00:00:00 2001
+> From: Kees Cook <kees@kernel.org>
+> Date: Mon, 19 May 2025 11:52:06 -0700
+> Subject: [PATCH] string.h: Provide basic sanity checks for fallback memcpy()
+> MIME-Version: 1.0
+> Content-Type: text/plain; charset=UTF-8
+> Content-Transfer-Encoding: 8bit
 > 
-> Hi,
+> Instead of defining memcpy() in terms of __builtin_memcpy() deep
+> in arch/x86/include/asm/string_32.h, notice that it is needed up in
+> the general string.h, as done with other common C String APIs. This
+> allows us to add basic sanity checking for pathological "size"
+> arguments to memcpy(). Besides the run-time checking benefit, this
+> avoids GCC trying to be very smart about value range tracking[1] when
+> CONFIG_PROFILE_ALL_BRANCHES=y but FORTIFY_SOURCE=n.
 > 
-> On Thu, 8 May 2025 14:39:11 +0200, Mauro Carvalho Chehab wrote:
->> Em Thu, 8 May 2025 22:25:31 +1000
->> Stephen Rothwell <sfr@canb.auug.org.au> escreveu:
-> [...]
-> 
->>>
->>> So, I used "KERNELDOC=$(pwd)/scripts/kernel-doc.pl" and tried again.
->>>
->>> I got these (new) messages:
->>>
->>> Error: Cannot open file drivers/virt/coco/tsm-mr.c
->>> Error: Cannot open file drivers/virt/coco/tsm-mr.c
->>> WARNING: kernel-doc 'scripts/kernel-doc.pl -rst -enable-lineno -export drivers/virt/coco/tsm-mr.c' failed with return code 2
->>>
->>> (and a few other innocuous ones)
->>>
->>> So your guess is good.
->>>
->>> It would be nice to have the Python kernel-doc fixed as well as the
->>> devsec-tsm tree.
->>
->> With regards to kernel-doc, failing to build if a file is missing
->> is the right thing to do.
-> 
-> Mauro, I don't agree here.
-> 
-> With the perl version of kernel-doc, a typo in a file path doesn't cause
-> a fatal error of docs build.
-> 
-> kernel-doc as python class libs ends up in a fatal error.
-> 
-> Here is a log of such a fatal error (on top of current docs-next with
-> intentional typo made in a pathname in one of .. kernel-doc::
-> 
-> -----------------------------------------------------------------
-> Sphinx parallel build error!
-> 
-> Versions
-> ========
-> 
-> * Platform:         linux; (Linux-6.8.0-59-generic-x86_64-with-glibc2.39)
-> * Python version:   3.12.3 (CPython)
-> * Sphinx version:   8.2.3
-> * Docutils version: 0.21.2
-> * Jinja2 version:   3.1.6
-> * Pygments version: 2.19.1
-> 
-> Last Messages
-> =============
-> 
->     userspace-api/gpio/gpio-get-chipinfo-ioctl .. userspace-api/media/dvb/dmx-fclose
-> 
-> 
->     reading sources... [ 90%]
->     userspace-api/media/dvb/dmx-fopen .. userspace-api/media/mediactl/media-controller-model
-> 
-> 
->     reading sources... [ 92%]
->     userspace-api/media/mediactl/media-func-close .. userspace-api/media/v4l/diff-v4l
-> 
-> Loaded Extensions
-> =================
-> 
-> * sphinx.ext.mathjax (8.2.3)
-> * alabaster (1.0.0)
-> * sphinxcontrib.applehelp (2.0.0)
-> * sphinxcontrib.devhelp (2.0.0)
-> * sphinxcontrib.htmlhelp (2.1.0)
-> * sphinxcontrib.serializinghtml (2.0.0)
-> * sphinxcontrib.qthelp (2.0.0)
-> * kerneldoc (1.0)
-> * rstFlatTable (1.0)
-> * kernel_include (1.0)
-> * kfigure (1.0.0)
-> * sphinx.ext.ifconfig (8.2.3)
-> * automarkup (unknown version)
-> * maintainers_include (1.0)
-> * sphinx.ext.autosectionlabel (8.2.3)
-> * kernel_abi (1.0)
-> * kernel_feat (1.0)
-> * translations (unknown version)
-> * sphinx.ext.imgmath (8.2.3)
-> 
-> Traceback
-> =========
-> 
->       File "/<...>/sphinx-8.2.3/lib/python3.12/site-packages/sphinx/util/parallel.py", line 137, in _join_one
->         raise SphinxParallelError(*result)
->     sphinx.errors.SphinxParallelError: KeyError: '/<...>/lib/bitmap-bad.c'
-> 
-> 
-> The full traceback has been saved in:
-> /tmp/sphinx-err-8jzxndsr.log
-> 
-> To report this error to the developers, please open an issue at <https://github.com/sphinx-doc/sphinx/issues/>. Thanks!
-> Please also report this if it was a user error, so that a better error message can be provided next time.
-> make[3]: *** [/<...>/Documentation/Makefile:123: htmldocs] Error 2
-> make[2]: *** [/<...>/Makefile:1806: htmldocs] Error 2
-> make[1]: *** [/<...>/Makefile:248: __sub-make] Error 2
-> make[1]: Leaving directory '/<...>/my-output'
-> make: *** [Makefile:248: __sub-make] Error 2
-> 
-> -----------------------------------------------------------------
-> 
-> This would surprise innocent devs who are kindly willing to test docs build.
-> 
-> I think you need to tame its behavior and make it emit a proper warning and
-> continue building docs in case of such predictable user errors.
+> Link: https://lore.kernel.org/all/202505191117.C094A90F88@keescook/ [1]
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/all/202501040747.S3LYfvYq-lkp@intel.com/
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Closes: https://lore.kernel.org/all/e3754f69-1dea-4542-8de0-a567a14fb95b@infradead.org/
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-Totally agree.
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+
 Thanks.
 
-> Am I asking you something unreasonable?
+> ---
+> Cc: "Mickaël Salaün" <mic@digikod.net>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: <x86@kernel.org>
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Cc: Andy Shevchenko <andy@kernel.org>
+> Cc: Uros Bizjak <ubizjak@gmail.com>
+> Cc: <linux-hardening@vger.kernel.org>
+> ---
+>  arch/x86/include/asm/string_32.h |  6 ------
+>  include/linux/string.h           | 13 +++++++++++++
+>  2 files changed, 13 insertions(+), 6 deletions(-)
 > 
-> Thanks,
-> Akira
-> 
->>                           As kernel-doc is now fully an Sphinx extension,
->> it now signalizes to Sphinx that the build has failed.
->>
->> Yet, it should have produced some warnings. Maybe we need to specify a
->> different log level with Sphinx to make it happen. I'll double check it
->> and send a fix later on to kernel-doc.
->>
->> Thanks,
->> Mauro
-> 
-> 
+> diff --git a/arch/x86/include/asm/string_32.h b/arch/x86/include/asm/string_32.h
+> index e9cce169bb4c..74397c95fa37 100644
+> --- a/arch/x86/include/asm/string_32.h
+> +++ b/arch/x86/include/asm/string_32.h
+> @@ -145,12 +145,6 @@ static __always_inline void *__constant_memcpy(void *to, const void *from,
+>  #define __HAVE_ARCH_MEMCPY
+>  extern void *memcpy(void *, const void *, size_t);
+>  
+> -#ifndef CONFIG_FORTIFY_SOURCE
+> -
+> -#define memcpy(t, f, n) __builtin_memcpy(t, f, n)
+> -
+> -#endif /* !CONFIG_FORTIFY_SOURCE */
+> -
+>  #define __HAVE_ARCH_MEMMOVE
+>  void *memmove(void *dest, const void *src, size_t n);
+>  
+> diff --git a/include/linux/string.h b/include/linux/string.h
+> index 01621ad0f598..ffcee31a14f9 100644
+> --- a/include/linux/string.h
+> +++ b/include/linux/string.h
+> @@ -3,6 +3,7 @@
+>  #define _LINUX_STRING_H_
+>  
+>  #include <linux/args.h>
+> +#include <linux/bug.h>
+>  #include <linux/array_size.h>
+>  #include <linux/cleanup.h>	/* for DEFINE_FREE() */
+>  #include <linux/compiler.h>	/* for inline */
+> @@ -390,7 +391,19 @@ static inline const char *kbasename(const char *path)
+>  
+>  #if !defined(__NO_FORTIFY) && defined(__OPTIMIZE__) && defined(CONFIG_FORTIFY_SOURCE)
+>  #include <linux/fortify-string.h>
+> +#else
+> +/* Basic sanity checking even without FORTIFY_SOURCE */
+> +# ifndef __HAVE_ARCH_MEMCPY
+> +#  define memcpy(t, f, n)					\
+> +	do {							\
+> +		typeof(n) __n = (n);				\
+> +		/* Skip impossible sizes. */			\
+> +		if (!WARN_ON(__n < 0 || __n == SIZE_MAX))	\
+> +			__builtin_memcpy(t, f, __n);		\
+> +	} while (0)
+> +# endif
+>  #endif
+> +
+>  #ifndef unsafe_memcpy
+>  #define unsafe_memcpy(dst, src, bytes, justification)		\
+>  	memcpy(dst, src, bytes)
 
 -- 
 ~Randy
-
 

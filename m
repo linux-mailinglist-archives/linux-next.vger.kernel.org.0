@@ -1,98 +1,101 @@
-Return-Path: <linux-next+bounces-6849-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6850-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9543AABD884
-	for <lists+linux-next@lfdr.de>; Tue, 20 May 2025 14:51:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A01A9ABD93E
+	for <lists+linux-next@lfdr.de>; Tue, 20 May 2025 15:22:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07EF23BDFEE
-	for <lists+linux-next@lfdr.de>; Tue, 20 May 2025 12:51:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6739318909E8
+	for <lists+linux-next@lfdr.de>; Tue, 20 May 2025 13:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A111127715;
-	Tue, 20 May 2025 12:51:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48A3C24290D;
+	Tue, 20 May 2025 13:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ToVooSWT"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="l99/oof6"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D2D33DB;
-	Tue, 20 May 2025 12:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D48B2417C4;
+	Tue, 20 May 2025 13:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747745501; cv=none; b=c9jFNPUpJzrXbHW6poRL0oFi+rPqNGXv4Ymms0kEXXig+yBS1fFE7zs4kHCzuePty1pdqbF9bvJL4HFikNpx09v7/x2GSY/iKgUZGh+Nwz/GaCQfdmXQDyhzDSzIQV6IGrSoHLtaIZZCN7oSvNnfYjhEg7x227v8RmFqjq4WUUY=
+	t=1747747332; cv=none; b=ZaQlUc/avQhsw2TkU5Fht9wWyqHr/bnu4U52WiOHU1HjGdSnxuG/Y5LVcJSjcaOI3w2121ohtT9/fKJGPRw0CUeprk6B3XskGm6Kz7wstMya2Sf02bErermWKTSt0wjqjuQ149kyY9uBDf0BhiMUpfGFj4/flw5Bt0KZzAn99JM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747745501; c=relaxed/simple;
-	bh=zumAJWDYQnat4fWlVZatfH+lvx8bhMaBs8mkDL2dsO0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Q94ZwTdjhrh/ETIQLk+8lESW572sxxfcPMw0TxwzG/W1+NzJFTOhCAR9PCXE0CLupo1zkJR5lTlQGklV4axLR6bw45/7w9x6CIP+YxUEvH76S8jvScrAWcNfEVcMePDSHXG9WwEkbm6PfgpgGYeFaxdYLVaYLLXarvAjpr+Cd3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ToVooSWT; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1747745497;
-	bh=CgmhPoW2ZqWVTc1tVVoXjvFrm0yS5Z2k+W8bO0bU1P4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=ToVooSWTG4j8ETG8sKglnSmtuDMHl9qp2HEdXUoSRS0dB9Db3YRSS72UQMts+yHVQ
-	 0W0jL/sXdGKXepxUPckHelNgNUqJFP4/3AfI+WxBl+JOCZJY3Z4drvCobmG9FT5tWD
-	 szkK9CC4iFiUgwmLSKPdE4YHbs27N2lUbT6Y+Nf4344BsRTF+GtULGVU8ZQofCOaLa
-	 FbIv6tpq5iVZaiWYB9uOhA/UOh56nbTSm7tbqsIoJyRczDVjLrZR2E8hxa6gTaewAT
-	 d+wMvNcv1bbJkKMTKbg+leWSfpO4U4DExrUBqe72e7CkyJY/yNTRiIMRqPkCNjl58q
-	 m6luJpm/HYNtA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4b1vZK3hfnz4wcg;
-	Tue, 20 May 2025 22:51:37 +1000 (AEST)
-Date: Tue, 20 May 2025 22:51:36 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the bitmap tree
-Message-ID: <20250520225136.026acdd6@canb.auug.org.au>
+	s=arc-20240116; t=1747747332; c=relaxed/simple;
+	bh=pLEHwDiVuZvXiue/k5tPps5MZhvaONMk0WPltQccuT8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lC6J3rGDlPMdEF6+VH1HwTjYUD8gGFKW35AFEtKACRO0ejvRDsIUpznk2HQbQhYh+CHWlg01oXFQpAVCjbVNvNx8BBMbfO6Oczfd2dmBAA5VK5kWVN0lkylxrD4GmRm6sBwGwqvGq9dJ5I9ZyPP4SQvms4mpXyVPI+bvpsKY0o8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=l99/oof6; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=qGkxzvfqtbfpZxZZ9+czodAziIbE78FPgucChcrRJxE=;
+	t=1747747330; x=1748956930; b=l99/oof6S4VuaqXcfvyKHhA+yq8KB7AWdSRYnaNvK2XXKtn
+	0jtZef6qFsYWmUR/20MurqIntl5NCIyV+k1uaIoVlw542kUoMrCLlIcvdGmzDSI+cwcIFudIik3wX
+	Be5tEIbG23vX1f84VJz3EJwKvqSk8SZtZTaVfwUN6XPh4VbjZ9jpYzFomHODM38facN7DiV1U1+Y0
+	r+ssGoXyvzFoWpSbOd+M32MADJsJh/CaWSHbRH9LoBglwj1IC76Mti3qH914oMe0qIXs7atJAcaii
+	0vuVfePA62sTetL3dk8ukv8uLsFIm3CfVBhv8t4MBH8WYf3Sk4LP70wRqfK9klkw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.2)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1uHMuz-0000000BckJ-1tcs;
+	Tue, 20 May 2025 15:22:06 +0200
+Message-ID: <f6d119025a88b766ec803ef948dbbf7c97574b74.camel@sipsolutions.net>
+Subject: Re: [PATCH] wifi: Check if socket flags are valid
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Bert Karwatzki <spasswolf@web.de>, linux-wireless@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, Jason Xing
+	 <kerneljasonxing@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	netdev@vger.kernel.org
+Date: Tue, 20 May 2025 15:22:01 +0200
+In-Reply-To: <20250518164546.4612-1-spasswolf@web.de>
+References: <20250518164546.4612-1-spasswolf@web.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RTnanEaF2re=MxWFOc_c_FD";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-malware-bazaar: not-scanned
 
---Sig_/RTnanEaF2re=MxWFOc_c_FD
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Bert,
 
-Hi all,
+Thank you _very_ much for doing all this debug. I was somewhat following
+along on my phone, but was out over the weekend.
 
-Commit
+> +++ b/drivers/net/wireless/ath/wil6210/txrx.h
+> @@ -618,7 +618,7 @@ static inline bool wil_need_txstat(struct sk_buff *sk=
+b)
+>  	const u8 *da =3D wil_skb_get_da(skb);
+> =20
+>  	return is_unicast_ether_addr(da) && skb->sk &&
+> -	       sock_flag(skb->sk, SOCK_WIFI_STATUS);
+> +	       sk_fullsock(skb->sk) && sock_flag(skb->sk, SOCK_WIFI_STATUS);
 
-  abdf5cc6dabd ("net: mana: explain irq_setup() algoritm")
+I feel like in line with sk_is_refcounted(), maybe we could add
 
-is missing a Signed-off-by from its author and committer.
+static inline bool
+sk_requests_wifi_status(struct sock *sk)
+{
+	return sk && sk_fullsock(sk) && sock_flag(sk,
+SOCK_WIFI_STATUS);
+}
 
---=20
-Cheers,
-Stephen Rothwell
+perhaps?
 
---Sig_/RTnanEaF2re=MxWFOc_c_FD
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+That's basically all the checks in all the callers.
 
------BEGIN PGP SIGNATURE-----
+I can also just do that though if you don't want to resend.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgsetgACgkQAVBC80lX
-0GxczQf+LdX7XoVkCO0l+uvGYnoQNOAKo8SR94Ar7gUe8q7Lj0SpY+g0/STjdo5X
-bzYWU1VT75tqFdS2QCQjPjWsjqAupFzbt3RnrVy46ouKg+OLoC+Jtn96dR0It64B
-U/paCZl6luabeH9BBDUpgINRaPnGGmNLhmwkEkcYSEgE3Pb2BmGZ8ALKeK7emBan
-oMsxpug5VIxO9GvRgpwU6WIqYwryYacC8X/Hr2u3o6yI3wblCBXUqHXEZsZCty5I
-wWLFpPWixzWqIaPpzGxziWjNi9NyZ5mw7WbxL7pkh4gBNEq0Q7PxfgB6TfHoW1Y8
-mwMaRpI/P9TBOgDFfshPmh/H5jDh1g==
-=1sGF
------END PGP SIGNATURE-----
+johannes
 
---Sig_/RTnanEaF2re=MxWFOc_c_FD--
 

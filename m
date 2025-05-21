@@ -1,89 +1,99 @@
-Return-Path: <linux-next+bounces-6889-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6890-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3055ABF3E2
-	for <lists+linux-next@lfdr.de>; Wed, 21 May 2025 14:12:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 174EEABFF11
+	for <lists+linux-next@lfdr.de>; Wed, 21 May 2025 23:45:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 053773AEFAD
-	for <lists+linux-next@lfdr.de>; Wed, 21 May 2025 12:11:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AA3D1BA39D0
+	for <lists+linux-next@lfdr.de>; Wed, 21 May 2025 21:45:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF71226B097;
-	Wed, 21 May 2025 12:10:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 676362343BE;
+	Wed, 21 May 2025 21:45:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ICWlmFKu"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="l45H/Hdk"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975102673B7;
-	Wed, 21 May 2025 12:10:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C911239E86;
+	Wed, 21 May 2025 21:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747829431; cv=none; b=pl+oafGE1pDlPbTUajpta2Z75Y4jRBd7eGqBgF6jyXPpGKUd7v86JnFo7ArVpRUl0ESfDPfG8DbYOGovXHlLbF3FeQm3GFozIC6pN0mm3rTz1LC/7DvMrxQC50bgzQWwX7TuMv/L1mz++GXTFp6EJx612JVE1/lV3QcwBpb8E4o=
+	t=1747863910; cv=none; b=ERVf0q2ahyL+EuQBVUuPOKqp81TmGH7y5DLsUuov8gpc0J/ioHg/g5fj/f0LOvmNH5W6WxHvhuUD3uOdNfGDGorSZSlracyvAEqifd7AwmMW4wEY16fjA2my+bzOzBHhAz+RZnsg1bdMDRw5DdxrhiHVGn40iBwyu1WltrKUMPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747829431; c=relaxed/simple;
-	bh=Ul4S0upKxC6Psuxit4DXY3Lq9BItrraC6q/iSk8CsNw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JWyPmnwQQy0w9K8IhPOdu1cw7LLgqYRkLw6UNw8VDOso4u0e8aI+ksQJDa2uvTb0kFT79VHJIlihGf95bBdDl3IJ0EK2g1Bd2mVt6E57Vv6s1tiXCOAhjbPoGoPfD7IBa1xCkZQHAzitBTKarCsY3CyFqbF1BNh0PiM/E7o5OTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ICWlmFKu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D481BC4CEF2;
-	Wed, 21 May 2025 12:10:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747829431;
-	bh=Ul4S0upKxC6Psuxit4DXY3Lq9BItrraC6q/iSk8CsNw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ICWlmFKueb494KjAtMVKX72qaHmsMN3iJZeJmxG981pMNYWxJL//DLOn6m6Dejage
-	 IPv+v7J0h++Xz9CjuGKVNcXhSPkRQgNa0Z8DLjk+E116Q5pxjDnGwjF6czbWP1xtBW
-	 qvNZ+nomRSmA5eZVOwbxsr0gK8xoX9IYRgUlKNZHntl0MWv8WozRnURKpiHzRgzQx1
-	 IiqL1GB+InXNlIOBfrUlnstrAo8/vDoFVw7CUCPvqJG+NfzD7+6kTdD5SHM+K5FF9p
-	 L1Y4i3w6DQZtzi/iz+hA7gwcSSJtVUa3YrLoLElBsudkGM7KnoGEXVgBuOaDSrBs7d
-	 hW1kzx5ezFMYA==
-Date: Wed, 21 May 2025 21:10:29 +0900
-From: Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the pci tree
-Message-ID: <20250521121029.GA143406@rocinante>
-References: <20250521202640.53a4fc3d@canb.auug.org.au>
+	s=arc-20240116; t=1747863910; c=relaxed/simple;
+	bh=YVDmLx9vj7F++sG4B9KupCmsslwElufZWwG0ao12FOw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SbexW4H+JJt97Vtjmwnq0tA8vBnVnGpFknVLXnKsELSHmKC9svCOUg02pdMkmrfnjOeMeuKyb/FmaSoX1RjdaXUY4TMw3nPehfhrFyEKIWm8nyTyPPZ57+WCLyUPTn99pjRwhWU7EElmK/zXl6gRpJq1tZTK/wsJkCDcfe/Ybho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=l45H/Hdk; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1747863901;
+	bh=Mdb8Rmk8xcuGjdoywcAIQPmOTys5LdSBg1bNKgqALrc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=l45H/Hdkzf7n5DHXy82SD9bsn4D5RDExg3y4Z80dfge6AR1WePuPyhnVxAVJBXvTg
+	 gcnFVgExGJ8plmioFr7LfrGH1Stpog1NtfPQHZoLEd4N+HyQbXrwmmguGSlI3p3xaf
+	 Oak6OjYNUKwwVtqy0iz4NrXH3XBHUcrmFC/e/qwIX75G4Je6ywOuqpdjnnrroAAw5w
+	 U2I4i+b9MoJnI7zbxhzWtwjzFObYAfRvXHOCg7l8yiWTcGYlRuOPC/KyjK7fO6QEGK
+	 1bxAREyJ1l71ddeehg4ywHRn9O+lpWIxEvBQFPMa6RPK7lbZHAsbKo9Li7Gsz6bASR
+	 NY9NEkSXj+HSQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4b2lMK1w03z4x8Z;
+	Thu, 22 May 2025 07:45:01 +1000 (AEST)
+Date: Thu, 22 May 2025 07:44:59 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Arnd Bergmann <arnd@arndb.de>, ARM
+ <linux-arm-kernel@lists.infradead.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the arm-soc tree
+Message-ID: <20250522074459.769185bf@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250521202640.53a4fc3d@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/o1HPX4j8TjdViW==7c6zhFH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Hello,
+--Sig_/o1HPX4j8TjdViW==7c6zhFH
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> After merging the pci tree, today's linux-next build (htmldocs) produced
-> this warning:
-> 
-> Documentation/PCI/rcar-pcie-firmware.rst: WARNING: document isn't included in any toctree
-> 
-> Introduced by commit
-> 
->   2bdf6ffe9f66 ("PCI: rcar-gen4: Document how to obtain platform firmware")
+Hi all,
 
-Sorry about that!  This should be fixed on the branch already, per:
+Commit
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?h=controller/rcar-gen4&id=003d15b30f3690b14315822439edc2c3f823c6cd
+  24822c4b476c ("dt-bindings: clock: socfpga: convert to yaml")
 
-Hopefully, running the "make htmldocs" should not report warnings for this
-new file any longer.
+is missing a Signed-off-by from its committer.
 
-I will coordinate with Bjorn about pushing next, as he is working on
-something that he might want to include there.
+--=20
+Cheers,
+Stephen Rothwell
 
-Thank you!
+--Sig_/o1HPX4j8TjdViW==7c6zhFH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-	Krzysztof
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmguSVsACgkQAVBC80lX
+0GxIdwf8CRHNFasknr+m8xh/thBjOffMpzQiMYd6RxXSRt7iUf9BmIbuMkjU9eZc
+S1Xp+LDadU+4y5fhrDQdhbWqqqTWWSQde+ZA8L3p03drMqEyofPlYZGh0DxPybiH
+KbW4vn9wdJqkseXBtdCg6lttfTf2swCUWetoXUK1geKCrOn2Uz5KcAM5RVCcz0Hi
+U0sButMVh0n6bhuG9/EbtTP4Nltchumm8XJ01KH89BIMtaMkYamnj91PYd/tKjpQ
+2IVDlj+47BuDv2PzUjNeBDFJHH4MAiosyjy56c+SjRk3i/I2hzFy4qa89kaoZ9NP
+lHtdzsfCwyqMPIN+5ExJbuvEgsjL/A==
+=a3ni
+-----END PGP SIGNATURE-----
+
+--Sig_/o1HPX4j8TjdViW==7c6zhFH--
 

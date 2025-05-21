@@ -1,132 +1,84 @@
-Return-Path: <linux-next+bounces-6876-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6879-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55D91ABEC73
-	for <lists+linux-next@lfdr.de>; Wed, 21 May 2025 08:52:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C91FDABED33
+	for <lists+linux-next@lfdr.de>; Wed, 21 May 2025 09:37:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4ACA84E2DA6
-	for <lists+linux-next@lfdr.de>; Wed, 21 May 2025 06:52:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84C7B4E1C2F
+	for <lists+linux-next@lfdr.de>; Wed, 21 May 2025 07:37:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70F4323496F;
-	Wed, 21 May 2025 06:48:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B23023505F;
+	Wed, 21 May 2025 07:37:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FNtyNu/g"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="qGFoeDdE"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBCC222F169;
-	Wed, 21 May 2025 06:48:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1423C232785;
+	Wed, 21 May 2025 07:37:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747810104; cv=none; b=csUqr7PGJACJXrGSdTHMQaSo4NO58KjNYBZ/eUEkMp7GjETNS3GSrI5QWk+2EraAf9oEky6ZLKTi05ubChb1WPgvYrFx0t91Cl/tK9SF7grqDTICWi4xuiSOBm/0DqmTsq89WmKYp3OL96S8Zst4axGIYi5b0BBMhO+ecMfLAM0=
+	t=1747813060; cv=none; b=sgMAotCQCbYsGO57wQ5SNfOKAo2hBpL847Wevhku0+4FjOzHVXlFFlrymh/gFd8yZmhACnjHKMAOxqAk2c/2JfV3+rLauE+KUGp8MXgVJyaIHSf8Pw0FdYJb0p+yGVIfJaYxTkoui0/E7ZaL2bcmlBnjgFgKf+39ObBCT9IFwcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747810104; c=relaxed/simple;
-	bh=I6xLSaFBQIId3MObCRNMgHxI1jqvUum8SVBf6dSTczs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Pb9Ld5rCHbODBBxkMBaPFeiYMHHsRcYS6U2Wt68IObRaedXkcX6TYP+VhieXMHgYrjBGnsvkfNGYWKB4VewUdliGCLVIVU7lh0QLLZPXIZPfiFIxusfyNvwfzygvLsYdJZd8SMpGSDSvwyLeWnCRNCImDOd6K8hjsBUgQUNhGBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=FNtyNu/g; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1747810096;
-	bh=KcYnKHf3wC05iJ0U5CbH9mfNcFKPffOomDQHqODaKBA=;
-	h=Date:From:To:Cc:Subject:From;
-	b=FNtyNu/g18YjzqfAEBMCGPKSadTvWAhI/UQ+EElRAXPkM6vU7DSE/pAnpAunNjg2Y
-	 GdnRHRl7e4NAINGZI+Tdf11R5N8n98dMRdxjeAHdg+Bbt5lAJTcxCnpHyXo3xk0YTw
-	 uQI56v84jTeb11grhYJQp17cKLNwvnf0EgSIvOi+Jmuf0R6/GwkOWLJvGs0bRpajPk
-	 SweOrGsavMBznW87rfUsOlOXpWwb8ev8xoA0AH9KzFBrz+IWUxfEXthC4LZZoG3Oyh
-	 aGfrdhbdAJi9uEd0npn3M33yYzXmUE0/LyLAumH9EbDR9SXDYx9LoU8kfYlO2XYg4K
-	 cvXi3uqQRTnPw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4b2MSb6DcGz4xck;
-	Wed, 21 May 2025 16:48:15 +1000 (AEST)
-Date: Wed, 21 May 2025 16:48:14 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Anup Patel <anup@brainfault.org>, Christoffer Dall
- <cdall@cs.columbia.edu>, Marc Zyngier <maz@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Radim =?UTF-8?B?S3LEjW3DocWZ?=
- <rkrcmar@ventanamicro.com>
-Subject: linux-next: manual merge of the kvm-riscv tree with the kvm-arm
- tree
-Message-ID: <20250521164814.3fddb821@canb.auug.org.au>
+	s=arc-20240116; t=1747813060; c=relaxed/simple;
+	bh=HeVcLu5pe7AJAPaB6hhsXE3LQ25Ay29oZ+Uaj3gjiHM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XI6IzpO68rZziZ0cFfwCUwiNz5uE/JhoVlhqAThcAVKpt9+zY06fX1CNBMqodRlkSk1w7t0JE+QfZVHGELRpwcNiKfJOUx+2Hy+1ROM4uDpbRktcL+gj/byJC13Kwd2ETu0VmIoEe1FJ4uUINaH9IkbRYDDqJFj1QrB2poxVNaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=qGFoeDdE; arc=none smtp.client-ip=168.119.38.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=HeVcLu5pe7AJAPaB6hhsXE3LQ25Ay29oZ+Uaj3gjiHM=;
+	t=1747813059; x=1749022659; b=qGFoeDdELxjJvvhY021qcqiNYhevf3kBNrN4QeU/HR3fdKn
+	7uIQBgtsS+hP3wYBqI4wbpVyF2rF+1N0hbxL7w7lmdwE6ZO1Z6MRYdQNdcs/nWADWeZzt9cDIjx1t
+	fLHFUAyv87KGmj1f9hYnXKqz5OmQYPzmxXo/gJn0c1FLT7YggO0K/t7LgF3Mc6I6q1jmPSsf3ttId
+	sGDDbWsOpzuMUKuJjs71oRwEe6Puqj5EAGpQbww0kLj7b44TRO/4NR7Y0SrIptAYT0IoBNfmLSSkK
+	bfP3o1FgQveeNiL3p5mgzWFH0m6PlA6PTuYo21egzR776C0tr4M/1Uu2H4k7EDWw==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.98.2)
+	(envelope-from <johannes@sipsolutions.net>)
+	id 1uHdSq-0000000Dv3Z-18jl;
+	Wed, 21 May 2025 09:02:08 +0200
+Message-ID: <545397842b6079ac0d51cfa8c49d5b2f13c14f58.camel@sipsolutions.net>
+Subject: Re: [PATCH] wifi: add sk_requests_wifi_status()
+From: Johannes Berg <johannes@sipsolutions.net>
+To: Randy Dunlap <rdunlap@infradead.org>, Bert Karwatzki <spasswolf@web.de>,
+ 	linux-wireless@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, Jason Xing
+	 <kerneljasonxing@gmail.com>
+Date: Wed, 21 May 2025 09:02:07 +0200
+In-Reply-To: <8cc4c232-c7cd-4dec-97c8-3573b5e471c2@infradead.org>
+References: <20250520223430.6875-1-spasswolf@web.de>
+	 <8cc4c232-c7cd-4dec-97c8-3573b5e471c2@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oyjzgwhEdqI0nbDxuIbcnjE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-malware-bazaar: not-scanned
 
---Sig_/oyjzgwhEdqI0nbDxuIbcnjE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 2025-05-20 at 15:57 -0700, Randy Dunlap wrote:
+...
+> That is usually spelled
+> Suggested-by:
+...
+> Missing indentation on the line above.
+...
 
-Hi all,
+I'll just fix that - will apply it now. Maybe also change the subject,
+since really it's about checking the socket flags properly, the main
+feature isn't adding the function :)
 
-Today's linux-next merge of the kvm-riscv tree got a conflict in:
-
-  include/uapi/linux/kvm.h
-
-between commit:
-
-  a7484c80e5ca ("KVM: arm64: Allow userspace to request KVM_ARM_VCPU_EL2*")
-
-from the kvm-arm tree and commit:
-
-  5b9db9c16f42 ("RISC-V: KVM: add KVM_CAP_RISCV_MP_STATE_RESET")
-
-from the kvm-riscv tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/uapi/linux/kvm.h
-index e6ed559d9091,454b7d4a0448..000000000000
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@@ -931,8 -930,7 +931,9 @@@ struct kvm_enable_cap=20
-  #define KVM_CAP_X86_APIC_BUS_CYCLES_NS 237
-  #define KVM_CAP_X86_GUEST_MODE 238
-  #define KVM_CAP_ARM_WRITABLE_IMP_ID_REGS 239
- -#define KVM_CAP_RISCV_MP_STATE_RESET 240
- +#define KVM_CAP_ARM_EL2 240
- +#define KVM_CAP_ARM_EL2_E2H0 241
-++#define KVM_CAP_RISCV_MP_STATE_RESET 242
- =20
-  struct kvm_irq_routing_irqchip {
-  	__u32 irqchip;
-
---Sig_/oyjzgwhEdqI0nbDxuIbcnjE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgtdy4ACgkQAVBC80lX
-0GyoKAf+I862MD67KZ6UCXiVNKahuKuKJ5yyIV15ir1ssuB/0Z+tKxNltgJe65/0
-8r+BL3AjEOCIREIWd9GnEmvd/Sr1xk6R70qNmMddFzxlElfrRN3I4JKE7NM8ooU1
-aMMgqcgINBifx2VMsGKaQBpzMRSKkuMQe8SeAZ4ysQH0piS488vZlffRS/KcfXVq
-9AaBiOlh2tLtUVbNLSomfs2l+Iq6LAt2tQOVFjeimopgVww9aTH5EvFgUD8E5fGH
-If74AD1hC1OfYbEdqwgu4dPYq1i/cT35a+vNeohDxkWHKJ6WWHPudyOachRakVXa
-RN3QvjLnysJapHzKy8WsV22Os6VufA==
-=I7y7
------END PGP SIGNATURE-----
-
---Sig_/oyjzgwhEdqI0nbDxuIbcnjE--
+johannes
 

@@ -1,101 +1,92 @@
-Return-Path: <linux-next+bounces-6887-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6888-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 166AEABF30C
-	for <lists+linux-next@lfdr.de>; Wed, 21 May 2025 13:39:23 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67450ABF380
+	for <lists+linux-next@lfdr.de>; Wed, 21 May 2025 13:56:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6AF793A8C77
-	for <lists+linux-next@lfdr.de>; Wed, 21 May 2025 11:39:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABEA31BA4F64
+	for <lists+linux-next@lfdr.de>; Wed, 21 May 2025 11:56:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBB4F25F78B;
-	Wed, 21 May 2025 11:39:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B982026460B;
+	Wed, 21 May 2025 11:56:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HAGiaAza"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U55hfG/b"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7950F22DA1E;
-	Wed, 21 May 2025 11:39:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD93256C9F;
+	Wed, 21 May 2025 11:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747827558; cv=none; b=hfBvZ5iNNWy/9ELWPUKTFipzMLOWB1I8H6I9JoYq/ehnOHqC2511T2CAnR43ikhSOP5dhGpoBshAbukUufiwvZb5YGOGBoon81eLFXAISuYEYMC4GXQtfuCWRMkSOIMqc7uv/irscGHhBMnGF6JJIq5No17NG7FsUDSnvNgTva4=
+	t=1747828582; cv=none; b=QbJo+9Il0AfX4DwjODt3cZAXd02KOjFhcduyZBS6FgNEi9hmcWH4+pAyyYmRJyDTcRLBUt4omEaItEcSMyRBxcP5G1sXH2TEd9uBhtpHRN5Fbx7E8siLuGjDcY6MsC9X7dnAdjb1Fp4t3NQR3/dMvWvEVO/f1FuGCCbcnm581LA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747827558; c=relaxed/simple;
-	bh=l+qES3gR2t/hhhfdyOwBWYAEhgd/RW6XMvrLKPoKEwc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=RE/UxWBjvDgVjtZFOfFoaKuNUAygFmLUEepsZI1ewZVMRFrCkFpFyK3PhSieSqlZY98ZOKfePFToQNbOWc7cmyNc/RpTRPJxdz3b3H8L6wSM1n/+WtYfYHWeVbqi8OiWgFvwvTbAyJfkgVA8Vm6W4G/SXD8+D0oMexkXBxC2Spw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HAGiaAza; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1747827552;
-	bh=FPU12V+VyqRazW4tmxLrjTucxkHYp0RFjPNMtPtSVr8=;
-	h=Date:From:To:Cc:Subject:From;
-	b=HAGiaAzaIMw+YZ3+fWot/6zebomePKe1+NPKGjngP6vAQ/A33ctxWFW63ABXI/+js
-	 vgaVtiNybkL/Bt9fEmBPyG1VIDq2HTAYEr1xT/VcvHtzQPassRx6Yk76h4fhWAwEfz
-	 fNDuVj0egN65GJzr1tG4auJi+efouxJEfCqh+fMkkeb7ZQ7N8hX+vkIr55rkHxAYAU
-	 fkD4c64U7onFT7OjR3f75nI6X+XBLcPE/e7H+esQGUaHHEFOy7mvFlrFL0R4IwqPFL
-	 E1f/ByAfC2ktC1KVIhLf3kpviIIfzqUwVV/QWb8TYwmru5irZjUerIBCVDZfUDBdkw
-	 /lwIyM8CE7I9Q==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4b2TwJ1Hryz4x1w;
-	Wed, 21 May 2025 21:39:11 +1000 (AEST)
-Date: Wed, 21 May 2025 21:39:10 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>, "Rob Herring (Arm)"
- <robh@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the arm64 tree
-Message-ID: <20250521213910.303c8546@canb.auug.org.au>
+	s=arc-20240116; t=1747828582; c=relaxed/simple;
+	bh=qgC2ReSgX+YJE74CHWmec7duordV1tUdpja/WM3qppE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rKawQvd1XfJanC8uTTQMzicuCIpq8BK+GXLn6zA+h5saHFhKrNlkcFU50sxKvnavLC+HSA4zp/Kr+Sn8a3obqhSnUhLwj8m+G2YfWKVN5R+VGn9kcUnWtzmayIIe2l2jE/oQZRmHagYCAxkj/7vq2WpS4Gu150ENU0Up80X+4Nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U55hfG/b; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15C86C4CEE7;
+	Wed, 21 May 2025 11:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747828582;
+	bh=qgC2ReSgX+YJE74CHWmec7duordV1tUdpja/WM3qppE=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=U55hfG/bE5HTr5xSnaaLuZbn5xjqqQ8gAQoisi0yPkx+19NA+hhkExsAo8dTtGN1l
+	 HdvOxEt1rVlnDwDtOy6z4wbHBuaqFakRLs4cYTeLxTeP0xhHHV7bB/hxLdW1kQ6/NI
+	 i7LsKMi02IvCf/LDHFhorj7ZUuwPvxZlfvjE8o1pSrStOHrPcO78PS986v2oVBhD6j
+	 zjl+BBUc7UT3F3PK5+osWEkUYlk0vmds3W22cr9Ww6egJfk3Q2Xv9rmjv/RvB/zY+S
+	 Z+wbHxqG+OvNI2MDOb/UCjLYYEGHaPN674J0R8o2vrYKfxCQhDg3dcCOKceHqZk0mV
+	 v6rLQ4gj6v/yQ==
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ad56e993ae9so633383766b.3;
+        Wed, 21 May 2025 04:56:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWSGQiPUE4PAVJd5I17K9kb9YGy3yryU/CKJ0NptFY2LGLh2iMVr3ulP0eTbkz0hK88ICy5HWluLFmKUzk=@vger.kernel.org, AJvYcCXDiiBMvfkdNjFiXs2e4MxCMDDBfaLLLpXpqTswpW8OsVSFFDL7EyHOyuTlHnrezHx31krKZnSkf894ZQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9He2fzfG4rTLzmG8AtpdLrEsK+dcdAw1ysZNbrWtidIAEhZTa
+	kA6OytE9JjBVxQOxunAJGl746T/GZcZ9yGNVfegonYK/pAbuWy0J4w2qDaE045gGwJAMPiS5MQq
+	fXxqKviG5lO8phV2RM32r4udHCr/85A==
+X-Google-Smtp-Source: AGHT+IF59P7sVgRr6RishM0tXcKyGpQghYtIxLUT/9smIEsMlXBQmlY9yu5d7LE4hl7rH/kuUB+cLnNmcL2tJg8tLok=
+X-Received: by 2002:a17:907:7ea3:b0:ad5:b18f:8898 with SMTP id
+ a640c23a62f3a-ad5b18f8a63mr173313366b.30.1747828580661; Wed, 21 May 2025
+ 04:56:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Otvl.1YiF6tdP6QbbI8zvL=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/Otvl.1YiF6tdP6QbbI8zvL=
-Content-Type: text/plain; charset=US-ASCII
+References: <20250521213910.303c8546@canb.auug.org.au>
+In-Reply-To: <20250521213910.303c8546@canb.auug.org.au>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 21 May 2025 06:56:09 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKCQ=b7+ZtuKWncX1ROHipNjRzCCEWruEC0obNkiHREDg@mail.gmail.com>
+X-Gm-Features: AX0GCFseBtwEcgMeb_HfMc0TrDp5gLRzEV1_MKNGGo9Ko1v-oNeXiUYZ3KwAs0I
+Message-ID: <CAL_JsqKCQ=b7+ZtuKWncX1ROHipNjRzCCEWruEC0obNkiHREDg@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the arm64 tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Anshuman Khandual <anshuman.khandual@arm.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Wed, May 21, 2025 at 6:39=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> Commit
+>
+>   54b8070548c6 ("arm64: el2_setup.h: Make __init_el2_fgt labels consisten=
+t, again")
+>
+> is missing a Signed-off-by from its author.
 
-Commit
+The error here actually is the author should be me. Will, can you fix that =
+up?
 
-  54b8070548c6 ("arm64: el2_setup.h: Make __init_el2_fgt labels consistent,=
- again")
-
-is missing a Signed-off-by from its author.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Otvl.1YiF6tdP6QbbI8zvL=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgtu14ACgkQAVBC80lX
-0GzULQf+LT5aLa0NL0KXstUzsqDubY5N5u7EPD/79TJojwPUposw9Ks3/HzUWZQ3
-HL30kSS8xG3EIVO8IQ6DRy/eGjA3viUmfSTjzpsxngf6E+miO4QWDnkCbpF8VYCq
-WHrSk/s4dPpKoy9PRkaqyuYVTfXRfU7LhQbyWMit7mQRmuEhyfM8qlkg/+ExMnmP
-hMCy/aj4mYNZrzgt5SwlMqUIVW85jdeEeBbK9NpGew0t7tC+ESCEzkOHsJdBh2LK
-Kxss9hIJgrAbTOA6F8S1qCOoWJLqLrAo6LZu1M7ifek5aQ6bCrKS6H9+Ua8CElFF
-NzvoBxnElalA8z3+vxkfY+dq6qhmpA==
-=gvz9
------END PGP SIGNATURE-----
-
---Sig_/Otvl.1YiF6tdP6QbbI8zvL=--
+Rob
 

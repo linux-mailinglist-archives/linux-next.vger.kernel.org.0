@@ -1,140 +1,127 @@
-Return-Path: <linux-next+bounces-6899-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6900-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75F85AC0339
-	for <lists+linux-next@lfdr.de>; Thu, 22 May 2025 05:54:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44289AC044B
+	for <lists+linux-next@lfdr.de>; Thu, 22 May 2025 07:56:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AC27169869
-	for <lists+linux-next@lfdr.de>; Thu, 22 May 2025 03:54:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E7B1A206B8
+	for <lists+linux-next@lfdr.de>; Thu, 22 May 2025 05:56:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E4D2134CF;
-	Thu, 22 May 2025 03:54:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8111D1F1317;
+	Thu, 22 May 2025 05:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CsekdJ0B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tWB7+V7t"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B797713C8EA;
-	Thu, 22 May 2025 03:54:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55C0C1A5B99;
+	Thu, 22 May 2025 05:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747886077; cv=none; b=HOSRD1411uX1/lCYcw2DMoUiZxJfTSrC8RBm5ywDjIgMFcSr903NwNMY9B6th9Uxm/bUipBUP78bnIYJqqh6Ui4j87OPMMAAlrpREX0lkZdGFzAlfSqImsPyGadhbAHwzrB4spmqSTCTsH4BMKQqYeOkrAdVQ5hmBsuaLjV+kMI=
+	t=1747893409; cv=none; b=RjxB2iN3U52NeKoE74MxfrKMzjdCHUFz+ZAc0+qqJHqimiauIvDume491Y/jATI0EFFGKhmr6UpPX9/eyslust5s2ztmNfWhIVKcGqown7vJrEHmy1MTBuy709bEsmQM1ZZw3ki+Def3XoprKAV/4StUUEzcjJ5SpCrOOnLCLY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747886077; c=relaxed/simple;
-	bh=2+jQzFNVa5cgzz6j8aCJcHo+8eX7DJJvhxssxR/Deyw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=RgeeOqa80JHF5Y7xgZU4lt/t0U4drR1c0LXD18ed+LiOx9RtpyeS6De9u9Yf2iqqcnsLZ7cKPp8HCj+zY8Dc6p7o0bKds4M+ihMYlYT7EFBmld0spn2mhB/FgZ5ox8EDegqLax/geIdSvV85/SoD07iZ8vcoUOnvwsb79bwM7SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CsekdJ0B; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1747886068;
-	bh=E5969M2rt8A9H8jXyAe1CRFepbcBCsnguHNEWanyUaM=;
-	h=Date:From:To:Cc:Subject:From;
-	b=CsekdJ0BbTNqTMFXEQe5LFbH2KPAKBh5GP57BjIjX2tO8fsVL9TLlDUB58qnKJtSA
-	 VAB6i/7Uht8V7hwz+w5fbhh8hhdtqDXzpeBGXXKN6Vnn9zC5DOkmuYnE1qMPEftoMo
-	 86Y9wA8IugGY4ey2XaR/Ow4xCxoQWe00I8uIMvKMKF32D3hTd2xxLZmeh3uHaPeLKM
-	 NB7A6sSu0qxQFGKJNP3XiQJ6Nj4Es3OwOU5A4ykzLOmRdEhX+v0X02SyPdqLhho7BQ
-	 aRBb9IEJSb/M8OJJ62WEbIsNcz0p2mos/FZESwaJmB37iZEbxa9/xcz0Brc4MeJkH8
-	 RjXaXfinVoWiw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4b2vYb1RDkz4wcx;
-	Thu, 22 May 2025 13:54:27 +1000 (AEST)
-Date: Thu, 22 May 2025 13:54:26 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Herbert Xu <herbert@gondor.apana.org.au>, Arnd Bergmann <arnd@arndb.de>
-Cc: Linux Crypto List <linux-crypto@vger.kernel.org>, ARM
- <linux-arm-kernel@lists.infradead.org>, Eric Biggers <ebiggers@google.com>,
- Fabio Estevam <festevam@denx.de>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the crypto tree with the arm-soc-fixes
- tree
-Message-ID: <20250522135426.31baa98c@canb.auug.org.au>
+	s=arc-20240116; t=1747893409; c=relaxed/simple;
+	bh=HQCkhi5OnnxcXIx33M5k6JbunrNSiHB/mQlxg7rf1Ow=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ipQFKKn0LjXw0Xn7g8yQkVsroIt/XAt2ZhhB4Cw8PtpZh/q2FLUa4V0/p9E4YOLKd8R51DptVlxB3QaYTgp5h2kvhGGTXDqxuvIfZzUe0FI71B5h8j4LK/84KLH2N+VDWzDITD/i8Kx2Ap4SPm84RTeTAhX2mNoY3LKbUxbf9Pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tWB7+V7t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B92BC4CEE4;
+	Thu, 22 May 2025 05:56:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747893408;
+	bh=HQCkhi5OnnxcXIx33M5k6JbunrNSiHB/mQlxg7rf1Ow=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=tWB7+V7tgRdXpOrrONheSP06mDFbYJuvzjSUNP3RxMt/Hq1U8Mk1jWIg6PB4j7Q/6
+	 vqYiA49jb2JaG7tb2JVNAn31cr5olswd7QwdgtC4eESdfZRODBRzqqI9GKI7bh4WkJ
+	 UUPwUCTZBYWO2jfdVbkNQQlmT4boEQpxss/5t4fab7a9QLJTQgloAea20M8xc3sWJm
+	 jQgq5FUEb2XWrw9ekJXLdcRL70xx3gN2GuYE9QVp/AHQVE+KSuuoMWPGElINVu8kAe
+	 Qenk1MN4IgwPgMcdvzsoIkWWTCsB43qWLUVpOsBle1pmZyfnjTk8DsPl9UMAHmZpHw
+	 lqg+ubfPULN1A==
+Message-ID: <f2e10c93-eb7e-4fc8-9b45-949ca1b93413@kernel.org>
+Date: Thu, 22 May 2025 07:56:45 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ImKYQSiFcD9J_N.rImKCANl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: duplicate patches in the samsung-krzk tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Arnd Bergmann <arnd@arndb.de>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ ARM <linux-arm-kernel@lists.infradead.org>
+References: <20250522113227.7593f675@canb.auug.org.au>
+ <20250522114205.35511096@canb.auug.org.au>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250522114205.35511096@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---Sig_/ImKYQSiFcD9J_N.rImKCANl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 22/05/2025 03:42, Stephen Rothwell wrote:
+> Hi all,
+> 
+> [cc arm-soc]
+> 
+> On Thu, 22 May 2025 11:32:27 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> The following commits are also in the arm-soc tree as different commits
+>> (but the same patches):
+>>
+>>   286e6e8787df ("ARM: s3c: stop including gpio.h")
+>>   e0d7c81b15e8 ("ARM: dts: samsung: sp5v210-aries: Align wifi node name with bindings")
+>>   e83a135a2b2f ("arm64: defconfig: enable ACPM protocol and Exynos mailbox")
 
-Hi all,
+Thanks, that's expected. I dropped them now from my queue.
 
-Today's linux-next merge of the crypto tree got a conflict in:
-
-  arch/arm64/configs/defconfig
-
-between commit:
-
-  6c9ab811871b ("arm64: defconfig: Ensure CRYPTO_CHACHA20_NEON is selected")
-
-from the arm-soc-fixes tree and commit:
-
-  3357b6c94569 ("crypto: tcrypt - rename CRYPTO_TEST to CRYPTO_BENCHMARK")
-
-from the crypto tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/arm64/configs/defconfig
-index e0d6ac7fd91a,4166bc4d3cec..000000000000
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@@ -1724,15 -1729,14 +1724,14 @@@ CONFIG_NLS_CODEPAGE_437=3D
-  CONFIG_NLS_ISO8859_1=3Dy
-  CONFIG_SECURITY=3Dy
-  CONFIG_CRYPTO_USER=3Dy
- +CONFIG_CRYPTO_CHACHA20=3Dm
-- CONFIG_CRYPTO_TEST=3Dm
-+ CONFIG_CRYPTO_BENCHMARK=3Dm
-  CONFIG_CRYPTO_ECHAINIV=3Dy
-  CONFIG_CRYPTO_MICHAEL_MIC=3Dm
-  CONFIG_CRYPTO_ANSI_CPRNG=3Dy
-  CONFIG_CRYPTO_USER_API_RNG=3Dm
- -CONFIG_CRYPTO_CHACHA20_NEON=3Dm
-  CONFIG_CRYPTO_GHASH_ARM64_CE=3Dy
-  CONFIG_CRYPTO_SHA1_ARM64_CE=3Dy
-- CONFIG_CRYPTO_SHA2_ARM64_CE=3Dy
-  CONFIG_CRYPTO_SHA512_ARM64_CE=3Dm
-  CONFIG_CRYPTO_SHA3_ARM64=3Dm
-  CONFIG_CRYPTO_SM3_ARM64_CE=3Dm
-
---Sig_/ImKYQSiFcD9J_N.rImKCANl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgun/IACgkQAVBC80lX
-0GyPogf9FadLTwEAH1WdTiF1LfsqmcK2B26c+1VO43iD8/S8a2oCTMzPROrwkG57
-f1dO+XZs9ty4ypHdJSa9wO2xPSlxBaOEHYbBhaiMCXrlKcCVqAFyPKQkxBPyyzM+
-j6syCdxJ/ISlshRqhWnMyqusN44d4XlFsC7rOoyLeBwgmv1Cthtzw1yD9zfJIkEX
-rnUiuOgoM7LTyIIZeAtjdr8ADCasWmSTPWfqz+CPXUieMSOU1dFlvT0RIv2L80Zw
-ytUlzcoI2eO+bTk+Ffm+Rbgy8ndnOXSldDYR0K5O0sJkfSMV/cmeBFvfbiRi3phz
-edwWNOjwW+sq1VkG0gVqu+fNFSkRYA==
-=4qkD
------END PGP SIGNATURE-----
-
---Sig_/ImKYQSiFcD9J_N.rImKCANl--
+Best regards,
+Krzysztof
 

@@ -1,112 +1,178 @@
-Return-Path: <linux-next+bounces-6908-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6909-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E748CAC1BD7
-	for <lists+linux-next@lfdr.de>; Fri, 23 May 2025 07:27:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 758A6AC1CCE
+	for <lists+linux-next@lfdr.de>; Fri, 23 May 2025 08:14:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B0261BA70E5
-	for <lists+linux-next@lfdr.de>; Fri, 23 May 2025 05:27:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1DC97AE878
+	for <lists+linux-next@lfdr.de>; Fri, 23 May 2025 06:12:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AE04221DA6;
-	Fri, 23 May 2025 05:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFB2F224B0F;
+	Fri, 23 May 2025 06:14:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Pjjdn/ly"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="qtorz+4H"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701E084FAD;
-	Fri, 23 May 2025 05:27:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9277DA8C;
+	Fri, 23 May 2025 06:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747978031; cv=none; b=CDQmjGOjQHyxkSZDCdcmbEYS1vB99oHphX8iK9z38P+BFRrE9vP8gEZR1INKacGfHjA4UR7oSMlgvmSeqy5HOg5XhRo/MnGUOrFT/ww4tzpDlhiqZjoJ/bGlmC8mGnXHTbCAksl42K6TWpU2WqKoMvorDGAo2oLVgjQZzriT0Jg=
+	t=1747980840; cv=none; b=gnv5Skd6qWYLT8IKqZHnt4yJWkwZTUIGai1+BfyRgn5NS0zCw+C0UvJV/sW3gt7w64dVT5QURo6RVXtpmzt2dW3MXp46D3dJhvn5kIedbZfQWTq2ZcHXcFWYtifXtrErdWVBYa/wEGbq5a6a+K7COIjWyR/V/4azs3fCZYwQ9Lw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747978031; c=relaxed/simple;
-	bh=8MYD50nTOlO1b0vm4Mg6QrOrgx1wBMtuXZ/yv7ojsG4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=YlVTxYM+WiNZpeF8iDOGILrcoD3+Kf9ry5+Vsvi4TdVJfcLww5rDPGY3T2I5s/uxhcCHQ40Zg7Re4D5EqMUbnwGoLP4hy5VDtJkATpX5yplXajTfohi6bkUM/awI/m5IrP0tWjJeFRGUkkblheB4Z0yOVwA09mpJhyma7iSmaLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Pjjdn/ly; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1747980840; c=relaxed/simple;
+	bh=0rnDohHDNcqVJjVo5X0KD3ipnyZySeQ57vlVYBZfkF4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=GwNIWTDkhdNzDPEtL41Yy6mo7LJgr2XYghiwjIGzxT0Dfw4hKtDmFlpcwSk65lZ5xhMpuwPlBEa+2Fgp6byLxzzGFSyHY/BRnJL+v1qS9oJtOSO+zxIjvW2pxtYKtY8xlXbjMqidDjq3JsBlDJMynClUT0mrFUh0A1sPFAO8owQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=qtorz+4H; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1747978024;
-	bh=+sF19I01sJ2giW8oAT186UfG3HiTL1V0aDAymplToIg=;
+	s=202503; t=1747980833;
+	bh=pn2PuBTFwlhixqOZOK4nMXhyOFmSaO0qfQoQhcdFgfU=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Pjjdn/ly8/mI9wS2QFgcmUXE5VflGy5u7v8bkVxFdsKbPwn8Ie3u8p8n3Tud08Pd3
-	 FVKiVhStoI9LQiTZg3YCkgDM+OPMzQ6TPiXW9jtkrBpZoB4SAKhvQTar/D67iDRE5d
-	 /wLIG6Vd9D8fI2UrFjoYdZ6alwYX1NPs7ITiriy9IxW15NLL6m1kjVqdiuGNjPzFbt
-	 PhB6lV5u2Rv28WxQUU0oMdEE5z7uJTJuv5W111mj2GdKMuzgTVx3cKvtu0pADz6Po6
-	 iSwn2rpnCvibC5nqdNp3vh0Ea3//T7SeAJMDCCMfpGnYbBmpyg3hn32HCAY3irYliL
-	 WmE9eMAgpd9BQ==
+	b=qtorz+4HtzchEWiH72jM72nMdXDjsE+qhqVvDOEIHN1fusy06F4xbU55OEGQyCwF6
+	 qgJ8JGqbGgn6q9eWQeMdpwqRuXj5XtChs61XwoP49d7KSDOIu8NQYz/3bZa5utHGQA
+	 m+is+mS7ayKfhdgo8z9M95Wo3IsC1XaWsStXmX58wj/aePAY5463n+8hgLA8UdRqXL
+	 no2iBBeexQHn11/+8+se3v/Eusby2ppV92gXj28B3ZvYgztLZsnquhczaT1BHzUk6n
+	 5ATM+ofZkr2j9tCMjHgiUCg+G4cmusgSte9ibTMq8MInYDyx7qY++Jg0E9vIzGNWNI
+	 AWFMef5TaXtOw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4b3YYz6nM2z4xM2;
-	Fri, 23 May 2025 15:27:03 +1000 (AEST)
-Date: Fri, 23 May 2025 15:27:03 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4b3Zc11TlGz4wxh;
+	Fri, 23 May 2025 16:13:53 +1000 (AEST)
+Date: Fri, 23 May 2025 16:13:52 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Stephen Boyd <sboyd@kernel.org>, Greg KH <greg@kroah.com>, Arnd Bergmann
- <arnd@arndb.de>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the spmi tree
-Message-ID: <20250523152703.68dd6bbf@canb.auug.org.au>
+To: Miguel Ojeda <ojeda@kernel.org>, Dave Airlie <airlied@redhat.com>
+Cc: Andreas Hindborg <a.hindborg@kernel.org>, Asahi Lina
+ <lina+kernel@asahilina.net>, Danilo Krummrich <dakr@kernel.org>, DRI
+ <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Tamir Duberstein <tamird@gmail.com>
+Subject: linux-next: manual merge of the rust tree with the drm tree
+Message-ID: <20250523161352.20f0589a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/otQmwNn_bdrl9F/6J=FL4+2";
+Content-Type: multipart/signed; boundary="Sig_/UfLstoki3dA=qGyu89WKs+a";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/otQmwNn_bdrl9F/6J=FL4+2
+--Sig_/UfLstoki3dA=qGyu89WKs+a
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in the char-misc tree as different commits
-(but the same patches):
+Today's linux-next merge of the rust tree got a conflict in:
 
-  02a0fd9c0c40 ("irqdomain: spmi: Switch to irq_domain_create_tree()")
-  a35fc095fc52 ("spmi: add a spmi driver for Apple SoC")
-  b9f0ab020eb3 ("dt-bindings: spmi: Add Apple SPMI controller")
-  e274b9cb7653 ("spmi: Only use Hikey 970 SPMI controller driver when ARM64=
-")
+  rust/bindings/bindings_helper.h
 
-These are commits
+between commits:
 
-  16d693749866 ("irqdomain: spmi: Switch to irq_domain_create_tree()")
-  77ca75e80c71 ("spmi: add a spmi driver for Apple SoC")
-  8cc68226a3a6 ("dt-bindings: spmi: Add Apple SPMI controller")
-  cdd18ef98259 ("spmi: Only use Hikey 970 SPMI controller driver when ARM64=
-")
+  9a69570682b1 ("rust: drm: ioctl: Add DRM ioctl abstraction")
+  07c9016085f9 ("rust: drm: add driver abstractions")
+  1e4b8896c0f3 ("rust: drm: add device abstraction")
+  a98a73be9ee9 ("rust: drm: file: Add File abstraction")
+  c284d3e42338 ("rust: drm: gem: Add GEM object abstraction")
 
-in the char-misc tree.
+from the drm tree and commits:
+
+  210b81578efb ("rust: xarray: Add an abstraction for XArray")
+  8cbc95f983bc ("rust: workaround `bindgen` issue with forward references t=
+o `enum` types")
+
+from the rust tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/otQmwNn_bdrl9F/6J=FL4+2
+diff --cc rust/bindings/bindings_helper.h
+index a5a6fb45d405,5532bbfd96eb..000000000000
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@@ -6,13 -6,29 +6,35 @@@
+   * Sorted alphabetically.
+   */
+ =20
++ /*
++  * First, avoid forward references to `enum` types.
++  *
++  * This workarounds a `bindgen` issue with them:
++  * <https://github.com/rust-lang/rust-bindgen/issues/3179>.
++  *
++  * Without this, the generated Rust type may be the wrong one (`i32`) or
++  * the proper one (typically `c_uint`) depending on how the headers are
++  * included, which in turn may depend on the particular kernel configurat=
+ion
++  * or the architecture.
++  *
++  * The alternative would be to use casts and likely an
++  * `#[allow(clippy::unnecessary_cast)]` in the Rust source files. Instead,
++  * this approach allows us to keep the correct code in the source files a=
+nd
++  * simply remove this section when the issue is fixed upstream and we bump
++  * the minimum `bindgen` version.
++  *
++  * This workaround may not be possible in some cases, depending on how th=
+e C
++  * headers are set up.
++  */
++ #include <linux/hrtimer_types.h>
++=20
+ +#include <drm/drm_device.h>
+ +#include <drm/drm_drv.h>
+ +#include <drm/drm_file.h>
+ +#include <drm/drm_gem.h>
+ +#include <drm/drm_ioctl.h>
+  #include <kunit/test.h>
+ +#include <linux/auxiliary_bus.h>
+  #include <linux/blk-mq.h>
+  #include <linux/blk_types.h>
+  #include <linux/blkdev.h>
+@@@ -66,4 -78,8 +89,9 @@@ const gfp_t RUST_CONST_HELPER___GFP_ZER
+  const gfp_t RUST_CONST_HELPER___GFP_HIGHMEM =3D ___GFP_HIGHMEM;
+  const gfp_t RUST_CONST_HELPER___GFP_NOWARN =3D ___GFP_NOWARN;
+  const blk_features_t RUST_CONST_HELPER_BLK_FEAT_ROTATIONAL =3D BLK_FEAT_R=
+OTATIONAL;
+ +const fop_flags_t RUST_CONST_HELPER_FOP_UNSIGNED_OFFSET =3D FOP_UNSIGNED_=
+OFFSET;
++=20
++ const xa_mark_t RUST_CONST_HELPER_XA_PRESENT =3D XA_PRESENT;
++=20
++ const gfp_t RUST_CONST_HELPER_XA_FLAGS_ALLOC =3D XA_FLAGS_ALLOC;
++ const gfp_t RUST_CONST_HELPER_XA_FLAGS_ALLOC1 =3D XA_FLAGS_ALLOC1;
+
+--Sig_/UfLstoki3dA=qGyu89WKs+a
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgwBycACgkQAVBC80lX
-0GzM2Qf9E8ZWLVmB8fwK254pjNrqoN1ph/ewVynkS8kRaA7P0v9OJNtRPbq8YOtf
-7N74XE2Qdgf776N2SX2NPRlvm74LpX8DTInrO42NmjwNpktd//46rLUwdkeHnYCI
-9hmCCFa3l3Th9b5MZh3k0ns3CqzGyjgishf8A6hLiUQlcthgIrLJVgLYsbfQez7G
-8XnIlO/8KIExK5NWyfuuPhHz+YgSqY3PCzo7DzzLryh4XKZYmga71oHHI71yNfST
-bqw5OjZDOyt3ls0vMGmXihtHD7hxzI4si42LLv0eRXrYBeLlh65hnJ1d5J9Y9yz0
-TQ4ePX71+PPOl1lBK+q7HxyQpkU5LA==
-=xkTN
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmgwEiAACgkQAVBC80lX
+0GydpAf/RbWvNFVq/Wp77QPgTquSHd4gV7XQfUccfon1i8HdQiQjUsK8oKbP8HWe
+9rWIFLwUnmcr/IawqVfBYZlBcld9LLWBXrmUpnLL2OcEOB7DI5W8LjhvT8GLbi6P
+qKMxrzeCsjpxdMLiucpBlLH1dzqneqie4Y/QdQhC+pYI4t7h/o3/OuzwuYKJzvTZ
+8oJ0LKWwiVD5CailSwJ1dZtWAuji3Ps+no+OoJbDA1lZ6GQ32ubn15r2n/XOmdAY
+kBD4VyS5PnJljLysMz/FhO4ntCaHRrn9sWQ6YsX8F9wUHdN2z+rJWj7Qnsh1c0RG
+owJ/9IJ6NtOwU18O9QOsuamt7dvWQg==
+=ou7m
 -----END PGP SIGNATURE-----
 
---Sig_/otQmwNn_bdrl9F/6J=FL4+2--
+--Sig_/UfLstoki3dA=qGyu89WKs+a--
 

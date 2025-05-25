@@ -1,52 +1,53 @@
-Return-Path: <linux-next+bounces-6919-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6920-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB55FAC3475
-	for <lists+linux-next@lfdr.de>; Sun, 25 May 2025 14:14:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ED0FAC3753
+	for <lists+linux-next@lfdr.de>; Mon, 26 May 2025 00:48:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E1E21895D92
-	for <lists+linux-next@lfdr.de>; Sun, 25 May 2025 12:15:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DE811893381
+	for <lists+linux-next@lfdr.de>; Sun, 25 May 2025 22:48:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AC11F09B6;
-	Sun, 25 May 2025 12:14:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E73B1ADC90;
+	Sun, 25 May 2025 22:48:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="iOH0WRs9"
+	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="n+UZrT8i"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.15.14])
+Received: from mout.web.de (mout.web.de [212.227.15.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963601F03D9;
-	Sun, 25 May 2025 12:14:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F16D113A86C;
+	Sun, 25 May 2025 22:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748175288; cv=none; b=eZng1Osi1Eo2E+3vGtsy/RczBFfLXHrq3IECXXFk1zgy9JLyEKERaw586RY+Lyw82jIltJqgnfwJQ/Iop0u4OgGMwmrPPwPi/PEEQFZo7fHvXCB5QDqAsxj302UlVkB+whRBNBQHy+iYBqSjoz36qVJZfsFjo+CcTJEewSwjuf8=
+	t=1748213316; cv=none; b=Cw4qZaQgBd3ak4Spogcj2lCyYSi6RLV7kiAl3RXXiYSW8cUpQK5849y+FYBm3QjY0YngW+UnPMoH+mqmaMz21ddtdp2jvp8pITx3Ynq+kHftoaT/0uW8Q3pL+Wh/igoVPRcnNTVeiJc1ITQCv4keL7HEWOiUCPtA4m1BzzxxmWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748175288; c=relaxed/simple;
-	bh=YjWZk96XYZTt6E1jewxusAGsKLFicY3r6Q4aQz6YD2g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=W1UthWjWbg8g0UIlVxCMdVNg58pigGWYJJ6HQiarLs8a95IbbYlDDsHKrgQYuW5YH4oVLJzZqoy3PQut4wkMVijBil89bhONqJkqtX4dm4vFXsOd4yd0B3yhy7HkmaHsmtsafSDHEsZDJIR2zx2QXFCQwlmqtfi9h382IfYdjn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=iOH0WRs9; arc=none smtp.client-ip=212.227.15.14
+	s=arc-20240116; t=1748213316; c=relaxed/simple;
+	bh=OthrtTMefQvAmwKEN7u6uegZMX5JD/Op86AbCwXJEQM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sHP5Q9iIOseHBODIv7ixFQvobFhWOHoQ0B8tbNeH3CrCP2415zpM+s5AhgZHzW7n1+cWdEN09VJVDcTRZZBjOix5Qjw/BlvSJKUKcPCqnbDj9HkiRtGLLUrvJYDbiMccYB8mPQjXv5WjBoCFF4UtQjQD7a311s/Ns39KJh+9K5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=n+UZrT8i; arc=none smtp.client-ip=212.227.15.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1748175265; x=1748780065; i=spasswolf@web.de;
-	bh=zDo2qUQEoBkCdLj2EFYA2QmC0e5zrCeQS6bJfHQTJfQ=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
-	 MIME-Version:Content-Transfer-Encoding:cc:
+	s=s29768273; t=1748213266; x=1748818066; i=spasswolf@web.de;
+	bh=0kJ761GxaFPwhvyiSXXAZNhysEl6OjbO0LYFyeNUTIs=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=iOH0WRs9QlUqE7vM8lTVuDaezLyKrWMDE4SzHeJJCyFZ48a9F7g76a1i76Zq445y
-	 YW9yHCn+RbAv5zPqjtS0KYn/XUt2zqCvQpp5Zl0j+Lk+m9ensM0M6bxmDxC0pGPXQ
-	 KrRGwhyMDtpc7h89pcREpp2z2Yiw/cQ9/Sa6ciF9FD5TZZwynZb392+NBfBemCDQY
-	 XY0DQkibcx+sshZRyKf7gWhKZczlAXE6VBrQgytlqYDbGtZ4FPfylvNDAT2ZZaCni
-	 Gp26O61ciYwc3Hd66DA1WznAhWDVQK1knh2IDrrMmLO8SapF3M3qd9VQMvBrqy6ri
-	 6cbB4AI8uvgc20/jfw==
+	b=n+UZrT8iAGDE+F+xC31MDCeFjFp0h9slpYnOd8NZ30skCiH/l/83UJWSkumKzatm
+	 FewDSR9VQKnIpuMZI/pH6YruvT7MDopfU58RNUpyC+gOUbssHa5llz907yOLT9Ouj
+	 ue0fJ/oAQNaPwOGEFwH+HV7DZnaQc7/W87Y9RhcRvItBl4u3mLE5cJfdQLc2R+k7H
+	 bi7lyYZmLpZrE28EYxuI30CkGo/NodElugUK5uJCPBYNXgH7BRReWHanxDcr85/52
+	 B5D7rMWHQmrM/v9ZOzYbDhgB57SCT2rixFMDrIHnTnCM4tRc8/K2ymR4qUaFM7R7z
+	 TvIZB279Maur687BCA==
 X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
 Received: from localhost.localdomain ([95.223.134.88]) by smtp.web.de
- (mrweb006 [213.165.67.108]) with ESMTPSA (Nemesis) id
- 1MjgT9-1ul6Ko2SDb-00cblm; Sun, 25 May 2025 14:14:25 +0200
+ (mrweb005 [213.165.67.108]) with ESMTPSA (Nemesis) id
+ 1N6K1l-1uymuO1dQP-011Czz; Mon, 26 May 2025 00:47:45 +0200
 From: Bert Karwatzki <spasswolf@web.de>
 To: linux-kernel@vger.kernel.org
 Cc: Bert Karwatzki <spasswolf@web.de>,
@@ -56,9 +57,11 @@ Cc: Bert Karwatzki <spasswolf@web.de>,
 	linux-rt-devel@lists.linux.dev,
 	Thomas Gleixner <tglx@linutronix.de>
 Subject: BUG: scheduling while atomic with PREEMPT_RT=y and bpf selftests
-Date: Sun, 25 May 2025 14:14:23 +0200
-Message-ID: <20250525121424.15517-1-spasswolf@web.de>
+Date: Mon, 26 May 2025 00:47:42 +0200
+Message-ID: <20250525224744.9640-1-spasswolf@web.de>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: 20250525121424.15517-1-spasswolf@web.de
+References: 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -66,2478 +69,9036 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:XsD5zbvYZ1K7kmt2B7zjb2MeCUUDZW+asfn2rd1rhNIEQvI1vNX
- h2eVbTMSjCTZzle1vXbGvFM8FZEz06yhbkixmJvygXrZeqym+OJgZUU/G9xdMYAuge1Ffkk
- qGx1wdlp5v5UQNRFDs5urbtxHHCO5PaW4ZuiTOSvDyv6wgSP68aoXMagol1WzQdi0Kdz3W9
- 6j8dPBLmrO935yOejE70w==
+X-Provags-ID: V03:K1:lKOHuVzeVtkdutPs2gLShnV1kktJGAFWO860YMLuWYX+2bM5mt8
+ NRbFV4iiife5P+dycriO4QrQZoZmNSit0wx4m7bzrBDY7s8ow9y+mcqQZbdQPjUNSERLdEi
+ TaxMo6kYBy5VIcmPpnAEIcV1rj7jMGJadQ3mvQPSRTmHOepNs6+7rVQvf2MDfCnb6jM4XYD
+ 4C7sJUrh7mQTgZPacrBOg==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:8W8ZexEKqu8=;XTQLTTIn425g52YSS0rpWQbBoaF
- vhAlV7jN9lv6U/5SRroXskUZE3bJHiChQzXqOZwvA7vueJK9HhDZ5W0FMvb4SW0/p380e7JmN
- uayLvUdDaJLh1k++F5xb5vUb8CjYxymA735ExRmPjQilvrt5mkP4DdRzYWu5fUQCUVSXu/OSG
- Hdpmf7khI2G4YLE0q4WEswrVbeNnUmq93FdVj/c+fgz3IXA8OBhF79Mqw2/NNitWJa4MzL+mw
- OrMIhCRZsLEt/DJmEwWSTov8TR9sNiUbSlVfFYTmJXB/BgVMhj4SpUDm2gt/lk5eS35sA6aVy
- CnDxS9Ki3FkXb4ZafYGCnj6wyYID2xQ2UWPkXc3TJebGpUkScvXzxWec+AwyYv1GfNPVLWTBH
- XdWBSQKR5vdhg4vkgn/lfIPANTX+aJJOI36Wxmx93UAgYYTSi8pWl6Z3x28n9zZMk3nygdsAW
- Fx/3e3ROYMRRM3nFBTVNpOQWJvWSO5GmdkfstdMbBvaAF1x7Vk7el+uInjQDf49ILu5XCNqXP
- 2ssXzdk3OTadXdKaX5tt9BVm19AZ8/d9FqbwBhAmpA7rHYBhOA7WLc9RIcvapuSAaP6Edu0lz
- jNZHudPgF3OIxr4ksFBWF5sOVRzD3MJAzTIzloOWsMukz9rqx6hlNeK1zoWB694F6b05Lxlcj
- lY6w4FdPPHZTj99RUSU8ytdGqaBabAQ7/sPSWD97Q0jkkd+wK44cHS8bFSWwoQpyIQqAcqK4L
- Jo8EoRJO9ayk5quNsBu0fw0TcdJavshehuYkNPUXHgpLLJyAbQVdZX5dzgLKOBCi5hoqOUKZa
- ATdCVIx7aP8R0G8zxCmaqvCbyEiuH1p+H/lLpy3Ss3xru8mgLRdsPzgVzSTwui+aOPdtXQsaq
- Qv0pOv1tbwg/vrtbA3d558bB7CfOpwJ/Rq9c4ojekYqHyzi9N8OwKEkOzouEvyVbKUUU/xZr6
- xHhHN4kvYJ7Suhh33kgbZxH1ZZPgSjBuEFQ65UKbfYVTDOJHbJzqRBPu5eQEUQ6sUkvvo/lHT
- ILtGZTw4XtuHc0lNeDLapNjcwvY0ZZbAvETFELBk1RzcRunrQ0dg0y74z7/IpYblvhFXtxpuW
- PGefGM5UkxW/kvxtxgpPRQmp9wc3SydmWgG2ctSD7yHSh+khWhDUl27i8rYO2NTapZwEqiU1g
- SWm2fxbPv45x2GczNxDQBqwhkO3z4mqDfrWvMizquerQn6TjaPCfRrAdtnNH4Gw7LsZ1s27Zc
- znGBB3ZOMygdgfwerUOdQGOszWGQygyZsLeEpqluwGDInm7NO6a2KM8PN2YO8wB7NLfz3k0GV
- +KOy7kEz2NMvSGsyBamqUlXzovjgkOi+TZgSpWSCf00El3PDWQlfAnQFtML6uKuYfIymwvzMe
- ie9WL3xy9LxmBZntr3Ng9pNSZJWdLygVE4kggid+6N/lQlCQuyF9PWgX7W
+UI-OutboundReport: notjunk:1;M01:P0:QR12uPAAG/Q=;757ZA1WTjOFASr5dGZCWH5Ku4gs
+ PRwcEPVa4cu+ZCOixliv3VDbk4JNoRVLbwMLbDJyXOA8OHW1KXj4rs3Yk0DCEEqIi5gcsHuIU
+ /vCO+PgWGp0TeH/KQ2k0U1LxKBpwvrvQ1q0QQEaSBBjFJbYrlUUrFuXpz1dtCOWDxx33q7sh6
+ oPR6TVT/wGrFuiRiTaab+IfloamflH/v6piWTt5Q8bPAQobWmld+jKChypGREliI5DWxTFDHe
+ ZrBZKJ2AkGj8edO4dqeo1jMVpQZoKyj30DoqGerjeOmrcWvV/TRT6p3wvthg4DqKvwZLEYbru
+ ghJmONVGfEyEElM7HimxJGGrekW+UzgunMa80+9ETtlBrBW/Vr5goEvD485IjSqHJOzFi9mWL
+ VfwAdYrnpxbqdxd8GKywdZEe+JndJ388urfg4MURaag0oloTw1Jtgqv+3ykpaMGTYz9rP6Vim
+ utZ2cEbxMRG4EtuwKp9iiXpN/qWbBiuPbxB3MqQKTLsIioSxdNNgiIPPB293omBGuVeSiYD40
+ 4daEqI9NnO9AcGOpEXpCHhkJZytfoXqKQOECSDFjz4vZqStwLKbL1FFndXoVFeV2BmTpP3ikP
+ CgFta46kh+H7ZbPoShd71yAGei3rty8cuAiw9OcW5Xe9RdZm9MTjQYaR3Eb6SbjYrbv12MYob
+ sf8eaA1tRkJEQBP9/Q9Uakr1UzpCAH9KGsIhhRuH+/RH9uEEEI7VXHkWtuOHivpfcv1N6ivQs
+ 2RYmZK4qDrb1hpxI/c378QMHCM+yTWQztZiqO8NjjEkQECDrGgDa2lJeZf33kFDde8swbmiM/
+ gUWurLgP28SX62Jk1fm7UK3LhOKDKsixBy3NnazG5Wb2HbaGiKiQI+JUyNOaJX/9tRTwE6VRo
+ mgOoq4ml85KseiTyyjWIspPmeDw7I3ipM9SZmHK0mVUw4lCIKhyy72AF70dHYYW+Qt/c0peTr
+ aoTF9lUT1h/cfpx6R7Vc3wOWEn4akInMdEeyLyX46FzfSLI8bEzTfjgBHzkG6tg2r/jznZKR0
+ QV4zzgQFtX+k2UIkC6pXo1YF9k14UT8MDVja9SDrhvcOz6vc1A7OZ6DCSjZPa4e786Zwyf3bE
+ YBDSCqQsfHEfULkvw4D7erh+9U4lNmisuulGU69fq7qTKJ4+aiKua1Bhly6fpt8JFEd2stazg
+ rhnWMOp+PdQI7Eta5UgSlweOCpATsgSE6VmB9HAjBtfjmep6uVZzw3m/fTwwsYC7ApLUkLfOQ
+ g0xoVs/ZAkt35fNGoVvCHz13ee5hV7xkiU8Wf+bZ59W4Ws49RC3QWSSf2Hrm06GsoihpubKD2
+ z2lNWEMKnuOayDd9cA7gExtcgI+aGQRdUgIOkMmKrmbTJZreLIhLS2EIdBsYibt7+OQKQML2y
+ r3qNyMyoHECpwCjvNzN9Z15Or1kHGWmek/zZwXgKH+mnakzKnYcxiT+gg2EPHr++qXnoEqlw+
+ iNE3mVQ==
 
-When running the bpf selftests while watching a video on youtube on a realt=
-ime
-enabled kernel (i.e. PREEMPT_RT=3Dy) I get frequent system lockups with the=
- message=20
-"BUG: scheduling while atomic".
-Affected versions are next-20250523, v6.15-rc7, v6.14, v6.13, v6.12. When c=
-ompiling
-without PREEMPT_RT=3Dy the bug does not occur.
+Now I've compiled next-2025023 with CONFIG_LOCKDEP=3Dy. This seems to avoid=
+ the
+lockups while still giving lots of warnings. Here are the warnings from one
+run of tools/testing/selftests/bpf/test_progs:=20
 
-Here is an error message (captured with netconsole) from next-20250523 (I s=
-orted
-the messages by thread Id, in the original capture they were mixed up):
-
-[  247.626280][ T2569] BUG: scheduling while atomic: ImageBridgeChld/2569/0=
-x00000002
-[  247.626285][ T2569] Modules linked in: bpf_testmod(O) netconsole ccm snd=
-_seq_dummy snd_hrtimer snd_seq_midi snd_seq_midi_event snd_seq rfcomm bnep =
-nls_ascii nls_cp437
-[  247.626299][ T2569]  vfat
-[  247.626300][ T2569]  fat
-[  247.626302][ T2569]  snd_ctl_led
-[  247.626303][ T2569]  snd_hda_codec_realtek
-[  247.626304][ T2569]  snd_hda_codec_generic
-[  247.626306][ T2569]  snd_hda_scodec_component
-[  247.626308][ T2569]  snd_hda_codec_hdmi
-[  247.626309][ T2569]  snd_usb_audio
-[  247.626310][ T2569]  btusb
-[  247.626311][ T2569]  snd_hda_intel
-[  247.626312][ T2569]  btrtl
-[  247.626314][ T2569]  snd_intel_dspcfg
-[  247.626315][ T2569]  btintel
-[  247.626317][ T2569]  btbcm
-[  247.626317][ T2569]  snd_soc_dmic
-[  247.626319][ T2569]  snd_acp3x_pdm_dma
-[  247.626320][ T2569]  snd_acp3x_rn
-[  247.626321][ T2569]  snd_usbmidi_lib
-[  247.626322][ T2569]  snd_hda_codec
-[  247.626324][ T2569]  uvcvideo
-[  247.626326][ T2569]  btmtk
-[  247.626327][ T2569]  snd_ump
-[  247.626328][ T2569]  snd_soc_core
-[  247.626329][ T2569]  videobuf2_vmalloc
-[  247.626330][ T2569]  snd_hwdep
-[  247.626332][ T2569]  videobuf2_memops
-[  247.626333][ T2569]  uvc
-[  247.626334][ T2569]  bluetooth
-[  247.626335][ T2569]  snd_hda_core
-[  247.626337][ T2569]  snd_rawmidi
-[  247.626338][ T2569]  videobuf2_v4l2
-[  247.626339][ T2569]  snd_seq_device
-[  247.626340][ T2569]  snd_pcm_oss
-[  247.626341][ T2569]  videodev
-[  247.626343][ T2569]  snd_mixer_oss
-[  247.626343][ T2569]  snd_rn_pci_acp3x
-[  247.626345][ T2569]  ecdh_generic
-[  247.626346][ T2569]  snd_pcm
-[  247.626347][ T2569]  ecc
-[  247.626349][ T2569]  snd_acp_config
-[  247.626350][ T2569]  videobuf2_common
-[  247.626351][ T2569]  snd_soc_acpi
-[  247.626352][ T2569]  msi_wmi
-[  247.626353][ T2569]  snd_timer
-[  247.626354][ T2569]  mc
-[  247.626356][ T2569]  sparse_keymap
-[  247.626357][ T2569]  snd
-[  247.626358][ T2569]  edac_mce_amd
-[  247.626359][ T2569]  wmi_bmof
-[  247.626360][ T2569]  k10temp
-[  247.626362][ T2569]  snd_pci_acp3x
-[  247.626363][ T2569]  soundcore
-[  247.626364][ T2569]  ccp
-[  247.626365][ T2569]  battery
-[  247.626367][ T2569]  ac
-[  247.626368][ T2569]  sch_fq_codel
-[  247.626370][ T2569]  button
-[  247.626371][ T2569]  joydev
-[  247.626373][ T2569]  hid_sensor_accel_3d
-[  247.626374][ T2569]  hid_sensor_prox
-[  247.626375][ T2569]  hid_sensor_gyro_3d
-[  247.626376][ T2569]  hid_sensor_als
-[  247.626377][ T2569]  hid_sensor_magn_3d
-[  247.626379][ T2569]  hid_sensor_trigger
-[  247.626380][ T2569]  industrialio_triggered_buffer
-[  247.626381][ T2569]  kfifo_buf
-[  247.626382][ T2569]  industrialio
-[  247.626384][ T2569]  evdev
-[  247.626385][ T2569]  amd_pmc
-[  247.626387][ T2569]  hid_sensor_iio_common
-[  247.626389][ T2569]  mt7921e
-[  247.626390][ T2569]  mt7921_common
-[  247.626392][ T2569]  mt792x_lib
-[  247.626393][ T2569]  mt76_connac_lib
-[  247.626395][ T2569]  mt76
-[  247.626396][ T2569]  mac80211
-[  247.626398][ T2569]  libarc4
-[  247.626399][ T2569]  cfg80211
-[  247.626400][ T2569]  rfkill
-[  247.626402][ T2569]  msr
-[  247.626403][ T2569]  fuse
-[  247.626404][ T2569]  nvme_fabrics
-[  247.626406][ T2569]  efi_pstore
-[  247.626408][ T2569]  configfs
-[  247.626409][ T2569]  nfnetlink
-[  247.626410][ T2569]  efivarfs
-[  247.626413][ T2569]  autofs4
-[  247.626414][ T2569]  ext4
-[  247.626415][ T2569]  mbcache
-[  247.626417][ T2569]  jbd2
-[  247.626419][ T2569]  usbhid
-[  247.626420][ T2569]  amdgpu
-[  247.626422][ T2569]  amdxcp
-[  247.626423][ T2569]  i2c_algo_bit
-[  247.626425][ T2569]  drm_client_lib
-[  247.626426][ T2569]  drm_ttm_helper
-[  247.626428][ T2569]  ttm
-[  247.626429][ T2569]  drm_exec
-[  247.626430][ T2569]  gpu_sched
-[  247.626432][ T2569]  xhci_pci
-[  247.626433][ T2569]  drm_suballoc_helper
-[  247.626435][ T2569]  drm_panel_backlight_quirks
-[  247.626436][ T2569]  xhci_hcd
-[  247.626439][ T2569]  cec
-[  247.626440][ T2569]  hid_sensor_hub
-[  247.626441][ T2569]  hid_multitouch
-[  247.626443][ T2569]  drm_buddy
-[  247.626444][ T2569]  mfd_core
-[  247.626445][ T2569]  hid_generic
-[  247.626446][ T2569]  drm_display_helper
-[  247.626448][ T2569]  psmouse
-[  247.626449][ T2569]  nvme
-[  247.626450][ T2569]  i2c_hid_acpi
-[  247.626451][ T2569]  usbcore
-[  247.626453][ T2569]  amd_sfh
-[  247.626454][ T2569]  i2c_hid
-[  247.626456][ T2569]  serio_raw
-[  247.626457][ T2569]  drm_kms_helper
-[  247.626459][ T2569]  hid
-[  247.626462][ T2569]  nvme_core
-[  247.626463][ T2569]  r8169
-[  247.626465][ T2569]  i2c_piix4
-[  247.626466][ T2569]  usb_common
-[  247.626468][ T2569]  crc16
-[  247.626470][ T2569]  i2c_smbus
-[  247.626471][ T2569]  i2c_designware_platform
-[  247.626472][ T2569]  i2c_designware_core
-[  247.626474][ T2569]  [last unloaded: bpf_testmod(O)]
-[  247.626476][ T2569]=20
-[  247.626734][ T2569] CPU: 12 UID: 1000 PID: 2569 Comm: ImageBridgeChld Ta=
-inted: G        W  O        6.15.0-rc7-next-20250523-gcc-dirty #1 PREEMPT_{=
-RT,(full)}=20
-[  247.626739][ T2569] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[  247.626740][ T2569] Hardware name: Micro-Star International Co., Ltd. Al=
-pha 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
-[  247.626742][ T2569] Call Trace:
-[  247.626742][ T2569]  <TASK>
-[  247.626744][ T2569]  dump_stack_lvl+0x6d/0xb0
-[  247.626749][ T2569]  __schedule_bug.cold+0x3e/0x4a
-[  247.626751][ T2569]  __schedule+0x1440/0x1c90
-[  247.626755][ T2569]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.626757][ T2569]  ? ____sys_sendmsg+0x335/0x370
-[  247.626759][ T2569]  ? copy_msghdr_from_user+0xea/0x170
-[  247.626763][ T2569]  schedule_rtlock+0x30/0xd0
-[  247.626765][ T2569]  rtlock_slowlock_locked+0x327/0xfb0
-[  247.626771][ T2569]  rt_spin_lock+0x7a/0xd0
-[  247.626774][ T2569]  task_get_cgroup1+0x6c/0xf0
-[  247.626778][ T2569]  bpf_task_get_cgroup1+0xe/0x20
-[  247.626782][ T2569]  bpf_prog_28ba4edb92179f43_on_enter+0x47/0x128
-[  247.626784][ T2569]  bpf_trace_run2+0x77/0xf0
-[  247.626787][ T2569]  __bpf_trace_sys_enter+0x10/0x30
-[  247.626790][ T2569]  syscall_trace_enter+0x157/0x1c0
-[  247.626792][ T2569]  do_syscall_64+0x2dc/0xfa0
-[  247.626795][ T2569]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.626798][ T2569]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[  247.626800][ T2569] RIP: 0033:0x7fbfd96fd9ee
-[  247.626806][ T2569] Code: 08 0f 85 f5 4b ff ff 49 89 fb 48 89 f0 48 89 d=
-7 48 89 ce 4c 89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0=
-f 05 <c3> 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
-[  247.626808][ T2569] RSP: 002b:00007fbfc68ed8f8 EFLAGS: 00000246 ORIG_RAX=
-: 00000000000000ca
-[  247.626810][ T2569] RAX: ffffffffffffffda RBX: 00007fbfc68ee6c0 RCX: 000=
-07fbfd96fd9ee
-[  247.626812][ T2569] RDX: 0000000000000faa RSI: 0000000000000189 RDI: 000=
-07fbfc6c1f4d0
-[  247.626813][ T2569] RBP: 0000000000000000 R08: 0000000000000000 R09: 000=
-00000ffffffff
-[  247.626814][ T2569] R10: 0000000000000000 R11: 0000000000000246 R12: 000=
-0000000000000
-[  247.626815][ T2569] R13: 00007fbfc6c1f480 R14: 0000000000000fac R15: 000=
-0000000001f58
-[  247.626820][ T2569]  </TASK>
-[  247.626863][ T2569] BUG: scheduling while atomic: ImageBridgeChld/2569/0=
-x00000000
-[  247.626866][ T2569] Modules linked in:
-[  247.626867][ T2569]  bpf_testmod(O)
-[  247.626868][ T2569]  netconsole ccm
-[  247.626870][ T2569]  snd_seq_dummy
-[  247.626871][ T2569]  snd_hrtimer
-[  247.626872][ T2569]  snd_seq_midi
-[  247.626873][ T2569]  snd_seq_midi_event snd_seq
-[  247.626875][ T2569]  rfcomm
-[  247.626875][ T2569]  bnep
-[  247.626877][ T2569]  nls_ascii
-[  247.626878][ T2569]  nls_cp437
-[  247.626879][ T2569]  vfat
-[  247.626880][ T2569]  fat
-[  247.626881][ T2569]  snd_ctl_led
-[  247.626882][ T2569]  snd_hda_codec_realtek
-[  247.626883][ T2569]  snd_hda_codec_generic
-[  247.626884][ T2569]  snd_hda_scodec_component
-[  247.626885][ T2569]  snd_hda_codec_hdmi
-[  247.626886][ T2569]  snd_usb_audio
-[  247.626887][ T2569]  btusb
-[  247.626888][ T2569]  snd_hda_intel
-[  247.626888][ T2569]  btrtl
-[  247.626890][ T2569]  snd_intel_dspcfg
-[  247.626891][ T2569]  btintel
-[  247.626892][ T2569]  btbcm
-[  247.626893][ T2569]  snd_soc_dmic
-[  247.626894][ T2569]  snd_acp3x_pdm_dma
-[  247.626895][ T2569]  snd_acp3x_rn
-[  247.626896][ T2569]  snd_usbmidi_lib
-[  247.626911][ T2569]  snd_hda_codec
-[  247.626913][ T2569]  uvcvideo
-[  247.626914][ T2569]  btmtk
-[  247.626915][ T2569]  snd_ump
-[  247.626915][ T2569]  snd_soc_core
-[  247.626916][ T2569]  videobuf2_vmalloc
-[  247.626917][ T2569]  snd_hwdep
-[  247.626918][ T2569]  videobuf2_memops
-[  247.626919][ T2569]  uvc
-[  247.626920][ T2569]  bluetooth
-[  247.626921][ T2569]  snd_hda_core snd_rawmidi
-[  247.626923][ T2569]  videobuf2_v4l2
-[  247.626924][ T2569]  snd_seq_device
-[  247.626925][ T2569]  snd_pcm_oss
-[  247.626926][ T2569]  videodev
-[  247.626926][ T2569]  snd_mixer_oss
-[  247.626927][ T2569]  snd_rn_pci_acp3x
-[  247.626928][ T2569]  ecdh_generic snd_pcm
-[  247.626930][ T2569]  ecc snd_acp_config
-[  247.626932][ T2569]  videobuf2_common
-[  247.626933][ T2569]  snd_soc_acpi
-[  247.626934][ T2569]  msi_wmi
-[  247.626935][ T2569]  snd_timer
-[  247.626936][ T2569]  mc
-[  247.626937][ T2569]  sparse_keymap
-[  247.626938][ T2569]  snd
-[  247.626939][ T2569]  edac_mce_amd
-[  247.626940][ T2569]  wmi_bmof
-[  247.626941][ T2569]  k10temp
-[  247.626942][ T2569]  snd_pci_acp3x
-[  247.626943][ T2569]  soundcore
-[  247.626945][ T2569]  ccp
-[  247.626946][ T2569]  battery
-[  247.626947][ T2569]  ac
-[  247.626948][ T2569]  sch_fq_codel
-[  247.626949][ T2569]  button
-[  247.626950][ T2569]  joydev
-[  247.626951][ T2569]  hid_sensor_accel_3d
-[  247.626952][ T2569]  hid_sensor_prox
-[  247.626953][ T2569]  hid_sensor_gyro_3d
-[  247.626954][ T2569]  hid_sensor_als
-[  247.626956][ T2569]  hid_sensor_magn_3d
-[  247.626957][ T2569]  hid_sensor_trigger
-[  247.626959][ T2569]  industrialio_triggered_buffer
-[  247.626960][ T2569]  kfifo_buf
-[  247.626961][ T2569]  industrialio
-[  247.626962][ T2569]  evdev
-[  247.626963][ T2569]  amd_pmc
-[  247.626965][ T2569]  hid_sensor_iio_common
-[  247.626966][ T2569]  mt7921e
-[  247.626967][ T2569]  mt7921_common
-[  247.626968][ T2569]  mt792x_lib
-[  247.626970][ T2569]  mt76_connac_lib
-[  247.626971][ T2569]  mt76
-[  247.626972][ T2569]  mac80211
-[  247.626973][ T2569]  libarc4
-[  247.626974][ T2569]  cfg80211
-[  247.626976][ T2569]  rfkill
-[  247.626977][ T2569]  msr
-[  247.626978][ T2569]  fuse
-[  247.626979][ T2569]  nvme_fabrics
-[  247.626980][ T2569]  efi_pstore
-[  247.626982][ T2569]  configfs
-[  247.626984][ T2569]  nfnetlink
-[  247.626984][ T2569]  efivarfs
-[  247.626987][ T2569]  autofs4
-[  247.626989][ T2569]  ext4
-[  247.626990][ T2569]  mbcache
-[  247.626991][ T2569]  jbd2
-[  247.626993][ T2569]  usbhid
-[  247.626994][ T2569]  amdgpu
-[  247.626995][ T2569]  amdxcp
-[  247.626997][ T2569]  i2c_algo_bit
-[  247.626998][ T2569]  drm_client_lib
-[  247.626999][ T2569]  drm_ttm_helper
-[  247.627000][ T2569]  ttm
-[  247.627002][ T2569]  drm_exec
-[  247.627003][ T2569]  gpu_sched
-[  247.627005][ T2569]  xhci_pci
-[  247.627006][ T2569]  drm_suballoc_helper
-[  247.627007][ T2569]  drm_panel_backlight_quirks
-[  247.627009][ T2569]  xhci_hcd
-[  247.627011][ T2569]  cec
-[  247.627012][ T2569]  hid_sensor_hub
-[  247.627014][ T2569]  hid_multitouch
-[  247.627015][ T2569]  drm_buddy
-[  247.627017][ T2569]  mfd_core
-[  247.627019][ T2569]  hid_generic
-[  247.627020][ T2569]  drm_display_helper
-[  247.627021][ T2569]  psmouse
-[  247.627022][ T2569]  nvme
-[  247.627023][ T2569]  i2c_hid_acpi
-[  247.627025][ T2569]  usbcore
-[  247.627026][ T2569]  amd_sfh
-[  247.627027][ T2569]  i2c_hid
-[  247.627029][ T2569]  serio_raw
-[  247.627030][ T2569]  drm_kms_helper
-[  247.627032][ T2569]  hid
-[  247.627033][ T2569]  nvme_core
-[  247.627035][ T2569]  r8169
-[  247.627036][ T2569]  i2c_piix4
-[  247.627037][ T2569]  usb_common
-[  247.627038][ T2569]  crc16
-[  247.627039][ T2569]  i2c_smbus
-[  247.627040][ T2569]  i2c_designware_platform i2c_designware_core
-[  247.627042][ T2569]  [last unloaded: bpf_testmod(O)]
-[  247.627043][ T2569]=20
-[  247.627171][ T2569] CPU: 0 UID: 1000 PID: 2569 Comm: ImageBridgeChld Tai=
-nted: G        W  O        6.15.0-rc7-next-20250523-gcc-dirty #1 PREEMPT_{R=
-T,(full)}=20
-[  247.627174][ T2569] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[  247.627175][ T2569] Hardware name: Micro-Star International Co., Ltd. Al=
-pha 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
-[  247.627176][ T2569] Call Trace:
-[  247.627177][ T2569]  <TASK>
-[  247.627178][ T2569]  dump_stack_lvl+0x6d/0xb0
-[  247.627182][ T2569]  __schedule_bug.cold+0x3e/0x4a
-[  247.627184][ T2569]  __schedule+0x1440/0x1c90
-[  247.627186][ T2569]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627188][ T2569]  ? sched_clock_cpu+0x11f/0x1f0
-[  247.627190][ T2569]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627191][ T2569]  ? psi_group_change+0x1c9/0x4b0
-[  247.627194][ T2569]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627195][ T2569]  ? futex_hash_put+0x50/0xa0
-[  247.627197][ T2569]  schedule+0x41/0x1a0
-[  247.627199][ T2569]  futex_do_wait+0x38/0x70
-[  247.627201][ T2569]  __futex_wait+0x91/0x100
-[  247.627203][ T2569]  ? __pfx_futex_wake_mark+0x10/0x10
-[  247.627206][ T2569]  futex_wait+0x6b/0x110
-[  247.627208][ T2569]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627209][ T2569]  ? futex_wake+0xb2/0x1c0
-[  247.627211][ T2569]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627213][ T2569]  ? __seccomp_filter+0x37/0x590
-[  247.627215][ T2569]  do_futex+0xcb/0x190
-[  247.627217][ T2569]  __x64_sys_futex+0x10b/0x1c0
-[  247.627221][ T2569]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627223][ T2569]  do_syscall_64+0x6f/0xfa0
-[  247.627226][ T2569]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627229][ T2569]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[  247.627231][ T2569] RIP: 0033:0x7fbfd96fd9ee
-[  247.627237][ T2569] Code: 08 0f 85 f5 4b ff ff 49 89 fb 48 89 f0 48 89 d=
-7 48 89 ce 4c 89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0=
-f 05 <c3> 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
-[  247.627239][ T2569] RSP: 002b:00007fbfc68ed8f8 EFLAGS: 00000246
-[  247.627241][ T2569]  ORIG_RAX: 00000000000000ca
-[  247.627242][ T2569] RAX: ffffffffffffffda RBX: 00007fbfc68ee6c0 RCX: 000=
-07fbfd96fd9ee
-[  247.627244][ T2569] RDX: 0000000000000fab RSI: 0000000000000189 RDI: 000=
-07fbfc6c1f4d4
-[  247.627245][ T2569] RBP: 0000000000000000 R08: 0000000000000000 R09: 000=
-00000ffffffff
-[  247.627246][ T2569] R10: 0000000000000000 R11: 0000000000000246 R12: 000=
-0000000000000
-[  247.627247][ T2569] R13: 00007fbfc6c1f480 R14: 0000000000000fad R15: 000=
-0000000001f5b
-[  247.627251][ T2569]  </TASK>
-[  247.627275][ T2569] ------------[ cut here ]------------
-[  247.627277][ T2569] WARNING: CPU: 0 PID: 2569 at kernel/sched/sched.h:24=
-90 __pick_next_task+0x187/0x1a0
-[  247.627292][ T2569]  snd_ctl_led
-[  247.627292][ T2569]  snd_hda_codec_realtek
-[  247.627293][ T2569]  snd_hda_codec_generic snd_hda_scodec_component
-[  247.627294][ T2569]  snd_hda_codec_hdmi
-[  247.627295][ T2569]  snd_usb_audio
-[  247.627296][ T2569]  btusb snd_hda_intel
-[  247.627297][ T2569]  btrtl
-[  247.627298][ T2569]  snd_intel_dspcfg
-[  247.627299][ T2569]  btintel btbcm
-[  247.627300][ T2569]  snd_soc_dmic
-[  247.627301][ T2569]  snd_acp3x_pdm_dma
-[  247.627302][ T2569]  snd_acp3x_rn
-[  247.627303][ T2569]  snd_usbmidi_lib
-[  247.627304][ T2569]  snd_hda_codec
-[  247.627305][ T2569]  uvcvideo
-[  247.627306][ T2569]  btmtk
-[  247.627306][ T2569]  snd_ump
-[  247.627307][ T2569]  snd_soc_core
-[  247.627308][ T2569]  videobuf2_vmalloc
-[  247.627309][ T2569]  snd_hwdep
-[  247.627311][ T2569]  videobuf2_memops
-[  247.627311][ T2569]  uvc bluetooth
-[  247.627313][ T2569]  snd_hda_core
-[  247.627314][ T2569]  snd_rawmidi
-[  247.627315][ T2569]  videobuf2_v4l2
-[  247.627315][ T2569]  snd_seq_device
-[  247.627316][ T2569]  snd_pcm_oss
-[  247.627317][ T2569]  videodev
-[  247.627318][ T2569]  snd_mixer_oss snd_rn_pci_acp3x
-[  247.627320][ T2569]  ecdh_generic
-[  247.627325][ T2569]  snd_soc_acpi
-[  247.627325][ T2569]  msi_wmi
-[  247.627326][ T2569]  snd_timer mc
-[  247.627328][ T2569]  sparse_keymap
-[  247.627329][ T2569]  snd
-[  247.627330][ T2569]  edac_mce_amd
-[  247.627331][ T2569]  wmi_bmof
-[  247.627332][ T2569]  k10temp
-[  247.627333][ T2569]  snd_pci_acp3x
-[  247.627334][ T2569]  soundcore
-[  247.627335][ T2569]  ccp
-[  247.627336][ T2569]  battery
-[  247.627337][ T2569]  ac
-[  247.627339][ T2569]  sch_fq_codel
-[  247.627339][ T2569]  button
-[  247.627340][ T2569]  joydev
-[  247.627341][ T2569]  hid_sensor_accel_3d hid_sensor_prox
-[  247.627343][ T2569]  hid_sensor_gyro_3d
-[  247.627344][ T2569]  hid_sensor_als
-[  247.627345][ T2569]  hid_sensor_magn_3d
-[  247.627346][ T2569]  hid_sensor_trigger
-[  247.627347][ T2569]  industrialio_triggered_buffer
-[  247.627348][ T2569]  kfifo_buf
-[  247.627349][ T2569]  industrialio
-[  247.627350][ T2569]  evdev
-[  247.627351][ T2569]  amd_pmc
-[  247.627352][ T2569]  hid_sensor_iio_common mt7921e
-[  247.627365][ T2569]  amdxcp i2c_algo_bit drm_client_lib
-[  247.627366][ T2569]  drm_ttm_helper
-[  247.627367][ T2569]  ttm drm_exec gpu_sched xhci_pci drm_suballoc_helper
-[  247.627370][ T2569]  drm_panel_backlight_quirks xhci_hcd cec hid_sensor_=
-hub hid_multitouch drm_buddy
-[  247.627373][ T2569]  mfd_core hid_generic drm_display_helper psmouse
-[  247.627375][ T2569]  nvme i2c_hid_acpi usbcore amd_sfh
-[  247.627377][ T2569]  i2c_hid serio_raw drm_kms_helper hid
-[  247.627379][ T2569]  nvme_core r8169 i2c_piix4 usb_common crc16 i2c_smbus
-[  247.627382][ T2569]  i2c_designware_platform i2c_designware_core [last u=
-nloaded: bpf_testmod(O)]
-[  247.627385][ T2569] CPU: 0 UID: 1000 PID: 2569 Comm: ImageBridgeChld Tai=
-nted: G        W  O        6.15.0-rc7-next-20250523-gcc-dirty #1 PREEMPT_{R=
-T,(full)}=20
-[  247.627388][ T2569] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[  247.627389][ T2569] Hardware name: Micro-Star International Co., Ltd. Al=
-pha 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
-[  247.627390][ T2569] RIP: 0010:__pick_next_task+0x187/0x1a0
-[  247.627392][ T2569] Code: 00 48 8b 04 24 48 83 c4 08 5b 5d 41 5c 41 5d e=
-9 8a 54 d7 ff 4c 89 e7 e8 c7 b5 01 00 4d 3b ac 24 88 0a 00 00 0f 84 6c ff f=
-f ff <0f> 0b e9 65 ff ff ff 49 8b 9d b0 02 00 00 e9 e8 fe ff ff 0f 0b 90
-[  247.627393][ T2569] RSP: 0018:ffffd115542e7c18 EFLAGS: 00010002
-[  247.627395][ T2569] RAX: ffff892540ad9080 RBX: ffffffff918a6e98 RCX: 000=
-0000000000000
-[  247.627396][ T2569] RDX: 0000000000000000 RSI: ffff892541074200 RDI: fff=
-f8933ee82c300
-[  247.627397][ T2569] RBP: ffffffff918a6f80 R08: 00000000ffff333d R09: 000=
-0000000000000
-[  247.627398][ T2569] R10: ffff89254242e780 R11: ffff8933ee617ca0 R12: fff=
-f8933ee82c300
-[  247.627399][ T2569] R13: ffff892541074200 R14: ffff8933ee82c300 R15: 000=
-0000000000fab
-[  247.627400][ T2569] FS:  00007fbfc68ee6c0(0000) GS:ffff89345be5f000(0000=
-) knlGS:0000000000000000
-[  247.627402][ T2569] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  247.627403][ T2569] CR2: 00001c0b46cd5000 CR3: 0000000195538000 CR4: 000=
-0000000750ef0
-[  247.627404][ T2569] PKRU: 55555554
-[  247.627406][ T2569] Call Trace:
-[  247.627407][ T2569]  <TASK>
-[  247.627408][ T2569]  ? dequeue_task_fair+0x9b/0x190
-[  247.627411][ T2569]  __schedule+0x293/0x1c90
-[  247.627414][ T2569]  ? sched_clock_cpu+0x11f/0x1f0
-[  247.627416][ T2569]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627419][ T2569]  ? psi_group_change+0x1c9/0x4b0
-[  247.627422][ T2569]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627424][ T2569]  ? futex_hash_put+0x50/0xa0
-[  247.627427][ T2569]  schedule+0x41/0x1a0
-[  247.627478][ T2569]  </TASK>
-[  247.627479][ T2569] ---[ end trace 0000000000000000 ]---
-[  247.626298][ T2045] BUG: scheduling while atomic: IPC I/O Parent/2045/0x=
-00000002
-[  247.626301][ T2045] Modules linked in:
-[  247.626302][ T2045]  bpf_testmod(O)
-[  247.626303][ T2045]  netconsole
-[  247.626305][ T2045]  ccm
-[  247.626306][ T2045]  snd_seq_dummy
-[  247.626307][ T2045]  snd_hrtimer snd_seq_midi
-[  247.626309][ T2045]  snd_seq_midi_event
-[  247.626310][ T2045]  snd_seq
-[  247.626311][ T2045]  rfcomm bnep
-[  247.626313][ T2045]  nls_ascii
-[  247.626313][ T2045]  nls_cp437
-[  247.626315][ T2045]  vfat
-[  247.626316][ T2045]  fat
-[  247.626317][ T2045]  snd_ctl_led
-[  247.626318][ T2045]  snd_hda_codec_realtek
-[  247.626319][ T2045]  snd_hda_codec_generic
-[  247.626320][ T2045]  snd_hda_scodec_component
-[  247.626320][ T2045]  snd_hda_codec_hdmi
-[  247.626321][ T2045]  snd_usb_audio
-[  247.626322][ T2045]  btusb
-[  247.626323][ T2045]  snd_hda_intel
-[  247.626324][ T2045]  btrtl
-[  247.626325][ T2045]  snd_intel_dspcfg
-[  247.626326][ T2045]  btintel
-[  247.626327][ T2045]  btbcm
-[  247.626328][ T2045]  snd_soc_dmic
-[  247.626329][ T2045]  snd_acp3x_pdm_dma
-[  247.626330][ T2045]  snd_acp3x_rn snd_usbmidi_lib
-[  247.626331][ T2045]  snd_hda_codec
-[  247.626332][ T2045]  uvcvideo
-[  247.626334][ T2045]  btmtk
-[  247.626335][ T2045]  snd_ump
-[  247.626336][ T2045]  snd_soc_core
-[  247.626337][ T2045]  videobuf2_vmalloc
-[  247.626338][ T2045]  snd_hwdep
-[  247.626339][ T2045]  videobuf2_memops
-[  247.626340][ T2045]  uvc bluetooth
-[  247.626341][ T2045]  snd_hda_core
-[  247.626342][ T2045]  snd_rawmidi
-[  247.626343][ T2045]  videobuf2_v4l2
-[  247.626344][ T2045]  snd_seq_device
-[  247.626345][ T2045]  snd_pcm_oss
-[  247.626346][ T2045]  videodev
-[  247.626347][ T2045]  snd_mixer_oss
-[  247.626348][ T2045]  snd_rn_pci_acp3x
-[  247.626349][ T2045]  ecdh_generic
-[  247.626350][ T2045]  snd_pcm
-[  247.626351][ T2045]  ecc
-[  247.626352][ T2045]  snd_acp_config
-[  247.626353][ T2045]  videobuf2_common
-[  247.626354][ T2045]  snd_soc_acpi
-[  247.626356][ T2045]  msi_wmi
-[  247.626357][ T2045]  snd_timer
-[  247.626358][ T2045]  mc
-[  247.626360][ T2045]  sparse_keymap
-[  247.626361][ T2045]  snd
-[  247.626362][ T2045]  edac_mce_amd
-[  247.626363][ T2045]  wmi_bmof
-[  247.626364][ T2045]  k10temp
-[  247.626366][ T2045]  snd_pci_acp3x soundcore
-[  247.626368][ T2045]  ccp
-[  247.626369][ T2045]  battery
-[  247.626370][ T2045]  ac
-[  247.626371][ T2045]  sch_fq_codel
-[  247.626372][ T2045]  button
-[  247.626373][ T2045]  joydev
-[  247.626374][ T2045]  hid_sensor_accel_3d
-[  247.626375][ T2045]  hid_sensor_prox
-[  247.626376][ T2045]  hid_sensor_gyro_3d
-[  247.626377][ T2045]  hid_sensor_als
-[  247.626379][ T2045]  hid_sensor_magn_3d
-[  247.626380][ T2045]  hid_sensor_trigger
-[  247.626381][ T2045]  industrialio_triggered_buffer
-[  247.626383][ T2045]  kfifo_buf
-[  247.626384][ T2045]  industrialio
-[  247.626385][ T2045]  evdev
-[  247.626386][ T2045]  amd_pmc
-[  247.626388][ T2045]  hid_sensor_iio_common
-[  247.626389][ T2045]  mt7921e
-[  247.626391][ T2045]  mt7921_common
-[  247.626392][ T2045]  mt792x_lib
-[  247.626393][ T2045]  mt76_connac_lib
-[  247.626395][ T2045]  mt76
-[  247.626397][ T2045]  mac80211
-[  247.626398][ T2045]  libarc4
-[  247.626400][ T2045]  cfg80211
-[  247.626401][ T2045]  rfkill
-[  247.626402][ T2045]  msr
-[  247.626403][ T2045]  fuse
-[  247.626404][ T2045]  nvme_fabrics
-[  247.626406][ T2045]  efi_pstore
-[  247.626408][ T2045]  configfs
-[  247.626409][ T2045]  nfnetlink
-[  247.626411][ T2045]  efivarfs
-[  247.626413][ T2045]  autofs4
-[  247.626414][ T2045]  ext4
-[  247.626416][ T2045]  mbcache
-[  247.626418][ T2045]  jbd2
-[  247.626419][ T2045]  usbhid
-[  247.626420][ T2045]  amdgpu
-[  247.626422][ T2045]  amdxcp
-[  247.626423][ T2045]  i2c_algo_bit
-[  247.626425][ T2045]  drm_client_lib
-[  247.626427][ T2045]  drm_ttm_helper
-[  247.626428][ T2045]  ttm
-[  247.626429][ T2045]  drm_exec
-[  247.626431][ T2045]  gpu_sched
-[  247.626432][ T2045]  xhci_pci
-[  247.626433][ T2045]  drm_suballoc_helper
-[  247.626435][ T2045]  drm_panel_backlight_quirks
-[  247.626437][ T2045]  xhci_hcd
-[  247.626438][ T2045]  cec
-[  247.626439][ T2045]  hid_sensor_hub
-[  247.626441][ T2045]  hid_multitouch
-[  247.626442][ T2045]  drm_buddy
-[  247.626443][ T2045]  mfd_core
-[  247.626445][ T2045]  hid_generic
-[  247.626446][ T2045]  drm_display_helper
-[  247.626448][ T2045]  psmouse
-[  247.626449][ T2045]  nvme
-[  247.626451][ T2045]  i2c_hid_acpi
-[  247.626452][ T2045]  usbcore
-[  247.626453][ T2045]  amd_sfh
-[  247.626455][ T2045]  i2c_hid
-[  247.626456][ T2045]  serio_raw
-[  247.626457][ T2045]  drm_kms_helper
-[  247.626460][ T2045]  hid
-[  247.626461][ T2045]  nvme_core
-[  247.626462][ T2045]  r8169
-[  247.626463][ T2045]  i2c_piix4
-[  247.626465][ T2045]  usb_common
-[  247.626466][ T2045]  crc16
-[  247.626467][ T2045]  i2c_smbus
-[  247.626469][ T2045]  i2c_designware_platform
-[  247.626470][ T2045]  i2c_designware_core
-[  247.626471][ T2045]  [last unloaded: bpf_testmod(O)]
-[  247.626472][ T2045]=20
-[  247.626477][ T2045] CPU: 2 UID: 1000 PID: 2045 Comm: IPC I/O Parent Tain=
-ted: G           O        6.15.0-rc7-next-20250523-gcc-dirty #1 PREEMPT_{RT=
-,(full)}=20
-[  247.626482][ T2045] Tainted: [O]=3DOOT_MODULE
-[  247.626483][ T2045] Hardware name: Micro-Star International Co., Ltd. Al=
-pha 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
-[  247.626485][ T2045] Call Trace:
-[  247.626490][ T2045]  <TASK>
-[  247.626492][ T2045]  dump_stack_lvl+0x6d/0xb0
-[  247.626499][ T2045]  __schedule_bug.cold+0x3e/0x4a
-[  247.626503][ T2045]  __schedule+0x1440/0x1c90
-[  247.626508][ T2045]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.626510][ T2045]  ? sched_clock_cpu+0x11f/0x1f0
-[  247.626514][ T2045]  ? psi_group_change+0x1c9/0x4b0
-[  247.626517][ T2045]  ? dl_server_start+0x3a/0x120
-[  247.626521][ T2045]  schedule_rtlock+0x30/0xd0
-[  247.626524][ T2045]  rtlock_slowlock_locked+0x327/0xfb0
-[  247.626530][ T2045]  rt_spin_lock+0x7a/0xd0
-[  247.626533][ T2045]  task_get_cgroup1+0x6c/0xf0
-[  247.626537][ T2045]  bpf_task_get_cgroup1+0xe/0x20
-[  247.626541][ T2045]  bpf_prog_28ba4edb92179f43_on_enter+0x47/0x128
-[  247.626544][ T2045]  bpf_trace_run2+0x77/0xf0
-[  247.626547][ T2045]  ? __x64_sys_futex+0x10b/0x1c0
-[  247.626553][ T2045]  __bpf_trace_sys_enter+0x10/0x30
-[  247.626556][ T2045]  syscall_trace_enter+0x157/0x1c0
-[  247.626558][ T2045]  do_syscall_64+0x2dc/0xfa0
-[  247.626561][ T2045]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.626564][ T2045]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[  247.626566][ T2045] RIP: 0033:0x7f16dd9269ee
-[  247.626586][ T2045] Code: 08 0f 85 f5 4b ff ff 49 89 fb 48 89 f0 48 89 d=
-7 48 89 ce 4c 89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0=
-f 05 <c3> 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
-[  247.626587][ T2045] RSP: 002b:00007f16cf4757f8 EFLAGS: 00000246 ORIG_RAX=
-: 000000000000002f
-[  247.626589][ T2045] RAX: ffffffffffffffda RBX: 00007f16cf4766c0 RCX: 000=
-07f16dd9269ee
-[  247.626590][ T2045] RDX: 0000000000000040 RSI: 00007f16cf475910 RDI: 000=
-0000000000091
-[  247.626591][ T2045] RBP: 00007f16cf475910 R08: 0000000000000000 R09: 000=
-0000000000000
-[  247.626593][ T2045] R10: 0000000000000000 R11: 0000000000000246 R12: 000=
-0000000000000
-[  247.626594][ T2045] R13: 0000000000000000 R14: 00007f16a1f99020 R15: 000=
-0000000000000
-[  247.626598][ T2045]  </TASK>
-[  247.626866][ T2045] BUG: scheduling while atomic: IPC I/O Parent/2045/0x=
-00000000
-[  247.626868][ T2045] Modules linked in:
-[  247.626869][ T2045]  bpf_testmod(O)
-[  247.626870][ T2045]  netconsole ccm
-[  247.626872][ T2045]  snd_seq_dummy
-[  247.626873][ T2045]  snd_hrtimer
-[  247.626874][ T2045]  snd_seq_midi snd_seq_midi_event
-[  247.626875][ T2045]  snd_seq
-[  247.626876][ T2045]  rfcomm
-[  247.626877][ T2045]  bnep
-[  247.626878][ T2045]  nls_ascii
-[  247.626879][ T2045]  nls_cp437
-[  247.626879][ T2045]  vfat fat
-[  247.626881][ T2045]  snd_ctl_led
-[  247.626882][ T2045]  snd_hda_codec_realtek
-[  247.626882][ T2045]  snd_hda_codec_generic snd_hda_scodec_component
-[  247.626884][ T2045]  snd_hda_codec_hdmi
-[  247.626885][ T2045]  snd_usb_audio
-[  247.626885][ T2045]  btusb snd_hda_intel
-[  247.626887][ T2045]  btrtl
-[  247.626888][ T2045]  snd_intel_dspcfg
-[  247.626889][ T2045]  btintel
-[  247.626889][ T2045]  btbcm
-[  247.626890][ T2045]  snd_soc_dmic
-[  247.626891][ T2045]  snd_acp3x_pdm_dma snd_acp3x_rn
-[  247.626892][ T2045]  snd_usbmidi_lib
-[  247.626893][ T2045]  snd_hda_codec
-[  247.626894][ T2045]  uvcvideo
-[  247.626895][ T2045]  btmtk
-[  247.626896][ T2045]  snd_ump
-[  247.626897][ T2045]  snd_soc_core
-[  247.626898][ T2045]  videobuf2_vmalloc
-[  247.626899][ T2045]  snd_hwdep
-[  247.626900][ T2045]  videobuf2_memops uvc
-[  247.626901][ T2045]  bluetooth snd_hda_core
-[  247.626902][ T2045]  snd_rawmidi videobuf2_v4l2
-[  247.626903][ T2045]  snd_seq_device snd_pcm_oss videodev snd_mixer_oss s=
-nd_rn_pci_acp3x ecdh_generic snd_pcm
-[  247.626907][ T2045]  ecc
-[  247.626908][ T2045]  snd_acp_config videobuf2_common snd_soc_acpi msi_wm=
-i snd_timer mc sparse_keymap snd
-[  247.626912][ T2045]  edac_mce_amd wmi_bmof
-[  247.626914][ T2045]  k10temp
-[  247.626915][ T2045]  snd_pci_acp3x
-[  247.626916][ T2045]  soundcore
-[  247.626916][ T2045]  ccp
-[  247.626917][ T2045]  battery
-[  247.626918][ T2045]  ac
-[  247.626919][ T2045]  sch_fq_codel
-[  247.626920][ T2045]  button joydev
-[  247.626921][ T2045]  hid_sensor_accel_3d
-[  247.626922][ T2045]  hid_sensor_prox
-[  247.626923][ T2045]  hid_sensor_gyro_3d
-[  247.626924][ T2045]  hid_sensor_als
-[  247.626925][ T2045]  hid_sensor_magn_3d
-[  247.626926][ T2045]  hid_sensor_trigger
-[  247.626927][ T2045]  industrialio_triggered_buffer kfifo_buf
-[  247.626929][ T2045]  industrialio evdev
-[  247.626931][ T2045]  amd_pmc
-[  247.626932][ T2045]  hid_sensor_iio_common
-[  247.626933][ T2045]  mt7921e
-[  247.626934][ T2045]  mt7921_common
-[  247.626935][ T2045]  mt792x_lib
-[  247.626937][ T2045]  mt76_connac_lib
-[  247.626937][ T2045]  mt76
-[  247.626938][ T2045]  mac80211
-[  247.626940][ T2045]  libarc4
-[  247.626941][ T2045]  cfg80211
-[  247.626942][ T2045]  rfkill
-[  247.626943][ T2045]  msr
-[  247.626944][ T2045]  fuse
-[  247.626945][ T2045]  nvme_fabrics
-[  247.626946][ T2045]  efi_pstore
-[  247.626947][ T2045]  configfs
-[  247.626948][ T2045]  nfnetlink
-[  247.626949][ T2045]  efivarfs
-[  247.626951][ T2045]  autofs4
-[  247.626952][ T2045]  ext4
-[  247.626953][ T2045]  mbcache
-[  247.626955][ T2045]  jbd2
-[  247.626957][ T2045]  usbhid
-[  247.626959][ T2045]  amdgpu
-[  247.626960][ T2045]  amdxcp
-[  247.626962][ T2045]  i2c_algo_bit
-[  247.626964][ T2045]  drm_client_lib
-[  247.626965][ T2045]  drm_ttm_helper
-[  247.626966][ T2045]  ttm
-[  247.626967][ T2045]  drm_exec
-[  247.626969][ T2045]  gpu_sched
-[  247.626970][ T2045]  xhci_pci
-[  247.626971][ T2045]  drm_suballoc_helper
-[  247.626973][ T2045]  drm_panel_backlight_quirks
-[  247.626974][ T2045]  xhci_hcd
-[  247.626976][ T2045]  cec
-[  247.626977][ T2045]  hid_sensor_hub
-[  247.626978][ T2045]  hid_multitouch
-[  247.626980][ T2045]  drm_buddy
-[  247.626981][ T2045]  mfd_core
-[  247.626982][ T2045]  hid_generic
-[  247.626983][ T2045]  drm_display_helper
-[  247.626985][ T2045]  psmouse
-[  247.626986][ T2045]  nvme
-[  247.626987][ T2045]  i2c_hid_acpi
-[  247.626988][ T2045]  usbcore
-[  247.626990][ T2045]  amd_sfh
-[  247.626991][ T2045]  i2c_hid
-[  247.626993][ T2045]  serio_raw
-[  247.626994][ T2045]  drm_kms_helper
-[  247.626995][ T2045]  hid
-[  247.626997][ T2045]  nvme_core r8169
-[  247.626999][ T2045]  i2c_piix4
-[  247.627001][ T2045]  usb_common
-[  247.627002][ T2045]  crc16
-[  247.627003][ T2045]  i2c_smbus
-[  247.627004][ T2045]  i2c_designware_platform
-[  247.627006][ T2045]  i2c_designware_core
-[  247.627007][ T2045]  [last unloaded: bpf_testmod(O)]
-[  247.627009][ T2045]=20
-[  247.627011][ T2045] CPU: 2 UID: 1000 PID: 2045 Comm: IPC I/O Parent Tain=
-ted: G        W  O        6.15.0-rc7-next-20250523-gcc-dirty #1 PREEMPT_{RT=
-,(full)}=20
-[  247.627016][ T2045] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[  247.627017][ T2045] Hardware name: Micro-Star International Co., Ltd. Al=
-pha 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
-[  247.627019][ T2045] Call Trace:
-[  247.627021][ T2045]  <TASK>
-[  247.627023][ T2045]  dump_stack_lvl+0x6d/0xb0
-[  247.627028][ T2045]  __schedule_bug.cold+0x3e/0x4a
-[  247.627031][ T2045]  __schedule+0x1440/0x1c90
-[  247.627035][ T2045]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627038][ T2045]  ? rt_write_lock+0x106/0x270
-[  247.627042][ T2045]  schedule+0x41/0x1a0
-[  247.627045][ T2045]  schedule_hrtimeout_range_clock+0xfc/0x110
-[  247.627049][ T2045]  do_epoll_wait+0x4fe/0x530
-[  247.627055][ T2045]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627058][ T2045]  ? __pfx_ep_autoremove_wake_function+0x10/0x10
-[  247.627063][ T2045]  __x64_sys_epoll_wait+0x5e/0xf0
-[  247.627066][ T2045]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627068][ T2045]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627070][ T2045]  ? syscall_trace_enter+0x157/0x1c0
-[  247.627073][ T2045]  do_syscall_64+0x6f/0xfa0
-[  247.627076][ T2045]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627079][ T2045]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[  247.627081][ T2045] RIP: 0033:0x7f16dd9269ee
-[  247.627087][ T2045] Code: 08 0f 85 f5 4b ff ff 49 89 fb 48 89 f0 48 89 d=
-7 48 89 ce 4c 89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0=
-f 05 <c3> 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
-[  247.627089][ T2045] RSP: 002b:00007f16cf4759c8 EFLAGS: 00000246
-[  247.627091][ T2045]  ORIG_RAX: 00000000000000e8
-[  247.627092][ T2045] RAX: ffffffffffffffda RBX: 00007f16cf4766c0 RCX: 000=
-07f16dd9269ee
-[  247.627094][ T2045] RDX: 0000000000000020 RSI: 00007f16dd680680 RDI: 000=
-0000000000010
-[  247.627095][ T2045] RBP: 00007f16dd677d00 R08: 0000000000000000 R09: 000=
-0000000000000
-[  247.627096][ T2045] R10: ffffffffffffffff R11: 0000000000000246 R12: 000=
-07f16dd680680
-[  247.627098][ T2045] R13: 00007f16d0f658c0 R14: 00007f16d0f658c0 R15: 000=
-00000ffffffff
-[  247.627102][ T2045]  </TASK>
-[  247.626311][ T3138] BUG: scheduling while atomic: MediaSu~isor #2/3138/0=
-x00000002
-[  247.626313][ T3138] Modules linked in:
-[  247.626314][ T3138]  bpf_testmod(O)
-[  247.626315][ T3138]  netconsole
-[  247.626317][ T3138]  ccm
-[  247.626318][ T3138]  snd_seq_dummy
-[  247.626319][ T3138]  snd_hrtimer
-[  247.626320][ T3138]  snd_seq_midi
-[  247.626321][ T3138]  snd_seq_midi_event
-[  247.626322][ T3138]  snd_seq
-[  247.626322][ T3138]  rfcomm
-[  247.626324][ T3138]  bnep nls_ascii
-[  247.626326][ T3138]  nls_cp437 vfat
-[  247.626328][ T3138]  fat
-[  247.626329][ T3138]  snd_ctl_led
-[  247.626330][ T3138]  snd_hda_codec_realtek
-[  247.626331][ T3138]  snd_hda_codec_generic
-[  247.626332][ T3138]  snd_hda_scodec_component
-[  247.626333][ T3138]  snd_hda_codec_hdmi snd_usb_audio
-[  247.626335][ T3138]  btusb
-[  247.626337][ T3138]  snd_hda_intel
-[  247.626338][ T3138]  btrtl
-[  247.626339][ T3138]  snd_intel_dspcfg
-[  247.626340][ T3138]  btintel
-[  247.626341][ T3138]  btbcm
-[  247.626342][ T3138]  snd_soc_dmic
-[  247.626343][ T3138]  snd_acp3x_pdm_dma
-[  247.626345][ T3138]  snd_acp3x_rn
-[  247.626346][ T3138]  snd_usbmidi_lib
-[  247.626347][ T3138]  snd_hda_codec
-[  247.626348][ T3138]  uvcvideo
-[  247.626349][ T3138]  btmtk
-[  247.626351][ T3138]  snd_ump
-[  247.626352][ T3138]  snd_soc_core
-[  247.626353][ T3138]  videobuf2_vmalloc
-[  247.626354][ T3138]  snd_hwdep
-[  247.626355][ T3138]  videobuf2_memops
-[  247.626357][ T3138]  uvc
-[  247.626358][ T3138]  bluetooth
-[  247.626359][ T3138]  snd_hda_core
-[  247.626361][ T3138]  snd_rawmidi
-[  247.626362][ T3138]  videobuf2_v4l2
-[  247.626363][ T3138]  snd_seq_device
-[  247.626365][ T3138]  snd_pcm_oss
-[  247.626366][ T3138]  videodev
-[  247.626368][ T3138]  snd_mixer_oss
-[  247.626369][ T3138]  snd_rn_pci_acp3x
-[  247.626371][ T3138]  ecdh_generic
-[  247.626372][ T3138]  snd_pcm
-[  247.626373][ T3138]  ecc
-[  247.626375][ T3138]  snd_acp_config
-[  247.626376][ T3138]  videobuf2_common
-[  247.626377][ T3138]  snd_soc_acpi
-[  247.626378][ T3138]  msi_wmi
-[  247.626380][ T3138]  snd_timer
-[  247.626381][ T3138]  mc
-[  247.626383][ T3138]  sparse_keymap
-[  247.626383][ T3138]  snd
-[  247.626385][ T3138]  edac_mce_amd
-[  247.626386][ T3138]  wmi_bmof
-[  247.626387][ T3138]  k10temp
-[  247.626388][ T3138]  snd_pci_acp3x
-[  247.626389][ T3138]  soundcore
-[  247.626390][ T3138]  ccp
-[  247.626391][ T3138]  battery
-[  247.626392][ T3138]  ac
-[  247.626394][ T3138]  sch_fq_codel
-[  247.626395][ T3138]  button
-[  247.626397][ T3138]  joydev
-[  247.626398][ T3138]  hid_sensor_accel_3d
-[  247.626399][ T3138]  hid_sensor_prox
-[  247.626400][ T3138]  hid_sensor_gyro_3d
-[  247.626401][ T3138]  hid_sensor_als
-[  247.626403][ T3138]  hid_sensor_magn_3d
-[  247.626404][ T3138]  hid_sensor_trigger
-[  247.626406][ T3138]  industrialio_triggered_buffer
-[  247.626407][ T3138]  kfifo_buf
-[  247.626408][ T3138]  industrialio
-[  247.626410][ T3138]  evdev
-[  247.626411][ T3138]  amd_pmc
-[  247.626413][ T3138]  hid_sensor_iio_common
-[  247.626414][ T3138]  mt7921e mt7921_common
-[  247.626416][ T3138]  mt792x_lib
-[  247.626417][ T3138]  mt76_connac_lib
-[  247.626419][ T3138]  mt76
-[  247.626420][ T3138]  mac80211
-[  247.626421][ T3138]  libarc4
-[  247.626422][ T3138]  cfg80211
-[  247.626424][ T3138]  rfkill
-[  247.626425][ T3138]  msr
-[  247.626426][ T3138]  fuse
-[  247.626427][ T3138]  nvme_fabrics
-[  247.626428][ T3138]  efi_pstore
-[  247.626429][ T3138]  configfs
-[  247.626430][ T3138]  nfnetlink
-[  247.626432][ T3138]  efivarfs
-[  247.626433][ T3138]  autofs4
-[  247.626434][ T3138]  ext4
-[  247.626435][ T3138]  mbcache
-[  247.626436][ T3138]  jbd2
-[  247.626437][ T3138]  usbhid
-[  247.626438][ T3138]  amdgpu
-[  247.626439][ T3138]  amdxcp
-[  247.626440][ T3138]  i2c_algo_bit
-[  247.626442][ T3138]  drm_client_lib
-[  247.626443][ T3138]  drm_ttm_helper
-[  247.626444][ T3138]  ttm
-[  247.626446][ T3138]  drm_exec
-[  247.626447][ T3138]  gpu_sched
-[  247.626449][ T3138]  xhci_pci
-[  247.626451][ T3138]  drm_suballoc_helper
-[  247.626453][ T3138]  drm_panel_backlight_quirks
-[  247.626454][ T3138]  xhci_hcd
-[  247.626456][ T3138]  cec
-[  247.626457][ T3138]  hid_sensor_hub
-[  247.626458][ T3138]  hid_multitouch
-[  247.626459][ T3138]  drm_buddy
-[  247.626462][ T3138]  mfd_core
-[  247.626463][ T3138]  hid_generic
-[  247.626465][ T3138]  drm_display_helper
-[  247.626467][ T3138]  psmouse
-[  247.626468][ T3138]  nvme
-[  247.626469][ T3138]  i2c_hid_acpi
-[  247.626471][ T3138]  usbcore
-[  247.626474][ T3138]  amd_sfh
-[  247.626475][ T3138]  i2c_hid
-[  247.626476][ T3138]  serio_raw
-[  247.626477][ T3138]  drm_kms_helper
-[  247.626478][ T3138]  hid
-[  247.626480][ T3138]  nvme_core
-[  247.626481][ T3138]  r8169
-[  247.626482][ T3138]  i2c_piix4
-[  247.626484][ T3138]  usb_common
-[  247.626485][ T3138]  crc16
-[  247.626485][ T3138]  i2c_smbus
-[  247.626486][ T3138]  i2c_designware_platform
-[  247.626487][ T3138]  i2c_designware_core
-[  247.626488][ T3138]  [last unloaded: bpf_testmod(O)]
-[  247.626489][ T3138]=20
-[  247.626823][ T3138] CPU: 13 UID: 1000 PID: 3138 Comm: MediaSu~isor #2 Ta=
-inted: G        W  O        6.15.0-rc7-next-20250523-gcc-dirty #1 PREEMPT_{=
-RT,(full)}=20
-[  247.626827][ T3138] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[  247.626829][ T3138] Hardware name: Micro-Star International Co., Ltd. Al=
-pha 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
-[  247.626830][ T3138] Call Trace:
-[  247.626831][ T3138]  <TASK>
-[  247.626833][ T3138]  dump_stack_lvl+0x6d/0xb0
-[  247.626837][ T3138]  __schedule_bug.cold+0x3e/0x4a
-[  247.626840][ T3138]  __schedule+0x1440/0x1c90
-[  247.626843][ T3138]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.626845][ T3138]  ? sched_clock_cpu+0x11f/0x1f0
-[  247.626847][ T3138]  ? psi_group_change+0x1c9/0x4b0
-[  247.626850][ T3138]  ? dl_server_start+0x3a/0x120
-[  247.626853][ T3138]  schedule_rtlock+0x30/0xd0
-[  247.626856][ T3138]  rtlock_slowlock_locked+0x327/0xfb0
-[  247.626861][ T3138]  rt_spin_lock+0x7a/0xd0
-[  247.626863][ T3138]  task_get_cgroup1+0x6c/0xf0
-[  247.626866][ T3138]  bpf_task_get_cgroup1+0xe/0x20
-[  247.626869][ T3138]  bpf_prog_28ba4edb92179f43_on_enter+0x47/0x128
-[  247.626871][ T3138]  bpf_trace_run2+0x77/0xf0
-[  247.626875][ T3138]  __bpf_trace_sys_enter+0x10/0x30
-[  247.626877][ T3138]  syscall_trace_enter+0x157/0x1c0
-[  247.626880][ T3138]  do_syscall_64+0x2dc/0xfa0
-[  247.626883][ T3138]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.626886][ T3138]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[  247.626888][ T3138] RIP: 0033:0x7f9d91191a0e
-[  247.626892][ T3138] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 0=
-1 c2 48 89 16 48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0=
-f 05 <5d> c3 cc 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
-[  247.626894][ T3138] RSP: 002b:00007f9d7bbcb910 EFLAGS: 00000297
-[  247.626896][ T3138]  ORIG_RAX: 00000000000000e4
-[  247.626897][ T3138] RAX: ffffffffffffffda RBX: 00007f9d909651f0 RCX: 000=
-07f9d91191a0e
-[  247.626899][ T3138] RDX: 0000000000000002 RSI: 00007f9d7bbcb930 RDI: 000=
-0000000000001
-[  247.626900][ T3138] RBP: 00007f9d7bbcb910 R08: 0000000000000000 R09: 000=
-07f9d9118b000
-[  247.626902][ T3138] R10: 5fb13eea24d73e07 R11: 0000000000000297 R12: 000=
-0000000000000
-[  247.626903][ T3138] R13: 0000000000000000 R14: 00007f9d7b9fe440 R15: 000=
-07f9d7bbcb9c8
-[  247.626907][ T3138]  </TASK>
-[  247.626930][ T3138] BUG: scheduling while atomic: MediaSu~isor #2/3138/0=
-x00000000
-[  247.626932][ T3138] Modules linked in:
-[  247.626933][ T3138]  bpf_testmod(O)
-[  247.626934][ T3138]  netconsole
-[  247.626935][ T3138]  ccm
-[  247.626936][ T3138]  snd_seq_dummy
-[  247.626937][ T3138]  snd_hrtimer
-[  247.626938][ T3138]  snd_seq_midi
-[  247.626939][ T3138]  snd_seq_midi_event
-[  247.626941][ T3138]  snd_seq
-[  247.626942][ T3138]  rfcomm
-[  247.626944][ T3138]  bnep
-[  247.626945][ T3138]  nls_ascii
-[  247.626946][ T3138]  nls_cp437
-[  247.626947][ T3138]  vfat
-[  247.626948][ T3138]  fat
-[  247.626949][ T3138]  snd_ctl_led
-[  247.626951][ T3138]  snd_hda_codec_realtek
-[  247.626952][ T3138]  snd_hda_codec_generic
-[  247.626953][ T3138]  snd_hda_scodec_component
-[  247.626955][ T3138]  snd_hda_codec_hdmi
-[  247.626956][ T3138]  snd_usb_audio
-[  247.626958][ T3138]  btusb
-[  247.626959][ T3138]  snd_hda_intel
-[  247.626961][ T3138]  btrtl
-[  247.626963][ T3138]  snd_intel_dspcfg
-[  247.626965][ T3138]  btintel
-[  247.626966][ T3138]  btbcm
-[  247.626967][ T3138]  snd_soc_dmic
-[  247.626969][ T3138]  snd_acp3x_pdm_dma
-[  247.626970][ T3138]  snd_acp3x_rn
-[  247.626971][ T3138]  snd_usbmidi_lib
-[  247.626973][ T3138]  snd_hda_codec
-[  247.626974][ T3138]  uvcvideo
-[  247.626976][ T3138]  btmtk
-[  247.626977][ T3138]  snd_ump
-[  247.626979][ T3138]  snd_soc_core
-[  247.626980][ T3138]  videobuf2_vmalloc
-[  247.626982][ T3138]  snd_hwdep
-[  247.626983][ T3138]  videobuf2_memops
-[  247.626985][ T3138]  uvc
-[  247.626987][ T3138]  bluetooth
-[  247.626988][ T3138]  snd_hda_core
-[  247.626990][ T3138]  snd_rawmidi
-[  247.626992][ T3138]  videobuf2_v4l2
-[  247.626993][ T3138]  snd_seq_device
-[  247.626994][ T3138]  snd_pcm_oss
-[  247.626996][ T3138]  videodev
-[  247.626998][ T3138]  snd_mixer_oss
-[  247.627000][ T3138]  snd_rn_pci_acp3x
-[  247.627002][ T3138]  ecdh_generic
-[  247.627004][ T3138]  snd_pcm
-[  247.627005][ T3138]  ecc
-[  247.627008][ T3138]  snd_acp_config
-[  247.627009][ T3138]  videobuf2_common
-[  247.627011][ T3138]  snd_soc_acpi
-[  247.627012][ T3138]  msi_wmi
-[  247.627013][ T3138]  snd_timer
-[  247.627014][ T3138]  mc
-[  247.627016][ T3138]  sparse_keymap
-[  247.627017][ T3138]  snd
-[  247.627019][ T3138]  edac_mce_amd
-[  247.627020][ T3138]  wmi_bmof
-[  247.627021][ T3138]  k10temp
-[  247.627023][ T3138]  snd_pci_acp3x
-[  247.627024][ T3138]  soundcore
-[  247.627026][ T3138]  ccp
-[  247.627028][ T3138]  battery
-[  247.627029][ T3138]  ac
-[  247.627030][ T3138]  sch_fq_codel
-[  247.627032][ T3138]  button
-[  247.627033][ T3138]  joydev
-[  247.627035][ T3138]  hid_sensor_accel_3d
-[  247.627036][ T3138]  hid_sensor_prox
-[  247.627037][ T3138]  hid_sensor_gyro_3d
-[  247.627039][ T3138]  hid_sensor_als
-[  247.627041][ T3138]  hid_sensor_magn_3d
-[  247.627043][ T3138]  hid_sensor_trigger
-[  247.627044][ T3138]  industrialio_triggered_buffer
-[  247.627045][ T3138]  kfifo_buf
-[  247.627047][ T3138]  industrialio
-[  247.627048][ T3138]  evdev
-[  247.627050][ T3138]  amd_pmc
-[  247.627051][ T3138]  hid_sensor_iio_common
-[  247.627053][ T3138]  mt7921e
-[  247.627054][ T3138]  mt7921_common
-[  247.627056][ T3138]  mt792x_lib
-[  247.627058][ T3138]  mt76_connac_lib
-[  247.627059][ T3138]  mt76
-[  247.627060][ T3138]  mac80211
-[  247.627062][ T3138]  libarc4
-[  247.627063][ T3138]  cfg80211
-[  247.627065][ T3138]  rfkill
-[  247.627066][ T3138]  msr
-[  247.627067][ T3138]  fuse
-[  247.627069][ T3138]  nvme_fabrics
-[  247.627070][ T3138]  efi_pstore
-[  247.627072][ T3138]  configfs
-[  247.627073][ T3138]  nfnetlink
-[  247.627074][ T3138]  efivarfs
-[  247.627076][ T3138]  autofs4
-[  247.627078][ T3138]  ext4
-[  247.627079][ T3138]  mbcache
-[  247.627080][ T3138]  jbd2
-[  247.627081][ T3138]  usbhid
-[  247.627083][ T3138]  amdgpu
-[  247.627084][ T3138]  amdxcp
-[  247.627086][ T3138]  i2c_algo_bit
-[  247.627087][ T3138]  drm_client_lib
-[  247.627089][ T3138]  drm_ttm_helper
-[  247.627091][ T3138]  ttm
-[  247.627092][ T3138]  drm_exec
-[  247.627093][ T3138]  gpu_sched
-[  247.627095][ T3138]  xhci_pci
-[  247.627096][ T3138]  drm_suballoc_helper
-[  247.627097][ T3138]  drm_panel_backlight_quirks xhci_hcd
-[  247.627099][ T3138]  cec hid_sensor_hub hid_multitouch drm_buddy
-[  247.627102][ T3138]  mfd_core
-[  247.627103][ T3138]  hid_generic drm_display_helper psmouse
-[  247.627105][ T3138]  nvme
-[  247.627106][ T3138]  i2c_hid_acpi usbcore amd_sfh
-[  247.627108][ T3138]  i2c_hid
-[  247.627109][ T3138]  serio_raw
-[  247.627111][ T3138]  drm_kms_helper
-[  247.627111][ T3138]  hid nvme_core r8169 i2c_piix4
-[  247.627115][ T3138]  usb_common crc16 i2c_smbus i2c_designware_platform
-[  247.627118][ T3138]  i2c_designware_core [last unloaded: bpf_testmod(O)]
-[  247.627119][ T3138]=20
-[  247.627254][ T3138] CPU: 13 UID: 1000 PID: 3138 Comm: MediaSu~isor #2 Ta=
-inted: G        W  O        6.15.0-rc7-next-20250523-gcc-dirty #1 PREEMPT_{=
-RT,(full)}=20
-[  247.627258][ T3138] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[  247.627259][ T3138] Hardware name: Micro-Star International Co., Ltd. Al=
-pha 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
-[  247.627260][ T3138] Call Trace:
-[  247.627262][ T3138]  <TASK>
-[  247.627263][ T3138]  dump_stack_lvl+0x6d/0xb0
-[  247.627267][ T3138]  __schedule_bug.cold+0x3e/0x4a
-[  247.627270][ T3138]  __schedule+0x1440/0x1c90
-[  247.627274][ T3138]  ? get_nohz_timer_target+0x26/0x180
-[  247.627277][ T3138]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627290][ T3138]  futex_do_wait+0x38/0x70
-[  247.627294][ T3138]  __futex_wait+0x91/0x100
-[  247.627297][ T3138]  ? __pfx_futex_wake_mark+0x10/0x10
-[  247.627301][ T3138]  futex_wait+0x6b/0x110
-[  247.627304][ T3138]  ? __pfx_hrtimer_wakeup+0x10/0x10
-[  247.627308][ T3138]  do_futex+0xcb/0x190
-[  247.627311][ T3138]  __x64_sys_futex+0x10b/0x1c0
-[  247.627316][ T3138]  do_syscall_64+0x6f/0xfa0
-[  247.627324][ T3138] RIP: 0033:0x7f9d90c4c9ee
-[  247.627329][ T3138] Code: 08 0f 85 f5 4b ff ff 49 89 fb 48 89 f0 48 89 d=
-7 48 89 ce 4c 89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0=
-f 05 <c3> 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
-[  247.627332][ T3138] RSP: 002b:00007f9d7bbcb7e8 EFLAGS: 00000246
-[  247.627333][ T3138]  ORIG_RAX: 00000000000000ca
-[  247.627335][ T3138] RAX: ffffffffffffffda RBX: 00007f9d7bbcc6c0 RCX: 000=
-07f9d90c4c9ee
-[  247.627337][ T3138] RDX: 0000000000000d57 RSI: 0000000000000089 RDI: 000=
-07f9d7bbcba14
-[  247.627339][ T3138] RBP: 0000000000000000 R08: 0000000000000000 R09: 000=
-00000ffffffff
-[  247.627341][ T3138] R10: 00007f9d7bbcb8f8 R11: 0000000000000246 R12: 000=
-07f9d90965210
-[  247.627343][ T3138] R13: 00007f9d7bbcba14 R14: 0000000000001ab3 R15: 000=
-07f9d7bbcb9f0
-[  247.627347][ T3138]  </TASK>
-[  247.626353][ T2554] BUG: scheduling while atomic: IPC I/O Child/2554/0x0=
-0000002
-[  247.626356][ T2554] Modules linked in:
-[  247.626357][ T2554]  bpf_testmod(O)
-[  247.626358][ T2554]  netconsole
-[  247.626359][ T2554]  ccm
-[  247.626360][ T2554]  snd_seq_dummy
-[  247.626361][ T2554]  snd_hrtimer
-[  247.626362][ T2554]  snd_seq_midi
-[  247.626363][ T2554]  snd_seq_midi_event
-[  247.626365][ T2554]  snd_seq
-[  247.626366][ T2554]  rfcomm
-[  247.626367][ T2554]  bnep
-[  247.626368][ T2554]  nls_ascii
-[  247.626369][ T2554]  nls_cp437
-[  247.626370][ T2554]  vfat
-[  247.626371][ T2554]  fat
-[  247.626372][ T2554]  snd_ctl_led
-[  247.626373][ T2554]  snd_hda_codec_realtek
-[  247.626374][ T2554]  snd_hda_codec_generic
-[  247.626375][ T2554]  snd_hda_scodec_component
-[  247.626376][ T2554]  snd_hda_codec_hdmi
-[  247.626377][ T2554]  snd_usb_audio
-[  247.626378][ T2554]  btusb
-[  247.626379][ T2554]  snd_hda_intel
-[  247.626380][ T2554]  btrtl
-[  247.626381][ T2554]  snd_intel_dspcfg
-[  247.626382][ T2554]  btintel
-[  247.626383][ T2554]  btbcm
-[  247.626383][ T2554]  snd_soc_dmic
-[  247.626384][ T2554]  snd_acp3x_pdm_dma
-[  247.626385][ T2554]  snd_acp3x_rn
-[  247.626386][ T2554]  snd_usbmidi_lib
-[  247.626387][ T2554]  snd_hda_codec
-[  247.626388][ T2554]  uvcvideo
-[  247.626389][ T2554]  btmtk
-[  247.626390][ T2554]  snd_ump
-[  247.626390][ T2554]  snd_soc_core
-[  247.626391][ T2554]  videobuf2_vmalloc
-[  247.626392][ T2554]  snd_hwdep
-[  247.626393][ T2554]  videobuf2_memops
-[  247.626393][ T2554]  uvc
-[  247.626394][ T2554]  bluetooth
-[  247.626395][ T2554]  snd_hda_core
-[  247.626396][ T2554]  snd_rawmidi
-[  247.626396][ T2554]  videobuf2_v4l2 snd_seq_device
-[  247.626398][ T2554]  snd_pcm_oss
-[  247.626399][ T2554]  videodev
-[  247.626399][ T2554]  snd_mixer_oss
-[  247.626400][ T2554]  snd_rn_pci_acp3x
-[  247.626401][ T2554]  ecdh_generic
-[  247.626402][ T2554]  snd_pcm
-[  247.626403][ T2554]  ecc
-[  247.626404][ T2554]  snd_acp_config
-[  247.626405][ T2554]  videobuf2_common
-[  247.626406][ T2554]  snd_soc_acpi
-[  247.626407][ T2554]  msi_wmi
-[  247.626408][ T2554]  snd_timer
-[  247.626408][ T2554]  mc
-[  247.626409][ T2554]  sparse_keymap
-[  247.626410][ T2554]  snd
-[  247.626410][ T2554]  edac_mce_amd
-[  247.626411][ T2554]  wmi_bmof
-[  247.626412][ T2554]  k10temp
-[  247.626413][ T2554]  snd_pci_acp3x
-[  247.626414][ T2554]  soundcore
-[  247.626415][ T2554]  ccp
-[  247.626416][ T2554]  battery
-[  247.626417][ T2554]  ac
-[  247.626418][ T2554]  sch_fq_codel button
-[  247.626419][ T2554]  joydev
-[  247.626420][ T2554]  hid_sensor_accel_3d
-[  247.626421][ T2554]  hid_sensor_prox
-[  247.626422][ T2554]  hid_sensor_gyro_3d
-[  247.626423][ T2554]  hid_sensor_als
-[  247.626424][ T2554]  hid_sensor_magn_3d
-[  247.626425][ T2554]  hid_sensor_trigger
-[  247.626425][ T2554]  industrialio_triggered_buffer
-[  247.626426][ T2554]  kfifo_buf
-[  247.626427][ T2554]  industrialio evdev
-[  247.626428][ T2554]  amd_pmc
-[  247.626429][ T2554]  hid_sensor_iio_common
-[  247.626430][ T2554]  mt7921e
-[  247.626431][ T2554]  mt7921_common
-[  247.626432][ T2554]  mt792x_lib
-[  247.626433][ T2554]  mt76_connac_lib
-[  247.626434][ T2554]  mt76
-[  247.626435][ T2554]  mac80211
-[  247.626436][ T2554]  libarc4
-[  247.626437][ T2554]  cfg80211
-[  247.626438][ T2554]  rfkill
-[  247.626439][ T2554]  msr
-[  247.626440][ T2554]  fuse
-[  247.626441][ T2554]  nvme_fabrics
-[  247.626442][ T2554]  efi_pstore
-[  247.626443][ T2554]  configfs
-[  247.626444][ T2554]  nfnetlink
-[  247.626445][ T2554]  efivarfs
-[  247.626446][ T2554]  autofs4
-[  247.626447][ T2554]  ext4
-[  247.626448][ T2554]  mbcache
-[  247.626449][ T2554]  jbd2
-[  247.626449][ T2554]  usbhid
-[  247.626450][ T2554]  amdgpu
-[  247.626451][ T2554]  amdxcp
-[  247.626452][ T2554]  i2c_algo_bit
-[  247.626453][ T2554]  drm_client_lib drm_ttm_helper
-[  247.626455][ T2554]  ttm
-[  247.626456][ T2554]  drm_exec
-[  247.626457][ T2554]  gpu_sched
-[  247.626457][ T2554]  xhci_pci
-[  247.626458][ T2554]  drm_suballoc_helper
-[  247.626459][ T2554]  drm_panel_backlight_quirks
-[  247.626460][ T2554]  xhci_hcd
-[  247.626461][ T2554]  cec
-[  247.626462][ T2554]  hid_sensor_hub
-[  247.626464][ T2554]  hid_multitouch
-[  247.626465][ T2554]  drm_buddy
-[  247.626465][ T2554]  mfd_core
-[  247.626466][ T2554]  hid_generic
-[  247.626467][ T2554]  drm_display_helper
-[  247.626468][ T2554]  psmouse nvme
-[  247.626470][ T2554]  i2c_hid_acpi
-[  247.626471][ T2554]  usbcore
-[  247.626472][ T2554]  amd_sfh
-[  247.626473][ T2554]  i2c_hid
-[  247.626473][ T2554]  serio_raw
-[  247.626475][ T2554]  drm_kms_helper
-[  247.626475][ T2554]  hid
-[  247.626476][ T2554]  nvme_core r8169
-[  247.626478][ T2554]  i2c_piix4 usb_common
-[  247.626479][ T2554]  crc16 i2c_smbus
-[  247.626480][ T2554]  i2c_designware_platform
-[  247.626481][ T2554]  i2c_designware_core
-[  247.626482][ T2554]  [last unloaded: bpf_testmod(O)]
-[  247.626483][ T2554]=20
-[  247.626600][ T2554] CPU: 6 UID: 1000 PID: 2554 Comm: IPC I/O Child Taint=
-ed: G        W  O        6.15.0-rc7-next-20250523-gcc-dirty #1 PREEMPT_{RT,=
-(full)}=20
-[  247.626604][ T2554] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[  247.626605][ T2554] Hardware name: Micro-Star International Co., Ltd. Al=
-pha 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
-[  247.626605][ T2554] Call Trace:
-[  247.626607][ T2554]  <TASK>
-[  247.626608][ T2554]  dump_stack_lvl+0x6d/0xb0
-[  247.626613][ T2554]  __schedule_bug.cold+0x3e/0x4a
-[  247.626615][ T2554]  __schedule+0x1440/0x1c90
-[  247.626617][ T2554]  ? __pfx_unix_stream_read_actor+0x10/0x10
-[  247.626619][ T2554]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.626621][ T2554]  ? sock_recvmsg+0xc0/0xd0
-[  247.626623][ T2554]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.626625][ T2554]  ? ____sys_recvmsg+0x82/0x1d0
-[  247.626627][ T2554]  schedule_rtlock+0x30/0xd0
-[  247.626629][ T2554]  rtlock_slowlock_locked+0x327/0xfb0
-[  247.626633][ T2554]  rt_spin_lock+0x7a/0xd0
-[  247.626635][ T2554]  task_get_cgroup1+0x6c/0xf0
-[  247.626638][ T2554]  bpf_task_get_cgroup1+0xe/0x20
-[  247.626640][ T2554]  bpf_prog_28ba4edb92179f43_on_enter+0x47/0x128
-[  247.626642][ T2554]  bpf_trace_run2+0x77/0xf0
-[  247.626644][ T2554]  __bpf_trace_sys_enter+0x10/0x30
-[  247.626646][ T2554]  syscall_trace_enter+0x157/0x1c0
-[  247.626648][ T2554]  do_syscall_64+0x2dc/0xfa0
-[  247.626650][ T2554]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.626652][ T2554]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[  247.626654][ T2554] RIP: 0033:0x7fbfd96fd9ee
-[  247.626660][ T2554] Code: 08 0f 85 f5 4b ff ff 49 89 fb 48 89 f0 48 89 d=
-7 48 89 ce 4c 89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0=
-f 05 <c3> 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
-[  247.626662][ T2554] RSP: 002b:00007fbfcd1199c8 EFLAGS: 00000246 ORIG_RAX=
-: 00000000000000e8
-[  247.626664][ T2554] RAX: ffffffffffffffda RBX: 00007fbfcd11a6c0 RCX: 000=
-07fbfd96fd9ee
-[  247.626665][ T2554] RDX: 0000000000000020 RSI: 00007fbfd947c200 RDI: 000=
-000000000000f
-[  247.626665][ T2554] RBP: 00007fbfd9435300 R08: 0000000000000000 R09: 000=
-0000000000000
-[  247.626666][ T2554] R10: ffffffffffffffff R11: 0000000000000246 R12: 000=
-07fbfd947c200
-[  247.626667][ T2554] R13: 00007fbfd94384a0 R14: 00007fbfd94384a0 R15: 000=
-00000ffffffff
-[  247.626670][ T2554]  </TASK>
-[  247.626947][ T2554] BUG: scheduling while atomic: IPC I/O Child/2554/0x0=
-0000000
-[  247.626950][ T2554] Modules linked in:
-[  247.626952][ T2554]  bpf_testmod(O)
-[  247.626954][ T2554]  netconsole
-[  247.626955][ T2554]  ccm
-[  247.626956][ T2554]  snd_seq_dummy
-[  247.626957][ T2554]  snd_hrtimer
-[  247.626958][ T2554]  snd_seq_midi
-[  247.626959][ T2554]  snd_seq_midi_event
-[  247.626960][ T2554]  snd_seq
-[  247.626961][ T2554]  rfcomm
-[  247.626962][ T2554]  bnep
-[  247.626963][ T2554]  nls_ascii
-[  247.626965][ T2554]  nls_cp437
-[  247.626966][ T2554]  vfat
-[  247.626968][ T2554]  fat
-[  247.626970][ T2554]  snd_ctl_led
-[  247.626971][ T2554]  snd_hda_codec_realtek
-[  247.626972][ T2554]  snd_hda_codec_generic
-[  247.626974][ T2554]  snd_hda_scodec_component
-[  247.626975][ T2554]  snd_hda_codec_hdmi snd_usb_audio
-[  247.626977][ T2554]  btusb
-[  247.626978][ T2554]  snd_hda_intel
-[  247.626979][ T2554]  btrtl
-[  247.626980][ T2554]  snd_intel_dspcfg
-[  247.626982][ T2554]  btintel
-[  247.626983][ T2554]  btbcm
-[  247.626984][ T2554]  snd_soc_dmic
-[  247.626985][ T2554]  snd_acp3x_pdm_dma
-[  247.626987][ T2554]  snd_acp3x_rn
-[  247.626988][ T2554]  snd_usbmidi_lib
-[  247.626989][ T2554]  snd_hda_codec uvcvideo
-[  247.626991][ T2554]  btmtk
-[  247.626992][ T2554]  snd_ump
-[  247.626993][ T2554]  snd_soc_core
-[  247.626994][ T2554]  videobuf2_vmalloc
-[  247.626995][ T2554]  snd_hwdep
-[  247.626997][ T2554]  videobuf2_memops
-[  247.626998][ T2554]  uvc
-[  247.626999][ T2554]  bluetooth
-[  247.627001][ T2554]  snd_hda_core snd_rawmidi
-[  247.627003][ T2554]  videobuf2_v4l2
-[  247.627004][ T2554]  snd_seq_device
-[  247.627005][ T2554]  snd_pcm_oss
-[  247.627006][ T2554]  videodev
-[  247.627007][ T2554]  snd_mixer_oss
-[  247.627008][ T2554]  snd_rn_pci_acp3x
-[  247.627010][ T2554]  ecdh_generic snd_pcm
-[  247.627012][ T2554]  ecc
-[  247.627012][ T2554]  snd_acp_config
-[  247.627013][ T2554]  videobuf2_common
-[  247.627014][ T2554]  snd_soc_acpi
-[  247.627015][ T2554]  msi_wmi
-[  247.627016][ T2554]  snd_timer
-[  247.627017][ T2554]  mc
-[  247.627018][ T2554]  sparse_keymap
-[  247.627020][ T2554]  snd
-[  247.627020][ T2554]  edac_mce_amd
-[  247.627021][ T2554]  wmi_bmof
-[  247.627022][ T2554]  k10temp
-[  247.627023][ T2554]  snd_pci_acp3x
-[  247.627024][ T2554]  soundcore
-[  247.627025][ T2554]  ccp
-[  247.627026][ T2554]  battery
-[  247.627028][ T2554]  ac
-[  247.627029][ T2554]  sch_fq_codel
-[  247.627030][ T2554]  button
-[  247.627031][ T2554]  joydev
-[  247.627031][ T2554]  hid_sensor_accel_3d
-[  247.627033][ T2554]  hid_sensor_prox
-[  247.627033][ T2554]  hid_sensor_gyro_3d
-[  247.627034][ T2554]  hid_sensor_als
-[  247.627036][ T2554]  hid_sensor_magn_3d
-[  247.627037][ T2554]  hid_sensor_trigger
-[  247.627038][ T2554]  industrialio_triggered_buffer
-[  247.627039][ T2554]  kfifo_buf
-[  247.627041][ T2554]  industrialio
-[  247.627042][ T2554]  evdev
-[  247.627043][ T2554]  amd_pmc
-[  247.627044][ T2554]  hid_sensor_iio_common
-[  247.627045][ T2554]  mt7921e
-[  247.627046][ T2554]  mt7921_common
-[  247.627047][ T2554]  mt792x_lib
-[  247.627048][ T2554]  mt76_connac_lib
-[  247.627049][ T2554]  mt76 mac80211
-[  247.627050][ T2554]  libarc4 cfg80211
-[  247.627052][ T2554]  rfkill
-[  247.627052][ T2554]  msr
-[  247.627053][ T2554]  fuse nvme_fabrics
-[  247.627055][ T2554]  efi_pstore
-[  247.627056][ T2554]  configfs
-[  247.627057][ T2554]  nfnetlink efivarfs
-[  247.627058][ T2554]  autofs4 ext4
-[  247.627060][ T2554]  mbcache jbd2
-[  247.627061][ T2554]  usbhid
-[  247.627062][ T2554]  amdgpu amdxcp
-[  247.627064][ T2554]  i2c_algo_bit drm_client_lib
-[  247.627065][ T2554]  drm_ttm_helper ttm
-[  247.627067][ T2554]  drm_exec gpu_sched
-[  247.627068][ T2554]  xhci_pci
-[  247.627069][ T2554]  drm_suballoc_helper drm_panel_backlight_quirks
-[  247.627071][ T2554]  xhci_hcd cec
-[  247.627072][ T2554]  hid_sensor_hub hid_multitouch
-[  247.627074][ T2554]  drm_buddy
-[  247.627075][ T2554]  mfd_core
-[  247.627076][ T2554]  hid_generic
-[  247.627076][ T2554]  drm_display_helper
-[  247.627077][ T2554]  psmouse
-[  247.627079][ T2554]  nvme
-[  247.627079][ T2554]  i2c_hid_acpi usbcore
-[  247.627081][ T2554]  amd_sfh
-[  247.627082][ T2554]  i2c_hid serio_raw
-[  247.627083][ T2554]  drm_kms_helper
-[  247.627084][ T2554]  hid
-[  247.627085][ T2554]  nvme_core
-[  247.627086][ T2554]  r8169 i2c_piix4
-[  247.627088][ T2554]  usb_common crc16
-[  247.627090][ T2554]  i2c_smbus i2c_designware_platform
-[  247.627091][ T2554]  i2c_designware_core [last unloaded: bpf_testmod(O)]
-[  247.627093][ T2554]=20
-[  247.627104][ T2554] CPU: 4 UID: 1000 PID: 2554 Comm: IPC I/O Child Taint=
-ed: G        W  O        6.15.0-rc7-next-20250523-gcc-dirty #1 PREEMPT_{RT,=
-(full)}=20
-[  247.627108][ T2554] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[  247.627108][ T2554] Hardware name: Micro-Star International Co., Ltd. Al=
-pha 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
-[  247.627110][ T2554] Call Trace:
-[  247.627111][ T2554]  <TASK>
-[  247.627112][ T2554]  dump_stack_lvl+0x6d/0xb0
-[  247.627116][ T2554]  __schedule_bug.cold+0x3e/0x4a
-[  247.627118][ T2554]  __schedule+0x1440/0x1c90
-[  247.627121][ T2554]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627123][ T2554]  ? rt_write_lock+0x106/0x270
-[  247.627126][ T2554]  schedule+0x41/0x1a0
-[  247.627128][ T2554]  schedule_hrtimeout_range_clock+0xfc/0x110
-[  247.627131][ T2554]  do_epoll_wait+0x4fe/0x530
-[  247.627133][ T2554]  ? futex_wake+0xb2/0x1c0
-[  247.627135][ T2554]  ? __seccomp_filter+0x37/0x590
-[  247.627137][ T2554]  ? fput+0x3f/0x90
-[  247.627139][ T2554]  ? __pfx_ep_autoremove_wake_function+0x10/0x10
-[  247.627142][ T2554]  __x64_sys_epoll_wait+0x5e/0xf0
-[  247.627144][ T2554]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627145][ T2554]  ? syscall_trace_enter+0x190/0x1c0
-[  247.627147][ T2554]  do_syscall_64+0x6f/0xfa0
-[  247.627150][ T2554]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627152][ T2554]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[  247.627153][ T2554] RIP: 0033:0x7fbfd96fd9ee
-[  247.627158][ T2554] Code: 08 0f 85 f5 4b ff ff 49 89 fb 48 89 f0 48 89 d=
-7 48 89 ce 4c 89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0=
-f 05 <c3> 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
-[  247.627160][ T2554] RSP: 002b:00007fbfcd1199c8 EFLAGS: 00000246 ORIG_RAX=
-: 00000000000000e8
-[  247.627162][ T2554] RAX: ffffffffffffffda RBX: 00007fbfcd11a6c0 RCX: 000=
-07fbfd96fd9ee
-[  247.627163][ T2554] RDX: 0000000000000020 RSI: 00007fbfd947c200 RDI: 000=
-000000000000f
-[  247.627164][ T2554] RBP: 00007fbfd9435300 R08: 0000000000000000 R09: 000=
-0000000000000
-[  247.627165][ T2554] R10: ffffffffffffffff R11: 0000000000000246 R12: 000=
-07fbfd947c200
-[  247.627165][ T2554] R13: 00007fbfd94384a0 R14: 00007fbfd94384a0 R15: 000=
-00000ffffffff
-[  247.627169][ T2554]  </TASK>
-[  247.626447][ T6866] BUG: scheduling while atomic: dav1d-worker/6866/0x00=
-000002
-[  247.626449][ T6866] Modules linked in:
-[  247.626450][ T6866]  bpf_testmod(O)
-[  247.626451][ T6866]  netconsole
-[  247.626453][ T6866]  ccm
-[  247.626454][ T6866]  snd_seq_dummy
-[  247.626455][ T6866]  snd_hrtimer
-[  247.626456][ T6866]  snd_seq_midi
-[  247.626458][ T6866]  snd_seq_midi_event
-[  247.626459][ T6866]  snd_seq
-[  247.626460][ T6866]  rfcomm
-[  247.626462][ T6866]  bnep
-[  247.626462][ T6866]  nls_ascii
-[  247.626464][ T6866]  nls_cp437
-[  247.626465][ T6866]  vfat
-[  247.626466][ T6866]  fat
-[  247.626467][ T6866]  snd_ctl_led
-[  247.626468][ T6866]  snd_hda_codec_realtek
-[  247.626469][ T6866]  snd_hda_codec_generic
-[  247.626470][ T6866]  snd_hda_scodec_component
-[  247.626473][ T6866]  snd_hda_codec_hdmi
-[  247.626474][ T6866]  snd_usb_audio
-[  247.626476][ T6866]  btusb
-[  247.626477][ T6866]  snd_hda_intel
-[  247.626478][ T6866]  btrtl
-[  247.626480][ T6866]  snd_intel_dspcfg
-[  247.626481][ T6866]  btintel
-[  247.626482][ T6866]  btbcm
-[  247.626484][ T6866]  snd_soc_dmic
-[  247.626485][ T6866]  snd_acp3x_pdm_dma
-[  247.626485][ T6866]  snd_acp3x_rn
-[  247.626486][ T6866]  snd_usbmidi_lib
-[  247.626487][ T6866]  snd_hda_codec
-[  247.626489][ T6866]  uvcvideo
-[  247.626489][ T6866]  btmtk
-[  247.626490][ T6866]  snd_ump
-[  247.626491][ T6866]  snd_soc_core videobuf2_vmalloc snd_hwdep videobuf2_=
-memops uvc bluetooth snd_hda_core snd_rawmidi videobuf2_v4l2 snd_seq_device=
- snd_pcm_oss
-[  247.626498][ T6866]  videodev snd_mixer_oss snd_rn_pci_acp3x ecdh_generi=
-c snd_pcm ecc
-[  247.626502][ T6866]  snd_acp_config videobuf2_common snd_soc_acpi msi_wm=
-i snd_timer mc sparse_keymap
-[  247.626507][ T6866]  snd edac_mce_amd wmi_bmof k10temp snd_pci_acp3x sou=
-ndcore
-[  247.626510][ T6866]  ccp battery ac sch_fq_codel button joydev
-[  247.626514][ T6866]  hid_sensor_accel_3d hid_sensor_prox hid_sensor_gyro=
-_3d hid_sensor_als
-[  247.626517][ T6866]  hid_sensor_magn_3d hid_sensor_trigger industrialio_=
-triggered_buffer kfifo_buf industrialio
-[  247.626520][ T6866]  evdev amd_pmc hid_sensor_iio_common mt7921e mt7921_=
-common
-[  247.626524][ T6866]  mt792x_lib mt76_connac_lib mt76 mac80211
-[  247.626526][ T6866]  libarc4
-[  247.626527][ T6866]  cfg80211 rfkill msr fuse nvme_fabrics efi_pstore co=
-nfigfs nfnetlink
-[  247.626532][ T6866]  efivarfs autofs4 ext4 mbcache jbd2 usbhid amdgpu
-[  247.626536][ T6866]  amdxcp i2c_algo_bit drm_client_lib drm_ttm_helper t=
-tm drm_exec
-[  247.626540][ T6866]  gpu_sched xhci_pci drm_suballoc_helper drm_panel_ba=
-cklight_quirks xhci_hcd
-[  247.626543][ T6866]  cec hid_sensor_hub hid_multitouch drm_buddy mfd_core
-[  247.626546][ T6866]  hid_generic drm_display_helper psmouse nvme i2c_hid=
-_acpi usbcore amd_sfh i2c_hid serio_raw
-[  247.626552][ T6866]  drm_kms_helper hid nvme_core r8169 i2c_piix4 usb_co=
-mmon
-[  247.626555][ T6866]  crc16 i2c_smbus i2c_designware_platform
-[  247.626557][ T6866]  i2c_designware_core [last unloaded: bpf_testmod(O)]
-[  247.626672][ T6866] CPU: 3 UID: 1000 PID: 6866 Comm: dav1d-worker Tainte=
-d: G        W  O        6.15.0-rc7-next-20250523-gcc-dirty #1 PREEMPT_{RT,(=
-full)}=20
-[  247.626675][ T6866] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[  247.626676][ T6866] Hardware name: Micro-Star International Co., Ltd. Al=
-pha 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
-[  247.626676][ T6866] Call Trace:
-[  247.626677][ T6866]  <TASK>
-[  247.626678][ T6866]  dump_stack_lvl+0x6d/0xb0
-[  247.626681][ T6866]  __schedule_bug.cold+0x3e/0x4a
-[  247.626683][ T6866]  __schedule+0x1440/0x1c90
-[  247.626685][ T6866]  ? sched_clock_cpu+0x11f/0x1f0
-[  247.626687][ T6866]  ? rt_spin_unlock+0x12/0x40
-[  247.626688][ T6866]  ? migrate_enable+0x115/0x160
-[  247.626690][ T6866]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.626693][ T6866]  schedule_rtlock+0x30/0xd0
-[  247.626695][ T6866]  rtlock_slowlock_locked+0x327/0xfb0
-[  247.626699][ T6866]  rt_spin_lock+0x7a/0xd0
-[  247.626701][ T6866]  task_get_cgroup1+0x6c/0xf0
-[  247.626703][ T6866]  bpf_task_get_cgroup1+0xe/0x20
-[  247.626705][ T6866]  bpf_prog_28ba4edb92179f43_on_enter+0x47/0x128
-[  247.626706][ T6866]  bpf_trace_run2+0x77/0xf0
-[  247.626709][ T6866]  __bpf_trace_sys_enter+0x10/0x30
-[  247.626710][ T6866]  syscall_trace_enter+0x157/0x1c0
-[  247.626712][ T6866]  do_syscall_64+0x2dc/0xfa0
-[  247.626715][ T6866]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.626716][ T6866]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[  247.626718][ T6866] RIP: 0033:0x7f9d90c43bdb
-[  247.626723][ T6866] Code: 37 75 f3 83 e1 03 83 f9 02 0f 84 10 01 00 00 4=
-1 80 f1 81 49 8d 7c 10 20 45 31 d2 ba 01 00 00 00 44 89 ce b8 ca 00 00 00 0=
-f 05 <48> 3d 00 f0 ff ff 0f 87 19 01 00 00 48 83 c4 08 31 c0 5b 5d c3 41
-[  247.626725][ T6866] RSP: 002b:00007f9d7b7fdd00 EFLAGS: 00000246 ORIG_RAX=
-: 00000000000000ca
-[  247.626727][ T6866] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 000=
-07f9d90c43bdb
-[  247.626728][ T6866] RDX: 0000000000000001 RSI: 0000000000000081 RDI: 000=
-07f9d7ba113c8
-[  247.626729][ T6866] RBP: 00007f9d7ba11000 R08: 00007f9d7ba113a8 R09: 000=
-0000000000081
-[  247.626730][ T6866] R10: 0000000000000000 R11: 0000000000000246 R12: 000=
-07f9d844a1620
-[  247.626731][ T6866] R13: 00007f9d7b100000 R14: 0000000000000000 R15: 000=
-07f9d90987fc0
-[  247.626734][ T6866]  </TASK>
-[  247.627226][ T6866] BUG: scheduling while atomic: dav1d-worker/6866/0x00=
-000000
-[  247.627237][ T6866] Modules linked in: bpf_testmod(O)
-[  247.627239][ T6866]  netconsole
-[  247.627240][ T6866]  ccm snd_seq_dummy
-[  247.627242][ T6866]  snd_hrtimer
-[  247.627243][ T6866]  snd_seq_midi snd_seq_midi_event
-[  247.627245][ T6866]  snd_seq
-[  247.627246][ T6866]  rfcomm
-[  247.627247][ T6866]  bnep nls_ascii nls_cp437 vfat
-[  247.627250][ T6866]  fat snd_ctl_led snd_hda_codec_realtek snd_hda_codec=
-_generic snd_hda_scodec_component snd_hda_codec_hdmi snd_usb_audio btusb
-[  247.627255][ T6866]  snd_hda_intel btrtl snd_intel_dspcfg btintel
-[  247.627258][ T6866]  btbcm snd_soc_dmic
-[  247.627260][ T6866]  snd_acp3x_pdm_dma
-[  247.627261][ T6866]  snd_acp3x_rn snd_usbmidi_lib
-[  247.627263][ T6866]  snd_hda_codec uvcvideo btmtk
-[  247.627265][ T6866]  snd_ump snd_soc_core videobuf2_vmalloc snd_hwdep vi=
-deobuf2_memops
-[  247.627269][ T6866]  uvc bluetooth snd_hda_core
-[  247.627271][ T6866]  snd_rawmidi
-[  247.627272][ T6866]  videobuf2_v4l2 snd_seq_device snd_pcm_oss videodev
-[  247.627275][ T6866]  snd_mixer_oss snd_rn_pci_acp3x ecdh_generic
-[  247.627278][ T6866]  snd_pcm
-[  247.627290][ T6866]  snd_pci_acp3x
-[  247.627292][ T6866]  soundcore
-[  247.627293][ T6866]  ccp
-[  247.627293][ T6866]  battery
-[  247.627294][ T6866]  ac
-[  247.627295][ T6866]  sch_fq_codel
-[  247.627296][ T6866]  button
-[  247.627297][ T6866]  joydev
-[  247.627298][ T6866]  hid_sensor_accel_3d
-[  247.627299][ T6866]  hid_sensor_prox
-[  247.627299][ T6866]  hid_sensor_gyro_3d
-[  247.627300][ T6866]  hid_sensor_als
-[  247.627301][ T6866]  hid_sensor_magn_3d
-[  247.627302][ T6866]  hid_sensor_trigger
-[  247.627303][ T6866]  industrialio_triggered_buffer kfifo_buf
-[  247.627304][ T6866]  industrialio
-[  247.627305][ T6866]  evdev
-[  247.627306][ T6866]  amd_pmc
-[  247.627307][ T6866]  hid_sensor_iio_common
-[  247.627308][ T6866]  mt7921e
-[  247.627308][ T6866]  mt7921_common
-[  247.627309][ T6866]  mt792x_lib
-[  247.627310][ T6866]  mt76_connac_lib mt76
-[  247.627311][ T6866]  mac80211
-[  247.627312][ T6866]  libarc4
-[  247.627313][ T6866]  cfg80211 rfkill
-[  247.627314][ T6866]  msr
-[  247.627315][ T6866]  fuse
-[  247.627316][ T6866]  nvme_fabrics
-[  247.627317][ T6866]  efi_pstore
-[  247.627318][ T6866]  configfs nfnetlink
-[  247.627319][ T6866]  efivarfs
-[  247.627324][ T6866]  amdxcp
-[  247.627325][ T6866]  i2c_algo_bit
-[  247.627326][ T6866]  drm_client_lib drm_ttm_helper
-[  247.627328][ T6866]  ttm
-[  247.627328][ T6866]  drm_exec gpu_sched
-[  247.627330][ T6866]  xhci_pci
-[  247.627331][ T6866]  drm_suballoc_helper
-[  247.627331][ T6866]  drm_panel_backlight_quirks xhci_hcd
-[  247.627333][ T6866]  cec
-[  247.627334][ T6866]  hid_sensor_hub
-[  247.627335][ T6866]  hid_multitouch
-[  247.627336][ T6866]  drm_buddy
-[  247.627336][ T6866]  mfd_core
-[  247.627337][ T6866]  hid_generic
-[  247.627338][ T6866]  drm_display_helper
-[  247.627339][ T6866]  psmouse
-[  247.627339][ T6866]  nvme
-[  247.627340][ T6866]  i2c_hid_acpi
-[  247.627341][ T6866]  usbcore
-[  247.627342][ T6866]  amd_sfh
-[  247.627343][ T6866]  i2c_hid
-[  247.627344][ T6866]  serio_raw
-[  247.627345][ T6866]  drm_kms_helper
-[  247.627346][ T6866]  hid
-[  247.627347][ T6866]  nvme_core
-[  247.627347][ T6866]  r8169
-[  247.627348][ T6866]  i2c_piix4
-[  247.627349][ T6866]  usb_common
-[  247.627350][ T6866]  crc16
-[  247.627350][ T6866]  i2c_smbus
-[  247.627365][ T6866]  <TASK>
-[  247.627367][ T6866]  dump_stack_lvl+0x6d/0xb0
-[  247.627370][ T6866]  __schedule_bug.cold+0x3e/0x4a
-[  247.627373][ T6866]  __schedule+0x1440/0x1c90
-[  247.627375][ T6866]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627377][ T6866]  ? ktime_get+0x3f/0xf0
-[  247.627379][ T6866]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627381][ T6866]  ? clockevents_program_event+0xa6/0x130
-[  247.627384][ T6866]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627387][ T6866]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.627389][ T6866]  ? hrtimer_interrupt+0x123/0x220
-[  247.627393][ T6866]  schedule+0x41/0x1a0
-[  247.627396][ T6866]  irqentry_exit_to_user_mode+0x15c/0x220
-[  247.627399][ T6866]  asm_sysvec_apic_timer_interrupt+0x1a/0x20
-[  247.627403][ T6866] RIP: 0033:0x7f9d7bfc90c7
-[  247.627408][ T6866] Code: e3 fd 00 c0 d8 c4 e2 65 0b dd c4 e2 5d 0b e5 c=
-4 e2 7d 0b c5 c5 e5 61 cc c5 e5 69 dc c5 dd 61 d0 c5 dd 69 e0 c4 c1 7a 6f 3=
-c 08 <4d> 8d 04 48 c4 c3 45 38 38 01 c5 95 f5 e9 c5 fd 6f cb c5 95 f5 f2
-[  247.627410][ T6866] RSP: 002b:00007f9d7b7fd5e8 EFLAGS: 00000202
-[  247.627411][ T6866]=20
-[  247.627412][ T6866] RAX: 0000000000000008 RBX: 0000000000000001 RCX: 000=
-0000000000500
-[  247.627414][ T6866] RDX: 00007f9d77c2338d RSI: 0000000000000500 RDI: 000=
-07f9d75623390
-[  247.627415][ T6866] RBP: 00007f9d7b100000 R08: 00007f9d77c2518d R09: 000=
-0000000000004
-[  247.627416][ T6866] R10: 00007f9d75624790 R11: fffffffffffffb00 R12: 000=
-000000000038c
-[  247.627418][ T6866] R13: 0000000000000500 R14: 000000000000000e R15: 000=
-0000000000006
-[  247.627422][ T6866]  </TASK>
-[  247.628011][ T1102] BUG: scheduling while atomic: in:imklog/1102/0x00000=
-002
-[  247.628013][ T1102] Modules linked in: bpf_testmod(O) netconsole ccm snd=
-_seq_dummy snd_hrtimer snd_seq_midi snd_seq_midi_event snd_seq rfcomm bnep =
-nls_ascii nls_cp437 vfat fat snd_ctl_led snd_hda_codec_realtek snd_hda_code=
-c_generic snd_hda_scodec_component snd_hda_codec_hdmi snd_usb_audio btusb s=
-nd_hda_intel btrtl snd_intel_dspcfg btintel btbcm snd_soc_dmic snd_acp3x_pd=
-m_dma
-[  247.628033][ T1102]  snd_acp3x_rn
-[  247.628034][ T1102]  snd_usbmidi_lib snd_hda_codec
-[  247.628035][ T1102]  uvcvideo
-[  247.628036][ T1102]  btmtk
-[  247.628038][ T1102]  snd_ump
-[  247.628039][ T1102]  snd_soc_core
-[  247.628040][ T1102]  videobuf2_vmalloc
-[  247.628041][ T1102]  snd_hwdep
-[  247.628042][ T1102]  videobuf2_memops
-[  247.628055][ T1102]  videobuf2_common
-[  247.628056][ T1102]  snd_soc_acpi
-[  247.628057][ T1102]  msi_wmi
-[  247.628058][ T1102]  snd_timer
-[  247.628059][ T1102]  mc
-[  247.628060][ T1102]  sparse_keymap
-[  247.628060][ T1102]  snd
-[  247.628061][ T1102]  edac_mce_amd
-[  247.628062][ T1102]  wmi_bmof
-[  247.628063][ T1102]  k10temp
-[  247.628064][ T1102]  snd_pci_acp3x
-[  247.628065][ T1102]  soundcore
-[  247.628066][ T1102]  ccp
-[  247.628066][ T1102]  battery
-[  247.628067][ T1102]  ac
-[  247.628068][ T1102]  sch_fq_codel
-[  247.628069][ T1102]  button
-[  247.628070][ T1102]  joydev
-[  247.628070][ T1102]  hid_sensor_accel_3d
-[  247.628072][ T1102]  hid_sensor_prox
-[  247.628073][ T1102]  hid_sensor_gyro_3d
-[  247.628074][ T1102]  hid_sensor_als
-[  247.628075][ T1102]  hid_sensor_magn_3d
-[  247.628076][ T1102]  hid_sensor_trigger
-[  247.628076][ T1102]  industrialio_triggered_buffer
-[  247.628077][ T1102]  kfifo_buf
-[  247.628079][ T1102]  industrialio
-[  247.628079][ T1102]  evdev
-[  247.628080][ T1102]  amd_pmc
-[  247.628081][ T1102]  hid_sensor_iio_common
-[  247.628082][ T1102]  mt7921e
-[  247.628083][ T1102]  mt7921_common
-[  247.628084][ T1102]  mt792x_lib
-[  247.628084][ T1102]  mt76_connac_lib
-[  247.628085][ T1102]  mt76
-[  247.628122][ T1102]  drm_kms_helper
-[  247.628123][ T1102]  hid
-[  247.628124][ T1102]  nvme_core
-[  247.628125][ T1102]  r8169
-[  247.628125][ T1102]  i2c_piix4
-[  247.628126][ T1102]  usb_common
-[  247.628127][ T1102]  crc16
-[  247.628128][ T1102]  i2c_smbus
-[  247.628129][ T1102]  i2c_designware_platform
-[  247.628130][ T1102]  i2c_designware_core
-[  247.628131][ T1102]  [last unloaded: bpf_testmod(O)]
-[  247.628132][ T1102]=20
-[  247.628134][ T1102] CPU: 13 UID: 0 PID: 1102 Comm: in:imklog Tainted: G =
-     D W  O        6.15.0-rc7-next-20250523-gcc-dirty #1 PREEMPT_{RT,(full)=
-}=20
-[  247.628138][ T1102] Tainted: [D]=3DDIE, [W]=3DWARN, [O]=3DOOT_MODULE
-[  247.628140][ T1102] Hardware name: Micro-Star International Co., Ltd. Al=
-pha 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
-[  247.628141][ T1102] Call Trace:
-[  247.628142][ T1102]  <TASK>
-[  247.628144][ T1102]  dump_stack_lvl+0x6d/0xb0
-[  247.628147][ T1102]  __schedule_bug.cold+0x3e/0x4a
-[  247.628150][ T1102]  __schedule+0x1440/0x1c90
-[  247.628152][ T1102]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.628155][ T1102]  ? rt_spin_unlock+0x12/0x40
-[  247.628157][ T1102]  ? migrate_enable+0x115/0x160
-[  247.628160][ T1102]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.628162][ T1102]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.628164][ T1102]  ? futex_hash_put+0x50/0xa0
-[  247.628167][ T1102]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.628169][ T1102]  schedule_rtlock+0x30/0xd0
-[  247.628172][ T1102]  rtlock_slowlock_locked+0x327/0xfb0
-[  247.628177][ T1102]  rt_spin_lock+0x7a/0xd0
-[  247.628180][ T1102]  task_get_cgroup1+0x6c/0xf0
-[  247.628183][ T1102]  bpf_task_get_cgroup1+0xe/0x20
-[  247.628186][ T1102]  bpf_prog_28ba4edb92179f43_on_enter+0x47/0x128
-[  247.628188][ T1102]  bpf_trace_run2+0x77/0xf0
-[  247.628192][ T1102]  __bpf_trace_sys_enter+0x10/0x30
-[  247.628194][ T1102]  syscall_trace_enter+0x157/0x1c0
-[  247.628197][ T1102]  do_syscall_64+0x2dc/0xfa0
-[  247.628200][ T1102]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.628202][ T1102]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[  247.628205][ T1102] RIP: 0033:0x7fc559b89f13
-[  247.628209][ T1102] Code: 81 00 00 00 b8 ca 00 00 00 0f 05 c3 66 66 2e 0=
-f 1f 84 00 00 00 00 00 40 80 f6 81 45 31 d2 ba 01 00 00 00 b8 ca 00 00 00 0=
-f 05 <c3> 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 8b 05 61 70 15 00 48 89
-[  247.628211][ T1102] RSP: 002b:00007fc5595c2248 EFLAGS: 00000246 ORIG_RAX=
-: 00000000000000ca
-[  247.628213][ T1102] RAX: ffffffffffffffda RBX: 00005562d01bad90 RCX: 000=
-07fc559b89f13
-[  247.628214][ T1102] RDX: 0000000000000001 RSI: 0000000000000081 RDI: 000=
-05562d01c7c70
-[  247.628215][ T1102] RBP: 0000000000000000 R08: 0000000000000000 R09: 000=
-0000000000000
-[  247.628217][ T1102] R10: 0000000000000000 R11: 0000000000000246 R12: 000=
-07fc550006cf0
-[  247.628218][ T1102] R13: 0000000000000004 R14: 0000000000098eb0 R15: 000=
-05562d01bf880
-[  247.628222][ T1102]  </TASK>
-[  247.628345][ T1102]  videobuf2_vmalloc snd_hwdep videobuf2_memops uvc bl=
-uetooth snd_hda_core
-[  247.628348][ T1102]  snd_rawmidi videobuf2_v4l2
-[  247.628350][ T1102]  snd_seq_device
-[  247.628351][ T1102]  snd_pcm_oss videodev
-[  247.628352][ T1102]  snd_mixer_oss snd_rn_pci_acp3x ecdh_generic snd_pcm=
- ecc snd_acp_config videobuf2_common snd_soc_acpi msi_wmi snd_timer mc spar=
-se_keymap snd edac_mce_amd wmi_bmof k10temp snd_pci_acp3x soundcore ccp bat=
-tery ac sch_fq_codel button joydev hid_sensor_accel_3d hid_sensor_prox hid_=
-sensor_gyro_3d hid_sensor_als hid_sensor_magn_3d hid_sensor_trigger industr=
-ialio_triggered_buffer kfifo_buf industrialio evdev amd_pmc hid_sensor_iio_=
-common mt7921e mt7921_common mt792x_lib mt76_connac_lib mt76 mac80211 libar=
-c4 cfg80211 rfkill msr fuse nvme_fabrics efi_pstore configfs nfnetlink efiv=
-arfs autofs4 ext4 mbcache jbd2 usbhid amdgpu amdxcp i2c_algo_bit drm_client=
-_lib drm_ttm_helper ttm drm_exec gpu_sched xhci_pci drm_suballoc_helper drm=
-_panel_backlight_quirks xhci_hcd cec hid_sensor_hub hid_multitouch drm_budd=
-y mfd_core hid_generic drm_display_helper
-[  247.628392][ T1102]  psmouse nvme i2c_hid_acpi usbcore amd_sfh
-[  247.628394][ T1102]  i2c_hid
-[  247.628395][ T1102]  serio_raw drm_kms_helper
-[  247.628396][ T1102]  hid nvme_core
-[  247.628398][ T1102]  r8169
-[  247.628398][ T1102]  i2c_piix4 usb_common
-[  247.628400][ T1102]  crc16 i2c_smbus
-[  247.628401][ T1102]  i2c_designware_platform i2c_designware_core
-[  247.628403][ T1102]  [last unloaded: bpf_testmod(O)]
-[  247.628404][ T1102]=20
-[  247.628406][ T1102] CPU: 15 UID: 0 PID: 1102 Comm: in:imklog Tainted: G =
-     D W  O        6.15.0-rc7-next-20250523-gcc-dirty #1 PREEMPT_{RT,(full)=
-}=20
-[  247.628409][ T1102] Tainted: [D]=3DDIE, [W]=3DWARN, [O]=3DOOT_MODULE
-[  247.628410][ T1102] Hardware name: Micro-Star International Co., Ltd. Al=
-pha 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
-[  247.628411][ T1102] Call Trace:
-[  247.628413][ T1102]  <TASK>
-[  247.628414][ T1102]  dump_stack_lvl+0x6d/0xb0
-[  247.628418][ T1102]  __schedule_bug.cold+0x3e/0x4a
-[  247.628420][ T1102]  __schedule+0x1440/0x1c90
-[  247.628423][ T1102]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.628425][ T1102]  ? sched_clock_cpu+0x11f/0x1f0
-[  247.628427][ T1102]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.628429][ T1102]  ? psi_group_change+0x1c9/0x4b0
-[  247.628431][ T1102]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.628433][ T1102]  ? futex_hash_put+0x50/0xa0
-[  247.628435][ T1102]  schedule+0x41/0x1a0
-[  247.628437][ T1102]  futex_do_wait+0x38/0x70
-[  247.628439][ T1102]  __futex_wait+0x91/0x100
-[  247.628032][  T555] BUG: scheduling while atomic: systemd-journal/555/0x=
-00000002
-[  247.628034][  T555] Modules linked in:
-[  247.628035][  T555]  bpf_testmod(O) netconsole
-[  247.628037][  T555]  ccm
-[  247.628037][  T555]  snd_seq_dummy
-[  247.628038][  T555]  snd_hrtimer snd_seq_midi
-[  247.628039][  T555]  snd_seq_midi_event snd_seq
-[  247.628041][  T555]  rfcomm
-[  247.628042][  T555]  bnep
-[  247.628043][  T555]  nls_ascii
-[  247.628056][  T555]  snd_acp3x_pdm_dma
-[  247.628057][  T555]  snd_acp3x_rn
-[  247.628058][  T555]  snd_usbmidi_lib
-[  247.628059][  T555]  snd_hda_codec
-[  247.628060][  T555]  uvcvideo
-[  247.628060][  T555]  btmtk
-[  247.628061][  T555]  snd_ump
-[  247.628062][  T555]  snd_soc_core videobuf2_vmalloc
-[  247.628063][  T555]  snd_hwdep
-[  247.628064][  T555]  videobuf2_memops
-[  247.628065][  T555]  uvc
-[  247.628065][  T555]  bluetooth
-[  247.628066][  T555]  snd_hda_core
-[  247.628067][  T555]  snd_rawmidi
-[  247.628068][  T555]  videobuf2_v4l2
-[  247.628069][  T555]  snd_seq_device
-[  247.628070][  T555]  snd_pcm_oss
-[  247.628070][  T555]  videodev
-[  247.628071][  T555]  snd_mixer_oss
-[  247.628072][  T555]  snd_rn_pci_acp3x ecdh_generic
-[  247.628073][  T555]  snd_pcm ecc
-[  247.628074][  T555]  snd_acp_config
-[  247.628075][  T555]  videobuf2_common
-[  247.628076][  T555]  snd_soc_acpi msi_wmi
-[  247.628077][  T555]  snd_timer
-[  247.628078][  T555]  mc sparse_keymap
-[  247.628079][  T555]  snd
-[  247.628080][  T555]  edac_mce_amd
-[  247.628081][  T555]  wmi_bmof
-[  247.628082][  T555]  k10temp snd_pci_acp3x
-[  247.628083][  T555]  soundcore
-[  247.628084][  T555]  ccp
-[  247.628084][  T555]  battery
-[  247.628085][  T555]  ac
-[  247.628086][  T555]  sch_fq_codel button
-[  247.628122][  T555]  drm_panel_backlight_quirks
-[  247.628123][  T555]  xhci_hcd
-[  247.628124][  T555]  cec
-[  247.628125][  T555]  hid_sensor_hub
-[  247.628125][  T555]  hid_multitouch
-[  247.628126][  T555]  drm_buddy
-[  247.628127][  T555]  mfd_core
-[  247.628128][  T555]  hid_generic drm_display_helper
-[  247.628129][  T555]  psmouse
-[  247.628130][  T555]  nvme
-[  247.628131][  T555]  i2c_hid_acpi
-[  247.628131][  T555]  usbcore amd_sfh
-[  247.628133][  T555]  i2c_hid serio_raw drm_kms_helper hid nvme_core
-[  247.628135][  T555]  r8169 i2c_piix4 usb_common crc16 i2c_smbus i2c_desi=
-gnware_platform
-[  247.628139][  T555]  i2c_designware_core [last unloaded: bpf_testmod(O)]
-[  247.628140][  T555]=20
-[  247.628392][  T555] ------------[ cut here ]------------
-[  247.628393][  T555] WARNING: CPU: 9 PID: 555 at kernel/time/timer.c:1610=
- __timer_delete_sync+0xad/0x190
-[  247.628397][  T555] Modules linked in:
-[  247.628398][  T555]  bpf_testmod(O)
-[  247.628399][  T555]  netconsole
-[  247.628399][  T555]  ccm snd_seq_dummy
-[  247.628401][  T555]  snd_hrtimer snd_seq_midi
-[  247.628402][  T555]  snd_seq_midi_event snd_seq
-[  247.628404][  T555]  rfcomm
-[  247.628405][  T555]  bnep nls_ascii nls_cp437 vfat fat
-[  247.628407][  T555]  snd_ctl_led snd_hda_codec_realtek snd_hda_codec_gen=
-eric snd_hda_scodec_component snd_hda_codec_hdmi
-[  247.628410][  T555]  snd_usb_audio btusb
-[  247.628411][  T555]  snd_hda_intel
-[  247.628412][  T555]  btrtl snd_intel_dspcfg btintel
-[  247.628414][  T555]  btbcm snd_soc_dmic snd_acp3x_pdm_dma snd_acp3x_rn s=
-nd_usbmidi_lib
-[  247.628416][  T555]  snd_hda_codec uvcvideo btmtk snd_ump snd_soc_core v=
-ideobuf2_vmalloc
-[  247.628419][  T555]  snd_hwdep videobuf2_memops uvc bluetooth
-[  247.628421][  T555]  snd_hda_core snd_rawmidi videobuf2_v4l2 snd_seq_dev=
-ice
-[  247.628424][  T555]  snd_pcm_oss
-[  247.628424][  T555]  videodev snd_mixer_oss snd_rn_pci_acp3x
-[  247.628426][  T555]  ecdh_generic snd_pcm ecc snd_acp_config
-[  247.628428][  T555]  videobuf2_common snd_soc_acpi msi_wmi
-[  247.628430][  T555]  snd_timer mc sparse_keymap snd
-[  247.628432][  T555]  edac_mce_amd wmi_bmof k10temp
-[  247.628434][  T555]  snd_pci_acp3x soundcore ccp battery ac
-[  247.628436][  T555]  sch_fq_codel button joydev hid_sensor_accel_3d
-[  247.628439][  T555]  hid_sensor_prox hid_sensor_gyro_3d hid_sensor_als
-[  247.628497][  T555] Call Trace:
-[  247.628498][  T555]  <TASK>
-[  247.628500][  T555]  uprobe_free_utask+0x3c/0xb0
-[  247.628504][  T555]  mm_release+0x12/0x100
-[  247.628507][  T555]  do_exit+0x1cf/0xa20
-[  247.628510][  T555]  do_group_exit+0x33/0x90
-[  247.628513][  T555]  get_signal+0x8bb/0x8c0
-[  247.628516][  T555]  ? force_sig_fault+0x5d/0x80
-[  247.628519][  T555]  arch_do_signal_or_restart+0x2d/0x240
-[  247.628521][  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
-[  247.628524][  T555]  irqentry_exit_to_user_mode+0x181/0x220
-[  247.628527][  T555]  asm_exc_page_fault+0x26/0x30
-[  247.628528][  T555] RIP: 0033:0x7fcc682f971f
-[  247.628531][  T555] Code: e3 ff 66 0f 1f 84 00 00 00 00 00 48 8d 4c 24 5=
-0 be 01 00 00 00 48 89 df e8 ee fd e3 ff 85 c0 0f 88 f6 fe ff ff 48 8b 44 2=
-4 50 <48> 89 68 18 e9 aa fc ff ff 0f 1f 84 00 00 00 00 00 48 3b ab 78 01
-[  247.628533][  T555] RSP: 002b:00007ffc27fae8b0 EFLAGS: 00010246
-[  247.628534][  T555] RAX: 00007fcc65722480 RBX: 000056544ee8cc30 RCX: 000=
-07fcc68435600
-[  247.628535][  T555] RDX: 0000000000000000 RSI: 00007fcc65722480 RDI: 000=
-056544ee8cc30
-[  247.628536][  T555] RBP: 0000000000efe570 R08: 0000000000000071 R09: 000=
-056544ee8cc68
-[  247.628537][  T555] R10: a500d93530668c6d R11: 0000000000000297 R12: 000=
-056544eea3180
-[  247.628538][  T555] R13: 00000000001c3a90 R14: 00007ffc27faea98 R15: 000=
-07ffc27faea90
-[  247.628541][  T555]  </TASK>
-[  247.628542][  T555] ---[ end trace 0000000000000000 ]---
-[  247.627485][    T0] kernel tried to execute NX-protected page - exploit =
-attempt? (uid: 0)
-[  247.627486][    T0] BUG: unable to handle page fault for address: ffffff=
-ff91fde6d0
-[  247.627487][    T0] #PF: supervisor instruction fetch in kernel mode
-[  247.627489][    T0] #PF: error_code(0x0011) - permissions violation
-[  247.627490][    T0] PGD 480a47067 P4D 480a47067 PUD 480a48063 PMD 800000=
-0480a001e3=20
-[  247.627493][    T0] Oops: Oops: 0011 [#1] SMP NOPTI
-[  247.627495][    T0] CPU: 0 UID: 0 PID: 0 Comm: swapper/8 Tainted: G     =
-   W  O        6.15.0-rc7-next-20250523-gcc-dirty #1 PREEMPT_{RT,(full)}=20
-[  247.627497][    T0] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[  247.627498][    T0] Hardware name: Micro-Star International Co., Ltd. Al=
-pha 15 B5EEK/MS-158L, BIOS E158LAMS.10F 11/11/2024
-[  247.627499][    T0] RIP: 0010:acpi_idle_driver+0x150/0xa14
-[  247.627501][    T0] Code: 00 00 00 00 00 00 12 00 00 00 00 00 00 00 24 0=
-0 00 00 00 4b 25 91 ff ff ff ff 10 49 e1 90 ff ff ff ff 20 4a 25 91 ff ff f=
-f ff <43> 33 00 00 00 00 00 00 00 00 00 00 00 00 00 00 41 43 50 49 20 49
-[  247.627503][    T0] RSP: 0018:ffffd115401f7e48 EFLAGS: 00010046
-[  247.627504][    T0] RAX: ffff892541074200 RBX: 0000000000000003 RCX: 000=
-0000000000000
-[  247.627505][    T0] RDX: 0000000000000000 RSI: 0000000055555554 RDI: 000=
-0000000000000
-[  247.627506][    T0] RBP: 0000000000000003 R08: 0000000000002001 R09: 000=
-0000000000000
-[  247.627507][    T0] R10: ffff892541074200 R11: ffff8933ee617d40 R12: fff=
-fffff91fde580
-[  247.627508][    T0] R13: ffff892542528000 R14: 475da8fc8a8e7c00 R15: 000=
-00000ee82d0d0
-[  247.627509][    T0] FS:  0000000000000000(0000) GS:ffff89345be5f000(0000=
-) knlGS:0000000000000000
-[  247.627510][    T0] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  247.627511][    T0] CR2: ffffffff91fde6d0 CR3: 0000000195538000 CR4: 000=
-0000000750ef0
-[  247.627512][    T0] PKRU: 55555554
-[  247.627512][    T0] Call Trace:
-[  247.627513][    T0]  <TASK>
-[  247.627514][    T0]  ? cpuidle_enter_state+0x93/0x6c0
-[  247.627517][    T0]  ? cpuidle_enter+0x2d/0x40
-[  247.627520][    T0]  ? do_idle+0x1df/0x260
-[  247.627522][    T0]  ? cpu_startup_entry+0x29/0x30
-[  247.627523][    T0]  ? start_secondary+0x125/0x160
-[  247.627526][    T0]  ? common_startup_64+0x13e/0x148
-[  247.627530][    T0]  </TASK>
-[  247.627531][    T0] Modules linked in: bpf_testmod(O) netconsole ccm snd=
-_seq_dummy snd_hrtimer snd_seq_midi snd_seq_midi_event snd_seq rfcomm bnep =
-nls_ascii nls_cp437 vfat fat snd_ctl_led snd_hda_codec_realtek snd_hda_code=
-c_generic snd_hda_scodec_component snd_hda_codec_hdmi snd_usb_audio btusb s=
-nd_hda_intel btrtl snd_intel_dspcfg btintel btbcm snd_soc_dmic snd_acp3x_pd=
-m_dma snd_acp3x_rn snd_usbmidi_lib snd_hda_codec uvcvideo btmtk snd_ump snd=
-_soc_core videobuf2_vmalloc snd_hwdep videobuf2_memops uvc bluetooth snd_hd=
-a_core snd_rawmidi videobuf2_v4l2 snd_seq_device snd_pcm_oss videodev snd_m=
-ixer_oss snd_rn_pci_acp3x ecdh_generic snd_pcm ecc snd_acp_config videobuf2=
-_common snd_soc_acpi msi_wmi snd_timer mc sparse_keymap snd edac_mce_amd wm=
-i_bmof k10temp snd_pci_acp3x soundcore ccp battery ac sch_fq_codel button j=
-oydev hid_sensor_accel_3d hid_sensor_prox hid_sensor_gyro_3d hid_sensor_als=
- hid_sensor_magn_3d hid_sensor_trigger industrialio_triggered_buffer kfifo_=
-buf industrialio evdev am
-[  247.627577][    T0]  mt7921_common mt792x_lib mt76_connac_lib mt76 mac80=
-211 libarc4 cfg80211 rfkill msr fuse nvme_fabrics efi_pstore configfs nfnet=
-link efivarfs autofs4 ext4 mbcache jbd2 usbhid amdgpu amdxcp i2c_algo_bit d=
-rm_client_lib drm_ttm_helper ttm drm_exec gpu_sched xhci_pci drm_suballoc_h=
-elper drm_panel_backlight_quirks xhci_hcd cec hid_sensor_hub hid_multitouch=
- drm_buddy mfd_core hid_generic drm_display_helper psmouse nvme i2c_hid_acp=
-i usbcore amd_sfh i2c_hid serio_raw drm_kms_helper hid nvme_core r8169 i2c_=
-piix4 usb_common crc16 i2c_smbus i2c_designware_platform i2c_designware_cor=
-e [last unloaded: bpf_testmod(O)]
-[  247.627604][    T0] CR2: ffffffff91fde6d0
-[  247.627605][    T0] ---[ end trace 0000000000000000 ]---
-[  247.628268][    T0] BUG: kernel NULL pointer dereference, address: 00000=
-00000000000
-[  247.628256][    T0] Kernel panic - not syncing: stack-protector: Kernel =
-stack is corrupted in: get_record_print_text_size+0x5e/0x60
-[  247.628629][    T0] Shutting down cpus with NMI
-[  247.628629][    T0] Kernel Offset: 0xf400000 from 0xffffffff81000000 (re=
-location range: 0xffffffff80000000-0xffffffffbfffffff)
-[  247.628629][    T0] pstore: dump skipped in Panic path because of concur=
-rent dump
-[  247.628629][    T0] ---[ end Kernel panic - not syncing: stack-protector=
-: Kernel stack is corrupted in: get_record_print_text_size+0x5e/0x60 ]---
-
-So I enabled CONFIG_SCHED_STACK_END_CHECK=3Dy and CONFIG_DEBUG_ATOMIC_SLEEP=
-=3Dy.
-With this I get warnings when running the bpf test_progs (without these con=
-fig option
-I do not get warnings before the system locks up) even thought I did
-not get a lockup/panic this time (I avoided watching a video this time)
-
-[   T16] BUG: sleeping function called from invalid context at kernel/locki=
+[ T2899] bpf_testmod: loading out-of-tree module taints kernel.
+[ T1113] wlp4s0: disconnect from AP 54:67:51:3d:a2:e0 for new auth to 54:67=
+:51:3d:a2:d2
+[ T1113] wlp4s0: authenticate with 54:67:51:3d:a2:d2 (local address=3Dc8:94=
+:02:c1:bd:69)
+[ T1113] wlp4s0: send auth to 54:67:51:3d:a2:d2 (try 1/3)
+[   T12] wlp4s0: authenticated
+[   T12] wlp4s0: associate with 54:67:51:3d:a2:d2 (try 1/3)
+[   T12] wlp4s0: RX ReassocResp from 54:67:51:3d:a2:d2 (capab=3D0x511 statu=
+s=3D0 aid=3D1)
+[   T12] wlp4s0: associated
+[   T12] wlp4s0: deauthenticated from 54:67:51:3d:a2:d2 (Reason: 15=3D4WAY_=
+HANDSHAKE_TIMEOUT)
+[ T1113] wlp4s0: authenticate with 54:67:51:3d:a2:e0 (local address=3Dc8:94=
+:02:c1:bd:69)
+[ T1113] wlp4s0: send auth to 54:67:51:3d:a2:e0 (try 1/3)
+[   T12] wlp4s0: authenticated
+[   T12] wlp4s0: associate with 54:67:51:3d:a2:e0 (try 1/3)
+[   T12] wlp4s0: RX AssocResp from 54:67:51:3d:a2:e0 (capab=3D0x1411 status=
+=3D17 aid=3D2)
+[   T12] wlp4s0: 54:67:51:3d:a2:e0 denied association (code=3D17)
+[ T1113] wlp4s0: authenticate with 54:67:51:3d:a2:d2 (local address=3Dc8:94=
+:02:c1:bd:69)
+[ T1113] wlp4s0: send auth to 54:67:51:3d:a2:d2 (try 1/3)
+[  T149] wlp4s0: authenticated
+[  T149] wlp4s0: associate with 54:67:51:3d:a2:d2 (try 1/3)
+[  T159] wlp4s0: RX AssocResp from 54:67:51:3d:a2:d2 (capab=3D0x511 status=
+=3D0 aid=3D1)
+[  T159] wlp4s0: associated
+[ T2916] TCP: bpf_incompl_ops does not implement required ops
+[ T2916] TCP: tcp_ca_wrong not registered or non-unique key
+[ T2916] BUG: sleeping function called from invalid context at kernel/locki=
 ng/spinlock_rt.c:48
-[   T16] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 16, name: p=
-r/legacy
-[   T16] preempt_count: 1, expected: 0
-[   T16] RCU nest depth: 2, expected: 2
-[   T16] CPU: 15 UID: 0 PID: 16 Comm: pr/legacy Tainted: G           O     =
-   6.15.0-rc7-next-20250523-gcc-dirty #2 PREEMPT_{RT,(full)}=20
-[   T16] Tainted: [O]=3DOOT_MODULE
-[   T16] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
-S-158L, BIOS E158LAMS.10F 11/11/2024
-[   T16] Call Trace:
-[   T16]  <TASK>
-[   T16]  dump_stack_lvl+0x6d/0xb0
-[   T16]  __might_resched.cold+0xaf/0xbd
-[   T16]  rt_spin_lock+0x47/0xf0
-[   T16]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   T16]  kmem_cache_free+0x13d/0x3b0
-[   T16]  skb_release_data+0x149/0x1c0
-[   T16]  __kfree_skb+0x29/0x40
-[   T16]  zap_completion_queue+0xee/0x110
-[   T16]  netpoll_send_skb+0x24f/0x2e0
-[   T16]  write_msg+0x12c/0x140 [netconsole]
-[   T16]  console_flush_all+0x28f/0x500
-[   T16]  __console_flush_and_unlock+0x51/0xf0
-[   T16]  ? __pfx_legacy_kthread_func+0x10/0x10
-[   T16]  legacy_kthread_func+0x38/0xf0
-[   T16]  ? __pfx_autoremove_wake_function+0x10/0x10
-[   T16]  kthread+0x119/0x210
-[   T16]  ? __pfx_kthread+0x10/0x10
-[   T16]  ret_from_fork+0x1d8/0x200
-[   T16]  ? __pfx_kthread+0x10/0x10
-[   T16]  ret_from_fork_asm+0x1a/0x30
-[   T16]  </TASK>
-[...]
-[   T16] BUG: sleeping function called from invalid context at kernel/locki=
-ng/spinlock_rt.c:48
-[   T16] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 16, name: p=
-r/legacy
-[   T16] preempt_count: 1, expected: 0
-[   T16] RCU nest depth: 2, expected: 2
-[   T16] CPU: 15 UID: 0 PID: 16 Comm: pr/legacy Tainted: G        W  O     =
-   6.15.0-rc7-next-20250523-gcc-dirty #2 PREEMPT_{RT,(full)}=20
-[   T16] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[   T16] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
-S-158L, BIOS E158LAMS.10F 11/11/2024
-[   T16] Call Trace:
-[   T16]  <TASK>
-[   T16]  dump_stack_lvl+0x6d/0xb0
-[   T16]  __might_resched.cold+0xaf/0xbd
-[   T16]  rt_spin_lock+0x47/0xf0
-[   T16]  ? srso_alias_return_thunk+0x5/0xfbef5
-[   T16]  kmem_cache_free+0x13d/0x3b0
-[   T16]  skb_release_data+0x149/0x1c0
-[   T16]  __kfree_skb+0x29/0x40
-[   T16]  zap_completion_queue+0xee/0x110
-[   T16]  netpoll_send_skb+0x24f/0x2e0
-[   T16]  write_msg+0x12c/0x140 [netconsole]
-[   T16]  console_flush_all+0x28f/0x500
-[   T16]  __console_flush_and_unlock+0x51/0xf0
-[   T16]  ? __pfx_legacy_kthread_func+0x10/0x10
-[   T16]  legacy_kthread_func+0x38/0xf0
-[   T16]  ? __pfx_autoremove_wake_function+0x10/0x10
-[   T16]  kthread+0x119/0x210
-[   T16]  ? __pfx_kthread+0x10/0x10
-[   T16]  ret_from_fork+0x1d8/0x200
-[   T16]  ? __pfx_kthread+0x10/0x10
-[   T16]  ret_from_fork_asm+0x1a/0x30
-[   T16]  </TASK>
-[...]
-[ T3289] BUG: sleeping function called from invalid context at kernel/locki=
-ng/spinlock_rt.c:48
-[ T3289] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 3289, name:=
+[ T2916] in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 2916, name:=
  test_progs
-[ T3289] preempt_count: 1, expected: 0
-[ T3289] RCU nest depth: 2, expected: 2
-[ T3289] CPU: 10 UID: 0 PID: 3289 Comm: test_progs Tainted: G        W  O  =
-      6.15.0-rc7-next-20250523-gcc-dirty #2 PREEMPT_{RT,(full)}=20
-[ T3289] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[ T3289] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+[ T2916] preempt_count: 1, expected: 0
+[ T2916] RCU nest depth: 2, expected: 2
+[ T2916] 4 locks held by test_progs/2916:
+[ T2916]  #0: ffffffffa3732de0 (rcu_read_lock_trace){....}-{0:0}, at: sysca=
+ll_trace_enter+0x18e/0x260
+[ T2916]  #1: ffffffffa3733880 (rcu_read_lock){....}-{1:3}, at: bpf_trace_r=
+un2+0x8c/0x260
+[ T2916]  #2: ffffffffa3733880 (rcu_read_lock){....}-{1:3}, at: task_get_cg=
+roup1+0x2a/0x340
+[ T2916]  #3: ffffffffa3756878 (css_set_lock){+.+.}-{3:3}, at: task_get_cgr=
+oup1+0xe8/0x340
+[ T2916] Preemption disabled at:
+[ T2916] [<ffffffffa2190acd>] fd_install+0x3d/0x360
+[ T2916] CPU: 11 UID: 0 PID: 2916 Comm: test_progs Tainted: G           O  =
+      6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2916] Tainted: [O]=3DOOT_MODULE
+[ T2916] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
 S-158L, BIOS E158LAMS.10F 11/11/2024
-[ T3289] Call Trace:
-[ T3289]  <TASK>
-[ T3289]  dump_stack_lvl+0x6d/0xb0
-[ T3289]  __might_resched.cold+0xaf/0xbd
-[ T3289]  rt_spin_lock+0x47/0xf0
-[ T3289]  ? migrate_enable+0x115/0x160
-[ T3289]  task_get_cgroup1+0x6c/0xf0
-[ T3289]  bpf_task_get_cgroup1+0xe/0x20
-[ T3289]  bpf_prog_284ec2fd004dd2fe_on_enter+0x62/0x1d4
-[ T3289]  bpf_trace_run2+0x9c/0x120
-[ T3289]  __bpf_trace_sys_enter+0x37/0x60
-[ T3289]  syscall_trace_enter+0x17f/0x1e0
-[ T3289]  do_syscall_64+0x2dc/0xfa0
-[ T3289]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T3289]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[ T3289] RIP: 0033:0x7f49364f3779
-[ T3289] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
+[ T2916] Call Trace:
+[ T2916]  <TASK>
+[ T2916]  dump_stack_lvl+0x6d/0xb0
+[ T2916]  __might_resched.cold+0xfa/0x135
+[ T2916]  rt_spin_lock+0x5f/0x190
+[ T2916]  ? task_get_cgroup1+0xe8/0x340
+[ T2916]  task_get_cgroup1+0xe8/0x340
+[ T2916]  bpf_task_get_cgroup1+0xe/0x20
+[ T2916]  bpf_prog_8d22669ef1ee8049_on_enter+0x62/0x1d4
+[ T2916]  bpf_trace_run2+0xd3/0x260
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  __bpf_trace_sys_enter+0x37/0x60
+[ T2916]  syscall_trace_enter+0x1c7/0x260
+[ T2916]  do_syscall_64+0x395/0xfa0
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2916] RIP: 0033:0x7f01bf2f0779
+[ T2916] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 0=
 1 f0 ff ff 73 01 c3 48 8b 0d 4f 86 0d 00 f7 d8 64 89 01 48
-[ T3289] RSP: 002b:00007fff31499fe8 EFLAGS: 00000206 ORIG_RAX: 000000000000=
+[ T2916] RSP: 002b:00007ffe4a37c8c8 EFLAGS: 00000202 ORIG_RAX: 000000000000=
 0141
-[ T3289] RAX: ffffffffffffffda RBX: 00007fff3149a778 RCX: 00007f49364f3779
-[ T3289] RDX: 0000000000000040 RSI: 00007fff3149a060 RDI: 000000000000001c
-[ T3289] RBP: 00007fff3149a000 R08: 00007fff3149a060 R09: 00007fff3149a060
-[ T3289] R10: 0000558d7c403f39 R11: 0000000000000206 R12: 0000000000000000
-[ T3289] R13: 00007fff3149a788 R14: 00007f4936b28000 R15: 0000558d7eaf6890
-[ T3289]  </TASK>
-[...]
-[ T6946] BUG: sleeping function called from invalid context at kernel/locki=
+[ T2916] RAX: ffffffffffffffda RBX: 00007ffe4a37d058 RCX: 00007f01bf2f0779
+[ T2916] RDX: 0000000000000040 RSI: 00007ffe4a37c940 RDI: 000000000000001c
+[ T2916] RBP: 00007ffe4a37c8e0 R08: 00007ffe4a37c940 R09: 00007ffe4a37c940
+[ T2916] R10: 000055edadecff39 R11: 0000000000000202 R12: 0000000000000000
+[ T2916] R13: 00007ffe4a37d068 R14: 00007f01bf925000 R15: 000055edb0606890
+[ T2916]  </TASK>
+[ T2916] BUG: scheduling while atomic: test_progs/2916/0x00000002
+[ T2916] 5 locks held by test_progs/2916:
+[ T2916]  #0: ffffffffa3732de0 (rcu_read_lock_trace){....}-{0:0}, at: sysca=
+ll_trace_enter+0x18e/0x260
+[ T2916]  #1: ffffffffa3733880 (rcu_read_lock){....}-{1:3}, at: bpf_trace_r=
+un2+0x8c/0x260
+[ T2916]  #2: ffffffffa3733880 (rcu_read_lock){....}-{1:3}, at: __bpf_prog_=
+enter_recur+0x22/0x120
+[ T2916]  #3: ffffffffa3733880 (rcu_read_lock){....}-{1:3}, at: task_get_cg=
+roup1+0x2a/0x340
+[ T2916]  #4: ffffffffa3756878 (css_set_lock){+.+.}-{3:3}, at: task_get_cgr=
+oup1+0xe8/0x340
+[ T2916] Modules linked in: bpf_testmod(O) ccm snd_seq_dummy snd_hrtimer sn=
+d_seq_midi snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device rfcomm bne=
+p snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic snd_hda_scodec_co=
+mponent snd_hda_codec_hdmi nls_ascii nls_cp437 vfat fat snd_acp3x_pdm_dma s=
+nd_soc_dmic snd_acp3x_rn btusb btrtl snd_soc_core btintel btbcm btmtk bluet=
+ooth ecdh_generic ecc snd_hda_intel snd_intel_dspcfg uvcvideo snd_hda_codec=
+ videobuf2_vmalloc videobuf2_memops snd_hwdep uvc snd_hda_core videobuf2_v4=
+l2 snd_pcm_oss videodev snd_rn_pci_acp3x snd_mixer_oss videobuf2_common snd=
+_acp_config msi_wmi snd_pcm mc sparse_keymap snd_soc_acpi snd_timer wmi_bmo=
+f edac_mce_amd snd k10temp snd_pci_acp3x soundcore ccp battery ac button jo=
+ydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro=
+_3d hid_sensor_als hid_sensor_trigger industrialio_triggered_buffer kfifo_b=
+uf industrialio evdev hid_sensor_iio_common amd_pmc sch_fq_codel mt7921e mt=
+7921_common mt792x_lib mt76_connac_lib mt76 mac80211
+[ T2916]  libarc4 cfg80211 rfkill msr nvme_fabrics fuse efi_pstore configfs=
+ nfnetlink efivarfs autofs4 ext4 mbcache jbd2 usbhid amdgpu amdxcp i2c_algo=
+_bit drm_client_lib drm_ttm_helper ttm drm_exec gpu_sched drm_suballoc_help=
+er drm_panel_backlight_quirks cec xhci_pci drm_buddy xhci_hcd drm_display_h=
+elper usbcore hid_sensor_hub drm_kms_helper psmouse nvme mfd_core hid_multi=
+touch hid_generic serio_raw nvme_core r8169 usb_common amd_sfh crc16 i2c_hi=
+d_acpi i2c_hid hid i2c_piix4 i2c_smbus i2c_designware_platform i2c_designwa=
+re_core [last unloaded: bpf_testmod(O)]
+[ T2916] Preemption disabled at:
+[ T2916] [<ffffffffa2190acd>] fd_install+0x3d/0x360
+[ T2916] CPU: 7 UID: 0 PID: 2916 Comm: test_progs Tainted: G        W  O   =
+     6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2916] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2916] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2916] Call Trace:
+[ T2916]  <TASK>
+[ T2916]  dump_stack_lvl+0x6d/0xb0
+[ T2916]  ? fd_install+0x3d/0x360
+[ T2916]  __schedule_bug.cold+0x8c/0x9a
+[ T2916]  __schedule+0x167e/0x1ca0
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? lock_acquire+0xca/0x300
+[ T2916]  ? find_held_lock+0x2b/0x80
+[ T2916]  ? rtlock_slowlock_locked+0x6a0/0x1d00
+[ T2916]  ? rtlock_slowlock_locked+0x6a0/0x1d00
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  schedule_rtlock+0x21/0x40
+[ T2916]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? lock_acquire+0xca/0x300
+[ T2916]  rt_spin_lock+0x99/0x190
+[ T2916]  task_get_cgroup1+0xe8/0x340
+[ T2916]  bpf_task_get_cgroup1+0xe/0x20
+[ T2916]  bpf_prog_1fa93f2af9548028_on_update+0x47/0x134
+[ T2916]  bpf_trampoline_6442503153+0x57/0xcf
+[ T2916]  bpf_local_storage_update+0x9/0x6f0
+[ T2916]  bpf_cgrp_storage_get+0xfa/0x130
+[ T2916]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x9f/0x128
+[ T2916]  bpf_trace_run2+0xd3/0x260
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  __bpf_trace_sys_enter+0x37/0x60
+[ T2916]  syscall_trace_enter+0x1c7/0x260
+[ T2916]  do_syscall_64+0x395/0xfa0
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2916] RIP: 0033:0x7f01bf2f0779
+[ T2916] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
+48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 0=
+1 f0 ff ff 73 01 c3 48 8b 0d 4f 86 0d 00 f7 d8 64 89 01 48
+[ T2916] RSP: 002b:00007ffe4a37cd18 EFLAGS: 00000246 ORIG_RAX: 000000000000=
+00ba
+[ T2916] RAX: ffffffffffffffda RBX: 00007ffe4a37d058 RCX: 00007f01bf2f0779
+[ T2916] RDX: 0000000000000000 RSI: 000000000000005f RDI: 000055edbc9b91f0
+[ T2916] RBP: 00007ffe4a37cd70 R08: 00000000ffffffff R09: 000055edbcbc90b8
+[ T2916] R10: 0000000000000064 R11: 0000000000000246 R12: 0000000000000000
+[ T2916] R13: 00007ffe4a37d068 R14: 00007f01bf925000 R15: 000055edb0606890
+[ T2916]  </TASK>
+[ T2604] BUG: scheduling while atomic: Timer/2604/0x00000002
+[ T2604] 4 locks held by Timer/2604:
+[ T2604]  #0: ffffffffa3732de0 (rcu_read_lock_trace){....}-{0:0}, at: sysca=
+ll_trace_enter+0x18e/0x260
+[ T2604]  #1: ffffffffa3733880 (rcu_read_lock){....}-{1:3}, at: bpf_trace_r=
+un2+0x8c/0x260
+[ T2604]  #2: ffffffffa3733880 (rcu_read_lock){....}-{1:3}, at: task_get_cg=
+roup1+0x2a/0x340
+[ T2604]  #3: ffffffffa3756878 (css_set_lock){+.+.}-{3:3}, at: task_get_cgr=
+oup1+0xe8/0x340
+[ T2604] Modules linked in: bpf_testmod(O) ccm snd_seq_dummy snd_hrtimer sn=
+d_seq_midi snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device rfcomm bne=
+p snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic snd_hda_scodec_co=
+mponent snd_hda_codec_hdmi nls_ascii nls_cp437 vfat fat snd_acp3x_pdm_dma s=
+nd_soc_dmic snd_acp3x_rn btusb btrtl snd_soc_core btintel btbcm btmtk bluet=
+ooth ecdh_generic ecc snd_hda_intel snd_intel_dspcfg uvcvideo snd_hda_codec=
+ videobuf2_vmalloc videobuf2_memops snd_hwdep uvc snd_hda_core videobuf2_v4=
+l2 snd_pcm_oss videodev snd_rn_pci_acp3x snd_mixer_oss videobuf2_common snd=
+_acp_config msi_wmi snd_pcm mc sparse_keymap snd_soc_acpi snd_timer wmi_bmo=
+f edac_mce_amd snd k10temp snd_pci_acp3x soundcore ccp battery ac button jo=
+ydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro=
+_3d hid_sensor_als hid_sensor_trigger industrialio_triggered_buffer kfifo_b=
+uf industrialio evdev hid_sensor_iio_common amd_pmc sch_fq_codel mt7921e mt=
+7921_common mt792x_lib mt76_connac_lib mt76 mac80211
+[ T2604]  libarc4 cfg80211 rfkill msr nvme_fabrics fuse efi_pstore configfs=
+ nfnetlink efivarfs autofs4 ext4 mbcache jbd2 usbhid amdgpu amdxcp i2c_algo=
+_bit drm_client_lib drm_ttm_helper ttm drm_exec gpu_sched drm_suballoc_help=
+er drm_panel_backlight_quirks cec xhci_pci drm_buddy xhci_hcd drm_display_h=
+elper usbcore hid_sensor_hub drm_kms_helper psmouse nvme mfd_core hid_multi=
+touch hid_generic serio_raw nvme_core r8169 usb_common amd_sfh crc16 i2c_hi=
+d_acpi i2c_hid hid i2c_piix4 i2c_smbus i2c_designware_platform i2c_designwa=
+re_core [last unloaded: bpf_testmod(O)]
+[ T2604] Preemption disabled at:
+[ T2604] [<ffffffffa1dda00d>] migrate_enable+0x8d/0x110
+[ T2604] CPU: 2 UID: 1000 PID: 2604 Comm: Timer Tainted: G        W  O     =
+   6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2604] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2604] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2604] Call Trace:
+[ T2604]  <TASK>
+[ T2604]  dump_stack_lvl+0x6d/0xb0
+[ T2604]  ? migrate_enable+0x8d/0x110
+[ T2604]  __schedule_bug.cold+0x8c/0x9a
+[ T2604]  __schedule+0x167e/0x1ca0
+[ T2604]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2604]  ? lock_acquire+0xca/0x300
+[ T2604]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2604]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2604]  ? mark_held_locks+0x40/0x70
+[ T2604]  schedule_rtlock+0x21/0x40
+[ T2604]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2604]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2604]  ? lock_acquire+0xca/0x300
+[ T2604]  rt_spin_lock+0x99/0x190
+[ T2604]  task_get_cgroup1+0xe8/0x340
+[ T2604]  bpf_task_get_cgroup1+0xe/0x20
+[ T2604]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2604]  bpf_trace_run2+0xd3/0x260
+[ T2604]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2604]  __bpf_trace_sys_enter+0x37/0x60
+[ T2604]  syscall_trace_enter+0x1c7/0x260
+[ T2604]  do_syscall_64+0x395/0xfa0
+[ T2604]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2604]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2604] RIP: 0033:0x7f93ae8a99ee
+[ T2604] Code: 08 0f 85 f5 4b ff ff 49 89 fb 48 89 f0 48 89 d7 48 89 ce 4c =
+89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0f 05 <c3> 66 2=
+e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
+[ T2604] RSP: 002b:00007f939d07c438 EFLAGS: 00000246 ORIG_RAX: 000000000000=
+00ca
+[ T2604] RAX: ffffffffffffffda RBX: 00007f939d07d6c0 RCX: 00007f93ae8a99ee
+[ T2604] RDX: 00000000000018db RSI: 0000000000000089 RDI: 00007f93ae5bdafc
+[ T2604] RBP: 0000000000000000 R08: 0000000000000000 R09: 00000000ffffffff
+[ T2604] R10: 00007f939d07c548 R11: 0000000000000246 R12: 00007f93ae5bdaa8
+[ T2604] R13: 00007f93ae5bdafc R14: 00000000000031dd R15: 00007f93ae5bdad8
+[ T2604]  </TASK>
+[ T2233] BUG: scheduling while atomic: Softwar~cThread/2233/0x00000002
+[ T2233] 4 locks held by Softwar~cThread/2233:
+[ T2233]  #0: ffffffffa3732de0 (rcu_read_lock_trace){....}-{0:0}, at: sysca=
+ll_trace_enter+0x18e/0x260
+[ T2233]  #1: ffffffffa3733880 (rcu_read_lock){....}-{1:3}, at: bpf_trace_r=
+un2+0x8c/0x260
+[ T2233]  #2: ffffffffa3733880 (rcu_read_lock){....}-{1:3}, at: task_get_cg=
+roup1+0x2a/0x340
+[ T2233]  #3: ffffffffa3756878 (css_set_lock){+.+.}-{3:3}, at: task_get_cgr=
+oup1+0xe8/0x340
+[ T2233] Modules linked in: bpf_testmod(O) ccm snd_seq_dummy snd_hrtimer sn=
+d_seq_midi snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device rfcomm bne=
+p snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic snd_hda_scodec_co=
+mponent snd_hda_codec_hdmi nls_ascii nls_cp437 vfat fat snd_acp3x_pdm_dma s=
+nd_soc_dmic snd_acp3x_rn btusb btrtl snd_soc_core btintel btbcm btmtk bluet=
+ooth ecdh_generic ecc snd_hda_intel snd_intel_dspcfg uvcvideo snd_hda_codec=
+ videobuf2_vmalloc videobuf2_memops snd_hwdep uvc snd_hda_core videobuf2_v4=
+l2 snd_pcm_oss videodev snd_rn_pci_acp3x snd_mixer_oss videobuf2_common snd=
+_acp_config msi_wmi snd_pcm mc sparse_keymap snd_soc_acpi snd_timer wmi_bmo=
+f edac_mce_amd snd k10temp snd_pci_acp3x soundcore ccp battery ac button jo=
+ydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro=
+_3d hid_sensor_als hid_sensor_trigger industrialio_triggered_buffer kfifo_b=
+uf industrialio evdev hid_sensor_iio_common amd_pmc sch_fq_codel mt7921e mt=
+7921_common mt792x_lib mt76_connac_lib mt76 mac80211
+[ T2233]  libarc4 cfg80211 rfkill msr nvme_fabrics fuse efi_pstore configfs=
+ nfnetlink efivarfs autofs4 ext4 mbcache jbd2 usbhid amdgpu amdxcp i2c_algo=
+_bit drm_client_lib drm_ttm_helper ttm drm_exec gpu_sched drm_suballoc_help=
+er drm_panel_backlight_quirks cec xhci_pci drm_buddy xhci_hcd drm_display_h=
+elper usbcore hid_sensor_hub drm_kms_helper psmouse nvme mfd_core hid_multi=
+touch hid_generic serio_raw nvme_core r8169 usb_common amd_sfh crc16 i2c_hi=
+d_acpi i2c_hid hid
+[ T2247] BUG: scheduling while atomic: Compositor/2247/0x00000002
+[ T2233]  i2c_piix4
+[ T2233]  i2c_smbus
+[ T2247] 4 locks held by Compositor/2247:
+[ T2233]  i2c_designware_platform i2c_designware_core
+[ T2247]  #0: ffffffffa3732de0
+[ T2233]  [last unloaded: bpf_testmod(O)]
+[ T2247]  (
+[ T2233]=20
+[ T2247] rcu_read_lock_trace
+[ T2233] Preemption disabled at:
+[ T2247] ){....}-{0:0}
+[ T2233] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T2247] , at: syscall_trace_enter+0x18e/0x260
+[ T2247]  #1: ffffffffa3733880 (rcu_read_lock
+[ T2233] CPU: 10 UID: 1000 PID: 2233 Comm: Softwar~cThread Tainted: G      =
+  W  O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2247] ){....}-{1:3}, at: bpf_trace_run2+0x8c/0x260
+[ T2247]  #2:=20
+[ T2233] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2247] ffffffffa3733880
+[ T2233] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2247]  (rcu_read_lock
+[ T2233] Call Trace:
+[ T2247] ){....}-{1:3}, at: task_get_cgroup1+0x2a/0x340
+[ T2233]  <TASK>
+[ T2247]  #3: ffffffffa3756878 (css_set_lock
+[ T2233]  dump_stack_lvl+0x6d/0xb0
+[ T2247] ){+.+.}-{3:3}, at: task_get_cgroup1+0xe8/0x340
+[ T2247] Modules linked in: bpf_testmod(O)
+[ T2233]  ? futex_private_hash_put+0x32/0x100
+[ T2247]  ccm snd_seq_dummy snd_hrtimer snd_seq_midi snd_seq_midi_event
+[ T2233]  __schedule_bug.cold+0x8c/0x9a
+[ T2247]  snd_rawmidi snd_seq snd_seq_device rfcomm bnep
+[ T2233]  __schedule+0x167e/0x1ca0
+[ T2247]  snd_ctl_led
+[ T2247]  snd_hda_codec_realtek snd_hda_codec_generic snd_hda_scodec_compon=
+ent snd_hda_codec_hdmi nls_ascii
+[ T2233]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2247]  nls_cp437
+[ T2247]  vfat fat snd_acp3x_pdm_dma
+[ T2233]  ? lock_acquire+0xca/0x300
+[ T2247]  snd_soc_dmic snd_acp3x_rn btusb btrtl snd_soc_core btintel
+[ T2233]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2247]  btbcm
+[ T2386] BUG: scheduling while atomic: WRRende~ckend#1/2386/0x00000002
+[ T2247]  btmtk bluetooth ecdh_generic
+[ T2386] 4 locks held by WRRende~ckend#1/2386:
+[ T2247]  ecc
+[ T2386]  #0:=20
+[ T2247]  snd_hda_intel snd_intel_dspcfg
+[ T2386] ffffffffa3732de0
+[ T2247]  uvcvideo
+[ T2233]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  (
+[ T2247]  snd_hda_codec
+[ T2386] rcu_read_lock_trace
+[ T2247]  videobuf2_vmalloc
+[ T2386] ){....}-{0:0}
+[ T2233]  ? mark_held_locks+0x40/0x70
+[ T2247]  videobuf2_memops snd_hwdep uvc
+[ T2386] , at: syscall_trace_enter+0x18e/0x260
+[ T2247]  snd_hda_core videobuf2_v4l2
+[ T2386]  #1:=20
+[ T2247]  snd_pcm_oss
+[ T2386] ffffffffa3733880
+[ T2247]  videodev
+[ T2386]  (rcu_read_lock
+[ T2247]  snd_rn_pci_acp3x snd_mixer_oss
+[ T2386] ){....}-{1:3}
+[ T2247]  videobuf2_common
+[ T2233]  schedule_rtlock+0x21/0x40
+[ T2247]  snd_acp_config
+[ T2386] , at: bpf_trace_run2+0x8c/0x260
+[ T2247]  msi_wmi snd_pcm
+[ T2386]  #2:=20
+[ T2247]  mc
+[ T2386] ffffffffa3733880
+[ T2247]  sparse_keymap
+[ T2386]  (
+[ T2233]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2247]  snd_soc_acpi
+[ T2386] rcu_read_lock
+[ T2247]  snd_timer
+[ T2386] ){....}-{1:3}
+[ T2247]  wmi_bmof edac_mce_amd
+[ T2386] , at: task_get_cgroup1+0x2a/0x340
+[ T2247]  snd k10temp
+[ T2386]  #3:=20
+[ T2247]  snd_pci_acp3x
+[ T2386] ffffffffa3756878
+[ T2233]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2247]  soundcore
+[ T2386]  (
+[ T2247]  ccp
+[ T2386] css_set_lock
+[ T2247]  battery
+[ T2386] ){+.+.}-{3:3}
+[ T2233]  ? lock_acquire+0xca/0x300
+[ T2247]  ac button
+[ T2386] , at: task_get_cgroup1+0xe8/0x340
+[ T2247]  joydev
+[ T2386] Modules linked in:
+[ T2247]  hid_sensor_magn_3d hid_sensor_prox
+[ T2386]  bpf_testmod(O)
+[ T2247]  hid_sensor_accel_3d hid_sensor_gyro_3d
+[ T2386]  ccm
+[ T2247]  hid_sensor_als
+[ T2386]  snd_seq_dummy snd_hrtimer
+[ T2247]  hid_sensor_trigger industrialio_triggered_buffer
+[ T2386]  snd_seq_midi snd_seq_midi_event
+[ T2247]  kfifo_buf industrialio
+[ T2386]  snd_rawmidi snd_seq
+[ T2247]  evdev hid_sensor_iio_common
+[ T2386]  snd_seq_device rfcomm
+[ T2247]  amd_pmc sch_fq_codel
+[ T2386]  bnep snd_ctl_led
+[ T2247]  mt7921e mt7921_common
+[ T2386]  snd_hda_codec_realtek
+[ T2247]  mt792x_lib
+[ T2386]  snd_hda_codec_generic
+[ T2233]  rt_spin_lock+0x99/0x190
+[ T2386]  snd_hda_scodec_component
+[ T2247]  mt76_connac_lib
+[ T2247]  mt76
+[ T2386]  snd_hda_codec_hdmi
+[ T2386]  nls_ascii
+[ T2247]  mac80211
+[ T2386]  nls_cp437
+[ T2247]  libarc4
+[ T2386]  vfat
+[ T2247]  cfg80211
+[ T2386]  fat
+[ T2247]  rfkill
+[ T2386]  snd_acp3x_pdm_dma
+[ T2247]  msr
+[ T2386]  snd_soc_dmic
+[ T2247]  nvme_fabrics
+[ T2386]  snd_acp3x_rn
+[ T2233]  task_get_cgroup1+0xe8/0x340
+[ T2247]  fuse
+[ T2386]  btusb
+[ T2247]  efi_pstore
+[ T2386]  btrtl
+[ T2247]  configfs
+[ T2386]  snd_soc_core
+[ T2247]  nfnetlink
+[ T2386]  btintel
+[ T2247]  efivarfs
+[ T2386]  btbcm
+[ T2247]  autofs4
+[ T2386]  btmtk
+[ T2233]  bpf_task_get_cgroup1+0xe/0x20
+[ T2247]  ext4
+[ T2386]  bluetooth
+[ T2247]  mbcache
+[ T2386]  ecdh_generic
+[ T2247]  jbd2
+[ T2386]  ecc
+[ T2386]  snd_hda_intel
+[ T2247]  usbhid
+[ T2247]  amdgpu
+[ T2386]  snd_intel_dspcfg
+[ T2233]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2386]  uvcvideo
+[ T2247]  amdxcp i2c_algo_bit
+[ T2386]  snd_hda_codec videobuf2_vmalloc
+[ T2247]  drm_client_lib
+[ T2386]  videobuf2_memops
+[ T2247]  drm_ttm_helper ttm
+[ T2386]  snd_hwdep uvc
+[ T2247]  drm_exec
+[ T2233]  bpf_trace_run2+0xd3/0x260
+[ T2386]  snd_hda_core
+[ T2247]  gpu_sched drm_suballoc_helper
+[ T2386]  videobuf2_v4l2 snd_pcm_oss
+[ T2247]  drm_panel_backlight_quirks cec
+[ T2386]  videodev
+[ T2233]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  snd_rn_pci_acp3x
+[ T2247]  xhci_pci
+[ T2386]  snd_mixer_oss
+[ T2247]  drm_buddy
+[ T2386]  videobuf2_common
+[ T2247]  xhci_hcd
+[ T2386]  snd_acp_config
+[ T2247]  drm_display_helper
+[ T2386]  msi_wmi
+[ T2247]  usbcore
+[ T2386]  snd_pcm
+[ T2247]  hid_sensor_hub
+[ T2386]  mc
+[ T2247]  drm_kms_helper
+[ T2386]  sparse_keymap
+[ T2247]  psmouse
+[ T2386]  snd_soc_acpi
+[ T2384] BUG: scheduling while atomic: WRScene~ilder#1/2384/0x00000002
+[ T2247]  nvme
+[ T2386]  snd_timer
+[ T2247]  mfd_core
+[ T2384] 4 locks held by WRScene~ilder#1/2384:
+[ T2247]  hid_multitouch
+[ T2233]  __bpf_trace_sys_enter+0x37/0x60
+[ T2386]  wmi_bmof
+[ T2247]  hid_generic
+[ T2386]  edac_mce_amd
+[ T2384]  #0:=20
+[ T2386]  snd
+[ T2247]  serio_raw
+[ T2386]  k10temp
+[ T2384] ffffffffa3732de0
+[ T2386]  snd_pci_acp3x
+[ T2247]  nvme_core r8169
+[ T2386]  soundcore
+[ T2384]  (
+[ T2233]  syscall_trace_enter+0x1c7/0x260
+[ T2386]  ccp
+[ T2247]  usb_common
+[ T2384] rcu_read_lock_trace
+[ T2247]  amd_sfh
+[ T2386]  battery
+[ T2386]  ac
+[ T2247]  crc16
+[ T2384] ){....}-{0:0}
+[ T2247]  i2c_hid_acpi
+[ T2386]  button joydev
+[ T2247]  i2c_hid hid
+[ T2386]  hid_sensor_magn_3d
+[ T2384] , at: syscall_trace_enter+0x18e/0x260
+[ T2386]  hid_sensor_prox
+[ T2247]  i2c_piix4
+[ T2233]  do_syscall_64+0x395/0xfa0
+[ T2247]  i2c_smbus
+[ T2386]  hid_sensor_accel_3d
+[ T2384]  #1:=20
+[ T2386]  hid_sensor_gyro_3d
+[ T2247]  i2c_designware_platform i2c_designware_core
+[ T2386]  hid_sensor_als
+[ T2384] ffffffffa3733880
+[ T2233]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2247]  [last unloaded: bpf_testmod(O)]
+[ T2386]  hid_sensor_trigger
+[ T2247]=20
+[ T2384]  (
+[ T2247] Preemption disabled at:
+[ T2384] rcu_read_lock
+[ T2386]  industrialio_triggered_buffer
+[ T2386]  kfifo_buf
+[ T2384] ){....}-{1:3}
+[ T2386]  industrialio
+[ T2384] RSP: 002b:00007f1f3a5fc318 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+0018
+[ T2384] RAX: ffffffffffffffda RBX: 00007f1f24eba000 RCX: 00007f1f6d7ed8c7
+[ T2384] RDX: 0000000000005d42 RSI: 0000000000002ea1 RDI: 00007f1f3a5fcf60
+[ T2384] RBP: 0000000000000007 R08: 00007f1f3bce7ee0 R09: 000000000000000d
+[ T2384] R10: 38ad0568aa6a9412 R11: 0000000000000202 R12: 0000000000000001
+[ T2384] R13: 0000000000000000 R14: 00007f1f3bffb600 R15: 0000000000005d44
+[ T2386] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2386] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2386] Call Trace:
+[ T2386]  __schedule_bug.cold+0x8c/0x9a
+[ T2386]  ? mark_held_locks+0x40/0x70
+[ T2386]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  ? lock_acquire+0xca/0x300
+[ T2386]  rt_spin_lock+0x99/0x190
+[ T2386]  task_get_cgroup1+0xe8/0x340
+[ T2386]  bpf_task_get_cgroup1+0xe/0x20
+[ T2386]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  __bpf_trace_sys_enter+0x37/0x60
+[ T2386]  syscall_trace_enter+0x1c7/0x260
+[ T2386]  do_syscall_64+0x395/0xfa0
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2386] RIP: 0033:0x7f1f6dca8a0e
+[ T2386] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[ T2386] RSP: 002b:00007f1f3a1f68b0 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+00e4
+[ T2386] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1f6dca8a0e
+[ T2386] RDX: 0000000000000002 RSI: 00007f1f3a1f6ac0 RDI: 0000000000000001
+[ T2386] RBP: 00007f1f3a1f68b0 R08: 0000000000000000 R09: 00007f1f6dca2000
+[ T2386] R10: 00007f1f25673b10 R11: 0000000000000297 R12: 00007f1f2da29be0
+[ T2386] R13: 00007f1f2da29b88 R14: 00007f1f3af3f9a0 R15: 00007f1f24f37550
+[ T2386]  </TASK>
+[ T2977] BUG: scheduling while atomic: dmesg/2977/0x00000002
+[ T2977] 4 locks held by dmesg/2977:
+[ T2977]  #0: ffffffffa3732de0 (rcu_read_lock_trace){....}-{0:0}, at: sysca=
+ll_trace_enter+0x18e/0x260
+[ T2977]  #1: ffffffffa3733880 (rcu_read_lock){....}-{1:3}, at: bpf_trace_r=
+un2+0x8c/0x260
+[ T2977]  #2: ffffffffa3733880 (rcu_read_lock){....}-{1:3}, at: task_get_cg=
+roup1+0x2a/0x340
+[ T2977]  #3: ffffffffa3756878 (css_set_lock){+.+.}-{3:3}, at: task_get_cgr=
+oup1+0xe8/0x340
+[ T2977] Modules linked in: bpf_testmod(O) ccm snd_seq_dummy snd_hrtimer sn=
+d_seq_midi snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device rfcomm bne=
+p snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T2977]  snd_hda_scodec_component snd_hda_codec_hdmi
+[  T555] 4 locks held by systemd-journal/555:
+[ T2977]  nls_ascii
+[ T2977]  nls_cp437
+[  T555]  #0:=20
+[ T2977]  vfat fat
+[  T555] ffffffffa3732de0
+[ T2977]  snd_acp3x_pdm_dma snd_soc_dmic
+[  T555]  (
+[ T2977]  snd_acp3x_rn
+[  T555] rcu_read_lock_trace
+[ T2977]  btusb btrtl
+[  T555] ){....}-{0:0}
+[ T2977]  snd_soc_core btintel btbcm btmtk
+[  T555] , at: syscall_trace_enter+0x18e/0x260
+[ T2977]  bluetooth ecdh_generic ecc
+[  T555]  #1:=20
+[ T2977]  snd_hda_intel
+[ T2977]  snd_intel_dspcfg
+[  T555] ffffffffa3733880
+[ T2977]  uvcvideo snd_hda_codec
+[  T555]  (
+[ T2977]  videobuf2_vmalloc
+[  T555] rcu_read_lock
+[ T2977]  videobuf2_memops
+[  T555] ){....}-{1:3}
+[ T2977]  snd_hwdep uvc snd_hda_core
+[  T555] , at: bpf_trace_run2+0x8c/0x260
+[ T2977]  videobuf2_v4l2 snd_pcm_oss
+[  T555]  #2:=20
+[ T2977]  videodev
+[  T555] ffffffffa3733880
+[ T2977]  snd_rn_pci_acp3x
+[  T555]  (
+[ T2977]  videobuf2_common snd_acp_config
+[  T555] , at: task_get_cgroup1+0x2a/0x340
+[  T555]  #3:=20
+[ T2977]  wmi_bmof edac_mce_amd
+[  T555] ){+.+.}-{3:3}
+[  T555] Modules linked in:
+[  T555]  ccm
+[  T555]  snd_seq_dummy
+[ T2977]  hid_sensor_trigger
+[  T555]  snd_seq_midi_event
+[  T555]  snd_seq
+[  T555]  rfcomm bnep
+[ T2977]  mt76_connac_lib mt76
+[  T555]  snd_hda_scodec_component snd_hda_codec_hdmi
+[ T2977]  rfkill msr
+[  T555]  snd_soc_dmic
+[  T555]  btrtl snd_soc_core
+[  T555]  btbcm btmtk
+[  T555]  ecdh_generic
+[  T555]  snd_intel_dspcfg uvcvideo
+[  T555]  snd_hda_codec
+[  T555]  videobuf2_vmalloc videobuf2_memops
+[ T2977]  drm_panel_backlight_quirks
+[  T555]  snd_hda_core
+[ T2977]  drm_buddy
+[  T555]  snd_rn_pci_acp3x
+[  T555]  videobuf2_common
+[  T555]  msi_wmi
+[ T2977]  hid_multitouch
+[  T555]  snd_timer wmi_bmof
+[ T2977]  usb_common
+[ T2977]  i2c_hid_acpi i2c_hid
+[ T2977]  i2c_piix4 i2c_smbus
+[  T555]  hid_sensor_magn_3d hid_sensor_prox
+[  T555]  hid_sensor_accel_3d hid_sensor_gyro_3d
+[  T555]  hid_sensor_als hid_sensor_trigger industrialio_triggered_buffer k=
+fifo_buf industrialio
+[ T2977] [<0000000000000000>] 0x0
+[  T555]  hid_sensor_iio_common amd_pmc sch_fq_codel mt7921e mt7921_common
+[  T555]  mt792x_lib mt76_connac_lib mt76 mac80211
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555]  libarc4
+[  T555]  cfg80211
+[ T2977] Call Trace:
+[ T2977]  <TASK>
+[  T555]  nfnetlink efivarfs autofs4 ext4 mbcache jbd2 usbhid
+[  T555]  amdgpu amdxcp i2c_algo_bit drm_client_lib
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ? lock_acquire+0xca/0x300
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  hid_multitouch hid_generic serio_raw
+[ T2977]  schedule_rtlock+0x21/0x40
+[  T555] Preemption disabled at:
+[  T555] [<ffffffffa21386bd>] count_memcg_events+0x4d/0x280
+[ T2977]  ? lock_acquire+0xca/0x300
+[ T2977]  rt_spin_lock+0x99/0x190
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  libarc4 cfg80211 rfkill msr nvme_fabrics fuse efi_pstore configfs=
+ nfnetlink efivarfs autofs4 ext4 mbcache jbd2 usbhid amdgpu amdxcp i2c_algo=
+_bit drm_client_lib drm_ttm_helper ttm drm_exec gpu_sched drm_suballoc_help=
+er drm_panel_backlight_quirks cec xhci_pci drm_buddy xhci_hcd drm_display_h=
+elper usbcore hid_sensor_hub drm_kms_helper psmouse nvme mfd_core hid_multi=
+touch hid_generic serio_raw nvme_core r8169 usb_common amd_sfh crc16 i2c_hi=
+d_acpi i2c_hid hid i2c_piix4 i2c_smbus i2c_designware_platform i2c_designwa=
+re_core [last unloaded: bpf_testmod(O)]
+[ T1155] Preemption disabled at:
+[ T1155] [<ffffffffa215f33f>] fput+0x1f/0x90
+[ T1155] CPU: 1 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155] Call Trace:
+[ T1155]  <TASK>
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  ? fput+0x1f/0x90
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? asm_sysvec_apic_timer_interrupt+0x1a/0x20
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? lock_acquire+0xca/0x300
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+0060
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc7700afb88 RCX: 00007fc77f05c7f9
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 00000000000423ee
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T1155] R13: 00007fc77e6b02e0 R14: 000000000007b559 R15: 000055f047b7b880
+[ T1155]  </TASK>
+[ T2916] check_preemption_disabled: 116 callbacks suppressed
+[ T2916] BUG: using smp_processor_id() in preemptible [00000000] code: test=
+_progs/2916
+[ T2604] BUG: assuming non migratable context at kernel/bpf/bpf_cgrp_storag=
+e.c:29
+[ T2916] caller is bpf_mem_cache_alloc_flags+0x19/0x160
+[ T2604] in_atomic(): 0, irqs_disabled(): 0, migration_disabled() 0 pid: 26=
+04, name: Timer
+[ T2604] 2 locks held by Timer/2604:
+[ T2916] CPU: 7 UID: 0 PID: 2916 Comm: test_progs Tainted: G        W  O   =
+     6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2604]  #0: ffffffffa3732de0
+[ T2916] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2604]  (
+[ T2916] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2916] Call Trace:
+[ T2604] rcu_read_lock_trace){....}-{0:0}
+[ T2916]  <TASK>
+[ T2604] , at: syscall_trace_enter+0x18e/0x260
+[ T2916]  dump_stack_lvl+0x6d/0xb0
+[ T2604]  #1: ffffffffa3733880 (rcu_read_lock
+[ T2916]  check_preemption_disabled+0xd6/0xe0
+[ T2604] ){....}-{1:3}, at: bpf_trace_run2+0x8c/0x260
+[ T2916]  bpf_mem_cache_alloc_flags+0x19/0x160
+[ T2916]  bpf_selem_alloc+0x161/0x270
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  bpf_local_storage_update+0xe9/0x6f0
+[ T2916]  bpf_cgrp_storage_get+0xfa/0x130
+[ T2916]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x9f/0x128
+[ T2916]  bpf_trace_run2+0xd3/0x260
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2233] BUG: using smp_processor_id() in preemptible [00000000] code: Soft=
+war~cThread/2233
+[ T2916]  __bpf_trace_sys_enter+0x37/0x60
+[ T2916]  syscall_trace_enter+0x1c7/0x260
+[ T2233] caller is rcu_is_watching+0x12/0x60
+[ T2916]  do_syscall_64+0x395/0xfa0
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2916] RIP: 0033:0x7f01bf2f0779
+[ T2916] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
+48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 0=
+1 f0 ff ff 73 01 c3 48 8b 0d 4f 86 0d 00 f7 d8 64 89 01 48
+[ T2916] RSP: 002b:00007ffe4a37cd18 EFLAGS: 00000246 ORIG_RAX: 000000000000=
+00ba
+[ T2916] RAX: ffffffffffffffda RBX: 00007ffe4a37d058 RCX: 00007f01bf2f0779
+[ T2247] BUG: using smp_processor_id() in preemptible [00000000] code: Comp=
+ositor/2247
+[ T2916] RDX: 0000000000000000 RSI: 000000000000005f RDI: 000055edbc9b91f0
+[ T2916] RBP: 00007ffe4a37cd70 R08: 00000000ffffffff R09: 000055edbcbc90b8
+[ T2916] R10: 0000000000000064 R11: 0000000000000246 R12: 0000000000000000
+[ T2916] R13: 00007ffe4a37d068 R14: 00007f01bf925000 R15: 000055edb0606890
+[ T2247] caller is rcu_is_watching+0x12/0x60
+[ T2010] BUG: scheduling while atomic: xfce4-terminal/2010/0x00000002
+[ T2916]  </TASK>
+[ T2010] 4 locks held by xfce4-terminal/2010:
+[ T2010]  #0:=20
+[ T2247] CPU: 15 UID: 1000 PID: 2247 Comm: Compositor Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2010] ffffffffa3732de0 (
+[ T2916] BUG: using smp_processor_id() in preemptible [00000000] code: test=
+_progs/2916
+[ T2010] rcu_read_lock_trace
+[ T2247] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2010] ){....}-{0:0}
+[ T2247] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2916] caller is rcu_is_watching+0x12/0x60
+[ T2247] Call Trace:
+[ T2010] , at: syscall_trace_enter+0x18e/0x260
+[ T2247]  <TASK>
+[ T2010]  #1: ffffffffa3733880
+[ T2247]  dump_stack_lvl+0x6d/0xb0
+[ T2010]  (
+[ T2386] BUG: using smp_processor_id() in preemptible [00000000] code: WRRe=
+nde~ckend#1/2386
+[ T2010] rcu_read_lock){....}-{1:3}, at: bpf_trace_run2+0x8c/0x260
+[ T2386] caller is rcu_is_watching+0x12/0x60
+[ T2247]  check_preemption_disabled+0xd6/0xe0
+[ T2010]  #2: ffffffffa3733880 (rcu_read_lock){....}-{1:3}
+[  T555] BUG: using smp_processor_id() in preemptible [00000000] code: syst=
+emd-journal/555
+[ T2010]  mc sparse_keymap
+[  T555] caller is rcu_is_watching+0x12/0x60
+[ T2010]  snd_soc_acpi snd_timer wmi_bmof edac_mce_amd
+[ T2247]  </TASK>
+[ T2010]  snd k10temp
+[ T2010]  snd_pci_acp3x
+[ T2010]  soundcore
+[ T2916] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2916] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2916]  <TASK>
+[ T2010]  joydev hid_sensor_magn_3d
+[ T2916]  dump_stack_lvl+0x6d/0xb0
+[ T2010]  hid_sensor_prox
+[ T2247] Modules linked in:
+[ T2010]  hid_sensor_accel_3d
+[ T2247]  bpf_testmod(O)
+[ T2247]  snd_seq_dummy
+[ T2010]  hid_sensor_trigger
+[ T2247]  snd_hrtimer
+[ T2916]  rcu_is_watching+0x12/0x60
+[ T2247]  snd_rawmidi snd_seq
+[ T2010]  hid_sensor_iio_common amd_pmc
+[ T2916]  ? syscall_trace_enter+0x1d5/0x260
+[ T2010]  sch_fq_codel
+[ T2916]  lock_release+0x21b/0x2e0
+[ T2247]  snd_ctl_led
+[ T2010]  mt7921_common mt792x_lib
+[ T2247]  snd_hda_codec_realtek snd_hda_codec_generic
+[ T2010]  mt76_connac_lib mt76
+[ T2247]  snd_hda_scodec_component
+[ T2916]  syscall_trace_enter+0x1da/0x260
+[ T2247]  snd_hda_codec_hdmi
+[ T2010]  mac80211 libarc4
+[ T2247]  nls_ascii nls_cp437
+[ T2010]  cfg80211
+[ T2916]  do_syscall_64+0x395/0xfa0
+[ T2010]  rfkill
+[ T2247]  vfat fat
+[ T2010]  msr
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2247]  snd_acp3x_pdm_dma
+[ T2010]  nvme_fabrics fuse
+[ T2247]  snd_soc_dmic snd_acp3x_rn
+[ T2010]  efi_pstore
+[ T2916]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2247]  btusb
+[ T2010]  configfs
+[ T2010]  nfnetlink
+[ T2247]  btrtl
+[ T2247]  snd_soc_core
+[ T2010]  efivarfs
+[ T2916] RIP: 0033:0x7f01bf2f0779
+[ T2010]  autofs4
+[ T2247]  btintel
+[ T2916] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
+48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 0=
+1 f0 ff ff 73 01 c3 48 8b 0d 4f 86 0d 00 f7 d8 64 89 01 48
+[ T2247]  btbcm
+[ T2010]  ext4 mbcache
+[ T2247]  btmtk
+[ T2916] RSP: 002b:00007ffe4a37cd18 EFLAGS: 00000246 ORIG_RAX: 000000000000=
+00ba
+[ T2010]  jbd2
+[ T2247]  bluetooth
+[ T2916] RAX: ffffffffffffffda RBX: 00007ffe4a37d058 RCX: 00007f01bf2f0779
+[ T2247]  ecdh_generic
+[ T2010]  usbhid amdgpu
+[ T2247]  ecc
+[ T2916] RDX: 0000000000000000 RSI: 000000000000005f RDI: 000055edbc9b91f0
+[ T2010]  amdxcp
+[ T2247]  snd_hda_intel
+[ T2916] RBP: 00007ffe4a37cd70 R08: 00000000ffffffff R09: 000055edbcbc90b8
+[ T2247]  uvcvideo
+[ T2010]  drm_ttm_helper ttm
+[ T2247]  snd_hda_codec videobuf2_vmalloc
+[ T2010]  drm_exec gpu_sched
+[ T2010]  drm_suballoc_helper
+[ T2247]  uvc
+[ T2247]  videobuf2_v4l2
+[ T2010]  xhci_pci drm_buddy
+[ T2247]  snd_pcm_oss videodev
+[ T2010]  xhci_hcd
+[ T1155] CPU: 1 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2247]  snd_rn_pci_acp3x
+[ T2010]  drm_display_helper usbcore
+[ T2247]  snd_mixer_oss videobuf2_common
+[ T2010]  hid_sensor_hub
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2010]  drm_kms_helper
+[ T2247]  snd_acp_config
+[ T2010]  psmouse
+[ T1155] Call Trace:
+[ T2247]  msi_wmi snd_pcm
+[ T2010]  nvme
+[ T1155]  <TASK>
+[ T2247]  mc
+[ T2010]  mfd_core
+[ T2247]  sparse_keymap
+[ T2010]  hid_multitouch
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T2247]  snd_soc_acpi
+[ T2010]  hid_generic
+[ T2247]  snd_timer
+[ T2010]  serio_raw
+[ T2247]  wmi_bmof
+[ T2010]  nvme_core
+[ T2247]  edac_mce_amd
+[ T1155]  check_preemption_disabled+0xd6/0xe0
+[ T2010]  r8169
+[ T2247]  snd
+[ T2010]  usb_common amd_sfh
+[ T2247]  k10temp
+[ T1155]  ? syscall_trace_enter+0x1d5/0x260
+[ T2010]  crc16
+[ T2247]  snd_pci_acp3x soundcore
+[ T2010]  i2c_hid_acpi i2c_hid
+[ T2247]  ccp
+[ T1155]  rcu_is_watching+0x12/0x60
+[ T2010]  hid
+[ T2247]  battery ac
+[ T2010]  i2c_piix4 i2c_smbus
+[ T2247]  button
+[ T1155]  ? syscall_trace_enter+0x1d5/0x260
+[ T2010]  i2c_designware_platform
+[ T2247]  joydev hid_sensor_magn_3d
+[ T2010]  i2c_designware_core
+[ T1155]  lock_release+0x21b/0x2e0
+[ T2010]  [last unloaded: bpf_testmod(O)]
+[ T2010]=20
+[ T1155]  syscall_trace_enter+0x1da/0x260
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T2247]  sch_fq_codel mt7921e mt7921_common mt792x_lib
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2247]  rfkill msr nvme_fabrics
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T2247]  fuse
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297
+[ T2247]  efi_pstore configfs
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc7700afb88 RCX: 00007fc77f05c7f9
+[ T2247]  efivarfs autofs4
+[ T2247]  usbhid
+[ T2247]  amdgpu amdxcp i2c_algo_bit drm_client_lib drm_ttm_helper ttm drm_=
+exec gpu_sched drm_suballoc_helper drm_panel_backlight_quirks
+[ T1155]  </TASK>
+[ T2233] CPU: 12 UID: 1000 PID: 2233 Comm: Softwar~cThread Tainted: G      =
+  W  O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2247]  usbcore hid_sensor_hub drm_kms_helper
+[ T2233] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2247]  nvme
+[ T2247]  serio_raw nvme_core r8169
+[ T2233]  check_preemption_disabled+0xd6/0xe0
+[ T2247]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T2233]  rcu_is_watching+0x12/0x60
+[ T2233]  ? syscall_trace_enter+0x1d5/0x260
+[  T555] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[  T555] RSP: 002b:00007fff31d4e980 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+00e4
+[  T555] RAX: ffffffffffffffda RBX: 0000000000000088 RCX: 00007fd47309ea0e
+[  T555] RDX: 0000000000000002 RSI: 00007fff31d4e9a0 RDI: 0000000000000001
+[  T555] RBP: 00007fff31d4e980 R08: 0000000000000000 R09: 00007fd473098000
+[  T555] R10: 3a5d08eb4dccc7bb R11: 0000000000000297 R12: 0000000000000000
+[  T555] R13: 000055b3d567d3b0 R14: 00007fff31d4eaf0 R15: 000000000962acd9
+[  T555]  </TASK>
+[ T1155] CPU: 1 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155] Call Trace:
+[ T1155]  <TASK>
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[  T555] INFO: lockdep is turned off.
+[  T555] Modules linked in: bpf_testmod(O) ccm snd_seq_dummy snd_hrtimer sn=
+d_seq_midi
+[ T1155]  rt_spin_lock+0x99/0x190
+[  T555]  snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[  T555]  rfcomm bnep snd_ctl_led snd_hda_codec_realtek snd_hda_codec_gener=
+ic
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  snd_hda_scodec_component snd_hda_codec_hdmi nls_ascii
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  nls_cp437 vfat fat snd_acp3x_pdm_dma
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[  T555]  snd_soc_dmic snd_acp3x_rn btusb
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  btrtl snd_soc_core btintel btbcm btmtk bluetooth
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  ecdh_generic ecc snd_hda_intel snd_intel_dspcfg
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[  T555]  uvcvideo snd_hda_codec videobuf2_vmalloc videobuf2_memops snd_hwd=
+ep
+[ T1155]  do_syscall_64+0x395/0xfa0
+[  T555]  uvc snd_hda_core
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555]  videobuf2_common snd_acp_config msi_wmi snd_pcm
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[  T555]  mc sparse_keymap snd_soc_acpi
+[  T555]  snd_timer
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297
+[  T555]  wmi_bmof
+[ T1155]  ORIG_RAX: 0000000000000060
+[  T555]  edac_mce_amd snd
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc7700b0a28 RCX: 00007fc77f05c7f9
+[  T555]  k10temp
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[  T555]  snd_pci_acp3x
+[  T555]  soundcore ccp
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[  T555]  battery
+[ T1155] R13: 00007fc77e6b02e0 R14: 000000000007b605 R15: 000055f047b7b880
+[  T555]  ac button joydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_ac=
+cel_3d hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger industrialio_tr=
+iggered_buffer
+[ T1155]  </TASK>
+[  T555]  kfifo_buf industrialio evdev
+[ T2604] CPU: 2 UID: 1000 PID: 2604 Comm: Timer Tainted: G        W  O     =
+   6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555]  hid_sensor_iio_common amd_pmc
+[ T2604] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555]  sch_fq_codel mt7921e
+[ T2604] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555]  mt7921_common
+[ T2604] Call Trace:
+[  T555]  mt792x_lib
+[ T2604]  <TASK>
+[  T555]  mt76_connac_lib mt76 mac80211
+[ T2604]  dump_stack_lvl+0x6d/0xb0
+[  T555]  libarc4 cfg80211 rfkill msr
+[ T2604]  check_preemption_disabled+0xd6/0xe0
+[  T555]  nvme_fabrics fuse efi_pstore configfs
+[ T2604]  ? syscall_trace_enter+0x1d5/0x260
+[  T555]  nfnetlink efivarfs autofs4 ext4
+[ T2604]  rcu_is_watching+0x12/0x60
+[ T2604]  ? syscall_trace_enter+0x1d5/0x260
+[ T2604]  lock_release+0x21b/0x2e0
+[  T555]  drm_client_lib drm_ttm_helper ttm
+[ T2386] BUG: scheduling while atomic: WRRende~ckend#1/2386/0x00000002
+[  T555]  drm_exec gpu_sched
+[ T2386] INFO: lockdep is turned off.
+[  T555]  drm_suballoc_helper
+[ T2386] Modules linked in:
+[  T555]  drm_panel_backlight_quirks
+[ T2386]  bpf_testmod(O)
+[  T555]  cec
+[ T2604]  do_syscall_64+0x395/0xfa0
+[  T555]  xhci_hcd
+[ T2386]  snd_seq_midi
+[  T555]  usbcore
+[ T2386]  snd_seq_midi_event
+[  T555]  hid_sensor_hub
+[ T1157]  bpf_testmod(O)
+[ T2386]  rfcomm
+[  T555]  hid_multitouch
+[ T2386]  snd_hda_codec_realtek
+[ T2010] Modules linked in:
+[ T1157]  snd_seq_midi_event
+[  T555]  nvme_core
+[ T2386]  snd_hda_codec_generic
+[ T2010]  bpf_testmod(O)
+[ T2604] RSP: 002b:00007f939d07c438 EFLAGS: 00000246
+[ T1157]  snd_rawmidi
+[  T555]  r8169
+[ T2386]  snd_hda_scodec_component
+[ T2010]  ccm
+[ T2604]  ORIG_RAX: 00000000000000ca
+[ T2604] RAX: ffffffffffffffda RBX: 00007f939d07d6c0 RCX: 00007f93ae8a99ee
+[  T555]  amd_sfh
+[ T2386]  nls_ascii
+[ T2010]  snd_seq_midi
+[ T1157]  rfcomm
+[  T555]  crc16
+[ T2386]  nls_cp437
+[  T555]  i2c_hid_acpi
+[ T2386]  vfat
+[ T2010]  snd_rawmidi
+[ T2386]  fat
+[ T2010]  snd_seq
+[ T1157]  snd_hda_codec_realtek
+[ T2604]  gpu_sched
+[ T2977]  ORIG_RAX: 0000000000000001
+[ T2386] Preemption disabled at:
+[ T2604]  drm_panel_backlight_quirks
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T2604]  cec
+[ T1157]  i2c_designware_core
+[ T2977] RDX: 000000000000008d RSI: 000055e375e787e0 RDI: 0000000000000001
+[ T1157]  [last unloaded: bpf_testmod(O)]
+[ T2604]  drm_buddy
+[ T2977] RBP: 000055e375e787e0 R08: 0000000000000000 R09: 0000000000000000
+[ T1157]=20
+[ T2604]  usbcore
+[ T2604]  psmouse nvme mfd_core hid_multitouch hid_generic serio_raw nvme_c=
+ore r8169 usb_common amd_sfh crc16
+[ T2977]  </TASK>
+[ T2604]  i2c_smbus i2c_designware_platform i2c_designware_core
+[ T2010] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2604]=20
+[ T2010] Call Trace:
+[ T2010]  <TASK>
+[ T2604] [<ffffffffa1dda00d>] migrate_enable+0x8d/0x110
+[ T2010]  dump_stack_lvl+0x6d/0xb0
+[ T2010]  ? fput+0x1f/0x90
+[ T2010]  __schedule_bug.cold+0x8c/0x9a
+[ T2010]  __schedule+0x167e/0x1ca0
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  ? rcu_is_watching+0x12/0x60
+[ T2010]  ? lock_release+0x21b/0x2e0
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  rt_spin_lock+0x99/0x190
+[ T2010]  task_get_cgroup1+0xe8/0x340
+[ T2010]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2010]  bpf_trace_run2+0xd3/0x260
+[ T2010]  __bpf_trace_sys_enter+0x37/0x60
+[ T2010]  syscall_trace_enter+0x1c7/0x260
+[ T2010]  do_syscall_64+0x395/0xfa0
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2010] RIP: 0033:0x7f0e4bf16a0e
+[ T2010] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[ T2010] RSP: 002b:00007ffc276f5140 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+00e4
+[ T2010] RAX: ffffffffffffffda RBX: 000055766d04c910 RCX: 00007f0e4bf16a0e
+[ T2010] RDX: 0000000000000002 RSI: 00007ffc276f51b0 RDI: 0000000000000001
+[ T2010] RBP: 00007ffc276f5140 R08: 0000000000000000 R09: 00007f0e4bf10000
+[ T2010] R10: 0000000000000001 R11: 0000000000000297 R12: 000000007fffffff
+[ T2010] R13: 000055766d04b0b0 R14: 000055766d04c910 R15: 000055766d04b0b0
+[ T2010]  </TASK>
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555] Call Trace:
+[  T555]  <TASK>
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[  T555]  ? count_memcg_events+0x4d/0x280
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  __schedule+0x167e/0x1ca0
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? lock_release+0x21b/0x2e0
+[  T555]  schedule_rtlock+0x21/0x40
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  rt_spin_lock+0x99/0x190
+[  T555]  task_get_cgroup1+0xe8/0x340
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  bpf_trace_run2+0xd3/0x260
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[  T555]  do_syscall_64+0x395/0xfa0
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555] RIP: 0033:0x7fd472b0fad7
+[  T555] Code: 73 01 c3 48 8b 0d 21 53 0d 00 f7 d8 64 89 01 48 83 c8 ff c3 =
+66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 ba 00 00 00 0f 05 <c3> 0f 1=
+f 84 00 00 00 00 00 b8 ea 00 00 00 0f 05 48 3d 01 f0 ff ff
+[  T555] RSP: 002b:00007fff31d51828 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+00ba
+[  T555] RAX: ffffffffffffffda RBX: 000000000000022b RCX: 00007fd472b0fad7
+[  T555] RDX: 00000000ffffffff RSI: 00007fd472ecafd0 RDI: 00007fd473095cc8
+[  T555] RBP: 000055b3d5668660 R08: 0000000000000000 R09: 000055b3d5667488
+[  T555] R10: 00007fff31d518a0 R11: 0000000000000202 R12: 000055b3d5668660
+[  T555] R13: ffffffffffffffff R14: 0000000000000000 R15: 00007fff31d51890
+[  T555]  </TASK>
+[ T1157] CPU: 5 UID: 0 PID: 1157 Comm: rs:main Q:Reg Tainted: G        W  O=
+        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1157] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1157] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1157] Call Trace:
+[ T1157]  <TASK>
+[ T1157]  dump_stack_lvl+0x6d/0xb0
+[ T1157]  ? futex_private_hash_put+0x32/0x100
+[ T1157]  __schedule_bug.cold+0x8c/0x9a
+[ T1157]  __schedule+0x167e/0x1ca0
+[ T1157]  ? rcu_is_watching+0x12/0x60
+[ T1157]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  ? rcu_is_watching+0x12/0x60
+[ T1157]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[  T555] INFO: lockdep is turned off.
+[  T555] Modules linked in:
+[ T1157]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  bpf_testmod(O) ccm snd_seq_dummy
+[ T1157]  ? rcu_is_watching+0x12/0x60
+[  T555]  snd_hrtimer snd_seq_midi snd_seq_midi_event
+[ T1157]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_rawmidi
+[  T555]  snd_seq snd_seq_device
+[ T1157]  ? lock_release+0x21b/0x2e0
+[  T555]  rfcomm bnep snd_ctl_led snd_hda_codec_realtek snd_hda_codec_gener=
+ic snd_hda_scodec_component
+[ T1157]  schedule_rtlock+0x21/0x40
+[  T555]  snd_hda_codec_hdmi nls_ascii nls_cp437 vfat
+[ T1157]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  fat
+[  T555]  snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn
+[ T1157]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_hda_intel snd_intel_dspcfg uvcvideo
+[ T2977]  snd_hda_codec videobuf2_vmalloc videobuf2_memops
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2977]  snd_hwdep uvc
+[ T2386] BUG: scheduling while atomic: WRRende~ckend#1/2386/0x00000002
+[ T2977]  snd_hda_core videobuf2_v4l2 snd_pcm_oss
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386] INFO: lockdep is turned off.
+[ T2977]  videodev
+[ T2386] Modules linked in:
+[ T2977]  snd_rn_pci_acp3x
+[ T2977]  snd_mixer_oss
+[ T2386]  bpf_testmod(O)
+[ T2977]  videobuf2_common snd_acp_config
+[ T2386]  ccm
+[ T2977]  msi_wmi snd_pcm
+[ T2386]  snd_seq_dummy
+[ T2977]  mc sparse_keymap
+[ T2386]  snd_hrtimer
+[ T2977]  snd_soc_acpi
+[ T2386]  snd_seq_midi
+[ T2977]  snd_timer
+[ T2386]  snd_seq_midi_event
+[  T555]  rt_spin_lock+0x99/0x190
+[ T2977]  wmi_bmof edac_mce_amd
+[ T2386]  snd_rawmidi
+[ T2977]  snd
+[ T2386]  snd_seq
+[ T2977]  k10temp
+[ T2386]  snd_seq_device
+[ T2977]  snd_pci_acp3x
+[  T555]  task_get_cgroup1+0xe8/0x340
+[ T2977]  ccp
+[ T2386]  snd_ctl_led
+[ T2977]  battery
+[ T2386]  snd_hda_codec_realtek
+[ T2977]  ac
+[ T2386]  snd_hda_codec_generic
+[ T2977]  button
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[ T2386]  snd_hda_scodec_component
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2386]  nls_ascii
+[ T2977]  hid_sensor_gyro_3d
+[ T2386]  nls_cp437
+[ T2977]  hid_sensor_als hid_sensor_trigger
+[ T2386]  vfat
+[ T2977]  industrialio_triggered_buffer
+[  T555]  bpf_trace_run2+0xd3/0x260
+[ T2977]  kfifo_buf
+[ T2386]  fat
+[ T2977]  industrialio
+[ T2386]  snd_acp3x_pdm_dma
+[ T2977]  evdev
+[ T2386]  snd_soc_dmic
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  hid_sensor_iio_common
+[ T2386]  snd_acp3x_rn
+[ T2386]  btusb
+[ T2977]  sch_fq_codel
+[ T2386]  btrtl
+[ T2386]  snd_soc_core
+[ T2386]  btintel
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  mt76 mac80211
+[ T2386]  bluetooth
+[ T2386]  ecdh_generic
+[ T2386]  ecc
+[ T2386]  snd_hda_intel
+[ T2977]  fuse
+[ T2386]  snd_intel_dspcfg
+[ T2977]  efi_pstore configfs
+[ T2386]  uvcvideo
+[ T2977]  nfnetlink
+[  T555]  do_syscall_64+0x395/0xfa0
+[ T2386]  snd_hda_codec
+[ T2977]  autofs4 ext4
+[ T2386]  videobuf2_vmalloc
+[ T2977]  mbcache
+[ T2386]  snd_hwdep
+[ T2977]  amdxcp
+[ T2386]  uvc
+[ T2386]  snd_hda_core
+[ T2977]  drm_client_lib
+[ T2386]  videobuf2_v4l2
+[ T2977]  drm_ttm_helper ttm
+[ T2386]  snd_pcm_oss
+[ T2977]  gpu_sched
+[ T2386]  videodev
+[  T555] RSP: 002b:00007fff31d516e0 EFLAGS: 00000297
+[ T2386]  snd_rn_pci_acp3x
+[ T2977]  drm_suballoc_helper drm_panel_backlight_quirks
+[  T555]  ORIG_RAX: 00000000000000e4
+[ T2386]  snd_mixer_oss
+[ T2977]  cec
+[  T555] RAX: ffffffffffffffda RBX: 000055b3d56687b0 RCX: 00007fd47309ea0e
+[  T555] RDX: 0000000000000002 RSI: 00007fff31d51700 RDI: 0000000000000001
+[ T2977]  xhci_hcd
+[  T555] R10: ffffffffffffffff R11: 0000000000000297 R12: 0000000000000001
+[ T2977]  hid_sensor_hub
+[ T2977]  drm_kms_helper
+[ T2977]  mfd_core hid_multitouch
+[ T2977]  hid_generic
+[ T2386]  wmi_bmof
+[ T2977]  serio_raw nvme_core
+[ T2386]  edac_mce_amd
+[  T555]  </TASK>
+[ T2977]  r8169
+[ T2386]  soundcore
+[ T2386]  button joydev
+[ T2386]  hid_sensor_magn_3d
+[ T2977] Preemption disabled at:
+[ T2977] [<0000000000000000>] 0x0
+[ T2386]  hid_sensor_als hid_sensor_trigger industrialio_triggered_buffer k=
+fifo_buf
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2386]  industrialio evdev hid_sensor_iio_common
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2386]  amd_pmc
+[ T2977] Call Trace:
+[ T2386]  sch_fq_codel mt7921e
+[ T2977]  <TASK>
+[ T2386]  mt7921_common mt792x_lib
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[ T2386]  mt76_connac_lib mt76 mac80211 libarc4
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[ T2386]  cfg80211 rfkill
+[ T2977]  __schedule+0x167e/0x1ca0
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  efi_pstore configfs
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T2386]  nfnetlink efivarfs autofs4
+[ T2386]  ext4 mbcache
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T2386]  jbd2 usbhid
+[ T2386]  amdgpu amdxcp i2c_algo_bit
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  drm_client_lib
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  gpu_sched drm_suballoc_helper
+[ T2977]  ? lock_release+0x21b/0x2e0
+[ T2386]  drm_panel_backlight_quirks cec xhci_pci drm_buddy xhci_hcd
+[ T2977]  schedule_rtlock+0x21/0x40
+[ T2386]  drm_display_helper usbcore
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2386]  hid_sensor_hub drm_kms_helper psmouse
+[ T2977]  ? preempt_count_sub+0x96/0xd0
+[ T2386]  nvme mfd_core hid_multitouch
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  hid_generic serio_raw nvme_core r8169 usb_common amd_sfh crc16 i2=
+c_hid_acpi
+[ T2977]  rt_spin_lock+0x99/0x190
+[ T2386]  i2c_hid hid i2c_piix4 i2c_smbus
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T2386]  i2c_designware_platform i2c_designware_core [last unloaded: bpf_t=
+estmod(O)]
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[ T2386] Preemption disabled at:
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2386] [<0000000000000000>] 0x0
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  usbcore
+[  T555]  videobuf2_common
+[ T2977] Call Trace:
+[ T2977]  <TASK>
+[ T1157]  drm_kms_helper
+[  T555]  snd_pcm
+[ T1157]  psmouse
+[  T555]  mc
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[  T555]  sparse_keymap
+[ T1157]  nvme
+[  T555]  snd_soc_acpi
+[ T1157]  mfd_core
+[  T555]  snd_timer
+[ T1157]  hid_multitouch
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  wmi_bmof
+[ T1157]  hid_generic
+[  T555]  edac_mce_amd
+[ T1157]  serio_raw
+[  T555]  snd k10temp
+[ T1157]  nvme_core
+[ T2977]  __schedule+0x167e/0x1ca0
+[  T555]  snd_pci_acp3x
+[ T1157]  r8169
+[  T555]  soundcore ccp
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  usb_common
+[  T555]  battery
+[ T1157]  amd_sfh
+[  T555]  ac
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1157]  crc16
+[  T555]  button joydev
+[ T1157]  i2c_hid_acpi
+[  T555]  hid_sensor_magn_3d
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  hid_sensor_prox
+[ T1157]  i2c_hid
+[  T555]  hid_sensor_accel_3d
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[  T555]  hid_sensor_gyro_3d
+[ T1157]  hid
+[  T555]  hid_sensor_als
+[ T1157]  i2c_piix4
+[  T555]  hid_sensor_trigger
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  i2c_smbus
+[  T555]  industrialio_triggered_buffer
+[ T1157]  i2c_designware_platform
+[  T555]  kfifo_buf
+[ T1157]  i2c_designware_core
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  industrialio evdev
+[ T1157]  [last unloaded: bpf_testmod(O)]
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[  T555]  hid_sensor_iio_common
+[ T1157]=20
+[  T555]  amd_pmc
+[ T1157] Preemption disabled at:
+[  T555]  sch_fq_codel
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  mt7921e mt7921_common
+[ T1157] [<ffffffffa215f33f>] fput+0x1f/0x90
+[  T555]  mt792x_lib
+[ T2977]  ? lock_release+0x21b/0x2e0
+[  T555]  mt76_connac_lib mt76 mac80211 libarc4 cfg80211 rfkill
+[ T2977]  schedule_rtlock+0x21/0x40
+[  T555]  msr nvme_fabrics fuse
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  efi_pstore configfs nfnetlink efivarfs
+[ T2977]  ? preempt_count_sub+0x96/0xd0
+[  T555]  autofs4 ext4 mbcache jbd2
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  usbhid amdgpu amdxcp i2c_algo_bit drm_client_lib drm_ttm_helper t=
+tm drm_exec gpu_sched drm_suballoc_helper drm_panel_backlight_quirks
+[ T2977]  rt_spin_lock+0x99/0x190
+[  T555]  cec xhci_pci drm_buddy xhci_hcd drm_display_helper
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[  T555]  usbcore hid_sensor_hub drm_kms_helper psmouse nvme
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  mfd_core hid_multitouch hid_generic serio_raw
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  nvme_core r8169 usb_common amd_sfh
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[  T555]  crc16 i2c_hid_acpi i2c_hid hid
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  i2c_piix4 i2c_smbus i2c_designware_platform i2c_designware_core [=
+last unloaded: bpf_testmod(O)]
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[  T555] Preemption disabled at:
+[  T555] [<ffffffffa21386bd>] count_memcg_events+0x4d/0x280
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  do_syscall_64+0x395/0xfa0
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[ T2977] RSP: 002b:00007ffc24356670 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+0000
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T2977] RDX: 00000000000007ff RSI: 000055e34b7d80a8 RDI: 0000000000000003
+[ T2977] RBP: 000055e34b7d80a8 R08: 0000000000000000 R09: 0000000000000000
+[ T2977] R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffc243568e8
+[ T2977] R13: 000055e34b7d2b80 R14: 000055e34b7d6ea0 R15: ffffffffffffffff
+[ T2977]  </TASK>
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555] Call Trace:
+[  T555]  <TASK>
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[ T2065] BUG: scheduling while atomic: glean.dispatche/2065/0x00000002
+[  T555]  ? count_memcg_events+0x4d/0x280
+[ T2065] INFO: lockdep is turned off.
+[ T2065] Modules linked in:
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[ T2065]  bpf_testmod(O) ccm
+[  T555]  __schedule+0x167e/0x1ca0
+[ T2065]  snd_seq_dummy snd_hrtimer snd_seq_midi snd_seq_midi_event snd_raw=
+midi
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2065]  snd_seq snd_seq_device
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2065]  rfcomm bnep snd_ctl_led
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2065]  snd_hda_codec_realtek
+[ T2065]  snd_hda_codec_generic snd_hda_scodec_component
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2065]  snd_hda_codec_hdmi nls_ascii nls_cp437
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2065]  vfat fat snd_acp3x_pdm_dma
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2065]  snd_soc_dmic snd_acp3x_rn btusb
+[  T555]  ? lock_release+0x21b/0x2e0
+[ T2065]  btrtl snd_soc_core btintel btbcm btmtk bluetooth
+[  T555]  schedule_rtlock+0x21/0x40
+[ T2065]  ecdh_generic ecc snd_hda_intel
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2065]  snd_intel_dspcfg uvcvideo snd_hda_codec videobuf2_vmalloc
+[  T555]  ? lock_release+0x21b/0x2e0
+[ T2065]  videobuf2_memops snd_hwdep uvc
+[  T555]  ? fput+0x3f/0x90
+[ T2065]  snd_hda_core videobuf2_v4l2 snd_pcm_oss
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_mixer_oss
+[ T2065] RSP: 002b:00007f1f5f4f5a98 EFLAGS: 00000202
+[ T1155]  videobuf2_common snd_acp_config
+[ T2065]  ORIG_RAX: 0000000000000018
+[ T1155]  msi_wmi
+[ T2065] RAX: ffffffffffffffda RBX: 00007f1f60e68240 RCX: 00007f1f6d7ed8c7
+[ T1155]  snd_pcm mc
+[ T2065] RDX: 0000000000000001 RSI: 00007f1f5f4f5c10 RDI: 00007f1f60e68240
+[ T1155]  sparse_keymap
+[ T2065] RBP: 000000003b9aca00 R08: 0000000000000000 R09: 0000000000000001
+[ T1155]  snd_soc_acpi snd_timer
+[ T2065] R10: 00007f1f31d924e0 R11: 0000000000000202 R12: 00007f1f6d7ed8c0
+[ T1155]  wmi_bmof edac_mce_amd
+[ T2065] R13: 00007f1f6d4a0400 R14: 00007f1f5f4f5c10 R15: 0000000000000008
+[ T1155]  snd k10temp snd_pci_acp3x soundcore ccp battery ac button joydev =
+hid_sensor_magn_3d
+[ T2065]  </TASK>
+[ T1155]  hid_sensor_prox
+[ T1155]  hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor_als hid_sensor_=
+trigger industrialio_triggered_buffer kfifo_buf industrialio evdev hid_sens=
+or_iio_common amd_pmc sch_fq_codel mt7921e mt7921_common mt792x_lib mt76_co=
+nnac_lib mt76 mac80211 libarc4 cfg80211 rfkill msr nvme_fabrics fuse efi_ps=
+tore configfs nfnetlink efivarfs autofs4 ext4 mbcache jbd2 usbhid amdgpu am=
+dxcp i2c_algo_bit drm_client_lib drm_ttm_helper ttm drm_exec gpu_sched drm_=
+suballoc_helper drm_panel_backlight_quirks cec xhci_pci drm_buddy xhci_hcd =
+drm_display_helper usbcore hid_sensor_hub drm_kms_helper psmouse nvme mfd_c=
+ore hid_multitouch hid_generic serio_raw nvme_core r8169 usb_common amd_sfh=
+ crc16 i2c_hid_acpi i2c_hid hid i2c_piix4 i2c_smbus i2c_designware_platform=
+ i2c_designware_core
+[ T1157] BUG: scheduling while atomic: rs:main Q:Reg/1157/0x00000002
+[ T1155]  [last unloaded: bpf_testmod(O)]
+[ T1157] INFO: lockdep is turned off.
+[ T1155] Preemption disabled at:
+[ T1157] Modules linked in: bpf_testmod(O)
+[ T1155] [<ffffffffa29f1017>] preempt_schedule_irq+0x27/0x70
+[ T1157]  ccm
+[ T1157]  snd_seq_dummy snd_hrtimer
+[ T1155] CPU: 8 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1157]  snd_seq_midi snd_seq_midi_event
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1157]  snd_rawmidi
+[ T1155] Call Trace:
+[ T1157]  snd_seq snd_seq_device
+[ T1155]  <TASK>
+[ T1157]  rfcomm bnep
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T1157]  snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic
+[ T1155]  ? preempt_schedule_irq+0x27/0x70
+[ T1157]  snd_hda_scodec_component snd_hda_codec_hdmi nls_ascii
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T1157]  nls_cp437 vfat
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T1157]  fat snd_acp3x_pdm_dma snd_soc_dmic
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1157]  snd_acp3x_rn btusb btrtl
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  snd_soc_core btintel btbcm
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1157]  btmtk bluetooth
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  ecdh_generic ecc
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  snd_hda_intel
+[ T1157]  snd_intel_dspcfg
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1157]  uvcvideo
+[ T1157]  snd_hda_codec videobuf2_vmalloc
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  videobuf2_memops snd_hwdep
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T1157]  uvc snd_hda_core videobuf2_v4l2 snd_pcm_oss
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T1157]  videodev snd_rn_pci_acp3x
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1157]  snd_mixer_oss videobuf2_common snd_acp_config
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  msi_wmi snd_pcm
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1157]  mc sparse_keymap snd_soc_acpi
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  snd_timer wmi_bmof edac_mce_amd snd k10temp snd_pci_acp3x soundco=
+re ccp
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T1157]  battery ac button joydev
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T1157]  hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T1157]  hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1157]  industrialio_triggered_buffer kfifo_buf industrialio
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T1157]  evdev hid_sensor_iio_common amd_pmc
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  sch_fq_codel mt7921e mt7921_common mt792x_lib
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T1157]  mt76_connac_lib mt76 mac80211 libarc4
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T1157]  cfg80211 rfkill msr nvme_fabrics
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T1157]  fuse
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  efi_pstore configfs nfnetlink efivarfs
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1157]  autofs4 ext4 mbcache jbd2
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T1157]  usbhid amdgpu
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T1157]  amdxcp i2c_algo_bit
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297
+[ T1157]  drm_client_lib
+[ T1155]  ORIG_RAX: 0000000000000060
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc7700a4b08 RCX: 00007fc77f05c7f9
+[ T1157]  drm_ttm_helper ttm
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T1157]  drm_exec
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 00000000000423fa
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T1157]  gpu_sched
+[ T1155] R13: 00007fc77e6b02e0 R14: 000000000007bc45 R15: 000055f047b7b880
+[ T1157]  drm_suballoc_helper
+[ T1157]  drm_panel_backlight_quirks cec xhci_pci drm_buddy xhci_hcd drm_di=
+splay_helper usbcore
+[ T1155]  </TASK>
+[ T2013]  rt_spin_lock+0x99/0x190
+[ T2977]  hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger industrialio=
+_triggered_buffer kfifo_buf
+[ T2977]  sch_fq_codel mt7921e mt7921_common
+[ T2977]  mt792x_lib mt76_connac_lib mt76 mac80211
+[ T2977]  libarc4 cfg80211 rfkill
+[ T2013]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  autofs4 ext4 mbcache jbd2
+[ T2013]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  usbhid amdgpu amdxcp i2c_algo_bit drm_client_lib
+[ T2013]  do_syscall_64+0x395/0xfa0
+[ T2977]  drm_ttm_helper ttm drm_exec
+[ T2013]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  gpu_sched drm_suballoc_helper drm_panel_backlight_quirks cec
+[ T2013]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977]  xhci_pci drm_buddy xhci_hcd drm_display_helper
+[ T2013] RIP: 0033:0x7f1f6dca8a0e
+[ T2977]  usbcore hid_sensor_hub
+[ T2013] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[ T2977]  drm_kms_helper psmouse
+[ T2013] RSP: 002b:00007ffe34ff9d70 EFLAGS: 00000297
+[ T2977]  nvme
+[ T2013]  ORIG_RAX: 00000000000000e4
+[ T2977]  mfd_core hid_multitouch
+[ T2013] RAX: ffffffffffffffda RBX: 00007f1f60e3d200 RCX: 00007f1f6dca8a0e
+[ T2977]  hid_generic
+[ T2977]  serio_raw nvme_core
+[ T2013] RBP: 00007ffe34ff9d70 R08: 0000000000000000 R09: 00007f1f6dca2000
+[ T2977]  r8169 usb_common
+[ T2013] R10: 0000000000000001 R11: 0000000000000297 R12: 000000007fffffff
+[ T2977]  amd_sfh
+[ T2977]  crc16 i2c_hid_acpi i2c_hid hid i2c_piix4 i2c_smbus i2c_designware=
+_platform i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T2977] Preemption disabled at:
+[ T2013]  </TASK>
+[ T2977] [<0000000000000000>] 0x0
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2977] Call Trace:
+[ T2977]  <TASK>
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[ T2013] BUG: scheduling while atomic: firefox-esr/2013/0x00000002
+[ T2977]  __schedule+0x167e/0x1ca0
+[ T2013] INFO: lockdep is turned off.
+[ T2013] Modules linked in:
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2013]  bpf_testmod(O) ccm snd_seq_dummy snd_hrtimer
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2013]  snd_seq_midi snd_seq_midi_event
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T2013]  snd_rawmidi snd_seq snd_seq_device rfcomm
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2013]  bnep snd_ctl_led snd_hda_codec_realtek
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2013]  snd_hda_codec_generic snd_hda_scodec_component
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T2013]  snd_hda_codec_hdmi nls_ascii nls_cp437 vfat
+[ T2013]  fat snd_acp3x_pdm_dma
+[ T2977]  ? lock_release+0x21b/0x2e0
+[ T2013]  snd_soc_dmic snd_acp3x_rn btusb btrtl snd_soc_core btintel
+[ T2977]  schedule_rtlock+0x21/0x40
+[ T2013]  btbcm btmtk bluetooth ecdh_generic
+[ T2013]  ecc snd_hda_intel snd_intel_dspcfg uvcvideo
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2013]  snd_hda_codec videobuf2_vmalloc
+[ T2010] BUG: scheduling while atomic: xfce4-terminal/2010/0x00000002
+[ T2013]  snd_acp_config
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T2013]  snd_timer
+[ T2013]  edac_mce_amd
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[ T2013]  k10temp snd_pci_acp3x
+[ T2010]  snd_seq_midi
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2013]  soundcore
+[ T2010]  snd_seq_midi_event
+[ T2013]  ccp
+[ T2010]  snd_rawmidi snd_seq
+[ T2013]  battery ac
+[ T2010]  snd_seq_device
+[ T2013]  button
+[ T2010]  rfcomm
+[ T2010]  bnep
+[ T2010]  snd_ctl_led
+[ T2013]  hid_sensor_gyro_3d
+[ T2010]  snd_hda_codec_generic
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2013]  hid_sensor_als
+[ T2010]  snd_hda_codec_hdmi
+[ T2010]  nls_ascii nls_cp437
+[ T2013]  kfifo_buf
+[ T2013]  industrialio
+[ T2010]  fat
+[ T2013]  hid_sensor_iio_common
+[ T2010]  snd_acp3x_pdm_dma
+[ T2977] RSP: 002b:00007ffc24356670 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+0000
+[ T2013]  amd_pmc
+[ T2010]  snd_soc_dmic
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T2010]  snd_acp3x_rn
+[ T2013]  mt7921e
+[ T2977] RDX: 00000000000007ff RSI: 000055e34b7d80a8 RDI: 0000000000000003
+[ T2010]  btusb
+[ T2010]  btrtl
+[ T2977] R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffc243568e8
+[ T2013]  mt792x_lib
+[ T2010]  snd_soc_core
+[ T2013]  mt76_connac_lib
+[ T2010]  btintel
+[ T2013]  mt76 mac80211
+[ T2013]  cfg80211 rfkill
+[ T2013]  msr
+[ T2010]  ecdh_generic
+[ T2010]  ecc
+[ T2013]  fuse
+[ T2010]  snd_hda_intel
+[ T2010]  snd_intel_dspcfg uvcvideo
+[ T2013]  nfnetlink efivarfs
+[ T2010]  videobuf2_vmalloc
+[ T2013]  mbcache
+[ T2010]  uvc
+[ T2010]  snd_pcm_oss
+[ T2013]  drm_client_lib
+[ T2013]  drm_ttm_helper ttm
+[ T2010]  snd_mixer_oss
+[ T2013]  gpu_sched drm_suballoc_helper
+[ T2010]  videobuf2_common snd_acp_config
+[ T2013]  drm_panel_backlight_quirks cec
+[ T2010]  msi_wmi
+[ T2010]  snd_pcm
+[ T2013]  drm_buddy
+[ T2010]  snd_soc_acpi
+[ T2013]  hid_sensor_hub drm_kms_helper
+[ T2010]  wmi_bmof
+[ T2010]  edac_mce_amd
+[ T2010]  snd
+[ T2013]  hid_generic
+[ T2013]  crc16
+[ T2010]  hid_sensor_prox
+[ T2010]  hid_sensor_gyro_3d
+[ T2010]  industrialio_triggered_buffer
+[ T1157] INFO: lockdep is turned off.
+[ T2013] [<0000000000000000>] 0x0
+[ T2010]  industrialio
+[ T1157]  bpf_testmod(O) ccm
+[ T2010]  evdev
+[ T2010]  hid_sensor_iio_common
+[ T2977]  i2c_piix4
+[ T1157]  ccp
+[ T2977]  i2c_designware_platform
+[ T1157]  battery ac
+[ T2977]  i2c_designware_core
+[ T2010]  bpf_testmod(O)
+[ T1157]  button
+[ T2977]  [last unloaded: bpf_testmod(O)]
+[ T2010]  ccm
+[ T1157]  joydev
+[ T2977]=20
+[ T2010]  snd_seq_dummy
+[ T2977] Preemption disabled at:
+[ T2010]  snd_hrtimer
+[ T1157]  hid_sensor_prox
+[ T2010]  snd_seq_midi
+[ T1157]  hid_sensor_accel_3d
+[ T2977] [<0000000000000000>] 0x0
+[ T1157]  hid_sensor_gyro_3d
+[ T2010]  snd_seq_midi_event
+[ T1157]  hid_sensor_als
+[ T2010]  snd_rawmidi
+[ T1157]  hid_sensor_trigger
+[ T2010]  snd_seq
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1157]  industrialio_triggered_buffer
+[ T2010]  snd_seq_device
+[ T1157]  kfifo_buf
+[ T2010]  rfcomm bnep
+[ T1157]  industrialio
+[ T2010]  snd_ctl_led
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1157]  evdev hid_sensor_iio_common
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2010]  snd_hda_codec_realtek
+[ T1157]  amd_pmc
+[ T2977] Call Trace:
+[ T2010]  snd_hda_codec_generic
+[ T1157]  sch_fq_codel
+[ T2010]  snd_hda_scodec_component
+[ T2977]  <TASK>
+[ T1157]  mt7921_common
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[ T2010]  nls_cp437 vfat
+[ T1157]  mt76_connac_lib mt76
+[ T2010]  fat
+[ T1157]  mac80211
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[ T1157]  libarc4
+[ T2977]  __schedule+0x167e/0x1ca0
+[ T1157]  msr
+[ T1157]  nvme_fabrics fuse
+[ T2010]  btintel
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  efi_pstore
+[ T2010]  btbcm btmtk
+[ T1157]  configfs
+[ T2010]  bluetooth
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  nfnetlink
+[ T2010]  ecdh_generic
+[ T1157]  efivarfs autofs4
+[ T2010]  ecc
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1157]  ext4
+[ T1157]  mbcache
+[ T2010]  snd_intel_dspcfg
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  uvcvideo
+[ T1157]  jbd2 usbhid
+[ T2010]  snd_hda_codec videobuf2_vmalloc
+[ T1157]  amdgpu
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  amdxcp
+[ T2010]  videobuf2_memops
+[ T1157]  i2c_algo_bit
+[ T2010]  snd_hwdep
+[ T1157]  drm_client_lib
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T2010]  uvc
+[ T1157]  drm_ttm_helper
+[ T2010]  snd_hda_core
+[ T1157]  ttm
+[ T2010]  videobuf2_v4l2
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1157]  drm_exec
+[ T2010]  snd_pcm_oss
+[ T1157]  gpu_sched
+[ T2977]  ? lock_release+0x21b/0x2e0
+[ T2010]  videodev
+[ T1157]  drm_suballoc_helper
+[ T2010]  snd_rn_pci_acp3x
+[ T1157]  drm_panel_backlight_quirks
+[ T1157]  cec
+[ T2010]  snd_mixer_oss
+[ T2010]  videobuf2_common
+[ T1157]  xhci_pci
+[ T2977]  schedule_rtlock+0x21/0x40
+[ T1157]  drm_buddy
+[ T2010]  msi_wmi
+[ T2010]  mc sparse_keymap
+[ T2010]  snd_soc_acpi
+[ T2010]  wmi_bmof
+[ T1157]  mfd_core
+[ T2010]  edac_mce_amd
+[ T1157]  hid_multitouch
+[ T2010]  snd
+[ T1157]  hid_generic
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  k10temp
+[ T1157]  serio_raw
+[ T2010]  snd_pci_acp3x soundcore
+[ T1157]  nvme_core r8169
+[ T2010]  ccp battery
+[ T1157]  usb_common
+[ T2010]  ac
+[ T1157]  amd_sfh crc16
+[ T2010]  button joydev
+[ T1157]  i2c_hid_acpi i2c_hid
+[ T2010]  hid_sensor_magn_3d
+[ T2977]  rt_spin_lock+0x99/0x190
+[ T1157]  hid
+[ T2010]  hid_sensor_prox
+[ T1157]  i2c_piix4
+[ T2010]  hid_sensor_accel_3d hid_sensor_gyro_3d
+[ T1157]  i2c_smbus i2c_designware_platform
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T2010]  hid_sensor_als
+[ T1157]  i2c_designware_core
+[ T2010]  hid_sensor_trigger
+[ T1157]  [last unloaded: bpf_testmod(O)]
+[ T2010]  industrialio_triggered_buffer
+[ T1157]=20
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[ T1157] Preemption disabled at:
+[ T2010]  kfifo_buf industrialio evdev
+[ T1157] [<ffffffffa215f33f>] fput+0x1f/0x90
+[ T2010]  hid_sensor_iio_common
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2010]  amd_pmc sch_fq_codel mt7921e
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[ T2010]  mt7921_common mt792x_lib mt76_connac_lib mt76
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  mac80211 libarc4 cfg80211 rfkill msr nvme_fabrics
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[ T2010]  fuse efi_pstore configfs nfnetlink efivarfs
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[ T2010]  autofs4 ext4 mbcache jbd2
+[ T2977]  do_syscall_64+0x395/0xfa0
+[ T2010]  usbhid amdgpu amdxcp
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  i2c_algo_bit drm_client_lib drm_ttm_helper ttm drm_exec
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2010]  gpu_sched drm_suballoc_helper
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[ T2010]  drm_panel_backlight_quirks cec xhci_pci
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[ T2010]  drm_buddy
+[ T2977] RSP: 002b:00007ffc24356670 EFLAGS: 00000202
+[ T2010]  xhci_hcd drm_display_helper
+[ T2977]  ORIG_RAX: 0000000000000000
+[ T2010]  usbcore
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T2010]  hid_sensor_hub drm_kms_helper
+[ T2977] RDX: 00000000000007ff RSI: 000055e34b7d80a8 RDI: 0000000000000003
+[ T2010]  psmouse nvme
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+0060
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc7700288e8 RCX: 00007fc77f05c7f9
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 000000000004240a
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T1155] R13: 00007fc77e6b02e0 R14: 000000000007df5c R15: 000055f047b7b880
+[ T2010] BUG: scheduling while atomic: xfce4-terminal/2010/0x00000002
+[ T2010] INFO: lockdep is turned off.
+[ T1155]  </TASK>
+[ T2010] Modules linked in: bpf_testmod(O) ccm snd_seq_dummy snd_hrtimer sn=
+d_seq_midi snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device rfcomm bne=
+p snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic snd_hda_scodec_co=
+mponent snd_hda_codec_hdmi nls_ascii nls_cp437 vfat fat snd_acp3x_pdm_dma s=
+nd_soc_dmic snd_acp3x_rn btusb btrtl snd_soc_core btintel btbcm btmtk bluet=
+ooth ecdh_generic ecc snd_hda_intel snd_intel_dspcfg
+[ T2977] BUG: scheduling while atomic: dmesg/2977/0x00000002
+[ T2010]  uvcvideo snd_hda_codec
+[ T2977] INFO: lockdep is turned off.
+[ T2010]  videobuf2_vmalloc
+[ T2977] Modules linked in:
+[ T2010]  videobuf2_memops snd_hwdep
+[ T2977]  bpf_testmod(O) ccm
+[ T2010]  uvc snd_hda_core
+[ T2977]  snd_seq_dummy snd_hrtimer
+[ T2010]  videobuf2_v4l2 snd_pcm_oss
+[ T2977]  snd_seq_midi
+[ T2010]  videodev
+[ T2977]  snd_seq_midi_event
+[ T2010]  snd_rn_pci_acp3x
+[ T2977]  snd_rawmidi
+[ T2010]  snd_mixer_oss
+[ T2977]  snd_seq
+[ T2010]  videobuf2_common
+[ T2977]  snd_seq_device
+[ T2010]  snd_acp_config
+[ T2977]  rfcomm bnep
+[ T2010]  msi_wmi
+[ T2977]  snd_ctl_led
+[ T2010]  snd_pcm
+[ T2977]  snd_hda_codec_realtek
+[ T2010]  mc sparse_keymap
+[ T2977]  snd_hda_codec_generic
+[ T2010]  snd_soc_acpi
+[ T2977]  snd_hda_scodec_component
+[ T2977]  snd_hda_codec_hdmi
+[ T2010]  snd_timer wmi_bmof
+[ T2977]  nls_ascii nls_cp437
+[ T2010]  edac_mce_amd snd
+[ T2977]  vfat fat
+[ T2010]  k10temp snd_pci_acp3x
+[ T2977]  snd_acp3x_pdm_dma snd_soc_dmic
+[ T2010]  soundcore ccp
+[ T2977]  snd_acp3x_rn btusb
+[ T2010]  battery ac
+[ T2977]  btrtl snd_soc_core
+[ T2010]  button joydev
+[ T2977]  btintel btbcm
+[ T2010]  hid_sensor_magn_3d
+[ T2977]  btmtk
+[ T2010]  hid_sensor_prox
+[ T2977]  bluetooth
+[ T2010]  hid_sensor_accel_3d
+[ T2010]  hid_sensor_gyro_3d
+[ T2977]  ecdh_generic
+[ T2977]  ecc
+[ T2010]  hid_sensor_als hid_sensor_trigger
+[ T2977]  snd_hda_intel snd_intel_dspcfg
+[ T2010]  industrialio_triggered_buffer kfifo_buf
+[ T2977]  uvcvideo snd_hda_codec
+[ T2010]  industrialio
+[ T2977]  videobuf2_vmalloc
+[ T2010]  evdev
+[ T2010]  hid_sensor_iio_common
+[ T2977]  videobuf2_memops snd_hwdep
+[ T2010]  amd_pmc sch_fq_codel
+[ T2977]  uvc snd_hda_core
+[ T2010]  mt7921e mt7921_common
+[ T2977]  videobuf2_v4l2 snd_pcm_oss
+[ T2010]  mt792x_lib
+[ T2977]  videodev
+[ T2010]  mt76_connac_lib
+[ T2977]  snd_rn_pci_acp3x
+[ T2010]  mt76 mac80211
+[ T2977]  snd_mixer_oss videobuf2_common
+[ T2010]  libarc4 cfg80211
+[ T2977]  snd_acp_config msi_wmi
+[ T2010]  rfkill msr
+[ T2977]  snd_pcm mc
+[ T2010]  nvme_fabrics fuse
+[ T2977]  sparse_keymap snd_soc_acpi
+[ T2010]  efi_pstore configfs
+[ T2977]  snd_timer
+[ T2010]  nfnetlink
+[ T2977]  wmi_bmof edac_mce_amd
+[ T2010]  efivarfs
+[ T2977]  snd
+[ T2010]  autofs4 ext4
+[ T2977]  k10temp
+[ T2010]  mbcache
+[ T2977]  snd_pci_acp3x soundcore
+[ T2010]  jbd2 usbhid
+[ T2977]  ccp battery
+[ T2010]  amdgpu
+[ T2977]  ac
+[ T2010]  amdxcp
+[ T2977]  button
+[ T2010]  i2c_algo_bit
+[ T2977]  joydev hid_sensor_magn_3d
+[ T2010]  drm_client_lib drm_ttm_helper
+[ T2977]  hid_sensor_prox hid_sensor_accel_3d
+[ T2010]  ttm drm_exec
+[ T2977]  hid_sensor_gyro_3d hid_sensor_als
+[ T2010]  gpu_sched drm_suballoc_helper
+[ T2977]  hid_sensor_trigger industrialio_triggered_buffer
+[ T2010]  drm_panel_backlight_quirks
+[ T2977]  kfifo_buf
+[ T2010]  cec
+[ T2977]  industrialio
+[ T2010]  xhci_pci drm_buddy
+[ T2977]  evdev hid_sensor_iio_common
+[ T2010]  xhci_hcd drm_display_helper
+[ T2977]  amd_pmc sch_fq_codel
+[ T2010]  usbcore hid_sensor_hub
+[ T2977]  mt7921e mt7921_common
+[ T2010]  drm_kms_helper
+[ T2977]  mt792x_lib
+[ T2010]  psmouse
+[ T2977]  mt76_connac_lib
+[ T2010]  nvme
+[ T2977]  mt76
+[ T2010]  mfd_core
+[ T2977]  mac80211
+[ T2010]  hid_multitouch hid_generic
+[ T2977]  libarc4 cfg80211
+[ T2010]  serio_raw nvme_core
+[ T2977]  rfkill msr
+[ T2010]  r8169
+[ T2977]  nvme_fabrics
+[ T2010]  usb_common
+[ T2977]  fuse
+[ T2010]  amd_sfh
+[ T2977]  efi_pstore configfs
+[ T2010]  crc16 i2c_hid_acpi
+[ T2977]  nfnetlink efivarfs
+[ T2010]  i2c_hid hid
+[ T2977]  autofs4 ext4
+[ T2010]  i2c_piix4 i2c_smbus
+[ T2977]  mbcache jbd2
+[ T2010]  i2c_designware_platform
+[ T2977]  usbhid
+[ T2010]  i2c_designware_core
+[ T2977]  amdgpu
+[ T2010]  [last unloaded: bpf_testmod(O)]
+[ T2977]  amdxcp i2c_algo_bit
+[ T2010]=20
+[ T2977]  drm_client_lib
+[ T2010] Preemption disabled at:
+[ T2977]  drm_ttm_helper ttm
+[ T2010] [<ffffffffa215f33f>] fput+0x1f/0x90
+[ T1155] Call Trace:
+[ T2977]  evdev
+[ T1155]  <TASK>
+[ T2977]  hid_sensor_iio_common amd_pmc sch_fq_codel
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T2977]  mt7921e mt7921_common mt792x_lib mt76_connac_lib
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T2977]  mt76 mac80211 libarc4
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T2977]  cfg80211 rfkill msr nvme_fabrics
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2977]  fuse efi_pstore configfs nfnetlink
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  efivarfs autofs4 ext4
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2977]  mbcache jbd2 usbhid amdgpu
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  amdxcp i2c_algo_bit drm_client_lib
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  drm_ttm_helper ttm drm_exec
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2977]  gpu_sched drm_suballoc_helper drm_panel_backlight_quirks
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  cec xhci_pci
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T2977]  drm_buddy xhci_hcd drm_display_helper usbcore hid_sensor_hub drm_=
+kms_helper
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T2977]  psmouse nvme mfd_core hid_multitouch
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2977]  hid_generic serio_raw nvme_core
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  r8169 usb_common amd_sfh
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2977]  crc16 i2c_hid_acpi i2c_hid hid
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  i2c_piix4 i2c_smbus i2c_designware_platform i2c_designware_core [=
+last unloaded: bpf_testmod(O)]
+[ T2977] Preemption disabled at:
+[ T2977] [<0000000000000000>] 0x0
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+0060
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc77008edf8 RCX: 00007fc77f05c7f9
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 0000000000042410
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T1155] R13: 00007fc77e6b02e0 R14: 000000000007edf0 R15: 000055f047b7b880
+[ T1155]  </TASK>
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2977] Call Trace:
+[ T2977]  <TASK>
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[ T2010] BUG: scheduling while atomic: xfce4-terminal/2010/0x00000002
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[ T2010] INFO: lockdep is turned off.
+[ T2010] Modules linked in: bpf_testmod(O) ccm
+[ T2977]  __schedule+0x167e/0x1ca0
+[ T2010]  snd_seq_dummy snd_hrtimer snd_seq_midi
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  snd_seq_midi_event snd_rawmidi snd_seq
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  snd_seq_device
+[ T2010]  rfcomm bnep
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T2010]  snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  snd_hda_scodec_component snd_hda_codec_hdmi nls_ascii nls_cp437
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  vfat fat
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T2010]  snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn btusb
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  btrtl snd_soc_core
+[ T2977]  ? lock_release+0x21b/0x2e0
+[ T2010]  btintel btbcm btmtk bluetooth ecdh_generic ecc
+[ T2977]  schedule_rtlock+0x21/0x40
+[ T2010]  snd_hda_intel snd_intel_dspcfg uvcvideo snd_hda_codec
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2010]  videobuf2_vmalloc videobuf2_memops snd_hwdep uvc
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  snd_hda_core videobuf2_v4l2 snd_pcm_oss
+[ T2977]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2010]  videodev snd_rn_pci_acp3x snd_mixer_oss videobuf2_common
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  snd_acp_config msi_wmi snd_pcm mc sparse_keymap snd_soc_acpi snd_=
+timer wmi_bmof edac_mce_amd snd
+[ T2977]  rt_spin_lock+0x99/0x190
+[ T2010]  k10temp snd_pci_acp3x soundcore ccp battery ac
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T2010]  button joydev hid_sensor_magn_3d hid_sensor_prox
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[ T2010]  hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor_als hid_sensor_=
+trigger
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2010]  industrialio_triggered_buffer kfifo_buf industrialio evdev
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[ T2010]  hid_sensor_iio_common amd_pmc sch_fq_codel
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  mt7921e mt7921_common mt792x_lib mt76_connac_lib mt76 mac80211
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[ T2010]  libarc4 cfg80211 rfkill msr nvme_fabrics
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[ T2010]  fuse efi_pstore configfs nfnetlink efivarfs
+[ T2977]  do_syscall_64+0x395/0xfa0
+[ T2010]  autofs4 ext4 mbcache
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  jbd2 usbhid amdgpu amdxcp
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2010]  i2c_algo_bit drm_client_lib drm_ttm_helper ttm
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[ T2010]  drm_exec gpu_sched
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[ T2010]  drm_suballoc_helper drm_panel_backlight_quirks
+[ T2977] RSP: 002b:00007ffc24356670 EFLAGS: 00000202
+[ T2010]  cec
+[ T2977]  ORIG_RAX: 0000000000000000
+[ T2010]  xhci_pci
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T2010]  drm_buddy xhci_hcd
+[ T2977] RDX: 00000000000007ff RSI: 000055e34b7d80a8 RDI: 0000000000000003
+[ T2010]  drm_display_helper
+[ T2977] RBP: 000055e34b7d80a8 R08: 0000000000000000 R09: 0000000000000000
+[ T2010]  usbcore hid_sensor_hub
+[ T2977] R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffc243568e8
+[ T2010]  drm_kms_helper
+[ T2977] R13: 000055e34b7d2b80 R14: 000055e34b7d6ea0 R15: ffffffffffffffff
+[ T2010]  psmouse nvme mfd_core hid_multitouch hid_generic serio_raw nvme_c=
+ore r8169 usb_common amd_sfh crc16
+[ T2977]  </TASK>
+[ T2010]  i2c_hid_acpi i2c_hid hid i2c_piix4 i2c_smbus i2c_designware_platf=
+orm i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T2010] Preemption disabled at:
+[ T2010] [<ffffffffa215f33f>] fput+0x1f/0x90
+[ T2010] CPU: 9 UID: 1000 PID: 2010 Comm: xfce4-terminal Tainted: G        =
+W  O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2010] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2010] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2010] Call Trace:
+[ T2010]  <TASK>
+[ T2010]  dump_stack_lvl+0x6d/0xb0
+[ T2010]  ? fput+0x1f/0x90
+[ T2977] BUG: scheduling while atomic: dmesg/2977/0x00000002
+[ T2977] INFO: lockdep is turned off.
+[ T2977] Modules linked in:
+[ T2010]  __schedule_bug.cold+0x8c/0x9a
+[ T2977]  bpf_testmod(O) ccm snd_seq_dummy
+[ T2010]  __schedule+0x167e/0x1ca0
+[ T2977]  snd_hrtimer snd_seq_midi snd_seq_midi_event
+[ T2010]  ? rcu_is_watching+0x12/0x60
+[ T2977]  snd_rawmidi snd_seq snd_seq_device rfcomm bnep
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_ctl_led snd_hda_codec_realtek
+[ T2010]  ? rcu_is_watching+0x12/0x60
+[ T2977]  snd_hda_codec_generic snd_hda_scodec_component snd_hda_codec_hdmi
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  nls_ascii nls_cp437 vfat fat
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn
+[ T2010]  ? rcu_is_watching+0x12/0x60
+[ T2977]  btusb btrtl snd_soc_core
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  btintel btbcm btmtk
+[ T2010]  ? lock_release+0x21b/0x2e0
+[ T2977]  bluetooth ecdh_generic ecc snd_hda_intel snd_intel_dspcfg uvcvideo
+[ T2010]  schedule_rtlock+0x21/0x40
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T2977]  snd_hda_codec
+[ T2977]  videobuf2_vmalloc
+[ T1155] INFO: lockdep is turned off.
+[ T2977]  videobuf2_memops
+[ T1155] Modules linked in:
+[ T2010]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2977]  snd_hwdep uvc
+[ T1155]  bpf_testmod(O)
+[ T2977]  snd_hda_core
+[ T1155]  ccm
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  videobuf2_v4l2
+[ T1155]  snd_seq_dummy snd_hrtimer
+[ T2977]  snd_pcm_oss
+[ T2010]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2977]  videodev
+[ T1155]  snd_seq_midi snd_seq_midi_event
+[ T2977]  snd_rn_pci_acp3x snd_mixer_oss
+[ T1155]  snd_rawmidi
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  videobuf2_common
+[ T1155]  snd_seq snd_seq_device
+[ T2977]  snd_acp_config msi_wmi
+[ T1155]  rfcomm bnep
+[ T2977]  snd_pcm mc
+[ T1155]  snd_ctl_led snd_hda_codec_realtek
+[ T2977]  sparse_keymap snd_soc_acpi
+[ T1155]  snd_hda_codec_generic snd_hda_scodec_component
+[ T2977]  snd_timer wmi_bmof
+[ T1155]  snd_hda_codec_hdmi
+[ T2010]  rt_spin_lock+0x99/0x190
+[ T2977]  edac_mce_amd
+[ T1155]  nls_ascii
+[ T2977]  snd
+[ T1155]  nls_cp437
+[ T2977]  k10temp
+[ T1155]  vfat
+[ T2010]  task_get_cgroup1+0xe8/0x340
+[ T2977]  snd_pci_acp3x
+[ T1155]  fat
+[ T2977]  soundcore
+[ T1155]  snd_acp3x_pdm_dma snd_soc_dmic
+[ T2977]  ccp
+[ T1155]  snd_acp3x_rn
+[ T2010]  bpf_task_get_cgroup1+0xe/0x20
+[ T2977]  battery
+[ T1155]  btusb
+[ T2977]  ac button
+[ T1155]  btrtl
+[ T2977]  joydev
+[ T2010]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  snd_soc_core
+[ T2977]  hid_sensor_magn_3d
+[ T1155]  btintel btbcm
+[ T2977]  hid_sensor_prox hid_sensor_accel_3d
+[ T1155]  btmtk
+[ T2010]  bpf_trace_run2+0xd3/0x260
+[ T2977]  hid_sensor_gyro_3d
+[ T1155]  bluetooth ecdh_generic
+[ T2977]  hid_sensor_als
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  hid_sensor_trigger
+[ T1155]  ecc snd_hda_intel
+[ T2977]  industrialio_triggered_buffer
+[ T1155]  snd_intel_dspcfg
+[ T2977]  kfifo_buf
+[ T1155]  uvcvideo
+[ T2977]  industrialio
+[ T1155]  snd_hda_codec
+[ T2010]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  evdev
+[ T1155]  videobuf2_vmalloc videobuf2_memops
+[ T2977]  hid_sensor_iio_common amd_pmc
+[ T1155]  snd_hwdep uvc
+[ T2977]  sch_fq_codel
+[ T2010]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  snd_hda_core
+[ T2977]  mt7921e mt7921_common
+[ T1155]  videobuf2_v4l2
+[ T2977]  mt792x_lib
+[ T1155]  snd_pcm_oss videodev
+[ T2010]  do_syscall_64+0x395/0xfa0
+[ T2977]  mt76_connac_lib mt76
+[ T1155]  snd_rn_pci_acp3x snd_mixer_oss
+[ T2977]  mac80211
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  videobuf2_common
+[ T2977]  libarc4 cfg80211
+[ T1155]  snd_acp_config
+[ T2977]  rfkill
+[ T1155]  msi_wmi snd_pcm
+[ T2010]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977]  msr
+[ T1155]  mc
+[ T2977]  nvme_fabrics fuse
+[ T1155]  sparse_keymap snd_soc_acpi
+[ T2010]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  snd_hda_core videobuf2_v4l2 snd_pcm_oss
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  videodev
+[ T1155]  snd_rn_pci_acp3x snd_mixer_oss
+[ T2010]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  videobuf2_common snd_acp_config msi_wmi snd_pcm
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  mc sparse_keymap snd_soc_acpi snd_timer wmi_bmof edac_mce_amd snd=
+ k10temp snd_pci_acp3x soundcore ccp
+[ T2010]  rt_spin_lock+0x99/0x190
+[ T1155]  battery ac button joydev hid_sensor_magn_3d
+[ T2010]  task_get_cgroup1+0xe8/0x340
+[ T1155]  hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor=
+_als
+[ T2010]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  hid_sensor_trigger industrialio_triggered_buffer kfifo_buf
+[ T2010]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  industrialio evdev hid_sensor_iio_common amd_pmc
+[ T2010]  bpf_trace_run2+0xd3/0x260
+[ T1155]  sch_fq_codel mt7921e mt7921_common
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  mt792x_lib mt76_connac_lib mt76 mac80211 libarc4 cfg80211
+[ T2010]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  rfkill msr nvme_fabrics fuse efi_pstore
+[ T2010]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  configfs nfnetlink efivarfs autofs4 ext4
+[ T2010]  do_syscall_64+0x395/0xfa0
+[ T1155]  mbcache jbd2
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  usbhid amdgpu amdxcp i2c_algo_bit drm_client_lib
+[ T2010]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155]  drm_ttm_helper ttm drm_exec
+[ T2010] RIP: 0033:0x7f0e4bf16a0e
+[ T1155]  gpu_sched drm_suballoc_helper drm_panel_backlight_quirks
+[ T2010] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[ T1155]  cec
+[ T2010] RSP: 002b:00007ffc276f5140 EFLAGS: 00000297
+[ T1155]  xhci_pci drm_buddy
+[ T2010]  ORIG_RAX: 00000000000000e4
+[ T1155]  xhci_hcd
+[ T2010] RAX: ffffffffffffffda RBX: 000055766d941690 RCX: 00007f0e4bf16a0e
+[ T1155]  drm_display_helper usbcore
+[ T2010] RDX: 0000000000000002 RSI: 00007ffc276f51b0 RDI: 0000000000000001
+[ T1155]  hid_sensor_hub
+[ T2010] RBP: 00007ffc276f5140 R08: 0000000000000000 R09: 00007f0e4bf10000
+[ T1155]  drm_kms_helper psmouse
+[ T2010] R10: 0000000000000001 R11: 0000000000000297 R12: 000000007fffffff
+[ T1155]  nvme
+[ T2010] R13: 000055766d04b0b0 R14: 000055766d941690 R15: 000055766d04b0b0
+[ T1155]  mfd_core hid_multitouch hid_generic serio_raw nvme_core r8169 usb=
+_common amd_sfh crc16 i2c_hid_acpi i2c_hid
+[ T2010]  </TASK>
+[ T1155]  hid i2c_piix4 i2c_smbus i2c_designware_platform i2c_designware_co=
+re [last unloaded: bpf_testmod(O)]
+[ T1155] Preemption disabled at:
+[ T1155] [<0000000000000000>] 0x0
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155] Call Trace:
+[ T1155]  <TASK>
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010] BUG: scheduling while atomic: xfce4-terminal/2010/0x00000002
+[ T2010] INFO: lockdep is turned off.
+[ T2010] Modules linked in:
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T2010]  bpf_testmod(O) ccm snd_seq_dummy snd_hrtimer snd_seq_midi
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T2010]  snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2010]  rfcomm bnep snd_ctl_led snd_hda_codec_realtek
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  snd_hda_codec_generic snd_hda_scodec_component snd_hda_codec_hdmi
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2010]  nls_ascii nls_cp437 vfat
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  fat
+[ T2010]  snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn btusb btrtl snd_soc_c=
+ore btintel btbcm btmtk bluetooth
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T2010]  ecdh_generic ecc snd_hda_intel snd_intel_dspcfg uvcvideo
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T2010]  snd_hda_codec videobuf2_vmalloc videobuf2_memops snd_hwdep
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T2010]  uvc
+[ T2010]  snd_hda_core videobuf2_v4l2 snd_pcm_oss
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2010]  videodev snd_rn_pci_acp3x snd_mixer_oss videobuf2_common
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T2010]  snd_acp_config msi_wmi snd_pcm
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  mc sparse_keymap snd_soc_acpi snd_timer wmi_bmof edac_mce_amd
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T2010]  snd k10temp snd_pci_acp3x soundcore ccp
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T2010]  battery ac button joydev hid_sensor_magn_3d
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T2010]  hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  hid_sensor_als hid_sensor_trigger industrialio_triggered_buffer k=
+fifo_buf
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2010]  industrialio
+[ T2010]  evdev hid_sensor_iio_common
+[ T1155] RIP: 0033:0x7fc77ec79bdb
+[ T2010]  amd_pmc sch_fq_codel mt7921e
+[ T1155] Code: 37 75 f3 83 e1 03 83 f9 02 0f 84 10 01 00 00 41 80 f1 81 49 =
+8d 7c 10 20 45 31 d2 ba 01 00 00 00 44 89 ce b8 ca 00 00 00 0f 05 <48> 3d 0=
+0 f0 ff ff 0f 87 19 01 00 00 48 83 c4 08 31 c0 5b 5d c3 41
+[ T2010]  mt7921_common mt792x_lib
+[ T1155] RSP: 002b:00007fc77e6b01f0 EFLAGS: 00000246
+[ T2010]  mt76_connac_lib
+[ T1155]  ORIG_RAX: 00000000000000ca
+[ T1155] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc77ec79bdb
+[ T1155] RDX: 0000000000000001 RSI: 0000000000000081 RDI: 000055f047b83d68
+[ T1155] RBP: 0000000000000001 R08: 000055f047b83d48 R09: 0000000000000081
+[ T1155] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+[ T1155] R13: 0000000000000004 R14: 000055f047b7c808 R15: 000055f047b7c7f0
+[ T2010]  mt76 mac80211
+[ T1155]  </TASK>
+[ T2010]  libarc4
+[ T2010]  cfg80211 rfkill msr nvme_fabrics fuse efi_pstore configfs nfnetli=
+nk efivarfs autofs4 ext4 mbcache jbd2 usbhid amdgpu amdxcp i2c_algo_bit drm=
+_client_lib drm_ttm_helper ttm drm_exec gpu_sched drm_suballoc_helper drm_p=
+anel_backlight_quirks cec xhci_pci drm_buddy xhci_hcd drm_display_helper us=
+bcore hid_sensor_hub drm_kms_helper psmouse nvme mfd_core hid_multitouch hi=
+d_generic serio_raw nvme_core r8169 usb_common amd_sfh crc16 i2c_hid_acpi i=
+2c_hid hid i2c_piix4 i2c_smbus i2c_designware_platform i2c_designware_core =
+[last unloaded: bpf_testmod(O)]
+[ T2010] Preemption disabled at:
+[ T2010] [<0000000000000000>] 0x0
+[ T2010] CPU: 9 UID: 1000 PID: 2010 Comm: xfce4-terminal Tainted: G        =
+W  O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2010] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2010] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2010] Call Trace:
+[ T2010]  <TASK>
+[ T2010]  dump_stack_lvl+0x6d/0xb0
+[ T2010]  __schedule_bug.cold+0x8c/0x9a
+[ T2010]  __schedule+0x167e/0x1ca0
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T2010]  ? rcu_is_watching+0x12/0x60
+[ T1155] INFO: lockdep is turned off.
+[ T1155] Modules linked in: bpf_testmod(O)
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ccm snd_seq_dummy snd_hrtimer
+[ T2010]  ? rcu_is_watching+0x12/0x60
+[ T1155]  snd_seq_midi snd_seq_midi_event snd_rawmidi
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_seq snd_seq_device rfcomm
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  bnep snd_ctl_led snd_hda_codec_realtek
+[ T2010]  ? rcu_is_watching+0x12/0x60
+[ T1155]  snd_hda_codec_generic snd_hda_scodec_component snd_hda_codec_hdmi
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  nls_ascii nls_cp437 vfat
+[ T2010]  ? lock_release+0x21b/0x2e0
+[ T1155]  fat snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn btusb btrtl
+[ T2010]  schedule_rtlock+0x21/0x40
+[ T1155]  snd_soc_core btintel btbcm
+[ T2010]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  btmtk bluetooth ecdh_generic ecc
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_hda_intel snd_intel_dspcfg uvcvideo
+[ T2010]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  snd_hda_codec videobuf2_vmalloc videobuf2_memops snd_hwdep
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  uvc snd_hda_core videobuf2_v4l2 snd_pcm_oss videodev snd_rn_pci_a=
+cp3x snd_mixer_oss videobuf2_common snd_acp_config msi_wmi
+[ T2010]  rt_spin_lock+0x99/0x190
+[ T1155]  snd_pcm mc sparse_keymap snd_soc_acpi snd_timer
+[ T2010]  task_get_cgroup1+0xe8/0x340
+[ T1155]  wmi_bmof edac_mce_amd snd k10temp snd_pci_acp3x
+[ T2010]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  soundcore ccp battery
+[ T2010]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  ac button joydev
+[ T2010]  bpf_trace_run2+0xd3/0x260
+[ T1155]  hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger industrialio=
+_triggered_buffer kfifo_buf industrialio
+[ T2010]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  evdev hid_sensor_iio_common amd_pmc sch_fq_codel mt7921e
+[ T2010]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  mt7921_common mt792x_lib mt76_connac_lib mt76
+[ T2010]  do_syscall_64+0x395/0xfa0
+[ T1155]  mac80211 libarc4 cfg80211
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  rfkill msr nvme_fabrics fuse efi_pstore
+[ T2010]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155]  configfs nfnetlink efivarfs
+[ T2010] RIP: 0033:0x7f0e4bf16a0e
+[ T1155]  autofs4 ext4
+[ T2010] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[ T1155]  mbcache jbd2
+[ T2010] RSP: 002b:00007ffc276f5140 EFLAGS: 00000297
+[ T1155]  usbhid amdgpu
+[ T2010]  ORIG_RAX: 00000000000000e4
+[ T1155]  amdxcp
+[ T2010] RAX: ffffffffffffffda RBX: 000055766d32b5c0 RCX: 00007f0e4bf16a0e
+[ T1155]  i2c_algo_bit
+[ T2010] RDX: 0000000000000002 RSI: 00007ffc276f51b0 RDI: 0000000000000001
+[ T1155]  drm_client_lib drm_ttm_helper
+[ T2010] RBP: 00007ffc276f5140 R08: 0000000000000000 R09: 00007f0e4bf10000
+[ T1155]  ttm
+[ T2010] R10: 0000000000000001 R11: 0000000000000297 R12: 000000007fffffff
+[ T1155]  drm_exec
+[ T2010] R13: 000055766d04b0b0 R14: 000055766d32b5c0 R15: 000055766d04b0b0
+[ T1155]  gpu_sched drm_suballoc_helper drm_panel_backlight_quirks cec xhci=
+_pci drm_buddy xhci_hcd drm_display_helper usbcore hid_sensor_hub drm_kms_h=
+elper
+[ T2010]  </TASK>
+[ T1155]  psmouse nvme mfd_core hid_multitouch hid_generic serio_raw nvme_c=
+ore r8169 usb_common amd_sfh crc16 i2c_hid_acpi i2c_hid hid i2c_piix4 i2c_s=
+mbus i2c_designware_platform i2c_designware_core [last unloaded: bpf_testmo=
+d(O)]
+[ T1155] Preemption disabled at:
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155] Call Trace:
+[ T1155]  <TASK>
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  hid_multitouch
+[ T2233]  ext4
+[ T2010]  kfifo_buf
+[ T1155]  hid_generic
+[ T1155]  serio_raw
+[ T2010]  industrialio evdev
+[ T1155]  nvme_core
+[ T2233]  jbd2
+[ T1155]  r8169
+[ T2233]  usbhid
+[ T2010]  amd_pmc
+[ T2233]  amdgpu
+[ T2010]  sch_fq_codel
+[ T1155]  amd_sfh
+[ T2233]  amdxcp
+[ T1155]  crc16
+[ T2233]  i2c_algo_bit
+[ T2010]  mt7921_common
+[ T1155]  i2c_hid_acpi
+[ T2233]  drm_client_lib
+[ T2010]  mt792x_lib
+[ T1155]  i2c_hid
+[ T2233]  drm_ttm_helper
+[ T2010]  mt76_connac_lib
+[ T2233]  ttm
+[ T1155]  i2c_piix4
+[ T2010]  mt76
+[ T1155]  i2c_smbus
+[ T2010]  mac80211
+[ T2233]  drm_exec
+[ T1155]  i2c_designware_platform
+[ T2010]  libarc4
+[ T2010]  cfg80211
+[ T2233]  gpu_sched
+[ T1155]  i2c_designware_core
+[ T2010]  rfkill
+[ T1155]  [last unloaded: bpf_testmod(O)]
+[ T2233]  drm_suballoc_helper
+[ T2010]  msr
+[ T1155]=20
+[ T2233]  drm_panel_backlight_quirks
+[ T1155] Preemption disabled at:
+[ T2010]  nvme_fabrics
+[ T2233]  cec
+[ T2233]  xhci_pci
+[ T2010]  fuse efi_pstore
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T2233]  drm_buddy
+[ T2010]  autofs4
+[ T2233]  usbcore
+[ T2010]  ext4 mbcache
+[ T2010]  usbhid
+[ T2233]  drm_kms_helper
+[ T1155] Call Trace:
+[ T2010]  amdgpu
+[ T2233]  psmouse
+[ T2010]  amdxcp
+[ T1155]  <TASK>
+[ T2233]  nvme
+[ T2010]  i2c_algo_bit drm_client_lib
+[ T2233]  mfd_core
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T2010]  drm_ttm_helper
+[ T2233]  hid_multitouch
+[ T2010]  ttm drm_exec
+[ T2233]  hid_generic
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[ T2010]  gpu_sched drm_suballoc_helper
+[ T2233]  serio_raw
+[ T2010]  drm_panel_backlight_quirks
+[ T2233]  nvme_core
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T2010]  cec
+[ T2233]  r8169
+[ T2010]  xhci_pci
+[ T2233]  usb_common
+[ T2010]  drm_buddy
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T2010]  xhci_hcd
+[ T2233]  amd_sfh
+[ T2010]  drm_display_helper
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2010]  usbcore
+[ T2233]  crc16
+[ T2010]  hid_sensor_hub
+[ T2233]  i2c_hid_acpi
+[ T2010]  drm_kms_helper
+[ T2233]  i2c_hid
+[ T2010]  psmouse
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2233]  hid
+[ T2010]  nvme
+[ T2233]  i2c_piix4
+[ T2010]  mfd_core
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2010]  hid_multitouch
+[ T2233]  i2c_smbus
+[ T2010]  hid_generic
+[ T2233]  i2c_designware_platform
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  serio_raw
+[ T2233]  i2c_designware_core
+[ T2010]  nvme_core
+[ T2233]  [last unloaded: bpf_testmod(O)]
+[ T2010]  r8169
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  usb_common
+[ T2233]=20
+[ T2010]  amd_sfh
+[ T2233] Preemption disabled at:
+[ T2010]  crc16
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2010]  i2c_hid_acpi i2c_hid hid
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2233] [<0000000000000000>] 0x0
+[ T2010]  i2c_piix4
+[ T2010]  i2c_smbus i2c_designware_platform
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T2010]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T2010] Preemption disabled at:
+[ T2010] [<ffffffffa215f33f>] fput+0x1f/0x90
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+0060
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc7700b14b8 RCX: 00007fc77f05c7f9
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 0000000000042416
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T1155] R13: 00007fc77e6b02e0 R14: 000000000007f8e6 R15: 000055f047b7b880
+[ T1155]  </TASK>
+[ T2010] CPU: 9 UID: 1000 PID: 2010 Comm: xfce4-terminal Tainted: G        =
+W  O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2010] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2010] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2010] Call Trace:
+[ T2010]  <TASK>
+[ T2010]  dump_stack_lvl+0x6d/0xb0
+[ T2010]  ? fput+0x1f/0x90
+[ T2010]  __schedule_bug.cold+0x8c/0x9a
+[ T2010]  __schedule+0x167e/0x1ca0
+[ T2010]  ? rcu_is_watching+0x12/0x60
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  ? rcu_is_watching+0x12/0x60
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  ? rcu_is_watching+0x12/0x60
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  ? lock_release+0x21b/0x2e0
+[ T2010]  schedule_rtlock+0x21/0x40
+[ T1155]  mbcache
+[ T1155]  jbd2
+[ T2010]  ccp
+[ T2010]  battery ac
+[ T2010]  button joydev
+[ T1155]  drm_client_lib drm_ttm_helper
+[ T2010]  hid_sensor_magn_3d hid_sensor_prox
+[ T1155]  ttm drm_exec
+[ T2010]  hid_sensor_accel_3d
+[ T1155]  gpu_sched
+[ T2010]  hid_sensor_gyro_3d hid_sensor_als
+[ T1155]  drm_suballoc_helper drm_panel_backlight_quirks
+[ T2010]  hid_sensor_trigger
+[ T1155]  cec
+[ T2010]  industrialio_triggered_buffer
+[ T2010]  kfifo_buf
+[ T1155]  xhci_pci
+[ T1155]  drm_buddy
+[ T2010]  industrialio evdev
+[ T1155]  xhci_hcd drm_display_helper
+[ T2010]  hid_sensor_iio_common
+[ T1155]  usbcore
+[ T2010]  amd_pmc sch_fq_codel
+[ T1155]  hid_sensor_hub
+[ T2010]  mt7921e
+[ T1155]  drm_kms_helper psmouse
+[ T2010]  mt7921_common mt792x_lib
+[ T1155]  nvme mfd_core
+[ T2010]  mt76_connac_lib mt76
+[ T1155]  hid_multitouch
+[ T2010]  mac80211
+[ T1155]  hid_generic serio_raw
+[ T2010]  libarc4 cfg80211
+[ T1155]  nvme_core r8169
+[ T2010]  rfkill
+[ T1155]  usb_common
+[ T2010]  msr nvme_fabrics
+[ T1155]  amd_sfh
+[ T2010]  fuse
+[ T1155]  crc16 i2c_hid_acpi
+[ T2010]  efi_pstore configfs
+[ T1155]  i2c_hid hid
+[ T2010]  nfnetlink
+[ T1155]  i2c_piix4
+[ T2010]  efivarfs
+[ T1155]  i2c_smbus
+[ T2010]  jbd2 usbhid
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T2010]  drm_ttm_helper ttm drm_exec gpu_sched drm_suballoc_helper
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2010]  drm_panel_backlight_quirks cec
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2010]  xhci_pci drm_buddy
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2010]  xhci_hcd
+[ T1155] Call Trace:
+[ T2010]  drm_display_helper usbcore
+[ T1155]  <TASK>
+[ T2010]  hid_sensor_hub drm_kms_helper psmouse
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T2010]  nvme
+[ T2010]  mfd_core hid_multitouch hid_generic
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[ T2010]  serio_raw nvme_core r8169 usb_common
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T2010]  amd_sfh crc16 i2c_hid_acpi i2c_hid
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T2010]  hid i2c_piix4 i2c_smbus
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  i2c_designware_platform i2c_designware_core [last unloaded: bpf_t=
+estmod(O)]
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2010]=20
+[ T2010] Preemption disabled at:
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010] [<ffffffffa215f33f>] fput+0x1f/0x90
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  ? rt_mutex_slowunlock+0x3ee/0x490
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+0060
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc770005978 RCX: 00007fc77f05c7f9
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 000000000004241a
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T1155] R13: 00007fc77e6b02e0 R14: 00000000000800fa R15: 000055f047b7b880
+[ T1155]  </TASK>
+[ T2010] CPU: 9 UID: 1000 PID: 2010 Comm: xfce4-terminal Tainted: G        =
+W  O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2010] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2010] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2010] Call Trace:
+[ T2010]  <TASK>
+[ T2010]  dump_stack_lvl+0x6d/0xb0
+[ T2010]  ? fput+0x1f/0x90
+[ T2010]  __schedule_bug.cold+0x8c/0x9a
+[ T2010]  __schedule+0x167e/0x1ca0
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  ? rcu_is_watching+0x12/0x60
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  ? rcu_is_watching+0x12/0x60
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  ? lock_release+0x21b/0x2e0
+[ T2010]  schedule_rtlock+0x21/0x40
+[ T2010]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  rt_spin_lock+0x99/0x190
+[ T2010]  task_get_cgroup1+0xe8/0x340
+[ T2010]  bpf_task_get_cgroup1+0xe/0x20
+[ T2010]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2010]  bpf_trace_run2+0xd3/0x260
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  __bpf_trace_sys_enter+0x37/0x60
+[ T2010]  syscall_trace_enter+0x1c7/0x260
+[ T2010]  do_syscall_64+0x395/0xfa0
+[ T2010]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2010]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2010] RIP: 0033:0x7f0e4ab709ee
+[ T1155]  snd_hda_codec videobuf2_vmalloc videobuf2_memops
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155]  snd_hwdep
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155]  uvc
+[  T555] Call Trace:
+[ T1155]  snd_hda_core
+[  T555]  <TASK>
+[ T1155]  videobuf2_v4l2 snd_pcm_oss videodev
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  snd_rn_pci_acp3x snd_mixer_oss videobuf2_common snd_acp_config ms=
+i_wmi
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  snd_pcm mc sparse_keymap
+[  T555]  __schedule+0x167e/0x1ca0
+[ T1155]  snd_soc_acpi snd_timer wmi_bmof edac_mce_amd
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T1155]  snd k10temp snd_pci_acp3x soundcore
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ccp battery ac
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T1155]  button joydev hid_sensor_magn_3d hid_sensor_prox
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor_als
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  hid_sensor_trigger industrialio_triggered_buffer kfifo_buf
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T1155]  industrialio evdev hid_sensor_iio_common
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  amd_pmc
+[ T1155]  sch_fq_codel mt7921e
+[  T555]  ? lock_release+0x21b/0x2e0
+[ T1155]  mt7921_common mt792x_lib mt76_connac_lib mt76 mac80211 libarc4
+[  T555]  schedule_rtlock+0x21/0x40
+[ T1155]  cfg80211 rfkill msr
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  nvme_fabrics fuse efi_pstore configfs
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  nfnetlink efivarfs autofs4
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  ext4 mbcache jbd2
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  usbhid amdgpu amdxcp i2c_algo_bit drm_client_lib drm_ttm_helper t=
+tm drm_exec gpu_sched drm_suballoc_helper drm_panel_backlight_quirks
+[  T555]  rt_spin_lock+0x99/0x190
+[ T1155]  cec xhci_pci drm_buddy xhci_hcd drm_display_helper usbcore
+[  T555]  task_get_cgroup1+0xe8/0x340
+[ T1155]  hid_sensor_hub drm_kms_helper psmouse nvme
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  mfd_core hid_multitouch hid_generic serio_raw nvme_core r8169
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  usb_common amd_sfh crc16 i2c_hid_acpi
+[  T555]  bpf_trace_run2+0xd3/0x260
+[ T1155]  i2c_hid
+[ T1155]  hid i2c_piix4 i2c_smbus
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  i2c_designware_platform i2c_designware_core [last unloaded: bpf_t=
+estmod(O)]
+[ T1155] Preemption disabled at:
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155] [<0000000000000000>] 0x0
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[  T555]  do_syscall_64+0x395/0xfa0
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555] RIP: 0033:0x7fd472a989ee
+[  T555] Code: 08 0f 85 f5 4b ff ff 49 89 fb 48 89 f0 48 89 d7 48 89 ce 4c =
+89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0f 05 <c3> 66 2=
+e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
+[  T555] RSP: 002b:00007fff31d516d8 EFLAGS: 00000246 ORIG_RAX: 000000000000=
+00e8
+[  T555] RAX: ffffffffffffffda RBX: 00007fd471f87980 RCX: 00007fd472a989ee
+[  T555] RDX: 000000000000008e RSI: 000055b3d56da960 RDI: 0000000000000007
+[  T555] RBP: 000000000000008e R08: 0000000000000000 R09: 0000000000000000
+[  T555] R10: ffffffffffffffff R11: 0000000000000246 R12: 000055b3d56da960
+[  T555] R13: ffffffffffffffff R14: 0000000000000050 R15: 0000000000000007
+[  T555]  </TASK>
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977] BUG: scheduling while atomic: dmesg/2977/0x00000002
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2977] INFO: lockdep is turned off.
+[ T2977] Modules linked in:
+[ T1155] Call Trace:
+[ T2977]  bpf_testmod(O)
+[ T1155]  <TASK>
+[ T2977]  ccm snd_seq_dummy snd_hrtimer
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T2977]  snd_seq_midi snd_seq_midi_event snd_rawmidi
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T2977]  snd_seq snd_seq_device rfcomm bnep
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T2977]  snd_ctl_led snd_hda_codec_realtek
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_hda_codec_generic snd_hda_scodec_component
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2977]  snd_hda_codec_hdmi nls_ascii nls_cp437
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  vfat fat snd_acp3x_pdm_dma
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2977]  snd_soc_dmic snd_acp3x_rn
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  btusb btrtl snd_soc_core
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  btintel btbcm
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2977]  btmtk bluetooth
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ecdh_generic ecc
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T2977]  snd_hda_intel snd_intel_dspcfg uvcvideo snd_hda_codec
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T2977]  videobuf2_vmalloc videobuf2_memops snd_hwdep
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2977]  uvc snd_hda_core videobuf2_v4l2
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_pcm_oss videodev
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2977]  snd_rn_pci_acp3x snd_mixer_oss videobuf2_common
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_acp_config msi_wmi snd_pcm mc sparse_keymap snd_soc_acpi snd_=
+timer wmi_bmof
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T2977]  edac_mce_amd snd k10temp snd_pci_acp3x
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T2977]  soundcore ccp battery ac button
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T2977]  joydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2977]  hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger
+[ T2977]  drm_buddy xhci_hcd
+[ T2977]  drm_display_helper
+[ T1155] R13: 0000000000000004 R14: 000055f047b7c808 R15: 000055f047b7c7f0
+[ T2977]  usbcore hid_sensor_hub drm_kms_helper psmouse nvme mfd_core hid_m=
+ultitouch hid_generic serio_raw nvme_core r8169
+[ T1155]  </TASK>
+[ T2977]  usb_common amd_sfh crc16 i2c_hid_acpi i2c_hid
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T2977]  hid
+[ T2977]  i2c_piix4
+[  T555] INFO: lockdep is turned off.
+[ T2977]  i2c_smbus
+[  T555] Modules linked in:
+[  T555]  ccm
+[  T555]  snd_seq_dummy
+[ T2977]=20
+[  T555]  snd_hrtimer
+[ T2977] Preemption disabled at:
+[  T555]  snd_seq_midi snd_seq_midi_event snd_rawmidi
+[ T2977] [<0000000000000000>] 0x0
+[  T555]  snd_seq snd_seq_device rfcomm bnep
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555]  snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555]  snd_hda_scodec_component
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555]  snd_hda_codec_hdmi
+[ T2977] Call Trace:
+[  T555]  nls_ascii
+[ T2977]  <TASK>
+[  T555]  nls_cp437 vfat fat
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[  T555]  snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn btusb btrtl
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  snd_soc_core btintel btbcm
+[ T2977]  __schedule+0x167e/0x1ca0
+[  T555]  btmtk bluetooth ecdh_generic ecc
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_hda_intel snd_intel_dspcfg
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  uvcvideo snd_hda_codec
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[  T555]  videobuf2_vmalloc videobuf2_memops snd_hwdep
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  uvc snd_hda_core videobuf2_v4l2
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_pcm_oss videodev
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[  T555]  snd_rn_pci_acp3x snd_mixer_oss videobuf2_common
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_acp_config
+[ T2977]  ? lock_release+0x21b/0x2e0
+[  T555]  msi_wmi snd_pcm mc sparse_keymap snd_soc_acpi
+[ T2977]  schedule_rtlock+0x21/0x40
+[  T555]  snd_timer wmi_bmof edac_mce_amd
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  snd k10temp snd_pci_acp3x
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  soundcore ccp
+[ T2977]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  battery ac button
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  joydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d hid=
+_sensor_gyro_3d hid_sensor_als hid_sensor_trigger industrialio_triggered_bu=
+ffer
+[ T2977]  rt_spin_lock+0x99/0x190
+[  T555]  kfifo_buf
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[  T555]  industrialio evdev
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  hid_sensor_iio_common amd_pmc sch_fq_codel mt7921e mt7921_common
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  mt792x_lib mt76_connac_lib mt76
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[  T555]  mac80211 libarc4 cfg80211
+[ T2977]  do_syscall_64+0x395/0xfa0
+[  T555]  rfkill msr
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  nvme_fabrics fuse efi_pstore configfs
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555]  nfnetlink efivarfs
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[  T555]  autofs4 ext4
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[  T555]  mbcache jbd2
+[ T2977] RSP: 002b:00007ffc24356240 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+0001
+[  T555]  usbhid
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[  T555]  amdgpu
+[ T2977] RDX: 0000000000000036 RSI: 000055e375e787e0 RDI: 0000000000000001
+[  T555]  amdxcp
+[ T2977] RBP: 000055e375e787e0 R08: 0000000000000000 R09: 0000000000000000
+[  T555]  i2c_algo_bit drm_client_lib
+[ T2977] R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000036
+[ T2977] R13: 00007fdfbd3f35c0 R14: 00007fdfbd3f0e80 R15: 00007ffc24356740
+[  T555]  drm_ttm_helper ttm drm_exec gpu_sched drm_suballoc_helper drm_pan=
+el_backlight_quirks cec xhci_pci
+[ T2977]  </TASK>
+[  T555]  drm_buddy xhci_hcd drm_display_helper usbcore hid_sensor_hub drm_=
+kms_helper psmouse nvme mfd_core hid_multitouch hid_generic serio_raw nvme_=
+core r8169 usb_common amd_sfh crc16 i2c_hid_acpi i2c_hid hid i2c_piix4 i2c_=
+smbus i2c_designware_platform i2c_designware_core [last unloaded: bpf_testm=
+od(O)]
+[  T555] Preemption disabled at:
+[  T555] [<0000000000000000>] 0x0
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] INFO: lockdep is turned off.
+[ T1155] Modules linked in: bpf_testmod(O)
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155]  ccm
+[ T1155]  snd_seq_dummy
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155]  snd_hrtimer
+[  T555] Call Trace:
+[ T1155]  snd_seq_midi snd_seq_midi_event snd_rawmidi
+[  T555]  <TASK>
+[ T1155]  snd_seq snd_seq_device rfcomm
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  bnep snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic snd_=
+hda_scodec_component
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  snd_hda_codec_hdmi nls_ascii nls_cp437 vfat fat snd_acp3x_pdm_dma
+[  T555]  __schedule+0x167e/0x1ca0
+[ T1155]  snd_soc_dmic snd_acp3x_rn btusb btrtl
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T1155]  snd_soc_core btintel btbcm btmtk bluetooth ecdh_generic
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ecc snd_hda_intel snd_intel_dspcfg uvcvideo
+[  T555]  amd_sfh
+[ T2977]  snd_pcm_oss
+[ T2977]  videodev snd_rn_pci_acp3x
+[  T555]  i2c_hid hid
+[ T2977]  snd_mixer_oss
+[  T555]  i2c_piix4
+[ T2977]  videobuf2_common
+[  T555]  i2c_smbus
+[ T2977]  snd_acp_config
+[  T555]  i2c_designware_platform
+[ T2977]  msi_wmi snd_pcm
+[  T555]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T2977]  mc sparse_keymap
+[  T555]=20
+[ T2977]  snd_soc_acpi
+[  T555] Preemption disabled at:
+[ T2977]  snd_timer wmi_bmof edac_mce_amd
+[  T555] [<0000000000000000>] 0x0
+[ T2977]  snd k10temp snd_pci_acp3x soundcore
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977]  ccp battery ac
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977]  button
+[ T2977]  joydev
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555] Call Trace:
+[ T2977]  hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d
+[  T555]  <TASK>
+[ T2977]  hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[ T2977]  industrialio_triggered_buffer kfifo_buf industrialio evdev
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[ T2977]  hid_sensor_iio_common amd_pmc sch_fq_codel mt7921e mt7921_common
+[  T555]  __schedule+0x167e/0x1ca0
+[ T2977]  mt792x_lib
+[ T2977]  mt76_connac_lib mt76 mac80211 libarc4 cfg80211 rfkill
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  msr nvme_fabrics fuse efi_pstore
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2977]  configfs
+[ T2977]  nfnetlink efivarfs autofs4 ext4
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  mbcache jbd2 usbhid amdgpu amdxcp
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  i2c_algo_bit
+[ T2977]  drm_client_lib drm_ttm_helper ttm
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2977]  drm_exec
+[ T2977]  gpu_sched drm_suballoc_helper drm_panel_backlight_quirks
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  cec xhci_pci drm_buddy
+[  T555]  ? lock_release+0x21b/0x2e0
+[ T2977]  xhci_hcd drm_display_helper usbcore hid_sensor_hub drm_kms_helper=
+ psmouse nvme
+[  T555]  schedule_rtlock+0x21/0x40
+[ T2977]  mfd_core
+[ T2977]  hid_multitouch hid_generic serio_raw nvme_core
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2977]  r8169
+[ T2977]  usb_common amd_sfh crc16 i2c_hid_acpi i2c_hid
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  hid i2c_piix4 i2c_smbus i2c_designware_platform
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2977]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T2977] Preemption disabled at:
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977] [<0000000000000000>] 0x0
+[  T555]  rt_spin_lock+0x99/0x190
+[  T555]  task_get_cgroup1+0xe8/0x340
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  bpf_trace_run2+0xd3/0x260
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[  T555]  do_syscall_64+0x395/0xfa0
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555] RIP: 0033:0x7fd47309ea0e
+[  T555] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[  T555] RSP: 002b:00007fff31d516e0 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+00e4
+[  T555] RAX: ffffffffffffffda RBX: 000055b3d56687b0 RCX: 00007fd47309ea0e
+[  T555] RDX: 0000000000000001 RSI: 00007fff31d51700 RDI: 0000000000000000
+[  T555] RBP: 00007fff31d516e0 R08: 0000000000000000 R09: 00007fd473098000
+[  T555] R10: ffffffffffffffff R11: 0000000000000297 R12: 0000000000000001
+[  T555] R13: ffffffffffffffff R14: 0000000000000050 R15: 0000000000000007
+[  T555]  </TASK>
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2977] Call Trace:
+[ T2977]  <TASK>
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[ T2977]  __schedule+0x167e/0x1ca0
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ? lock_release+0x21b/0x2e0
+[ T2977]  schedule_rtlock+0x21/0x40
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  rt_spin_lock+0x99/0x190
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  do_syscall_64+0x395/0xfa0
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[ T2977] RSP: 002b:00007ffc24356670 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+0000
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T2977] RDX: 00000000000007ff RSI: 000055e34b7d80a8 RDI: 0000000000000003
+[ T2977] RBP: 000055e34b7d80a8 R08: 0000000000000000 R09: 0000000000000000
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  uvc snd_hda_core videobuf2_v4l2
+[  T555]  ? lock_release+0x21b/0x2e0
+[ T2977]  snd_pcm_oss videodev snd_rn_pci_acp3x snd_mixer_oss videobuf2_com=
+mon snd_acp_config msi_wmi
+[  T555]  schedule_rtlock+0x21/0x40
+[ T2977]  snd_pcm mc sparse_keymap snd_soc_acpi snd_timer
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2977]  wmi_bmof edac_mce_amd snd k10temp
+[  T555]  ? fput+0x3f/0x90
+[ T2977]  snd_pci_acp3x soundcore ccp battery
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ac button joydev hid_sensor_magn_3d
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor=
+_als hid_sensor_trigger industrialio_triggered_buffer kfifo_buf industriali=
+o evdev hid_sensor_iio_common amd_pmc sch_fq_codel mt7921e mt7921_common
+[  T555]  rt_spin_lock+0x99/0x190
+[ T2977]  mt792x_lib mt76_connac_lib mt76 mac80211 libarc4 cfg80211 rfkill
+[  T555]  task_get_cgroup1+0xe8/0x340
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[ T2977]  nfnetlink efivarfs autofs4 ext4 mbcache
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2977]  jbd2 usbhid amdgpu amdxcp i2c_algo_bit
+[  T555]  bpf_trace_run2+0xd3/0x260
+[ T2977]  drm_client_lib drm_ttm_helper ttm drm_exec
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  gpu_sched drm_suballoc_helper drm_panel_backlight_quirks cec xhci=
+_pci drm_buddy xhci_hcd drm_display_helper
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  usbcore hid_sensor_hub drm_kms_helper psmouse nvme
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  mfd_core hid_multitouch hid_generic serio_raw nvme_core
+[  T555]  do_syscall_64+0x395/0xfa0
+[ T2977]  r8169 usb_common amd_sfh
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  crc16 i2c_hid_acpi i2c_hid hid i2c_piix4
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977]  i2c_smbus i2c_designware_platform i2c_designware_core [last unloa=
+ded: bpf_testmod(O)]
+[  T555] RIP: 0033:0x7fd47309ea0e
+[ T2977] Preemption disabled at:
+[  T555] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[ T2977] [<0000000000000000>] 0x0
+[  T555] RSP: 002b:00007fff31d4e980 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+00e4
+[  T555] RAX: ffffffffffffffda RBX: 0000000000000063 RCX: 00007fd47309ea0e
+[  T555] RDX: 0000000000000002 RSI: 00007fff31d4e9a0 RDI: 0000000000000001
+[  T555] RBP: 00007fff31d4e980 R08: 0000000000000000 R09: 00007fd473098000
+[  T555] R10: dad5e00e056e111e R11: 0000000000000297 R12: 0000000000000000
+[  T555] R13: 000055b3d567d3b0 R14: 00007fff31d4eaf0 R15: 000000000962acd9
+[  T555]  </TASK>
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155] INFO: lockdep is turned off.
+[ T2977] Call Trace:
+[ T1155] Modules linked in: bpf_testmod(O)
+[ T2977]  <TASK>
+[ T1155]  ccm snd_seq_dummy
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  snd_hrtimer snd_seq_midi snd_seq_midi_event snd_rawmidi
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  snd_seq snd_seq_device rfcomm bnep
+[ T2977]  __schedule+0x167e/0x1ca0
+[ T1155]  snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_hda_scodec_component snd_hda_codec_hdmi nls_ascii nls_cp437
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  vfat fat snd_acp3x_pdm_dma
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1155]  snd_soc_dmic snd_acp3x_rn btusb
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  btrtl snd_soc_core btintel
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  btbcm btmtk bluetooth
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ecdh_generic ecc snd_hda_intel snd_intel_dspcfg
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  uvcvideo snd_hda_codec
+[ T2977]  ? lock_release+0x21b/0x2e0
+[ T1155]  videobuf2_vmalloc videobuf2_memops snd_hwdep uvc snd_hda_core vid=
+eobuf2_v4l2
+[ T2977]  schedule_rtlock+0x21/0x40
+[ T1155]  snd_pcm_oss videodev snd_rn_pci_acp3x snd_mixer_oss
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  videobuf2_common snd_acp_config msi_wmi
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_pcm mc sparse_keymap
+[ T2977]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  snd_soc_acpi snd_timer wmi_bmof
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  edac_mce_amd
+[ T1155]  snd k10temp snd_pci_acp3x soundcore ccp battery ac button joydev =
+hid_sensor_magn_3d
+[ T2977]  rt_spin_lock+0x99/0x190
+[ T1155]  hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor=
+_als hid_sensor_trigger
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T1155]  industrialio_triggered_buffer kfifo_buf industrialio evdev
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  hid_sensor_iio_common amd_pmc sch_fq_codel
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  mt7921e mt7921_common mt792x_lib mt76_connac_lib
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[ T1155]  mt76 mac80211 libarc4 cfg80211
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  rfkill msr nvme_fabrics fuse efi_pstore configfs
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  nfnetlink efivarfs autofs4 ext4 mbcache
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  jbd2 usbhid amdgpu amdxcp i2c_algo_bit
+[ T2977]  do_syscall_64+0x395/0xfa0
+[ T1155]  drm_client_lib drm_ttm_helper
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ttm drm_exec gpu_sched drm_suballoc_helper
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155]  drm_panel_backlight_quirks cec xhci_pci
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[ T1155]  drm_buddy
+[ T1155]  xhci_hcd drm_display_helper
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[ T1155]  usbcore
+[ T2977] RSP: 002b:00007ffc24356240 EFLAGS: 00000202
+[ T1155]  hid_sensor_hub drm_kms_helper
+[ T2977]  ORIG_RAX: 0000000000000001
+[ T1155]  psmouse
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T1155]  nvme
+[ T2977] RDX: 0000000000000036 RSI: 000055e375e787e0 RDI: 0000000000000001
+[ T1155]  mfd_core hid_multitouch
+[ T2977] RBP: 000055e375e787e0 R08: 0000000000000000 R09: 0000000000000000
+[ T1155]  hid_generic
+[ T2977] R10: 0000000000000000 R11: 0000000000000202 R12: 0000000000000036
+[ T1155]  serio_raw
+[ T2977] R13: 00007fdfbd3f35c0 R14: 00007fdfbd3f0e80 R15: 00007ffc24356740
+[ T1155]  nvme_core r8169 usb_common amd_sfh crc16 i2c_hid_acpi i2c_hid hid=
+ i2c_piix4 i2c_smbus i2c_designware_platform
+[ T2977]  </TASK>
+[ T1155]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T1155] Preemption disabled at:
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155] Call Trace:
+[ T1155]  <TASK>
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977] BUG: scheduling while atomic: dmesg/2977/0x00000002
+[ T2977] INFO: lockdep is turned off.
+[ T2977] Modules linked in: bpf_testmod(O) ccm snd_seq_dummy
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  snd_hrtimer snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  snd_seq_device rfcomm bnep snd_ctl_led snd_hda_codec_realtek snd_=
+hda_codec_generic
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T2977]  snd_hda_scodec_component snd_hda_codec_hdmi
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  nls_ascii nls_cp437 vfat fat snd_acp3x_pdm_dma
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977]  snd_soc_dmic snd_acp3x_rn btusb btrtl
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T2977]  snd_soc_core btintel btbcm
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T2977]  btmtk bluetooth
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297
+[ T2977]  ecdh_generic ecc
+[ T1155]  ORIG_RAX: 0000000000000060
+[ T2977]  snd_hda_intel
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc770005978 RCX: 00007fc77f05c7f9
+[ T2977]  snd_intel_dspcfg uvcvideo
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T2977]  snd_hda_codec
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 0000000000042426
+[ T2977]  videobuf2_vmalloc videobuf2_memops
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T2977]  snd_hwdep
+[ T1155] R13: 00007fc77e6b02e0 R14: 0000000000081456 R15: 000055f047b7b880
+[ T2977]  uvc snd_hda_core videobuf2_v4l2 snd_pcm_oss videodev snd_rn_pci_a=
+cp3x snd_mixer_oss videobuf2_common snd_acp_config msi_wmi snd_pcm
+[ T1155]  </TASK>
+[ T2977]  mc sparse_keymap snd_soc_acpi snd_timer wmi_bmof edac_mce_amd snd=
+ k10temp snd_pci_acp3x soundcore ccp battery ac button joydev hid_sensor_ma=
+gn_3d hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor_als=
+ hid_sensor_trigger industrialio_triggered_buffer kfifo_buf industrialio ev=
+dev hid_sensor_iio_common amd_pmc sch_fq_codel mt7921e mt7921_common mt792x=
+_lib mt76_connac_lib mt76 mac80211 libarc4 cfg80211 rfkill msr nvme_fabrics=
+ fuse efi_pstore configfs nfnetlink efivarfs autofs4 ext4 mbcache jbd2 usbh=
+id amdgpu amdxcp
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T2977]  i2c_algo_bit
+[ T1155] INFO: lockdep is turned off.
+[ T2977]  drm_client_lib
+[ T1155] Modules linked in:
+[ T2977]  drm_ttm_helper
+[ T1155]  bpf_testmod(O)
+[ T2977]  ttm drm_exec
+[ T1155]  ccm
+[ T2977]  gpu_sched
+[ T1155]  snd_seq_dummy
+[ T2977]  drm_suballoc_helper
+[ T1155]  snd_hrtimer
+[ T1155]  snd_seq_midi
+[ T2977]  drm_panel_backlight_quirks cec
+[ T1155]  snd_seq_midi_event
+[ T2977]  xhci_pci
+[ T1155]  snd_rawmidi snd_seq
+[ T2977]  drm_buddy xhci_hcd
+[ T1155]  snd_seq_device rfcomm
+[ T2977]  drm_display_helper usbcore
+[ T1155]  bnep snd_ctl_led
+[ T2977]  hid_sensor_hub
+[ T1155]  snd_hda_codec_realtek
+[ T2977]  drm_kms_helper psmouse
+[ T1155]  snd_hda_codec_generic
+[ T2977]  nvme
+[ T1155]  snd_hda_scodec_component
+[ T2977]  mfd_core
+[ T1155]  snd_hda_codec_hdmi
+[ T2977]  hid_multitouch
+[ T1155]  nls_ascii nls_cp437
+[ T2977]  hid_generic serio_raw
+[ T1155]  vfat fat
+[ T2977]  nvme_core r8169
+[ T1155]  snd_acp3x_pdm_dma
+[ T2977]  usb_common
+[ T1155]  snd_soc_dmic
+[ T2977]  amd_sfh
+[ T1155]  snd_acp3x_rn
+[ T2977]  crc16
+[ T1155]  btusb
+[ T2977]  i2c_hid_acpi i2c_hid
+[ T1155]  btrtl snd_soc_core
+[ T2977]  hid i2c_piix4
+[ T1155]  btintel btbcm
+[ T2977]  i2c_smbus i2c_designware_platform
+[ T1155]  btmtk bluetooth
+[ T2977]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T1155]  ecdh_generic ecc
+[ T2977]=20
+[ T1155]  snd_hda_intel
+[ T2977] Preemption disabled at:
+[ T1155]  snd_intel_dspcfg uvcvideo
+[ T2977] [<0000000000000000>] 0x0
+[ T1155]  snd_hda_codec videobuf2_vmalloc videobuf2_memops snd_hwdep
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155]  uvc snd_hda_core videobuf2_v4l2
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155]  snd_pcm_oss
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155]  videodev
+[ T2977] Call Trace:
+[ T1155]  snd_rn_pci_acp3x
+[ T2977]  <TASK>
+[ T1155]  snd_mixer_oss videobuf2_common snd_acp_config
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  msi_wmi snd_pcm mc sparse_keymap
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  snd_soc_acpi snd_timer wmi_bmof edac_mce_amd
+[ T2977]  __schedule+0x167e/0x1ca0
+[ T1155]  snd k10temp snd_pci_acp3x
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  soundcore ccp
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1155]  battery
+[ T1155]  ac button joydev
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1155]  hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger industrialio=
+_triggered_buffer
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  kfifo_buf industrialio evdev
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  hid_sensor_iio_common amd_pmc
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1155]  sch_fq_codel
+[ T1155]  mt7921e mt7921_common
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  mt792x_lib
+[ T1155]  mt76_connac_lib mt76
+[ T2977]  ? lock_release+0x21b/0x2e0
+[ T1155]  mac80211 libarc4 cfg80211 rfkill msr nvme_fabrics
+[ T2977]  schedule_rtlock+0x21/0x40
+[ T1155]  fuse efi_pstore configfs
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  nfnetlink efivarfs autofs4 ext4
+[ T2977]  ? preempt_count_sub+0x96/0xd0
+[ T1155]  mbcache jbd2 usbhid amdgpu
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  amdxcp i2c_algo_bit drm_client_lib drm_ttm_helper ttm drm_exec gp=
+u_sched drm_suballoc_helper drm_panel_backlight_quirks cec xhci_pci
+[ T2977]  rt_spin_lock+0x99/0x190
+[ T1155]  drm_buddy xhci_hcd drm_display_helper usbcore hid_sensor_hub
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T1155]  drm_kms_helper psmouse nvme mfd_core hid_multitouch
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  hid_generic serio_raw nvme_core
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  r8169 usb_common amd_sfh crc16
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[ T1155]  i2c_hid_acpi i2c_hid hid i2c_piix4
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  i2c_smbus i2c_designware_platform i2c_designware_core [last unloa=
+ded: bpf_testmod(O)]
+[ T1155] Preemption disabled at:
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  do_syscall_64+0x395/0xfa0
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[ T2977] RSP: 002b:00007ffc24356670 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+0000
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T2977] RDX: 00000000000007ff RSI: 000055e34b7d80a8 RDI: 0000000000000003
+[ T2977] RBP: 000055e34b7d80a8 R08: 0000000000000000 R09: 0000000000000000
+[ T2977] R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffc243568e8
+[ T2977] R13: 000055e34b7d2b80 R14: 000055e34b7d6ea0 R15: ffffffffffffffff
+[ T2977]  </TASK>
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155] Call Trace:
+[ T1155]  <TASK>
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[  T555] INFO: lockdep is turned off.
+[  T555] Modules linked in: bpf_testmod(O) ccm
+[ T1155]  rt_spin_lock+0x99/0x190
+[  T555]  snd_seq_dummy snd_hrtimer snd_seq_midi snd_seq_midi_event snd_raw=
+midi
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[  T555]  snd_seq snd_seq_device rfcomm bnep snd_ctl_led
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  snd_hda_codec_realtek snd_hda_codec_generic snd_hda_scodec_compon=
+ent
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  snd_hda_codec_hdmi nls_ascii nls_cp437 vfat
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[  T555]  fat snd_acp3x_pdm_dma snd_soc_dmic
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_acp3x_rn btusb btrtl snd_soc_core btintel btbcm
+[ T2977]  [last unloaded: bpf_testmod(O)]
+[ T2977] Preemption disabled at:
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155]  fuse efi_pstore
+[ T1155]  configfs
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155]  nfnetlink
+[ T2977] Call Trace:
+[ T1155]  efivarfs autofs4
+[ T2977]  <TASK>
+[ T1155]  ext4 mbcache jbd2
+[ T1155]  usbhid amdgpu amdxcp i2c_algo_bit drm_client_lib
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  drm_ttm_helper ttm drm_exec
+[ T2977]  __schedule+0x167e/0x1ca0
+[ T1155]  gpu_sched drm_suballoc_helper drm_panel_backlight_quirks
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  cec xhci_pci drm_buddy
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1155]  xhci_hcd drm_display_helper usbcore hid_sensor_hub
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  drm_kms_helper psmouse nvme
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1155]  mfd_core hid_multitouch hid_generic
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  serio_raw nvme_core r8169
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  usb_common amd_sfh crc16
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1155]  i2c_hid_acpi i2c_hid hid
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  i2c_piix4 i2c_smbus i2c_designware_platform
+[ T2977]  ? lock_release+0x21b/0x2e0
+[ T1155]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T1155] Preemption disabled at:
+[ T2977]  schedule_rtlock+0x21/0x40
+[ T1155] [<ffffffffa1d86334>] irq_enter_rcu+0x14/0xb0
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2977]  ? preempt_count_sub+0x96/0xd0
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  rt_spin_lock+0x99/0x190
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  do_syscall_64+0x395/0xfa0
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[ T2977] RSP: 002b:00007ffc24356670 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+0000
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T2977] RDX: 00000000000007ff RSI: 000055e34b7d80a8 RDI: 0000000000000003
+[ T2977] RBP: 000055e34b7d80a8 R08: 0000000000000000 R09: 0000000000000000
+[ T2977] R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffc243568e8
+[ T2977] R13: 000055e34b7d2b80 R14: 000055e34b7d6ea0 R15: ffffffffffffffff
+[ T2977]  </TASK>
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155] Call Trace:
+[ T1155]  <TASK>
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  ? irq_enter_rcu+0x14/0xb0
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555] INFO: lockdep is turned off.
+[  T555] Modules linked in:
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555]  bpf_testmod(O) ccm snd_seq_dummy
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_hrtimer snd_seq_midi snd_seq_midi_event
+[ T1155]  ? lock_release+0x21b/0x2e0
+[  T555]  snd_rawmidi snd_seq snd_seq_device rfcomm bnep snd_ctl_led snd_hd=
+a_codec_realtek snd_hda_codec_generic
+[ T1155]  schedule_rtlock+0x21/0x40
+[  T555]  snd_hda_scodec_component snd_hda_codec_hdmi nls_ascii nls_cp437 v=
+fat
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  fat snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn btusb btrtl
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_soc_core btintel btbcm
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  btmtk bluetooth ecdh_generic
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ecc snd_hda_intel snd_intel_dspcfg uvcvideo snd_hda_codec videobu=
+f2_vmalloc videobuf2_memops snd_hwdep uvc snd_hda_core videobuf2_v4l2
+[ T1155]  rt_spin_lock+0x99/0x190
+[  T555]  snd_pcm_oss videodev snd_rn_pci_acp3x snd_mixer_oss videobuf2_com=
+mon snd_acp_config
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[  T555]  msi_wmi snd_pcm mc sparse_keymap snd_soc_acpi
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  snd_timer wmi_bmof edac_mce_amd snd
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  k10temp
+[  T555]  snd_pci_acp3x soundcore ccp battery ac
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[  T555]  button joydev hid_sensor_magn_3d hid_sensor_prox
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor_als hid_sensor_=
+trigger industrialio_triggered_buffer kfifo_buf industrialio evdev
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  hid_sensor_iio_common amd_pmc sch_fq_codel mt7921e mt7921_common
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[  T555]  mt792x_lib mt76_connac_lib mt76 mac80211
+[ T1155]  do_syscall_64+0x395/0xfa0
+[  T555]  libarc4 cfg80211 rfkill
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  msr nvme_fabrics fuse efi_pstore configfs
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555]  nfnetlink efivarfs autofs4 ext4 mbcache
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[  T555]  jbd2 usbhid amdgpu
+[ T2977]  rt_spin_lock+0x99/0x190
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  ecc snd_hda_intel snd_intel_dspcfg uvcvideo
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[ T1155]  uvc snd_hda_core videobuf2_v4l2 snd_pcm_oss
+[ T1155]  videodev snd_rn_pci_acp3x snd_mixer_oss videobuf2_common snd_acp_=
+config msi_wmi
+[ T1155]  snd_pcm mc sparse_keymap snd_soc_acpi snd_timer
+[ T2977]  do_syscall_64+0x395/0xfa0
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[ T1155]  kfifo_buf industrialio
+[ T2977] RSP: 002b:00007ffc24356670 EFLAGS: 00000202
+[ T1155]  evdev
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T1155]  mt7921e
+[ T1155]  mt7921_common mt792x_lib
+[ T1155]  mt76_connac_lib mt76
+[ T1155]  mac80211 libarc4 cfg80211 rfkill msr nvme_fabrics fuse efi_pstore=
+ configfs nfnetlink
+[ T2977]  </TASK>
+[ T1155]  efivarfs autofs4 ext4 mbcache jbd2 usbhid amdgpu amdxcp i2c_algo_=
+bit drm_client_lib drm_ttm_helper ttm drm_exec gpu_sched drm_suballoc_helpe=
+r drm_panel_backlight_quirks cec xhci_pci drm_buddy xhci_hcd drm_display_he=
+lper usbcore hid_sensor_hub drm_kms_helper psmouse nvme mfd_core hid_multit=
+ouch hid_generic serio_raw nvme_core r8169 usb_common amd_sfh crc16 i2c_hid=
+_acpi i2c_hid hid i2c_piix4 i2c_smbus i2c_designware_platform i2c_designwar=
+e_core [last unloaded: bpf_testmod(O)]
+[ T1155] Preemption disabled at:
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155] Call Trace:
+[ T1155]  <TASK>
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[  T555] INFO: lockdep is turned off.
+[  T555] Modules linked in:
+[  T555]  bpf_testmod(O) ccm snd_seq_dummy
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_soc_dmic snd_acp3x_rn btusb
+[  T555]  btbcm btmtk
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  uvc snd_hda_core videobuf2_v4l2 snd_pcm_oss
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  rt_spin_lock+0x99/0x190
+[  T555]  ccp battery ac button joydev hid_sensor_magn_3d
+[  T555]  hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor=
+_als
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  industrialio evdev hid_sensor_iio_common amd_pmc
+[  T555]  mt792x_lib mt76_connac_lib mt76 mac80211 libarc4 cfg80211 rfkill
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555]  drm_panel_backlight_quirks cec xhci_pci
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[  T555]  drm_buddy
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297
+[  T555]  xhci_hcd drm_display_helper
+[ T1155]  ORIG_RAX: 0000000000000060
+[  T555]  usbcore
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc7700b2528 RCX: 00007fc77f05c7f9
+[  T555]  hid_sensor_hub drm_kms_helper
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[  T555]  psmouse nvme
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 000000000004242e
+[  T555]  mfd_core hid_multitouch
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[  T555]  hid_generic serio_raw
+[ T1155] R13: 00007fc77e6b02e0 R14: 00000000000824a5 R15: 000055f047b7b880
+[  T555]  nvme_core r8169 usb_common amd_sfh crc16 i2c_hid_acpi i2c_hid hid=
+ i2c_piix4 i2c_smbus i2c_designware_platform i2c_designware_core [last unlo=
+aded: bpf_testmod(O)]
+[ T1155]  </TASK>
+[  T555] Preemption disabled at:
+[  T555] [<0000000000000000>] 0x0
+[ T2977] BUG: scheduling while atomic: dmesg/2977/0x00000002
+[ T2977] INFO: lockdep is turned off.
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977] Modules linked in: bpf_testmod(O) ccm
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977]  snd_seq_dummy
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2977]  snd_hrtimer snd_seq_midi
+[  T555] Call Trace:
+[ T2977]  snd_seq_midi_event
+[  T555]  <TASK>
+[ T2977]  snd_rawmidi snd_seq snd_seq_device
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[ T2977]  rfcomm bnep snd_ctl_led snd_hda_codec_realtek
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[ T2977]  snd_hda_codec_generic snd_hda_scodec_component snd_hda_codec_hdmi=
+ nls_ascii
+[  T555]  __schedule+0x167e/0x1ca0
+[ T2977]  nls_cp437 vfat fat snd_acp3x_pdm_dma snd_soc_dmic
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_acp3x_rn btusb
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2977]  btrtl snd_soc_core btintel
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  btbcm btmtk bluetooth ecdh_generic
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ecc snd_hda_intel
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2977]  snd_intel_dspcfg uvcvideo snd_hda_codec videobuf2_vmalloc
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  videobuf2_memops snd_hwdep
+[  T555]  ? lock_release+0x21b/0x2e0
+[ T2977]  uvc snd_hda_core videobuf2_v4l2 snd_pcm_oss videodev snd_rn_pci_a=
+cp3x snd_mixer_oss
+[  T555]  schedule_rtlock+0x21/0x40
+[  T555] Modules linked in: bpf_testmod(O)
+[ T1155]  ? lock_release+0x21b/0x2e0
+[  T555]  ccm snd_seq_dummy snd_hrtimer snd_seq_midi snd_seq_midi_event snd=
+_rawmidi
+[ T1155]  schedule_rtlock+0x21/0x40
+[  T555]  snd_seq snd_seq_device rfcomm
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  bnep snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_hda_scodec_component snd_hda_codec_hdmi nls_ascii
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  nls_cp437 vfat fat snd_acp3x_pdm_dma
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_soc_dmic snd_acp3x_rn btusb btrtl snd_soc_core btintel btbcm =
+btmtk bluetooth ecdh_generic ecc
+[ T1155]  rt_spin_lock+0x99/0x190
+[  T555]  snd_hda_intel snd_intel_dspcfg uvcvideo snd_hda_codec videobuf2_v=
+malloc
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[  T555]  videobuf2_memops snd_hwdep uvc snd_hda_core
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  videobuf2_v4l2 snd_pcm_oss videodev
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  snd_rn_pci_acp3x snd_mixer_oss videobuf2_common snd_acp_config
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[  T555]  msi_wmi snd_pcm mc
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  sparse_keymap snd_soc_acpi snd_timer wmi_bmof edac_mce_amd snd k1=
+0temp
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  snd_pci_acp3x soundcore ccp
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[  T555]  battery ac button joydev hid_sensor_magn_3d
+[ T1155]  do_syscall_64+0x395/0xfa0
+[  T555]  hid_sensor_prox hid_sensor_accel_3d
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555]  industrialio_triggered_buffer kfifo_buf
+[ T1155] RIP: 0033:0x7fc77ec79bdb
+[  T555]  industrialio evdev
+[ T1155] Code: 37 75 f3 83 e1 03 83 f9 02 0f 84 10 01 00 00 41 80 f1 81 49 =
+8d 7c 10 20 45 31 d2 ba 01 00 00 00 44 89 ce b8 ca 00 00 00 0f 05 <48> 3d 0=
+0 f0 ff ff 0f 87 19 01 00 00 48 83 c4 08 31 c0 5b 5d c3 41
+[  T555]  hid_sensor_iio_common amd_pmc
+[ T1155] RSP: 002b:00007fc77e6b01f0 EFLAGS: 00000246 ORIG_RAX: 000000000000=
+00ca
+[  T555]  sch_fq_codel
+[ T1155] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fc77ec79bdb
+[  T555]  mt7921e mt7921_common
+[ T1155] RDX: 0000000000000001 RSI: 0000000000000081 RDI: 000055f047b83d68
+[  T555]  mt792x_lib
+[ T1155] RBP: 0000000000000001 R08: 000055f047b83d48 R09: 0000000000000081
+[  T555]  mt76_connac_lib
+[ T1155] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+[ T1155] R13: 0000000000000004 R14: 000055f047b7c808 R15: 000055f047b7c7f0
+[  T555]  mt76 mac80211 libarc4 cfg80211 rfkill msr
+[ T1155]  </TASK>
+[  T555]  nvme_fabrics fuse efi_pstore configfs nfnetlink efivarfs autofs4 =
+ext4 mbcache jbd2 usbhid amdgpu amdxcp i2c_algo_bit drm_client_lib drm_ttm_=
+helper ttm drm_exec gpu_sched drm_suballoc_helper drm_panel_backlight_quirk=
+s cec xhci_pci drm_buddy xhci_hcd drm_display_helper usbcore hid_sensor_hub=
+ drm_kms_helper psmouse nvme
+[ T2977] BUG: scheduling while atomic: dmesg/2977/0x00000002
+[  T555]  mfd_core hid_multitouch
+[ T2977] INFO: lockdep is turned off.
+[  T555]  hid_generic
+[ T2977] Modules linked in:
+[  T555]  serio_raw nvme_core
+[ T2977]  bpf_testmod(O) ccm
+[  T555]  r8169 usb_common
+[ T2977]  snd_seq_dummy snd_hrtimer
+[  T555]  amd_sfh crc16
+[ T2977]  snd_seq_midi snd_seq_midi_event
+[  T555]  i2c_hid_acpi i2c_hid
+[ T2977]  snd_rawmidi snd_seq
+[  T555]  hid i2c_piix4
+[ T2977]  bnep snd_ctl_led
+[ T2977]  snd_hda_codec_realtek
+[ T2977]  snd_hda_codec_generic snd_hda_scodec_component
+[  T555] Preemption disabled at:
+[  T555] [<0000000000000000>] 0x0
+[ T2977]  vfat fat snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977]  btusb btrtl snd_soc_core
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977]  btintel
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2977]  btmtk
+[  T555] Call Trace:
+[ T2977]  ecdh_generic ecc snd_hda_intel
+[ T2977]  snd_intel_dspcfg uvcvideo snd_hda_codec videobuf2_vmalloc videobu=
+f2_memops
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[ T2977]  snd_hwdep uvc snd_hda_core
+[ T2977]  videobuf2_v4l2 snd_pcm_oss videodev snd_rn_pci_acp3x
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2977]  snd_mixer_oss videobuf2_common snd_acp_config msi_wmi
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  sparse_keymap snd_soc_acpi snd_timer wmi_bmof
+[ T2977]  edac_mce_amd snd k10temp
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  battery ac button
+[ T2977]  joydev hid_sensor_magn_3d hid_sensor_prox
+[  T555]  ? lock_release+0x21b/0x2e0
+[  T555]  schedule_rtlock+0x21/0x40
+[ T2977]  kfifo_buf industrialio evdev hid_sensor_iio_common
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2977]  amd_pmc sch_fq_codel mt7921e
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2977]  mt76 mac80211 libarc4 cfg80211
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  rt_spin_lock+0x99/0x190
+[ T2977]  mbcache jbd2 usbhid amdgpu amdxcp
+[ T2977]  i2c_algo_bit drm_client_lib drm_ttm_helper ttm drm_exec
+[ T2977]  gpu_sched drm_suballoc_helper drm_panel_backlight_quirks cec
+[  T555]  bpf_trace_run2+0xd3/0x260
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  drm_kms_helper psmouse nvme mfd_core hid_multitouch hid_generic
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  serio_raw nvme_core r8169 usb_common
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  amd_sfh crc16 i2c_hid_acpi i2c_hid hid
+[ T2977]  i2c_piix4 i2c_smbus i2c_designware_platform
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T2977] Preemption disabled at:
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977] [<0000000000000000>] 0x0
+[ T3068]  drm_panel_backlight_quirks cec
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T3068]  xhci_pci
+[ T2594] [<ffffffffa215f33f>] fput+0x1f/0x90
+[ T3068]  drm_buddy
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T3068]  xhci_hcd drm_display_helper usbcore
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T3068]  hid_sensor_hub drm_kms_helper
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T3068]  psmouse nvme mfd_core hid_multitouch hid_generic
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T3068]  serio_raw nvme_core r8169 usb_common
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T3068]  amd_sfh crc16 i2c_hid_acpi
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T3068]  i2c_hid hid
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T3068]  i2c_piix4 i2c_smbus i2c_designware_platform
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T3068]  i2c_designware_core
+[ T3068]  [last unloaded: bpf_testmod(O)]
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T3068] Preemption disabled at:
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T3068] [<ffffffffa1dda00d>] migrate_enable+0x8d/0x110
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+0060
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc770000c98 RCX: 00007fc77f05c7f9
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 000000000004243a
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T1155] R13: 00007fc77e6b02e0 R14: 0000000000083c1b R15: 000055f047b7b880
+[ T1155]  </TASK>
+[ T3068] CPU: 10 UID: 1000 PID: 3068 Comm: MediaSu~isor #1 Tainted: G      =
+  W  O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T3068] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T3068] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T3068] Call Trace:
+[ T3068]  <TASK>
+[ T3068]  dump_stack_lvl+0x6d/0xb0
+[ T3068]  ? migrate_enable+0x8d/0x110
+[ T3068]  __schedule_bug.cold+0x8c/0x9a
+[ T3068]  __schedule+0x167e/0x1ca0
+[ T3068]  ? rcu_is_watching+0x12/0x60
+[ T3068]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T3068]  ? rcu_is_watching+0x12/0x60
+[ T3068]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T3068]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T1155] INFO: lockdep is turned off.
+[ T3068]  ? rcu_is_watching+0x12/0x60
+[ T1155] Modules linked in: bpf_testmod(O) ccm snd_seq_dummy
+[ T3068]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_hrtimer
+[ T1155]  snd_seq_midi snd_seq_midi_event snd_rawmidi
+[ T3068]  ? lock_release+0x21b/0x2e0
+[ T1155]  snd_seq snd_seq_device rfcomm bnep snd_ctl_led
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T1155]  snd_hda_codec_realtek snd_hda_codec_generic
+[  T555] INFO: lockdep is turned off.
+[ T3068]  schedule_rtlock+0x21/0x40
+[  T555] Modules linked in:
+[ T1155]  snd_hda_scodec_component snd_hda_codec_hdmi
+[  T555]  bpf_testmod(O) ccm
+[ T1155]  nls_ascii
+[  T555]  snd_seq_dummy
+[ T1155]  nls_cp437
+[ T3068]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  snd_hrtimer
+[ T1155]  vfat
+[  T555]  snd_seq_midi
+[ T1155]  fat
+[  T555]  snd_seq_midi_event
+[ T1155]  snd_acp3x_pdm_dma
+[  T555]  snd_rawmidi
+[ T1155]  snd_soc_dmic
+[ T3068]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_seq
+[ T1155]  snd_acp3x_rn
+[  T555]  snd_seq_device
+[ T1155]  btusb
+[ T1155]  btrtl
+[  T555]  rfcomm
+[ T3068]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  snd_soc_core
+[  T555]  bnep snd_ctl_led
+[ T1155]  btintel btbcm
+[  T555]  snd_hda_codec_realtek snd_hda_codec_generic
+[ T1155]  btmtk
+[ T3068]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_hda_scodec_component
+[ T1155]  bluetooth ecdh_generic
+[  T555]  snd_hda_codec_hdmi
+[ T1155]  ecc
+[  T555]  nls_ascii
+[ T1155]  snd_hda_intel
+[  T555]  nls_cp437
+[ T1155]  snd_intel_dspcfg
+[  T555]  vfat
+[ T1155]  uvcvideo
+[  T555]  fat snd_acp3x_pdm_dma
+[ T1155]  snd_hda_codec videobuf2_vmalloc
+[  T555]  snd_soc_dmic snd_acp3x_rn
+[ T1155]  videobuf2_memops snd_hwdep
+[  T555]  btusb
+[ T3068]  rt_spin_lock+0x99/0x190
+[  T555]  btrtl
+[ T1155]  uvc
+[ T1155]  snd_hda_core
+[  T555]  snd_soc_core
+[  T555]  btintel
+[ T1155]  videobuf2_v4l2 snd_pcm_oss
+[  T555]  btbcm btmtk
+[ T1155]  videodev
+[  T555]  bluetooth
+[ T3068]  task_get_cgroup1+0xe8/0x340
+[ T1155]  snd_rn_pci_acp3x snd_mixer_oss
+[  T555]  ecdh_generic ecc
+[ T1155]  videobuf2_common snd_acp_config
+[  T555]  snd_hda_intel
+[ T3068]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  snd_intel_dspcfg
+[ T1155]  msi_wmi snd_pcm
+[  T555]  uvcvideo snd_hda_codec
+[ T1155]  mc
+[  T555]  videobuf2_vmalloc
+[ T1155]  sparse_keymap
+[ T3068]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  videobuf2_memops
+[ T1155]  snd_soc_acpi
+[  T555]  snd_hwdep
+[ T1155]  snd_timer wmi_bmof
+[  T555]  uvc snd_hda_core
+[ T1155]  edac_mce_amd snd
+[  T555]  videobuf2_v4l2
+[ T3068]  bpf_trace_run2+0xd3/0x260
+[ T1155]  k10temp
+[  T555]  snd_pcm_oss
+[ T1155]  snd_pci_acp3x
+[  T555]  videodev
+[ T1155]  soundcore
+[  T555]  snd_rn_pci_acp3x
+[ T1155]  ccp
+[ T3068]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_mixer_oss
+[ T1155]  battery
+[  T555]  videobuf2_common
+[ T1155]  ac
+[  T555]  snd_acp_config
+[ T1155]  button
+[  T555]  msi_wmi
+[ T1155]  joydev
+[  T555]  snd_pcm
+[ T1155]  hid_sensor_magn_3d
+[ T2977]  bnep snd_ctl_led
+[ T1155]  xhci_pci
+[ T1155]  drm_buddy
+[ T2977]  snd_hda_codec_realtek
+[ T1155]  xhci_hcd
+[ T2977]  snd_hda_codec_generic
+[ T2977]  snd_hda_scodec_component
+[ T1155]  drm_display_helper
+[ T2234]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  usbcore
+[ T2977]  snd_hda_codec_hdmi
+[ T1155]  hid_sensor_hub
+[ T2977]  nls_ascii nls_cp437
+[ T1155]  drm_kms_helper psmouse
+[ T2977]  vfat fat
+[ T1155]  nvme mfd_core
+[ T2977]  snd_acp3x_pdm_dma snd_soc_dmic
+[ T1155]  hid_multitouch hid_generic
+[ T2977]  snd_acp3x_rn
+[ T2234]  rt_spin_lock+0x99/0x190
+[ T1155]  serio_raw
+[ T2977]  btusb btrtl
+[ T1155]  nvme_core r8169
+[ T2977]  snd_soc_core
+[ T1155]  usb_common
+[ T2977]  btintel
+[ T2234]  task_get_cgroup1+0xe8/0x340
+[ T1155]  amd_sfh
+[ T2977]  btbcm
+[ T1155]  crc16
+[ T2977]  btmtk bluetooth
+[ T1155]  i2c_hid_acpi
+[ T2234]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  i2c_hid
+[ T2977]  ecdh_generic ecc
+[ T1155]  hid i2c_piix4
+[ T2977]  snd_hda_intel
+[ T2234]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  i2c_smbus
+[ T2977]  snd_intel_dspcfg
+[ T1155]  i2c_designware_platform
+[ T2977]  uvcvideo
+[ T2977]  snd_hda_codec
+[ T1155]  i2c_designware_core
+[ T2234]  bpf_trace_run2+0xd3/0x260
+[ T1155]  [last unloaded: bpf_testmod(O)]
+[ T2977]  videobuf2_memops
+[ T2977]  uvc
+[ T2234]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  snd_mixer_oss videobuf2_common snd_acp_config msi_wmi
+[ T2234]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  snd_pcm mc sparse_keymap snd_soc_acpi snd_timer
+[ T2234]  do_syscall_64+0x395/0xfa0
+[ T2977]  wmi_bmof edac_mce_amd snd
+[ T2234]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  k10temp snd_pci_acp3x soundcore ccp battery
+[ T2234]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977]  ac button joydev hid_sensor_magn_3d
+[ T2977]  hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d
+[ T2234] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
+48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 0=
+1 f0 ff ff 73 01 c3 48 8b 0d 4f 86 0d 00 f7 d8 64 89 01 48
+[ T2977]  hid_sensor_als hid_sensor_trigger
+[ T2234] RSP: 002b:00007f1f537fd418 EFLAGS: 00000246
+[ T2977]  industrialio_triggered_buffer kfifo_buf
+[ T2234]  ORIG_RAX: 00000000000000ca
+[ T2977]  industrialio
+[ T2234] RAX: ffffffffffffffda RBX: 00007f1f6d470100 RCX: 00007f1f6d803779
+[ T2977]  evdev
+[ T2234] RDX: 0000000000000001 RSI: 0000000000000081 RDI: 00007f1f60e5bae8
+[ T2977]  hid_sensor_iio_common amd_pmc
+[ T2234] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000080000
+[ T2977]  sch_fq_codel
+[ T2234] R10: 00007f1f5f4f5c10 R11: 0000000000000246 R12: 00007f1f26332400
+[ T2977]  mt7921e
+[ T2977]  mt7921_common
+[ T2234] R13: 00007f1f537fd600 R14: 0000000000000000 R15: 0000000000000008
+[ T2977]  mt792x_lib mt76_connac_lib mt76 mac80211 libarc4 cfg80211 rfkill =
+msr nvme_fabrics fuse efi_pstore
+[ T2234]  </TASK>
+[ T2977]  configfs nfnetlink efivarfs
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977]  autofs4 ext4
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977]  mbcache
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2977]  jbd2 usbhid
+[  T555] INFO: lockdep is turned off.
+[ T1155] Call Trace:
+[ T2977]  amdgpu
+[  T555] Modules linked in:
+[ T1155]  <TASK>
+[ T2977]  amdxcp i2c_algo_bit
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[  T555]  snd_seq_dummy
+[ T2977]  ttm
+[  T555]  snd_seq_midi
+[ T2977]  gpu_sched
+[ T2977]  drm_suballoc_helper drm_panel_backlight_quirks
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  snd_rawmidi
+[ T2977]  cec
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T2977]  drm_buddy
+[  T555]  bnep
+[ T2977]  usbcore
+[  T555]  snd_hda_codec_realtek snd_hda_codec_generic
+[  T555]  snd_hda_scodec_component snd_hda_codec_hdmi
+[ T2977]  psmouse
+[  T555]  nls_ascii
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  nvme_core r8169
+[  T555]  snd_soc_core
+[ T2977]  crc16
+[  T555]  bluetooth
+[  T555]  snd_hda_intel snd_intel_dspcfg
+[ T2977]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[  T555]  uvcvideo snd_hda_codec
+[ T2977]=20
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T2977] Preemption disabled at:
+[  T555]  videobuf2_memops snd_hwdep
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  uvc snd_hda_core videobuf2_v4l2 snd_pcm_oss
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  videodev snd_rn_pci_acp3x snd_mixer_oss
+[ T1155]  rt_spin_lock+0x99/0x190
+[  T555]  videobuf2_common snd_acp_config msi_wmi snd_pcm
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[  T555]  mc sparse_keymap snd_soc_acpi snd_timer
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  wmi_bmof edac_mce_amd snd
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  k10temp snd_pci_acp3x
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[  T555]  soundcore ccp battery
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ac button joydev hid_sensor_magn_3d
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor=
+_als
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[  T555]  hid_sensor_trigger industrialio_triggered_buffer kfifo_buf
+[ T1155]  do_syscall_64+0x395/0xfa0
+[  T555]  industrialio
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  evdev hid_sensor_iio_common amd_pmc sch_fq_codel
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555]  mt7921e mt7921_common mt792x_lib
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1387]  cfg80211 rfkill
+[ T2977] Call Trace:
+[ T1387]  msr
+[ T2977]  <TASK>
+[ T1387]  nvme_fabrics fuse
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[ T1387]  efi_pstore configfs nfnetlink efivarfs autofs4
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[ T1387]  ext4 mbcache jbd2
+[ T2977]  __schedule+0x167e/0x1ca0
+[ T1387]  usbhid amdgpu amdxcp i2c_algo_bit
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  drm_client_lib drm_ttm_helper ttm
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  drm_exec gpu_sched drm_suballoc_helper
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1387]  drm_panel_backlight_quirks cec xhci_pci drm_buddy
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  xhci_hcd drm_display_helper usbcore
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  hid_sensor_hub drm_kms_helper psmouse
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1387]  nvme mfd_core hid_multitouch
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  hid_generic serio_raw nvme_core
+[ T2977]  ? lock_release+0x21b/0x2e0
+[ T1387]  r8169 usb_common amd_sfh crc16 i2c_hid_acpi i2c_hid
+[ T2977]  schedule_rtlock+0x21/0x40
+[ T1387]  hid i2c_piix4 i2c_smbus
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1387]  i2c_designware_platform i2c_designware_core [last unloaded: bpf_t=
+estmod(O)]
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]=20
+[ T1387] Preemption disabled at:
+[ T2977]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1387] [<ffffffffa215f33f>] fput+0x1f/0x90
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  rt_spin_lock+0x99/0x190
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  do_syscall_64+0x395/0xfa0
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[ T2977] RSP: 002b:00007ffc24356670 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+0000
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T2977] RDX: 00000000000007ff RSI: 000055e34b7d80a8 RDI: 0000000000000003
+[ T2977] RBP: 000055e34b7d80a8 R08: 0000000000000000 R09: 0000000000000000
+[ T2977] R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffc243568e8
+[ T2977] R13: 000055e34b7d2b80 R14: 000055e34b7d6ea0 R15: ffffffffffffffff
+[ T2977]  </TASK>
+[ T1387] CPU: 8 UID: 1000 PID: 1387 Comm: Xorg Tainted: G        W  O      =
+  6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1387] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1387] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1387] Call Trace:
+[ T1387]  <TASK>
+[ T1387]  dump_stack_lvl+0x6d/0xb0
+[ T1387]  ? fput+0x1f/0x90
+[ T1387]  __schedule_bug.cold+0x8c/0x9a
+[ T1387]  __schedule+0x167e/0x1ca0
+[ T1387]  ? unix_stream_sendmsg+0x5ff/0x670
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  ? rcu_is_watching+0x12/0x60
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  ? rcu_is_watching+0x12/0x60
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  ? lock_release+0x21b/0x2e0
+[ T1387]  schedule_rtlock+0x21/0x40
+[ T2977] BUG: scheduling while atomic: dmesg/2977/0x00000002
+[ T2977] INFO: lockdep is turned off.
+[ T1387]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2977] Modules linked in: bpf_testmod(O) ccm snd_seq_dummy snd_hrtimer
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq snd_seq_devic=
+e rfcomm bnep snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T2977]  snd_hda_scodec_component
+[ T1387]  rt_spin_lock+0x99/0x190
+[ T2977]  snd_hda_codec_hdmi
+[ T1155] INFO: lockdep is turned off.
+[ T2977]  nls_ascii
+[ T1155] Modules linked in:
+[ T2977]  nls_cp437 vfat
+[ T1155]  bpf_testmod(O)
+[ T1387]  task_get_cgroup1+0xe8/0x340
+[ T2977]  fat snd_acp3x_pdm_dma
+[ T1155]  ccm
+[ T2977]  snd_soc_dmic
+[ T1155]  snd_seq_dummy snd_hrtimer
+[ T2977]  snd_acp3x_rn
+[ T1387]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  snd_seq_midi
+[ T2977]  btusb
+[ T1155]  snd_seq_midi_event
+[ T2977]  btrtl snd_soc_core
+[ T1155]  snd_rawmidi
+[ T1387]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2977]  btintel
+[ T1155]  snd_seq
+[ T2977]  btbcm
+[ T1155]  snd_seq_device
+[ T2977]  btmtk
+[ T1387]  bpf_trace_run2+0xd3/0x260
+[ T1155]  rfcomm
+[ T2977]  bluetooth
+[ T1155]  bnep
+[ T1155]  snd_ctl_led
+[ T2977]  ecdh_generic
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_hda_codec_realtek
+[ T2977]  ecc
+[ T1155]  snd_hda_codec_generic
+[ T2977]  snd_hda_intel
+[ T1155]  snd_hda_scodec_component
+[ T2977]  snd_intel_dspcfg
+[ T1155]  snd_hda_codec_hdmi
+[ T2977]  uvcvideo
+[ T1387]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  nls_ascii
+[ T1155]  nls_cp437
+[ T2977]  snd_hda_codec
+[ T2977]  videobuf2_vmalloc
+[ T1155]  vfat fat
+[ T2977]  videobuf2_memops
+[ T1387]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  snd_hwdep
+[ T1155]  snd_acp3x_pdm_dma
+[ T2977]  uvc
+[ T1155]  snd_soc_dmic
+[ T2977]  snd_hda_core
+[ T1155]  snd_acp3x_rn
+[ T1387]  do_syscall_64+0x395/0xfa0
+[ T2977]  videobuf2_v4l2
+[ T1155]  btusb btrtl
+[ T2977]  snd_pcm_oss
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  videodev
+[ T1155]  snd_soc_core btintel
+[ T2977]  snd_rn_pci_acp3x
+[ T1155]  btbcm
+[ T2977]  snd_mixer_oss
+[ T1155]  btmtk
+[ T1387]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977]  videobuf2_common
+[ T1155]  bluetooth ecdh_generic
+[ T2977]  snd_acp_config msi_wmi
+[ T1155]  ecc
+[ T2977]  snd_pcm
+[ T1155]  snd_hda_intel
+[ T1387] RIP: 0033:0x7f732c2af9ee
+[ T2977]  mc sparse_keymap
+[ T1155]  snd_intel_dspcfg
+[ T1387] Code: 08 0f 85 f5 4b ff ff 49 89 fb 48 89 f0 48 89 d7 48 89 ce 4c =
+89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0f 05 <c3> 66 2=
+e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
+[ T2977]  snd_soc_acpi
+[ T1155]  uvcvideo
+[ T2977]  snd_timer
+[ T1155]  snd_hda_codec
+[ T1387] RSP: 002b:00007ffefbcb5f18 EFLAGS: 00000246
+[ T1155]  videobuf2_vmalloc
+[ T2977]  wmi_bmof
+[ T1387]  ORIG_RAX: 000000000000002f
+[ T1155]  videobuf2_memops
+[ T2977]  edac_mce_amd
+[ T1387] RAX: ffffffffffffffda RBX: 00007f732bfa0b00 RCX: 00007f732c2af9ee
+[ T1155]  snd_hwdep
+[ T2977]  snd
+[ T1387] RDX: 0000000000000000 RSI: 00007ffefbcb5fa0 RDI: 000000000000002f
+[ T1155]  uvc
+[ T2977]  k10temp
+[ T1387] RBP: 0000000000004000 R08: 0000000000000000 R09: 0000000000000000
+[ T2977]  snd_pci_acp3x
+[ T1155]  snd_hda_core videobuf2_v4l2
+[ T1387] R10: 0000000000000000 R11: 0000000000000246 R12: 00005633f0420c40
+[ T2977]  soundcore ccp
+[ T1155]  snd_pcm_oss
+[ T1387] R13: 00005633efad56a0 R14: 0000000000000000 R15: 0000000000000000
+[ T2977]  battery
+[ T1155]  videodev snd_rn_pci_acp3x
+[ T2977]  ac button
+[ T1155]  snd_mixer_oss videobuf2_common
+[ T2977]  joydev hid_sensor_magn_3d
+[ T1155]  snd_acp_config
+[ T2977]  hid_sensor_prox
+[ T1155]  msi_wmi snd_pcm
+[ T2977]  hid_sensor_accel_3d hid_sensor_gyro_3d
+[ T1155]  mc
+[ T1387]  </TASK>
+[ T2977]  hid_sensor_als
+[ T1155]  sparse_keymap snd_soc_acpi
+[ T2977]  hid_sensor_trigger
+[ T1155]  snd_timer
+[ T2977]  industrialio_triggered_buffer
+[ T1155]  wmi_bmof
+[ T2977]  kfifo_buf
+[ T1155]  edac_mce_amd
+[ T2977]  industrialio
+[ T1155]  snd
+[ T2977]  evdev
+[ T1155]  k10temp
+[ T2977]  hid_sensor_iio_common
+[ T1155]  snd_pci_acp3x
+[ T2977]  amd_pmc
+[ T1155]  soundcore ccp
+[ T2977]  sch_fq_codel mt7921e
+[ T1155]  battery ac
+[ T2977]  mt7921_common mt792x_lib
+[ T1155]  button joydev
+[ T2977]  mt76_connac_lib mt76
+[ T1155]  hid_sensor_magn_3d hid_sensor_prox
+[ T2977]  mac80211 libarc4
+[ T1155]  hid_sensor_accel_3d
+[ T2977]  cfg80211
+[ T1155]  hid_sensor_gyro_3d hid_sensor_als
+[ T2977]  rfkill msr
+[ T1155]  hid_sensor_trigger industrialio_triggered_buffer
+[ T2977]  nvme_fabrics
+[ T1155]  kfifo_buf
+[ T2977]  fuse
+[ T2977]  efi_pstore
+[ T1155]  industrialio evdev
+[ T2977]  configfs
+[ T1155]  hid_sensor_iio_common
+[ T2977]  nfnetlink efivarfs
+[ T1155]  amd_pmc sch_fq_codel
+[ T2977]  autofs4 ext4
+[ T1155]  mt7921e
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T2977]  mbcache
+[ T1155]  mt7921_common
+[ T2977]  jbd2
+[  T555] INFO: lockdep is turned off.
+[ T2977]  usbhid
+[ T1155]  mt792x_lib
+[  T555] Modules linked in:
+[ T2977]  amdgpu
+[ T1155]  mt76_connac_lib
+[  T555]  bpf_testmod(O)
+[ T2977]  amdxcp
+[ T1155]  mt76
+[ T2977]  i2c_algo_bit
+[ T1155]  mac80211
+[  T555]  ccm
+[ T1155]  libarc4
+[  T555]  snd_seq_dummy
+[ T2977]  drm_client_lib
+[ T1155]  cfg80211
+[  T555]  snd_hrtimer
+[ T2977]  drm_ttm_helper
+[ T1155]  rfkill
+[  T555]  snd_seq_midi
+[ T2977]  ttm
+[ T2977]  drm_exec
+[  T555]  snd_seq_midi_event
+[ T1155]  msr nvme_fabrics
+[ T2977]  gpu_sched
+[  T555]  snd_rawmidi
+[ T1155]  fuse
+[ T2977]  drm_suballoc_helper
+[  T555]  snd_seq
+[ T1155]  efi_pstore
+[ T2977]  drm_panel_backlight_quirks
+[  T555]  snd_seq_device
+[ T1155]  configfs
+[ T2977]  cec
+[  T555]  rfcomm
+[ T1155]  nfnetlink
+[  T555]  bnep
+[ T1155]  efivarfs
+[ T2977]  xhci_pci drm_buddy
+[  T555]  snd_ctl_led
+[ T1155]  autofs4
+[ T2977]  xhci_hcd
+[  T555]  snd_hda_codec_realtek
+[ T1155]  ext4 mbcache
+[ T2977]  drm_display_helper
+[  T555]  snd_hda_codec_generic snd_hda_scodec_component
+[ T1155]  jbd2
+[ T2977]  usbcore hid_sensor_hub
+[  T555]  snd_hda_codec_hdmi
+[ T1155]  usbhid
+[ T2977]  drm_kms_helper
+[ T1155]  amdgpu
+[  T555]  nls_ascii
+[ T2977]  psmouse
+[ T1155]  amdxcp
+[  T555]  nls_cp437 vfat
+[ T2977]  nvme
+[ T1155]  i2c_algo_bit
+[  T555]  fat
+[ T1155]  drm_client_lib
+[ T2977]  mfd_core
+[  T555]  snd_acp3x_pdm_dma
+[ T1155]  drm_ttm_helper
+[ T2977]  hid_multitouch
+[  T555]  snd_soc_dmic
+[ T2977]  hid_generic
+[ T1155]  ttm
+[  T555]  snd_acp3x_rn
+[ T1155]  drm_exec
+[ T2977]  serio_raw
+[  T555]  btusb
+[ T1155]  gpu_sched
+[ T2977]  nvme_core
+[  T555]  btrtl
+[ T1155]  drm_suballoc_helper
+[ T2977]  r8169
+[  T555]  snd_soc_core
+[ T2977]  usb_common
+[ T1155]  drm_panel_backlight_quirks cec
+[  T555]  btintel
+[ T2977]  amd_sfh
+[ T1155]  xhci_pci
+[  T555]  btbcm
+[ T2977]  crc16
+[ T1155]  drm_buddy
+[ T2977]  i2c_hid_acpi
+[  T555]  btmtk bluetooth
+[ T1155]  xhci_hcd
+[ T2977]  i2c_hid hid
+[  T555]  ecdh_generic
+[ T1155]  drm_display_helper usbcore
+[  T555]  ecc
+[ T2977]  i2c_piix4
+[ T1155]  hid_sensor_hub
+[  T555]  snd_hda_intel
+[ T2977]  i2c_smbus
+[  T555]  snd_intel_dspcfg
+[ T2977]  i2c_designware_platform
+[ T1155]  drm_kms_helper psmouse
+[ T2977]  i2c_designware_core
+[  T555]  uvcvideo
+[ T1155]  nvme
+[  T555]  snd_hda_codec
+[ T2977]  [last unloaded: bpf_testmod(O)]
+[ T1155]  mfd_core
+[ T2977]=20
+[  T555]  videobuf2_vmalloc
+[ T1155]  hid_multitouch
+[  T555]  videobuf2_memops
+[ T2977] Preemption disabled at:
+[ T1155]  hid_generic
+[  T555]  snd_hwdep
+[ T1155]  serio_raw
+[  T555]  uvc
+[ T2977] [<0000000000000000>] 0x0
+[ T1155]  nvme_core
+[  T555]  snd_hda_core
+[ T1155]  r8169 usb_common
+[  T555]  videobuf2_v4l2 snd_pcm_oss
+[ T1155]  amd_sfh
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155]  crc16
+[  T555]  videodev snd_rn_pci_acp3x
+[ T1155]  i2c_hid_acpi
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555]  snd_mixer_oss
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155]  i2c_hid hid
+[  T555]  videobuf2_common
+[ T2977] Call Trace:
+[ T1155]  i2c_piix4
+[  T555]  snd_acp_config
+[ T2977]  <TASK>
+[ T1155]  i2c_smbus
+[  T555]  msi_wmi
+[ T1155]  i2c_designware_platform
+[  T555]  snd_pcm
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  i2c_designware_core
+[  T555]  mc
+[ T1155]  [last unloaded: bpf_testmod(O)]
+[  T555]  sparse_keymap snd_soc_acpi
+[ T1155]=20
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[ T1155] Preemption disabled at:
+[  T555]  snd_timer wmi_bmof edac_mce_amd
+[ T2977]  __schedule+0x167e/0x1ca0
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[  T555]  snd k10temp
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_pci_acp3x soundcore ccp battery
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ac button
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[  T555]  joydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  industrialio_triggered_buffer kfifo_buf industrialio
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[  T555]  evdev hid_sensor_iio_common amd_pmc
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  sch_fq_codel mt7921e
+[ T2977]  ? lock_release+0x21b/0x2e0
+[  T555]  mt7921_common mt792x_lib mt76_connac_lib mt76 mac80211 libarc4 cf=
+g80211
+[ T2977]  schedule_rtlock+0x21/0x40
+[  T555]  rfkill msr nvme_fabrics
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  fuse efi_pstore configfs nfnetlink
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  efivarfs autofs4 ext4
+[ T2977]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  mbcache jbd2 usbhid amdgpu
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  amdxcp i2c_algo_bit drm_client_lib drm_ttm_helper ttm drm_exec gp=
+u_sched drm_suballoc_helper drm_panel_backlight_quirks cec xhci_pci
+[ T2977]  rt_spin_lock+0x99/0x190
+[  T555]  drm_buddy xhci_hcd drm_display_helper usbcore hid_sensor_hub drm_=
+kms_helper
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[  T555]  psmouse nvme mfd_core hid_multitouch
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  hid_generic serio_raw nvme_core r8169
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  usb_common amd_sfh crc16 i2c_hid_acpi
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[  T555]  i2c_hid hid i2c_piix4
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  i2c_smbus
+[  T555]  i2c_designware_platform i2c_designware_core [last unloaded: bpf_t=
+estmod(O)]
+[  T555] Preemption disabled at:
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[  T555] [<0000000000000000>] 0x0
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  do_syscall_64+0x395/0xfa0
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[ T2977] RSP: 002b:00007ffc24356670 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+0000
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T2977] RDX: 00000000000007ff RSI: 000055e34b7d80a8 RDI: 0000000000000003
+[ T2977] RBP: 000055e34b7d80a8 R08: 0000000000000000 R09: 0000000000000000
+[ T2977] R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffc243568e8
+[ T2977] R13: 000055e34b7d2b80 R14: 000055e34b7d6ea0 R15: ffffffffffffffff
+[ T2977]  </TASK>
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155] Call Trace:
+[ T1155]  <TASK>
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387] BUG: scheduling while atomic: Xorg/1387/0x00000002
+[ T1387] INFO: lockdep is turned off.
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1387] Modules linked in: bpf_testmod(O) ccm snd_seq_dummy
+[ T1155] RIP: 0033:0x7fc77ec77f13
+[ T1387]  snd_hrtimer snd_seq_midi
+[ T1155] Code: 81 00 00 00 b8 ca 00 00 00 0f 05 c3 66 66 2e 0f 1f 84 00 00 =
+00 00 00 40 80 f6 81 45 31 d2 ba 01 00 00 00 b8 ca 00 00 00 0f 05 <c3> 66 2=
+e 0f 1f 84 00 00 00 00 00 66 90 48 8b 05 61 70 15 00 48 89
+[ T1387]  snd_seq_midi_event
+[ T1155] RSP: 002b:00007fc77e6b0248 EFLAGS: 00000246
+[ T1387]  snd_rawmidi snd_seq
+[ T1155]  ORIG_RAX: 00000000000000ca
+[ T1387]  snd_seq_device
+[ T1155] RAX: ffffffffffffffda RBX: 000055f047b76d90 RCX: 00007fc77ec77f13
+[ T1387]  rfcomm
+[ T1155] RDX: 0000000000000001 RSI: 0000000000000081 RDI: 000055f047b83c70
+[ T1387]  bnep snd_ctl_led
+[ T1155] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+[ T1387]  snd_hda_codec_realtek
+[ T1155] R10: 0000000000000000 R11: 0000000000000246 R12: 00007fc7700b03a0
+[ T1387]  snd_hda_codec_generic
+[ T1155] R13: 0000000000000004 R14: 0000000000085c89 R15: 000055f047b7b880
+[ T1387]  snd_hda_scodec_component
+[ T1387]  snd_hda_codec_hdmi nls_ascii nls_cp437 vfat fat snd_acp3x_pdm_dma=
+ snd_soc_dmic snd_acp3x_rn btusb
+[ T1155]  </TASK>
+[ T1387]  btrtl snd_soc_core btintel btbcm
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1387]  btmtk bluetooth
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1387]  ecdh_generic
+[ T1387]  ecc
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1387]  snd_hda_intel
+[  T555] Call Trace:
+[ T1387]  snd_intel_dspcfg
+[  T555]  <TASK>
+[ T1387]  uvcvideo snd_hda_codec videobuf2_vmalloc
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[ T1387]  videobuf2_memops snd_hwdep uvc snd_hda_core
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[ T1387]  videobuf2_v4l2 snd_pcm_oss videodev snd_rn_pci_acp3x
+[  T555]  __schedule+0x167e/0x1ca0
+[ T1387]  snd_mixer_oss videobuf2_common snd_acp_config
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T1387]  msi_wmi
+[ T1387]  snd_pcm mc sparse_keymap snd_soc_acpi
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  snd_timer wmi_bmof
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T1387]  edac_mce_amd
+[ T1387]  snd k10temp snd_pci_acp3x
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  soundcore ccp battery
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  ac button joydev
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T1387]  hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  hid_sensor_gyro_3d hid_sensor_als
+[  T555]  ? lock_release+0x21b/0x2e0
+[ T1387]  hid_sensor_trigger industrialio_triggered_buffer kfifo_buf indust=
+rialio evdev hid_sensor_iio_common
+[  T555]  schedule_rtlock+0x21/0x40
+[ T1387]  amd_pmc sch_fq_codel mt7921e
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1387]  mt7921_common mt792x_lib mt76_connac_lib
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T1387]  mt76
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  mac80211
+[ T1155] INFO: lockdep is turned off.
+[ T1387]  libarc4
+[ T1155] Modules linked in:
+[ T1387]  cfg80211
+[ T1155]  bpf_testmod(O)
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1387]  rfkill
+[ T1155]  ccm
+[ T1387]  msr nvme_fabrics
+[ T1155]  snd_seq_dummy
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  fuse
+[ T1155]  snd_hrtimer snd_seq_midi
+[ T1387]  efi_pstore configfs
+[ T1155]  snd_seq_midi_event snd_rawmidi
+[ T1387]  nfnetlink efivarfs
+[ T1155]  snd_seq snd_seq_device
+[ T1387]  autofs4 ext4
+[ T1155]  rfcomm
+[ T1387]  mbcache
+[ T1155]  bnep snd_ctl_led
+[  T555]  rt_spin_lock+0x99/0x190
+[ T1387]  jbd2
+[ T1155]  snd_hda_codec_realtek
+[ T1387]  usbhid amdgpu
+[ T1155]  snd_hda_codec_generic snd_hda_scodec_component
+[ T1387]  amdxcp i2c_algo_bit
+[ T1155]  snd_hda_codec_hdmi
+[  T555]  task_get_cgroup1+0xe8/0x340
+[ T1387]  drm_client_lib
+[ T1155]  nls_ascii
+[ T1387]  drm_ttm_helper
+[ T1387]  ttm
+[ T1155]  nls_cp437 vfat
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[ T1387]  drm_exec
+[ T1155]  fat
+[ T1387]  gpu_sched drm_suballoc_helper
+[ T1155]  snd_acp3x_pdm_dma snd_soc_dmic
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1387]  drm_panel_backlight_quirks
+[ T1155]  snd_acp3x_rn
+[ T1387]  cec
+[ T1155]  btusb
+[ T1155]  btrtl
+[ T1387]  xhci_pci
+[  T555]  bpf_trace_run2+0xd3/0x260
+[ T1155]  snd_soc_core
+[ T1387]  drm_buddy xhci_hcd
+[ T1155]  btintel btbcm
+[ T1387]  drm_display_helper
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  btmtk
+[ T1387]  usbcore
+[ T1155]  bluetooth
+[ T1387]  hid_sensor_hub
+[ T1155]  ecdh_generic ecc
+[ T1387]  drm_kms_helper psmouse
+[ T1155]  snd_hda_intel
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[ T1387]  nvme
+[ T1155]  snd_intel_dspcfg
+[ T1387]  mfd_core
+[ T1155]  uvcvideo
+[ T1387]  hid_multitouch
+[ T1155]  snd_hda_codec
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  videobuf2_vmalloc
+[ T1387]  hid_generic serio_raw
+[ T1155]  videobuf2_memops snd_hwdep
+[ T1387]  nvme_core
+[ T1155]  uvc
+[ T1387]  r8169
+[  T555]  do_syscall_64+0x395/0xfa0
+[ T1387]  usb_common
+[ T1155]  snd_hda_core
+[ T1387]  amd_sfh
+[ T1155]  videobuf2_v4l2
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1387]  crc16
+[ T1155]  snd_pcm_oss
+[ T1387]  i2c_hid_acpi
+[ T1387]  i2c_hid
+[ T1155]  videodev snd_rn_pci_acp3x
+[ T1387]  hid
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1387]  i2c_piix4
+[ T1155]  snd_mixer_oss videobuf2_common
+[ T1387]  i2c_smbus i2c_designware_platform
+[ T1155]  snd_acp_config
+[  T555] RIP: 0033:0x7fd47309ea0e
+[ T1387]  i2c_designware_core
+[ T1155]  msi_wmi snd_pcm
+[  T555] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[ T1387]  [last unloaded: bpf_testmod(O)]
+[ T1155]  mc
+[ T1155]  sparse_keymap
+[ T1387]=20
+[  T555] RSP: 002b:00007fff31d516e0 EFLAGS: 00000297
+[ T1387] Preemption disabled at:
+[ T1155]  snd_soc_acpi
+[  T555]  ORIG_RAX: 00000000000000e4
+[ T1155]  snd_timer
+[  T555] RAX: ffffffffffffffda RBX: 000055b3d56687b0 RCX: 00007fd47309ea0e
+[ T1155]  wmi_bmof
+[ T1155]  edac_mce_amd
+[ T1387] [<0000000000000000>] 0x0
+[  T555] RDX: 0000000000000080 RSI: 00007fff31d51700 RDI: 0000000000000007
+[ T1155]  snd
+[  T555] RBP: 00007fff31d516e0 R08: 0000000000000000 R09: 00007fd473098000
+[ T1155]  k10temp snd_pci_acp3x
+[  T555] R10: ffffffffffffffff R11: 0000000000000297 R12: 0000000000000001
+[ T1155]  soundcore
+[  T555] R13: ffffffffffffffff R14: 0000000000000050 R15: 0000000000000007
+[ T1155]  ccp battery ac button joydev hid_sensor_magn_3d hid_sensor_prox h=
+id_sensor_accel_3d hid_sensor_gyro_3d hid_sensor_als
+[  T555]  </TASK>
+[ T1155]  hid_sensor_trigger industrialio_triggered_buffer kfifo_buf indust=
+rialio
+[ T1387] CPU: 8 UID: 1000 PID: 1387 Comm: Xorg Tainted: G        W  O      =
+  6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155]  evdev hid_sensor_iio_common amd_pmc
+[ T1387] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155]  sch_fq_codel
+[ T1387] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155]  mt7921e
+[ T1387] Call Trace:
+[ T1155]  mt7921_common mt792x_lib
+[ T1387]  <TASK>
+[ T1155]  mt76_connac_lib
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T1155]  mt76 mac80211
+[  T555] INFO: lockdep is turned off.
+[ T1387]  dump_stack_lvl+0x6d/0xb0
+[  T555] Modules linked in:
+[ T1155]  libarc4
+[  T555]  bpf_testmod(O)
+[ T1155]  cfg80211
+[  T555]  ccm
+[ T1155]  rfkill
+[ T1387]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  snd_seq_dummy
+[ T1155]  msr nvme_fabrics
+[  T555]  snd_hrtimer snd_seq_midi
+[ T1155]  fuse
+[ T1387]  __schedule+0x167e/0x1ca0
+[ T1155]  efi_pstore
+[  T555]  snd_seq_midi_event snd_rawmidi
+[ T1155]  configfs nfnetlink
+[  T555]  snd_seq
+[ T1387]  ? rcu_is_watching+0x12/0x60
+[ T1155]  efivarfs
+[  T555]  snd_seq_device rfcomm
+[ T1155]  autofs4 ext4
+[  T555]  bnep
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  mbcache
+[  T555]  snd_ctl_led snd_hda_codec_realtek
+[ T1155]  jbd2 usbhid
+[  T555]  snd_hda_codec_generic
+[ T1387]  ? rcu_is_watching+0x12/0x60
+[ T1155]  amdgpu
+[  T555]  snd_hda_scodec_component
+[ T1155]  amdxcp i2c_algo_bit
+[  T555]  snd_hda_codec_hdmi
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  nls_ascii
+[ T1155]  drm_client_lib
+[  T555]  nls_cp437
+[ T1155]  drm_ttm_helper ttm
+[  T555]  vfat
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  drm_exec
+[  T555]  fat
+[ T1155]  gpu_sched
+[  T555]  snd_acp3x_pdm_dma
+[ T1387]  ? rcu_is_watching+0x12/0x60
+[ T1155]  drm_suballoc_helper
+[  T555]  snd_soc_dmic snd_acp3x_rn
+[ T1155]  drm_panel_backlight_quirks
+[  T555]  btusb
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  cec
+[  T555]  btrtl
+[ T1155]  xhci_pci
+[ T1387]  ? lock_release+0x21b/0x2e0
+[  T555]  snd_soc_core
+[ T1155]  drm_buddy
+[  T555]  btintel
+[ T1155]  xhci_hcd
+[  T555]  btbcm
+[ T1155]  drm_display_helper
+[  T555]  btmtk
+[ T1155]  usbcore
+[  T555]  bluetooth
+[ T1387]  schedule_rtlock+0x21/0x40
+[ T1155]  hid_sensor_hub
+[  T555]  ecdh_generic
+[ T1155]  drm_kms_helper
+[  T555]  ecc snd_hda_intel
+[ T1155]  psmouse
+[ T1387]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  nvme
+[  T555]  snd_intel_dspcfg uvcvideo
+[ T1155]  mfd_core hid_multitouch
+[  T555]  snd_hda_codec
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  hid_generic
+[  T555]  videobuf2_vmalloc videobuf2_memops
+[ T1155]  serio_raw
+[  T555]  snd_hwdep
+[ T1387]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  nvme_core
+[  T555]  uvc
+[ T1155]  r8169 usb_common
+[  T555]  snd_hda_core
+[ T1155]  amd_sfh
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  videobuf2_v4l2
+[ T1155]  crc16
+[  T555]  snd_pcm_oss
+[ T1155]  i2c_hid_acpi
+[  T555]  videodev
+[ T1155]  i2c_hid hid
+[  T555]  snd_rn_pci_acp3x snd_mixer_oss
+[ T1155]  i2c_piix4 i2c_smbus
+[  T555]  videobuf2_common snd_acp_config
+[ T1155]  i2c_designware_platform i2c_designware_core
+[  T555]  msi_wmi
+[ T1387]  rt_spin_lock+0x99/0x190
+[ T1155]  [last unloaded: bpf_testmod(O)]
+[  T555]  snd_pcm mc
+[ T1155]=20
+[  T555]  sparse_keymap
+[ T1155] Preemption disabled at:
+[  T555]  snd_soc_acpi
+[ T1387]  task_get_cgroup1+0xe8/0x340
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[  T555]  snd_timer wmi_bmof edac_mce_amd snd
+[ T1387]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  k10temp snd_pci_acp3x soundcore
+[ T1387]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  ccp battery ac button
+[ T1387]  bpf_trace_run2+0xd3/0x260
+[  T555]  joydev hid_sensor_magn_3d hid_sensor_prox
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor_als hid_sensor_=
+trigger industrialio_triggered_buffer kfifo_buf
+[ T1387]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  industrialio evdev hid_sensor_iio_common amd_pmc sch_fq_codel
+[ T1387]  syscall_trace_enter+0x1c7/0x260
+[  T555]  mt7921e mt7921_common mt792x_lib mt76_connac_lib mt76
+[ T1387]  do_syscall_64+0x395/0xfa0
+[  T555]  mac80211 libarc4
+[ T1387]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  cfg80211 rfkill msr nvme_fabrics fuse
+[ T1387]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555]  efi_pstore configfs nfnetlink efivarfs
+[ T1387] RIP: 0033:0x7f732c2f8da7
+[  T555]  autofs4 ext4
+[ T1387] Code: 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 =
+6f 00 00 00 0f 05 c3 0f 1f 84 00 00 00 00 00 b8 27 00 00 00 0f 05 <c3> 0f 1=
+f 84 00 00 00 00 00 b8 6e 00 00 00 0f 05 c3 0f 1f 84 00 00
+[  T555]  mbcache jbd2
+[ T1387] RSP: 002b:00007ffefbcb6118 EFLAGS: 00000202
+[  T555]  usbhid amdgpu
+[ T1387]  ORIG_RAX: 0000000000000027
+[  T555]  amdxcp
+[ T1387] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f732c2f8da7
+[  T555]  i2c_algo_bit drm_client_lib
+[ T1387] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00005633ee91eb00
+[  T555]  drm_ttm_helper
+[ T1387] RBP: 00005633ee91eb00 R08: 0000000000000001 R09: 0000000000000001
+[  T555]  ttm drm_exec
+[ T1387] R10: 0000000000000001 R11: 0000000000000202 R12: 0000000000000000
+[  T555]  gpu_sched
+[ T1387] R13: 0000000000000000 R14: 00005633d5592b18 R15: 00005633ee762bc0
+[  T555]  drm_suballoc_helper
+[  T555]  drm_panel_backlight_quirks cec xhci_pci drm_buddy xhci_hcd drm_di=
+splay_helper usbcore hid_sensor_hub drm_kms_helper psmouse
+[ T1387]  </TASK>
+[  T555]  nvme mfd_core hid_multitouch
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555]  hid_generic serio_raw
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555]  nvme_core
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555]  r8169 usb_common
+[ T1155] Call Trace:
+[  T555]  amd_sfh
+[ T1155]  <TASK>
+[  T555]  crc16 i2c_hid_acpi i2c_hid
+[ T2977] BUG: scheduling while atomic: dmesg/2977/0x00000002
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[  T555]  hid i2c_piix4
+[ T2977] INFO: lockdep is turned off.
+[  T555]  i2c_smbus
+[ T2977] Modules linked in:
+[  T555]  i2c_designware_platform
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[ T2977]  bpf_testmod(O) ccm
+[  T555]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T2977]  snd_seq_dummy
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T2977]  snd_hrtimer
+[  T555]=20
+[  T555] Preemption disabled at:
+[ T2977]  snd_seq_midi snd_seq_midi_event
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T2977]  snd_rawmidi
+[  T555] [<0000000000000000>] 0x0
+[ T2977]  snd_seq snd_seq_device
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2977]  rfcomm bnep snd_ctl_led snd_hda_codec_realtek
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_hda_codec_generic snd_hda_scodec_component
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2977]  snd_hda_codec_hdmi
+[ T2977]  nls_ascii nls_cp437 vfat
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  fat snd_acp3x_pdm_dma snd_soc_dmic
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_acp3x_rn btusb btrtl
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2977]  snd_soc_core btintel btbcm btmtk
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  bluetooth ecdh_generic
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T2977]  ecc snd_hda_intel snd_intel_dspcfg uvcvideo snd_hda_codec videobu=
+f2_vmalloc
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T2977]  videobuf2_memops snd_hwdep uvc
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2977]  snd_hda_core videobuf2_v4l2 snd_pcm_oss videodev
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_rn_pci_acp3x snd_mixer_oss videobuf2_common
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2977]  snd_acp_config msi_wmi snd_pcm
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  mc sparse_keymap snd_soc_acpi snd_timer wmi_bmof edac_mce_amd snd=
+ k10temp snd_pci_acp3x soundcore ccp
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T2977]  battery ac button joydev hid_sensor_magn_3d hid_sensor_prox
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T2977]  hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor_als hid_sensor_=
+trigger
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T2977]  industrialio_triggered_buffer kfifo_buf industrialio evdev
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2977]  hid_sensor_iio_common amd_pmc sch_fq_codel
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T2977]  mt7921e mt7921_common mt792x_lib
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  mt76_connac_lib mt76 mac80211 libarc4 cfg80211 rfkill msr
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  nvme_fabrics fuse efi_pstore configfs nfnetlink
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  efivarfs autofs4 ext4 mbcache
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T2977]  jbd2 usbhid amdgpu
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  amdxcp i2c_algo_bit drm_client_lib drm_ttm_helper ttm
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977]  drm_exec gpu_sched drm_suballoc_helper
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T2977]  drm_panel_backlight_quirks cec xhci_pci
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T2977]  drm_buddy xhci_hcd
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297
+[ T2977]  drm_display_helper
+[ T1155]  ORIG_RAX: 0000000000000060
+[ T2977]  usbcore
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc770000c98 RCX: 00007fc77f05c7f9
+[ T2977]  hid_sensor_hub drm_kms_helper
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T2977]  psmouse nvme
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 0000000000042448
+[ T2977]  mfd_core
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T2977]  hid_multitouch hid_generic
+[ T1155] R13: 00007fc77e6b02e0 R14: 0000000000085c8e R15: 000055f047b7b880
+[ T2977]  serio_raw nvme_core r8169 usb_common amd_sfh crc16 i2c_hid_acpi i=
+2c_hid hid i2c_piix4
+[ T1155]  </TASK>
+[ T2977]  i2c_smbus i2c_designware_platform i2c_designware_core
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977]  [last unloaded: bpf_testmod(O)]
+[ T2977]=20
+[ T2977] Preemption disabled at:
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555] Call Trace:
+[ T2977] [<0000000000000000>] 0x0
+[  T555]  <TASK>
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  __schedule+0x167e/0x1ca0
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? lock_release+0x21b/0x2e0
+[  T555]  schedule_rtlock+0x21/0x40
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  rt_spin_lock+0x99/0x190
+[  T555]  task_get_cgroup1+0xe8/0x340
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  bpf_trace_run2+0xd3/0x260
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[  T555]  do_syscall_64+0x395/0xfa0
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555] RIP: 0033:0x7fd47309ea0e
+[  T555] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[  T555] RSP: 002b:00007fff31d51730 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+00e4
+[  T555] RAX: ffffffffffffffda RBX: 000055b3c0476728 RCX: 00007fd47309ea0e
+[  T555] RDX: 0000000000000002 RSI: 00007fff31d51750 RDI: 0000000000000001
+[  T555] RBP: 00007fff31d51730 R08: 0000000000000000 R09: 00007fd473098000
+[  T555] R10: 00007fff31d517e0 R11: 0000000000000297 R12: 0000000000000353
+[  T555] R13: 000055b3c0476728 R14: 000055b3d5668660 R15: 0000000000000000
+[  T555]  </TASK>
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2977] Call Trace:
+[ T2977]  <TASK>
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[ T2977]  __schedule+0x167e/0x1ca0
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T1155] INFO: lockdep is turned off.
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1155] Modules linked in: bpf_testmod(O) ccm
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_seq_dummy snd_hrtimer snd_seq_midi
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_seq_midi_event snd_rawmidi snd_seq
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T1155]  snd_seq_device rfcomm bnep
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_ctl_led snd_hda_codec_realtek
+[ T2977]  ? lock_release+0x21b/0x2e0
+[ T1155]  snd_hda_codec_generic snd_hda_scodec_component snd_hda_codec_hdmi=
+ nls_ascii nls_cp437
+[ T2977]  schedule_rtlock+0x21/0x40
+[ T1155]  vfat fat snd_acp3x_pdm_dma snd_soc_dmic
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  snd_acp3x_rn btusb btrtl
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_soc_core
+[ T1155]  btintel btbcm
+[ T2977]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  btmtk bluetooth ecdh_generic ecc
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_hda_intel snd_intel_dspcfg uvcvideo snd_hda_codec videobuf2_v=
+malloc videobuf2_memops snd_hwdep uvc snd_hda_core videobuf2_v4l2 snd_pcm_o=
+ss
+[ T2977]  rt_spin_lock+0x99/0x190
+[ T1155]  videodev snd_rn_pci_acp3x snd_mixer_oss videobuf2_common snd_acp_=
+config
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T1155]  msi_wmi snd_pcm mc sparse_keymap
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  snd_soc_acpi snd_timer wmi_bmof edac_mce_amd
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  snd k10temp snd_pci_acp3x soundcore
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[ T1155]  ccp battery ac button
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  joydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d hid=
+_sensor_gyro_3d hid_sensor_als
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  hid_sensor_trigger industrialio_triggered_buffer kfifo_buf indust=
+rialio
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  evdev hid_sensor_iio_common amd_pmc sch_fq_codel mt7921e
+[ T2977]  do_syscall_64+0x395/0xfa0
+[ T1155]  mt7921_common mt792x_lib
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  mt76_connac_lib mt76 mac80211 libarc4 cfg80211
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155]  rfkill msr nvme_fabrics fuse
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[ T1155]  efi_pstore configfs
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[ T1155]  nfnetlink efivarfs
+[ T2977] RSP: 002b:00007ffc24356670 EFLAGS: 00000202
+[ T1155]  autofs4 ext4
+[ T2977]  ORIG_RAX: 0000000000000000
+[ T1155]  mbcache
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T1155]  jbd2 usbhid
+[ T2977] RDX: 00000000000007ff RSI: 000055e34b7d80a8 RDI: 0000000000000003
+[ T1155]  amdgpu
+[ T2977] RBP: 000055e34b7d80a8 R08: 0000000000000000 R09: 0000000000000000
+[ T1155]  amdxcp i2c_algo_bit
+[ T2977] R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffc243568e8
+[ T1155]  drm_client_lib
+[ T2977] R13: 000055e34b7d2b80 R14: 000055e34b7d6ea0 R15: ffffffffffffffff
+[ T1155]  drm_ttm_helper ttm drm_exec gpu_sched drm_suballoc_helper drm_pan=
+el_backlight_quirks cec xhci_pci drm_buddy xhci_hcd drm_display_helper
+[ T2977]  </TASK>
+[ T1155]  usbcore hid_sensor_hub drm_kms_helper psmouse nvme mfd_core hid_m=
+ultitouch hid_generic serio_raw nvme_core r8169 usb_common amd_sfh crc16 i2=
+c_hid_acpi i2c_hid hid
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T1155]  i2c_piix4 i2c_smbus
+[  T555] INFO: lockdep is turned off.
+[ T1155]  i2c_designware_platform
+[  T555] Modules linked in:
+[ T1155]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[  T555]  bpf_testmod(O) ccm
+[ T1155]=20
+[  T555]  snd_seq_dummy
+[ T1155] Preemption disabled at:
+[  T555]  snd_hrtimer snd_seq_midi
+[ T1155] [<ffffffffa29f1017>] preempt_schedule_irq+0x27/0x70
+[  T555]  snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555]  rfcomm bnep snd_ctl_led
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555]  snd_hda_codec_realtek
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555]  snd_hda_codec_generic
+[ T1155] Call Trace:
+[  T555]  snd_hda_scodec_component
+[ T1155]  <TASK>
+[  T555]  snd_hda_codec_hdmi nls_ascii nls_cp437
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[  T555]  vfat fat snd_acp3x_pdm_dma snd_soc_dmic
+[ T1155]  ? preempt_schedule_irq+0x27/0x70
+[  T555]  snd_acp3x_rn btusb btrtl
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  snd_soc_core btintel btbcm btmtk
+[ T1155]  __schedule+0x167e/0x1ca0
+[  T555]  bluetooth ecdh_generic ecc
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_hda_intel snd_intel_dspcfg uvcvideo
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_hda_codec videobuf2_vmalloc videobuf2_memops
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555]  snd_hwdep uvc snd_hda_core videobuf2_v4l2
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_pcm_oss videodev snd_rn_pci_acp3x
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_mixer_oss videobuf2_common snd_acp_config
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555]  msi_wmi snd_pcm mc
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  sparse_keymap snd_soc_acpi snd_timer
+[ T1155]  ? lock_release+0x21b/0x2e0
+[  T555]  wmi_bmof edac_mce_amd snd k10temp snd_pci_acp3x soundcore
+[ T1155]  schedule_rtlock+0x21/0x40
+[  T555]  ccp battery ac button
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  joydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger industrialio=
+_triggered_buffer
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  kfifo_buf industrialio evdev hid_sensor_iio_common amd_pmc sch_fq=
+_codel mt7921e mt7921_common mt792x_lib mt76_connac_lib
+[ T1155]  rt_spin_lock+0x99/0x190
+[  T555]  mt76 mac80211 libarc4 cfg80211 rfkill msr
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[  T555]  nvme_fabrics fuse efi_pstore configfs
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  nfnetlink efivarfs autofs4 ext4
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  mbcache jbd2 usbhid amdgpu
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[  T555]  amdxcp i2c_algo_bit drm_client_lib
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  drm_ttm_helper ttm drm_exec gpu_sched drm_suballoc_helper drm_pan=
+el_backlight_quirks
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  cec xhci_pci drm_buddy xhci_hcd drm_display_helper
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[  T555]  usbcore hid_sensor_hub drm_kms_helper psmouse nvme
+[ T1155]  do_syscall_64+0x395/0xfa0
+[  T555]  mfd_core hid_multitouch hid_generic
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  serio_raw nvme_core r8169 usb_common
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555]  amd_sfh crc16 i2c_hid_acpi i2c_hid
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[  T555]  hid i2c_piix4 i2c_smbus
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[  T555]  i2c_designware_platform i2c_designware_core
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+0060
+[  T555]  [last unloaded: bpf_testmod(O)]
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc7700b04a8 RCX: 00007fc77f05c7f9
+[  T555] Preemption disabled at:
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 0000000000042448
+[  T555] [<0000000000000000>] 0x0
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T1155] R13: 00007fc77e6b02e0 R14: 0000000000085c97 R15: 000055f047b7b880
+[ T2977] BUG: scheduling while atomic: dmesg/2977/0x00000002
+[ T2977] INFO: lockdep is turned off.
+[ T2977] Modules linked in: bpf_testmod(O) ccm
+[ T1155]  </TASK>
+[ T2977]  snd_seq_dummy snd_hrtimer snd_seq_midi
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977]  snd_seq_midi_event snd_rawmidi snd_seq
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977]  snd_seq_device
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2977]  rfcomm
+[  T555] Call Trace:
+[ T2977]  bnep
+[  T555]  <TASK>
+[ T2977]  snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[ T2977]  snd_hda_scodec_component snd_hda_codec_hdmi nls_ascii nls_cp437 v=
+fat
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[ T2977]  fat snd_acp3x_pdm_dma snd_soc_dmic
+[  T555]  __schedule+0x167e/0x1ca0
+[ T2977]  snd_acp3x_rn btusb btrtl snd_soc_core
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  btintel btbcm btmtk
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  bluetooth ecdh_generic
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2977]  ecc snd_hda_intel snd_intel_dspcfg uvcvideo
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_hda_codec videobuf2_vmalloc videobuf2_memops
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_hwdep uvc snd_hda_core
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2977]  videobuf2_v4l2 snd_pcm_oss videodev
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_rn_pci_acp3x snd_mixer_oss videobuf2_common
+[  T555]  ? lock_release+0x21b/0x2e0
+[ T2977]  snd_acp_config msi_wmi snd_pcm mc sparse_keymap snd_soc_acpi
+[  T555]  schedule_rtlock+0x21/0x40
+[ T2977]  snd_timer wmi_bmof edac_mce_amd
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2977]  snd k10temp snd_pci_acp3x soundcore
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ccp battery ac
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2977]  button joydev hid_sensor_magn_3d
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor=
+_als hid_sensor_trigger industrialio_triggered_buffer kfifo_buf industriali=
+o evdev hid_sensor_iio_common amd_pmc
+[  T555]  rt_spin_lock+0x99/0x190
+[ T2977]  sch_fq_codel mt7921e mt7921_common mt792x_lib mt76_connac_lib
+[  T555]  task_get_cgroup1+0xe8/0x340
+[ T2977]  mt76 mac80211 libarc4 cfg80211 rfkill
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[ T2977]  msr
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T2977]  nvme_fabrics
+[ T1155] INFO: lockdep is turned off.
+[ T2977]  fuse
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155] Modules linked in:
+[ T2977]  efi_pstore configfs
+[ T1155]  bpf_testmod(O)
+[ T2977]  nfnetlink
+[ T1155]  ccm
+[  T555]  bpf_trace_run2+0xd3/0x260
+[ T2977]  efivarfs
+[ T1155]  snd_seq_dummy
+[ T2977]  autofs4
+[ T1155]  snd_hrtimer
+[ T1155]  snd_seq_midi
+[ T2977]  ext4
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  mbcache
+[ T1155]  snd_seq_midi_event
+[ T2977]  jbd2
+[ T1155]  snd_rawmidi snd_seq
+[ T2977]  usbhid amdgpu
+[ T1155]  snd_seq_device
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  amdxcp
+[ T1155]  rfcomm
+[ T1155]  bnep
+[ T2977]  i2c_algo_bit
+[ T2977]  drm_client_lib
+[ T1155]  snd_ctl_led snd_hda_codec_realtek
+[ T2977]  drm_ttm_helper
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  snd_hda_codec_generic
+[ T2977]  ttm
+[ T1155]  snd_hda_scodec_component
+[ T1155]  snd_hda_codec_hdmi
+[ T2977]  drm_exec gpu_sched
+[ T1155]  nls_ascii
+[  T555]  do_syscall_64+0x395/0xfa0
+[ T2977]  drm_suballoc_helper
+[ T1155]  nls_cp437
+[ T2977]  drm_panel_backlight_quirks
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  cec
+[ T1155]  vfat fat
+[ T2977]  xhci_pci drm_buddy
+[ T1155]  snd_acp3x_pdm_dma snd_soc_dmic
+[ T2977]  xhci_hcd
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977]  drm_display_helper
+[ T1155]  snd_acp3x_rn btusb
+[ T2977]  usbcore
+[ T1155]  btrtl
+[  T555] RIP: 0033:0x7fd47309ea0e
+[ T2977]  hid_sensor_hub
+[ T1155]  snd_soc_core
+[ T2977]  drm_kms_helper psmouse
+[  T555] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[ T1155]  btintel
+[ T2977]  nvme
+[ T1155]  btbcm
+[ T2977]  mfd_core
+[  T555] RSP: 002b:00007fff31d51840 EFLAGS: 00000297
+[ T2977]  hid_multitouch
+[ T1155]  btmtk
+[ T2977]  hid_generic
+[  T555]  ORIG_RAX: 00000000000000e4
+[ T1155]  bluetooth
+[ T2977]  serio_raw
+[  T555] RAX: ffffffffffffffda RBX: 000055b3d5666e00 RCX: 00007fd47309ea0e
+[ T1155]  ecdh_generic
+[ T2977]  nvme_core
+[ T1155]  ecc
+[ T2977]  r8169
+[  T555] RDX: 0000000000000001 RSI: 00007fff31d51860 RDI: 0000000000000000
+[ T1155]  snd_hda_intel
+[ T2977]  usb_common
+[  T555] RBP: 00007fff31d51840 R08: 0000000000000000 R09: 00007fd473098000
+[ T1155]  snd_intel_dspcfg
+[ T2977]  amd_sfh
+[  T555] R10: 0000000000000001 R11: 0000000000000297 R12: 00007fff31d518a0
+[ T1155]  uvcvideo
+[ T2977]  crc16 i2c_hid_acpi
+[  T555] R13: 00007fff31d51898 R14: 0000000000000000 R15: 00007fff31d51890
+[ T1155]  snd_hda_codec
+[ T2977]  i2c_hid
+[ T1155]  videobuf2_vmalloc videobuf2_memops
+[ T2977]  hid i2c_piix4
+[ T1155]  snd_hwdep uvc
+[ T2977]  i2c_smbus
+[ T1155]  snd_hda_core
+[ T2977]  i2c_designware_platform
+[ T1155]  videobuf2_v4l2
+[ T2977]  i2c_designware_core
+[ T1155]  snd_pcm_oss
+[ T2977]  [last unloaded: bpf_testmod(O)]
+[  T555]  </TASK>
+[ T1155]  videodev
+[ T2977]=20
+[ T1155]  snd_rn_pci_acp3x
+[ T2977] Preemption disabled at:
+[ T1155]  snd_mixer_oss videobuf2_common snd_acp_config msi_wmi
+[ T2977] [<0000000000000000>] 0x0
+[ T1155]  snd_pcm mc sparse_keymap snd_soc_acpi
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155]  snd_timer wmi_bmof
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155]  edac_mce_amd
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155]  snd k10temp
+[ T2977] Call Trace:
+[ T1155]  snd_pci_acp3x
+[ T2977]  <TASK>
+[ T2386] BUG: scheduling while atomic: WRRende~ckend#1/2386/0x00000002
+[ T1155]  soundcore ccp battery
+[ T2386] INFO: lockdep is turned off.
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  ac
+[ T2386] Modules linked in:
+[ T1155]  button
+[ T2386]  bpf_testmod(O)
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  joydev
+[ T2386]  ccm snd_seq_dummy
+[ T1155]  hid_sensor_magn_3d
+[ T2386]  snd_hrtimer
+[ T1155]  hid_sensor_prox
+[ T2977]  __schedule+0x167e/0x1ca0
+[ T1155]  hid_sensor_accel_3d
+[ T2386]  snd_seq_midi
+[ T1155]  hid_sensor_gyro_3d
+[ T2386]  snd_seq_midi_event
+[ T1155]  hid_sensor_als
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  snd_rawmidi
+[ T1155]  hid_sensor_trigger
+[ T2386]  snd_seq
+[ T1155]  industrialio_triggered_buffer
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  snd_seq_device
+[ T1155]  kfifo_buf
+[ T2386]  rfcomm
+[ T1155]  industrialio
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T2386]  bnep
+[ T1155]  evdev hid_sensor_iio_common
+[ T2386]  snd_ctl_led snd_hda_codec_realtek
+[ T1155]  amd_pmc
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  snd_hda_codec_generic
+[ T1155]  sch_fq_codel mt7921e
+[ T2386]  snd_hda_scodec_component
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  mt7921_common
+[ T2386]  snd_hda_codec_hdmi
+[ T1155]  mt792x_lib
+[ T2386]  nls_ascii nls_cp437
+[ T1155]  mt76_connac_lib
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[ T2386]  vfat
+[ T1155]  mt76
+[ T2386]  fat
+[ T1155]  mac80211 libarc4
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  snd_acp3x_pdm_dma snd_soc_dmic
+[ T1155]  cfg80211
+[ T2977]  ? lock_release+0x21b/0x2e0
+[ T2386]  snd_acp3x_rn
+[ T1155]  rfkill
+[ T1155]  msr
+[ T2386]  btusb
+[ T2386]  btrtl
+[ T1155]  nvme_fabrics fuse
+[ T2386]  snd_soc_core
+[ T1155]  efi_pstore
+[ T2977]  schedule_rtlock+0x21/0x40
+[ T1155]  configfs
+[ T2386]  btintel btbcm
+[ T1155]  nfnetlink efivarfs
+[ T2386]  btmtk
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  autofs4
+[ T2386]  bluetooth
+[ T1155]  ext4
+[ T2386]  ecdh_generic
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  mbcache
+[ T2386]  ecc
+[ T1155]  jbd2
+[ T2386]  snd_hda_intel
+[ T2386]  snd_intel_dspcfg
+[ T2977]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  usbhid
+[ T2386]  uvcvideo
+[ T1155]  amdgpu
+[ T1155]  amdxcp
+[ T2386]  snd_hda_codec
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  i2c_algo_bit
+[ T2386]  videobuf2_vmalloc
+[ T2386]  videobuf2_memops
+[ T1155]  drm_client_lib
+[ T1155]  drm_ttm_helper
+[ T2386]  snd_hwdep
+[ T1155]  ttm
+[ T2386]  uvc
+[ T1155]  drm_exec
+[ T2386]  snd_hda_core
+[ T1155]  gpu_sched
+[ T2386]  videobuf2_v4l2
+[ T1155]  drm_suballoc_helper
+[ T2386]  snd_pcm_oss
+[ T1155]  drm_panel_backlight_quirks
+[ T2386]  videodev snd_rn_pci_acp3x
+[ T2977]  rt_spin_lock+0x99/0x190
+[ T1155]  cec xhci_pci
+[ T2386]  snd_mixer_oss videobuf2_common
+[ T1155]  drm_buddy xhci_hcd
+[ T2386]  snd_acp_config msi_wmi
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[ T1155]  drm_display_helper
+[ T2386]  snd_pcm
+[ T1155]  usbcore
+[ T1155]  hid_sensor_hub
+[ T2386]  mc
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[ T2386]  sparse_keymap
+[ T1155]  drm_kms_helper psmouse
+[ T2386]  snd_soc_acpi
+[ T1155]  nvme
+[ T2386]  snd_timer
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  mfd_core
+[ T2386]  wmi_bmof edac_mce_amd
+[ T1155]  hid_multitouch
+[ T2386]  snd
+[ T1155]  hid_generic
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[ T2386]  k10temp
+[ T1155]  serio_raw nvme_core
+[ T2386]  snd_pci_acp3x soundcore
+[ T1155]  r8169
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  ccp
+[ T1155]  usb_common amd_sfh
+[ T2386]  battery ac
+[ T1155]  crc16 i2c_hid_acpi
+[ T2386]  button joydev
+[ T1155]  i2c_hid
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[ T2386]  hid_sensor_magn_3d
+[ T1155]  hid i2c_piix4
+[ T2386]  hid_sensor_prox
+[ T1155]  i2c_smbus i2c_designware_platform
+[ T2386]  hid_sensor_accel_3d
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  i2c_designware_core
+[ T2386]  hid_sensor_gyro_3d hid_sensor_als
+[ T1155]  [last unloaded: bpf_testmod(O)]
+[ T2386]  hid_sensor_trigger
+[ T1155]=20
+[ T2977]  do_syscall_64+0x395/0xfa0
+[ T1155] Preemption disabled at:
+[ T2386]  industrialio_triggered_buffer kfifo_buf
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  industrialio
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T2386]  evdev hid_sensor_iio_common amd_pmc
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2386]  sch_fq_codel mt7921e mt7921_common mt792x_lib
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[ T2386]  mt76_connac_lib mt76
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[ T2386]  mac80211 libarc4
+[ T2977] RSP: 002b:00007ffc24356670 EFLAGS: 00000202
+[ T2386]  cfg80211
+[ T2977]  ORIG_RAX: 0000000000000000
+[ T2386]  rfkill msr
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T2386]  nvme_fabrics
+[ T2977] RDX: 00000000000007ff RSI: 000055e34b7d80a8 RDI: 0000000000000003
+[ T2386]  fuse efi_pstore
+[ T2977] RBP: 000055e34b7d80a8 R08: 0000000000000000 R09: 0000000000000000
+[ T2386]  configfs nfnetlink
+[ T2977] R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffc243568e8
+[ T2386]  efivarfs
+[ T2977] R13: 000055e34b7d2b80 R14: 000055e34b7d6ea0 R15: ffffffffffffffff
+[ T2386]  autofs4 ext4 mbcache jbd2 usbhid amdgpu amdxcp i2c_algo_bit drm_c=
+lient_lib drm_ttm_helper ttm
+[ T2977]  </TASK>
+[ T2386]  drm_exec gpu_sched drm_suballoc_helper
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2386]  drm_panel_backlight_quirks cec
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2386]  xhci_pci
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2386]  drm_buddy
+[ T1155] Call Trace:
+[ T2386]  xhci_hcd drm_display_helper
+[ T1155]  <TASK>
+[ T2386]  usbcore hid_sensor_hub
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T2386]  drm_kms_helper psmouse nvme mfd_core
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[ T2386]  hid_multitouch hid_generic serio_raw
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T2386]  nvme_core r8169 usb_common amd_sfh
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T2386]  crc16 i2c_hid_acpi i2c_hid
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2386]  hid i2c_piix4 i2c_smbus i2c_designware_platform
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2386] Preemption disabled at:
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386] [<ffffffffa29f0b46>] schedule+0x36/0x130
+[  T555] INFO: lockdep is turned off.
+[  T555] Modules linked in:
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  bpf_testmod(O)
+[  T555]  ccm snd_seq_dummy
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555]  snd_hrtimer snd_seq_midi snd_seq_midi_event
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_rawmidi snd_seq snd_seq_device
+[ T1155]  ? lock_release+0x21b/0x2e0
+[  T555]  rfcomm bnep snd_ctl_led snd_hda_codec_realtek snd_hda_codec_gener=
+ic snd_hda_scodec_component
+[ T1155]  schedule_rtlock+0x21/0x40
+[  T555]  snd_hda_codec_hdmi nls_ascii nls_cp437
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  vfat fat snd_acp3x_pdm_dma snd_soc_dmic
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_acp3x_rn btusb btrtl
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  snd_soc_core btintel btbcm
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  btmtk
+[  T555]  bluetooth ecdh_generic ecc snd_hda_intel snd_intel_dspcfg uvcvide=
+o snd_hda_codec videobuf2_vmalloc videobuf2_memops snd_hwdep
+[ T1155]  rt_spin_lock+0x99/0x190
+[  T555]  uvc snd_hda_core videobuf2_v4l2 snd_pcm_oss videodev
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[  T555]  snd_rn_pci_acp3x snd_mixer_oss videobuf2_common snd_acp_config ms=
+i_wmi
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  snd_pcm mc sparse_keymap
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  snd_soc_acpi snd_timer wmi_bmof edac_mce_amd
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[  T555]  snd k10temp snd_pci_acp3x
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  soundcore ccp battery ac button joydev hid_sensor_magn_3d
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor=
+_als
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[  T555]  hid_sensor_trigger industrialio_triggered_buffer kfifo_buf indust=
+rialio evdev
+[ T1155]  do_syscall_64+0x395/0xfa0
+[  T555]  hid_sensor_iio_common amd_pmc
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  sch_fq_codel mt7921e mt7921_common mt792x_lib mt76_connac_lib
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555]  mt76 mac80211 libarc4
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[  T555]  cfg80211
+[  T555]  rfkill msr
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[  T555]  nvme_fabrics
+[  T555]  fuse
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297
+[  T555]  efi_pstore
+[ T1155]  ORIG_RAX: 0000000000000060
+[  T555]  configfs nfnetlink
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc770090428 RCX: 00007fc77f05c7f9
+[  T555]  efivarfs
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[  T555]  autofs4 ext4
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 000000000004244a
+[  T555]  mbcache
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[  T555]  jbd2 usbhid
+[ T1155] R13: 00007fc77e6b02e0 R14: 0000000000085ca7 R15: 000055f047b7b880
+[  T555]  amdgpu amdxcp i2c_algo_bit drm_client_lib drm_ttm_helper ttm drm_=
+exec gpu_sched drm_suballoc_helper drm_panel_backlight_quirks
+[ T1155]  </TASK>
+[  T555]  cec xhci_pci drm_buddy
+[ T2386] CPU: 8 UID: 1000 PID: 2386 Comm: WRRende~ckend#1 Tainted: G       =
+ W  O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555]  xhci_hcd drm_display_helper usbcore
+[ T2386] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555]  hid_sensor_hub drm_kms_helper
+[ T2386] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555]  psmouse
+[ T2386] Call Trace:
+[  T555]  nvme
+[ T2386]  <TASK>
+[  T555]  mfd_core hid_multitouch hid_generic
+[ T2386]  dump_stack_lvl+0x6d/0xb0
+[  T555]  serio_raw nvme_core r8169 usb_common
+[ T2386]  ? schedule+0x36/0x130
+[  T555]  amd_sfh crc16 i2c_hid_acpi
+[ T2386]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  i2c_hid hid i2c_piix4 i2c_smbus
+[ T2386]  __schedule+0x167e/0x1ca0
+[  T555]  i2c_designware_platform i2c_designware_core [last unloaded: bpf_t=
+estmod(O)]
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555] Preemption disabled at:
+[  T555] [<0000000000000000>] 0x0
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  ? rcu_is_watching+0x12/0x60
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  ? rcu_is_watching+0x12/0x60
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T1155] INFO: lockdep is turned off.
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155] Modules linked in: bpf_testmod(O)
+[ T2386]  ? lock_release+0x21b/0x2e0
+[ T1155]  ccm snd_seq_dummy snd_hrtimer snd_seq_midi snd_seq_midi_event snd=
+_rawmidi
+[ T2386]  schedule_rtlock+0x21/0x40
+[ T1155]  snd_seq snd_seq_device rfcomm bnep
+[ T2386]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic
+[ T2386]  ? futex_unqueue+0xa0/0x170
+[ T1155]  snd_hda_scodec_component snd_hda_codec_hdmi nls_ascii nls_cp437
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  vfat fat snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn btusb btrtl =
+snd_soc_core btintel btbcm
+[ T2386]  rt_spin_lock+0x99/0x190
+[ T1155]  btmtk bluetooth ecdh_generic ecc snd_hda_intel snd_intel_dspcfg
+[ T2386]  task_get_cgroup1+0xe8/0x340
+[ T1155]  uvcvideo snd_hda_codec videobuf2_vmalloc videobuf2_memops
+[ T2386]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  snd_hwdep uvc snd_hda_core
+[ T2386]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  videobuf2_v4l2 snd_pcm_oss videodev snd_rn_pci_acp3x
+[ T2386]  bpf_trace_run2+0xd3/0x260
+[ T1155]  snd_mixer_oss videobuf2_common snd_acp_config msi_wmi
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_pcm mc sparse_keymap snd_soc_acpi snd_timer wmi_bmof
+[ T2386]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  edac_mce_amd snd k10temp snd_pci_acp3x
+[ T2386]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  soundcore
+[ T1155]  ccp battery ac button
+[ T2386]  do_syscall_64+0x395/0xfa0
+[ T1155]  joydev hid_sensor_magn_3d hid_sensor_prox
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor_als hid_sensor_=
+trigger
+[ T2386]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155]  industrialio_triggered_buffer kfifo_buf industrialio evdev hid_se=
+nsor_iio_common
+[ T2386] RIP: 0033:0x7f1f6d7ed8c7
+[ T1155]  amd_pmc sch_fq_codel mt7921e
+[ T2386] Code: 73 01 c3 48 8b 0d 31 e5 0e 00 f7 d8 64 89 01 48 83 c8 ff c3 =
+66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 18 00 00 00 0f 05 <48> 3d 0=
+1 f0 ff ff 73 01 c3 48 8b 0d 01 e5 0e 00 f7 d8 64 89 01 48
+[ T1155]  mt7921_common mt792x_lib
+[ T2386] RSP: 002b:00007f1f3a1fa1d8 EFLAGS: 00000202
+[ T1155]  mt76_connac_lib
+[ T2386]  ORIG_RAX: 0000000000000018
+[ T1155]  mt76
+[ T2386] RAX: ffffffffffffffda RBX: 00007f1f3a1fa1e8 RCX: 00007f1f6d7ed8c7
+[ T1155]  mac80211 libarc4
+[ T2386] RDX: 0000000000007e88 RSI: 0000000000003f44 RDI: 00007f1f3bffa600
+[ T1155]  cfg80211 rfkill
+[ T2386] RBP: 0000000000000007 R08: 0000000000000007 R09: e5e5e5e5e5e5e5e5
+[ T1155]  msr
+[ T2386] R10: 0000000000000007 R11: 0000000000000202 R12: 00007f1f3a1fa61c
+[ T1155]  nvme_fabrics fuse
+[ T2386] R13: 00007f1f3a1fa380 R14: 00007f1f3a1fa2d0 R15: 00007f1f3a1fa218
+[ T1155]  efi_pstore configfs nfnetlink efivarfs autofs4 ext4 mbcache jbd2 =
+usbhid amdgpu amdxcp
+[ T2386]  </TASK>
+[ T1155]  i2c_algo_bit drm_client_lib
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155]  drm_ttm_helper ttm drm_exec
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155]  gpu_sched
+[ T2977] BUG: scheduling while atomic: dmesg/2977/0x00000002
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155]  drm_suballoc_helper
+[ T2977] INFO: lockdep is turned off.
+[  T555] Call Trace:
+[ T1155]  drm_panel_backlight_quirks
+[ T2977] Modules linked in:
+[  T555]  <TASK>
+[ T1155]  cec
+[ T2977]  bpf_testmod(O)
+[ T1155]  xhci_pci
+[ T2977]  ccm
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[ T2977]  snd_seq_dummy
+[ T1155]  drm_buddy
+[ T2977]  snd_hrtimer
+[ T2977]  snd_seq_midi
+[ T1155]  xhci_hcd
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  drm_display_helper
+[ T2977]  snd_seq_midi_event
+[ T1155]  usbcore
+[ T2977]  snd_rawmidi
+[ T2977]  snd_seq
+[ T1155]  hid_sensor_hub
+[ T2977]  snd_seq_device
+[  T555]  __schedule+0x167e/0x1ca0
+[ T1155]  drm_kms_helper psmouse
+[ T2977]  rfcomm bnep
+[ T1155]  nvme
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2977]  snd_ctl_led
+[ T1155]  mfd_core
+[ T1155]  hid_multitouch
+[ T2977]  snd_hda_codec_realtek
+[ T2977]  snd_hda_codec_generic
+[ T1155]  hid_generic serio_raw
+[ T2977]  snd_hda_scodec_component
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  nvme_core
+[ T2977]  snd_hda_codec_hdmi
+[ T1155]  r8169 usb_common
+[ T2977]  nls_ascii
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T1155]  amd_sfh
+[ T2977]  nls_cp437
+[ T1155]  crc16 i2c_hid_acpi
+[ T2977]  vfat
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  i2c_hid
+[ T2977]  fat snd_acp3x_pdm_dma
+[ T1155]  hid i2c_piix4
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_soc_dmic snd_acp3x_rn
+[ T1155]  i2c_smbus i2c_designware_platform
+[ T2977]  btusb
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2977]  btrtl
+[ T1155]  i2c_designware_core
+[ T2977]  snd_soc_core
+[ T1155]  [last unloaded: bpf_testmod(O)]
+[ T2977]  btintel
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]=20
+[ T2977]  btbcm
+[ T1155] Preemption disabled at:
+[ T2977]  btmtk
+[  T555]  ? lock_release+0x21b/0x2e0
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T2977]  bluetooth ecdh_generic ecc snd_hda_intel snd_intel_dspcfg
+[  T555]  schedule_rtlock+0x21/0x40
+[ T2977]  uvcvideo snd_hda_codec videobuf2_vmalloc videobuf2_memops
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2977]  snd_hwdep uvc snd_hda_core videobuf2_v4l2
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  snd_pcm_oss videodev
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2977]  snd_rn_pci_acp3x snd_mixer_oss videobuf2_common snd_acp_config
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  msi_wmi snd_pcm mc sparse_keymap snd_soc_acpi snd_timer wmi_bmof =
+edac_mce_amd snd k10temp snd_pci_acp3x
+[  T555]  rt_spin_lock+0x99/0x190
+[ T2977]  soundcore ccp battery ac button joydev
+[  T555]  task_get_cgroup1+0xe8/0x340
+[ T2977]  hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d hid_sensor=
+_gyro_3d
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[ T2977]  hid_sensor_als hid_sensor_trigger industrialio_triggered_buffer
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2977]  kfifo_buf industrialio evdev hid_sensor_iio_common
+[  T555]  bpf_trace_run2+0xd3/0x260
+[ T2977]  amd_pmc sch_fq_codel mt7921e
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  mt7921_common mt792x_lib mt76_connac_lib mt76 mac80211 libarc4 cf=
+g80211
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  rfkill msr nvme_fabrics fuse efi_pstore
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  configfs nfnetlink efivarfs autofs4 ext4
+[  T555]  do_syscall_64+0x395/0xfa0
+[ T2977]  mbcache jbd2
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  usbhid amdgpu amdxcp i2c_algo_bit drm_client_lib
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977]  drm_ttm_helper ttm drm_exec
+[  T555] RIP: 0033:0x7fd47309ea0e
+[ T2977]  gpu_sched drm_suballoc_helper drm_panel_backlight_quirks
+[  T555] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[ T2977]  cec xhci_pci
+[  T555] RSP: 002b:00007fff31d516e0 EFLAGS: 00000297
+[ T2977]  drm_buddy
+[  T555]  ORIG_RAX: 00000000000000e4
+[ T2977]  xhci_hcd
+[  T555] RAX: ffffffffffffffda RBX: 000055b3d56687b0 RCX: 00007fd47309ea0e
+[ T2977]  drm_display_helper usbcore
+[  T555] RDX: 0000000000000080 RSI: 00007fff31d51700 RDI: 0000000000000007
+[ T2977]  hid_sensor_hub
+[  T555] RBP: 00007fff31d516e0 R08: 0000000000000000 R09: 00007fd473098000
+[ T2977]  drm_kms_helper psmouse
+[  T555] R10: ffffffffffffffff R11: 0000000000000297 R12: 0000000000000001
+[ T2977]  nvme mfd_core
+[  T555] R13: ffffffffffffffff R14: 0000000000000050 R15: 0000000000000007
+[ T2977]  hid_multitouch hid_generic serio_raw nvme_core r8169 usb_common a=
+md_sfh crc16 i2c_hid_acpi i2c_hid
+[  T555]  </TASK>
+[ T2977]  hid i2c_piix4 i2c_smbus
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977]  i2c_designware_platform i2c_designware_core
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977]  [last unloaded: bpf_testmod(O)]
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2977]=20
+[ T1155] Call Trace:
+[ T2977] Preemption disabled at:
+[ T1155]  <TASK>
+[ T2977] [<0000000000000000>] 0x0
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+0060
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc77002a378 RCX: 00007fc77f05c7f9
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 000000000004244a
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T1155] R13: 00007fc77e6b02e0 R14: 0000000000085cb0 R15: 000055f047b7b880
+[ T1155]  </TASK>
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2977] Call Trace:
+[ T2977]  <TASK>
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[ T2977]  __schedule+0x167e/0x1ca0
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[  T555] INFO: lockdep is turned off.
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555] Modules linked in: bpf_testmod(O) ccm
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_seq_dummy snd_hrtimer snd_seq_midi
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[  T555]  snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  rfcomm bnep
+[ T2977]  ? lock_release+0x21b/0x2e0
+[  T555]  snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic snd_hda_s=
+codec_component snd_hda_codec_hdmi nls_ascii
+[ T2977]  schedule_rtlock+0x21/0x40
+[  T555]  nls_cp437 vfat fat
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn btusb
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  btrtl snd_soc_core btintel
+[ T2977]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  btbcm btmtk bluetooth ecdh_generic
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ecc snd_hda_intel snd_intel_dspcfg uvcvideo snd_hda_codec videobu=
+f2_vmalloc videobuf2_memops snd_hwdep uvc snd_hda_core videobuf2_v4l2
+[ T2977]  rt_spin_lock+0x99/0x190
+[  T555]  snd_pcm_oss videodev snd_rn_pci_acp3x snd_mixer_oss videobuf2_com=
+mon
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[  T555]  snd_acp_config msi_wmi snd_pcm mc sparse_keymap
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  snd_soc_acpi snd_timer wmi_bmof edac_mce_amd
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  snd k10temp snd_pci_acp3x soundcore
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[  T555]  ccp battery ac
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  button joydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel=
+_3d hid_sensor_gyro_3d
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  hid_sensor_als hid_sensor_trigger industrialio_triggered_buffer k=
+fifo_buf industrialio
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[  T555]  evdev hid_sensor_iio_common amd_pmc sch_fq_codel
+[ T2977]  do_syscall_64+0x395/0xfa0
+[  T555]  mt7921e mt7921_common mt792x_lib
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  mt76_connac_lib mt76 mac80211 libarc4
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[ T2977] RSP: 002b:00007ffc24356240 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+0001
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[ T2977] RDX: 000000000000004a RSI: 000055e375e787e0 RDI: 0000000000000001
+[ T2977] RBP: 000055e375e787e0 R08: 0000000000000000 R09: 0000000000000000
+[ T2977] R10: 0000000000000000 R11: 0000000000000202 R12: 000000000000004a
+[  T555]  cfg80211 rfkill
+[ T2977] R13: 00007fdfbd3f35c0 R14: 00007fdfbd3f0e80 R15: 00007ffc24356740
+[  T555]  msr nvme_fabrics fuse efi_pstore configfs nfnetlink efivarfs auto=
+fs4 ext4
+[ T2977]  </TASK>
+[  T555]  mbcache jbd2 usbhid amdgpu amdxcp i2c_algo_bit drm_client_lib drm=
+_ttm_helper ttm drm_exec gpu_sched drm_suballoc_helper drm_panel_backlight_=
+quirks cec xhci_pci drm_buddy xhci_hcd drm_display_helper usbcore hid_senso=
+r_hub drm_kms_helper psmouse nvme mfd_core hid_multitouch hid_generic serio=
+_raw nvme_core r8169 usb_common amd_sfh crc16 i2c_hid_acpi i2c_hid hid i2c_=
+piix4 i2c_smbus i2c_designware_platform i2c_designware_core [last unloaded:=
+ bpf_testmod(O)]
+[  T555] Preemption disabled at:
+[  T555] [<0000000000000000>] 0x0
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555] Call Trace:
+[  T555]  <TASK>
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  __schedule+0x167e/0x1ca0
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T1155] INFO: lockdep is turned off.
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155] Modules linked in: bpf_testmod(O) ccm
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_seq_dummy snd_hrtimer snd_seq_midi
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T1155]  snd_seq_midi_event snd_rawmidi snd_seq
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_seq_device
+[ T1155]  rfcomm bnep
+[  T555]  ? lock_release+0x21b/0x2e0
+[ T1155]  snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic snd_hda_s=
+codec_component snd_hda_codec_hdmi
+[  T555]  schedule_rtlock+0x21/0x40
+[ T1155]  nls_ascii nls_cp437 vfat fat
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn btusb
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  btrtl snd_soc_core btintel
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  btbcm btmtk bluetooth
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ecdh_generic ecc snd_hda_intel snd_intel_dspcfg uvcvideo snd_hda_=
+codec videobuf2_vmalloc videobuf2_memops snd_hwdep uvc snd_hda_core
+[  T555]  rt_spin_lock+0x99/0x190
+[ T1155]  videobuf2_v4l2 snd_pcm_oss videodev snd_rn_pci_acp3x snd_mixer_oss
+[  T555]  task_get_cgroup1+0xe8/0x340
+[ T1155]  videobuf2_common snd_acp_config msi_wmi snd_pcm mc
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  sparse_keymap snd_soc_acpi snd_timer
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  wmi_bmof
+[ T1155]  edac_mce_amd snd k10temp snd_pci_acp3x
+[  T555]  bpf_trace_run2+0xd3/0x260
+[ T1155]  soundcore ccp battery
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ac button joydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_ac=
+cel_3d
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger industrialio=
+_triggered_buffer kfifo_buf
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  industrialio evdev hid_sensor_iio_common amd_pmc
+[  T555]  do_syscall_64+0x395/0xfa0
+[ T1155]  sch_fq_codel mt7921e mt7921_common
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  mt792x_lib mt76_connac_lib mt76 mac80211 libarc4
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155]  cfg80211 rfkill msr
+[  T555] RIP: 0033:0x7fd472a989ee
+[ T1155]  nvme_fabrics fuse efi_pstore
+[  T555] Code: 08 0f 85 f5 4b ff ff 49 89 fb 48 89 f0 48 89 d7 48 89 ce 4c =
+89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0f 05 <c3> 66 2=
+e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
+[ T1155]  configfs nfnetlink
+[  T555] RSP: 002b:00007fff31d4edc8 EFLAGS: 00000246
+[ T1155]  efivarfs
+[  T555]  ORIG_RAX: 0000000000000000
+[ T1155]  autofs4
+[  T555] RAX: ffffffffffffffda RBX: 00007fd471f87980 RCX: 00007fd472a989ee
+[ T1155]  ext4 mbcache
+[  T555] RDX: 0000000000002000 RSI: 00007fff31d4f770 RDI: 0000000000000008
+[ T1155]  jbd2
+[  T555] RBP: 000055b3d5668660 R08: 0000000000000000 R09: 0000000000000000
+[ T1155]  usbhid amdgpu
+[  T555] R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff31d517e0
+[ T1155]  amdxcp
+[  T555] R13: 00007fff31d4f770 R14: 0000000000000000 R15: 0000000000000000
+[ T1155]  i2c_algo_bit drm_client_lib drm_ttm_helper ttm drm_exec gpu_sched=
+ drm_suballoc_helper drm_panel_backlight_quirks cec xhci_pci drm_buddy
+[  T555]  </TASK>
+[ T1155]  xhci_hcd drm_display_helper usbcore hid_sensor_hub drm_kms_helper=
+ psmouse nvme mfd_core hid_multitouch hid_generic serio_raw nvme_core r8169=
+ usb_common amd_sfh crc16 i2c_hid_acpi i2c_hid hid i2c_piix4 i2c_smbus i2c_=
+designware_platform i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T1155] Preemption disabled at:
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155] Call Trace:
+[ T1155]  <TASK>
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  __schedule+0x167e/0x1ca0
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555] INFO: lockdep is turned off.
+[  T555] Modules linked in: bpf_testmod(O)
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  ccm
+[  T555]  snd_seq_dummy snd_hrtimer snd_seq_midi
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_seq_midi_event snd_rawmidi snd_seq
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555]  snd_seq_device rfcomm bnep snd_ctl_led
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_hda_codec_realtek snd_hda_codec_generic snd_hda_scodec_compon=
+ent
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_hda_codec_hdmi nls_ascii nls_cp437
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555]  vfat fat snd_acp3x_pdm_dma snd_soc_dmic
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_acp3x_rn btusb
+[ T1155]  ? lock_release+0x21b/0x2e0
+[  T555]  btrtl snd_soc_core btintel btbcm btmtk bluetooth
+[ T1155]  schedule_rtlock+0x21/0x40
+[  T555]  ecdh_generic ecc snd_hda_intel snd_intel_dspcfg
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  uvcvideo snd_hda_codec videobuf2_vmalloc videobuf2_memops snd_hwd=
+ep
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  uvc snd_hda_core videobuf2_v4l2 snd_pcm_oss videodev snd_rn_pci_a=
+cp3x snd_mixer_oss videobuf2_common snd_acp_config msi_wmi snd_pcm
+[ T1155]  rt_spin_lock+0x99/0x190
+[  T555]  mc sparse_keymap snd_soc_acpi snd_timer wmi_bmof edac_mce_amd
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[  T555]  snd k10temp snd_pci_acp3x soundcore
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  ccp battery ac button
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  joydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[  T555]  hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  industrialio_triggered_buffer
+[  T555]  kfifo_buf industrialio evdev hid_sensor_iio_common amd_pmc sch_fq=
+_codel
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  mt7921e mt7921_common mt792x_lib mt76_connac_lib mt76
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[  T555]  mac80211 libarc4 cfg80211 rfkill
+[ T1155]  do_syscall_64+0x395/0xfa0
+[  T555]  msr nvme_fabrics fuse
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  efi_pstore configfs nfnetlink efivarfs autofs4
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555]  ext4 mbcache jbd2 usbhid
+[ T1155] RIP: 0033:0x7fc77ec77f13
+[  T555]  amdgpu amdxcp i2c_algo_bit
+[ T1155] Code: 81 00 00 00 b8 ca 00 00 00 0f 05 c3 66 66 2e 0f 1f 84 00 00 =
+00 00 00 40 80 f6 81 45 31 d2 ba 01 00 00 00 b8 ca 00 00 00 0f 05 <c3> 66 2=
+e 0f 1f 84 00 00 00 00 00 66 90 48 8b 05 61 70 15 00 48 89
+[  T555]  drm_client_lib drm_ttm_helper
+[ T1155] RSP: 002b:00007fc77e6b0248 EFLAGS: 00000246
+[  T555]  ttm
+[ T1155]  ORIG_RAX: 00000000000000ca
+[  T555]  drm_exec
+[ T1155] RAX: ffffffffffffffda RBX: 000055f047b76d90 RCX: 00007fc77ec77f13
+[  T555]  gpu_sched
+[ T1155] RDX: 0000000000000001 RSI: 0000000000000081 RDI: 000055f047b83c70
+[  T555]  drm_suballoc_helper
+[ T1155] RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+[  T555]  drm_panel_backlight_quirks cec
+[ T1155] R10: 0000000000000000 R11: 0000000000000246 R12: 00007fc7700287e0
+[  T555]  xhci_pci drm_buddy
+[ T1155] R13: 0000000000000004 R14: 0000000000085cc7 R15: 000055f047b7b880
+[  T555]  xhci_hcd drm_display_helper usbcore hid_sensor_hub drm_kms_helper=
+ psmouse nvme mfd_core hid_multitouch hid_generic
+[ T1155]  </TASK>
+[  T555]  serio_raw nvme_core r8169 usb_common amd_sfh crc16 i2c_hid_acpi i=
+2c_hid hid i2c_piix4 i2c_smbus i2c_designware_platform i2c_designware_core =
+[last unloaded: bpf_testmod(O)]
+[  T555] Preemption disabled at:
+[  T555] [<0000000000000000>] 0x0
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555] Call Trace:
+[  T555]  <TASK>
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  __schedule+0x167e/0x1ca0
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? lock_release+0x21b/0x2e0
+[  T555]  schedule_rtlock+0x21/0x40
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  rt_spin_lock+0x99/0x190
+[  T555]  task_get_cgroup1+0xe8/0x340
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  bpf_trace_run2+0xd3/0x260
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[  T555]  do_syscall_64+0x395/0xfa0
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555] RIP: 0033:0x7fd47309ea0e
+[  T555] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[  T555] RSP: 002b:00007fff31d516e0 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+00e4
+[  T555] RAX: ffffffffffffffda RBX: 000055b3d56687b0 RCX: 00007fd47309ea0e
+[  T555] RDX: 0000000000000001 RSI: 00007fff31d51700 RDI: 0000000000000000
+[  T555] RBP: 00007fff31d516e0 R08: 0000000000000000 R09: 00007fd473098000
+[  T555] R10: ffffffffffffffff R11: 0000000000000297 R12: 0000000000000001
+[  T555] R13: ffffffffffffffff R14: 0000000000000050 R15: 0000000000000007
+[  T555]  </TASK>
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T1155] INFO: lockdep is turned off.
+[ T1155] Modules linked in: bpf_testmod(O) ccm snd_seq_dummy snd_hrtimer sn=
+d_seq_midi snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device rfcomm bne=
+p snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic snd_hda_scodec_co=
+mponent snd_hda_codec_hdmi nls_ascii nls_cp437 vfat fat snd_acp3x_pdm_dma s=
+nd_soc_dmic snd_acp3x_rn
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T1155]  btusb
+[  T555] INFO: lockdep is turned off.
+[ T1155]  btrtl
+[  T555] Modules linked in:
+[ T1155]  snd_soc_core btintel
+[  T555]  bpf_testmod(O) ccm
+[ T1155]  btbcm btmtk
+[  T555]  snd_seq_dummy snd_hrtimer
+[ T1155]  bluetooth
+[  T555]  snd_seq_midi
+[ T1155]  ecdh_generic ecc
+[  T555]  snd_seq_midi_event snd_rawmidi
+[ T1155]  snd_hda_intel snd_intel_dspcfg
+[  T555]  snd_seq snd_seq_device
+[ T1155]  uvcvideo snd_hda_codec
+[  T555]  rfcomm bnep
+[ T1155]  videobuf2_vmalloc
+[  T555]  snd_ctl_led
+[ T1155]  videobuf2_memops
+[  T555]  snd_hda_codec_realtek
+[ T1155]  snd_hwdep uvc
+[  T555]  snd_hda_codec_generic snd_hda_scodec_component
+[ T1155]  snd_hda_core videobuf2_v4l2
+[  T555]  snd_hda_codec_hdmi nls_ascii
+[ T1155]  snd_pcm_oss videodev
+[  T555]  nls_cp437 vfat
+[ T1155]  snd_rn_pci_acp3x snd_mixer_oss
+[  T555]  fat
+[ T1155]  videobuf2_common
+[  T555]  snd_acp3x_pdm_dma
+[ T1155]  snd_acp_config
+[  T555]  snd_soc_dmic
+[ T1155]  msi_wmi snd_pcm
+[  T555]  snd_acp3x_rn btusb
+[ T1155]  mc
+[  T555]  btrtl
+[ T1155]  sparse_keymap snd_soc_acpi
+[  T555]  snd_soc_core btintel
+[ T1155]  snd_timer wmi_bmof
+[  T555]  btbcm btmtk
+[ T1155]  edac_mce_amd snd
+[  T555]  bluetooth
+[ T1155]  k10temp
+[  T555]  ecdh_generic ecc
+[ T1155]  snd_pci_acp3x soundcore
+[  T555]  snd_hda_intel
+[ T1155]  ccp
+[  T555]  snd_intel_dspcfg uvcvideo
+[ T1155]  battery
+[  T555]  snd_hda_codec
+[ T1155]  ac
+[  T555]  videobuf2_vmalloc
+[ T1155]  button
+[  T555]  videobuf2_memops
+[ T1155]  joydev
+[  T555]  snd_hwdep uvc
+[ T1155]  hid_sensor_magn_3d hid_sensor_prox
+[  T555]  snd_hda_core videobuf2_v4l2
+[ T1155]  hid_sensor_accel_3d
+[  T555]  snd_pcm_oss
+[ T1155]  hid_sensor_gyro_3d
+[  T555]  videodev
+[ T1155]  hid_sensor_als hid_sensor_trigger
+[  T555]  snd_rn_pci_acp3x snd_mixer_oss
+[ T1155]  industrialio_triggered_buffer
+[  T555]  videobuf2_common
+[ T1155]  kfifo_buf industrialio
+[  T555]  snd_acp_config msi_wmi
+[ T1155]  evdev hid_sensor_iio_common
+[  T555]  snd_pcm mc
+[ T1155]  amd_pmc
+[  T555]  sparse_keymap
+[ T1155]  sch_fq_codel mt7921e
+[  T555]  snd_soc_acpi snd_timer
+[ T1155]  mt7921_common
+[  T555]  wmi_bmof
+[ T1155]  mt792x_lib mt76_connac_lib
+[  T555]  edac_mce_amd snd
+[ T1155]  mt76 mac80211
+[  T555]  k10temp snd_pci_acp3x
+[ T1155]  libarc4 cfg80211
+[  T555]  soundcore ccp
+[ T1155]  rfkill msr
+[  T555]  battery ac
+[ T1155]  nvme_fabrics fuse
+[  T555]  button joydev
+[ T1155]  efi_pstore configfs
+[  T555]  hid_sensor_magn_3d hid_sensor_prox
+[ T1155]  nfnetlink efivarfs
+[  T555]  hid_sensor_accel_3d hid_sensor_gyro_3d
+[ T1155]  autofs4 ext4
+[  T555]  hid_sensor_als
+[ T1155]  mbcache
+[  T555]  hid_sensor_trigger
+[ T1155]  jbd2
+[  T555]  industrialio_triggered_buffer
+[ T1155]  usbhid
+[  T555]  kfifo_buf
+[ T1155]  amdgpu
+[  T555]  industrialio
+[ T1155]  amdxcp
+[  T555]  evdev
+[ T1155]  i2c_algo_bit
+[  T555]  hid_sensor_iio_common
+[ T1155]  drm_client_lib
+[  T555]  amd_pmc
+[ T1155]  drm_ttm_helper
+[  T555]  sch_fq_codel
+[ T1155]  ttm
+[  T555]  mt7921e
+[ T1155]  drm_exec
+[  T555]  mt7921_common
+[ T1155]  gpu_sched drm_suballoc_helper
+[  T555]  mt792x_lib mt76_connac_lib
+[ T1155]  drm_panel_backlight_quirks
+[  T555]  mt76
+[ T1155]  cec xhci_pci
+[  T555]  mac80211
+[ T1155]  drm_buddy
+[  T555]  libarc4 cfg80211
+[ T1155]  xhci_hcd drm_display_helper
+[  T555]  rfkill msr
+[ T1155]  usbcore hid_sensor_hub
+[  T555]  nvme_fabrics fuse
+[ T1155]  drm_kms_helper psmouse
+[  T555]  efi_pstore configfs
+[ T1155]  nvme mfd_core
+[  T555]  nfnetlink efivarfs
+[ T1155]  hid_multitouch hid_generic
+[  T555]  autofs4
+[ T1155]  serio_raw
+[  T555]  ext4
+[  T555]  mbcache
+[ T1155]  nvme_core r8169
+[  T555]  jbd2 usbhid
+[ T1155]  usb_common
+[  T555]  amdgpu
+[ T1155]  amd_sfh crc16
+[  T555]  amdxcp i2c_algo_bit
+[ T1155]  i2c_hid_acpi
+[  T555]  drm_client_lib
+[ T1155]  i2c_hid hid
+[  T555]  drm_ttm_helper ttm
+[ T1155]  i2c_piix4
+[  T555]  drm_exec
+[ T1155]  i2c_smbus
+[  T555]  gpu_sched
+[ T1155]  i2c_designware_platform i2c_designware_core
+[  T555]  drm_suballoc_helper drm_panel_backlight_quirks
+[ T1155]  [last unloaded: bpf_testmod(O)]
+[  T555]  cec xhci_pci
+[ T1155] Preemption disabled at:
+[  T555]  drm_buddy
+[ T1155] [<ffffffffa21386bd>] count_memcg_events+0x4d/0x280
+[  T555]  xhci_hcd drm_display_helper usbcore hid_sensor_hub
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555]  drm_kms_helper
+[  T555]  psmouse nvme
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555]  mfd_core
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555]  hid_multitouch hid_generic
+[ T1155] Call Trace:
+[  T555]  serio_raw
+[ T1155]  <TASK>
+[  T555]  nvme_core r8169 usb_common
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[  T555]  amd_sfh crc16 i2c_hid_acpi
+[ T1155]  ? count_memcg_events+0x4d/0x280
+[  T555]  i2c_hid hid i2c_piix4 i2c_smbus
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  i2c_designware_platform i2c_designware_core [last unloaded: bpf_t=
+estmod(O)]
+[ T1155]  __schedule+0x167e/0x1ca0
+[  T555]=20
+[  T555] Preemption disabled at:
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555] [<0000000000000000>] 0x0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+0060
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc77001e928 RCX: 00007fc77f05c7f9
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 000000000004244c
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T1155] R13: 00007fc77e6b02e0 R14: 0000000000085ce1 R15: 000055f047b7b880
+[ T1155]  </TASK>
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555] Call Trace:
+[  T555]  <TASK>
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  __schedule+0x167e/0x1ca0
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? lock_release+0x21b/0x2e0
+[  T555]  schedule_rtlock+0x21/0x40
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  rt_spin_lock+0x99/0x190
+[  T555]  task_get_cgroup1+0xe8/0x340
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T1155] INFO: lockdep is turned off.
+[ T1155] Modules linked in:
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  bpf_testmod(O) ccm snd_seq_dummy
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  snd_hrtimer snd_seq_midi snd_seq_midi_event snd_rawmidi
+[  T555]  bpf_trace_run2+0xd3/0x260
+[ T1155]  snd_seq snd_seq_device rfcomm
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  bnep
+[ T1155]  snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic snd_hda_s=
+codec_component snd_hda_codec_hdmi nls_ascii
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  nls_cp437 vfat fat snd_acp3x_pdm_dma
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  snd_soc_dmic snd_acp3x_rn btusb btrtl snd_soc_core
+[  T555]  do_syscall_64+0x395/0xfa0
+[ T1155]  btintel btbcm btmtk
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  bluetooth ecdh_generic ecc snd_hda_intel snd_intel_dspcfg
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155]  uvcvideo snd_hda_codec videobuf2_vmalloc
+[  T555] RIP: 0033:0x7fd472a989ee
+[ T1155]  videobuf2_memops snd_hwdep uvc
+[  T555] Code: 08 0f 85 f5 4b ff ff 49 89 fb 48 89 f0 48 89 d7 48 89 ce 4c =
+89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0f 05 <c3> 66 2=
+e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
+[ T1155]  snd_hda_core
+[  T555] RSP: 002b:00007fff31d4edc8 EFLAGS: 00000246
+[ T1155]  videobuf2_v4l2
+[ T1155]  snd_pcm_oss
+[  T555]  ORIG_RAX: 0000000000000000
+[ T1155]  videodev
+[  T555] RAX: ffffffffffffffda RBX: 00007fd471f87980 RCX: 00007fd472a989ee
+[ T1155]  snd_rn_pci_acp3x snd_mixer_oss
+[  T555] RDX: 0000000000002000 RSI: 00007fff31d4f770 RDI: 0000000000000008
+[ T1155]  videobuf2_common
+[  T555] RBP: 000055b3d5668660 R08: 0000000000000000 R09: 0000000000000000
+[ T1155]  snd_acp_config msi_wmi
+[  T555] R10: 0000000000000000 R11: 0000000000000246 R12: 00007fff31d517e0
+[ T1155]  snd_pcm mc
+[  T555] R13: 00007fff31d4f770 R14: 0000000000000000 R15: 0000000000000000
+[ T1155]  sparse_keymap snd_soc_acpi snd_timer wmi_bmof edac_mce_amd snd k1=
+0temp snd_pci_acp3x soundcore ccp
+[  T555]  </TASK>
+[ T1155]  battery ac button joydev hid_sensor_magn_3d hid_sensor_prox hid_s=
+ensor_accel_3d hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger industr=
+ialio_triggered_buffer kfifo_buf industrialio evdev hid_sensor_iio_common a=
+md_pmc sch_fq_codel mt7921e mt7921_common mt792x_lib mt76_connac_lib mt76 m=
+ac80211 libarc4 cfg80211 rfkill msr nvme_fabrics fuse efi_pstore configfs n=
+fnetlink efivarfs autofs4 ext4 mbcache jbd2 usbhid amdgpu
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T1155]  amdxcp
+[  T555] INFO: lockdep is turned off.
+[ T1155]  i2c_algo_bit
+[  T555] Modules linked in:
+[ T1155]  drm_client_lib
+[  T555]  bpf_testmod(O)
+[ T1155]  drm_ttm_helper
+[  T555]  ccm
+[ T1155]  ttm drm_exec
+[  T555]  snd_seq_dummy
+[ T1155]  gpu_sched
+[  T555]  snd_hrtimer
+[ T1155]  drm_suballoc_helper
+[  T555]  snd_seq_midi
+[ T1155]  drm_panel_backlight_quirks
+[  T555]  snd_seq_midi_event
+[ T1155]  cec
+[  T555]  snd_rawmidi
+[ T1155]  xhci_pci
+[  T555]  snd_seq snd_seq_device
+[ T1155]  drm_buddy
+[  T555]  rfcomm
+[ T1155]  xhci_hcd
+[  T555]  bnep
+[ T1155]  drm_display_helper usbcore
+[  T555]  snd_ctl_led snd_hda_codec_realtek
+[ T1155]  hid_sensor_hub drm_kms_helper
+[  T555]  snd_hda_codec_generic snd_hda_scodec_component
+[ T1155]  psmouse nvme
+[  T555]  snd_hda_codec_hdmi nls_ascii
+[ T1155]  mfd_core hid_multitouch
+[  T555]  nls_cp437 vfat
+[ T1155]  hid_generic serio_raw
+[  T555]  fat snd_acp3x_pdm_dma
+[ T1155]  nvme_core
+[  T555]  snd_soc_dmic
+[ T1155]  r8169
+[ T1155]  usb_common
+[  T555]  snd_acp3x_rn btusb
+[ T1155]  amd_sfh crc16
+[  T555]  btrtl snd_soc_core
+[ T1155]  i2c_hid_acpi i2c_hid
+[  T555]  btintel btbcm
+[ T1155]  hid i2c_piix4
+[  T555]  btmtk bluetooth
+[ T1155]  i2c_smbus i2c_designware_platform
+[  T555]  ecdh_generic ecc
+[ T1155]  i2c_designware_core
+[  T555]  snd_hda_intel
+[ T1155]  [last unloaded: bpf_testmod(O)]
+[  T555]  snd_intel_dspcfg uvcvideo
+[ T1155] Preemption disabled at:
+[  T555]  snd_hda_codec
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[  T555]  videobuf2_vmalloc videobuf2_memops snd_hwdep uvc snd_hda_core
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555]  videobuf2_v4l2 snd_pcm_oss
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555]  videodev
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555]  snd_rn_pci_acp3x
+[ T1155] Call Trace:
+[  T555]  snd_mixer_oss videobuf2_common
+[ T1155]  <TASK>
+[  T555]  snd_acp_config msi_wmi
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[  T555]  snd_pcm mc sparse_keymap snd_soc_acpi
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[  T555]  snd_timer wmi_bmof edac_mce_amd snd
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  k10temp snd_pci_acp3x soundcore
+[ T1155]  __schedule+0x167e/0x1ca0
+[  T555]  ccp battery ac button
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555]  joydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555]  industrialio_triggered_buffer kfifo_buf industrialio evdev
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  hid_sensor_iio_common amd_pmc sch_fq_codel
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  mt7921e mt7921_common mt792x_lib
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555]  mt76_connac_lib mt76 mac80211
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  libarc4
+[  T555]  cfg80211 rfkill
+[ T1155]  ? lock_release+0x21b/0x2e0
+[  T555]  msr nvme_fabrics fuse efi_pstore configfs nfnetlink
+[ T1155]  schedule_rtlock+0x21/0x40
+[  T555]  efivarfs autofs4 ext4 mbcache
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  jbd2 usbhid amdgpu amdxcp
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  i2c_algo_bit drm_client_lib
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  drm_ttm_helper
+[  T555]  ttm drm_exec gpu_sched
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  drm_suballoc_helper drm_panel_backlight_quirks cec xhci_pci drm_b=
+uddy xhci_hcd drm_display_helper usbcore hid_sensor_hub drm_kms_helper psmo=
+use
+[ T1155]  rt_spin_lock+0x99/0x190
+[  T555]  nvme mfd_core hid_multitouch hid_generic serio_raw
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[  T555]  nvme_core r8169 usb_common amd_sfh crc16
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  i2c_hid_acpi i2c_hid hid
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  i2c_piix4
+[  T555]  i2c_smbus i2c_designware_platform i2c_designware_core
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[  T555]  [last unloaded: bpf_testmod(O)]
+[  T555] Preemption disabled at:
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555] [<0000000000000000>] 0x0
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+0060
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc7700b07a8 RCX: 00007fc77f05c7f9
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 000000000004244c
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T1155] R13: 00007fc77e6b02e0 R14: 0000000000085ced R15: 000055f047b7b880
+[ T1155]  </TASK>
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555] Call Trace:
+[  T555]  <TASK>
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  __schedule+0x167e/0x1ca0
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T1155] INFO: lockdep is turned off.
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T1155] Modules linked in: bpf_testmod(O) ccm
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_seq_dummy snd_hrtimer snd_seq_midi
+[  T555]  ? lock_release+0x21b/0x2e0
+[ T1155]  snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device rfcomm
+[  T555]  schedule_rtlock+0x21/0x40
+[ T1155]  bnep snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  snd_hda_scodec_component snd_hda_codec_hdmi nls_ascii
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  nls_cp437 vfat fat
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn btusb
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  btrtl snd_soc_core btintel btbcm btmtk bluetooth ecdh_generic ecc=
+ snd_hda_intel snd_intel_dspcfg uvcvideo snd_hda_codec
+[  T555]  rt_spin_lock+0x99/0x190
+[ T1155]  videobuf2_vmalloc videobuf2_memops snd_hwdep uvc snd_hda_core
+[  T555]  task_get_cgroup1+0xe8/0x340
+[ T1155]  videobuf2_v4l2 snd_pcm_oss videodev snd_rn_pci_acp3x
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  snd_mixer_oss videobuf2_common snd_acp_config msi_wmi
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  snd_pcm mc sparse_keymap snd_soc_acpi
+[  T555]  bpf_trace_run2+0xd3/0x260
+[ T1155]  snd_timer wmi_bmof edac_mce_amd
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd
+[ T1155]  k10temp snd_pci_acp3x soundcore ccp battery ac
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  button joydev hid_sensor_magn_3d hid_sensor_prox
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor_als hid_sensor_=
+trigger industrialio_triggered_buffer
+[  T555]  do_syscall_64+0x395/0xfa0
+[ T1155]  kfifo_buf industrialio
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  evdev hid_sensor_iio_common amd_pmc sch_fq_codel mt7921e
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155]  mt7921_common mt792x_lib mt76_connac_lib mt76
+[  T555] RIP: 0033:0x7fd472b0fad7
+[ T1155]  mac80211 libarc4
+[  T555] Code: 73 01 c3 48 8b 0d 21 53 0d 00 f7 d8 64 89 01 48 83 c8 ff c3 =
+66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 ba 00 00 00 0f 05 <c3> 0f 1=
+f 84 00 00 00 00 00 b8 ea 00 00 00 0f 05 48 3d 01 f0 ff ff
+[ T1155]  cfg80211 rfkill
+[  T555] RSP: 002b:00007fff31d51828 EFLAGS: 00000202
+[ T1155]  msr
+[  T555]  ORIG_RAX: 00000000000000ba
+[ T1155]  nvme_fabrics
+[  T555] RAX: ffffffffffffffda RBX: 000000000000022b RCX: 00007fd472b0fad7
+[ T1155]  fuse
+[  T555] RDX: 00000000ffffffff RSI: 00007fd472ecafd0 RDI: 00007fd473095cc8
+[  T555] RBP: 000055b3d5668660 R08: 0000000000000000 R09: 000055b3d5667488
+[  T555] R10: 00007fff31d518a0 R11: 0000000000000202 R12: 000055b3d5668660
+[  T555] R13: ffffffffffffffff R14: 0000000000000000 R15: 00007fff31d51890
+[ T1155]  efi_pstore configfs nfnetlink efivarfs autofs4 ext4 mbcache
+[  T555]  </TASK>
+[ T1155]  jbd2 usbhid amdgpu amdxcp i2c_algo_bit drm_client_lib drm_ttm_hel=
+per ttm drm_exec gpu_sched drm_suballoc_helper drm_panel_backlight_quirks c=
+ec xhci_pci drm_buddy xhci_hcd drm_display_helper usbcore hid_sensor_hub dr=
+m_kms_helper psmouse nvme mfd_core hid_multitouch hid_generic serio_raw nvm=
+e_core r8169
+[ T2977] BUG: scheduling while atomic: dmesg/2977/0x00000002
+[ T1155]  usb_common amd_sfh
+[ T2977] INFO: lockdep is turned off.
+[ T1155]  crc16
+[ T2977] Modules linked in:
+[ T1155]  i2c_hid_acpi
+[ T2977]  bpf_testmod(O)
+[ T1155]  i2c_hid
+[ T2977]  ccm snd_seq_dummy
+[ T1155]  hid i2c_piix4
+[ T2977]  snd_hrtimer snd_seq_midi
+[ T1155]  i2c_smbus i2c_designware_platform
+[ T2977]  snd_seq_midi_event snd_rawmidi
+[ T1155]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T2977]  snd_seq snd_seq_device
+[ T1155]=20
+[ T2977]  rfcomm
+[ T1155] Preemption disabled at:
+[ T2977]  bnep
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T2977]  snd_ctl_led
+[ T2977]  snd_hda_codec_realtek snd_hda_codec_generic snd_hda_scodec_compon=
+ent
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977]  snd_hda_codec_hdmi nls_ascii nls_cp437
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977]  vfat
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2977]  fat snd_acp3x_pdm_dma
+[ T1155] Call Trace:
+[ T2977]  snd_soc_dmic
+[ T1155]  <TASK>
+[ T2977]  snd_acp3x_rn btusb btrtl
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T2977]  snd_soc_core btintel btbcm
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[ T2977]  btmtk bluetooth ecdh_generic ecc
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T2977]  snd_hda_intel snd_intel_dspcfg uvcvideo
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T2977]  snd_hda_codec videobuf2_vmalloc videobuf2_memops
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2977]  snd_hwdep uvc snd_hda_core videobuf2_v4l2 snd_pcm_oss
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  videodev snd_rn_pci_acp3x
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2977]  snd_mixer_oss videobuf2_common snd_acp_config
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  msi_wmi
+[ T2977]  snd_pcm mc
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  sparse_keymap snd_soc_acpi snd_timer
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T2977]  wmi_bmof edac_mce_amd snd
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  k10temp snd_pci_acp3x soundcore
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T2977]  ccp battery ac button joydev hid_sensor_magn_3d
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T2977]  hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2977]  hid_sensor_als hid_sensor_trigger industrialio_triggered_buffer
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  kfifo_buf
+[ T2977]  industrialio evdev
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2977]  hid_sensor_iio_common amd_pmc sch_fq_codel mt7921e
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  mt7921_common mt792x_lib mt76_connac_lib mt76 mac80211 libarc4 cf=
+g80211 rfkill msr nvme_fabrics fuse
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T2977]  efi_pstore configfs nfnetlink efivarfs autofs4
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T2977]  ext4 mbcache jbd2 usbhid
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T2977]  amdgpu amdxcp i2c_algo_bit drm_client_lib
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2977]  drm_ttm_helper ttm drm_exec gpu_sched
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T2977]  drm_suballoc_helper drm_panel_backlight_quirks cec
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  xhci_pci drm_buddy xhci_hcd drm_display_helper usbcore hid_sensor=
+_hub drm_kms_helper
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T2977]  psmouse nvme mfd_core hid_multitouch
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T2977]  hid_generic serio_raw nvme_core r8169 usb_common
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T2977]  amd_sfh crc16 i2c_hid_acpi
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2977]  i2c_hid hid i2c_piix4 i2c_smbus i2c_designware_platform
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2977]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T2977] Preemption disabled at:
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T2977] [<0000000000000000>] 0x0
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+0060
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc770005978 RCX: 00007fc77f05c7f9
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 000000000004244c
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T1155] R13: 00007fc77e6b02e0 R14: 0000000000085cf5 R15: 000055f047b7b880
+[ T1155]  </TASK>
+[ T2977] CPU: 11 UID: 1000 PID: 2977 Comm: dmesg Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2977] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2977] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2977] Call Trace:
+[ T2977]  <TASK>
+[ T2977]  dump_stack_lvl+0x6d/0xb0
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T2977]  __schedule_bug.cold+0x8c/0x9a
+[  T555] INFO: lockdep is turned off.
+[  T555] Modules linked in: bpf_testmod(O)
+[ T2977]  __schedule+0x167e/0x1ca0
+[  T555]  ccm snd_seq_dummy snd_hrtimer
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_seq_midi
+[  T555]  snd_seq_midi_event snd_rawmidi
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_seq snd_seq_device rfcomm
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[  T555]  bnep snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_hda_scodec_component snd_hda_codec_hdmi nls_ascii
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  nls_cp437 vfat fat
+[ T2977]  ? rcu_is_watching+0x12/0x60
+[  T555]  snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  btusb btrtl
+[ T2977]  ? lock_release+0x21b/0x2e0
+[  T555]  snd_soc_core btintel btbcm btmtk bluetooth ecdh_generic
+[ T2977]  schedule_rtlock+0x21/0x40
+[  T555]  ecc snd_hda_intel snd_intel_dspcfg uvcvideo
+[ T2977]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  snd_hda_codec videobuf2_vmalloc videobuf2_memops snd_hwdep
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  uvc snd_hda_core
+[ T2977]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  videobuf2_v4l2 snd_pcm_oss videodev snd_rn_pci_acp3x
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_mixer_oss videobuf2_common snd_acp_config msi_wmi snd_pcm mc =
+sparse_keymap snd_soc_acpi snd_timer wmi_bmof edac_mce_amd
+[ T2977]  rt_spin_lock+0x99/0x190
+[  T555]  snd k10temp snd_pci_acp3x soundcore ccp battery
+[ T2977]  task_get_cgroup1+0xe8/0x340
+[  T555]  ac button joydev hid_sensor_magn_3d
+[ T2977]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor=
+_als
+[ T2977]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  hid_sensor_trigger industrialio_triggered_buffer kfifo_buf indust=
+rialio
+[ T2977]  bpf_trace_run2+0xd3/0x260
+[  T555]  evdev hid_sensor_iio_common amd_pmc
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  sch_fq_codel mt7921e mt7921_common mt792x_lib mt76_connac_lib mt76
+[ T2977]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  mac80211 libarc4 cfg80211 rfkill msr
+[ T2977]  syscall_trace_enter+0x1c7/0x260
+[  T555]  nvme_fabrics fuse efi_pstore configfs
+[ T2977]  do_syscall_64+0x395/0xfa0
+[  T555]  nfnetlink efivarfs autofs4
+[ T2977]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ext4 mbcache jbd2 usbhid amdgpu
+[ T2977]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555]  amdxcp i2c_algo_bit drm_client_lib drm_ttm_helper
+[ T2977] RIP: 0033:0x7fdfbd29a687
+[  T555]  ttm drm_exec
+[ T2977] Code: 48 89 fa 4c 89 df e8 58 b3 00 00 8b 93 08 03 00 00 59 5e 48 =
+83 f8 fc 74 1a 5b c3 0f 1f 84 00 00 00 00 00 48 8b 44 24 10 0f 05 <5b> c3 0=
+f 1f 80 00 00 00 00 83 e2 39 83 fa 08 75 de e8 23 ff ff ff
+[  T555]  gpu_sched drm_suballoc_helper
+[ T2977] RSP: 002b:00007ffc24356670 EFLAGS: 00000202
+[  T555]  drm_panel_backlight_quirks
+[ T2977]  ORIG_RAX: 0000000000000000
+[  T555]  cec
+[  T555]  xhci_pci
+[ T2977] RAX: ffffffffffffffda RBX: 00007fdfbd208740 RCX: 00007fdfbd29a687
+[  T555]  drm_buddy
+[ T2977] RDX: 00000000000007ff RSI: 000055e34b7d80a8 RDI: 0000000000000003
+[  T555]  xhci_hcd drm_display_helper
+[ T2977] RBP: 000055e34b7d80a8 R08: 0000000000000000 R09: 0000000000000000
+[  T555]  usbcore
+[ T2977] R10: 0000000000000000 R11: 0000000000000202 R12: 00007ffc243568e8
+[  T555]  hid_sensor_hub drm_kms_helper
+[ T2977] R13: 000055e34b7d2b80 R14: 000055e34b7d6ea0 R15: ffffffffffffffff
+[  T555]  psmouse nvme mfd_core hid_multitouch hid_generic serio_raw nvme_c=
+ore r8169 usb_common amd_sfh
+[ T2977]  </TASK>
+[  T555]  crc16 i2c_hid_acpi i2c_hid hid i2c_piix4 i2c_smbus i2c_designware=
+_platform i2c_designware_core [last unloaded: bpf_testmod(O)]
+[  T555] Preemption disabled at:
+[  T555] [<0000000000000000>] 0x0
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555] Call Trace:
+[  T555]  <TASK>
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  __schedule+0x167e/0x1ca0
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? lock_release+0x21b/0x2e0
+[  T555]  schedule_rtlock+0x21/0x40
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  rt_spin_lock+0x99/0x190
+[  T555]  task_get_cgroup1+0xe8/0x340
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  bpf_trace_run2+0xd3/0x260
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[  T555]  do_syscall_64+0x395/0xfa0
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555] RIP: 0033:0x7fd47309ea0e
+[  T555] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[  T555] RSP: 002b:00007fff31d516e0 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+00e4
+[  T555] RAX: ffffffffffffffda RBX: 000055b3d56687b0 RCX: 00007fd47309ea0e
+[  T555] RDX: 0000000000000001 RSI: 00007fff31d51700 RDI: 0000000000000000
+[  T555] RBP: 00007fff31d516e0 R08: 0000000000000000 R09: 00007fd473098000
+[  T555] R10: ffffffffffffffff R11: 0000000000000297 R12: 0000000000000001
+[  T555] R13: ffffffffffffffff R14: 0000000000000050 R15: 0000000000000007
+[  T555]  </TASK>
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T1155] INFO: lockdep is turned off.
+[ T1155] Modules linked in: bpf_testmod(O) ccm snd_seq_dummy snd_hrtimer sn=
+d_seq_midi snd_seq_midi_event snd_rawmidi
+[ T2247] BUG: scheduling while atomic: Compositor/2247/0x00000002
+[ T1155]  snd_seq snd_seq_device rfcomm
+[ T2247] INFO: lockdep is turned off.
+[ T1155]  bnep
+[ T2247] Modules linked in:
+[ T1155]  snd_ctl_led snd_hda_codec_realtek
+[ T2247]  bpf_testmod(O)
+[ T1155]  snd_hda_codec_generic
+[ T2247]  ccm snd_seq_dummy
+[ T1155]  snd_hda_scodec_component snd_hda_codec_hdmi
+[ T2247]  snd_hrtimer
+[ T1155]  nls_ascii
+[ T2247]  snd_seq_midi
+[ T1155]  nls_cp437 vfat
+[ T2247]  snd_seq_midi_event
+[ T1155]  fat snd_acp3x_pdm_dma
+[ T2247]  snd_rawmidi
+[ T1155]  snd_soc_dmic
+[ T2247]  snd_seq
+[ T1155]  snd_acp3x_rn
+[ T2247]  snd_seq_device
+[ T1155]  btusb
+[ T2247]  rfcomm
+[ T1155]  btrtl
+[ T2247]  bnep
+[ T1155]  snd_soc_core
+[ T2247]  snd_ctl_led
+[ T1155]  btintel
+[ T2247]  snd_hda_codec_realtek
+[ T1155]  btbcm
+[ T2247]  snd_hda_codec_generic
+[ T1155]  btmtk
+[ T2247]  snd_hda_scodec_component
+[ T1155]  bluetooth
+[ T2247]  snd_hda_codec_hdmi
+[ T1155]  ecdh_generic
+[ T2247]  nls_ascii
+[ T1155]  ecc
+[ T2247]  nls_cp437 vfat
+[ T1155]  snd_hda_intel snd_intel_dspcfg
+[ T2247]  fat
+[ T1155]  uvcvideo
+[ T2247]  snd_acp3x_pdm_dma
+[ T1155]  snd_hda_codec
+[ T2247]  snd_soc_dmic
+[ T1155]  videobuf2_vmalloc
+[ T2247]  snd_acp3x_rn btusb
+[ T1155]  videobuf2_memops snd_hwdep
+[ T2247]  btrtl
+[ T1155]  uvc
+[ T2247]  snd_soc_core
+[ T1155]  snd_hda_core
+[ T2247]  btintel
+[ T1155]  videobuf2_v4l2
+[ T2247]  btbcm
+[ T1155]  snd_pcm_oss videodev
+[ T2247]  btmtk
+[ T1155]  snd_rn_pci_acp3x
+[ T2247]  bluetooth
+[ T1155]  snd_mixer_oss videobuf2_common
+[ T2247]  ecdh_generic
+[ T1155]  snd_acp_config
+[ T2247]  ecc
+[ T1155]  msi_wmi snd_pcm
+[ T2247]  snd_hda_intel
+[ T1155]  mc
+[ T2247]  snd_intel_dspcfg
+[ T1155]  sparse_keymap
+[ T2247]  uvcvideo
+[ T1155]  snd_soc_acpi
+[ T2247]  snd_hda_codec
+[ T1155]  snd_timer
+[ T2247]  videobuf2_vmalloc
+[ T1155]  wmi_bmof
+[ T2247]  videobuf2_memops
+[ T1155]  edac_mce_amd snd
+[ T2247]  snd_hwdep
+[ T1155]  k10temp
+[ T2247]  uvc
+[ T1155]  snd_pci_acp3x
+[ T2247]  snd_hda_core
+[ T1155]  soundcore
+[ T2247]  videobuf2_v4l2
+[ T1155]  ccp
+[ T2247]  snd_pcm_oss
+[ T1155]  battery
+[ T2247]  videodev
+[ T1155]  ac
+[ T2247]  snd_rn_pci_acp3x
+[ T1155]  button
+[ T2247]  snd_mixer_oss
+[ T1155]  joydev
+[ T2247]  videobuf2_common
+[ T1155]  hid_sensor_magn_3d
+[ T2247]  snd_acp_config
+[ T1155]  hid_sensor_prox
+[ T2247]  msi_wmi
+[ T1155]  hid_sensor_accel_3d
+[ T2247]  snd_pcm mc
+[ T1155]  hid_sensor_gyro_3d hid_sensor_als
+[ T2247]  sparse_keymap
+[ T1155]  hid_sensor_trigger
+[ T2247]  snd_soc_acpi
+[ T1155]  industrialio_triggered_buffer
+[ T2247]  snd_timer wmi_bmof
+[ T1155]  kfifo_buf industrialio
+[ T2247]  edac_mce_amd
+[ T1155]  evdev
+[ T2247]  snd
+[ T1155]  hid_sensor_iio_common amd_pmc
+[ T2247]  k10temp
+[ T1155]  sch_fq_codel
+[ T2247]  snd_pci_acp3x
+[ T1155]  mt7921e
+[ T2247]  soundcore
+[ T1155]  mt7921_common
+[ T2247]  ccp
+[ T1155]  mt792x_lib
+[ T2247]  battery
+[ T1155]  mt76_connac_lib
+[ T2247]  ac button
+[ T1155]  mt76 mac80211
+[ T2247]  joydev
+[ T1155]  libarc4
+[ T2247]  hid_sensor_magn_3d
+[ T1155]  cfg80211 rfkill
+[ T2247]  hid_sensor_prox
+[ T1155]  msr nvme_fabrics
+[ T2247]  hid_sensor_accel_3d
+[ T1155]  fuse
+[ T2247]  hid_sensor_gyro_3d
+[ T1155]  efi_pstore
+[ T2247]  hid_sensor_als
+[ T1155]  configfs
+[ T2247]  hid_sensor_trigger
+[ T1155]  nfnetlink
+[ T2247]  industrialio_triggered_buffer
+[ T1155]  efivarfs
+[ T2247]  kfifo_buf
+[ T1155]  autofs4
+[ T2247]  industrialio
+[ T1155]  ext4
+[ T2247]  evdev
+[ T1155]  mbcache
+[ T2247]  hid_sensor_iio_common
+[ T1155]  jbd2
+[ T2247]  amd_pmc
+[ T1155]  usbhid
+[ T2247]  sch_fq_codel
+[ T1155]  amdgpu
+[ T2247]  mt7921e
+[ T1155]  amdxcp
+[ T2247]  mt7921_common
+[ T1155]  i2c_algo_bit
+[ T2247]  mt792x_lib
+[ T1155]  drm_client_lib
+[ T2247]  mt76_connac_lib
+[ T1155]  drm_ttm_helper
+[ T2247]  mt76
+[ T1155]  ttm
+[ T2247]  mac80211
+[ T1155]  drm_exec
+[ T2247]  libarc4
+[ T1155]  gpu_sched
+[ T2247]  cfg80211
+[ T1155]  drm_suballoc_helper
+[ T2247]  rfkill
+[ T1155]  drm_panel_backlight_quirks
+[ T2247]  msr
+[ T1155]  cec
+[ T2247]  nvme_fabrics
+[ T1155]  xhci_pci
+[ T2247]  fuse
+[ T1155]  drm_buddy
+[ T2247]  efi_pstore
+[ T1155]  xhci_hcd
+[ T2247]  configfs
+[ T1155]  drm_display_helper
+[ T2247]  nfnetlink
+[ T1155]  usbcore
+[ T2247]  efivarfs
+[ T1155]  hid_sensor_hub
+[ T2247]  autofs4
+[ T1155]  drm_kms_helper
+[ T2247]  ext4
+[ T1155]  psmouse
+[ T2247]  mbcache
+[ T1155]  nvme
+[ T2247]  jbd2
+[ T1155]  mfd_core
+[ T2247]  usbhid
+[ T1155]  hid_multitouch
+[ T2247]  amdgpu
+[ T1155]  hid_generic
+[ T2247]  amdxcp
+[ T1155]  serio_raw
+[ T2247]  i2c_algo_bit
+[ T1155]  nvme_core
+[ T2247]  drm_client_lib
+[ T1155]  r8169
+[ T2247]  drm_ttm_helper
+[ T1155]  usb_common
+[ T2247]  ttm
+[ T1155]  amd_sfh
+[ T2247]  drm_exec gpu_sched
+[ T1155]  crc16 i2c_hid_acpi
+[ T2247]  drm_suballoc_helper
+[ T1155]  i2c_hid
+[ T2247]  drm_panel_backlight_quirks
+[ T1155]  hid i2c_piix4
+[ T2247]  cec
+[ T1155]  i2c_smbus
+[ T2247]  xhci_pci
+[ T1155]  i2c_designware_platform
+[ T2247]  drm_buddy
+[ T1155]  i2c_designware_core
+[ T2247]  xhci_hcd drm_display_helper
+[ T1155]  [last unloaded: bpf_testmod(O)]
+[ T2247]  usbcore
+[ T1155] Preemption disabled at:
+[ T2247]  hid_sensor_hub drm_kms_helper
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T2247]  psmouse nvme mfd_core hid_multitouch
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2247]  hid_generic serio_raw nvme_core
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2247]  r8169
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155] Call Trace:
+[ T2247]  usb_common amd_sfh
+[ T1155]  <TASK>
+[ T2247]  crc16 i2c_hid_acpi
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T2247]  i2c_hid hid i2c_piix4
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[ T2247]  i2c_smbus i2c_designware_platform i2c_designware_core
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T2247]  [last unloaded: bpf_testmod(O)]
+[ T2247] Preemption disabled at:
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2247] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? lock_release+0x21b/0x2e0
+[ T1155]  schedule_rtlock+0x21/0x40
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  ? rt_mutex_slowunlock+0x3ee/0x490
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  rt_spin_lock+0x99/0x190
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  do_syscall_64+0x395/0xfa0
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297 ORIG_RAX: 000000000000=
+0060
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc770004fa8 RCX: 00007fc77f05c7f9
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 0000000000042458
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[ T1155] R13: 00007fc77e6b02e0 R14: 0000000000086fb2 R15: 000055f047b7b880
+[ T1155]  </TASK>
+[ T2247] CPU: 8 UID: 1000 PID: 2247 Comm: Compositor Tainted: G        W  O=
+        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2247] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2247] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2247] Call Trace:
+[ T2247]  <TASK>
+[ T2247]  dump_stack_lvl+0x6d/0xb0
+[ T2247]  ? futex_private_hash_put+0x32/0x100
+[ T2247]  __schedule_bug.cold+0x8c/0x9a
+[ T2247]  __schedule+0x167e/0x1ca0
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T1155] INFO: lockdep is turned off.
+[ T1155] Modules linked in:
+[ T2247]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  bpf_testmod(O) ccm snd_seq_dummy snd_hrtimer
+[ T2247]  ? rcu_is_watching+0x12/0x60
+[ T1155]  snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq snd_seq_device
+[ T2247]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  rfcomm bnep snd_ctl_led
+[ T2247]  ? rcu_is_watching+0x12/0x60
+[ T1155]  snd_hda_codec_realtek
+[ T1155]  snd_hda_codec_generic snd_hda_scodec_component snd_hda_codec_hdmi
+[ T2247]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  nls_ascii
+[ T1155]  nls_cp437 vfat fat snd_acp3x_pdm_dma
+[ T2247]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd_soc_dmic snd_acp3x_rn btusb btrtl
+[ T2247]  ? rcu_is_watching+0x12/0x60
+[ T1155]  snd_soc_core btintel btbcm btmtk
+[ T2247]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  bluetooth ecdh_generic ecc
+[ T2247]  ? lock_release+0x21b/0x2e0
+[ T1155]  snd_hda_intel snd_intel_dspcfg uvcvideo snd_hda_codec videobuf2_v=
+malloc videobuf2_memops snd_hwdep
+[ T2247]  schedule_rtlock+0x21/0x40
+[ T1155]  uvc snd_hda_core videobuf2_v4l2 snd_pcm_oss
+[ T2247]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  videodev snd_rn_pci_acp3x snd_mixer_oss videobuf2_common snd_acp_=
+config
+[ T2247]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  msi_wmi snd_pcm mc
+[ T2247]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T1155]  sparse_keymap
+[ T1155]  snd_soc_acpi snd_timer wmi_bmof edac_mce_amd
+[ T2247]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  snd k10temp snd_pci_acp3x soundcore ccp battery ac button joydev =
+hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d h=
+id_sensor_als
+[ T2247]  rt_spin_lock+0x99/0x190
+[ T1155]  hid_sensor_trigger industrialio_triggered_buffer kfifo_buf indust=
+rialio evdev hid_sensor_iio_common
+[ T2247]  task_get_cgroup1+0xe8/0x340
+[ T1155]  amd_pmc sch_fq_codel mt7921e mt7921_common mt792x_lib mt76_connac=
+_lib
+[ T2247]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  mt76 mac80211 libarc4 cfg80211 rfkill
+[ T2247]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  msr nvme_fabrics fuse efi_pstore configfs
+[ T2247]  bpf_trace_run2+0xd3/0x260
+[ T1155]  nfnetlink efivarfs autofs4 ext4 mbcache
+[ T2247]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  jbd2 usbhid amdgpu amdxcp i2c_algo_bit drm_client_lib drm_ttm_hel=
+per ttm
+[ T2247]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  drm_exec gpu_sched drm_suballoc_helper drm_panel_backlight_quirks=
+ cec
+[ T2247]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  xhci_pci drm_buddy xhci_hcd drm_display_helper usbcore hid_sensor=
+_hub
+[ T2247]  do_syscall_64+0x395/0xfa0
+[ T1155]  drm_kms_helper psmouse nvme mfd_core
+[ T2247]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  hid_multitouch hid_generic serio_raw nvme_core r8169 usb_common
+[ T2247]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155]  amd_sfh crc16 i2c_hid_acpi i2c_hid hid i2c_piix4
+[ T2247] RIP: 0033:0x7f1f6dca8a0e
+[ T1155]  i2c_smbus i2c_designware_platform i2c_designware_core
+[ T2247] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[ T1155]  [last unloaded: bpf_testmod(O)]
+[ T2247] RSP: 002b:00007f1f533bb810 EFLAGS: 00000297
+[ T1155]=20
+[ T1155] Preemption disabled at:
+[ T2247]  ORIG_RAX: 00000000000000e4
+[ T1155] [<ffffffffa1ead6a2>] futex_private_hash_put+0x32/0x100
+[ T2247] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1f6dca8a0e
+[ T2247] RDX: 0000000000000002 RSI: 00007f1f533bb830 RDI: 0000000000000001
+[ T2247] RBP: 00007f1f533bb810 R08: 0000000000000000 R09: 00007f1f6dca2000
+[ T2247] R10: 0000000000000000 R11: 0000000000000297 R12: 0000002385309ebb
+[ T2247] R13: 00000000ffffffff R14: 00007f1f3bce4eb0 R15: 0000000000000000
+[ T2247]  </TASK>
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T1155] Call Trace:
+[ T1155]  <TASK>
+[  T555] INFO: lockdep is turned off.
+[  T555] Modules linked in:
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[  T555]  bpf_testmod(O) ccm snd_seq_dummy
+[ T1155]  ? futex_private_hash_put+0x32/0x100
+[  T555]  snd_hrtimer snd_seq_midi snd_seq_midi_event snd_rawmidi
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  snd_seq snd_seq_device rfcomm bnep
+[ T1155]  __schedule+0x167e/0x1ca0
+[  T555]  snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555]  snd_hda_scodec_component snd_hda_codec_hdmi nls_ascii nls_cp437 v=
+fat
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  fat snd_acp3x_pdm_dma snd_soc_dmic
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555]  snd_acp3x_rn btusb btrtl
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_soc_core btintel btbcm
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  btmtk bluetooth ecdh_generic
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555]  ecc snd_hda_intel snd_intel_dspcfg uvcvideo
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_hda_codec videobuf2_vmalloc
+[ T1155]  ? lock_release+0x21b/0x2e0
+[  T555]  videobuf2_memops snd_hwdep uvc snd_hda_core videobuf2_v4l2 snd_pc=
+m_oss
+[ T1155]  schedule_rtlock+0x21/0x40
+[  T555]  videodev snd_rn_pci_acp3x snd_mixer_oss videobuf2_common
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  snd_acp_config msi_wmi snd_pcm
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  mc sparse_keymap snd_soc_acpi
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  snd_timer wmi_bmof edac_mce_amd snd
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  k10temp snd_pci_acp3x soundcore ccp battery ac button joydev hid_=
+sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d
+[ T1155]  rt_spin_lock+0x99/0x190
+[  T555]  hid_sensor_gyro_3d hid_sensor_als hid_sensor_trigger industrialio=
+_triggered_buffer kfifo_buf
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[  T555]  industrialio evdev hid_sensor_iio_common amd_pmc sch_fq_codel
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  mt7921e mt7921_common mt792x_lib
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  mt76_connac_lib mt76 mac80211 libarc4
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[  T555]  cfg80211 rfkill msr nvme_fabrics
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  fuse efi_pstore configfs nfnetlink efivarfs autofs4
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  ext4 mbcache jbd2 usbhid amdgpu
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[  T555]  amdxcp i2c_algo_bit drm_client_lib drm_ttm_helper ttm
+[ T1155]  do_syscall_64+0x395/0xfa0
+[  T555]  drm_exec gpu_sched
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  drm_suballoc_helper drm_panel_backlight_quirks cec xhci_pci drm_b=
+uddy
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555]  xhci_hcd drm_display_helper usbcore hid_sensor_hub
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[  T555]  drm_kms_helper psmouse nvme
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[  T555]  mfd_core
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297
+[  T555]  hid_multitouch hid_generic
+[ T1155]  ORIG_RAX: 0000000000000060
+[  T555]  serio_raw
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc770000fe8 RCX: 00007fc77f05c7f9
+[  T555]  nvme_core r8169
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[  T555]  usb_common
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 0000000000042458
+[  T555]  amd_sfh crc16
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[  T555]  i2c_hid_acpi
+[ T1155] R13: 00007fc77e6b02e0 R14: 0000000000086fb4 R15: 000055f047b7b880
+[  T555]  i2c_hid hid i2c_piix4 i2c_smbus i2c_designware_platform i2c_desig=
+nware_core [last unloaded: bpf_testmod(O)]
+[  T555] Preemption disabled at:
+[ T1155]  </TASK>
+[  T555] [<0000000000000000>] 0x0
+[ T2386] BUG: scheduling while atomic: WRRende~ckend#1/2386/0x00000002
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2386] INFO: lockdep is turned off.
+[ T2386] Modules linked in: bpf_testmod(O)
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2386]  ccm
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555] Call Trace:
+[ T2386]  snd_seq_dummy snd_hrtimer
+[  T555]  <TASK>
+[ T2386]  snd_seq_midi snd_seq_midi_event snd_rawmidi
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[ T2386]  snd_seq snd_seq_device rfcomm
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[ T2386]  bnep snd_ctl_led snd_hda_codec_realtek
+[  T555]  __schedule+0x167e/0x1ca0
+[ T2386]  snd_hda_codec_generic snd_hda_scodec_component snd_hda_codec_hdmi
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2386]  nls_ascii nls_cp437 vfat fat
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  snd_acp3x_pdm_dma snd_soc_dmic
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2386]  snd_acp3x_rn btusb btrtl
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  snd_soc_core btintel
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  btbcm btmtk bluetooth
+[  T555]  ? rcu_is_watching+0x12/0x60
+[ T2386]  ecdh_generic ecc
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  snd_hda_intel snd_intel_dspcfg
+[  T555]  ? lock_release+0x21b/0x2e0
+[ T2386]  uvcvideo snd_hda_codec videobuf2_vmalloc videobuf2_memops snd_hwd=
+ep
+[  T555]  schedule_rtlock+0x21/0x40
+[ T2386]  uvc snd_hda_core videobuf2_v4l2
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[ T2386]  snd_pcm_oss videodev snd_rn_pci_acp3x
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  snd_mixer_oss videobuf2_common snd_acp_config
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[ T2386]  msi_wmi snd_pcm
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  mc sparse_keymap snd_soc_acpi snd_timer wmi_bmof edac_mce_amd snd=
+ k10temp snd_pci_acp3x
+[  T555]  rt_spin_lock+0x99/0x190
+[ T2386]  soundcore ccp battery ac button
+[  T555]  task_get_cgroup1+0xe8/0x340
+[ T2386]  joydev hid_sensor_magn_3d hid_sensor_prox
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[ T2386]  hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor_als
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T2386]  hid_sensor_trigger industrialio_triggered_buffer kfifo_buf indust=
+rialio
+[  T555]  bpf_trace_run2+0xd3/0x260
+[ T2386]  evdev hid_sensor_iio_common
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  amd_pmc sch_fq_codel mt7921e mt7921_common mt792x_lib
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[ T2386]  mt76_connac_lib mt76 mac80211 libarc4
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[ T2386]  cfg80211 rfkill msr nvme_fabrics
+[  T555]  do_syscall_64+0x395/0xfa0
+[ T2386]  fuse efi_pstore
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2386]  configfs nfnetlink efivarfs autofs4
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2386]  ext4 mbcache jbd2
+[  T555] RIP: 0033:0x7fd47309ea0e
+[ T2386]  usbhid amdgpu amdxcp
+[  T555] Code: 9a 3b 41 83 c0 01 48 3d ff c9 9a 3b 77 ee 4c 01 c2 48 89 16 =
+48 89 46 08 5b 31 c0 41 5c 5d c3 cc 5b b8 e4 00 00 00 41 5c 0f 05 <5d> c3 c=
+c 41 81 79 04 ff ff ff 7f 0f 84 99 00 00 00 f3 90 e9 4c ff
+[ T2386]  i2c_algo_bit
+[  T555] RSP: 002b:00007fff31d516e0 EFLAGS: 00000297
+[ T2386]  drm_client_lib
+[  T555]  ORIG_RAX: 00000000000000e4
+[ T2386]  drm_ttm_helper
+[  T555] RAX: ffffffffffffffda RBX: 000055b3d56687b0 RCX: 00007fd47309ea0e
+[ T2386]  ttm
+[  T555] RDX: 0000000000000080 RSI: 00007fff31d51700 RDI: 0000000000000007
+[ T2386]  drm_exec
+[  T555] RBP: 00007fff31d516e0 R08: 0000000000000000 R09: 00007fd473098000
+[ T2386]  gpu_sched drm_suballoc_helper
+[  T555] R10: ffffffffffffffff R11: 0000000000000297 R12: 0000000000000001
+[ T2386]  drm_panel_backlight_quirks
+[  T555] R13: ffffffffffffffff R14: 0000000000000050 R15: 0000000000000007
+[ T2386]  cec
+[  T555]  </TASK>
+[ T2386]  xhci_pci drm_buddy xhci_hcd drm_display_helper usbcore hid_sensor=
+_hub drm_kms_helper psmouse nvme mfd_core hid_multitouch hid_generic serio_=
+raw nvme_core r8169 usb_common amd_sfh crc16 i2c_hid_acpi i2c_hid hid i2c_p=
+iix4 i2c_smbus i2c_designware_platform i2c_designware_core [last unloaded: =
+bpf_testmod(O)]
+[ T2386] Preemption disabled at:
+[ T2386] [<ffffffffa29f0b46>] schedule+0x36/0x130
+[ T2386] CPU: 8 UID: 1000 PID: 2386 Comm: WRRende~ckend#1 Tainted: G       =
+ W  O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] BUG: scheduling while atomic: in:imklog/1155/0x00000002
+[ T1155] INFO: lockdep is turned off.
+[ T2386] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Modules linked in:
+[ T2386] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155]  bpf_testmod(O) ccm
+[ T2386] Call Trace:
+[ T1155]  snd_seq_dummy snd_hrtimer
+[ T2386]  <TASK>
+[ T1155]  snd_seq_midi snd_seq_midi_event
+[ T2386]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  snd_rawmidi
+[ T1155]  snd_seq snd_seq_device rfcomm bnep
+[ T2386]  ? schedule+0x36/0x130
+[ T1155]  snd_ctl_led snd_hda_codec_realtek snd_hda_codec_generic snd_hda_s=
+codec_component
+[ T2386]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  snd_hda_codec_hdmi nls_ascii nls_cp437 vfat
+[ T2386]  __schedule+0x167e/0x1ca0
+[ T1155]  fat snd_acp3x_pdm_dma snd_soc_dmic snd_acp3x_rn btusb
+[ T2386]  ? rcu_is_watching+0x12/0x60
+[ T1155]  btrtl snd_soc_core btintel btbcm btmtk
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  bluetooth ecdh_generic ecc snd_hda_intel
+[ T2386]  ? rcu_is_watching+0x12/0x60
+[ T1155]  snd_intel_dspcfg uvcvideo snd_hda_codec videobuf2_vmalloc
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  videobuf2_memops snd_hwdep uvc snd_hda_core
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  videobuf2_v4l2 snd_pcm_oss videodev
+[ T2386]  ? rcu_is_watching+0x12/0x60
+[ T1155]  snd_rn_pci_acp3x snd_mixer_oss videobuf2_common snd_acp_config
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  msi_wmi snd_pcm mc sparse_keymap
+[ T2386]  ? lock_release+0x21b/0x2e0
+[ T1155]  snd_soc_acpi snd_timer wmi_bmof edac_mce_amd snd k10temp snd_pci_=
+acp3x
+[ T2386]  schedule_rtlock+0x21/0x40
+[ T1155]  soundcore ccp battery ac button
+[ T2386]  rtlock_slowlock_locked+0x635/0x1d00
+[ T1155]  joydev hid_sensor_magn_3d hid_sensor_prox hid_sensor_accel_3d hid=
+_sensor_gyro_3d hid_sensor_als hid_sensor_trigger
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  industrialio_triggered_buffer kfifo_buf industrialio evdev hid_se=
+nsor_iio_common amd_pmc sch_fq_codel mt7921e mt7921_common mt792x_lib mt76_=
+connac_lib mt76 mac80211
+[ T2386]  rt_spin_lock+0x99/0x190
+[ T1155]  libarc4 cfg80211 rfkill msr nvme_fabrics fuse efi_pstore
+[ T2386]  task_get_cgroup1+0xe8/0x340
+[ T1155]  configfs nfnetlink efivarfs autofs4 ext4
+[ T2386]  bpf_task_get_cgroup1+0xe/0x20
+[ T1155]  mbcache jbd2 usbhid amdgpu amdxcp i2c_algo_bit
+[ T2386]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[ T1155]  drm_client_lib drm_ttm_helper ttm drm_exec
+[ T2386]  bpf_trace_run2+0xd3/0x260
+[ T1155]  gpu_sched drm_suballoc_helper drm_panel_backlight_quirks cec xhci=
+_pci
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  drm_buddy xhci_hcd drm_display_helper usbcore hid_sensor_hub drm_=
+kms_helper psmouse
+[ T2386]  __bpf_trace_sys_enter+0x37/0x60
+[ T1155]  nvme mfd_core hid_multitouch hid_generic serio_raw nvme_core
+[ T2386]  syscall_trace_enter+0x1c7/0x260
+[ T1155]  r8169 usb_common amd_sfh crc16 i2c_hid_acpi i2c_hid
+[ T2386]  do_syscall_64+0x395/0xfa0
+[ T1155]  hid i2c_piix4 i2c_smbus i2c_designware_platform
+[ T2386]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  i2c_designware_core [last unloaded: bpf_testmod(O)]
+[ T1155] Preemption disabled at:
+[ T2386]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T1155] [<ffffffffa29f1017>] preempt_schedule_irq+0x27/0x70
+[ T2386] RIP: 0033:0x7f1f6d7ed8c7
+[ T2386] Code: 73 01 c3 48 8b 0d 31 e5 0e 00 f7 d8 64 89 01 48 83 c8 ff c3 =
+66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 18 00 00 00 0f 05 <48> 3d 0=
+1 f0 ff ff 73 01 c3 48 8b 0d 01 e5 0e 00 f7 d8 64 89 01 48
+[ T2386] RSP: 002b:00007f1f3a1fa1d8 EFLAGS: 00000206 ORIG_RAX: 000000000000=
+0018
+[ T2386] RAX: ffffffffffffffda RBX: 00007f1f3a1fa1e8 RCX: 00007f1f6d7ed8c7
+[ T2386] RDX: 0000000000007e8a RSI: 0000000000003f45 RDI: 00007f1f3bffa600
+[ T2386] RBP: 0000000000000009 R08: 0000000000000007 R09: e5e5e5e5e5e5e5e5
+[ T2386] R10: 0000000000000007 R11: 0000000000000206 R12: 00007f1f3a1fa61c
+[ T2386] R13: 00007f1f3a1fa380 R14: 00007f1f3a1fa2d0 R15: 00007f1f3a1fa218
+[ T2386]  </TASK>
+[ T1155] CPU: 6 UID: 0 PID: 1155 Comm: in:imklog Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T1155] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T1155] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T1155] Call Trace:
+[ T1155]  <TASK>
+[ T1155]  dump_stack_lvl+0x6d/0xb0
+[ T1155]  ? preempt_schedule_irq+0x27/0x70
+[ T1155]  __schedule_bug.cold+0x8c/0x9a
+[ T1155]  __schedule+0x167e/0x1ca0
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555] BUG: scheduling while atomic: systemd-journal/555/0x00000002
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555] INFO: lockdep is turned off.
+[  T555] Modules linked in:
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  bpf_testmod(O) ccm snd_seq_dummy
+[ T1155]  ? rcu_is_watching+0x12/0x60
+[  T555]  snd_hrtimer snd_seq_midi snd_seq_midi_event
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_rawmidi snd_seq snd_seq_device
+[ T1155]  ? lock_release+0x21b/0x2e0
+[  T555]  rfcomm bnep snd_ctl_led snd_hda_codec_realtek snd_hda_codec_gener=
+ic snd_hda_scodec_component
+[ T1155]  schedule_rtlock+0x21/0x40
+[  T555]  snd_hda_codec_hdmi nls_ascii nls_cp437
+[ T1155]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  vfat fat snd_acp3x_pdm_dma snd_soc_dmic
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  snd_acp3x_rn btusb btrtl
+[ T1155]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  snd_soc_core btintel btbcm
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  btmtk bluetooth ecdh_generic ecc snd_hda_intel snd_intel_dspcfg u=
+vcvideo snd_hda_codec videobuf2_vmalloc videobuf2_memops snd_hwdep
+[ T1155]  rt_spin_lock+0x99/0x190
+[  T555]  uvc snd_hda_core videobuf2_v4l2 snd_pcm_oss videodev
+[ T1155]  task_get_cgroup1+0xe8/0x340
+[  T555]  snd_rn_pci_acp3x snd_mixer_oss videobuf2_common snd_acp_config ms=
+i_wmi
+[ T1155]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  snd_pcm mc sparse_keymap snd_soc_acpi
+[ T1155]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  snd_timer wmi_bmof edac_mce_amd
+[ T1155]  bpf_trace_run2+0xd3/0x260
+[  T555]  snd k10temp snd_pci_acp3x soundcore
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ccp battery ac button joydev hid_sensor_magn_3d
+[ T1155]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  hid_sensor_prox hid_sensor_accel_3d hid_sensor_gyro_3d hid_sensor=
+_als
+[ T1155]  syscall_trace_enter+0x1c7/0x260
+[  T555]  hid_sensor_trigger industrialio_triggered_buffer kfifo_buf indust=
+rialio evdev
+[ T1155]  do_syscall_64+0x395/0xfa0
+[  T555]  hid_sensor_iio_common amd_pmc
+[ T1155]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  sch_fq_codel mt7921e mt7921_common mt792x_lib mt76_connac_lib
+[ T1155]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555]  mt76 mac80211 libarc4 cfg80211 rfkill
+[ T1155] RIP: 0033:0x7fc77f05c7f9
+[  T555]  msr nvme_fabrics
+[ T1155] Code: 01 00 00 89 16 8b 80 d4 01 00 00 89 46 04 eb c8 81 3d 1b 98 =
+ff ff ff ff ff 7f 74 4d f3 90 e9 07 ff ff ff b8 60 00 00 00 0f 05 <eb> ae 4=
+8 0f ba e2 3e 73 0b 4c 89 d8 48 d3 e8 e9 53 ff ff ff 48 21
+[  T555]  fuse
+[  T555]  efi_pstore
+[ T1155] RSP: 002b:00007fc77e6b02c8 EFLAGS: 00000297
+[  T555]  configfs nfnetlink
+[ T1155]  ORIG_RAX: 0000000000000060
+[  T555]  efivarfs
+[ T1155] RAX: ffffffffffffffda RBX: 00007fc7700b04a8 RCX: 00007fc77f05c7f9
+[  T555]  autofs4
+[ T1155] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007fc77e6b02e0
+[  T555]  ext4 mbcache
+[ T1155] RBP: 00007fc77e6b02d0 R08: 0000000000000000 R09: 000000000004245a
+[  T555]  jbd2
+[ T1155] R10: 00007fc77f056000 R11: 0000000000000297 R12: 0000000000000000
+[  T555]  usbhid amdgpu
+[ T1155] R13: 00007fc77e6b02e0 R14: 0000000000086fc1 R15: 000055f047b7b880
+[  T555]  amdxcp i2c_algo_bit drm_client_lib drm_ttm_helper ttm drm_exec gp=
+u_sched drm_suballoc_helper drm_panel_backlight_quirks cec
+[ T1155]  </TASK>
+[  T555]  xhci_pci drm_buddy xhci_hcd drm_display_helper usbcore hid_sensor=
+_hub drm_kms_helper psmouse nvme mfd_core hid_multitouch hid_generic serio_=
+raw nvme_core r8169 usb_common amd_sfh crc16 i2c_hid_acpi i2c_hid hid i2c_p=
+iix4 i2c_smbus i2c_designware_platform i2c_designware_core [last unloaded: =
+bpf_testmod(O)]
+[  T555] Preemption disabled at:
+[  T555] [<0000000000000000>] 0x0
+[  T555] CPU: 3 UID: 0 PID: 555 Comm: systemd-journal Tainted: G        W  =
+O        6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[  T555] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[  T555] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[  T555] Call Trace:
+[  T555]  <TASK>
+[  T555]  dump_stack_lvl+0x6d/0xb0
+[  T555]  __schedule_bug.cold+0x8c/0x9a
+[  T555]  __schedule+0x167e/0x1ca0
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? rcu_is_watching+0x12/0x60
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? lock_release+0x21b/0x2e0
+[  T555]  schedule_rtlock+0x21/0x40
+[  T555]  rtlock_slowlock_locked+0x635/0x1d00
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  ? _raw_spin_unlock_irqrestore+0x40/0x80
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  rt_spin_lock+0x99/0x190
+[  T555]  task_get_cgroup1+0xe8/0x340
+[  T555]  bpf_task_get_cgroup1+0xe/0x20
+[  T555]  bpf_prog_1b41d68a2f9ed9f4_on_enter+0x47/0x128
+[  T555]  bpf_trace_run2+0xd3/0x260
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  __bpf_trace_sys_enter+0x37/0x60
+[  T555]  syscall_trace_enter+0x1c7/0x260
+[  T555]  do_syscall_64+0x395/0xfa0
+[  T555]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  T555]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  T555] RIP: 0033:0x7fd472b0fad7
+[  T555] Code: 73 01 c3 48 8b 0d 21 53 0d 00 f7 d8 64 89 01 48 83 c8 ff c3 =
+66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 b8 ba 00 00 00 0f 05 <c3> 0f 1=
+f 84 00 00 00 00 00 b8 ea 00 00 00 0f 05 48 3d 01 f0 ff ff
+[  T555] RSP: 002b:00007fff31d51828 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+00ba
+[  T555] RAX: ffffffffffffffda RBX: 000000000000022b RCX: 00007fd472b0fad7
+[  T555] RDX: 00000000ffffffff RSI: 00007fd472ecafd0 RDI: 00007fd473095cc8
+[  T555] RBP: 000055b3d5668660 R08: 0000000000000000 R09: 000055b3d5667488
+[  T555] R10: 00007fff31d518a0 R11: 0000000000000202 R12: 000055b3d5668660
+[  T555] R13: ffffffffffffffff R14: 0000000000000000 R15: 00007fff31d51890
+[  T555]  </TASK>
+[ T4362] tun: Universal TUN/TAP device driver, 1.6
+[ T4373] BUG: sleeping function called from invalid context at kernel/locki=
 ng/spinlock_rt.c:48
-[ T6946] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 6946, name:=
+[ T4373] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 4373, name:=
  test_progs
-[ T6946] preempt_count: 1, expected: 0
-[ T6946] RCU nest depth: 0, expected: 0
-[ T6946] CPU: 1 UID: 0 PID: 6946 Comm: test_progs Tainted: G        W  O   =
-     6.15.0-rc7-next-20250523-gcc-dirty #2 PREEMPT_{RT,(full)}=20
-[ T6946] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[ T6946] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+[ T4373] preempt_count: 1, expected: 0
+[ T4373] RCU nest depth: 0, expected: 0
+[ T4373] INFO: lockdep is turned off.
+[ T4373] irq event stamp: 0
+[ T4373] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+[ T4373] hardirqs last disabled at (0): [<ffffffffa1d785ee>] copy_process+0=
+xa0e/0x2110
+[ T4373] softirqs last  enabled at (0): [<ffffffffa1d785ee>] copy_process+0=
+xa0e/0x2110
+[ T4373] softirqs last disabled at (0): [<0000000000000000>] 0x0
+[ T4373] Preemption disabled at:
+[ T4373] [<ffffffffa1fc3089>] __bpf_async_init+0x69/0x2f0
+[ T4373] CPU: 1 UID: 0 PID: 4373 Comm: test_progs Tainted: G        W  O   =
+     6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T4373] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T4373] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
 S-158L, BIOS E158LAMS.10F 11/11/2024
-[ T6946] Call Trace:
-[ T6946]  <TASK>
-[ T6946]  dump_stack_lvl+0x6d/0xb0
-[ T6946]  __might_resched.cold+0xaf/0xbd
-[ T6946]  rt_spin_lock+0x47/0xf0
-[ T6946]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T6946]  ? timerqueue_add+0x71/0xc0
-[ T6946]  ___slab_alloc.isra.0+0x7b/0xb00
-[ T6946]  ? sched_clock_cpu+0x65/0x1f0
-[ T6946]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T6946]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T6946]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T6946]  ? finish_task_switch.isra.0+0x9b/0x2f0
-[ T6946]  ? bpf_map_kmalloc_node+0x72/0x130
-[ T6946]  __kmalloc_node_noprof+0xd2/0x3b0
-[ T6946]  bpf_map_kmalloc_node+0x72/0x130
-[ T6946]  __bpf_async_init+0x104/0x290
-[ T6946]  bpf_timer_init+0x33/0x40
-[ T6946]  bpf_prog_03f8615b5cb1a541_start_cb+0x5d/0x91
-[ T6946]  bpf_prog_e039af9d31be3357_start_timer+0x65/0x8a
-[ T6946]  bpf_prog_test_run_syscall+0xdd/0x210
-[ T6946]  ? fput+0x3f/0x90
-[ T6946]  __sys_bpf+0xc12/0x2740
-[ T6946]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T6946]  ? preempt_count_sub+0x4b/0x60
-[ T6946]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T6946]  ? futex_wake+0xb2/0x1c0
-[ T6946]  __x64_sys_bpf+0x21/0x30
-[ T6946]  do_syscall_64+0x6f/0xfa0
-[ T6946]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T6946]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[ T6946] RIP: 0033:0x7f49364f3779
-[ T6946] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
+[ T4373] Call Trace:
+[ T4373]  <TASK>
+[ T4373]  dump_stack_lvl+0x6d/0xb0
+[ T4373]  __might_resched.cold+0xfa/0x135
+[ T4373]  rt_spin_lock+0x5f/0x190
+[ T4373]  ? ___slab_alloc.isra.0+0x73/0xb00
+[ T4373]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T4373]  ? lock_acquire+0x282/0x300
+[ T4373]  ___slab_alloc.isra.0+0x73/0xb00
+[ T4373]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T4373]  ? rcu_is_watching+0x12/0x60
+[ T4373]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T4373]  ? enqueue_hrtimer+0xb1/0x100
+[ T4373]  ? start_dl_timer+0x102/0x1e0
+[ T4373]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T4373]  ? rcu_is_watching+0x12/0x60
+[ T4373]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T4373]  ? psi_task_change+0x89/0x140
+[ T4373]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T4373]  ? bpf_map_kmalloc_node+0x72/0x220
+[ T4373]  __kmalloc_node_noprof+0xfb/0x490
+[ T4373]  bpf_map_kmalloc_node+0x72/0x220
+[ T4373]  __bpf_async_init+0x125/0x2f0
+[ T4373]  bpf_timer_init+0x33/0x40
+[ T4373]  bpf_prog_e1400c375a5ffab1_start_cb+0x5d/0x91
+[ T4373]  bpf_prog_c49dd2c33b6fb3ba_start_timer+0x65/0x8a
+[ T4373]  bpf_prog_test_run_syscall+0x103/0x290
+[ T4373]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T4373]  ? fput+0x3f/0x90
+[ T4373]  __sys_bpf+0xd33/0x26d0
+[ T4373]  ? preempt_count_sub+0x96/0xd0
+[ T4373]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T4373]  ? futex_wake+0xb2/0x1d0
+[ T4373]  __x64_sys_bpf+0x21/0x30
+[ T4373]  do_syscall_64+0x7a/0xfa0
+[ T4373]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T4373]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T4373] RIP: 0033:0x7f01bf2f0779
+[ T4373] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 0=
 1 f0 ff ff 73 01 c3 48 8b 0d 4f 86 0d 00 f7 d8 64 89 01 48
-[ T6946] RSP: 002b:00007f4925ffa878 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+[ T4373] RSP: 002b:00007f01af7fd878 EFLAGS: 00000202 ORIG_RAX: 000000000000=
 0141
-[ T6946] RAX: ffffffffffffffda RBX: 00007f4925ffbcdc RCX: 00007f49364f3779
-[ T6946] RDX: 0000000000000050 RSI: 00007f4925ffa8b0 RDI: 000000000000000a
-[ T6946] RBP: 00007f4925ffa890 R08: 0000000000000004 R09: 00007f4925ffa8b0
-[ T6946] R10: 00007fff3149a440 R11: 0000000000000202 R12: 0000000000000020
-[ T6946] R13: 000000000000005f R14: 00007fff3149a230 R15: 00007f49257fb000
-[ T6946]  </TASK>
-[...]
-[ T3289] BUG: sleeping function called from invalid context at kernel/locki=
+[ T4373] RAX: ffffffffffffffda RBX: 00007f01af7fecdc RCX: 00007f01bf2f0779
+[ T4373] RDX: 0000000000000050 RSI: 00007f01af7fd8b0 RDI: 000000000000000a
+[ T4373] RBP: 00007f01af7fd890 R08: 0000000000000004 R09: 00007f01af7fd8b0
+[ T4373] R10: 00007ffe4a37cd20 R11: 0000000000000202 R12: 0000000000000020
+[ T4373] R13: 000000000000005f R14: 00007ffe4a37cb10 R15: 00007f01aeffe000
+[ T4373]  </TASK>
+[   C15] hrtimer: interrupt took 2384976 ns
+[ T6472] NET: Registered PF_VSOCK protocol family
+[ T2916] bpf getsockopt: ignoring program buffer with optlen=3D4097 (max_op=
+tlen=3D4096)
+[ T2916] bpf setsockopt: ignoring program buffer with optlen=3D4097 (max_op=
+tlen=3D4096)
+[   T23] perf: interrupt took too long (2566 > 2500), lowering kernel.perf_=
+event_max_sample_rate to 77000
+[   T23] perf: interrupt took too long (4060 > 4025), lowering kernel.perf_=
+event_max_sample_rate to 49000
+[ T2916] struct_ops for bpf_test_no_cfi_ops has no cfi_stubs
+[ T2916] bpf_testmod: oh no, recursing into test_1, recursion_misses 1
+[ T7256] loop: module loaded
+[ T7255] loop0: detected capacity change from 0 to 20480
+[    C4] operation not supported error, dev loop0, sector 20352 op 0x9:(WRI=
+TE_ZEROES) flags 0x10000800 phys_seg 0 prio class 0
+[ T7271] EXT4-fs (loop0): mounting ext2 file system using the ext4 subsystem
+[ T7271] EXT4-fs (loop0): mounted filesystem 200ff9cb-ef7f-4c69-ab8c-84155b=
+84800e r/w without journal. Quota mode: disabled.
+[ T7296] EXT4-fs (loop0): unmounting filesystem 200ff9cb-ef7f-4c69-ab8c-841=
+55b84800e.
+[ T2916] BUG: sleeping function called from invalid context at kernel/locki=
 ng/spinlock_rt.c:48
-[ T3289] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 3289, name:=
+[ T2916] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 2916, name:=
  new_name
-[ T3289] preempt_count: 1, expected: 0
-[ T3289] RCU nest depth: 1, expected: 1
-[ T3289] CPU: 10 UID: 0 PID: 3289 Comm: new_name Tainted: G        W  O    =
-    6.15.0-rc7-next-20250523-gcc-dirty #2 PREEMPT_{RT,(full)}=20
-[ T3289] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[ T3289] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+[ T2916] preempt_count: 1, expected: 0
+[ T2916] RCU nest depth: 1, expected: 1
+[ T2916] INFO: lockdep is turned off.
+[ T2916] irq event stamp: 23480570
+[ T2916] hardirqs last  enabled at (23480569): [<ffffffffa1ccc16f>] dump_st=
+ack_lvl+0x3f/0xb0
+[ T2916] hardirqs last disabled at (23480570): [<ffffffffa1ccc15c>] dump_st=
+ack_lvl+0x2c/0xb0
+[ T2916] softirqs last  enabled at (23480156): [<ffffffffa1d8616e>] __local=
+_bh_enable_ip+0xee/0x170
+[ T2916] softirqs last disabled at (23480150): [<ffffffffa1f8dc1a>] bpf_raw=
+_tp_link_attach+0x11a/0x220
+[ T2916] Preemption disabled at:
+[ T2916] [<ffffffffa1fc3089>] __bpf_async_init+0x69/0x2f0
+[ T2916] CPU: 7 UID: 0 PID: 2916 Comm: new_name Tainted: G        W  O     =
+   6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2916] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2916] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
 S-158L, BIOS E158LAMS.10F 11/11/2024
-[ T3289] Call Trace:
-[ T3289]  <TASK>
-[ T3289]  dump_stack_lvl+0x6d/0xb0
-[ T3289]  __might_resched.cold+0xaf/0xbd
-[ T3289]  rt_spin_lock+0x47/0xf0
-[ T3289]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T3289]  ___slab_alloc.isra.0+0x7b/0xb00
-[ T3289]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T3289]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T3289]  ? orc_find.part.0+0x148/0x1e0
-[ T3289]  ? bpf_map_kmalloc_node+0x72/0x130
-[ T3289]  __kmalloc_node_noprof+0xd2/0x3b0
-[ T3289]  ? kernel_text_address+0x70/0xd0
-[ T3289]  bpf_map_kmalloc_node+0x72/0x130
-[ T3289]  __bpf_async_init+0x104/0x290
-[ T3289]  bpf_timer_init+0x33/0x40
-[ T3289]  bpf_prog_208954fba389149b_test1+0x87/0x16f
-[ T3289]  bpf_trampoline_6442502366+0x43/0xa7
-[ T3289]  bpf_fentry_test1+0x9/0x20
-[ T3289]  bpf_prog_test_run_tracing+0x132/0x290
-[ T3289]  ? fput+0x3f/0x90
-[ T3289]  __sys_bpf+0xc12/0x2740
-[ T3289]  __x64_sys_bpf+0x21/0x30
-[ T3289]  do_syscall_64+0x6f/0xfa0
-[ T3289]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T3289]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[ T3289] RIP: 0033:0x7f49364f3779
-[ T3289] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
+[ T2916] Call Trace:
+[ T2916]  <TASK>
+[ T2916]  dump_stack_lvl+0x6d/0xb0
+[ T2916]  __might_resched.cold+0xfa/0x135
+[ T2916]  rt_spin_lock+0x5f/0x190
+[ T2916]  ? ___slab_alloc.isra.0+0x73/0xb00
+[ T2916]  ? rcu_is_watching+0x12/0x60
+[ T2916]  ___slab_alloc.isra.0+0x73/0xb00
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? is_bpf_text_address+0x65/0x120
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? rcu_is_watching+0x12/0x60
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? is_bpf_text_address+0x6f/0x120
+[ T2916]  ? bpf_map_kmalloc_node+0x72/0x220
+[ T2916]  __kmalloc_node_noprof+0xfb/0x490
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  bpf_map_kmalloc_node+0x72/0x220
+[ T2916]  __bpf_async_init+0x125/0x2f0
+[ T2916]  bpf_timer_init+0x33/0x40
+[ T2916]  bpf_prog_208954fba389149b_test1+0x87/0x16f
+[ T2916]  bpf_trampoline_6442502617+0x43/0xa7
+[ T2916]  bpf_fentry_test1+0x9/0x20
+[ T2916]  bpf_prog_test_run_tracing+0x147/0x2f0
+[ T2916]  ? fput+0x3f/0x90
+[ T2916]  __sys_bpf+0xd33/0x26d0
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? lock_release+0x21b/0x2e0
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  __x64_sys_bpf+0x21/0x30
+[ T2916]  do_syscall_64+0x7a/0xfa0
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2916] RIP: 0033:0x7f01bf2f0779
+[ T2916] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 0=
 1 f0 ff ff 73 01 c3 48 8b 0d 4f 86 0d 00 f7 d8 64 89 01 48
-[ T3289] RSP: 002b:00007fff3149a0d8 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+[ T2916] RSP: 002b:00007ffe4a37c9b8 EFLAGS: 00000206 ORIG_RAX: 000000000000=
 0141
-[ T3289] RAX: ffffffffffffffda RBX: 00007fff3149a778 RCX: 00007f49364f3779
-[ T3289] RDX: 0000000000000050 RSI: 00007fff3149a110 RDI: 000000000000000a
-[ T3289] RBP: 00007fff3149a0f0 R08: 00000000ffffffff R09: 00007fff3149a110
-[ T3289] R10: 0000000000000064 R11: 0000000000000202 R12: 0000000000000000
-[ T3289] R13: 00007fff3149a788 R14: 00007f4936b28000 R15: 0000558d7eaf6890
-[ T3289]  </TASK>
-[T10029] BUG: sleeping function called from invalid context at kernel/locki=
+[ T2916] RAX: ffffffffffffffda RBX: 00007ffe4a37d058 RCX: 00007f01bf2f0779
+[ T2916] RDX: 0000000000000050 RSI: 00007ffe4a37c9f0 RDI: 000000000000000a
+[ T2916] RBP: 00007ffe4a37c9d0 R08: 00000000ffffffff R09: 00007ffe4a37c9f0
+[ T2916] R10: 0000000000000064 R11: 0000000000000206 R12: 0000000000000000
+[ T2916] R13: 00007ffe4a37d068 R14: 00007f01bf925000 R15: 000055edb0606890
+[ T2916]  </TASK>
+[ T7350] BUG: sleeping function called from invalid context at kernel/locki=
 ng/spinlock_rt.c:48
-[T10029] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 10029, name=
-: new_name
-[T10029] preempt_count: 1, expected: 0
-[T10029] RCU nest depth: 0, expected: 0
-[T10029] CPU: 13 UID: 0 PID: 10029 Comm: new_name Tainted: G        W  O   =
-     6.15.0-rc7-next-20250523-gcc-dirty #2 PREEMPT_{RT,(full)}=20
-[T10029] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[T10029] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
-S-158L, BIOS E158LAMS.10F 11/11/2024
-[T10029] Call Trace:
-[T10029]  <TASK>
-[T10029]  dump_stack_lvl+0x6d/0xb0
-[T10029]  __might_resched.cold+0xaf/0xbd
-[T10029]  rt_spin_lock+0x47/0xf0
-[T10029]  ___slab_alloc.isra.0+0x7b/0xb00
-[T10029]  ? orc_find.part.0+0x148/0x1e0
-[T10029]  ? srso_alias_return_thunk+0x5/0xfbef5
-[T10029]  ? srso_alias_return_thunk+0x5/0xfbef5
-[T10029]  ? is_bpf_text_address+0x22/0x30
-[T10029]  ? srso_alias_return_thunk+0x5/0xfbef5
-[T10029]  ? bpf_map_kmalloc_node+0x72/0x130
-[T10029]  __kmalloc_node_noprof+0xd2/0x3b0
-[T10029]  ? perf_callchain_kernel+0xa5/0x140
-[T10029]  bpf_map_kmalloc_node+0x72/0x130
-[T10029]  __bpf_async_init+0x104/0x290
-[T10029]  bpf_timer_init+0x33/0x40
-[T10029]  bpf_prog_6ca587954a1650c7_race+0x9c/0xe1
-[T10029]  bpf_prog_test_run_syscall+0xdd/0x210
-[T10029]  ? fput+0x3f/0x90
-[T10029]  __sys_bpf+0xc12/0x2740
-[T10029]  __x64_sys_bpf+0x21/0x30
-[T10029]  do_syscall_64+0x6f/0xfa0
-[T10029]  ? srso_alias_return_thunk+0x5/0xfbef5
-[T10029]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[T10029] RIP: 0033:0x7f49364f3779
-[T10029] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
-48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 0=
-1 f0 ff ff 73 01 c3 48 8b 0d 4f 86 0d 00 f7 d8 64 89 01 48
-[T10029] RSP: 002b:00007f4923ff6898 EFLAGS: 00000206 ORIG_RAX: 000000000000=
-0141
-[T10029] RAX: ffffffffffffffda RBX: 00007f4923ff7cdc RCX: 00007f49364f3779
-[T10029] RDX: 0000000000000050 RSI: 00007f4923ff68d0 RDI: 000000000000000a
-[T10029] RBP: 00007f4923ff68b0 R08: 00007f4923ff76c0 R09: 00007f4923ff68d0
-[T10029] R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000020
-[T10029] R13: 000000000000005f R14: 00007fff31499ff0 R15: 00007f49237f7000
-[T10029]  </TASK>
-[...]
-[ T3289] BUG: sleeping function called from invalid context at kernel/locki=
-ng/spinlock_rt.c:48
-[ T3289] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 3289, name:=
+[ T7350] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 7350, name:=
  new_name
-[ T3289] preempt_count: 1, expected: 0
-[ T3289] RCU nest depth: 3, expected: 3
-[ T3289] CPU: 6 UID: 0 PID: 3289 Comm: new_name Tainted: G        W  O     =
-   6.15.0-rc7-next-20250523-gcc-dirty #2 PREEMPT_{RT,(full)}=20
-[ T3289] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
-[ T3289] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+[ T7350] preempt_count: 1, expected: 0
+[ T7350] RCU nest depth: 0, expected: 0
+[ T7350] INFO: lockdep is turned off.
+[ T7350] irq event stamp: 0
+[ T7350] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+[ T7350] hardirqs last disabled at (0): [<ffffffffa1d785ee>] copy_process+0=
+xa0e/0x2110
+[ T7350] softirqs last  enabled at (0): [<ffffffffa1d785ee>] copy_process+0=
+xa0e/0x2110
+[ T7350] softirqs last disabled at (0): [<0000000000000000>] 0x0
+[ T7350] Preemption disabled at:
+[ T7350] [<ffffffffa1fc3089>] __bpf_async_init+0x69/0x2f0
+[ T7350] CPU: 5 UID: 0 PID: 7350 Comm: new_name Tainted: G        W  O     =
+   6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T7350] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T7350] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
 S-158L, BIOS E158LAMS.10F 11/11/2024
-[ T3289] Call Trace:
-[ T3289]  <TASK>
-[ T3289]  dump_stack_lvl+0x6d/0xb0
-[ T3289]  __might_resched.cold+0xaf/0xbd
-[ T3289]  rt_spin_lock+0x47/0xf0
-[ T3289]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T3289]  ___slab_alloc.isra.0+0x7b/0xb00
-[ T3289]  ? ___slab_alloc.isra.0+0x289/0xb00
-[ T3289]  ? ___slab_alloc.isra.0+0x289/0xb00
-[ T3289]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T3289]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T3289]  ? bpf_map_kmalloc_node+0x72/0x130
-[ T3289]  __kmalloc_node_noprof+0xd2/0x3b0
-[ T3289]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T3289]  bpf_map_kmalloc_node+0x72/0x130
-[ T3289]  __bpf_async_init+0x104/0x290
-[ T3289]  bpf_prog_97c348ba29efa0d1_test_call_array_sleepable+0xb3/0x10e
-[ T3289]  bpf_test_run+0x200/0x390
-[ T3289]  ? bpf_test_run+0x10d/0x390
-[ T3289]  ? kmem_cache_alloc_noprof+0x82/0x210
-[ T3289]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T3289]  ? migrate_enable+0x115/0x160
-[ T3289]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T3289]  ? kmem_cache_alloc_noprof+0x82/0x210
-[ T3289]  bpf_prog_test_run_skb+0x37b/0x7c0
-[ T3289]  ? fput+0x3f/0x90
-[ T3289]  __sys_bpf+0xc12/0x2740
-[ T3289]  __x64_sys_bpf+0x21/0x30
-[ T3289]  do_syscall_64+0x6f/0xfa0
-[ T3289]  ? srso_alias_return_thunk+0x5/0xfbef5
-[ T3289]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[ T3289] RIP: 0033:0x7f49364f3779
-[ T3289] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
+[ T7350] Call Trace:
+[ T7350]  <TASK>
+[ T7350]  dump_stack_lvl+0x6d/0xb0
+[ T7350]  __might_resched.cold+0xfa/0x135
+[ T7350]  rt_spin_lock+0x5f/0x190
+[ T7350]  ? ___slab_alloc.isra.0+0x73/0xb00
+[ T7350]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T7350]  ? rcu_is_watching+0x12/0x60
+[ T7350]  ___slab_alloc.isra.0+0x73/0xb00
+[ T7350]  ? rcu_is_watching+0x12/0x60
+[ T7350]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T7350]  ? lock_release+0x21b/0x2e0
+[ T7350]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T7350]  ? is_bpf_text_address+0x6f/0x120
+[ T7350]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T7350]  ? kernel_text_address+0x70/0xd0
+[ T7350]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T7350]  ? __kernel_text_address+0x12/0x40
+[ T7350]  ? bpf_map_kmalloc_node+0x72/0x220
+[ T7350]  __kmalloc_node_noprof+0xfb/0x490
+[ T7350]  bpf_map_kmalloc_node+0x72/0x220
+[ T7350]  __bpf_async_init+0x125/0x2f0
+[ T7350]  bpf_timer_init+0x33/0x40
+[ T7350]  bpf_prog_6ca587954a1650c7_race+0x9c/0xe1
+[ T7350]  bpf_prog_test_run_syscall+0x103/0x290
+[ T7350]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T7350]  ? fput+0x3f/0x90
+[ T7350]  __sys_bpf+0xd33/0x26d0
+[ T7350]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T7350]  ? lock_release+0x21b/0x2e0
+[ T7350]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T7350]  __x64_sys_bpf+0x21/0x30
+[ T7350]  do_syscall_64+0x7a/0xfa0
+[ T7350]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T7350]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T7350] RIP: 0033:0x7f01bf2f0779
+[ T7350] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 0=
 1 f0 ff ff 73 01 c3 48 8b 0d 4f 86 0d 00 f7 d8 64 89 01 48
-[ T3289] RSP: 002b:00007fff31499c38 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+[ T7350] RSP: 002b:00007f01ad7f9898 EFLAGS: 00000206 ORIG_RAX: 000000000000=
 0141
-[ T3289] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f49364f3779
-[ T3289] RDX: 0000000000000050 RSI: 00007fff31499c70 RDI: 000000000000000a
-[ T3289] RBP: 00007fff31499c50 R08: 00000000ffffffff R09: 00007fff31499c70
-[ T3289] R10: 0000000000000064 R11: 0000000000000202 R12: 0000000000000000
-[ T3289] R13: 00007fff3149a788 R14: 00007f4936b28000 R15: 0000558d7eaf6890
-[ T3289]  </TASK>
-[...]
+[ T7350] RAX: ffffffffffffffda RBX: 00007f01ad7facdc RCX: 00007f01bf2f0779
+[ T7350] RDX: 0000000000000050 RSI: 00007f01ad7f98d0 RDI: 000000000000000a
+[ T7350] RBP: 00007f01ad7f98b0 R08: 00007f01ad7fa6c0 R09: 00007f01ad7f98d0
+[ T7350] R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000000020
+[ T7350] R13: 000000000000005f R14: 00007ffe4a37c8d0 R15: 00007f01acffa000
+[ T7350]  </TASK>
+[ T2916] BUG: sleeping function called from invalid context at kernel/locki=
+ng/spinlock_rt.c:48
+[ T2916] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 2916, name:=
+ new_name
+[ T2916] preempt_count: 1, expected: 0
+[ T2916] RCU nest depth: 1, expected: 1
+[ T2916] INFO: lockdep is turned off.
+[ T2916] irq event stamp: 23480570
+[ T2916] hardirqs last  enabled at (23480569): [<ffffffffa1ccc16f>] dump_st=
+ack_lvl+0x3f/0xb0
+[ T2916] hardirqs last disabled at (23480570): [<ffffffffa1ccc15c>] dump_st=
+ack_lvl+0x2c/0xb0
+[ T2916] softirqs last  enabled at (23480156): [<ffffffffa1d8616e>] __local=
+_bh_enable_ip+0xee/0x170
+[ T2916] softirqs last disabled at (23480150): [<ffffffffa1f8dc1a>] bpf_raw=
+_tp_link_attach+0x11a/0x220
+[ T2916] Preemption disabled at:
+[ T2916] [<ffffffffa1fc3089>] __bpf_async_init+0x69/0x2f0
+[ T2916] CPU: 7 UID: 0 PID: 2916 Comm: new_name Tainted: G        W  O     =
+   6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2916] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2916] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2916] Call Trace:
+[ T2916]  <TASK>
+[ T2916]  dump_stack_lvl+0x6d/0xb0
+[ T2916]  __might_resched.cold+0xfa/0x135
+[ T2916]  rt_spin_lock+0x5f/0x190
+[ T2916]  ? ___slab_alloc.isra.0+0x73/0xb00
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ___slab_alloc.isra.0+0x73/0xb00
+[ T2916]  ? rcu_is_watching+0x12/0x60
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? is_bpf_text_address+0x65/0x120
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? rcu_is_watching+0x12/0x60
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? bpf_map_kmalloc_node+0x72/0x220
+[ T2916]  __kmalloc_node_noprof+0xfb/0x490
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  bpf_map_kmalloc_node+0x72/0x220
+[ T2916]  __bpf_async_init+0x125/0x2f0
+[ T2916]  bpf_timer_init+0x33/0x40
+[ T2916]  bpf_prog_a5e8b38bc982b60e_test1+0xc8/0x12e
+[ T2916]  bpf_trampoline_6442502617+0x43/0xa7
+[ T2916]  bpf_fentry_test1+0x9/0x20
+[ T2916]  bpf_prog_test_run_tracing+0x147/0x2f0
+[ T2916]  ? fput+0x3f/0x90
+[ T2916]  __sys_bpf+0xd33/0x26d0
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? lock_release+0x21b/0x2e0
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  __x64_sys_bpf+0x21/0x30
+[ T2916]  do_syscall_64+0x7a/0xfa0
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2916] RIP: 0033:0x7f01bf2f0779
+[ T2916] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
+48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 0=
+1 f0 ff ff 73 01 c3 48 8b 0d 4f 86 0d 00 f7 d8 64 89 01 48
+[ T2916] RSP: 002b:00007ffe4a37ca18 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+0141
+[ T2916] RAX: ffffffffffffffda RBX: 00007ffe4a37d058 RCX: 00007f01bf2f0779
+[ T2916] RDX: 0000000000000050 RSI: 00007ffe4a37ca50 RDI: 000000000000000a
+[ T2916] RBP: 00007ffe4a37ca30 R08: 00000000ffffffff R09: 00007ffe4a37ca50
+[ T2916] R10: 0000000000000064 R11: 0000000000000202 R12: 0000000000000000
+[ T2916] R13: 00007ffe4a37d068 R14: 00007f01bf925000 R15: 000055edb0606890
+[ T2916]  </TASK>
+[ T7479] ipip: IPv4 and MPLS over IPv4 tunneling driver
+[ T7610] Initializing XFRM netlink socket
+[ T2916] ref_ctr_offset mismatch. inode: 0x1c06467 offset: 0x95a816 ref_ctr=
+_offset(old): 0x6effc12 ref_ctr_offset(new): 0x6effc10
+[ T4821] pci_bus 0000:03: Allocating resources
+[  T111] [drm] PCIE GART of 512M enabled (table at 0x00000081FEB00000).
+[  T111] amdgpu 0000:03:00.0: amdgpu: PSP is resuming...
+[  T111] amdgpu 0000:03:00.0: amdgpu: reserve 0xa00000 from 0x81fd000000 fo=
+r PSP TMR
+[  T111] amdgpu 0000:03:00.0: amdgpu: RAS: optional ras ta ucode is not ava=
+ilable
+[  T111] amdgpu 0000:03:00.0: amdgpu: SECUREDISPLAY: optional securedisplay=
+ ta ucode is not available
+[  T111] amdgpu 0000:03:00.0: amdgpu: SMU is resuming...
+[  T111] amdgpu 0000:03:00.0: amdgpu: smu driver if version =3D 0x0000000f,=
+ smu fw if version =3D 0x00000013, smu fw program =3D 0, version =3D 0x003b=
+3100 (59.49.0)
+[  T111] amdgpu 0000:03:00.0: amdgpu: SMU driver if version not matched
+[  T111] amdgpu 0000:03:00.0: amdgpu: SMU is resumed successfully!
+[  T111] [drm] kiq ring mec 2 pipe 1 q 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: [drm] DMUB hardware initialized: vers=
+ion=3D0x02020020
+[  T111] amdgpu 0000:03:00.0: [drm] Cannot find any crtc or sizes
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring gfx_0.0.0 uses VM inv eng 0 on h=
+ub 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring gfx_0.1.0 uses VM inv eng 1 on h=
+ub 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring comp_1.0.0 uses VM inv eng 4 on =
+hub 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring comp_1.1.0 uses VM inv eng 5 on =
+hub 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring comp_1.2.0 uses VM inv eng 6 on =
+hub 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring comp_1.3.0 uses VM inv eng 7 on =
+hub 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring comp_1.0.1 uses VM inv eng 8 on =
+hub 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring comp_1.1.1 uses VM inv eng 9 on =
+hub 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring comp_1.2.1 uses VM inv eng 10 on=
+ hub 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring comp_1.3.1 uses VM inv eng 11 on=
+ hub 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring kiq_0.2.1.0 uses VM inv eng 12 o=
+n hub 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring sdma0 uses VM inv eng 13 on hub 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring sdma1 uses VM inv eng 14 on hub 0
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring vcn_dec_0 uses VM inv eng 0 on h=
+ub 8
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring vcn_enc_0.0 uses VM inv eng 1 on=
+ hub 8
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring vcn_enc_0.1 uses VM inv eng 4 on=
+ hub 8
+[  T111] amdgpu 0000:03:00.0: amdgpu: ring jpeg_dec uses VM inv eng 5 on hu=
+b 8
+[  T111] amdgpu 0000:03:00.0: [drm] Cannot find any crtc or sizes
+[ T4828] pci_bus 0000:03: Allocating resources
+[  T361] [drm] PCIE GART of 512M enabled (table at 0x00000081FEB00000).
+[  T361] amdgpu 0000:03:00.0: amdgpu: PSP is resuming...
+[  T361] amdgpu 0000:03:00.0: amdgpu: reserve 0xa00000 from 0x81fd000000 fo=
+r PSP TMR
+[  T361] amdgpu 0000:03:00.0: amdgpu: RAS: optional ras ta ucode is not ava=
+ilable
+[  T361] amdgpu 0000:03:00.0: amdgpu: SECUREDISPLAY: optional securedisplay=
+ ta ucode is not available
+[  T361] amdgpu 0000:03:00.0: amdgpu: SMU is resuming...
+[  T361] amdgpu 0000:03:00.0: amdgpu: smu driver if version =3D 0x0000000f,=
+ smu fw if version =3D 0x00000013, smu fw program =3D 0, version =3D 0x003b=
+3100 (59.49.0)
+[  T361] amdgpu 0000:03:00.0: amdgpu: SMU driver if version not matched
+[  T361] amdgpu 0000:03:00.0: amdgpu: SMU is resumed successfully!
+[  T361] [drm] kiq ring mec 2 pipe 1 q 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: [drm] DMUB hardware initialized: vers=
+ion=3D0x02020020
+[  T361] amdgpu 0000:03:00.0: [drm] Cannot find any crtc or sizes
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring gfx_0.0.0 uses VM inv eng 0 on h=
+ub 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring gfx_0.1.0 uses VM inv eng 1 on h=
+ub 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring comp_1.0.0 uses VM inv eng 4 on =
+hub 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring comp_1.1.0 uses VM inv eng 5 on =
+hub 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring comp_1.2.0 uses VM inv eng 6 on =
+hub 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring comp_1.3.0 uses VM inv eng 7 on =
+hub 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring comp_1.0.1 uses VM inv eng 8 on =
+hub 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring comp_1.1.1 uses VM inv eng 9 on =
+hub 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring comp_1.2.1 uses VM inv eng 10 on=
+ hub 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring comp_1.3.1 uses VM inv eng 11 on=
+ hub 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring kiq_0.2.1.0 uses VM inv eng 12 o=
+n hub 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring sdma0 uses VM inv eng 13 on hub 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring sdma1 uses VM inv eng 14 on hub 0
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring vcn_dec_0 uses VM inv eng 0 on h=
+ub 8
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring vcn_enc_0.0 uses VM inv eng 1 on=
+ hub 8
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring vcn_enc_0.1 uses VM inv eng 4 on=
+ hub 8
+[  T361] amdgpu 0000:03:00.0: amdgpu: ring jpeg_dec uses VM inv eng 5 on hu=
+b 8
+[  T361] amdgpu 0000:03:00.0: [drm] Cannot find any crtc or sizes
+[ T3942] pci_bus 0000:03: Allocating resources
+[ T3942] pci_bus 0000:03: Allocating resources
+[ T4828] pci_bus 0000:03: Allocating resources
+[ T7393] [drm] PCIE GART of 512M enabled (table at 0x00000081FEB00000).
+[ T7393] amdgpu 0000:03:00.0: amdgpu: PSP is resuming...
+[ T7393] amdgpu 0000:03:00.0: amdgpu: reserve 0xa00000 from 0x81fd000000 fo=
+r PSP TMR
+[ T7393] amdgpu 0000:03:00.0: amdgpu: RAS: optional ras ta ucode is not ava=
+ilable
+[ T7393] amdgpu 0000:03:00.0: amdgpu: SECUREDISPLAY: optional securedisplay=
+ ta ucode is not available
+[ T7393] amdgpu 0000:03:00.0: amdgpu: SMU is resuming...
+[ T7393] amdgpu 0000:03:00.0: amdgpu: smu driver if version =3D 0x0000000f,=
+ smu fw if version =3D 0x00000013, smu fw program =3D 0, version =3D 0x003b=
+3100 (59.49.0)
+[ T7393] amdgpu 0000:03:00.0: amdgpu: SMU driver if version not matched
+[ T7393] amdgpu 0000:03:00.0: amdgpu: SMU is resumed successfully!
+[ T7393] [drm] kiq ring mec 2 pipe 1 q 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: [drm] DMUB hardware initialized: vers=
+ion=3D0x02020020
+[ T7393] amdgpu 0000:03:00.0: [drm] Cannot find any crtc or sizes
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring gfx_0.0.0 uses VM inv eng 0 on h=
+ub 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring gfx_0.1.0 uses VM inv eng 1 on h=
+ub 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring comp_1.0.0 uses VM inv eng 4 on =
+hub 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring comp_1.1.0 uses VM inv eng 5 on =
+hub 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring comp_1.2.0 uses VM inv eng 6 on =
+hub 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring comp_1.3.0 uses VM inv eng 7 on =
+hub 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring comp_1.0.1 uses VM inv eng 8 on =
+hub 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring comp_1.1.1 uses VM inv eng 9 on =
+hub 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring comp_1.2.1 uses VM inv eng 10 on=
+ hub 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring comp_1.3.1 uses VM inv eng 11 on=
+ hub 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring kiq_0.2.1.0 uses VM inv eng 12 o=
+n hub 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring sdma0 uses VM inv eng 13 on hub 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring sdma1 uses VM inv eng 14 on hub 0
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring vcn_dec_0 uses VM inv eng 0 on h=
+ub 8
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring vcn_enc_0.0 uses VM inv eng 1 on=
+ hub 8
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring vcn_enc_0.1 uses VM inv eng 4 on=
+ hub 8
+[ T7393] amdgpu 0000:03:00.0: amdgpu: ring jpeg_dec uses VM inv eng 5 on hu=
+b 8
+[ T7393] amdgpu 0000:03:00.0: [drm] Cannot find any crtc or sizes
+[ T4821] pci_bus 0000:03: Allocating resources
+[ T5525] [drm] PCIE GART of 512M enabled (table at 0x00000081FEB00000).
+[ T5525] amdgpu 0000:03:00.0: amdgpu: PSP is resuming...
+[ T3942] pci_bus 0000:03: Allocating resources
+[ T5525] amdgpu 0000:03:00.0: amdgpu: reserve 0xa00000 from 0x81fd000000 fo=
+r PSP TMR
+[ T5525] amdgpu 0000:03:00.0: amdgpu: RAS: optional ras ta ucode is not ava=
+ilable
+[ T5525] amdgpu 0000:03:00.0: amdgpu: SECUREDISPLAY: optional securedisplay=
+ ta ucode is not available
+[ T5525] amdgpu 0000:03:00.0: amdgpu: SMU is resuming...
+[ T5525] amdgpu 0000:03:00.0: amdgpu: smu driver if version =3D 0x0000000f,=
+ smu fw if version =3D 0x00000013, smu fw program =3D 0, version =3D 0x003b=
+3100 (59.49.0)
+[ T5525] amdgpu 0000:03:00.0: amdgpu: SMU driver if version not matched
+[ T5525] amdgpu 0000:03:00.0: amdgpu: SMU is resumed successfully!
+[ T5525] [drm] kiq ring mec 2 pipe 1 q 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: [drm] DMUB hardware initialized: vers=
+ion=3D0x02020020
+[ T5525] amdgpu 0000:03:00.0: [drm] Cannot find any crtc or sizes
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring gfx_0.0.0 uses VM inv eng 0 on h=
+ub 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring gfx_0.1.0 uses VM inv eng 1 on h=
+ub 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring comp_1.0.0 uses VM inv eng 4 on =
+hub 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring comp_1.1.0 uses VM inv eng 5 on =
+hub 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring comp_1.2.0 uses VM inv eng 6 on =
+hub 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring comp_1.3.0 uses VM inv eng 7 on =
+hub 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring comp_1.0.1 uses VM inv eng 8 on =
+hub 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring comp_1.1.1 uses VM inv eng 9 on =
+hub 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring comp_1.2.1 uses VM inv eng 10 on=
+ hub 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring comp_1.3.1 uses VM inv eng 11 on=
+ hub 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring kiq_0.2.1.0 uses VM inv eng 12 o=
+n hub 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring sdma0 uses VM inv eng 13 on hub 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring sdma1 uses VM inv eng 14 on hub 0
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring vcn_dec_0 uses VM inv eng 0 on h=
+ub 8
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring vcn_enc_0.0 uses VM inv eng 1 on=
+ hub 8
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring vcn_enc_0.1 uses VM inv eng 4 on=
+ hub 8
+[ T5525] amdgpu 0000:03:00.0: amdgpu: ring jpeg_dec uses VM inv eng 5 on hu=
+b 8
+[ T5525] amdgpu 0000:03:00.0: [drm] Cannot find any crtc or sizes
+[ T4828] pci_bus 0000:03: Allocating resources
+[ T5513] [drm] PCIE GART of 512M enabled (table at 0x00000081FEB00000).
+[ T5513] amdgpu 0000:03:00.0: amdgpu: PSP is resuming...
+[ T4821] pci_bus 0000:03: Allocating resources
+[ T5513] amdgpu 0000:03:00.0: amdgpu: reserve 0xa00000 from 0x81fd000000 fo=
+r PSP TMR
+[ T5513] amdgpu 0000:03:00.0: amdgpu: RAS: optional ras ta ucode is not ava=
+ilable
+[ T5513] amdgpu 0000:03:00.0: amdgpu: SECUREDISPLAY: optional securedisplay=
+ ta ucode is not available
+[ T5513] amdgpu 0000:03:00.0: amdgpu: SMU is resuming...
+[ T5513] amdgpu 0000:03:00.0: amdgpu: smu driver if version =3D 0x0000000f,=
+ smu fw if version =3D 0x00000013, smu fw program =3D 0, version =3D 0x003b=
+3100 (59.49.0)
+[ T5513] amdgpu 0000:03:00.0: amdgpu: SMU driver if version not matched
+[ T5513] amdgpu 0000:03:00.0: amdgpu: SMU is resumed successfully!
+[ T5513] [drm] kiq ring mec 2 pipe 1 q 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: [drm] DMUB hardware initialized: vers=
+ion=3D0x02020020
+[ T5513] amdgpu 0000:03:00.0: [drm] Cannot find any crtc or sizes
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring gfx_0.0.0 uses VM inv eng 0 on h=
+ub 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring gfx_0.1.0 uses VM inv eng 1 on h=
+ub 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring comp_1.0.0 uses VM inv eng 4 on =
+hub 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring comp_1.1.0 uses VM inv eng 5 on =
+hub 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring comp_1.2.0 uses VM inv eng 6 on =
+hub 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring comp_1.3.0 uses VM inv eng 7 on =
+hub 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring comp_1.0.1 uses VM inv eng 8 on =
+hub 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring comp_1.1.1 uses VM inv eng 9 on =
+hub 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring comp_1.2.1 uses VM inv eng 10 on=
+ hub 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring comp_1.3.1 uses VM inv eng 11 on=
+ hub 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring kiq_0.2.1.0 uses VM inv eng 12 o=
+n hub 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring sdma0 uses VM inv eng 13 on hub 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring sdma1 uses VM inv eng 14 on hub 0
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring vcn_dec_0 uses VM inv eng 0 on h=
+ub 8
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring vcn_enc_0.0 uses VM inv eng 1 on=
+ hub 8
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring vcn_enc_0.1 uses VM inv eng 4 on=
+ hub 8
+[ T5513] amdgpu 0000:03:00.0: amdgpu: ring jpeg_dec uses VM inv eng 5 on hu=
+b 8
+[ T5513] amdgpu 0000:03:00.0: [drm] Cannot find any crtc or sizes
+[ T2916] BUG: sleeping function called from invalid context at kernel/locki=
+ng/spinlock_rt.c:48
+[ T2916] in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 2916, name:=
+ new_name
+[ T2916] preempt_count: 1, expected: 0
+[ T2916] RCU nest depth: 3, expected: 3
+[ T2916] INFO: lockdep is turned off.
+[ T2916] irq event stamp: 23480570
+[ T2916] hardirqs last  enabled at (23480569): [<ffffffffa1ccc16f>] dump_st=
+ack_lvl+0x3f/0xb0
+[ T2916] hardirqs last disabled at (23480570): [<ffffffffa1ccc15c>] dump_st=
+ack_lvl+0x2c/0xb0
+[ T2916] softirqs last  enabled at (23480156): [<ffffffffa1d8616e>] __local=
+_bh_enable_ip+0xee/0x170
+[ T2916] softirqs last disabled at (23480150): [<ffffffffa1f8dc1a>] bpf_raw=
+_tp_link_attach+0x11a/0x220
+[ T2916] Preemption disabled at:
+[ T2916] [<ffffffffa1fc3089>] __bpf_async_init+0x69/0x2f0
+[ T2916] CPU: 10 UID: 0 PID: 2916 Comm: new_name Tainted: G        W  O    =
+    6.15.0-rc7-next-20250523-gcc-dirty #4 PREEMPT_{RT,(full)}=20
+[ T2916] Tainted: [W]=3DWARN, [O]=3DOOT_MODULE
+[ T2916] Hardware name: Micro-Star International Co., Ltd. Alpha 15 B5EEK/M=
+S-158L, BIOS E158LAMS.10F 11/11/2024
+[ T2916] Call Trace:
+[ T2916]  <TASK>
+[ T2916]  dump_stack_lvl+0x6d/0xb0
+[ T2916]  __might_resched.cold+0xfa/0x135
+[ T2916]  rt_spin_lock+0x5f/0x190
+[ T2916]  ? ___slab_alloc.isra.0+0x73/0xb00
+[ T2916]  ___slab_alloc.isra.0+0x73/0xb00
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? rcu_is_watching+0x12/0x60
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? rt_mutex_slowunlock+0x3ee/0x490
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? rtlock_slowlock_locked+0x55/0x1d00
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? bpf_map_kmalloc_node+0x72/0x220
+[ T2916]  __kmalloc_node_noprof+0xfb/0x490
+[ T2916]  bpf_map_kmalloc_node+0x72/0x220
+[ T2916]  __bpf_async_init+0x125/0x2f0
+[ T2916]  bpf_prog_90ea96a459b64173_test_call_array_sleepable+0xb3/0x10e
+[ T2916]  bpf_test_run+0x1fb/0x400
+[ T2916]  ? bpf_test_run+0x115/0x400
+[ T2916]  ? migrate_enable+0xd6/0x110
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? rcu_is_watching+0x12/0x60
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? migrate_enable+0xd6/0x110
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? rcu_is_watching+0x12/0x60
+[ T2916]  ? kmem_cache_alloc_noprof+0x21e/0x2b0
+[ T2916]  bpf_prog_test_run_skb+0x37b/0x7c0
+[ T2916]  ? fput+0x3f/0x90
+[ T2916]  __sys_bpf+0xd33/0x26d0
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  ? lock_release+0x21b/0x2e0
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  __x64_sys_bpf+0x21/0x30
+[ T2916]  do_syscall_64+0x7a/0xfa0
+[ T2916]  ? srso_alias_return_thunk+0x5/0xfbef5
+[ T2916]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ T2916] RIP: 0033:0x7f01bf2f0779
+[ T2916] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 =
+48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 0=
+1 f0 ff ff 73 01 c3 48 8b 0d 4f 86 0d 00 f7 d8 64 89 01 48
+[ T2916] RSP: 002b:00007ffe4a37c518 EFLAGS: 00000202 ORIG_RAX: 000000000000=
+0141
+[ T2916] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f01bf2f0779
+[ T2916] RDX: 0000000000000050 RSI: 00007ffe4a37c550 RDI: 000000000000000a
+[ T2916] RBP: 00007ffe4a37c530 R08: 00000000ffffffff R09: 00007ffe4a37c550
+[ T2916] R10: 0000000000000064 R11: 0000000000000202 R12: 0000000000000000
+[ T2916] R13: 00007ffe4a37d068 R14: 00007f01bf925000 R15: 000055edb0606890
+[ T2916]  </TASK>
 
 Bert Karwatzki
 

@@ -1,143 +1,159 @@
-Return-Path: <linux-next+bounces-6933-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6934-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7A15AC3D81
-	for <lists+linux-next@lfdr.de>; Mon, 26 May 2025 11:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37144AC47B6
+	for <lists+linux-next@lfdr.de>; Tue, 27 May 2025 07:42:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70E6E17320E
-	for <lists+linux-next@lfdr.de>; Mon, 26 May 2025 09:59:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6C001658AB
+	for <lists+linux-next@lfdr.de>; Tue, 27 May 2025 05:42:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9AB1F417F;
-	Mon, 26 May 2025 09:59:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 782731D416E;
+	Tue, 27 May 2025 05:42:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="c9+ups1O"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="V/FBWR68"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C221F3B87
-	for <linux-next@vger.kernel.org>; Mon, 26 May 2025 09:59:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF213C13B;
+	Tue, 27 May 2025 05:42:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748253547; cv=none; b=JAJnPN8FjVWK2oQkZ0uoUIq279/+6k796UDOHJzzcjloD/s5JlfRSKgV+vLv6i1vaTNJm2HzkjkJIYaOrO94VI0S/recyzdnSiHs0FE0U56pzxc95/pwHph9nU7/RjXzgE9GnjwpGyUMNYC87McLFjm3JdSQzDn0L5jPaONuEZs=
+	t=1748324552; cv=none; b=s8FmR91PysjRiP93JGskCUv6kqXm9HDnYVts1u5AcVQIpUU8lsT/pEgU+wd6csFdPSIkfUHDyDHJfcNKH03hYmBSAslmMxRz0ixTsZ9swvVX5FraszHnhGX0AQ57QBsptIPJUBGJwpxHp+DWwbk8NzP13qyc8gPMu563Ei01ykk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748253547; c=relaxed/simple;
-	bh=ZZ/CN1r4rWAqXttKLcXuv5t0jn+s5tjiKYxppOvqz0o=;
-	h=MIME-Version:from:Date:Message-ID:Subject:To:Cc:Content-Type; b=CQc0H7ZDmuhGMX06FGdOpcywMwpwRot0PKM5QeuSsEnbJGrzs3OxSAR6fx/rpXUhUlhGjOAFBfo2Kljhryy4Zna5Ur3khEFF76YzvecF1/O/g42cMf91xAlYR8Q282WKY+oTpCEiwrbEr1ibMzwIsoKMtvR9L0a8PX0WOBbpBis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=c9+ups1O; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e7db5c1312fso410181276.3
-        for <linux-next@vger.kernel.org>; Mon, 26 May 2025 02:59:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1748253545; x=1748858345; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:reply-to
-         :from:mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5bAscapsNbBNCEyNcI/o/geJmdjtYZcfwIFLzTWKZcI=;
-        b=c9+ups1OgA79qK5AGoCSAHrdBYkGTzplzUk2iaScgdB0XzsHsTms+4HzXVm4c3I5mv
-         UnwjdHYejtlMI7MXwgt0qCrcAaQqPSvaRMvNH7VMYALY6kob0rvyK4HRxy4XZSGI0dL9
-         NlXTg5NmIGkIXWsQHTC39kk+M6yabncBJGbQMfj14NbP3Plh6O4ymMcLpn3Xc0PNhmYz
-         XeaUhxtHTHG8EsRUEqhnJqCn4jE5DRLnx2SrQb1KB0kxhun4wD2l7mycXpdoBkawjjFd
-         8yfXaMFliHAhjGfCIwrLQOtmzWpVx3ikUtjTsSW0qeRW6mrJDvpJm0C3bEQWQT1BM5wN
-         8rbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748253545; x=1748858345;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:reply-to
-         :from:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5bAscapsNbBNCEyNcI/o/geJmdjtYZcfwIFLzTWKZcI=;
-        b=Q0bSoCHJIieo8sDNq/ION5LAgYVoOfzsMK8wGSlOJnznTZTAn7p3ZqgRvCwcLSd5+o
-         OVKJHJPa7vlKyy//Kh7kcoob/ncZ8IMLRMDCvF7N7JB9J/o/m5UYzkNkJkLR7qOFtLRp
-         RBV+7NEpcXzYBncRLpsx6/3r23GW7GktbSx1ocqyYqc2Y6mrxm2ool6nCLO+63xa9+KW
-         pwHQtsy3nFqILxKY2Ond2VUTNbwR1c8c4MWRCu+a+lEFCFl2RPoT1ma0VRGnVwuJrYk0
-         /2AnfwRYn/Hwr792K3TU6P9BywLfu1s7pRoLGWJ1swLY9pFiHfeL5hRS69HIevLNmXOr
-         QgNg==
-X-Forwarded-Encrypted: i=1; AJvYcCUO2Z2glHUNHDUsEVjW6zOxCzUbxQT8/VWXQXrKYJUp4iioYqdIdBSkGXjp7dy2sKVzqucb8JUft8+a@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbRpMgg1dALSFZisYH/MHsbS7bV9apYomDi5oAXc05XmN0yugJ
-	6e9tufSEt5beqjEebZEE4fqQUsnQptVVXL+U7eFaRrhyBjQ931jGWBk1WolARVPLh1UuHNb0Go3
-	o3qgEnCRVwDQGFrPoxU2VI2jdsN8+Tl73EOiWycBoX9SFHkpMB5hA
-X-Gm-Gg: ASbGnct9g4CGXtPuVtyclL1CFsXlyC+G722wiKVPBLbdP/T+XSHNNDd1soL+MGex4qm
-	uEdjqnwGFUPmIQhBB3O0oBhxjqgeI9ITGNqAQrDbenO59S0s6ujr9cA/1h9cl4bs0EsDu8/PQP0
-	ZRrNTXHJ1QENBRTaIz7DVasb5sdsvsRg5T68pqBskZVg==
-X-Google-Smtp-Source: AGHT+IEMjPBNr4q4e27dnoT3RGsiVPzuztek0nqMGU5Et5iFG0oUJ2rP+NGouepqm0xXekK3Rg0A5Nm5YqgJ+VC89+8=
-X-Received: by 2002:a05:6902:2206:b0:e7d:585e:8d2e with SMTP id
- 3f1490d57ef6-e7d919e6771mr9152597276.29.1748253545002; Mon, 26 May 2025
- 02:59:05 -0700 (PDT)
-Received: from 415818378487 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 26 May 2025 05:59:03 -0400
-Received: from 415818378487 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 26 May 2025 05:59:03 -0400
+	s=arc-20240116; t=1748324552; c=relaxed/simple;
+	bh=LSN+JZs62AFH8k+p7KoqWLl+5lo1kiXD5xF9uP2he0U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O3x6+b9iT6UKCams5/SW1ClAqFfGj1IAA8tRtez71kQ9RxDxbGVnmzP1SnoYAoBbUQEIqgBC8CgjYtdh5dY40BsgStoqQo4vs7hvdocYK8E8DH++tCxCBccjrJc8+Sr7GE+g10k7pEcsu1JbLVLaewrKOBbReu2KL4hLso/MqIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=V/FBWR68; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 54R5FfiB015958;
+	Tue, 27 May 2025 05:41:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=GB88/zUggTdqQf1vImnha+8Sk12HP4jhUFUL0qn4Z
+	vU=; b=V/FBWR68q7U5PJamO7/+CQq+tyxlawzMoIkWkG/nRZ9+uewlSxq8Q8Ztr
+	m7A1OpVNv56X8JSogwuQgOSjj8j52Z5KfouU0jQr4AAiPcQWAq+ld62QBIFquQmS
+	X0h07LxZzYsuPoyqeJ8QPJHB10r6vLKp+fw4U6nOkpsh5eHRFXlpTvTCk/iWEVeL
+	PTB0g6Dn8cnZ6wRJgtK/2PGKIpXorIkexRxwijT5YpX3OFuHVO6u+O4jUVAtddwR
+	oO97vUl3NdHSk6R18WIUM0g1nCeFK9rlIEsgGHoTqtCLBHEqyZAklPp46YZOggAH
+	GMS9iN88u4s/CWHadl1fOc6+9xhsA==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46v0p2g75u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 May 2025 05:41:52 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 54R5RbJ8032740;
+	Tue, 27 May 2025 05:41:51 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46v0p2g75r-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 May 2025 05:41:51 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 54R2pSY1009847;
+	Tue, 27 May 2025 05:41:51 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 46usxms7bm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 May 2025 05:41:50 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 54R5fkgp47841684
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 27 May 2025 05:41:46 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C934A2004B;
+	Tue, 27 May 2025 05:41:46 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8F9C420040;
+	Tue, 27 May 2025 05:41:41 +0000 (GMT)
+Received: from li-621bac4c-27c7-11b2-a85c-c2bf7c4b3c07.ibm.com.com (unknown [9.43.24.30])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 27 May 2025 05:41:41 +0000 (GMT)
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        hbathini@linux.ibm.com, maddy@linux.ibm.com, venkat88@linux.ibm.com,
+        sfr@canb.auug.org.au, alexei.starovoitov@gmail.com,
+        daniel@iogearbox.net, mykolal@fb.com, yoong.siang.song@intel.com,
+        martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+        haoluo@google.com, jolsa@kernel.org, shuah@kernel.org
+Subject: [PATCH net-next] selftests/bpf: Fix bpf selftest build warning
+Date: Tue, 27 May 2025 11:11:38 +0530
+Message-ID: <20250527054138.1086006-1-skb99@linux.ibm.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-from: KernelCI bot <bot@kernelci.org>
-Reply-To: kernelci@lists.linux.dev
-Date: Mon, 26 May 2025 05:59:03 -0400
-X-Gm-Features: AX0GCFthZfks8QA8KnfGHvfP_2Y2hwfXyqhTrnXPwSVcO8ZIKUa3W4g8T0SOUxQ
-Message-ID: <CACo-S-3U1=Q61L1TGb-KtG=cu2LNkWJC-9rBT_aNQNJQ8j=trw@mail.gmail.com>
-Subject: =?UTF-8?B?W1JFR1JFU1NJT05dIG5leHQvbWFzdGVyOiAoYnVpbGQpIOKAmFNPQ0tfQ09SRURVTVA=?=
-	=?UTF-8?B?4oCZIHVuZGVjbGFyZWQgKGZpcnN0IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKTsgZGlkIHlvdSBtLi4u?=
-To: kernelci-results@groups.io
-Cc: regressions@lists.linux.dev, gus@collabora.com, linux-next@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: hniIQAKNbKaMz0m7uRoeVVGmN4blMz1r
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNTI3MDA0MiBTYWx0ZWRfX2KH/YZ+IXrD+ xEwRJfReATiRs31NWV8AHzlO+alRQxKzjNz03su/4PdjDwFwCMnMclWmCbI8sOigQtx/uiisz94 wpKFdDXu5QFUsnQcjZ7a3KX3p4tuznFhguhpQHkI0B8CIMGy7LB2el/unBH+vCfMq9BFtj+PCLg
+ v7pmMp9dqtjyTSSuXI+zw925ImeqPR171eKx5d+LLwLpMfqpLFrVG70b5mqx0DucYAEOixRxVu2 P+/v7k5Otum5E0CBJa7vVTDZXr6TObLh5Y/Tc22YICRzPfMINs9h1TnThZywBfTlY7JcJL3ZkZi X+yrPf32qcMZNXLmguE/5vJvplY+gaFnjDHhHZohduGQUJtLxVlRNWzrZ99+tkUnDxM45JLornJ
+ aevHuUXaYlaHN6RkOy4ICEgssJHEzd+IbjKgqHtR3KnQJkTfKexMqq5gfk+JgKxQZE7GuPka
+X-Authority-Analysis: v=2.4 cv=Q7TS452a c=1 sm=1 tr=0 ts=683550a0 cx=c_pps a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17 a=dt9VzEwgFbYA:10 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=QyXUC8HyAAAA:8 a=rV7urDwo7b39epbSBP8A:9
+X-Proofpoint-GUID: kUl06Ny2CnDbsd5iHLU-MPR7ppgJ17oC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-05-27_03,2025-05-26_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 mlxlogscore=695 phishscore=0 clxscore=1015
+ malwarescore=0 adultscore=0 mlxscore=0 impostorscore=0 spamscore=0
+ suspectscore=0 lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505160000 definitions=main-2505270042
 
-Hello,
+On linux-next, build for bpf selftest displays a warning:
 
-New build issue found on next/master:
+Warning: Kernel ABI header at 'tools/include/uapi/linux/if_xdp.h'
+differs from latest version at 'include/uapi/linux/if_xdp.h'.
 
+Commit 8066e388be48 ("net: add UAPI to the header guard in various network headers")
+changed the header guard from _LINUX_IF_XDP_H to _UAPI_LINUX_IF_XDP_H
+in include/uapi/linux/if_xdp.h.
+
+To resolve the warning, update tools/include/uapi/linux/if_xdp.h
+to align with the changes in include/uapi/linux/if_xdp.h
+
+Fixes: 8066e388be48 ("net: add UAPI to the header guard in various network headers")
+Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Closes: https://lore.kernel.org/all/c2bc466d-dff2-4d0d-a797-9af7f676c065@linux.ibm.com/
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
 ---
- =E2=80=98SOCK_COREDUMP=E2=80=99 undeclared (first use in this function); d=
-id you mean
-=E2=80=98SOCK_RDM=E2=80=99? in net/unix/af_unix.o (net/unix/af_unix.c)
-[logspec:kbuild,kbuild.compiler.error]
----
+ tools/include/uapi/linux/if_xdp.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-- dashboard: https://d.kernelci.org/i/maestro:1ec0ababeee988e6d6392eedfbe6a=
-035ed2dfd6d
-- giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
-it
-- commit HEAD:  3be1a7a31fbda82f3604b6c31e4f390110de1b46
+diff --git a/tools/include/uapi/linux/if_xdp.h b/tools/include/uapi/linux/if_xdp.h
+index 42869770776e..44f2bb93e7e6 100644
+--- a/tools/include/uapi/linux/if_xdp.h
++++ b/tools/include/uapi/linux/if_xdp.h
+@@ -7,8 +7,8 @@
+  *	      Magnus Karlsson <magnus.karlsson@intel.com>
+  */
+ 
+-#ifndef _LINUX_IF_XDP_H
+-#define _LINUX_IF_XDP_H
++#ifndef _UAPI_LINUX_IF_XDP_H
++#define _UAPI_LINUX_IF_XDP_H
+ 
+ #include <linux/types.h>
+ 
+@@ -180,4 +180,4 @@ struct xdp_desc {
+ /* TX packet carries valid metadata. */
+ #define XDP_TX_METADATA (1 << 1)
+ 
+-#endif /* _LINUX_IF_XDP_H */
++#endif /* _UAPI_LINUX_IF_XDP_H */
+-- 
+2.43.5
 
-
-Log excerpt:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-net/unix/af_unix.c:1158:21: error: =E2=80=98SOCK_COREDUMP=E2=80=99 undeclar=
-ed (first
-use in this function); did you mean =E2=80=98SOCK_RDM=E2=80=99?
- 1158 |         if (flags & SOCK_COREDUMP) {
-      |                     ^~~~~~~~~~~~~
-      |                     SOCK_RDM
-net/unix/af_unix.c:1158:21: note: each undeclared identifier is
-reported only once for each function it appears in
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-
-
-# Builds where the incident occurred:
-
-## 32r2el_defconfig on (mips):
-- compiler: gcc-12
-- dashboard: https://d.kernelci.org/build/maestro:68342eeefb37369f44a86dc3
-
-
-#kernelci issue maestro:1ec0ababeee988e6d6392eedfbe6a035ed2dfd6d
-
-Reported-by: kernelci.org bot <bot@kernelci.org>
-
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
 

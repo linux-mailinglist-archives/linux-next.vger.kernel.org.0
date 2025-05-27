@@ -1,124 +1,177 @@
-Return-Path: <linux-next+bounces-6944-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6945-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 193AAAC5DC0
-	for <lists+linux-next@lfdr.de>; Wed, 28 May 2025 01:23:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43194AC5DEE
+	for <lists+linux-next@lfdr.de>; Wed, 28 May 2025 01:57:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B6E59E14B2
-	for <lists+linux-next@lfdr.de>; Tue, 27 May 2025 23:23:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F374C4A14F1
+	for <lists+linux-next@lfdr.de>; Tue, 27 May 2025 23:57:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 789A8215F48;
-	Tue, 27 May 2025 23:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6C1D218EBF;
+	Tue, 27 May 2025 23:57:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Pb50IpjT"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lnXWlQTu"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75D3B18DB35;
-	Tue, 27 May 2025 23:23:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA6720D4E7;
+	Tue, 27 May 2025 23:57:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748388224; cv=none; b=fsZqmIEfXl4txr4CuFTSx3sjKlVKJTw1J+bmFxJPMAEN7h5R6ngH5uDgFSlOF2uj6vMGxrPi1hVxpBy9ynbdliyTAFUNf8cgX2/GlcdT/mFb+aglIuts3yQclifo4JbNKWCT2QHz6NgZxREyYNJeTH039Y1rDYLzkCE0POYRt3U=
+	t=1748390249; cv=none; b=uCjAU5k7TQZET0fbJ1kdKdT8PGPw7p1YqqxIm9PCOmP0PPAHCSV3EtfTdeV0WaStAS2LqgRBYeyDGKdldEybHsIizcZVmSavNJqEoGlaUW9RwRQHX03krzflaMBVx69Bnjn9o9aF9ms/Q7M33xxqJeoRCIb3yTZPaiI1uJmouLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748388224; c=relaxed/simple;
-	bh=hV8ZhJ0z5fjSmbfqZL4LCeBt1spON4Y5Y+uEf08AhRk=;
+	s=arc-20240116; t=1748390249; c=relaxed/simple;
+	bh=4rzospWiM3I9VYJW5PpLvtlA+s826zPjqIS9HklwM6s=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RCtLLSOBJWhTXh3qQX006F5ZwNqBQGSMFrj6YDDM4c/R7iOZG1nnfYiIqpF6UiL7Suaw6MxKq8j8TcdHuyHv0wU8siYcFJc0VrtirYsrjEYfGIvti0HVnJacgL7wJ6YCsgBql4p3eMQ5hxgSpVYdcHSRxBmagiiNqp34iXmVbrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Pb50IpjT; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=l0HcFRVb1uu6fOGGBWKjMqGNFwueb5kTMPcB7Lw2aDASTRW0S0CV6a2Jnt3Z+fN6g38Q8WSruc9FL1cUG+xaHrMmh18M/NHCHlNCqTKmgkm0X/uIRG7508amnl7O1vLs88li72xZVs25Jp7DpsMa7nIR5M/nG7HImkAZLGAjW4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lnXWlQTu; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1748388215;
-	bh=u1wTzxtVgecuSVP+iUSOPaULQ3zG9ey1MjZEn3KHkDk=;
+	s=202503; t=1748390243;
+	bh=uE7goBOyHoByTcAKpFO+8N6kWoUoMhxzA8GrTQkKBuQ=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Pb50IpjTPAZld6OVS5+RvtU0teyadmgef/g9caKX7aoIGQc4s9zEjHMNi12IYt5EL
-	 oH4dVWwv4Lf5C05baBu6Ab6wLrfk9a+nyQ0B6oCLXJDe1oGrEYiV7xz5WDiIQPZ41I
-	 Cp455DblEyixb+22jvzyghM1TeC8fwIwMMumBF7192ikMNCGmvR53JdVe4DoyIH2eH
-	 sHPi/mqamZHEwWDjb0iVYjqmCvNqZu70C8sqEGArjslhTaI59crmER9l1LlZ8LNrGP
-	 JhKSbFMJQ7apGw8bNNfIrqs5bUmFxWdRB5x31ppDArG5UtCXo9tHf5BbECmjqgLhNd
-	 kzlgazZx2yIVw==
+	b=lnXWlQTuZtPeeAvbcPhiGPBxAuoXyjQ4laLjkyvLCvdYdHNSO3XgvGj1JM9V6A8EL
+	 maQMmfG9aXjaW2Lk4EKxNzksRuyIyHDqsf9x7yRp5eRWiriPiN5VkBHuW+ixzGP1Fj
+	 vHqPsTBVcxlc2e210rufZ7sQUnGpHzrW9xF7Hn/q6y/oWUGdpv2v+ZUgLLhNldvveb
+	 zntb8BuPSH676yhrIutLidrw/3ZttMthRgsx0v5PQGW0UG4XMUmCjH0ntqxzLG9CKH
+	 6lsbBq6DycvsuitO3UYdUANf7c/S3ikwco+9l/G3jgH+3aKWXftLcANBj8YWN+KEoz
+	 lIdzwI5oRO1Aw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4b6TGG2x2lz4wc3;
-	Wed, 28 May 2025 09:23:34 +1000 (AEST)
-Date: Wed, 28 May 2025 09:23:33 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4b6V1G6p44z4wc3;
+	Wed, 28 May 2025 09:57:22 +1000 (AEST)
+Date: Wed, 28 May 2025 09:57:22 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kent Overstreet <kent.overstreet@linux.dev>
+To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
  "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the tip tree with the bcachefs tree
-Message-ID: <20250528092333.10969c39@canb.auug.org.au>
-In-Reply-To: <20250526144204.658ddfc7@canb.auug.org.au>
-References: <20250526144204.658ddfc7@canb.auug.org.au>
+ Dan Williams <dan.j.williams@intel.com>, Dave Hansen
+ <dave.hansen@linux.intel.com>, David Hildenbrand <david@redhat.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the tip tree with the mm-unstable
+ tree
+Message-ID: <20250528095722.11a4bb16@canb.auug.org.au>
+In-Reply-To: <20250515151102.5b0f9e4f@canb.auug.org.au>
+References: <20250515151102.5b0f9e4f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3YYf=Ds5=7o8ir2t1z3jIH4";
+Content-Type: multipart/signed; boundary="Sig_/kLuN.o/neRA1gXKG9RIMQaE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/3YYf=Ds5=7o8ir2t1z3jIH4
+--Sig_/kLuN.o/neRA1gXKG9RIMQaE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 26 May 2025 14:42:04 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Thu, 15 May 2025 15:11:02 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
 > Today's linux-next merge of the tip tree got a conflict in:
 >=20
->   fs/bcachefs/clock.c
+>   arch/x86/mm/pat/memtype.c
 >=20
 > between commit:
 >=20
->   881e64bc3a17 ("bcachefs: bch2_kthread_io_clock_wait_once()")
+>   f387f960a89a ("x86/mm/pat: factor out setting cachemode into pgprot_set=
+_cachemode()")
 >=20
-> from the bcachefs tree and commit:
+> from the mm-unstable tree and commit:
 >=20
->   aad823aa3a7d ("treewide, timers: Rename destroy_timer_on_stack() as tim=
-er_destroy_on_stack()")
+>   1b3f2bd04d90 ("x86/devmem: Remove duplicate range_is_allowed() definiti=
+on")
 >=20
 > from the tip tree.
 >=20
-> I fixed it up (the former removed a line updated by the latter, so I
-> just used that) and can carry the fix as necessary. This is now fixed
-> as far as linux-next is concerned, but any non trivial conflicts should
-> be mentioned to your upstream maintainer when your tree is submitted for
-> merging.  You may also want to consider cooperating with the maintainer
-> of the conflicting tree to minimise any particularly complex conflicts.
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+>=20
+> diff --cc arch/x86/mm/pat/memtype.c
+> index ccc55c00b4c8,c97b527c66fe..000000000000
+> --- a/arch/x86/mm/pat/memtype.c
+> +++ b/arch/x86/mm/pat/memtype.c
+> @@@ -773,39 -775,6 +775,12 @@@ pgprot_t phys_mem_access_prot(struct fi
+>   	return vma_prot;
+>   }
+>  =20
+> - #ifdef CONFIG_STRICT_DEVMEM
+> - /* This check is done in drivers/char/mem.c in case of STRICT_DEVMEM */
+> - static inline int range_is_allowed(unsigned long pfn, unsigned long siz=
+e)
+> - {
+> - 	return 1;
+> - }
+> - #else
+> - /* This check is needed to avoid cache aliasing when PAT is enabled */
+> - static inline int range_is_allowed(unsigned long pfn, unsigned long siz=
+e)
+> - {
+> - 	u64 from =3D ((u64)pfn) << PAGE_SHIFT;
+> - 	u64 to =3D from + size;
+> - 	u64 cursor =3D from;
+> -=20
+> - 	if (!pat_enabled())
+> - 		return 1;
+> -=20
+> - 	while (cursor < to) {
+> - 		if (!devmem_is_allowed(pfn))
+> - 			return 0;
+> - 		cursor +=3D PAGE_SIZE;
+> - 		pfn++;
+> - 	}
+> - 	return 1;
+> - }
+> - #endif /* CONFIG_STRICT_DEVMEM */
+> -=20
+>  +static inline void pgprot_set_cachemode(pgprot_t *prot, enum page_cache=
+_mode pcm)
+>  +{
+>  +	*prot =3D __pgprot((pgprot_val(*prot) & ~_PAGE_CACHE_MASK) |
+>  +			 cachemode2protval(pcm));
+>  +}
+>  +
+>   int phys_mem_access_prot_allowed(struct file *file, unsigned long pfn,
+>   				unsigned long size, pgprot_t *vma_prot)
+>   {
 
-This is now a conflict between the bcachefs tree and Linus' tree.
+This is now a conflict between the mm-stable tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/3YYf=Ds5=7o8ir2t1z3jIH4
+--Sig_/kLuN.o/neRA1gXKG9RIMQaE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmg2SXUACgkQAVBC80lX
-0Gxckgf9F4MLqnzTcLnUrO2Kdj9J4d3mn8oDi4Tb5mHPNFI87yFGasEes5FmTpwf
-p7xrrvTexqBrkXWNSiYg1y87YehN6SmEF+144u4V7PW1xARmhV5tHcZtV3g4U1bN
-4+IgOzRNpcRunVeV6/c2H93yNms01kZVw/boElojddeXm7B6d4bGAvBiHMINkPZj
-WYWuLVDLEOpOSviBXLa3Y5tpC23qrAK3ouWkq8/c723Reu5mBBKDLjxKzYiqo+BW
-8iQ8I/syWyhPmIlfBOMk6vI1BAg/N2IbP8mHv/gmC7Ke7vAvOQ1REEm0X6ZS5FnB
-+dMC3EGRhwokso48mNWPajpwfVhtJw==
-=nexv
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmg2UWIACgkQAVBC80lX
+0Gzpagf/dD1biF/kx5BhKiF1y1iONLJDxX7ExGyiIQR5nlRCUdQ3FjSeJUeUFYm8
+XRN7Rl+LSXsngljetgn/ebpCMR8Z5Sl/YYZP0ynjcnFM2bKbKAbz3p9BTkBz0WOA
+kK8+zYFzRarIFVrWEW+aXeW+rU26D6meQZXLzfhqmUmM1MY3L8nFAPmqpmHa+X9F
+bxPGLFXVZoT0L9vAwWdFydayofIt4zNryeouw7eaCABgXu0z/w3zQDhINCHyZhEJ
+Mba9sXCtL4NXf81+0AVvtZWBwXadUdIrArjySKY+9k35aruazbA9OMIhxe7lcvGp
+w9ngUpLaUWnF1U6sSyIIo1rlt5F06g==
+=n4GM
 -----END PGP SIGNATURE-----
 
---Sig_/3YYf=Ds5=7o8ir2t1z3jIH4--
+--Sig_/kLuN.o/neRA1gXKG9RIMQaE--
 

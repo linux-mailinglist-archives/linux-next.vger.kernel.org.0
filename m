@@ -1,163 +1,106 @@
-Return-Path: <linux-next+bounces-6938-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6939-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0002AC4BAB
-	for <lists+linux-next@lfdr.de>; Tue, 27 May 2025 11:42:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 552E3AC4BE7
+	for <lists+linux-next@lfdr.de>; Tue, 27 May 2025 12:03:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9250516BB18
-	for <lists+linux-next@lfdr.de>; Tue, 27 May 2025 09:42:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2400189C96B
+	for <lists+linux-next@lfdr.de>; Tue, 27 May 2025 10:03:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40E8724DFF3;
-	Tue, 27 May 2025 09:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0F5E1F8722;
+	Tue, 27 May 2025 10:03:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BL5pdBHW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="deWvU+w8"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA88B242D79;
-	Tue, 27 May 2025 09:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C1E1D63C0;
+	Tue, 27 May 2025 10:03:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748338963; cv=none; b=dFMybekVwl9x/UGqz5DESDtcWkOJ3+yZWWyfwlTC/FM2zilYWoS/y1fXJItJAmnK77UfOz2aKJ6cy1XAe8883eV7bH/XP6UCF9whus10uTDDY+8ea03KMhIsEsPe98T3H2gFPjel01VS9dKIg8XUesiX3qghxrJAgFsHNCD8eZI=
+	t=1748340200; cv=none; b=JOltZiZjprP4nS5/mbI6lNqD8iDE/1XfzmxxdHMYgcEd9MsvhRiq4QzXQgKcsbNwzHBrMYcMhVKasICBts0dknYfOxTrge+o6mNyjtE4Res0C0oBKg5dca27suDtFAWLfbGZfQGIm1Ypd1ZRQgqdrY6/I1lSgGuj3KGhjZzCQHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748338963; c=relaxed/simple;
-	bh=KhLIfsYnelNEZ8D4w+wbh5tXAw8K5vPBHj/PfGFuEGU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=saQN1FQLmIPP1GFBCNVqgu51z2Cbu26aWEKWXjZoVRs6V/GVfVF+TYzOhBTDGJJtURgLtm0bpXKka9s7oEeGVu6PUu+WL65AkIJrbrAWsBLRW1C3TjmA3HFxCd0lT8xNxlfHHUHuvcv/82JiN8GCsAc8CIxl+Sy8xPibDa/REPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BL5pdBHW; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1748338954;
-	bh=KhLIfsYnelNEZ8D4w+wbh5tXAw8K5vPBHj/PfGFuEGU=;
-	h=Date:From:To:Cc:Subject:From;
-	b=BL5pdBHW0cWlmr6VI4l9qvutlZejMLKMI+vO0D7WqOI7GhBfQrp836GRm2dmKI763
-	 WEdrm+gI/qH0yH/1HyzajC4uLO1TTYIPkm0XYzmAiQsoHJjfWKUF1rkAP36WGcpmtn
-	 8/3C+njwYhaOnEJqfLpKaNpNh5VzS2ngJGfMaTGvRWoRhFIQS8GS0UyYFKDVV9tcZb
-	 mwWEMezqIqZLrq9J4xXnv8hL8Gz0zfuJyp06GCvKme70bXsWEd588Z9p3q2sQiKPjP
-	 SRroyjCKsiD+0JxQFss0dOdEcC9BjwjcmQqJSbsSTSKkEnFZjdNmk32YQZWkU1OVZQ
-	 JKdXDfUgq2V7A==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4b672y01Xcz4x0L;
-	Tue, 27 May 2025 19:42:33 +1000 (AEST)
-Date: Tue, 27 May 2025 19:42:33 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the rust tree
-Message-ID: <20250527194233.552bf9f5@canb.auug.org.au>
+	s=arc-20240116; t=1748340200; c=relaxed/simple;
+	bh=N7s/zNlfZnvcb62ku95UbrsRQHe2RxZlDVfjCFV3oi0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MlO2RkQ0D/va8To1985CIJinFzCTSMZBMRuCyT1iUbIXlckMaZSQNLOcWjrnb5TdYB51q36CHltZRljUMlxnH0638LL8zjlTUPX0A99Vf6RyscGQmjkWebIZcG669ePkgA6NuJhgilmaUG2SOlHXyvyOAFAQ3pdd50ZWNFlIh1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=deWvU+w8; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-30f1bde0399so491294a91.2;
+        Tue, 27 May 2025 03:03:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748340196; x=1748944996; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N7s/zNlfZnvcb62ku95UbrsRQHe2RxZlDVfjCFV3oi0=;
+        b=deWvU+w8FH/WoYErUPtVwetexbwScCvKLLmEkKz/s1zKFPQe5uyWl0Hf912EkE+j/w
+         EUATz1hR8k0U6a5kGJGQgCQDcUr7ry/h1SkJ3KWk4vtQ3HD15fRzK3z4TIeNSHp5EGtg
+         kTLZrWwRr43aClJnfvBoVVOWW+ct5N2p/ieez3wRdzWOn9V56LquTImYaioIZ6YK30SY
+         IkG0D9uFitKjJj7NSPqMJZjutX8tSJc34pQqg/DHXtHks1mIy9+pSue9SZF7/cjpWn+Z
+         IBAAsO/KDUycScxXw5Zo0dwENaNuiY0HF3MU24zSBIIoWe98afOsDq6NI4NABrucJRG0
+         vUCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748340196; x=1748944996;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N7s/zNlfZnvcb62ku95UbrsRQHe2RxZlDVfjCFV3oi0=;
+        b=cpvcdys8jPZFtvLRiN3NKDG7VMGXEJHGSQDzFwVIGY4Y9KRD3DJrQOO0A9fGwNVoo0
+         QvfwVePffY5yfsV1pmMRlkK/3I4xAjcUoaJb1hX75eCMMyl9jw/311qcp6IT9LM4pY81
+         38kjQavGlmDB16Ih9PGaSLh8Tlk25+yxwtpK4mSjiM0HE2BETXZoA0LrTps8Jizp1Q5c
+         UUYuj+kpz5aaP+rX8BxPTAQQEtov+GBc9N2TmDquHHPh7Yys9IEs1YG6ar9qYytBfjqy
+         Z0+QfouMXaUnaWlpQQ/uac+VOaGsuIWOZG9uyUWwoXWJsWkjoyEE/7SfkI50FTqAz3PR
+         YvBA==
+X-Forwarded-Encrypted: i=1; AJvYcCUAfEnUYf2q5X6eZaIrRXk9y9kGMIgdZq1ig8qsrXPSQXZ8WN9smX7vp9Yh+HNwI6wlQQcUWdB8q98Fedc=@vger.kernel.org, AJvYcCWwIb2Hparyk4RNZSH+mTAqbpSWnGfvBiT8ejXV/oxWw+DuPKN9Fv142UbgdmhGyrGL8mZoD/0hkVfEuQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yws/D0hm07LdGXmaR0Ll25bFJI3ceadzkXEeDZ1oECeSXaeucFr
+	BUIMatcnI3SgzKHAWf5Uj5VDMnCE480573A8LzFNn/L4Tgj7GtfT88uazGd8zGGio5BCtGcNQBj
+	j3MnGqognZlijui90afGyGSHDGWs8jjg0BQcbQUMWlA==
+X-Gm-Gg: ASbGncuf4ps1He+zH3UVUBmPnVgqBRD+OsHhARnc/K4H/T4493VL9zG1QZvAi9RRU54
+	fYX77YgnfHrbgPGJpna7AI85hCekFJHYLsmgwQUKDueKtJpJx1kOhkU9p7u8t1HYtnDv/fyD2DB
+	IMxiW/wEH4r088b/WIBzUvxzd7wNnTPW1/0QG++VZ1K7w=
+X-Google-Smtp-Source: AGHT+IEPIq/u4taIawq5xqwkC4StHrnzxeZSAh1GW/jdRY7ozvteC2mcyDegw4nKZONma+w6QdKxrmct4hiNSaTlJAc=
+X-Received: by 2002:a17:90b:1b51:b0:2ff:7b41:c3cf with SMTP id
+ 98e67ed59e1d1-311108a4f4amr7538237a91.4.1748340196317; Tue, 27 May 2025
+ 03:03:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Fqq3u70AekdL/=.rP=N9tj7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/Fqq3u70AekdL/=.rP=N9tj7
-Content-Type: text/plain; charset=US-ASCII
+References: <20250527194233.552bf9f5@canb.auug.org.au>
+In-Reply-To: <20250527194233.552bf9f5@canb.auug.org.au>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 27 May 2025 12:03:04 +0200
+X-Gm-Features: AX0GCFtun3ukeO9dEXScaNFcLEqCDkD4bVsXzZLbwJmHriUHLRmYUArQ6GleKbM
+Message-ID: <CANiq72mmVNzWsYByWTVU-Dd5XcrmSLOZbYohqxEjVKL0hEp=4w@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the rust tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Miguel Ojeda <ojeda@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Tue, May 27, 2025 at 11:42=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.or=
+g.au> wrote:
+>
+> After merging the rust tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> x86_64-linux-gnu-ld: vmlinux.o: in function `kernel::alloc::kvec::tests::=
+kunit_rust_wrapper_test_kvec_retain':
+> (.text+0x1bd7194): undefined reference to `kunit_unary_assert_format'
 
-After merging the rust tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Sorry about that -- I did my usual tests (several archs, Rust
+versions, etc.), but not an `allmodconfig`. I will take a look.
 
-x86_64-linux-gnu-ld: vmlinux.o: in function `kernel::alloc::kvec::tests::ku=
-nit_rust_wrapper_test_kvec_retain':
-(.text+0x1bd7194): undefined reference to `kunit_unary_assert_format'
-x86_64-linux-gnu-ld: (.text+0x1bd71a1): undefined reference to `__kunit_do_=
-failed_assertion'
-x86_64-linux-gnu-ld: (.text+0x1bd71ae): undefined reference to `__kunit_abo=
-rt'
-x86_64-linux-gnu-ld: vmlinux.o: in function `kernel::kunit::tests::kunit_ru=
-st_wrapper_rust_test_kunit_in_kunit_test':
-(.text+0x1bd75eb): undefined reference to `kunit_unary_assert_format'
-x86_64-linux-gnu-ld: (.text+0x1bd75f8): undefined reference to `__kunit_do_=
-failed_assertion'
-x86_64-linux-gnu-ld: (.text+0x1bd7605): undefined reference to `__kunit_abo=
-rt'
-x86_64-linux-gnu-ld: vmlinux.o: in function `kernel::str::tests::kunit_rust=
-_wrapper_test_cstr_to_str':
-(.text+0x1bd7e01): undefined reference to `kunit_unary_assert_format'
-x86_64-linux-gnu-ld: (.text+0x1bd7e0e): undefined reference to `__kunit_do_=
-failed_assertion'
-x86_64-linux-gnu-ld: (.text+0x1bd7e1b): undefined reference to `__kunit_abo=
-rt'
-x86_64-linux-gnu-ld: vmlinux.o: in function `kernel::str::tests::kunit_rust=
-_wrapper_test_cstr_to_str_invalid_utf8':
-(.text+0x1bd81a0): undefined reference to `kunit_unary_assert_format'
-x86_64-linux-gnu-ld: (.text+0x1bd81ad): undefined reference to `__kunit_do_=
-failed_assertion'
-x86_64-linux-gnu-ld: (.text+0x1bd81ba): undefined reference to `__kunit_abo=
-rt'
-x86_64-linux-gnu-ld: vmlinux.o: in function `kernel::str::tests::kunit_rust=
-_wrapper_test_cstr_display':
-(.text+0x1bd9728): undefined reference to `kunit_unary_assert_format'
-x86_64-linux-gnu-ld: (.text+0x1bd9735): undefined reference to `__kunit_do_=
-failed_assertion'
-x86_64-linux-gnu-ld: (.text+0x1bd9742): undefined reference to `__kunit_abo=
-rt'
-x86_64-linux-gnu-ld: vmlinux.o: in function `kernel::str::tests::kunit_rust=
-_wrapper_test_cstr_display_all_bytes':
-(.text+0x1bda03c): undefined reference to `kunit_unary_assert_format'
-x86_64-linux-gnu-ld: (.text+0x1bda049): undefined reference to `__kunit_do_=
-failed_assertion'
-x86_64-linux-gnu-ld: (.text+0x1bda056): undefined reference to `__kunit_abo=
-rt'
-x86_64-linux-gnu-ld: vmlinux.o: in function `kernel::str::tests::kunit_rust=
-_wrapper_test_cstr_debug':
-(.text+0x1bdb598): undefined reference to `kunit_unary_assert_format'
-x86_64-linux-gnu-ld: (.text+0x1bdb5a5): undefined reference to `__kunit_do_=
-failed_assertion'
-x86_64-linux-gnu-ld: (.text+0x1bdb5b2): undefined reference to `__kunit_abo=
-rt'
-x86_64-linux-gnu-ld: vmlinux.o: in function `kernel::str::tests::kunit_rust=
-_wrapper_test_bstr_display':
-(.text+0x1bdcf82): undefined reference to `kunit_unary_assert_format'
-x86_64-linux-gnu-ld: (.text+0x1bdcf8f): undefined reference to `__kunit_do_=
-failed_assertion'
-x86_64-linux-gnu-ld: (.text+0x1bdcf9c): undefined reference to `__kunit_abo=
-rt'
-x86_64-linux-gnu-ld: vmlinux.o: in function `kernel::str::tests::kunit_rust=
-_wrapper_test_bstr_debug':
-(.text+0x1bde962): undefined reference to `kunit_unary_assert_format'
-x86_64-linux-gnu-ld: (.text+0x1bde96f): undefined reference to `__kunit_do_=
-failed_assertion'
-x86_64-linux-gnu-ld: (.text+0x1bde97c): undefined reference to `__kunit_abo=
-rt'
-
-Caused by one of the latest commits in the rust tree.
-
-I have used the rust tree from next-20250526 for today.
-
---=20
 Cheers,
-Stephen Rothwell
-
---Sig_/Fqq3u70AekdL/=.rP=N9tj7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmg1iQkACgkQAVBC80lX
-0Gyv5Af/ahfLD9rAgW7coAZSHeKW/v5H0002DdHHrJA0cK3Heuu5K9EsNyzYkv9k
-wWGi4i8fgZajp/53zHPgB9DQZL/WSAbpx9MIvya4cr4kFKCuX1u2NcZOTWLei+0m
-Nu4jhFLi+o2sC4QDkNIq4SsDtIuELrQmsCjx6ekiPYe12Do1lH0TfNNo9PFFbjo4
-1sy3MdHQBAbxOHqN/9DFmrVSgEba1xRg/ZtEJ15KM9JpqrS707BUd9uek/hYb8DC
-ZC9zpFoASjSty5dcLcIgGbLAKDZNUZ8PYUpGX19Ug6uCbTcVG+IcRZs6vsmCpzY7
-EGo1iuSg5nKvHC0b3NmQYaRiF0Fs0A==
-=2wLw
------END PGP SIGNATURE-----
-
---Sig_/Fqq3u70AekdL/=.rP=N9tj7--
+Miguel
 

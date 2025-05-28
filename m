@@ -1,147 +1,147 @@
-Return-Path: <linux-next+bounces-6956-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6957-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 386D7AC61BA
-	for <lists+linux-next@lfdr.de>; Wed, 28 May 2025 08:14:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 291B8AC624F
+	for <lists+linux-next@lfdr.de>; Wed, 28 May 2025 08:47:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2D311BC0F50
-	for <lists+linux-next@lfdr.de>; Wed, 28 May 2025 06:14:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA35FA209E1
+	for <lists+linux-next@lfdr.de>; Wed, 28 May 2025 06:46:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA16921577E;
-	Wed, 28 May 2025 06:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBDF92441AF;
+	Wed, 28 May 2025 06:44:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cfNZ+ABh"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="r8EFuGRB"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3762F211A0E;
-	Wed, 28 May 2025 06:13:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1AF24678D;
+	Wed, 28 May 2025 06:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748412838; cv=none; b=P7oSRNFoknMc0a0gfXv/RBdSrlme0cBWLIKtFXpl4Gp8FO3pm3fxXloypXM5fub0JTwz76VdIlaLxXFoiV6QFSpSX3mbcVS/ff9U4rjCkpx+AREuMXvOScrKrZQlzD/agHDDLPSBEedUdwZxGkawlqNawUM8uIfakNXdSlS5h+E=
+	t=1748414655; cv=none; b=T1NsgWfwXRrxcRJeOJmzGyV2rF2R2HDtOQNT8EG5MoY2uZeHr0kZJRSeR1fBCvznALDuqk+UPPU3t40FZBxscJG03DCx0+nHN16TJgYnIxb/hTG7BAPZuut/2W582rhA4DrYdSfktodIPb/jLqkJKTOcUw+xk6Y337BaMsVugyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748412838; c=relaxed/simple;
-	bh=eiT/vSc22rEGiAvVFZ5/ZWqinHH0e3XtVZ+udxaTsIQ=;
+	s=arc-20240116; t=1748414655; c=relaxed/simple;
+	bh=i/IPBsRRQzA/LSTE9msuNs7+guqvJN7NuTau9LEEuis=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bR1khq8CNaOCRe6Agiq5fMu2D3dcUnd7jXxpFcIH0eC2a6nkX151ph0FPWAaQQMjsPy2wCtYiPG3GaWcpMzrYd4+lEYM/a/0ubegsMFqxu4y0o+3JC8R3Ptf389Bav2RqyvwLKS15cbTU7GFosmgh1FgZ+I1XR0Gds/M5YJ38/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cfNZ+ABh; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=llS7Ycq+YPadKlltYKzR+VoZ/IreqYpKgfs85P9xG7dqdD23Y2lOX67oxCmC237s6ZkMJwWsUITomSi7j3rgQ+lQb320CYg1vWuIyADU31uK/ouOTvew8XKY1aVluci2Uir9nWMw6bsSHwa1T74YbzCUiKEK7MVl6V6+4CraZjg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=r8EFuGRB; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1748412827;
-	bh=AifmlD6epwaraxjcxUJRxGnsd49Asu8Er1vCXQcUTVs=;
+	s=202503; t=1748414648;
+	bh=WvPbx51UEfdYoAoEDuqVeZqZrLagzgnwzW0OdKATt9E=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=cfNZ+ABhXc53YvuOrV8s6xuFkbs26dgv/UxojMQSBtdcfkgdl4dF6EeJsPGMDFsZS
-	 b1WyVHDeLSnqhZuyUHncTsZY2npJUWbqkzGg2gzGSsUSzhmuN8JvTsusQcj6sJ5klL
-	 KyVvP6zCoXvfuV+d15KrgsLC7QMBt886kX5j1QThBuP4wkJ9OgmSaItXw933htYMSS
-	 RZ4edILUd/QHqiNz6WRkWEaQzx38lxtvy7E9ONZOMoVEhBxaLnHbt0x3yaFU79nfo8
-	 haf8cFR+p+P6F4791/+gd0GsmBEzKY2Xhg2y2giUcHi2Y3sTMZ/1M0sYrQANFPzk3D
-	 HiylG6yLTSfCA==
+	b=r8EFuGRBg5Lg4KLSqw677Yk2Rm3v/LggXuyUr5cknbdyxjGCAR/I4EK8taXpbgfSO
+	 UUZ6XXqOR4Yov+RWB1KJnXzkXzhs49toVPhJe4oGohuPrUsCDfsFov0dtnIWBIOsAP
+	 cbHpNC/2liziQbUnU9m//QBrrunZKhaEDnpaSYZQjNe1/Y0JqWYQJLXdzeYgRlRYTl
+	 W1N2zR4xP6Hp6DYmMGuUE0AxgJBP5cTHrU83E7HclHIKTpIFygylIm9f+2fS6EB7fF
+	 KjSL+KRHvx2eWTg+AKHS6hZ9Q0bvV+c3nt5hEzZ8t0nyqP/uU1B+IT20aagSFCNVpP
+	 7IGZtvQtoftKQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4b6fMY1sm1z4wcg;
-	Wed, 28 May 2025 16:13:45 +1000 (AEST)
-Date: Wed, 28 May 2025 16:13:44 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4b6g2c41Hwz4x8Z;
+	Wed, 28 May 2025 16:44:08 +1000 (AEST)
+Date: Wed, 28 May 2025 16:44:07 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- "Jiri Slaby (SUSE)" <jirislaby@kernel.org>, Mengyuan Lou
- <mengyuanlou@net-swift.com>, Networking <netdev@vger.kernel.org>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Maxim Levitsky <mlevitsk@redhat.com>,
+ KVM <kvm@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the tip tree with the net-next tree
-Message-ID: <20250528161344.0533ae6b@canb.auug.org.au>
-In-Reply-To: <20250507124900.4dad50d4@canb.auug.org.au>
-References: <20250507124900.4dad50d4@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the kvm tree
+Message-ID: <20250528164407.1d8d3948@canb.auug.org.au>
+In-Reply-To: <CABgObfbCg1wiZJmnXFihmRLvPiJq2bCQH3MNVMfiUJphz4JW3g@mail.gmail.com>
+References: <20250528152832.3ce43330@canb.auug.org.au>
+	<CABgObfbCg1wiZJmnXFihmRLvPiJq2bCQH3MNVMfiUJphz4JW3g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/o+MW=vr2532+4g+j=5kq6Tm";
+Content-Type: multipart/signed; boundary="Sig_/RZdYClXNIns397zIJYDIAX7";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/o+MW=vr2532+4g+j=5kq6Tm
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/RZdYClXNIns397zIJYDIAX7
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Paolo,
 
-On Wed, 7 May 2025 12:49:00 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+On Wed, 28 May 2025 07:37:57 +0200 Paolo Bonzini <pbonzini@redhat.com> wrot=
+e:
+>
+> On Wed, May 28, 2025 at 7:28=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.o=
+rg.au> wrote:
+> >
+> > After merging the kvm tree, today's linux-next build (x86_64 allmodconf=
+ig)
+> > failed like this:
+> >
+> > error[E0425]: cannot find function `mutex_trylock` in crate `bindings` =
+=20
+> >    --> rust/kernel/sync/lock/mutex.rs:129:41 =20
+> >     |
+> > 129 |         let result =3D unsafe { bindings::mutex_trylock(ptr) };
+> >     |                                         ^^^^^^^^^^^^^ help: a fun=
+ction with a similar name exists: `mutex_lock`
+> >     |
+> >    ::: /home/sfr/next/x86_64_allmodconfig/rust/bindings/bindings_helper=
+s_generated.rs:265:5
+> >     |
+> > 265 |     pub fn mutex_lock(lock: *mut mutex);
+> >     |     ------------------------------------ similarly named function=
+ `mutex_lock` defined here
+> >
+> > error: aborting due to 1 previous error =20
 >=20
-> Today's linux-next merge of the tip tree got a conflict in:
->=20
->   drivers/net/ethernet/wangxun/txgbe/txgbe_irq.c
->=20
-> between commit:
->=20
->   a9843689e2de ("net: txgbe: add sriov function support")
->=20
-> from the net-next tree and commit:
->=20
->   567b0a520912 ("net: Switch to irq_domain_create_*()")
->=20
-> from the tip tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
->=20
-> diff --cc drivers/net/ethernet/wangxun/txgbe/txgbe_irq.c
-> index 3b9e831cf0ef,f2c2bd257e39..000000000000
-> --- a/drivers/net/ethernet/wangxun/txgbe/txgbe_irq.c
-> +++ b/drivers/net/ethernet/wangxun/txgbe/txgbe_irq.c
-> @@@ -198,9 -183,9 +198,9 @@@ int txgbe_setup_misc_irq(struct txgbe *
->   	if (wx->mac.type =3D=3D wx_mac_aml)
->   		goto skip_sp_irq;
->  =20
->  -	txgbe->misc.nirqs =3D 1;
->  +	txgbe->misc.nirqs =3D TXGBE_IRQ_MAX;
-> - 	txgbe->misc.domain =3D irq_domain_add_simple(NULL, txgbe->misc.nirqs, =
-0,
-> - 						   &txgbe_misc_irq_domain_ops, txgbe);
-> + 	txgbe->misc.domain =3D irq_domain_create_simple(NULL, txgbe->misc.nirq=
-s, 0,
-> + 						      &txgbe_misc_irq_domain_ops, txgbe);
->   	if (!txgbe->misc.domain)
->   		return -ENOMEM;
->  =20
+> I thought that since Rust failures wouldn't have to be fixed by
+> non-Rust maintainers, they wouldn't block merging of non-Rust trees in
+> linux-next?
 
-This is now a conflict between the net-next tree and Linus' tree/
+I am sorry, but I am not sure how that is supposed to work.  (Do I
+disable RUST in my builds - thereby possibly missing other build
+problems?)  In this case you can probably not even do an allmodconfig
+build of the kvm tree alone if you have rustc etc installed, right?
 
+BTW, the only bit of the kvm tree not merged into linux-next today is
+the kvm-lockdep-common topic branch that was merged overnight (my time).
+
+> In this case it's not a problem to fix it up at all (I'll send a patch
+> to Miguel as soon as I've taken the little guy to school); it's just
+> to understand what's to expect.
+
+That patch needs to go into your tree (with Miguel's Ack if necessary)
+otherwise as soon as Linus merges your tree, his allmodconfig build
+will be broken and he will (probably) unmerge your tree and let you
+know (and wonder why I didn't pick it up).
+
+I don't know what to tell you about expectations, sorry.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/o+MW=vr2532+4g+j=5kq6Tm
+--Sig_/RZdYClXNIns397zIJYDIAX7
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmg2qZgACgkQAVBC80lX
-0GwT7wf/fWQAj8OZZMVbej4HGWoEpYR1tA0t1tacM6TqEUm8ooLO0mCWNos1RlSq
-OYcABZyMkEa+86zzL45PubNi+KKrAGQU2pphTVztZ12zYh18OcPgNWU8xasuL+TF
-XSxrswGyAmPpN/YV+VJs3NNY5ALaPgd3gPkgUhXH3PAN21V027vZsrE5qCMCHz3D
-zlXYd09X0tSVIej7BFUTJMCvNF+RxH2AtiGi+s//HgGqimfqiRI7iKzOESAfWlPF
-w4VDOQGyLoOGJIcE1mpedhcYzbYGRHJ/T6UY4S/IC3oEF9Gt524oh0S2aHXcYxQA
-4jyAx8u+NbG/A83VqPivI025yGBlLw==
-=cjmD
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmg2sLcACgkQAVBC80lX
+0GzLRwgAmeVTbPm1XBE0JnDMQuwmj6lX0bnhI0YU9CFzbEwCYJ7S8TQiqhAqnbpi
+a3pkfykkmATvcA7M2lrGa3nmRmDgoH0soOIkotGO1ZHA14IdvXaFWvRBUOqL8wOn
+Y3IVV0GYrfZA++KR5MT1oqOics71su/nL2Us93ig97yQLhqv6BaR913NDY1HPW+1
+6ZQeu+0ZycPQ4ExZFZS3Jj8NC6pd5ezR/r9lcgvITWtIy8eQBBIPMbw6/6zbRUTv
+nnpE4eYNtoaIkTDxhjPE4kPJOjSFu6SBQzF27DmnCdLZqCkVSzWTJfnmBTLbZdUh
+qxb9PbqpliB0c13ZOZySNZGpq4biaQ==
+=HZKP
 -----END PGP SIGNATURE-----
 
---Sig_/o+MW=vr2532+4g+j=5kq6Tm--
+--Sig_/RZdYClXNIns397zIJYDIAX7--
 

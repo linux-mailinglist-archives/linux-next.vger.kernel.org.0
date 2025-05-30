@@ -1,53 +1,87 @@
-Return-Path: <linux-next+bounces-6988-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-6987-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0AB6AC899E
-	for <lists+linux-next@lfdr.de>; Fri, 30 May 2025 10:03:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB870AC8971
+	for <lists+linux-next@lfdr.de>; Fri, 30 May 2025 09:52:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E042E7A245B
-	for <lists+linux-next@lfdr.de>; Fri, 30 May 2025 08:02:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78448189185F
+	for <lists+linux-next@lfdr.de>; Fri, 30 May 2025 07:53:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 217871EA7DD;
-	Fri, 30 May 2025 08:03:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE3E9211A2A;
+	Fri, 30 May 2025 07:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="RpVg/SAz"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cgi2AZCl"
 X-Original-To: linux-next@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0209C1D61AA;
-	Fri, 30 May 2025 08:03:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA97B211460
+	for <linux-next@vger.kernel.org>; Fri, 30 May 2025 07:52:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748592231; cv=none; b=IRx+EmAkGcjnRY4i8ZkZNgqIiwfm9tCAuJSUuNncmLbbN3GgJhBefpZkJJIddc4EZovNtAZgVL9GZfMZziC73tPxyLAmC2i5vqVuHf6HymtviaORuThykDvUrjf8DZ5of/Bp6BZ5+vWftL8LNV+zqApggTl8HjHOGUD03HCHmXc=
+	t=1748591562; cv=none; b=nWCBQYuAhwo80ciW7nl4bd+cj+tzVySs/BsPY2LLomR9xkV8x6IYZMxQKxag/c/oYsfnxp4CBDv1INUS/03VtO/XC2kWanXSIwbnbAaTZUimeZ7EnIjo5hAor6SoEDyqjvRQaewSUydtbfwaALHJugnplX1JCfJ8KHd9KS/tTpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748592231; c=relaxed/simple;
-	bh=MOZRfILlxYLTD5YPIe1ukUVdwB74Lc8RJ5ifhuojFsE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=U1y83/La4Ii256wFYkfo69uiuIln5Vt7JoXQGHRrRmS2vayOMFff8iDSY3gtx/wEZGt9pCbI6XdMqO4cT+rJvVDjhpJNpySZloMxLYWBAPwVWUH3rnEX6HPFuDC5RU/PUJCe5TZp2JceKtqChlUnBcDy4TaBRkGmRi7hg+WtTzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=RpVg/SAz; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=+FQ7mAJWoOpdEQTP2UWDOkXe0sgkjazV/6cKTyxk9EY=; t=1748592229;
-	x=1749024229; b=RpVg/SAzeTHW9iVd0qAEDdquy03idZeON58JPD6gIbu2l3qxoD06zD31NS9I1
-	cOzzlm+tQXbD3e+A0EFN5hTvZiqMstEHL1rVcFB73lPBSM2vFbuSJNueLYfpETCJ/oYqJ7qi+5+0J
-	wZRGxwvD5ktppJzf5OwDmvXuWX5UMKMYWAo3NrlE8l++bCnt/V5rVT3hVpXDaG/DPnHlnU3iyFwqP
-	ARI3V2yyLiyCBgD5u4X0VBrXSQVHmzDXfV3fehr5czXxQNgbdoi1rSgR/5jqcw5fbRBR3riRhAp+x
-	nCIe+jR66WfqSgG9/gmRGNO2chPs//aPOFsZKEL0MyECdZpdvA==;
-Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-	id 1uKuRp-006ZdF-2k;
-	Fri, 30 May 2025 09:46:37 +0200
-Message-ID: <699ec35a-5453-4900-b535-a9a9863bb9bf@leemhuis.info>
-Date: Fri, 30 May 2025 09:46:35 +0200
+	s=arc-20240116; t=1748591562; c=relaxed/simple;
+	bh=G7T/l+SD9ggtZyaAliggeCOwfSM27hsQMoMmxA00zko=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LyyivIB1SPHc3Km8oHJIswSEcQz0xxEH+YnRbi6k+Fyee46lh6T4Gbx0RJ0HQQtnjiPyCa2T/ZcR+i/R1BfYPSzA9FUOMLpbiUkeBxcC+c9B6zsP2lCAZbMFKf6C/a9uxHEYeayvHRy4Ov+A3GJxkzzE96zzBQ4F2zAc6DD5VQk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cgi2AZCl; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1748591559;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=dXme6NLsCN/6JumBzv0W754qfhIz6/enEzzfyphIa0E=;
+	b=cgi2AZCl2lBqCQilxK3mZgp9525Sf3BYMVZdWWlo6QFg/aEZbjieAvIpL4Ey1ezy4oMEU1
+	5R/zj+DviJaEh4kSBcoP2lQze5SwD3Ui28+FXRSoADuDwqMZMyQ1SmDZyJLjppXL00gGTK
+	69a2GCz+ULLk2eANK4MDprHNW0BlDi0=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-346-1kOUNMQ9NUqv_WNqgV0v6A-1; Fri, 30 May 2025 03:52:38 -0400
+X-MC-Unique: 1kOUNMQ9NUqv_WNqgV0v6A-1
+X-Mimecast-MFC-AGG-ID: 1kOUNMQ9NUqv_WNqgV0v6A_1748591557
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-601a4d2913fso1708959a12.0
+        for <linux-next@vger.kernel.org>; Fri, 30 May 2025 00:52:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748591557; x=1749196357;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dXme6NLsCN/6JumBzv0W754qfhIz6/enEzzfyphIa0E=;
+        b=vWTxryApL2ko/q6lfgMKaKqO6A4BYdqZWJEeGtUMjLtsNMXDpBVBir/mmd3WavxFEU
+         GSMo1MISTJUIBpyuMoAAqOiTYFaw98GbLRgepjKhJKY4/rb5MZE3TPsLi3WsqKotQZ9B
+         K3zOrewohvZCgCW6UhW3cnq5I3ChaT5oHIh1VhHq2UeCde35BQyQNQeiX4rEYexmnJT8
+         UFGNCsOiXkJJ+2A38eJTFySLLMHK/oW1dPGH+VJK2Ypq2QI8JnvQeTHThNSvpcL12RIi
+         2I4BctrIQ8V7CODTleaNhErlCfWn2Dd/wBuyLPNHyvBBz+jOQT0tbs77XEGMJUV5+nI+
+         r53g==
+X-Forwarded-Encrypted: i=1; AJvYcCWZefXM93iT8zo2axQihMD6X1Z5etHjDci7xwfIyN0gdrfdO/fwDY9JA/Mzq350mgYOnuTuXgYE5F/z@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhqCAKG8xzDrfeKl3riVqjwrnIWk+Fi7d2J5NQfeF3U0R3ttxU
+	JWDMufwpK+GVWObmHe/R9dlSdhT05epkAGgXDtGk3r7GabYimoyzdfc278a0KIniSkx/9xj/NIU
+	adEU4IUraG664UQ36i47+2zpy9nQAAPOvv6G8cdznsAmgAwBrIeH7xr82hii9P7k=
+X-Gm-Gg: ASbGncto1rIu0Ndvp4YgNgJz22ss3NGZ34L4A4T9s1f9OyNOBYayAGauAYvf9/V2pnw
+	k+3KDWyGVk7hWwAVeqpI2gn7TV2rAnA2lv1DNzLypr8zw5QLAj2QHSwo4U21VfvGOWC0mcwZvbO
+	gVAZuZg3ahirfnGlihD9rBwqmM3ULTDEEOIlG5gJvuX4ANYjjZ9t48rtJCOYfN8Hi2mYtoL0xOe
+	zs9+xWb66ZWkss2C2+QHY8pxVnutWKsGeOMaQbmoLXtx+ELaQCP4IhAkbYLFXS2DxDVe84sseS0
+	G3DGIla/SgyKdQ==
+X-Received: by 2002:a05:6402:2813:b0:5fb:87a2:5ef9 with SMTP id 4fb4d7f45d1cf-6057c621ee7mr948146a12.23.1748591556919;
+        Fri, 30 May 2025 00:52:36 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGWrvvdA9UB3dms/gjMEl+Cd773vHH5XoMNH/OJN8Qpd3i0iyiTFpV0kUVwOV/w6O9TdD8GEg==
+X-Received: by 2002:a05:6402:2813:b0:5fb:87a2:5ef9 with SMTP id 4fb4d7f45d1cf-6057c621ee7mr948131a12.23.1748591556503;
+        Fri, 30 May 2025 00:52:36 -0700 (PDT)
+Received: from [192.168.10.48] ([151.49.64.79])
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-60566c5c222sm1235068a12.27.2025.05.30.00.52.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 May 2025 00:52:35 -0700 (PDT)
+Message-ID: <a283a171-7c74-4e05-bdb1-dd28f1fe6a6e@redhat.com>
+Date: Fri, 30 May 2025 09:52:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -55,312 +89,133 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: REGRESSION: armv7 build mismatched types
-To: Rudraksha Gupta <guptarud@gmail.com>, linux-kernel@vger.kernel.org,
- Linux regressions mailing list <regressions@lists.linux.dev>,
- rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Tamir Duberstein <tamird@gmail.com>
-References: <700ebe13-c2d3-48e3-800f-8dc327efb6fc@gmail.com>
-From: Thorsten Leemhuis <linux@leemhuis.info>
-Content-Language: de-DE, en-US
-Autocrypt: addr=linux@leemhuis.info; keydata=
- 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 n7RI
-In-Reply-To: <700ebe13-c2d3-48e3-800f-8dc327efb6fc@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1748592229;a15d77b2;
-X-HE-SMSGID: 1uKuRp-006ZdF-2k
+Subject: Re: linux-next: Tree for May 29 (kernel/locking/rtmutex_api.c)
+To: Randy Dunlap <rdunlap@infradead.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, Maxim Levitsky <mlevitsk@redhat.com>
+References: <20250529165801.6dcb3fcf@canb.auug.org.au>
+ <2d9429d0-e76c-429b-80d4-780052e0907c@infradead.org>
+From: Paolo Bonzini <pbonzini@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=pbonzini@redhat.com; keydata=
+ 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
+In-Reply-To: <2d9429d0-e76c-429b-80d4-780052e0907c@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-CCing linux-next and Tamir Duberstein, who authored the culprit.
+On 5/29/25 19:12, Randy Dunlap wrote:
+> 
+> 
+> On 5/28/25 11:58 PM, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Changes since 20250528:
+>>
+> 
+> on x86_64 or i386:
+> 
+> 
+> In file included from ../include/uapi/linux/posix_types.h:5,
+>                   from ../include/uapi/linux/types.h:14,
+>                   from ../include/linux/types.h:6,
+>                   from ../include/linux/kasan-checks.h:5,
+>                   from ../include/asm-generic/rwonce.h:26,
+>                   from ./arch/x86/include/generated/asm/rwonce.h:1,
+>                   from ../include/linux/compiler.h:390,
+>                   from ../include/linux/export.h:5,
+>                   from ../include/linux/linkage.h:7,
+>                   from ../include/linux/preempt.h:10,
+>                   from ../include/linux/spinlock.h:56,
+>                   from ../kernel/locking/rtmutex_api.c:5:
+> ../include/linux/stddef.h:8:14: error: expected declaration specifiers or ‘...’ before ‘(’ token
+>      8 | #define NULL ((void *)0)
+>        |              ^
+> ../include/linux/mutex.h:183:46: note: in expansion of macro ‘NULL’
+>    183 |         _mutex_lock_killable(lock, subclass, NULL)
+>        |                                              ^~~~
+> ../kernel/locking/rtmutex_api.c:547:13: note: in expansion of macro ‘mutex_lock_killable_nested’
+>    547 | int __sched mutex_lock_killable_nested(struct mutex *lock,
+>        |             ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> ../kernel/locking/rtmutex_api.c:552:19: error: ‘mutex_lock_killable_nested’ undeclared here (not in a function); did you mean ‘mutex_lock_io_nested’?
+>    552 | EXPORT_SYMBOL_GPL(mutex_lock_killable_nested);
+>        |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> ../include/linux/export.h:76:23: note: in definition of macro ‘__EXPORT_SYMBOL’
+>     76 |         extern typeof(sym) sym;                                 \
+>        |                       ^~~
+> ../include/linux/export.h:90:41: note: in expansion of macro ‘_EXPORT_SYMBOL’
+>     90 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "GPL")
+>        |                                         ^~~~~~~~~~~~~~
+> ../kernel/locking/rtmutex_api.c:552:1: note: in expansion of macro ‘EXPORT_SYMBOL_GPL’
+>    552 | EXPORT_SYMBOL_GPL(mutex_lock_killable_nested);
+>        | ^~~~~~~~~~~~~~~~~
+> ../include/linux/stddef.h:8:14: error: expected declaration specifiers or ‘...’ before ‘(’ token
+>      8 | #define NULL ((void *)0)
+>        |              ^
+> ../include/linux/mutex.h:215:60: note: in expansion of macro ‘NULL’
+>    215 | #define mutex_trylock(lock) _mutex_trylock_nest_lock(lock, NULL)
+>        |                                                            ^~~~
+> ../kernel/locking/rtmutex_api.c:596:13: note: in expansion of macro ‘mutex_trylock’
+>    596 | int __sched mutex_trylock(struct mutex *lock)
+>        |             ^~~~~~~~~~~~~
+> ../kernel/locking/rtmutex_api.c:609:15: error: ‘mutex_trylock’ undeclared here (not in a function); did you mean ‘ww_mutex_trylock’?
+>    609 | EXPORT_SYMBOL(mutex_trylock);
+>        |               ^~~~~~~~~~~~~
+> ../include/linux/export.h:76:23: note: in definition of macro ‘__EXPORT_SYMBOL’
+>     76 |         extern typeof(sym) sym;                                 \
+>        |                       ^~~
+> ../include/linux/export.h:89:41: note: in expansion of macro ‘_EXPORT_SYMBOL’
+>     89 | #define EXPORT_SYMBOL(sym)              _EXPORT_SYMBOL(sym, "")
+>        |                                         ^~~~~~~~~~~~~~
+> ../kernel/locking/rtmutex_api.c:609:1: note: in expansion of macro ‘EXPORT_SYMBOL’
+>    609 | EXPORT_SYMBOL(mutex_trylock);
+>        | ^~~~~~~~~~~~~
+> 
+> 
+> This seems to be due to <linux/mutex.h> containing a #define for mutex_lock_killable_nested()
+> when DEBUG_PAGE_ALLOC is set and another for when DEBUG_PAGE_ALLOC is not set.
+> But then rtmutex_api.c has a function by that name also... (for the DEBUG_PAGE_ALLOC=y case,
+> which is set in my failing randconfig file, which is attached).
 
-On 30.05.25 08:23, Rudraksha Gupta wrote:
-> Logs: https://gitlab.postmarketos.org/LogicalErzor/pmaports/-/jobs/1368490
-> 
-> Archive: https://web.archive.org/web/20250530060232/https://
-> gitlab.postmarketos.org/LogicalErzor/pmaports/-/jobs/1368490/raw
+Yep, the bad condition is CONFIG_DEBUG_PAGE_ALLOC=y + CONFIG_RT_MUTEXES=y.
+Patch at https://lore.kernel.org/r/20250530075136.11842-1-pbonzini@redhat.com.
 
-I ran into the same error on aarch64 and x86_64 when building -next for
-Fedora today using the rawhide config:
+Thanks for the report!
 
-https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/fedora-rawhide-x86_64/09103515-next-next-all/builder-live.log.gz
-https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/fedora-rawhide-aarch64/09103515-next-next-all/builder-live.log.gz
-
-Reverting b20fbbc08a363f ("rust: check type of `$ptr` in
-`container_of!`") fixed things. That's the patch Rudraksha suspected to
-be the root of the problem (see the quote below).
-
-Ciao, Thorsten
-
-> Snip:
-> 
-> ||
-> 
-> |EXPORTS rust/exports_core_generated.h|
-> |
-> ||
-> RUSTC L rust/compiler_builtins.o
-> ||
-> RUSTC L rust/ffi.o
-> ||
-> RUSTC L rust/build_error.o
-> ||
-> RUSTC L rust/pin_init.o
-> ||
-> RUSTC L rust/bindings.o
-> ||
-> RUSTC L rust/uapi.o
-> ||
-> EXPORTS rust/exports_bindings_generated.h
-> ||
-> RUSTC L rust/kernel.o
-> ||
-> error[E0308]: mismatched types
-> ||
-> --> rust/kernel/lib.rs:234:45
-> ||
-> |
-> ||
-> 234 | $crate::assert_same_type(field_ptr, (&raw const (*container_ptr).
-> $($fields)*).cast_mut());
-> ||
-> | ------------------------ ---------
-> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `*const
-> drm_device`, found `*mut Opaque<drm_device>`
-> ||
-> | | |
-> ||
-> | | expected all arguments to be this `*const drm_device` type because
-> they need to match the type of this parameter
-> ||
-> | arguments to this function are incorrect
-> ||
-> |
-> ||
-> ::: rust/kernel/drm/device.rs:140:18
-> ||
-> |
-> ||
-> 140 | unsafe { crate::container_of!(ptr, Self, dev) }.cast_mut()
-> ||
-> | ------------------------------------ in this macro invocation
-> ||
-> |
-> ||
-> = note: expected raw pointer `*const drm_device`
-> ||
-> found raw pointer `*mut Opaque<drm_device>`
-> ||
-> note: function defined here
-> ||
-> --> rust/kernel/lib.rs:241:8
-> ||
-> |
-> ||
-> 241 | pub fn assert_same_type<T>(_: T, _: T) {}
-> ||
-> | ^^^^^^^^^^^^^^^^ - ---- ---- this parameter needs to match the `*const
-> drm_device` type of parameter #1
-> ||
-> | | |
-> ||
-> | | parameter #2 needs to match the `*const drm_device` type of this
-> parameter
-> ||
-> | parameter #1 and parameter #2 both reference this parameter `T`
-> ||
-> = note: this error originates in the macro `crate::container_of` (in
-> Nightly builds, run with -Z macro-backtrace for more info)
-> ||
-> error[E0308]: mismatched types
-> ||
-> --> rust/kernel/lib.rs:234:45
-> ||
-> |
-> ||
-> 234 | $crate::assert_same_type(field_ptr, (&raw const (*container_ptr).
-> $($fields)*).cast_mut());
-> ||
-> | ------------------------ ---------
-> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `*mut
-> drm_gem_object`, found `*mut Opaque<drm_gem_object>`
-> ||
-> | | |
-> ||
-> | | expected all arguments to be this `*mut drm_gem_object` type because
-> they need to match the type of this parameter
-> ||
-> | arguments to this function are incorrect
-> ||
-> |
-> ||
-> ::: rust/kernel/drm/gem/mod.rs:130:20
-> ||
-> |
-> ||
-> 130 | unsafe { &*crate::container_of!(self_ptr, Object<T>, obj) }
-> ||
-> | ---------------------------------------------- in this macro invocation
-> ||
-> |
-> ||
-> = note: expected raw pointer `*mut drm_gem_object`
-> ||
-> found raw pointer `*mut Opaque<drm_gem_object>`
-> ||
-> note: function defined here
-> ||
-> --> rust/kernel/lib.rs:241:8
-> ||
-> |
-> ||
-> 241 | pub fn assert_same_type<T>(_: T, _: T) {}
-> ||
-> | ^^^^^^^^^^^^^^^^ - ---- ---- this parameter needs to match the `*mut
-> drm_gem_object` type of parameter #1
-> ||
-> | | |
-> ||
-> | | parameter #2 needs to match the `*mut drm_gem_object` type of this
-> parameter
-> ||
-> | parameter #1 and parameter #2 both reference this parameter `T`
-> ||
-> = note: this error originates in the macro `crate::container_of` (in
-> Nightly builds, run with -Z macro-backtrace for more info)
-> ||
-> error[E0308]: mismatched types
-> ||
-> --> rust/kernel/lib.rs:234:45
-> ||
-> |
-> ||
-> 234 | $crate::assert_same_type(field_ptr, (&raw const (*container_ptr).
-> $($fields)*).cast_mut());
-> ||
-> | ------------------------ ---------
-> ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `*mut
-> drm_gem_object`, found `*mut Opaque<drm_gem_object>`
-> ||
-> | | |
-> ||
-> | | expected all arguments to be this `*mut drm_gem_object` type because
-> they need to match the type of this parameter
-> ||
-> | arguments to this function are incorrect
-> ||
-> |
-> ||
-> ::: rust/kernel/drm/gem/mod.rs:273:29
-> ||
-> |
-> ||
-> 273 | let this = unsafe { crate::container_of!(obj, Self, obj) };
-> ||
-> | ------------------------------------ in this macro invocation
-> ||
-> |
-> ||
-> = note: expected raw pointer `*mut drm_gem_object`
-> ||
-> found raw pointer `*mut Opaque<drm_gem_object>`
-> ||
-> note: function defined here
-> ||
-> --> rust/kernel/lib.rs:241:8
-> ||
-> |
-> ||
-> 241 | pub fn assert_same_type<T>(_: T, _: T) {}
-> ||
-> | ^^^^^^^^^^^^^^^^ - ---- ---- this parameter needs to match the `*mut
-> drm_gem_object` type of parameter #1
-> ||
-> | | |
-> ||
-> | | parameter #2 needs to match the `*mut drm_gem_object` type of this
-> parameter
-> ||
-> | parameter #1 and parameter #2 both reference this parameter `T`
-> ||
-> = note: this error originates in the macro `crate::container_of` (in
-> Nightly builds, run with -Z macro-backtrace for more info)
-> ||
-> error: aborting due to 3 previous errors
-> ||
-> For more information about this error, try `rustc --explain E0308`.
-> ||
-> make[2]: *** [rust/Makefile:538: rust/kernel.o] Error 1
-> ||
-> make[1]: *** [/home/pmos/build/src/linux-next-next-20250530/
-> Makefile:1285: prepare] Error 2
-> ||make: *** [Makefile:248: __sub-make] Error 2|
-> 
-> 
-> Bad: next-20250530
-> 
-> Good: next-20250528
-> 
-> 
-> Likely introduced with: https://lore.kernel.org/all/
-> CANiq72mFiCrzawVUVOU2giJtBVsRdAO3sGtDsZptPuFvmid3EQ@mail.gmail.com/
-> 
-> 
-> Repo: https://gitlab.postmarketos.org/LogicalErzor/pmaports/-/tree/rust/
-> device/testing/linux-next
-> 
-> How it's built (Alpine-like build system):
-> 
-> - https://archive.ph/vxEmk
-> 
-> Config fragments (in addition to qcom_defconfig):
-> 
-> - https://archive.ph/q4hfc
-> 
-> - https://archive.ph/RKgFf
-> 
-> 
-> 
+Paolo
 
 

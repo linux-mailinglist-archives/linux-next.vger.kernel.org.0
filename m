@@ -1,275 +1,195 @@
-Return-Path: <linux-next+bounces-7027-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7028-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E110ACCA8E
-	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 17:50:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8588FACCAD8
+	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 17:59:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13BDE7A8079
-	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 15:49:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82F6C18902D0
+	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 16:00:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 119B923BF91;
-	Tue,  3 Jun 2025 15:50:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43A1723BF91;
+	Tue,  3 Jun 2025 15:59:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="LLXWPex1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HyzjKTOO"
 X-Original-To: linux-next@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2064.outbound.protection.outlook.com [40.107.223.64])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63B5723371F;
-	Tue,  3 Jun 2025 15:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.64
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748965831; cv=fail; b=QVdW+2721cgULlMHWEixX+hAhzXP1XxClH6o8vIr189iLeg/9AVSzYI6VO8/fo54vubxfQZ5EczaQPpPYdgnJWNnN+MdDGSvQpYUnHfa0IuTM1WDK4GGaVnKHsim4XfayoUbWR2uG8IfAL7XoEQXE319iGUxqAGh4syCYYqqHDM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748965831; c=relaxed/simple;
-	bh=WFIY9NlFZ90z0eUV/I6899+s2zgLrwFHkYQ+2vhr1II=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=QYMcQAjdqkDslQo/AlK5Rw/fDqMoQNN1m27Tp4hNfMZEwfrcfEZhicYoAr67fcKTqgyWHcgeYmboUdgMQe5aowQP0fdR9nd2mK6EDtezL9/56F3CSDKF8b1Ecjp9IRKgHCr7RIszTrIn9XMtFxsxw33LCh5++D0o214FLD3pVy4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=LLXWPex1; arc=fail smtp.client-ip=40.107.223.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=t5NsUe0ywDAuFOniWnCxFWHK1bITJMUBCh6HLyaSKuAQ9uxZWFLeElkXfThAPxu0K3W4oiCg2Ca5s6C6w5hq9b5iquTMBifnSLL2o8BCyWmKair1d06JUh2kTn0IVgS79Qx4jgmmwhuhELvBUhthEmvUtTi2pH6k+XzXge6xSsrlZNAb0vvki5ZG0BBmU7Dq3h8OWqvpAXjM19b9WBduVJ5X2jYpiDiUeH7JNzyHaLaAYNMOmXOI8gAUfCcuw5OTAyD7XHEziXBCNJ/oZpzmj3JiFVe8N7RqUR8f5Pq9QCbVk0HERUpD9PMZRnrxZv16xJ31gPM8YcuyqNTXwkaNBw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=618V3RmR0lHvOQjS5h8DTmkWqNgJ9iFmcT10eRwZxuc=;
- b=y1yWJITFAQPMYFFQDa+PDuu4ByH3TRHd1CNawngyuJDJ5mWudyh5OAJaEIzuqgIMqrZ4hdxK2znOl4vf+KEOn2Tr5/zTO2YaZXdDdWiRBAp0QSgX1lVwN0jt5ysk8Q0roplY1UZ/pyUwii1oxWpGsefnhZKlJc26R/CgplupOuoO+W1JULU1qSOC+ClJuw3ybR/bCJ/KS851vlcGRwN6Jc0xFyoYeIQRczyA/TPT9gGJ4A9gWFJ2cc+/GZFX9BI2M6Y2FPht6juTR9MwvlvP3IYXGDLeIAeda40v3Zy2y1T4Qor4h/mGF02BCaUfda9NhM3bVhZvMLl9ACfGMPiIJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=618V3RmR0lHvOQjS5h8DTmkWqNgJ9iFmcT10eRwZxuc=;
- b=LLXWPex1E4XBhowkXHWCDzR3FVyL7xe/NGq1+yVfGz7KsAQkDAYvBwfK6/8d2iI1KP2iU39vxNJvzR8qL8vN1CzGqlVRxYz7WITMky/a1ouCWSYnEjd5srkaJOQLkEHNWilVccYdM4RaQ8BAGQLNNhME7JjQdi8xmy7WyrZutqI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS0PR12MB6440.namprd12.prod.outlook.com (2603:10b6:8:c8::18) by
- CY8PR12MB8066.namprd12.prod.outlook.com (2603:10b6:930:70::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8792.33; Tue, 3 Jun 2025 15:50:24 +0000
-Received: from DS0PR12MB6440.namprd12.prod.outlook.com
- ([fe80::6576:7d84:1c66:1620]) by DS0PR12MB6440.namprd12.prod.outlook.com
- ([fe80::6576:7d84:1c66:1620%5]) with mapi id 15.20.8792.033; Tue, 3 Jun 2025
- 15:50:23 +0000
-Message-ID: <69d28f56-5b89-4d95-9c9c-baf6e894d4b4@amd.com>
-Date: Tue, 3 Jun 2025 11:50:18 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] platform/x86: Use i2c adapter name to fix build
- errors
-Content-Language: en-GB
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: Pratap Nirujogi <pratap.nirujogi@amd.com>, rdunlap@infradead.org,
- Hans de Goede <hdegoede@redhat.com>, sfr@canb.auug.org.au,
- linux-next@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, benjamin.chan@amd.com, bin.du@amd.com,
- gjorgji.rosikopulos@amd.com, king.li@amd.com, dantony@amd.com
-References: <20250530200234.1539571-1-pratap.nirujogi@amd.com>
- <20250530200234.1539571-4-pratap.nirujogi@amd.com>
- <ea615c2e-d306-06b2-10b0-2423ab59a8e9@linux.intel.com>
- <46a1ad3e-3419-4f03-b5ce-a36d2480037c@amd.com>
- <56698b89-756a-ec89-787c-d08351abf7f0@linux.intel.com>
-From: "Nirujogi, Pratap" <pnirujog@amd.com>
-In-Reply-To: <56698b89-756a-ec89-787c-d08351abf7f0@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CP5P284CA0081.BRAP284.PROD.OUTLOOK.COM
- (2603:10d6:103:93::14) To DS0PR12MB6440.namprd12.prod.outlook.com
- (2603:10b6:8:c8::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF992C325E;
+	Tue,  3 Jun 2025 15:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748966383; cv=none; b=msrGpBqpLpdhPHH9+WaRh4pAXyDj30ojSS5JILFNKwcQo9TL8yQ1VxtXJAU6j38XSrHh7ZcoTwJP59LvMgYsLM5tpiIHXAvf0YaF7WDl3GQ20dALqNkBsnHkHSWtNt2TeJ2WSqDaJMHuXVj+apTpNAOer9hIuLp50I9GH4TQo30=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748966383; c=relaxed/simple;
+	bh=S9rFyqEqfGykqpsB1Q1dXB4ySJhX94m8PwN7l2iyDzM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LSfuGkDo+hfcU5mjLESDk9KJQxwQoiiJV11eL+FLfU00vKaXi5/nX6uXsUpYXaNwQblF8Bbs7PMtS08n118h5rZUGip5CKh43TKfz+e2FeJ+rsucK+lP4hCQjzc5bcx5KULYFiNnKq+ReYCp1yGc86kwDgQvj8fwKgoRaJRFea4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HyzjKTOO; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-742caef5896so4878472b3a.3;
+        Tue, 03 Jun 2025 08:59:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1748966381; x=1749571181; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=byvTZd8dGHi3GYuLA8Z6BPGWPQmb1AIbB7Z5ZeFCEco=;
+        b=HyzjKTOOlmmKstZqXaYg2m+Ed0S1eE8c3K0AQVkHIlVP8TUm7nh1uNHO/+2Zs/hSIw
+         xAXyjrKnwQiKZPOnx2l6dZJUp5ZeS9iJvnte627u1lgCHlAnrpaU219gkixHaJYXEd67
+         mQdPGWPFYGYVfe/vmD0ir8MceUuuaXXVGP9bdsgsakfsgwlEo8vrzJ92TQ4y0oitQtyH
+         JiX7GOKPT4LjwQWGLY749ItNyl9/TszZOmdRNN47/BdxvROVqrbeSEx6hMY8v7+QUkCh
+         e3IyLRVhwMYzofWxDO4Ujqz2CzWtgN9YyrgdOcqlZdoWp9p5tf3l3N0f9E5AnsSUgzUV
+         ggdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1748966381; x=1749571181;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=byvTZd8dGHi3GYuLA8Z6BPGWPQmb1AIbB7Z5ZeFCEco=;
+        b=vhwoiQjYVAKlqUZvg3TEKN8m2vFUaoJ6C+4eXDkAagOyfs9LTYvmAvhQJMZEQ0SDU6
+         3Dvu/b+sTnoKcDGBPdDBScJBbHSWbrggaqkHsG3e7Yq/lRm3GLcCnplZW+VuUUwLCtHZ
+         5qsp2v22qC3BN4x8YlwVLORipvjistYHMiPfLvFedolZVhl51/80zR15rrkVZqIAT6ZA
+         XjvUo1ENIA55qkXH3olH5jXYdVGBl+hqpHrxBJlZLa8bzCVZz4kJ7aQDsBWvg+Ob1IU5
+         d5luTgat1bGKl8W7+vCUYoigubS0Uh5OoH6/AEAH7NRTYe98NFYQ/2l17s938v3CEkov
+         5KXg==
+X-Forwarded-Encrypted: i=1; AJvYcCV6codfnAV/fv6cCdaX3u29Wao2rEg+MsWBhRsxgrAhgmFjeh2Q1Dt5EOiLbcC6BtNYiO1ERdUEu6Wtdpk=@vger.kernel.org, AJvYcCWmwLo3xWEUMlz1yUIVzqHcpGznGGnbTYu67ca167b49JydhcUHWFxwKGsh1ZFfcIpa44pELuglB3aJcA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOSGmVCPZLRh24xALQ3WhlcwqPf5IXbtfOjxxMZcczIYYdDnVI
+	uDlNX6Xsle8zj+elT9SwG+63wEbYnHyry91tgdrH6H56FlFXqkMMBHs3
+X-Gm-Gg: ASbGncsFFQdQYVftfWVry64NVF1PmS46u7DYlcshv7/z1d8qA6shwPVg1PA6tXS8hSA
+	NJUVSJqXJOK/LiwdjNgspLChA8LiUGz1/b+ENMmULSIT0ppZu6XcHWoz6khOivsq7XXhL6e2uD9
+	ZwA4WxjnDP4IZUGXK2+u4o6yTEKeavtul1FS0IPv03J0qE0smcZKzbmCo+pSUAYZdQT41qkrFPt
+	OcT+Cx2Ayf46aQOkPczwImtAn20oy1SAkbwegoW8qQTBh4Y7mmfBmFzV2ykTLyKxa/IVEbE2zly
+	mLcXMkSHGz3P4NHq0uIplxUf85ZQERDBQNsu7E4AzsTXUmeixa4AlxKMLgxXruYkQ7RYV+E4XsZ
+	LrUkJPPbIADAikyE40goz2T2E
+X-Google-Smtp-Source: AGHT+IFl2MIAa/z34V+Rv3EN4B0t8IhoHEo3bTs1kto5CMUTPpbgS7oT1AGsVgoQyBYY0F33ub6Ktg==
+X-Received: by 2002:a05:6a00:1a89:b0:740:91e4:8107 with SMTP id d2e1a72fcca58-747bd863bb4mr25107570b3a.0.1748966380784;
+        Tue, 03 Jun 2025 08:59:40 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-747afed4399sm9593589b3a.77.2025.06.03.08.59.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jun 2025 08:59:40 -0700 (PDT)
+Message-ID: <4ec0dba9-8fdd-42a7-946e-0ae06905bb68@gmail.com>
+Date: Tue, 3 Jun 2025 08:59:38 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB6440:EE_|CY8PR12MB8066:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d2fb289-5e7b-4a9c-6c64-08dda2b659e4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ckFmcjNydkcyOXA2MEhIQ2J3aVpuZFJKZFRyK0ZDLzZaVm1JVi91SWJNR1VB?=
- =?utf-8?B?SWFPMTd0TXhrbU80ZlF0NVNSZGp3VVl4LzlWdnRqdFZRSWdzS3pCemJxdnJu?=
- =?utf-8?B?bGNIR1V2ZzZWbDlEUHlOVVBxRWsrMW1hTGdpQWRVQTlVeDRGYStmTHpydXZU?=
- =?utf-8?B?dlY4cEZ2MVhXNzErN1FHNjdZNjJTN1VEODdxWXpZNTdlYXdGdTZUWjlYdEpt?=
- =?utf-8?B?b2ZtVnRnL1JORldMenluL0hNV0hVMytDR0pQM1UzelAzQXpwQk1HQkFJeldT?=
- =?utf-8?B?SjBVd3V0ZXVzTTlLaEp5M3RDRHFPRk1HUkl6SHJuRFFURXR1YW1QVm5MZUQ4?=
- =?utf-8?B?OFJjSEJSSW1LVU8xeUpEMHQ5ck9WRXpPUUVoS1hERHozL1BuMmpRcGdNSHFi?=
- =?utf-8?B?eW4zYnlqUnZQOU14S09KekVOKy80UnZCTno2aWc1OUw2bnc4a0c2bEdZV2N6?=
- =?utf-8?B?NnpzUEkzbHk0dmg5MWpPZ1M2bWhoM2RCUUVZYXJYZHp1OHFOOWxTZHg2V2NR?=
- =?utf-8?B?RVhoQzdJdityUjZUVVRNRGcrQ0oxTnM1aWwxb1FBMWk1V0lIcnZWWXVDUkZM?=
- =?utf-8?B?NnluUHgwSEZkdnUzWDdMbU56aWxsVk11bnF1dWVBaDFCU3NoZGNsdVk2NHJB?=
- =?utf-8?B?Tk91MFVZakZranpPQ2J6SUpZS3FoRjFyWFFKNnB6YmZxSGFjVXQ3cnppVGdh?=
- =?utf-8?B?bG9PWkNKMWhDclRhWUtBd3RSMFp2T2pyeWtJekUyYTl2QlJPLzhEdEc5a1FK?=
- =?utf-8?B?ODB6ZnFzWm9TNEJONktxcWVQVlpmZUhzbHJLOFRvUy9BS2V3alFsQk5STFhE?=
- =?utf-8?B?RCtzU0RJZk5FOHZDVzQwbVlGdGJlTS9GTllQZEllRDJBSy8yVTBFTEpPN0g5?=
- =?utf-8?B?dWJvdDdZRmcvWDZhTXZGaUFLaG1HY1JjOGNobnhueW5Zdkx5WTRkeFhwajRQ?=
- =?utf-8?B?NVA5a0VtUWpPRUtHdkVYYUdTcVpmNnNZZk11TDF5UUZTME9JVnpoeCtrZkR5?=
- =?utf-8?B?bXQxNFRwd1JEVXZ5U2c0UjdqL0luVXMrWmFUM3hKZjFrSmF4c1NtYjhjRUVw?=
- =?utf-8?B?V0xJOHFwbUxUMHpOY3AxTExLaUVoQitycUp6UmZPb081dmsyVnNHc3A3SkEx?=
- =?utf-8?B?Y0x3Q1VERnJZZUFYdkZpRitUY09DaHJOeGxxWTRKUFpQc3hWcjhiY2YwNk5m?=
- =?utf-8?B?WmxHcWI2WmgxVnhGQU5kNXBCSTN6YXBUQTVHQ3NQb2RZa3VUUzRiWVpUd3RZ?=
- =?utf-8?B?TDVheHNETGI2Vk5MVWFpVHFhTFcxMEF5anpnZmxKazhLN2tTK1dlOTNsNk5Q?=
- =?utf-8?B?VjFnL0x6blJUdCtPN3pLWFNTdGY5b3U3TjNaV1BSYzdUZnI1OVF1OWtlaGlS?=
- =?utf-8?B?bFZGNUE2U3Y1NHhWVStyUnJNanlTdi80Q2Jsd05qZGs2Qk1ib1lsT1NOZXQ1?=
- =?utf-8?B?SXZUZkhtTzBXR0hUUkRCeEdUQkt6TXY2VjRCbnVtOUd2b3dabE0wOHMzVlJO?=
- =?utf-8?B?am5WaEphSjNkcVh2amtjcGxsVW16Tmh2dEZtUS9mSmtxU3NYUTJrRzhoTk03?=
- =?utf-8?B?Q3g3eGQwWUFOLzBXbkZXaUFCay9aOENqYW9sbmV5WVdLRE9XaDd3TmFIMDB5?=
- =?utf-8?B?Z2VKUk9vL1cwbEw1YmdBS1BIVjJtSU9WdmVjM3Z2ZThsRWJETDFzTkhiR3RP?=
- =?utf-8?B?NlBkZlhwU3BVd01jT09Nek5zc2JiZUsyQXdjKzg4dmIwbi9JSXdiM2VpT3dh?=
- =?utf-8?B?QXd6aEVrRWlyMHhqY1ljKzl2QTlMMmtNQnIzK1BWdnJmaUNBeEhyVGVGbkJO?=
- =?utf-8?B?cDVaTUYzT211VlQ5VUZjdWRLb1h1K3pZQzdHd1IxZHBWV2lmejdUUnMvWFZU?=
- =?utf-8?B?NDhEYXRLeGNWSS9pRTJLY3E4TnBTR1NXdjQyamFma0xOVmpycEw1WVhHZ3Mw?=
- =?utf-8?Q?U8izEXn6was=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6440.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Vm1jRUpMRHQydFBWcnJUYXAxdTdQN1BvdzU1bkdKQ1hPRmhFUENOSTRpeG1t?=
- =?utf-8?B?MTNxM1lWWkRiKy9DRkpiVDYxdTZRK0E5bzFRZ1l2cUhKdVV0QUVYVndWSkFT?=
- =?utf-8?B?bXdrbytlRGhZTzhMT0dDTktuZUlNWFdJMW9hVVRFdDRJZjFZOGh2eDIvejZ1?=
- =?utf-8?B?OWZ1c3A3ai9FdFBEaTg1V1Z2R0M5b1RDeHEvMUQzVjJtMERSSVlQL2RIRWta?=
- =?utf-8?B?RWUvWlVsL3psOU93bXl6cS9LL2F0TUMxNUVvVkJ6b0IrVGRaWVJvYWtkSmx3?=
- =?utf-8?B?TFRJSStHYkxzYVFZUlp4MnhYU2M2RkhKWCtWWXpJRFZlbGZUTTZvRWhOREox?=
- =?utf-8?B?SWNCb05iVm5ZVXVKSWhoVXNLYTBVa2FBWWRjMTQybCtiaHNGSklGekpac245?=
- =?utf-8?B?Z2tOS0N5MmJPQVh5UGlCd2J5ZlczdDRHREsvVSt6YzNsWFRsMGdzNXBGckdp?=
- =?utf-8?B?N1AxU1g2WnFsdWRRYVJnYWU4S2Z1UFpkMVBZNjhpT1dsUWdpNVl4WUpGSlhU?=
- =?utf-8?B?aUcxMkJ6MEVyR2UyUGNndVFFY3dseU1xM0hPVHpSV1YrVFJWbkR1UkNXNWsy?=
- =?utf-8?B?bGFVVk5uZG81eWpIYS82MnNNdk9RMlhKSlp5eU5rRjRVaWZWT0FQN1VsVjIz?=
- =?utf-8?B?SE0rSUxEMmJjQmpQUVRwVi9nMXN0b2xVOWFNVWU3c2FSTnlpWWxBaFBuRWhp?=
- =?utf-8?B?OFhGa2UzRzU2M0NHN1hidDBGVUlPWFRvaXRFMm9sc0RhbUhwL2xlVUd4MGhB?=
- =?utf-8?B?R24vcW1sdWtLZHo4UFFSRzFaS2xXYXdlSFlkTEs2emRlSFhxRE1CdjZoRFdG?=
- =?utf-8?B?SGNaaHYza01iTUFOUTlSWVdRWHVNR3JIakhVcjZqNTZNL3E4RjlSdzlSNTZz?=
- =?utf-8?B?VGo5YkpVaVJjKzJmV1NkUFlLNHZYdTAxeElPZTFSYk94RzJ6UW52L0p1aHpo?=
- =?utf-8?B?QUJyYkZJRFE5M0U3ZytZR2kwbFBzS05DMmNSVzZtMnZIWjJxU1JLYXNDTnNo?=
- =?utf-8?B?TlA3a1lZcnNxUFdnaUtGdkJ2LzN1NG9kbVdFbzZxMjhDeDVsd2hhNWVQb2VD?=
- =?utf-8?B?QkVyOHVwa056QUxKb25abGN0OXZOcFdtL01PbWR1ajJyYS9vdUprVHZDTmhu?=
- =?utf-8?B?K3lPUERZWTNsTGJLSVUrWGpSZjFtTFBLaTUrV1I4R3FrV2lsREpCTjBTUHdo?=
- =?utf-8?B?MVpYRmx5YUczTFZxa2tIRmwwUlRUV2FTZmd5ekY2N0t0ZnE0ODBrNE94bS9C?=
- =?utf-8?B?UGdHZmxRbDNkaldIQ0J0MmFXK3RIWTNzSmRLWXI4OER5ekFBV1BvNnVkTWJV?=
- =?utf-8?B?d1p3YzBlQVVGMmUyNFYySzhmcElUWUdHY0dkb2I0WlF4azV6UXFXQ0dFbGpz?=
- =?utf-8?B?YXdvNlROdSt1VWlEMzREdVFaTmlJa0owMUJkeGtlbTFFbEt3Q2l6ZkxtZHgw?=
- =?utf-8?B?R0dDWmRoUFY0S2p6eDRGclBjSnE5eEdTZFRYOXpxREc1TERPYTAvRWpnRG5C?=
- =?utf-8?B?bXVSN05ZMlp2dE5GbHJtUGJrNWtnZ29hQzlnTlFGUzFRZHVOazN0UWZtbk40?=
- =?utf-8?B?aVAyalgrM3RJVXoySE53WDZJK1plZytCQS9OdXNhMU9XREJORENmeVpZZFRq?=
- =?utf-8?B?eXZjaHhKRS9jT1ZFNFBGdWMyaHkxbEpncDNXanlFTGlQSGs5eFBIYUgwYnVm?=
- =?utf-8?B?eGZGb2NNY1pLY1Frcy9tcmNpQWxVNnRSa1A0b2pDbjkwVlRuOWtmT1lQeEps?=
- =?utf-8?B?dEtreU9jZXl5MXcwei9zRU1kNzEyUE83SUcxbDNBWUZ5eFZmdGFMV3BwWTY5?=
- =?utf-8?B?MkxPMHFsYWtXd0lCTUpFWFJDNnlvcDhzcGxnL1duT3VCMmpoYzA5VnBHMCs2?=
- =?utf-8?B?SmZyYUhaSDIwOHZpVDF5cWdCNGJIV2M4bUwzZGpyeGZSVFdvWXNjSkU5ODlh?=
- =?utf-8?B?czFSb0lZSDZPNEMwaHdwdmV4WkhYWGdLQnJxaStNYUtFd1AvU1BvMVVoaGRB?=
- =?utf-8?B?RHR3K0hRSFlnWmtqbk45T3pkQ05DZFZQdzhmR1ZHUlhmcmtYVEp2anJwODUx?=
- =?utf-8?B?Zk11UjZBUUNLRjFrK3BORWk5bzZXMy80a1BleUxpcWJBQ3IyeU5FUVNSR3Ux?=
- =?utf-8?Q?zDK1vQ8X6m9tipo5sJ/C+yUSO?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d2fb289-5e7b-4a9c-6c64-08dda2b659e4
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6440.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2025 15:50:23.7060
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bFwknAuJpaHsG1meFrVFQ4ecmnl2HPgcmyj4JqupM9Ml3yNu0kjA0wMrxl9tqUua96GzRRnqhQwmMXJgAQHdng==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8066
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: manual merge of the char-misc tree with the broadcom
+ tree
+To: Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Arnd Bergmann <arnd@arndb.de>, Akshay Gupta <akshay.gupta@amd.com>,
+ Andrea della Porta <andrea.porta@suse.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20250603142730.084cf0a4@canb.auug.org.au>
+ <2025060350-porous-clutter-88fc@gregkh>
+Content-Language: en-US
+From: Florian Fainelli <f.fainelli@gmail.com>
+Autocrypt: addr=f.fainelli@gmail.com; keydata=
+ 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
+ WlfRzlpjIPmdjgoicA==
+In-Reply-To: <2025060350-porous-clutter-88fc@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-
-On 6/3/2025 3:15 AM, Ilpo Järvinen wrote:
-> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
-> 
-> 
-> On Mon, 2 Jun 2025, Nirujogi, Pratap wrote:
-> 
->> Hi Ilpo,
+On 6/2/25 22:11, Greg KH wrote:
+> On Tue, Jun 03, 2025 at 02:27:30PM +1000, Stephen Rothwell wrote:
+>> Hi all,
 >>
->> On 5/31/2025 1:11 AM, Ilpo Järvinen wrote:
->>> Caution: This message originated from an External Source. Use proper caution
->>> when opening attachments, clicking links, or responding.
->>>
->>>
->>> On Fri, 30 May 2025, Pratap Nirujogi wrote:
->>>
->>>> Use 'adapater->name' inplace of 'adapter->owner->name' to fix build issues
->>>> when CONFIG_MODULES is not defined.
->>>>
->>>> Fixes: 90b85567e457 ("platform/x86: Add AMD ISP platform config for
->>>> OV05C10")
->>>
->>> This is the which should have this Fixes tag, the other commits should not
->>> have it as they're not really the fix (but this change just depends on
->>> them, but since stable is not in picture yet for this driver we don't
->>> need to indicate even those deps).
->>>
->> Thank you, I will take care of keeping the Fixes tag only in the x86/platform
->> driver patch and will remove in the other two i2c driver patches.
+>> Today's linux-next merge of the char-misc tree got conflicts in:
 >>
->> Sorry I think I'm not completely clear on this statement "we don't need to
->> indicate even those deps" - Am I good if I submit the same patch series
->> removing the Fixes tag from the two i2c driver patches? Or Is it about
->> submitting the i2c patches independently from x86/platform, instead of keeping
->> all the 3 patches in a single series. Can you please help to clarify?
-> 
-> Just remove the other fixes tags. Those changes don't really "fix" the
-> problem but lay groundwork for the last patch.
-> 
-> (If this would be going to stable, which it isn't because the driver is
-> not yet in any stable kernels, you'd have to add Cc: <stable@vger.kernel.org>
-> to all dependencies within the series and the fix and the Fixes tag
-> would still be in the last change only.)
-> 
-> 
-> The series should be applied as whole, either by me or the i2c
-> maintainers once it's ready.
-> 
-Thanks Ilpo for clarifying, and good to know about how the dependencies 
-should be handled once the driver is in any of the stable branches and 
-the significance of mailing list 'stable@vger.kernel.org'.
-
-Will submit the new v2 patch series addressing the comments shortly.
-
-Thanks,
-Pratap
-
-> --
->   i.
-> 
->>>> Reported-by: Randy Dunlap <rdunlap@infradead.org>
->>>> Link:
->>>> https://lore.kernel.org/all/04577a46-9add-420c-b181-29bad582026d@infradead.org
->>>> Signed-off-by: Pratap Nirujogi <pratap.nirujogi@amd.com>
->>>> ---
->>>>    drivers/platform/x86/amd/amd_isp4.c | 2 +-
->>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/platform/x86/amd/amd_isp4.c
->>>> b/drivers/platform/x86/amd/amd_isp4.c
->>>> index 0cc01441bcbb..80b57b58621a 100644
->>>> --- a/drivers/platform/x86/amd/amd_isp4.c
->>>> +++ b/drivers/platform/x86/amd/amd_isp4.c
->>>> @@ -151,7 +151,7 @@ MODULE_DEVICE_TABLE(acpi, amdisp_sensor_ids);
->>>>
->>>>    static inline bool is_isp_i2c_adapter(struct i2c_adapter *adap)
->>>>    {
->>>> -     return !strcmp(adap->owner->name, "i2c_designware_amdisp");
->>>> +     return !strcmp(adap->name, "AMDISP DesignWare I2C adapter");
->>>
->>> Since both are in-kernel code, share that name through a define in some
->>> header.
->>>
->> sure, I will find the header file that can be used to add the adap->name
->> definition.
+>>    drivers/misc/Kconfig
+>>    drivers/misc/Makefile
 >>
->> Thanks,
->> Pratap
+>> between commit:
 >>
->>> --
->>>    i.
->>>
+>>    d04abc60a903 ("misc: rp1: RaspberryPi RP1 misc driver")
 >>
+>> from the broadcom tree and commit:
+>>
+>>    e15658676405 ("hwmon/misc: amd-sbi: Move core sbrmi from hwmon to misc")
+>>
+>> from the char-misc tree.
+>>
+>> I fixed it up (see below) and can carry the fix as necessary. This
+>> is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
+>>
+>> -- 
+>> Cheers,
+>> Stephen Rothwell
+>>
+>> diff --cc drivers/misc/Kconfig
+>> index e12e445a10fa,0de7c35f6fe5..000000000000
+>> --- a/drivers/misc/Kconfig
+>> +++ b/drivers/misc/Kconfig
+>> @@@ -660,5 -647,5 +659,6 @@@ source "drivers/misc/uacce/Kconfig
+>>    source "drivers/misc/pvpanic/Kconfig"
+>>    source "drivers/misc/mchp_pci1xxxx/Kconfig"
+>>    source "drivers/misc/keba/Kconfig"
+>>   +source "drivers/misc/rp1/Kconfig"
+>> + source "drivers/misc/amd-sbi/Kconfig"
+>>    endmenu
+>> diff --cc drivers/misc/Makefile
+>> index 9ed1c3d8dc06,b628044fb74e..000000000000
+>> --- a/drivers/misc/Makefile
+>> +++ b/drivers/misc/Makefile
+>> @@@ -75,4 -73,4 +74,5 @@@ lan966x-pci-objs		:= lan966x_pci.
+>>    lan966x-pci-objs		+= lan966x_pci.dtbo.o
+>>    obj-$(CONFIG_MCHP_LAN966X_PCI)	+= lan966x-pci.o
+>>    obj-y				+= keba/
+>>   +obj-$(CONFIG_MISC_RP1)		+= rp1/
+>> + obj-y				+= amd-sbi/
+> 
+> This is fine, but why are new drivers being added to trees during the
+> -rc1 merge window period?
 
+I applied Andrea's pull request adding the RP1 drivers to get a head 
+start on what merge conflicts we would get and some build coverage by 
+the robots.
+-- 
+Florian
 

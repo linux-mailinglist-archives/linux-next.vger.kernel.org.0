@@ -1,113 +1,114 @@
-Return-Path: <linux-next+bounces-7044-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7045-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29E47ACD007
-	for <lists+linux-next@lfdr.de>; Wed,  4 Jun 2025 00:50:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D94BACD014
+	for <lists+linux-next@lfdr.de>; Wed,  4 Jun 2025 00:58:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5CEA175CC1
-	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 22:50:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69C161893E07
+	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 22:58:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA5EA2528EF;
-	Tue,  3 Jun 2025 22:50:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 554E322688C;
+	Tue,  3 Jun 2025 22:57:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mrVR7gin"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kR9UTzT3"
 X-Original-To: linux-next@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F402C3253;
-	Tue,  3 Jun 2025 22:50:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C15C1A2643;
+	Tue,  3 Jun 2025 22:57:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748991041; cv=none; b=O9Z7VHP/A6oQ9ddg2RllgEl3rytkc36HYK/bwjruuyyClirjHks4Xy3YFeJQuixLRhJMogz1iNhorqWLoXQgohJ1BGIztzjSd30gmlrw8noxsjUo9+PlTXSKCRr8vHkTfuR9wj3Srn/YK9BhXOg/A+7IxmXjsgRoZObeMhubsXw=
+	t=1748991476; cv=none; b=GDF1BiVcTVERagPsXqa8E8zfwbWZUuZ6mXRVFrPNcgJ8fc5wXvzxrXHk7qiHEILIwHot8gLBbAyKQfMXGNs6BF7mc8fNb2nRDhX+yZhXgCpuJYKpULKxFbRaKh6ED7J3KjmCgzLfWZFU0Hpk0SSfpwA9Kn48I+5BuQM1fl+pop0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748991041; c=relaxed/simple;
-	bh=JrGe4uBJahLz5YeQ0/N5/IVdiMkVsz+GX9RKuQgN51U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oaTYJaoatbb6ZgdU96nfAAeJzoIl3kPbiY6gDT5ssgxEisNRh40C6jfI1VBBLWLpVsMBmge9UPucPGPWNhjGtCc43CispZ7q+FOBxONhq/ZZ0yghP0xt5TDr9A3Pvo2Hq66rCdE6YCeJY6jeoWS9aGBqrWyKFnFu3QncB01f7DY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mrVR7gin; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=CZKj2AIR+080trTPaitatfhGvrcRO8PhQFCCLir9byA=; b=mrVR7ginH1lcP1LaUS+6BdevXX
-	q1KhEnPSOMWVxU7QeIQZqxtpYFEflkQKmz+yQII5RFIpsoS6GXe8g9PF0xdt/f7ZC9CLqNjdeMrwX
-	IZ6/Yy41LI3IfCmeeaYJiP8SHGsRtb8Td2X+QrHh8t9DbRsMNdPAeWMwmL9RJ+aVLPVYUpUmqgMEP
-	qyHZ7H3aj/iz+V6ciQLfJUo2Vehvn+uBJmd4iCQEV7ulfbCizVkw2HcZb+ezs6FvfavM6k89MK2br
-	HMhk+QXyPmr8DDhdij+uLFuZf5Ccz3v/RN21Fr9EvdiHcxbsz8jYEnlNdTRWp5RZb74yYxokJBLC6
-	M9AiKREQ==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uMaSm-00000002VyY-2lMY;
-	Tue, 03 Jun 2025 22:50:33 +0000
-Message-ID: <0993ec4e-c0cd-4e63-a0b3-3b9db0082279@infradead.org>
-Date: Tue, 3 Jun 2025 15:50:28 -0700
+	s=arc-20240116; t=1748991476; c=relaxed/simple;
+	bh=mfHYMr+11h25XsQDyANpiLb2jQGWQgM6lpmUpf4GY2A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=WLAM2sNLMT3czARjUUsoHNnSwSY5d8z7k8ef46WQeIDfkrfOveCVmvED7/izpFlT3JfYOUtZ4LYb30QG2a1at+GISiochQfj1FSIt/UD0lxtfrSoM/YzNPQm2PAE1Fm969jDspIUlAe3+XL/Dfn2cc7IIujIonFJkjUEDpN4rRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=kR9UTzT3; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1748991466;
+	bh=4IRj4XnLCWXGXfbFdoH9RyIeDX5InpmpdZH6opIp2pM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=kR9UTzT3QdFhz+aRkXi9PtVQpQ2vR4X2xspD2SG0VtNwsZWwE+yYogcDgEfPinchn
+	 n+9pJGeQ6+GZgX7pb923MtLVZt4ImlSKaT8YnKdVJkAMW0ezqqcvODIGBP8UlZQo6r
+	 Pb2X0OSOBd/e0OcFu6+2O190vjx78qLTiaCOJv8+N6p6KIwIVmW7kFC3snMf/UTp3d
+	 8zyxH2pFGDLLtoOXrL9ZvVsNSEfkuPO9/X7a8Lgu8v6IF3HtqFDGCdRmCsV71O59qe
+	 L9oZ1+p+qA/27BK9JHfOoB36V39hfqZKZDGa2KUyu5clfxp1sIy4ehC+FFTsOVbf+K
+	 3v09ngtOHr67A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bBmMG1lX0z4x6p;
+	Wed,  4 Jun 2025 08:57:46 +1000 (AEST)
+Date: Wed, 4 Jun 2025 08:57:44 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Alex Deucher <alexdeucher@gmail.com>
+Cc: Alex Deucher <alexander.deucher@amd.com>, Yihan Zhu <Yihan.Zhu@amd.com>,
+ Zaeem Mohamed <zaeem.mohamed@amd.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20250604085744.3584e17d@canb.auug.org.au>
+In-Reply-To: <20250422203338.3ff1ce14@canb.auug.org.au>
+References: <20250422203338.3ff1ce14@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] i2c: designware: Initialize adapter name only when
- not set
-To: Pratap Nirujogi <pratap.nirujogi@amd.com>, andi.shyti@kernel.org,
- hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com,
- mario.limonciello@amd.com, sfr@canb.auug.org.au, linux-next@vger.kernel.org
-Cc: linux-i2c@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-kernel@vger.kernel.org, benjamin.chan@amd.com, bin.du@amd.com,
- gjorgji.rosikopulos@amd.com, king.li@amd.com, dantony@amd.com
-References: <20250603214611.3039787-1-pratap.nirujogi@amd.com>
- <20250603214611.3039787-2-pratap.nirujogi@amd.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250603214611.3039787-2-pratap.nirujogi@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/dnyC3i4/CtbNtkDh2u5unN5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/dnyC3i4/CtbNtkDh2u5unN5
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 6/3/25 2:40 PM, Pratap Nirujogi wrote:
-> Check if the adapter name is already set in the driver prior
-> to initializing with generic name in i2c_dw_probe_master().
+On Tue, 22 Apr 2025 20:33:38 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the amdgpu tree, today's linux-next build (htmldocs)
+> produced this warning:
+>=20
+> WARNING: drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:1068 struct member '=
+mcm' not described in 'mpc_funcs'
+> WARNING: drivers/gpu/drm/amd/display/dc/inc/hw/mpc.h:1068 struct member '=
+rmcm' not described in 'mpc_funcs'
+>=20
+> Introduced by commit
+>=20
+>   652968d996d7 ("drm/amd/display: DCN42 RMCM and MCM 3DLUT support")
 
-That explains what but not why. Commits should also explain
-why they are doing something.
+I am still seeing these warnings.
 
-> 
-> Signed-off-by: Pratap Nirujogi <pratap.nirujogi@amd.com>
+--=20
+Cheers,
+Stephen Rothwell
 
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
+--Sig_/dnyC3i4/CtbNtkDh2u5unN5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Thanks.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmg/fekACgkQAVBC80lX
+0GzkuQgAja3ZeLrkuJBzY/upPHetUNnnLu4LGnwK+OOjK0sP52HwZyGjk8FZve0r
+6vLqt1kLmx9PAsA3BzPB4kG6DPmS5HhGRzOniev0kzOm+6MHytH1xpLwkGp3Mftt
+upBIydH1eZokUs0uqbTjyb+UQFUHL6svBoDL2gjNiD9sgZqn6h6FlzSvVWx5OE8F
+47WCIq2kt8b0tBHg78hAaKhKATmC1miEGVwGPjtmNn33Fv+Jj3iq2j+sSURuWZfY
+ZuBNukop5GMZegPcJhpOQGF+x1kJfqkgBJYnPRSxVg2rAEZ0u3nHFQ5KRH7inz7G
+MPGXDgvrGg3UFTlRgr0cJox7EY0KOw==
+=eSFu
+-----END PGP SIGNATURE-----
 
-> ---
->  drivers/i2c/busses/i2c-designware-master.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-master.c b/drivers/i2c/busses/i2c-designware-master.c
-> index c5394229b77f..9d7d9e47564a 100644
-> --- a/drivers/i2c/busses/i2c-designware-master.c
-> +++ b/drivers/i2c/busses/i2c-designware-master.c
-> @@ -1042,8 +1042,9 @@ int i2c_dw_probe_master(struct dw_i2c_dev *dev)
->  	if (ret)
->  		return ret;
->  
-> -	snprintf(adap->name, sizeof(adap->name),
-> -		 "Synopsys DesignWare I2C adapter");
-> +	if (!adap->name[0])
-> +		scnprintf(adap->name, sizeof(adap->name),
-> +			  "Synopsys DesignWare I2C adapter");
->  	adap->retries = 3;
->  	adap->algo = &i2c_dw_algo;
->  	adap->quirks = &i2c_dw_quirks;
-
--- 
-~Randy
+--Sig_/dnyC3i4/CtbNtkDh2u5unN5--
 

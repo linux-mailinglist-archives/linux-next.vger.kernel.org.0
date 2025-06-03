@@ -1,170 +1,115 @@
-Return-Path: <linux-next+bounces-7018-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7019-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AD0AACBF75
-	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 07:11:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0695FACBFB5
+	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 07:46:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7EF6188BC6D
-	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 05:11:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C483E17023F
+	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 05:46:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75DE41F2BB5;
-	Tue,  3 Jun 2025 05:11:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A84C18FDBD;
+	Tue,  3 Jun 2025 05:45:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="qTxKsWRh";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hwBuFQ3W"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="pFhkpe9+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 937E71D6DB9;
-	Tue,  3 Jun 2025 05:11:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9BA12CD88;
+	Tue,  3 Jun 2025 05:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748927479; cv=none; b=upz9j4STb77AHB9ts53EcWl1LrQiFACHU8+Tnnp1VumsHbvSdjY7upBvtJwRMO+yFRNo07jEPbNaxkzYQzKHt/QVE7gJQh57DTLTgNEVjdU/dr/WFAJdsyCgFc7pxIFxWFHP6N7e1hbtOxWM+bQZmtxxPeiMpUPY7aDLw+RS7f4=
+	t=1748929555; cv=none; b=N1IyHJZLw3nlXGfxqXZi7nP/YtnwePBNdI6DMjtthZt/+wzyTK+I8r4zjst4XjgDJJ8AAuFJStrDCFAZNM/8N4DS8fwp50S06Iw5Y8k29j4rYJz2QeTJpjM6Drp7g6+sTbnCfps47FqJnyh/30hXu8iVUPd22zlVQ5llkheR0p4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748927479; c=relaxed/simple;
-	bh=Dx/VK87AmLLgtcRd480u9IN/HcaIFL9/n9Qw9H6FB/0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T5LyHl1V/g3ZKaImKufOnbk2kkPw+DxzhGXG5LMEe1scanQAAjP2FzVPyaIC23hPj1DqMGKJ6M9YZB7Ld6N4uNgcMleQ4OswvVdjgYo0Q0sdfws095ftgAe7IMG2AWIX+dYA69uz35LVAVgRrpygsDK+8y24lFKLDxLqp+9Cnqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=qTxKsWRh; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hwBuFQ3W; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfout.phl.internal (Postfix) with ESMTP id 6C9A6138035F;
-	Tue,  3 Jun 2025 01:11:13 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-12.internal (MEProxy); Tue, 03 Jun 2025 01:11:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1748927473; x=1749013873; bh=50nxHTzCmt
-	WnB6tBiM/A0RvRLIJt43Fj+BsaGe35DRA=; b=qTxKsWRhfYuViXyhYjjBsb7dLQ
-	RjxjdigzFa8bm+mXMiknxXurc+WoBkj79x7v79mh2o7wm9/rXMhQuMGD/G1ULpwy
-	xJrE7ExV4igHTFtzK4m0ZTQIdxXoM5fCUuOUU0u/epF4RJaiXWFTOL94QLJyMtmu
-	Chu6VJiM61RSR5Y/PUH94hl0moFVEIpnUJfxXFOJ/kXlapHRSeO0v7+1Bn7ETa55
-	q/VvPhCr3nL1sdojP808bCpexlnCCGksSUFS8Mcrsv5oNpcDLFVp+5uebCdMK/my
-	oh8rDiifkuj1+Q0ZrHdUxKTr0PnkFhcfF5fuFjWZs0fWt8gQYEqY4mqfKvzg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1748927473; x=1749013873; bh=50nxHTzCmtWnB6tBiM/A0RvRLIJt43Fj+Bs
-	aGe35DRA=; b=hwBuFQ3WnjzSxcIkVVByaA2RDF9IYbQyiErWKqfJQR5lzcRBfbk
-	8sxW5EKHLyPZsbtxPbK3u1LEa4mUwGd3H08bI1DBSL68VqN+GiUUSvyVj9jZKi3+
-	c5F5vqV176mteiMiPLDKsdQ5pSA//tt+UjPV6HGquWojZtyLQLHsNUh62IZ7hWSi
-	V8zfFT+U5bLPRnpxi2sQOtnvGcV68ymBPi/C61c7orxFF1gI0/JT4czhZ7PmwJ8C
-	zFK6X1CARkQ8krl9RLHfOAIAMaZ8/mCG4eO+BUegM6niMI6o/qePMRBcMXITuF3P
-	ayXsZgaifVz8YvbcFEwKG4/F1Xb10T4JEtA==
-X-ME-Sender: <xms:8IM-aO7pCtE1xNnkI-VNXj_MSEFNeBPGJJW08KF-_wRilJM98tKc3w>
-    <xme:8IM-aH6KLyN5scaUhx4QT0YADPAKwspTJiLZffbCr4rN1FrNE1YOUhrwhCTGyDcry
-    tj5cXVvNzcekQ>
-X-ME-Received: <xmr:8IM-aNeDM5lfkpPA6YQ_GzAOXA8RrqdYBJEUO6r0xwLCnqraouY8E4H5lu1Ya7Zg_YHOqXa6ilfDelQK5LVX5ORIFmttj1w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdefleeikeculddtuddrgeefvddrtd
-    dtmdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggft
-    fghnshhusghstghrihgsvgdpuffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftd
-    dtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhf
-    gggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrh
-    horghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvvedvleejuefgtdduudfhkeel
-    tdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushhtvghrufhiiigvpedtnecurf
-    grrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhdpnhgspghrtghp
-    thhtohepudeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehsfhhrsegtrghnsg
-    drrghuuhhgrdhorhhgrdgruhdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpdhr
-    tghpthhtohepfhdrfhgrihhnvghllhhisehgmhgrihhlrdgtohhmpdhrtghpthhtoheprg
-    hkshhhrgihrdhguhhpthgrsegrmhgurdgtohhmpdhrtghpthhtoheprghnughrvggrrdhp
-    ohhrthgrsehsuhhsvgdrtghomhdprhgtphhtthhopehflhhorhhirghnrdhfrghinhgvlh
-    hlihessghrohgruggtohhmrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghl
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqnhgvgihtse
-    hvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:8IM-aLK4ecT6v-H7qlXsH-Y8mnLUoTJE2Nv3dKkwg0UgpJdvTuRmtQ>
-    <xmx:8IM-aCJUH-BYGw4JiWR3ojPro7vkP7aoSYQyoLE2V_0jhpnDUKHpLg>
-    <xmx:8IM-aMz6Kx9pcMn9lha8kLLkroez_oAh9sP51DKaVS3jPCXNmyIh4w>
-    <xmx:8IM-aGKiulcMQpwoNz3eZARGiySZTVwGD8XiWgZ1JUDfYAuyZ9sy3A>
-    <xmx:8YM-aNphLU_3d9aySS6frB33aIA0fdynpW8gmGrirscBy6bxpbHA98Xh>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 3 Jun 2025 01:11:12 -0400 (EDT)
-Date: Tue, 3 Jun 2025 07:11:10 +0200
-From: Greg KH <greg@kroah.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Arnd Bergmann <arnd@arndb.de>, Florian Fainelli <f.fainelli@gmail.com>,
-	Akshay Gupta <akshay.gupta@amd.com>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the char-misc tree with the broadcom
- tree
-Message-ID: <2025060350-porous-clutter-88fc@gregkh>
-References: <20250603142730.084cf0a4@canb.auug.org.au>
+	s=arc-20240116; t=1748929555; c=relaxed/simple;
+	bh=LtHvPdT+Q7lR9OGt4/pM1UjYaajoB9iYZBB/9f95i/8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=UkIO4ltvDxO8WeC4GbPjPOiVesvZ1xUfmkOWWAPez7w4mj0KpU9+fB3A+F8RPpd9FTpQSTrZsmj2/PpJ4arW9O0IDrhyNmEN+fpzliHynI7SCNZKPeY5URjtIrfJOZhRHvJeR54u4xgcuhVuNdn9eLThGNpzD5yQnTUNJ6rjYxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=pFhkpe9+; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1748929548;
+	bh=eNCFXTw8XKmhEt8tKCJxKFbM+gDPJPPm7GtD8paQF7A=;
+	h=Date:From:To:Cc:Subject:From;
+	b=pFhkpe9+gfoPDdb11J79OsaYCry/skjlbdbapH0mpLRePOSNk4OmTOa9x6PdE1UhS
+	 4LlJsC46fbzJS7KUvc/XkdN3M/c2/+R4J3s4QsiOz27WhceJV0iwEDHeGKITXrR0qn
+	 Ot8Q+HQbAd/qyP8CcoeMrFdJIwDQ20e872wFK/wmFGfCNUfIZkh+7voPmsZ6VVGvOq
+	 6hai7/OWVWfHORmjNAtqWmiwLy0o0uW+w5hHjFNZWucLqoIEifQantGCahaACVlBM4
+	 Tfdb8XpbmfsebrR68oTfxuOiSLw0Xls3PROEOumDFfkole/nv8Afv+mjsfzQkDM1WG
+	 75CQwA2m7uuRQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bBKST2Xtmz4xgW;
+	Tue,  3 Jun 2025 15:45:45 +1000 (AEST)
+Date: Tue, 3 Jun 2025 15:45:44 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc: Alexandre Ghiti <alexghiti@rivosinc.com>, Andy Chiu
+ <andybnac@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the risc-v tree
+Message-ID: <20250603154544.1602a8b5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250603142730.084cf0a4@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/.NHMe63MR8k.cRvvDTizoPq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Jun 03, 2025 at 02:27:30PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the char-misc tree got conflicts in:
-> 
->   drivers/misc/Kconfig
->   drivers/misc/Makefile
-> 
-> between commit:
-> 
->   d04abc60a903 ("misc: rp1: RaspberryPi RP1 misc driver")
-> 
-> from the broadcom tree and commit:
-> 
->   e15658676405 ("hwmon/misc: amd-sbi: Move core sbrmi from hwmon to misc")
-> 
-> from the char-misc tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/misc/Kconfig
-> index e12e445a10fa,0de7c35f6fe5..000000000000
-> --- a/drivers/misc/Kconfig
-> +++ b/drivers/misc/Kconfig
-> @@@ -660,5 -647,5 +659,6 @@@ source "drivers/misc/uacce/Kconfig
->   source "drivers/misc/pvpanic/Kconfig"
->   source "drivers/misc/mchp_pci1xxxx/Kconfig"
->   source "drivers/misc/keba/Kconfig"
->  +source "drivers/misc/rp1/Kconfig"
-> + source "drivers/misc/amd-sbi/Kconfig"
->   endmenu
-> diff --cc drivers/misc/Makefile
-> index 9ed1c3d8dc06,b628044fb74e..000000000000
-> --- a/drivers/misc/Makefile
-> +++ b/drivers/misc/Makefile
-> @@@ -75,4 -73,4 +74,5 @@@ lan966x-pci-objs		:= lan966x_pci.
->   lan966x-pci-objs		+= lan966x_pci.dtbo.o
->   obj-$(CONFIG_MCHP_LAN966X_PCI)	+= lan966x-pci.o
->   obj-y				+= keba/
->  +obj-$(CONFIG_MISC_RP1)		+= rp1/
-> + obj-y				+= amd-sbi/
+--Sig_/.NHMe63MR8k.cRvvDTizoPq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This is fine, but why are new drivers being added to trees during the
--rc1 merge window period?
+Hi all,
 
-thanks,
+After merging the risc-v tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-greg k-h
+Documentation/arch/riscv/cmodx.rst:14: WARNING: Title underline too short.
+
+CMODX in the Kernel Space
+--------------------- [docutils]
+Documentation/arch/riscv/cmodx.rst:43: WARNING: Title underline too short.
+
+CMODX in the User Space
+--------------------- [docutils]
+Documentation/arch/riscv/cmodx.rst:43: WARNING: Title underline too short.
+
+CMODX in the User Space
+--------------------- [docutils]
+
+Introduced by commit
+
+  0e07200b2af6 ("riscv: Documentation: add a description about dynamic ftra=
+ce")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/.NHMe63MR8k.cRvvDTizoPq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmg+jAgACgkQAVBC80lX
+0Gxrqwf/S5QiDPzs0yjPbAzUPF+T52/OnTecTUUpNb5TjMHrf1kbasGKEIcih6hm
+35+5MOEUbfxWObcxXc4VEZwZwo96si5BKfRglWzdpAJEeXw1PV9LRTWj1cbdJOKC
+NJcJgPDZkxgUmtVaFd0rZowa3qh/2EQIvjraTXFDfd+mwwK2eLypJfLduxQxiW5m
+C/F9Vdsjc8g5Bi3/sXdFkcPoU3lSiv6JkczPX4frwr/JWWrWciIR1nGemkkilGGk
+HicC01vegPlHRnrV1n2klbHYoDzN8taCKNDYVEqhnaGeOaDp1xlX8M+fW/Frtsrr
+BYWf1mNfP5hDNoEdzygJYyYbodc2vg==
+=EoZT
+-----END PGP SIGNATURE-----
+
+--Sig_/.NHMe63MR8k.cRvvDTizoPq--
 

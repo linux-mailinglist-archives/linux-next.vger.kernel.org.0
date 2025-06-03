@@ -1,107 +1,136 @@
-Return-Path: <linux-next+bounces-7041-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7042-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10B5BACCFDB
-	for <lists+linux-next@lfdr.de>; Wed,  4 Jun 2025 00:26:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E4C4ACCFFD
+	for <lists+linux-next@lfdr.de>; Wed,  4 Jun 2025 00:48:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91CCF3A32D6
-	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 22:26:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1BA8174FDD
+	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 22:48:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B24422541C;
-	Tue,  3 Jun 2025 22:26:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D423155C82;
+	Tue,  3 Jun 2025 22:48:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BIoX8otJ"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="f1OBsMcQ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB99518DB24;
-	Tue,  3 Jun 2025 22:26:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F0B2C3253;
+	Tue,  3 Jun 2025 22:48:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748989589; cv=none; b=LqxBBZtM/csuFlmaCwzjRAB+Had0XUxsgmbWceOlp77dOXNXK1enSuUIBgWgD2enHlZR95fTuVa1WMXogjUs+UXGReDaKJgRdQrY+Zrcs6JUFevKvYUfT2IJTnm6Ssdw6jimhoQuQhkr8U1dVdXTQ63bZNgO4OYIe6+/o/UrcKw=
+	t=1748990922; cv=none; b=AXZR5wHJGcLVwaM9bdm7Q9S2V9VQloC2plAk7TUmOrHk4Mv08kCwEyJJHBNuNCbi73HzvPai/sCvsB8uRkQkGqDutonANxxIquDSTFuAWqfG6h2ytwK9Zv0JgV9JjkiN9l5FUI1axfrhjibpDIOaHhFmN5k/MF7Qm+c3TmHBaXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748989589; c=relaxed/simple;
-	bh=zfz0c69FmOJCdnkXBAWjeZ3ec55qgxSzUQXGbh7JbEE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F3Yra8inr9ft494GnqlrvU5bG7Z7luGCSKt2mY6pIeeTAyQ0YSKJopcqypRW36C3tFEhXe2jwpDIYEuY10rRfkCBDTSdiK0RR0qZRBZLNUrJrXCiYJyjomJYYDvr6/Z6oVGycZFV+UqyVWi/gVx7SsWXXUIgowMh5e3GX4wXEcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BIoX8otJ; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-23519817b57so4993005ad.3;
-        Tue, 03 Jun 2025 15:26:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1748989587; x=1749594387; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=spS60ybMSuhEoBnhprr08UeCQOS996miorjWsXmMPCI=;
-        b=BIoX8otJihRarstr08r5VaWztJTwd6L7Y8CvA3Lkmh3CdBfnvC1hsnQeiouR7DtJCl
-         CVCL25X/2tZWkrmyJt7q6k8kuiXS+Yz5pgidkUzkZ8Fnlo0HqSSb9p7T7ClIMzba5569
-         et+7pYDdDORFZMW/GabbncslrW1L2bu15LzlwKjuh8VbmcBw+yin1/1GjUdpq8yaK5C/
-         tPEXrcNfUSLdF/dn9gg8hSudZd7XzLdqrQQDJyvxxTvXNssQH1Z/V4maZ7IJKC3XMuvj
-         dx/WSuwTxMaV0I7PAOYB38dP75JihtCehHdcHVKT6ovWadQPHZd6DNnw9/QBqwTo9kOd
-         Bzzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748989587; x=1749594387;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=spS60ybMSuhEoBnhprr08UeCQOS996miorjWsXmMPCI=;
-        b=YKqlmDCAX6AZgQiP3ujmRnVUSoyOTirCwYBkA2fmmtIqjOjkhRKTcUr3JCDNI/dHmY
-         iCaG+i11Vh9+LHMm4BDAQXm2TPQsbEu0yc63xdUY7T4l+ns5KxhlAdcF1UNieLt2mwyd
-         Atc1mHC2iUZwXU1jzMSzoOUlFXBDs151Ttacb4wCHn6pyu3I+XX4JgeVM4D2IalwE70O
-         XAtm/QJXTx2yxVPZub9KayQ/LD5ZQ5IvF9H0H9DDR1TRJ1WgwphV3xNN1V7QizeIpuh1
-         kh/EmnLYzXd9UibUELF+6jl6zd4moC26qM33hJFTgkorYTzsdhkR5qYm6vCG0ZzqibaN
-         psvA==
-X-Forwarded-Encrypted: i=1; AJvYcCUwVuKap2eE4f3ZoFHhL17nh5+ND4qkJ09tAAjgxabuMN2MxZenE6SKKYXgTGpzp3EZaQRyFpcnuCDRvmo=@vger.kernel.org, AJvYcCW9TRk6xAKoIWzRdfo2pDmR462cswl9HtZ8QQpVuwlRybXuKLAvO8xUMPsXtb3GCKCoVrZ+FLUNyRLyoffyHkg=@vger.kernel.org, AJvYcCXbv2Efn2nu7ytkCRYvgGvfjahZmNxeMQAjFxVYnFhvVA53u0K0TkEVtUS8V7LGDh/J7L/OBKjZnFtUqg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwP+5NMjJhjwte30UTmTqfA9VuJyikZoky+cHQjbBLLNJosFK+L
-	WQk+vv6tYhNMDj7n7CrZ9EBgZwAAXAdGC6ei9QN6aBzlOzbXbZWP7VIGKrBE/fc3fHgmIm20aLN
-	rRT5saXxHdO6gn1ASFCrhZcLKKZrfwaY=
-X-Gm-Gg: ASbGncvRwAu2l+iIQjbTcBth9WaRUcatvUDT4wzOl3Fr6TItA+35S5yL0TxqSSvp9em
-	qT4zAQZW10quKBlovctYEJJzUVF0ORNpuu5hhg9a5aGrpXRNRKb63smzH0PRl8u29OxWFfZhCjo
-	4TKjfvAvKwcTc2zEPzIbn8sa/9xihSov22
-X-Google-Smtp-Source: AGHT+IHYe4MifwZmarTiGrmPgQXYs94V6HqZaBrwfAdvRpZP4olnAr0bDFZ1PORuNElDs5cZ2+9XBUxmqKGqQyL6VWI=
-X-Received: by 2002:a17:903:32cf:b0:234:c549:da0c with SMTP id
- d9443c01a7336-235e0f37687mr2464635ad.0.1748989587025; Tue, 03 Jun 2025
- 15:26:27 -0700 (PDT)
+	s=arc-20240116; t=1748990922; c=relaxed/simple;
+	bh=clJQUNwdwlX60yAaKsNhWdwwXmyiCmre5oh/U1SAchE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cJNMBI9f1qCQtcuZ7btZVFNQU2KP++h6tCyoAWTxJGuZQw33ZgvNbGKjQwkckqdYtVIGh9+Mhh6ebG2FqXhksDEcuxG8UD2BwmpRrHalPTGHMw11Zd4L93T/J/9eCyfdCtY/FBBjzRpqWeoaRvyGaurPXfJuV7lcY5VSR3z312M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=f1OBsMcQ; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=SrYBN3CmnWpYR3NhQM6Kd9jk26siZ5bSwDLCv5Pgh8A=; b=f1OBsMcQH/n0npzP2qozZCdFaw
+	RhIQJ6AVWEM83ZqVdmb9MMyn0sryR+FggxsIZdJjT8oiUNmc/9KOUvsi+kGVzDMEQXE8vgA7Refvg
+	f+t9kRIt/LRBCA5w0Ng6JSWchkq5tvwlZr0kKxNGTaAK/Oq0SZEBe24Ip2b8/ltpiQgZYoHEn1Ckl
+	bgzOT03pBqlXOxBKqaQPQo0VZfbnAFUB89SJDGMSwHG9pbbwE8kZOyil20w+1ue/RhPO//jxv/Svj
+	sc10MuR1SClw5U0V3Va1X1zxISx1+4QDuAbHvyuOcLgXDf1iTMieHsIM4roUp4DQaZYTSTXoVPFZp
+	ludJ0CRA==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uMaQp-00000002VsN-41Hy;
+	Tue, 03 Jun 2025 22:48:32 +0000
+Message-ID: <f80360f4-0d17-4464-8ede-21bae10dcfd8@infradead.org>
+Date: Tue, 3 Jun 2025 15:48:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <700ebe13-c2d3-48e3-800f-8dc327efb6fc@gmail.com>
- <CANiq72mFL4dn+0JppLLfxyKnM+xYwKeduFw2j07hUfxWVVHdUw@mail.gmail.com>
- <f5d5b84c-0850-4df9-bad7-61fff12c4248@leemhuis.info> <CANiq72=+qUNJu5j+uoveMrTbngwA89+ScwjUPd9OyVGqps54aw@mail.gmail.com>
- <20250604073118.4205f303@canb.auug.org.au>
-In-Reply-To: <20250604073118.4205f303@canb.auug.org.au>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Wed, 4 Jun 2025 00:26:14 +0200
-X-Gm-Features: AX0GCFsOpisR9zReSwsbnHOeUt07nmPeJXowIYZoqNdvdu6R35lnffHM6XE6fuk
-Message-ID: <CANiq72=EttF8tieqakoyYxfu_-LyUjCTcaogtO-Z1HajGx7LMg@mail.gmail.com>
-Subject: Re: REGRESSION: armv7 build mismatched types
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thorsten Leemhuis <linux@leemhuis.info>, linux-kernel@vger.kernel.org, 
-	Linux regressions mailing list <regressions@lists.linux.dev>, rust-for-linux@vger.kernel.org, 
-	Miguel Ojeda <ojeda@kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] i2c: amd-isp: Initialize unique adpater name
+To: Pratap Nirujogi <pratap.nirujogi@amd.com>, andi.shyti@kernel.org,
+ hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com,
+ mario.limonciello@amd.com, sfr@canb.auug.org.au, linux-next@vger.kernel.org
+Cc: linux-i2c@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ linux-kernel@vger.kernel.org, benjamin.chan@amd.com, bin.du@amd.com,
+ gjorgji.rosikopulos@amd.com, king.li@amd.com, dantony@amd.com
+References: <20250603214611.3039787-1-pratap.nirujogi@amd.com>
+ <20250603214611.3039787-3-pratap.nirujogi@amd.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250603214611.3039787-3-pratap.nirujogi@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jun 3, 2025 at 11:32=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Damn!  I knew I would forget.  Sorry about that, it will be applied
-> today.
 
-No worries! If you prefer that I send a reminder in this kind of
-cases, I would be happy to do so.
 
-Thanks!
+On 6/3/25 2:40 PM, Pratap Nirujogi wrote:
+> Initialize unique name for amdisp i2c adapter, which is used
+> in the platform driver to detect the matching adapter for
+> i2c_client creation.
+> 
+> Add definition of amdisp i2c adapter name in a new header file
+> (include/linux/soc/amd/isp4_misc.h) as it is referred in different
+> driver modules.
+> 
+> Signed-off-by: Pratap Nirujogi <pratap.nirujogi@amd.com>
 
-Cheers,
-Miguel
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks.
+
+> ---
+>  drivers/i2c/busses/i2c-designware-amdisp.c |  2 ++
+>  include/linux/soc/amd/isp4_misc.h          | 12 ++++++++++++
+>  2 files changed, 14 insertions(+)
+>  create mode 100644 include/linux/soc/amd/isp4_misc.h
+> 
+> diff --git a/drivers/i2c/busses/i2c-designware-amdisp.c b/drivers/i2c/busses/i2c-designware-amdisp.c
+> index ad6f08338124..450793d5f839 100644
+> --- a/drivers/i2c/busses/i2c-designware-amdisp.c
+> +++ b/drivers/i2c/busses/i2c-designware-amdisp.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm_runtime.h>
+> +#include <linux/soc/amd/isp4_misc.h>
+>  
+>  #include "i2c-designware-core.h"
+>  
+> @@ -62,6 +63,7 @@ static int amd_isp_dw_i2c_plat_probe(struct platform_device *pdev)
+>  
+>  	adap = &isp_i2c_dev->adapter;
+>  	adap->owner = THIS_MODULE;
+> +	scnprintf(adap->name, sizeof(adap->name), AMDISP_I2C_ADAP_NAME);
+>  	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
+>  	adap->dev.of_node = pdev->dev.of_node;
+>  	/* use dynamically allocated adapter id */
+> diff --git a/include/linux/soc/amd/isp4_misc.h b/include/linux/soc/amd/isp4_misc.h
+> new file mode 100644
+> index 000000000000..6738796986a7
+> --- /dev/null
+> +++ b/include/linux/soc/amd/isp4_misc.h
+> @@ -0,0 +1,12 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +
+> +/*
+> + * Copyright (C) 2025 Advanced Micro Devices, Inc.
+> + */
+> +
+> +#ifndef __SOC_ISP4_MISC_H
+> +#define __SOC_ISP4_MISC_H
+> +
+> +#define AMDISP_I2C_ADAP_NAME "AMDISP DesignWare I2C adapter"
+> +
+> +#endif
+
+-- 
+~Randy
 

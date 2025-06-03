@@ -1,115 +1,183 @@
-Return-Path: <linux-next+bounces-7036-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7037-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10A98ACCF00
-	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 23:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A1CE5ACCF33
+	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 23:46:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 672C2188BD75
-	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 21:32:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D02911896C44
+	for <lists+linux-next@lfdr.de>; Tue,  3 Jun 2025 21:46:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C30D9221FBE;
-	Tue,  3 Jun 2025 21:32:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FA2E226D1E;
+	Tue,  3 Jun 2025 21:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="MaZ9vsL0"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="YNov1x0C"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2087.outbound.protection.outlook.com [40.107.236.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D961A8405;
-	Tue,  3 Jun 2025 21:32:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748986330; cv=none; b=oUXDhl18JIzdQe7V5JfJjU5Fyg0I1Vj6pIBAcdxYPNpNpR2zjOArufWTBsyn6xZoAJCUPG4kQlrcquAo56LTHvV+W7ncjFVdOljNQ41bYsQuKxUboN7Ug1h3R1lFcTxow0W6B0R+d0anPUJaGissD1BX1QJp41ozsgyBuTvBkw4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748986330; c=relaxed/simple;
-	bh=Jss5g9npedZTDFWuPuZqcGQ4qelof1pkUcNtSIxUI0k=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LIP9ERolD6R952Rod/tV7x4LigJN59ivieF2E/wrBLXWrsgazY6feACCcw08v5mfXj2jQ+2w/EuYRmXe9MzEQ5Buz4Xk55mx58HrMwOjmK/O1jh/HAa1MzvvvcwtNO+f7d29Te2YhnPyFx828scKnDH/1VltonUcGKS/z4i9VqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=MaZ9vsL0; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1748986318;
-	bh=YXJifQgVfyCRhkpdle8Kp435xD880whtOSxBMS0Ih54=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=MaZ9vsL0X5Kk30mYEXscfWDBSLxk7pcYzbNsWk1HwMt3Cbzgh0kTYkC4cVKBv28Qf
-	 nBASVGshjDK8uuA0+Cldej6g3xXG8l/ONznix5GNJ6pvC6LrbHS2weVTJIGhlAXR85
-	 Tzj+sabj2CISLq4u+i9sxM2u93RNiv5OdB+8OSgiuqvEF60fKscd4WpMuRdTCX/npe
-	 Ss4H1p6SO0DY8RqhAeN0Z5zcKEkYQV0hZUVdy1eni9wBefl5yFSfUANt/8bE+Mjlbo
-	 B/4DK6vAnt8xAMEZ1yepyUCuPhV7ATBKLezYaHu+1i41i9nR/Ity9stxmjCFKLpnL8
-	 H6xGRuynGTazQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bBkSG1l9rz4xc6;
-	Wed,  4 Jun 2025 07:31:58 +1000 (AEST)
-Date: Wed, 4 Jun 2025 07:31:18 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Thorsten Leemhuis <linux@leemhuis.info>, linux-kernel@vger.kernel.org,
- Linux regressions mailing list <regressions@lists.linux.dev>,
- rust-for-linux@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: REGRESSION: armv7 build mismatched types
-Message-ID: <20250604073118.4205f303@canb.auug.org.au>
-In-Reply-To: <CANiq72=+qUNJu5j+uoveMrTbngwA89+ScwjUPd9OyVGqps54aw@mail.gmail.com>
-References: <700ebe13-c2d3-48e3-800f-8dc327efb6fc@gmail.com>
-	<CANiq72mFL4dn+0JppLLfxyKnM+xYwKeduFw2j07hUfxWVVHdUw@mail.gmail.com>
-	<f5d5b84c-0850-4df9-bad7-61fff12c4248@leemhuis.info>
-	<CANiq72=+qUNJu5j+uoveMrTbngwA89+ScwjUPd9OyVGqps54aw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CFDE7081F;
+	Tue,  3 Jun 2025 21:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.87
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1748987192; cv=fail; b=jl/KPwa3hqzp0KtFoo0pwXhg9MQoUvmUBeep//l97nGoU3KeDCjbu3U/yowCO7O20Lt9FWavWow/6TAHx/3swCaxuOTNjgndNo/8ulba5et+8EdeP0MN32yGy+WQusM9apucVg5HgwxdZgqBEWi+96YjqvgdA9P4gc1Glh9Ib0g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1748987192; c=relaxed/simple;
+	bh=70tmZtWYF2KTJ63HgJRgvwg5Gb7xVhaV+YHLiUzilJc=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sPhoX8CMhZkSPy/qHm3OK3BXD7f9THvOZvSp4lZ45YzBcGAH3FZxL8dfVu/5O/hitDrJyi9fJ/AqSfPdfIbnFyIpQ1fjkXca88mqSfpB4SVnLU9CEbX3S+Klo4lF5FdsBB+Y0ah1UXCL/s4mUVwIdRfPFb6RhpVKuGj2jz1ZLiI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=YNov1x0C; arc=fail smtp.client-ip=40.107.236.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bmvcdH2tvbNr8tLau3EnphbfGIgL+o10ezSE60w0gJstYVJ3jGrlI1ALcvyP32wfwcJRg2rYh31E6WXq5b6WhIi88ltM3CX8nSr2dq6gDjTwPfZCFTG+VijU82yrG9FVAZ0NJVP80Clga9bfn3/W5Za50xVzxErUdi1dEAERmi7gSZv2+Wj70kHkCurW5Bf8jPxMi+4GZEOmG2b2WnU5gydQJnv8KUgptE5uTGYv1p6WOhmKInhEMA3P7B3D1GEyEf7WFNBzcG0VnNEMme89JG+rFSTnpkmhP9nJHIbolz4DBIWnKu1Ig5BA4HrAiFHB6HuOKIAnAs4CVxtL3rsZEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sRR9tbraq2TmRaz1nieZLpfmMiD0bPZnhIA2+UO1LF4=;
+ b=jc2gxagB7YckQyHqk/AbPo//pCHN820WRIiObffD9yq+5BPatlgFx8K4TfQmLHHFxy6xn4/SzWLY1J6HJz4nZH0bqvXB+OsoDm8RMlUWI4lNHE3X3C5dX684NfcItD9tXB3nD419MK6NgB+4Qu1ABsRU1zYmnrC3BlSO/1fd9u5KJAiYCwgDfStQzqLEAPURp1fCnyx3QPj9ukbcYrsFoFxHSG9k7POQmOsnjbkLbosbCiBgX2pSdb10/psuClJkn9ecDERnPOKqc5Tcw42Atwy0FHWsl/uQBGK4wcQY2TSJKCMOiDH41Zkuy3RNAkByaKS1eVemotIbeI1IaM91cQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sRR9tbraq2TmRaz1nieZLpfmMiD0bPZnhIA2+UO1LF4=;
+ b=YNov1x0CwLKscjJ0WlVHpmN98UqWuo8zt6cvWtpjndAppslnDt95gxea/6TXsB6Y02k5DzGTdBEFnyR5HYmVtJlT4oTx+VhqcoG2Nqmjy6WPnJelZfrj1H7y2BPTDp//7Nn16TG/2x4tNKSj3F+AXFzug4h/ogcUnRKsYTbfCrY=
+Received: from SA9PR11CA0025.namprd11.prod.outlook.com (2603:10b6:806:6e::30)
+ by SJ5PPF4D350AC80.namprd12.prod.outlook.com (2603:10b6:a0f:fc02::993) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8678.31; Tue, 3 Jun
+ 2025 21:46:26 +0000
+Received: from SA2PEPF00003F62.namprd04.prod.outlook.com
+ (2603:10b6:806:6e:cafe::a5) by SA9PR11CA0025.outlook.office365.com
+ (2603:10b6:806:6e::30) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8792.34 via Frontend Transport; Tue,
+ 3 Jun 2025 21:46:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SA2PEPF00003F62.mail.protection.outlook.com (10.167.248.37) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8792.29 via Frontend Transport; Tue, 3 Jun 2025 21:46:26 +0000
+Received: from maple-stxh-linux-10.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Tue, 3 Jun 2025 16:46:24 -0500
+From: Pratap Nirujogi <pratap.nirujogi@amd.com>
+To: <andi.shyti@kernel.org>, <rdunlap@infradead.org>, <hdegoede@redhat.com>,
+	<ilpo.jarvinen@linux.intel.com>, <mario.limonciello@amd.com>,
+	<sfr@canb.auug.org.au>, <linux-next@vger.kernel.org>
+CC: <linux-i2c@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <benjamin.chan@amd.com>, <bin.du@amd.com>,
+	<gjorgji.rosikopulos@amd.com>, <king.li@amd.com>, <dantony@amd.com>, "Pratap
+ Nirujogi" <pratap.nirujogi@amd.com>
+Subject: [PATCH v2 0/3] Fix build issue when CONFIG_MODULES is not set
+Date: Tue, 3 Jun 2025 17:40:10 -0400
+Message-ID: <20250603214611.3039787-1-pratap.nirujogi@amd.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lh=kQjAukULzSZZYDl2ICpu";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003F62:EE_|SJ5PPF4D350AC80:EE_
+X-MS-Office365-Filtering-Correlation-Id: 220a680f-f4b7-4d50-5b40-08dda2e8172d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700013|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?etNX78RSvLGcqMCoKDC3vdVgMpdkKXR7hYJGvzCQqDDKc4+UrZFBYogR3kuF?=
+ =?us-ascii?Q?Fd5kTBKV1NxX0eUYNLy+UaVeGWlX1X/eApbKDIf52XxoPSq4nH/0VVET+U06?=
+ =?us-ascii?Q?Yt5N4AiLp8z7rETmWsykfaAxg9d3j5dek8yL86kM5tcQxfb1w55hM9RFH/+j?=
+ =?us-ascii?Q?7GtY3kMCh8A9y7p6jKpw9mWWD5xpRG2dc4KjfsvYT4R9o/fRvxCYKhMcT3Tb?=
+ =?us-ascii?Q?Y+g8sK4gWaJOUOczx0Zzb5koUy2A6vbLwUepa+Rut9XQ3bgMCCNnkbNZrHSr?=
+ =?us-ascii?Q?STR1avFwuJopS4dlL5OmHwsC5ZZBo4MfZiM//bKvT+FSta4Qy0tQ7Q0Jx+vs?=
+ =?us-ascii?Q?DIDr4jxDwAegGTWEk4jlQ1ztbgK694IOxLZRNLznMiQsY7ckVLvWuZcCs6zB?=
+ =?us-ascii?Q?d6tSqs9dOpTdQDXXwMAjl8j75ICqFq8TBpmiV51SzDaiHpVpL3WuDDqu/wGH?=
+ =?us-ascii?Q?GrOeXePhkFDCWT+n+y2m2DN8KYXNmwsKxlHS73iGYUX3asLQXgaZFO4i2hRi?=
+ =?us-ascii?Q?//Xsk1nCrALhEyHQhX/VaKqzISGfDaGhU9r0iN7DKnR2W4U9PL0l06ykFNW1?=
+ =?us-ascii?Q?kBlfuS2U5ijxkJ9ps7VK7O36aNfW7clwDQ5rTswcJYExw9eZWjqHXtSzAkXP?=
+ =?us-ascii?Q?c+ZURgqLLFIknUjQUFf3AmGlS15/NEU6fR58omph7WmHQfjwqIRkvmHX7gV0?=
+ =?us-ascii?Q?D9CVybdPb56y+1kDktC3ynDzm+b14/vTMfR2zLlCRBuHucyey7PYg7CoAVc/?=
+ =?us-ascii?Q?ANj+f/ABMWKPRJLeeg41JdYSOV4G9p+XnIKyFAaoU5QmAZjb9JmLu1R+cjzB?=
+ =?us-ascii?Q?gu/idPQACqnQqYBTrtsaB9uoBRScBBCzG7R4YF4Xx4wYAVlLm8bJUKlKRFUx?=
+ =?us-ascii?Q?2tipIbeDXqMAGjScSagNJL3sj4ICtF7vm5/GF0pMS2ieVkSO/Wc9EuOfrVCB?=
+ =?us-ascii?Q?kPGWOrJpqSR40kcARtcR6jE5Xv/SRqTNVVV4sIpaBHLkW6Vb0UzBbJJEjeZh?=
+ =?us-ascii?Q?O67TefPj1fHEOlYaeyZI28CKzmJRb5m1Da4kEUefjaS5UHJOM28taOuRsPJt?=
+ =?us-ascii?Q?kPSeBVAvYRxlEH2XY+nehdoJIBxM3WjXphuY2nfkAyBxZUimjk9XQT2cMlwF?=
+ =?us-ascii?Q?OQy/HpzJgPoYB2S0f/ncaH5DRppN8dX4ZyD6h73NI0eYqFR3hZvOvVKbJz9h?=
+ =?us-ascii?Q?BPJYWQ5OyEGVED0bKOg+OpjXB5VEvUxh5/hiVRlZnc6LeIgZxkOTYuqEBGDN?=
+ =?us-ascii?Q?UFjCVG6kD/KhtX5sFUoHIEcnbObPQJ6ZHjravQzJDpIWpDHKIdWltR3gmFjw?=
+ =?us-ascii?Q?mhTu/D3NjV1VnzjG1d5k+G8NOXm8JOakP6E7/xyC/gqllG9HcrfQtFuDFplj?=
+ =?us-ascii?Q?T071c0fR1U1UxBtSOnJO3rvSdAvT8mjqJCbERG9IM0YC+Jkm4+chAwJO51v6?=
+ =?us-ascii?Q?XGfwYVid+DlPjicssKGCUJnLXhqfx3OXH+VTvBE3WYWA4SWUFkjYajMpaiIp?=
+ =?us-ascii?Q?5rM8KcR4Un5vL1xBo1Jq7j6gxCbq7uqmzhDK?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jun 2025 21:46:26.0678
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 220a680f-f4b7-4d50-5b40-08dda2e8172d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF00003F62.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPF4D350AC80
 
---Sig_/lh=kQjAukULzSZZYDl2ICpu
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+When CONFIG_MODULES is not defined, 'adap->owner->name' used in amd_isp4 platform
+driver will not be valid and is resulting in build failures.
 
-Hi Miguel,
+../drivers/platform/x86/amd/amd_isp4.c: In function 'is_isp_i2c_adapter':
+../drivers/platform/x86/amd/amd_isp4.c:154:35: error: invalid use of undefined type 'struct module'
+  154 |         return !strcmp(adap->owner->name, "i2c_designware_amdisp");
+      |                                   ^~
 
-On Tue, 3 Jun 2025 15:04:02 +0200 Miguel Ojeda <miguel.ojeda.sandonis@gmail=
-.com> wrote:
->
-> On Tue, Jun 3, 2025 at 2:51=E2=80=AFPM Thorsten Leemhuis <linux@leemhuis.=
-info> wrote:
-> >
-> > Or is this heading towards mainline really soon now anyway? =20
->=20
-> The Rust PR is, but it would be nice to have the fix in -next before
-> sending the PR (I will give Linus a test merge anyway, but it is nice
-> to know everything is OK in -next too, and to have another reference
-> point for Linus).
+To fix this issue, need to make changes both in platform and i2c driver modules.
 
-Damn!  I knew I would forget.  Sorry about that, it will be applied
-today.
---=20
-Cheers,
-Stephen Rothwell
+* In the amd_isp4 x86/platform driver, replace 'adap->owner->name' with 'adap->name', this removes
+the hard dependency on 'struct module'.
+* In i2c amdisp driver, initialize unique name to i2c adapter and also make a change in
+i2c-designware-common to avoid overwriting with generic name when adap->name[] is already set.
 
---Sig_/lh=kQjAukULzSZZYDl2ICpu
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+---
 
------BEGIN PGP SIGNATURE-----
+Changes v1 -> v2:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmg/aaYACgkQAVBC80lX
-0GxoSgf/bawM8QgK3MOoFaT2gHDO8PiXvv5971lHtGpy2qhxliT5XDXWZCAEbKJm
-BzuZfZJ6EXxwJG06fT1eB3mNRuQngFRzHNXjKWrCEYjq2cK7zlCIMhxlmk6bP2nH
-glcgix+v71OSXD6hI2TD5qywlsnVzOB/wCFCkLOOcBjfgsDBYIMdp5jqpGAyYbhW
-cqWDZ2ERGt5DaumVPVxtn4gHrunLD5TlWApKTPRVfxXeNa2O2fhkCr95O8OhsALP
-kmmOeGYByTB5QSd+cRo3/Kpc8cl86+tfVqankyCVOaV3QOr147IViitWfPkpHdTE
-qr9dAZBIRMwu9Zv37JQwIlbPro4s1A==
-=BbwS
------END PGP SIGNATURE-----
+* Replace snprintf with scnprintf
+* Add new isp4 specific misc header file to include the adapter name
+* Remove 'Fixes' and 'Link' tags from i2c patches
 
---Sig_/lh=kQjAukULzSZZYDl2ICpu--
+---
+
+Pratap Nirujogi (3):
+  i2c: designware: Initialize adapter name only when not set
+  i2c: amd-isp: Initialize unique adpater name
+  platform/x86: Use i2c adapter name to fix build errors
+
+ drivers/i2c/busses/i2c-designware-amdisp.c |  2 ++
+ drivers/i2c/busses/i2c-designware-master.c |  5 +++--
+ drivers/platform/x86/amd/amd_isp4.c        |  3 ++-
+ include/linux/soc/amd/isp4_misc.h          | 12 ++++++++++++
+ 4 files changed, 19 insertions(+), 3 deletions(-)
+ create mode 100644 include/linux/soc/amd/isp4_misc.h
+
+-- 
+2.43.0
+
 

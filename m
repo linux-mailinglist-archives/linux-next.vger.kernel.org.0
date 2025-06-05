@@ -1,126 +1,129 @@
-Return-Path: <linux-next+bounces-7074-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7075-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39902ACF4FF
-	for <lists+linux-next@lfdr.de>; Thu,  5 Jun 2025 19:08:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE538ACF503
+	for <lists+linux-next@lfdr.de>; Thu,  5 Jun 2025 19:08:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8C423AD2A2
-	for <lists+linux-next@lfdr.de>; Thu,  5 Jun 2025 17:07:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41A46188F978
+	for <lists+linux-next@lfdr.de>; Thu,  5 Jun 2025 17:08:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D242A2750E3;
-	Thu,  5 Jun 2025 17:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8C1276048;
+	Thu,  5 Jun 2025 17:08:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="p+6ndzKD"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="rbEli0xE"
 X-Original-To: linux-next@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC6113D521;
-	Thu,  5 Jun 2025 17:08:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7577127603C
+	for <linux-next@vger.kernel.org>; Thu,  5 Jun 2025 17:08:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749143292; cv=none; b=YFD1Em3Oh9fIIvROhTICsrzeEfa1uoJ+3N8mj+N0ptf8PTGbzfAzkUN0AMlNAFYPICeeNmdEjUSBR467neipCAiX7OBhy6OehTMemapfPYY28uMSHWXmRv1Wwzzoa9QJeROKzxhvhfihlVETJ5xuMZLB0F2kHZyPn/WVtCUErew=
+	t=1749143310; cv=none; b=IXRp3oHlXIpSBSQreVwh06nDjb3+zOvmbJU7mhe7D64LC5iucDObM9dLUAUyqcJdXX5JbygRYt0ltF0O72Re7P6OU3/f4T3g7xdzSRpgLsZyxK92Mp56lBf0uRl2eO/0y/5mYLFa/KMStEFSwxMUxUsKUJSLuiCvF2iyERVj6YM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749143292; c=relaxed/simple;
-	bh=b4STD/lOfA1i70s8WfGdglRnk8LVxXlWtZI7Ja8pL98=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qOqmP5gvNTNH1lA6D+BwnvMJfJUEOetFeSL+BEHyU8/ybXXzAOW3TBlOlJExrFwvsZe7giVNspjq7Lu6Uq34M+L6Ne5RFGpnAWqXqfHTs17TeQrdWCLL2GUWWmxxsMf3+H0LtwopzwZcY8OcyI0XUtebuEZGhMxleQ1klJkjOW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=p+6ndzKD; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=ueMI9i9n30bX3Jb2KX/od2qOmj/m0L2xH9S2mUAYsqU=; b=p+6ndzKDgG9O+gYpEgwvjEOHqH
-	bDMYpcsl5livWauj7Jm5e3ujw01G6BEAR7d5xfQIu6xHvk1JWZ/G8QZCriUFaaGZRCVsbNm8kwIjG
-	ektBQXo2b4MomHC6H4QFDJFZrJAud8AYFFG+OrVMozV2xnYHZXZnlEhN6eeu5L8zQ4bj+beVsv62O
-	zZES7niKKjEfFSxsfXMLX50+25Bp7x9JNHGXqrkrckcXpIMEjfHiQb6j8T7LIggi+Gq1AuUlKROWG
-	v+43xecWV9L3CteHDxyWilCDCXAK5oklQPRQF1Ujnf+SeMHyWcYxEF5X0cjt++TAT8Xbc9IqA2rUD
-	O9Vfpg/g==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uNE4U-00000004SQP-0XiO;
-	Thu, 05 Jun 2025 17:08:06 +0000
-Message-ID: <44c89b6b-edaa-4b0f-9306-a447ef2d9250@infradead.org>
-Date: Thu, 5 Jun 2025 10:07:53 -0700
+	s=arc-20240116; t=1749143310; c=relaxed/simple;
+	bh=Xor07VUsbOeFgDBNzxyUQcS3y1z857Vg/NhaiO09Vjs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rikB/Z1Iq7XJcWFsi4KBqRWS6wawZdei4zCoBVE/FINpORaoJi0da9PB+lONGhDY3RaSqZcWAjCNg5yjRezItZYsEX6jFCqke6opoZZCnBDBavAlbzRXkXRVt9OBbPImMZEC2C8EcDmYQuPNadMwtcjqTkUsOXhvBLwQFGX40Zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=rbEli0xE; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ad88105874aso196069166b.1
+        for <linux-next@vger.kernel.org>; Thu, 05 Jun 2025 10:08:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1749143307; x=1749748107; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eBFaMyvc7Z4G2BwTWyjfiiTjbOmRhGeDBAsf/dJ0JBA=;
+        b=rbEli0xEIWhc+ZpMaMWUQ3UAx0qdLDux7ZR2rXzF5Vygr1KL28gi5aKC68/Jef7uXd
+         llytjwtPq1rqZlgfU+mBiFO7rnA1Oetk+Jmc3z25xo2ssSLnRmCSMkr1R+mwCYj2y6Rs
+         RVsUjA5agZyEL20glRRO1Pq1yCsP2i4FPpUbdDX6YSB2++oxMCojcFHTyLkKJR+vXgnC
+         JaZgsub0WJdQzQuInSRiUrNPELxQyoB7wbUmu0C49+PrROVYPiI9Y+CCLvrzdLHZvG9E
+         OpBk7qxToDpUIKweWdzDTr0mz03JBd3MLc6cMvSF6DrCCLzaCu60ozId0OYPXCG3M6z5
+         TCqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749143307; x=1749748107;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eBFaMyvc7Z4G2BwTWyjfiiTjbOmRhGeDBAsf/dJ0JBA=;
+        b=rQ5NDCcdXw/SktMQAWpVlRr29IHeLL2Baxggjvr4OAp63fH0K5l7pM4JjxoA/VZ5dE
+         /lSFsXPqAuv4A2jMh6dm+zGz7ggB2bTJV5G+NUhaMSGdm4b3cx58lnvOsEy/W3YblCTi
+         OS2PHO6sdhsohU5rcspZ4B8QTbr51bcdUr+nUst2b3wbiXwpkuXM1gCFdFtsDMOr/z0l
+         k7aVsI1Omw1ZbF0vKGOp4K3zizuu1y6FwK6eMhs8B1kZbMVjzKM5/7byQ4FcuhmKIkWV
+         orwTylJ/tf7NDxgK64/N1F41KnZZ2aGOJOL/fnC0ZWVLB5RsgL5d7GfpYc/zwom+mmHr
+         xYeg==
+X-Forwarded-Encrypted: i=1; AJvYcCVvPXBoJQL1efHBAXL5/gMNURmHHD5zVIqoq5giuOx6Z67ju+PHmFs3nClkK/wzkcCkh2nLbupk6Y29@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyYkZc5qhZeQl79REs2ci0inrGb2QTfhVEzDIRA4IAznFC/CaD
+	t/IPcwvbnAN6sMCBxZzrxRvw61V5qax2OZ7NWXz3oBSlKg3dKeOVcwj8ihIBxgouxmplk+wo7Ki
+	O+IYLgE3V2WKKTI7iiQphXHKIuVaPQGfHeB93uLq4A1oxbQQrGeBj
+X-Gm-Gg: ASbGnctCZ1JmT0EXhAtFjd0le/hUXKxbU0DhKZml5HJD7cInznze0jYhr55SNmiQwrF
+	qVDi19QQmBFEIFIcmhK8wZaCOfckg1hWn+j68TpAV0juDsQzYRV/q3kreAoAnEzrMQ/pi5bOmQH
+	7xPfM3hLncU+AlmbzS/t+Gda1NCBDrTMiaJ7nTyh48nhmoe5uRm7Nz2CHASFtEQnTWkg==
+X-Google-Smtp-Source: AGHT+IGTCHq+t5jdVb8jQHUiPfAMFaQRkOyee0NnDl9vyCqzG6RguIOtsl/bnX1AkhqzfGKID5KrFbQAwgDjTLTpk0k=
+X-Received: by 2002:a17:906:7309:b0:add:f182:2f with SMTP id
+ a640c23a62f3a-addf8ff42c6mr763518166b.51.1749143306591; Thu, 05 Jun 2025
+ 10:08:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Jun 3 (clk/clk-rp1.c)
-To: Andrea della Porta <andrea.porta@suse.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linux-clk@vger.kernel.org
-References: <20250603170058.5e1e1058@canb.auug.org.au>
- <cee929b0-8b09-4e6b-95c1-c4067a8c389d@infradead.org>
- <6e88587d-f426-4841-b370-b46917822212@broadcom.com>
- <aEGhHy7qPyIjG5Xp@apocalypse>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <aEGhHy7qPyIjG5Xp@apocalypse>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250605163513.7cfb7f2b@canb.auug.org.au> <mhng-3E0595D4-92E8-4E7C-B02A-C33F7289E4A6@palmerdabbelt-mac>
+In-Reply-To: <mhng-3E0595D4-92E8-4E7C-B02A-C33F7289E4A6@palmerdabbelt-mac>
+From: Alexandre Ghiti <alexghiti@rivosinc.com>
+Date: Thu, 5 Jun 2025 19:08:15 +0200
+X-Gm-Features: AX0GCFvCQWwB2B0ViDQFNYu-OFCgo9Wv2Jrd8RVGLpLAUQmyY22KHw5EsyNqXeI
+Message-ID: <CAHVXubicfhkX15S=fSo2yQcSCUmA57cJATk6=ayy5OCWvRx0MA@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the risc-v tree
+To: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Paul Walmsley <paul@pwsan.com>, cyrilbur@tenstorrent.com, 
+	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Jun 5, 2025 at 6:23=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com> =
+wrote:
+>
+> On Wed, 04 Jun 2025 23:35:13 PDT (-0700), Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > In commit
+> >
+> >   4e27ce58e7fa ("riscv: uaccess: Only restore the CSR_STATUS SUM bit")
+> >
+> > Fixes tag
+> >
+> >   Fixes: 788aa64c0c01 ("riscv: save the SR_SUM status over switches")
+> >
+> > has these problem(s):
+> >
+> >   - Target SHA1 does not exist
+> >
+> > Maybe you meant
+> >
+> > Fixes: b0feecf5b812 ("riscv: save the SR_SUM status over switches")
+> > Fixes: 788aa64c01f1 ("riscv: save the SR_SUM status over switches")
+> > or
+> > Fixes: 8f9b274ad153 ("riscv: save the SR_SUM status over switches")
+> >
+> > (yes, they are all the same patch ... and all ancestors of 4e27ce58e7fa=
+)
+>
+> Ya, thanks.  Something's gone way off the rails here, let me try to
+> figure it out...
 
+I expected to send this fix (along with other fixes) next week, after
+the -rc1 was released, with the proper fixes tag, so maybe Palmer you
+can just drop it?
 
-On 6/5/25 6:52 AM, Andrea della Porta wrote:
-> On 20:06 Wed 04 Jun     , Florian Fainelli wrote:
->>
->>
->> On 6/3/2025 10:01 AM, Randy Dunlap wrote:
->>>
->>>
->>> On 6/3/25 12:00 AM, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> Please do not add any material destined for v6.17 to you rlinux-next
->>>> included branches until after v6.16-rc1 has been released.
->>>>
->>>> Changes since 20250530:
->>>>
->>>
->>> on i386:
->>>
->>> ld: drivers/clk/clk-rp1.o: in function `rp1_pll_divider_set_rate':
->>> clk-rp1.c:(.text+0xba1): undefined reference to `__udivdi3'
->>>
->>> caused by
->>> 	/* must sleep 10 pll vco cycles */
->>> 	ndelay(10ULL * div * NSEC_PER_SEC / parent_rate);
->>>
->>>
->>
->> Andrea, do you mind fixing this build error for a 32-bit kernel? Thanks!
-> 
-> Sorry for the delay, this should fix it:
-> 
-> @@ -754,7 +769,7 @@ static int rp1_pll_divider_set_rate(struct clk_hw *hw,
->         clockman_write(clockman, data->ctrl_reg, sec);
->  
->         /* must sleep 10 pll vco cycles */
-> -       ndelay(10ULL * div * NSEC_PER_SEC / parent_rate);
-> +       ndelay(div64_ul(10ULL * div * NSEC_PER_SEC, parent_rate));
->  
->         sec &= ~PLL_SEC_RST;
->         clockman_write(clockman, data->ctrl_reg, sec);
-> 
-> should I send a new patch with this fix only (against linux-next or stblinux/next?)
-> or Florian is it better if you make the change in your next branch directly?
-
-Yes, this fixes the 32-bit build error. Thanks.
-
-Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
--- 
-~Randy
+>
+> > --
+> > Cheers,
+> > Stephen Rothwell
 

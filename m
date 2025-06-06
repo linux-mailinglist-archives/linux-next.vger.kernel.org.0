@@ -1,159 +1,189 @@
-Return-Path: <linux-next+bounces-7091-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7092-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75F7AAD038E
-	for <lists+linux-next@lfdr.de>; Fri,  6 Jun 2025 15:56:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0249AD0992
+	for <lists+linux-next@lfdr.de>; Fri,  6 Jun 2025 23:35:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 366CE171810
-	for <lists+linux-next@lfdr.de>; Fri,  6 Jun 2025 13:56:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FB4117AEC1
+	for <lists+linux-next@lfdr.de>; Fri,  6 Jun 2025 21:35:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55CE728936B;
-	Fri,  6 Jun 2025 13:56:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56169218EB1;
+	Fri,  6 Jun 2025 21:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Odf1V1xo"
 X-Original-To: linux-next@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2042.outbound.protection.outlook.com [40.107.93.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C1A289353;
-	Fri,  6 Jun 2025 13:56:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749218163; cv=none; b=NrUYG/z2k0DiUhAsvscLKhpYunpGC9fOCUoNjBxObGZefApFsiVt2HzIAdWZYGHglmL+RCT5Ep+w/GpEZaIi6jFCS8IwcbQPwFkpfKfWHyW+n+IbpA+KkZf0hci7777/BGxZpEa7Fo7r4IBXDOnSrgI3iMUL3dx3Wb3X95PYk44=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749218163; c=relaxed/simple;
-	bh=T+xV+4L5kYc18ASh5RZNYLy6c0+J111f8iQGQAuhVOM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=apPhDatMOZbIzK7D9dTn8kt8+VjVAY2ElNEmOVeNyAi+MZsPADaTPjRHq/J5DbuOGbbX4vEwxjjDu/jhtDgZ65yqk2taEcjLgpGU4sgGlKhTzlJ1zf/Kzk65sffyqk/KlxeBqU2ZLgLBNsm22Xb3um4QoAi48yPNBrdz6C0UQNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf04.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay10.hostedemail.com (Postfix) with ESMTP id 9ADE0C03B6;
-	Fri,  6 Jun 2025 13:55:53 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf04.hostedemail.com (Postfix) with ESMTPA id 908C82002B;
-	Fri,  6 Jun 2025 13:55:51 +0000 (UTC)
-Date: Fri, 6 Jun 2025 09:57:12 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Bert Karwatzki <spasswolf@web.de>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
- bpf@vger.kernel.org, linux-rt-users@vger.kernel.org,
- linux-rt-devel@lists.linux.dev, Thomas Gleixner	 <tglx@linutronix.de>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: Re: BUG: scheduling while atomic with PREEMPT_RT=y and bpf
- selftests
-Message-ID: <20250606095712.7287fa31@gandalf.local.home>
-In-Reply-To: <b86bd98b23d1299981c4e95b593eb5a144fbf822.camel@web.de>
-References: <20250605091904.5853-1-spasswolf@web.de>
-	<20250605084816.3e5d1af1@gandalf.local.home>
-	<b86bd98b23d1299981c4e95b593eb5a144fbf822.camel@web.de>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6961A76BC;
+	Fri,  6 Jun 2025 21:35:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1749245739; cv=fail; b=ZJ/gAh2pgaM+VErKEn9if1Y1/S1AXimDVr7F4QcxKy9bVvbD6hOY/6zm+OLKaV6eUlOZEtpy+8MGx78m7yMAZ7Ilt/6T0YJ8AKOsr6jV3j0+/3sKkI6qJL0D8qmadPuU1oIB9gDMXXzkNP3feAzSoWUG1O/0H6MpJZKHtNBo/Ac=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1749245739; c=relaxed/simple;
+	bh=vtg5b9XFBWIkroApGojeWo4ERPUCVy3Doe5O8edCCkA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZCzVYsnKgxJ570b1aaA+JcbWgqraDorfmVOpFGvoXkOmScSbZragfLe0sDOb/bBdn13ydKtBpMz0JEoH7kU1wfbJ/8hoV7s9Wtt9K2gBWk55GziyVZksG5SFBD/VJe8J5TZZdOKrhjEVuzLm8ibugAK2b+6K6i/Pf217+cyaUT0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Odf1V1xo; arc=fail smtp.client-ip=40.107.93.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Rdn9OYDeF4+YCEVo2gjJ7JfPf40DSl2Hx1ooPLz48QoVZFyRn006tyNmH5KkuXEx91QhH57fDNO6cjEtQMZ4DRlYJ1OUUoiuUqhD4Ov+hAl03M509VbbX92s+tTI8g7ZsWL25Kq7LeAFRjKmmFo3/rXdzySI9IT35wtMOGRDWMZu2VPH5V9X0ChAjqOjHMlKrl3Nw+G/gwVUYTPu2iJfEzOe0Lca9WGEKzI5MTIdWvoo5JAiyTO1BWDp16fa+M6MiGrbb+zA3p1tt++aR0XsdoljQXQYSMS3qYnxMZksGYQ4M06GDNTn/9/HIZC3kurAjuCgI1bn7rLxN40azzVDEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=p4b9Pod96PbYHgFzo9jVXGB1YVqlKfuB2TmroS4jbDg=;
+ b=bvVRmmhDhUcyn1RWXVwYhOptknUsEutMV966wRoG7tNQ8zZvvvTtTdmmR5AcfYA0ZkNeKaUzlrWeZGcHtKyMP796/L5HF6kc724TlVTe2J1eypJSDC+BUQvooWwF/YRDaYKUQU17VWWYpWbYryMvid4+uOcB9LBO/+227EVQRCvTC1khWdMnL8yJVRS/6q7aAUplKUcP9fZbZvwcfIX/wIdAAgNw6FuxDoTdakpc/09dkZBxEHl1lPEG03fO2MwcADfaL3Qua1qiD6+m/KgxhrTcTFXVDNYW+SiDIdZMb4q/vPdMPJ59iiQnV3eiVFPy/2s1SeG1Rhyrh9ZTFp51aA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p4b9Pod96PbYHgFzo9jVXGB1YVqlKfuB2TmroS4jbDg=;
+ b=Odf1V1xojkjwwOOddN9IPaf9driLG+prI2m7hIf3z3zJzrcqni1mtLyn5ZzjGby8LRzxhiul/KPtYB3EJvG+tbO/wQgc5yPa1faYbHkPr+AvwR9CuuIp2RTKIwEurxp+7DM5de4b4kldaPxCg93BISVCpDjMvIGL7RRvS34mjYo=
+Received: from CH2PR11CA0017.namprd11.prod.outlook.com (2603:10b6:610:54::27)
+ by LV2PR12MB5749.namprd12.prod.outlook.com (2603:10b6:408:17f::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8792.36; Fri, 6 Jun
+ 2025 21:35:34 +0000
+Received: from CH1PEPF0000AD7F.namprd04.prod.outlook.com
+ (2603:10b6:610:54:cafe::41) by CH2PR11CA0017.outlook.office365.com
+ (2603:10b6:610:54::27) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8746.31 via Frontend Transport; Fri,
+ 6 Jun 2025 21:35:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CH1PEPF0000AD7F.mail.protection.outlook.com (10.167.244.88) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8792.29 via Frontend Transport; Fri, 6 Jun 2025 21:35:33 +0000
+Received: from maple-stxh-linux-10.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Fri, 6 Jun 2025 16:35:32 -0500
+From: Pratap Nirujogi <pratap.nirujogi@amd.com>
+To: <andi.shyti@kernel.org>, <rdunlap@infradead.org>, <hdegoede@redhat.com>,
+	<ilpo.jarvinen@linux.intel.com>, <sfr@canb.auug.org.au>,
+	<linux-next@vger.kernel.org>
+CC: <linux-i2c@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <benjamin.chan@amd.com>, <bin.du@amd.com>,
+	<gjorgji.rosikopulos@amd.com>, <king.li@amd.com>, <dantony@amd.com>, "Pratap
+ Nirujogi" <pratap.nirujogi@amd.com>
+Subject: [PATCH v3 0/3] Fix build issue when CONFIG_MODULES is not set
+Date: Fri, 6 Jun 2025 17:31:38 -0400
+Message-ID: <20250606213446.1145099-1-pratap.nirujogi@amd.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Stat-Signature: gjpoyntgruu9ygjckensj914ib3c1f8u
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 908C82002B
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX18wYnWS6mag3f3tRHCDwUyD3HZnkmZJDHk=
-X-HE-Tag: 1749218151-743164
-X-HE-Meta: U2FsdGVkX1/TAoqV8oNEos9TrqNq41Y49RWqAr+8SwyGA/Uy8la/u8oAjQAmA5e4WoyryKetbdmbRDPXfaqTTnZnl25CcHILPiF0Q/7sQo2elCXM9IX4dQxLaE9HVOKlNpQFSOIUCe3vu+lLdwmPBCOffcKiaF7i7U8T12XpoK4Ujjue3e4UO74Szo3B2cRHZS5hzpRhdN4Kh6+KskN0XkuLgKwbb9t4h3SQngOkPgOHVw7jc6U8nHVPOIUHY+53Cvtxh8KHPHXQqsDYUk4cUrurNlTtCZcXoQqf0eavMvO6Nv3DAO+TbkN1sO9i1jGwDjo/IJDON0cfZ9P39tD8EZh52P/YkmUs3uopnfRu3sbH70V/3aR5Z1C3jqtfVQAhHujB6VdxESXZdQo/BnW0bQ==
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD7F:EE_|LV2PR12MB5749:EE_
+X-MS-Office365-Filtering-Correlation-Id: c3574afd-aa24-4502-008f-08dda542118e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|1800799024|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?pj5mMUWYbyFbbrWs8dWdb/WE/AOy7KA9xUW32rVIkFTOHJKWSgVPgnEq8WD8?=
+ =?us-ascii?Q?rMpsZTa22DXVoNC6nt3Qgm9XN5WKmYDJ18xaKXG8+nBjBllqURfQI66RvsIh?=
+ =?us-ascii?Q?Mqnad3YA/lNBBIhrAOxrz5lmSmZ2PBuY+rPTF8KjXgWI4ycV8iNGmMHnFsrN?=
+ =?us-ascii?Q?auCowqdp2+WL+/DOYC9JJ+m68B3iWW7PdlqubFK5C0O9xL34yoMvf6hEatJM?=
+ =?us-ascii?Q?oj8TDhYVjUSL+vdBT9Bwa/nh3Pqx8eyuheNohew+cQrLaM8yC9YDWm0anW6M?=
+ =?us-ascii?Q?gAVlj4dz5HB/Z1kgpUOMnLvbx6+zye+2pKFDpCLl8t7MJP2EYUlqldfbawrN?=
+ =?us-ascii?Q?Wz/vJ3H4AxtvBqSfe5h9e1J8dW34szCrBJ87KkdXkJijfM0HbV4KvdTupdP3?=
+ =?us-ascii?Q?Pkz0AQ4Ll4MX4SecxxkAcEFkqIxItXUvnJeTgQHbUG4MY4f6xVR/sSjhlagM?=
+ =?us-ascii?Q?Ux+x2+WEAfcENw946ZzTZl7dUPD9qDU8C/0r8Pi+rcw5M4PbVIbGroGhaAPm?=
+ =?us-ascii?Q?Pdwfxqpe1GKIncGJiSFrBPpLRjXxoGKgGSzFNZUz3VvNHFPJsSwzE0zNEa1+?=
+ =?us-ascii?Q?27FbMM+4/auJ+/9l4xPncTLhdwK7rRuuG5H6rEK2N+iw/klbB+4nkN0uz8Bo?=
+ =?us-ascii?Q?KRa4EztbtWaWIbV7wZjMuZMBfHtJytIMGMoChxBG7bpzWKoAA6nRFmTEIt/m?=
+ =?us-ascii?Q?bBDWA3hsCh0b0TKsvUP0iGcN7AeImIJxkRANWJyGp00FmEEYYueOBuBAUHiS?=
+ =?us-ascii?Q?CXB/kwYljNWFY4QKIfY00AJWGnQvNYswhSvBcYtD+Z9fUrjHj+TIjXWfSY1i?=
+ =?us-ascii?Q?hotdHyoHTVYv+NxWCL1YtJPzciIBn/HFbN+qASFWTp+cuTfnZEGvQPNrc1Qt?=
+ =?us-ascii?Q?pW7vm5W3sBi8TVNW2k/EG7STQq2KkPAv6YZW/FgOI6NepdKWgGQRjzdVVCgj?=
+ =?us-ascii?Q?LALcq+zzJN1UCyWD8LH62AFH080p3lP5VIHuaXcV+56pPAxxsnjJNbdOQsAA?=
+ =?us-ascii?Q?SPrQPhvursbBYyCy1Qi/Nyf3/xBm8LfXHcLM8YOLxwwlW9KMyt1kpR1nxyEH?=
+ =?us-ascii?Q?LlMmvriXTcVNvPfsmxhJ/B3B3J+b/jMVAZCI83o6lxSGLWgRwEee78WXzDdT?=
+ =?us-ascii?Q?42Dt5VcvPBvFWfQAzNlG0smjuI/ncjsRn7a/FpPCJQKjJQYQhYaq7R2bMFx5?=
+ =?us-ascii?Q?CeZ3hOAqV+aSFrz6X/Y9cRgiyzoHNuO/bHycbXclOi8nFtGafQ2Wmc2z/BzP?=
+ =?us-ascii?Q?0LXfqC6IQO29OPBkLErBOcDPczfVwzfIkXhNFK4y+0Jvqh3/9l4R6cAmFFa8?=
+ =?us-ascii?Q?s3BfE3fw8dThczTK+HlGpKx31oKLz3rvwmGFQSSr8DjqEMNxcP2GHkxHDK4R?=
+ =?us-ascii?Q?BrMOlZlQVYS9MkMwRMRJ8CXhuhuqB/87Ni2e3q4yllBTopWmxUcENOjjgisQ?=
+ =?us-ascii?Q?SEiaQQ/PaiTzkR/meL3B+WcB797vOPHdqDTusmkq3WDA6Ho4Y0v/ybISsl+D?=
+ =?us-ascii?Q?YL1zGLnrCzOlYwf0dLBFnbGsxkkrwaoHHpxo?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jun 2025 21:35:33.6868
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3574afd-aa24-4502-008f-08dda542118e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH1PEPF0000AD7F.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5749
 
-On Fri, 06 Jun 2025 15:13:05 +0200
-Bert Karwatzki <spasswolf@web.de> wrote:
+When CONFIG_MODULES is not defined, 'adap->owner->name' used in amd_isp4 platform
+driver will not be valid and is resulting in build failures.
 
-> I tried this and first thought my kernel did not have the right configura=
-tion as
->=20
-> # trace-cmd record -e preempt_disable -e preempt_enable
->=20
-> seemed to do nothing in particular, but it turns out it takes a long time=
- to start
-> (~1min) when the kernel is compiled with CONFIG_LOCKDEP=3Dy. (on the stan=
-dard debian
+../drivers/platform/x86/amd/amd_isp4.c: In function 'is_isp_i2c_adapter':
+../drivers/platform/x86/amd/amd_isp4.c:154:35: error: invalid use of undefined type 'struct module'
+  154 |         return !strcmp(adap->owner->name, "i2c_designware_amdisp");
+      |                                   ^~
 
-Yeah, that's a recent regression in the code which I'm currently testing a
-fix for:
+To fix this issue, need to make changes both in platform and i2c driver modules.
 
-   https://lore.kernel.org/linux-trace-kernel/20250605161701.35f7989a@ganda=
-lf.local.home
+* In the amd_isp4 x86/platform driver, replace 'adap->owner->name' with 'adap->name', this removes
+the hard dependency on 'struct module'.
+* In i2c amdisp driver, initialize unique name to i2c adapter and also make a change in
+i2c-designware-common to avoid overwriting with generic name when adap->name[] is already set.
+
+---
+
+Changes v2 -> v3:
+
+* Update commit text for patch 1/3
 
 
-> kernel starting to record takes less time, but it does not have CONFIG_PR=
-EEMPT_TRACER.)
->=20
-> So after the trace-cmd was running I ran the bpf example and got a trace.=
-dat:
->=20
-> # ls -lh trace.dat=20
-> -rw-r--r-- 1 root root 152M  6. Jun 14:41 trace.dat
->=20
-> turning this into a report with
->=20
-> # trace-cmd report > preemp_trace.rep
->=20
-> gives a rather unwieldly large file
+Changes v1 -> v2:
 
-Of course, it's recording every time preemption is enabled and disabled ;-)
+* Replace snprintf with scnprintf
+* Add new isp4 specific misc header file to include the adapter name
+* Remove 'Fixes' and 'Link' tags from i2c patches
 
-I usually run it with a test:
+---
 
- # trace-cmd record -e preempt_disable -e preempt_enable ./myprog
 
-Where it will stop when ./myprog is done.
+Pratap Nirujogi (3):
+  i2c: designware: Initialize adapter name only when not set
+  i2c: amd-isp: Initialize unique adpater name
+  platform/x86: Use i2c adapter name to fix build errors
 
->=20
-> # ls -lh preempt_trace.rep=20
-> -rw-rw-r-- 1 root root 7,4G  6. Jun 14:46 preempt_trace.rep
->=20
-> This file has about 61 million lines
->=20
-> # wc -l preempt_trace.rep
-> 61627360 preempt_trace.rep
->=20
-> but only 742104 corresponding to the bpf example program "test_progs"
->=20
-> # grep test_progs preempt_trace.rep | wc -l
-> 742104
+ drivers/i2c/busses/i2c-designware-amdisp.c |  2 ++
+ drivers/i2c/busses/i2c-designware-master.c |  5 +++--
+ drivers/platform/x86/amd/amd_isp4.c        |  3 ++-
+ include/linux/soc/amd/isp4_misc.h          | 12 ++++++++++++
+ 4 files changed, 19 insertions(+), 3 deletions(-)
+ create mode 100644 include/linux/soc/amd/isp4_misc.h
 
- # trace-cmd record -e preempt_disable -e preempt_enable -F ./test_progs
-
-where "-F" means "follow" and will only record when "./test_progs" is runni=
-ng.
-Add "-c" to also trace its children.
-
->=20
-> Is it possible to filter the preempt_{en,dis}able events by task name (i.=
-e.
-> get_current()->comm)?
->=20
-> I tried this (from=C2=A0https://code.tools/man/1/trace-cmd-report/) but it
-> fails with an error message:
-> # trace-cmd record -e preempt_enable -F '.*:COMM =3D=3D "test_progs"' -e =
-preempt_disable -F '.*:COMM =3D=3D "test_progs"'
-
- -F means to execute. The -F in trace-cmd report is filter (that's because
- -f was already taken :-p)
-
--- Steve
-
->=20
-> ********************
->  Unable to exec .*:COMM =3D=3D "test_progs"
-> ********************
-> trace-cmd: No such file or directory
->   Failed to exec .*:COMM =3D=3D "test_progs"
-> libtracecmd: No such file or directory
->   can not stat 'trace.dat.cpu0'
->=20
->=20
-> Bert Karwatzki
+-- 
+2.43.0
 
 

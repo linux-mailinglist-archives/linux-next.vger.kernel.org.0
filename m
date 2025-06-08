@@ -1,96 +1,189 @@
-Return-Path: <linux-next+bounces-7096-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7097-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF0D6AD0B46
-	for <lists+linux-next@lfdr.de>; Sat,  7 Jun 2025 07:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DCB4AD1194
+	for <lists+linux-next@lfdr.de>; Sun,  8 Jun 2025 10:46:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 205313B1736
-	for <lists+linux-next@lfdr.de>; Sat,  7 Jun 2025 05:38:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48F153AC25D
+	for <lists+linux-next@lfdr.de>; Sun,  8 Jun 2025 08:45:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5080C22083;
-	Sat,  7 Jun 2025 05:39:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE5761E8322;
+	Sun,  8 Jun 2025 08:45:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CUzWu+8G"
+	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="hEHPKKK3"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [212.227.15.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234FCFC08;
-	Sat,  7 Jun 2025 05:39:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B0F156CA;
+	Sun,  8 Jun 2025 08:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749274746; cv=none; b=iB6GC/eCN1zlzu7iFjL1jCjC29M5fbNIzAsK+S2zzDvxvE6Fm6Nrhmo0KX9i2XHx3ZbNu2lew/sTP6tZIVZ1e5SnEm2zYDnv0bUUjzLCW6qrEdlfZJc5C7AXapoJOI/pIJgdNn39LZSXK1tYifYmlV4lJ5XHbqMIo8K/hhUv6h4=
+	t=1749372358; cv=none; b=SCcXiZhxp5TNhq/bC+f1QJoNE1O+hcIrrhwut39g54xnBI4WWYRn9YSvpNCVQY3AWec2qIPlKd2JV5ZKxSyvwtM4v8TXmT4fyrTZaZ6jwTvwajFgzmnuCesEjeauhDh/2mRK45Y10/I1PfP8j7+SpJFXrwOeGlwxsIlKl+FneTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749274746; c=relaxed/simple;
-	bh=AVThBw/F33fAeb2r1HgHu8ZbHxRoQavzAslSvTHulLw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nuSlANtp+aCfpf04OThFsxRKJjalRp36GPAlNFPalyeimXdfjUTc5lte044Xu8XxY+i/ArJnzTBpHIbvHgVogQ5Rs4OQbdDRAOxDdXFfLPB1fj+WFYXhB+CNN5gcL8QRBkU46P7BHBj9+p78tTTpvzZu/LxLepiJr9F9MUvyHIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CUzWu+8G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE8A5C4CEF0;
-	Sat,  7 Jun 2025 05:39:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749274745;
-	bh=AVThBw/F33fAeb2r1HgHu8ZbHxRoQavzAslSvTHulLw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=CUzWu+8G+kFlFl5yy4QydF4j3r5jMreiweCGJl2URKy4YcWCi2P9bePeTuSD/xtmM
-	 mRJ4PKLRILilB4+uVEo2S0P2kU5At58gl8EfAwcy4KNjfzkP7VZWmZ24MyeiOtHe4Z
-	 0kdLKuFVYcmBEQRcpRjwTKUNgWhaOEmlNym2N4xx96WJofEO5dRw4rDnFfPZCDrnWG
-	 nsmd+VD3Bu0WBH3zv7cIjpRr2AqWPP9BYyGqne2toZXJeuMSL7mk82OqWr6T8hZQgC
-	 tvJuQYDvXwFPlXtCMUUTyMs3z38AstQ2y2ZwL+DIoLoYHPdzCZUWRmaEzTU5eq32JL
-	 ecYgFW/3KMNHg==
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5533a86a134so2691369e87.3;
-        Fri, 06 Jun 2025 22:39:05 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW/p85ruCsjAQz8/BA7m7PNVTv+Wl1V+S7BQ49tvAANRuDQJbF348fGT/eJBzCXf27/CktWRY8ps28s@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYNXOe7HkMpGQSIkdfKsyBlJyCgndvsd3ZXLf2AHXsSS3jNIgC
-	6D/QGHZJzHOEA6TdMEOEnsGzeLeRHiTs9TEavtDGk/ODetB9t+nNY5SWtUa0mqQQIjMQ5ifwe8T
-	gv9m23jt8GBoLuJeYVtnEyAEEm09VkDw=
-X-Google-Smtp-Source: AGHT+IHuxD3D0b+KPglNs5+al6yPwC3eDxiUtjLJrZ8CrxSPS9EnyZWM1loozXqR5KbCyXhknFbzm1XH0Z7NW1+2HuY=
-X-Received: by 2002:a05:6512:ea1:b0:553:2191:d334 with SMTP id
- 2adb3069b0e04-55366c0e5bdmr1787948e87.35.1749274744355; Fri, 06 Jun 2025
- 22:39:04 -0700 (PDT)
+	s=arc-20240116; t=1749372358; c=relaxed/simple;
+	bh=v4PkM/Ar22LVKA1uuGEftCXiCqmcHBsUUBjFLYyvYiI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ExTaebQla9ryWNBp0BJXFPVvC2hKkBdZPWr84BFW0fqCPIpW+LCUZt7hFv2Prloj2uW2ujGVWTURAn1bbGhxYEiDm1Zh6qyWFC98O2KUrn2kUJbemRvZq4P/225sJyZN71QS75L0OFicfUOVey8NPCwX/Dc5zg7BGTD4fyXCo/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=hEHPKKK3; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1749372338; x=1749977138; i=spasswolf@web.de;
+	bh=EdEG80i6V1qMQITbp6edf3dtJZUmhxxsKi7heRnjiwg=;
+	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=hEHPKKK3kdkSbkgnyzXo3MrxRSvK6LwLLb7qKRPXzWD9KGC17Z9IErE3Z9qRZNvB
+	 vbpMyvcgxaUvqAtEo9laPpcSPVgEL9jkJH0WgAifPhcfjD/mAHECBdZ8rfaxAlQeR
+	 wKMLA4IBZ90yWs8CO6Wa7GoOrC9dRtpGWsA2i67uDuXTVFeu2mtWHfXwWmqgFQWLX
+	 pPmK1cCyvItwktisbU2K3BoXWkqoZqLlkOdtAQoPaKpmDFgx7fE0MYt7kuP2VEv32
+	 Z7dJmWSXDteH8QZIHEuKF8hMr1yBr8TTl2mxJT3wuMRcuSgiDWTX2Lo12xof4Lb4r
+	 dg0x37OFPhDP7mw8Gw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.0.101] ([95.223.134.88]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1M4sXj-1uNMJR1tHL-0091Bv; Sun, 08
+ Jun 2025 10:45:38 +0200
+Message-ID: <0b1f48ba715a16c4d4874ae65bc01914de4d5a90.camel@web.de>
+Subject: Re: BUG: scheduling while atomic with PREEMPT_RT=y and bpf selftests
+From: Bert Karwatzki <spasswolf@web.de>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Steven Rostedt
+	 <rostedt@goodmis.org>
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-rt-users@vger.kernel.org, 
+	linux-rt-devel@lists.linux.dev, Thomas Gleixner <tglx@linutronix.de>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>, spasswolf@web.de
+Date: Sun, 08 Jun 2025 10:45:36 +0200
+In-Reply-To: <20250605125133.RSTingmi@linutronix.de>
+References: <20250605091904.5853-1-spasswolf@web.de>
+		 <20250605084816.3e5d1af1@gandalf.local.home>
+		 <20250605125133.RSTingmi@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.56.1-1 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250606140126.10b191fa@canb.auug.org.au>
-In-Reply-To: <20250606140126.10b191fa@canb.auug.org.au>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sat, 7 Jun 2025 14:38:28 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR_5U6qr5f+i9AY5UYmVZcC7YE7hgMYJQ7gtN_Vw7=WKA@mail.gmail.com>
-X-Gm-Features: AX0GCFtw9MN79PH0yaN6g8aK_M_w7e-w2wf0mT2xdCmKoKm8GUe21rA7GiwVwvo
-Message-ID: <CAK7LNAR_5U6qr5f+i9AY5UYmVZcC7YE7hgMYJQ7gtN_Vw7=WKA@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the kbuild tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Avuy5UJuZKURJRTxQ764K+K7sZX230PJvIemxiufXAdVCKOLnBJ
+ doNxe9ya2SO8EH2duok+ueOTbm8cZCc4GLSAK7En2qdmqPZFIN7jrZBeUqo/rUAxm2tzaaL
+ f9EA6sZrqgu/F40AxBI9SvI6Wo5/i1ufEjFlbMI5riowijuk7bvxF7cqfoVFOsBQVcDG/52
+ r0UWHzHzHRiJGTK0ztbwA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:BA8NKV7akWg=;dBQYN42GqmZDJpDPPWyybh4vwaO
+ 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
 
-On Fri, Jun 6, 2025 at 1:01=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
->
-> Hi all,
->
-> After merging the kbuild tree, today's linux-next build (htmldocs)
-> produced this warning:
->
-> Documentation/kbuild/makefiles.rst:1104: ERROR: Unknown target name: "non=
--builtin vmlinux targets - extra-y". [docutils]
->
-> Introduced by commit
->
->   3db6f0026e85 ("kbuild: set y instead of 1 to KBUILD_{BUILTIN,MODULES}")
+Am Donnerstag, dem 05.06.2025 um 14:51 +0200 schrieb Sebastian Andrzej Sie=
+wior:
+> On 2025-06-05 08:48:38 [-0400], Steven Rostedt wrote:
+> > On Thu,  5 Jun 2025 11:19:03 +0200
+> > Bert Karwatzki <spasswolf@web.de> wrote:
+> >=20
+> > > This patch seems to create so much output that the orginal error mes=
+sage and
+> > > backtrace often get lost, so I needed several runs to get a meaningf=
+ul message
+> > > when running
+> >=20
+> > Are you familiar with preempt count tracing?
+>=20
+> I have an initial set of patches to tackle this problem, I'm going to
+> send them after the merge window.
+>=20
+> Sebastian
 
+I've found the reason for the "mysterious" increase of preempt_count:
 
-Fixed now. Thanks.
+[   70.821750] [   T2746] bpf_link_settle calling fd_install() preemt_coun=
+t =3D 0
+[   70.821751] [   T2746] preempt_count_add 5898: preempt_count =3D 0x0 co=
+unter =3D 0x1b232c
+[   70.821752] [   T2746] preempt_count_add 5900: preempt_count =3D 0x1 co=
+unter =3D 0x1b232d
+[   70.821754] [   T2746] preempt_count_sub 5966: preempt_count =3D 0x1 co=
+unter =3D 0x1b232e
+[   70.821755] [   T2746] preempt_count_sub 5968: preempt_count =3D 0x0 co=
+unter =3D 0x1b232f
+[   70.821761] [   T2746] __bpf_trace_sys_enter 18: preempt_count =3D 0x0
+[   70.821762] [   T2746] __bpf_trace_sys_enter 18: preempt_count =3D 0x1
+[   70.821764] [   T2746] __bpf_trace_run: preempt_count =3D 1
+[   70.821765] [   T2746] bpf_prog_run: preempt_count =3D 1
+[   70.821766] [   T2746] __bpf_prog_run: preempt_count =3D 1
 
+It's caused by this macro from include/trace/bpf_probe.h (with my pr_err()=
+):
 
---=20
-Best Regards
-Masahiro Yamada
+#define __BPF_DECLARE_TRACE_SYSCALL(call, proto, args) \
+static notrace void \
+__bpf_trace_##call(void *__data, proto) \
+{ \
+ might_fault(); \
+ if (!strcmp(get_current()->comm, "test_progs")) \
+ pr_err("%s %d: preempt_count =3D 0x%x", __func__, __LINE__, preempt_count=
+());\
+ preempt_disable_notrace(); \
+ if (!strcmp(get_current()->comm, "test_progs")) \
+ pr_err("%s %d: preempt_count =3D 0x%x", __func__, __LINE__, preempt_count=
+());\
+ CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args)); =
+\
+ preempt_enable_notrace(); \
+}
+
+The preempt_{en,dis}able_notrace were introduced in
+commit 4aadde89d81f ("tracing/bpf: disable preemption in syscall probe")
+This commit is present in v6.14 and v6.15, but the bug already appears in
+v6.12 so in that case preemption is disable somewhere else.=20
+
+Bert Karwatzki
 

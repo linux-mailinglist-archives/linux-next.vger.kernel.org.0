@@ -1,65 +1,65 @@
-Return-Path: <linux-next+bounces-7100-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7101-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49347AD19E1
-	for <lists+linux-next@lfdr.de>; Mon,  9 Jun 2025 10:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 599DCAD1AC8
+	for <lists+linux-next@lfdr.de>; Mon,  9 Jun 2025 11:39:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 080C016A630
-	for <lists+linux-next@lfdr.de>; Mon,  9 Jun 2025 08:36:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F1FE1635C2
+	for <lists+linux-next@lfdr.de>; Mon,  9 Jun 2025 09:39:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C8011DF738;
-	Mon,  9 Jun 2025 08:36:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC8F24EA8D;
+	Mon,  9 Jun 2025 09:38:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XO+uIp87"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ev4jiEc/"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63EF113B58B;
-	Mon,  9 Jun 2025 08:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5531A9B4A;
+	Mon,  9 Jun 2025 09:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749458190; cv=none; b=GBmgeANY+8gp0v0w8RpEkrPiDCmbM9QCElgy3SB/YLJjdUfG/nLA1zv4HQ4yHvcEhNULfEUORbGE+DstJekVj90tyUhtk0n8fmPZqwNYWTCHp2tbUysdkgyMAWSwIGQVz4hACHEy4oHBy63qFhuXWnyElsHmmLs77djEep78WA4=
+	t=1749461938; cv=none; b=MHPJ8enjpMTRykhYQelcPotuWbuRmwsm6lrt0l1108UGJ59PjFFrMuF8rU+eiCMRbLIghIOtFcrOP1Tojnt543f8dRenx2Xn0HRMgBEoIpjS1cxeKJu4CHXl9cwtJM2F54CpTk2MvDh2W3h72bjX6INwSf5Q+fuNLmUNugRb1ZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749458190; c=relaxed/simple;
-	bh=8QNRwHCuxJbDFi2bGOl3QM6WNpa0T685U6On908e3zg=;
+	s=arc-20240116; t=1749461938; c=relaxed/simple;
+	bh=zbvV33JMZvTvWDfJU5HDNM9KGa+BZqS9I2y7gEHZzFI=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=cGE+epXmyNgFyO0ZJticNShF2hA3RDZrECNj0dJZHJecaC9OvwGI/jiEq4bVb7iJEscxNcEP0pAjvvDac0HFNIteGjjngwzKWF+eGS54+Q2F6YGRH5kwV+gZigoIicaJPxXzH4ZMTq99g13FSh93BtefBHuXlhQlLnKqkKWPvRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XO+uIp87; arc=none smtp.client-ip=192.198.163.13
+	 MIME-Version:Content-Type; b=HxDg6MencqAjjAQ7WrTOLaLYJrtyD7R/RGkSZHA3VsCnIZQyf6W1OvVsUBUJmRqaAtktBaGwOrFxUTLB78+hcpfs5kSvUgudQPCUfYa6FpbzLT4/aFKIZUdR02z3Qc8AjpsAGrV6JC+7KcNJgdH0Wh9ZUD04j8t7I2iKOuZVlxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ev4jiEc/; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1749458188; x=1780994188;
+  t=1749461937; x=1780997937;
   h=from:date:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=8QNRwHCuxJbDFi2bGOl3QM6WNpa0T685U6On908e3zg=;
-  b=XO+uIp87P3DxlnnbY5dtVTqb07pt4nxRC02kO3R/L21BTwMJYEW2t96L
-   Dff+Vxyx9igl+xTwxM5W9Ej0hMsPRlTgNfzWwIrHBhCWRpk3uf1Harxn8
-   +PBtaarFU9qYPfU7zeYa+qIDMXFLAEcKvxMXc/Ej7ngizlJxJ9Mq/0RHz
-   y8hqP3mqRnrEnByuVflFgh86OUXW9odgJHLqG4JoUXqK/L/+Xu+jXgLLb
-   9gpXGRMidbvyQQaObFyQ+qmzqB0TxGXGVIUE3KZ9gDpsetUcGxF52jJcM
-   wL7usH7mlqddckBsAM5dWzmMZyO8lG8JfOYHqMrSk1WPrq6QAg6KiN2MD
-   w==;
-X-CSE-ConnectionGUID: w7apxO1gQgKp2Ydusvfxlg==
-X-CSE-MsgGUID: orks4UjpTiGCo92pCyZLQA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11458"; a="54161131"
+  bh=zbvV33JMZvTvWDfJU5HDNM9KGa+BZqS9I2y7gEHZzFI=;
+  b=Ev4jiEc/+eLgZJMFvLbH++d4saClr1oHMojBdVbCeh+luG6DTn3/+t1c
+   Q6zcILKaQTY2onrOjQzDPOO/9FtY1wLYaeAoM+Wjoo/IsNPOk+3LmalkJ
+   trgva7LhT4nq+hkaENZYug/W+ZxKyNxfYpT6hZULbmI+EpZoNvF9Vwmgu
+   FYXtHBDnqUX9xVa7FyU38qMDS1o7Ga0Pku+V90kOo2tMegGJ1zJRinZGO
+   fsiWy0zJZRnHLLdX2B/3xkZl/AZO45vdcQZG8QeMOrUn5hvrEGnZPWM4m
+   Fc3CFqefTjQ6+rp+5pqDaZdZKjWf46eO2+hP2ttudlEl7O0bv4MzSZLsA
+   g==;
+X-CSE-ConnectionGUID: uWSDG2F8QG2FtUhdprGLOA==
+X-CSE-MsgGUID: bVUbWsLLT82tNR1GTXxglw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11458"; a="51237776"
 X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
-   d="scan'208";a="54161131"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 01:36:27 -0700
-X-CSE-ConnectionGUID: oV5OVo1VR/mpeE07O42iQw==
-X-CSE-MsgGUID: 8tCg/4BQRS2YyU+FnCGwmg==
+   d="scan'208";a="51237776"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 02:38:57 -0700
+X-CSE-ConnectionGUID: ZrfCtFc8TBS7QNAQGIRSzA==
+X-CSE-MsgGUID: jgRA0eSYSkGSZHNDtfIAIQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,222,1744095600"; 
-   d="scan'208";a="150264707"
+   d="scan'208";a="151457547"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.22])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 01:36:22 -0700
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2025 02:38:51 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 9 Jun 2025 11:36:19 +0300 (EEST)
+Date: Mon, 9 Jun 2025 12:38:47 +0300 (EEST)
 To: Pratap Nirujogi <pratap.nirujogi@amd.com>
 cc: andi.shyti@kernel.org, rdunlap@infradead.org, 
     Hans de Goede <hdegoede@redhat.com>, sfr@canb.auug.org.au, 
@@ -68,79 +68,96 @@ cc: andi.shyti@kernel.org, rdunlap@infradead.org,
     benjamin.chan@amd.com, bin.du@amd.com, gjorgji.rosikopulos@amd.com, 
     king.li@amd.com, dantony@amd.com
 Subject: Re: [PATCH v3 2/3] i2c: amd-isp: Initialize unique adpater name
-In-Reply-To: <20250606213446.1145099-3-pratap.nirujogi@amd.com>
-Message-ID: <6136cfca-45ca-5832-cf5b-f49e16f6ed5e@linux.intel.com>
-References: <20250606213446.1145099-1-pratap.nirujogi@amd.com> <20250606213446.1145099-3-pratap.nirujogi@amd.com>
+In-Reply-To: <6136cfca-45ca-5832-cf5b-f49e16f6ed5e@linux.intel.com>
+Message-ID: <69495068-fbee-f123-27f2-226eda8684b8@linux.intel.com>
+References: <20250606213446.1145099-1-pratap.nirujogi@amd.com> <20250606213446.1145099-3-pratap.nirujogi@amd.com> <6136cfca-45ca-5832-cf5b-f49e16f6ed5e@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: multipart/mixed; boundary="8323328-2116048114-1749461927=:948"
 
-On Fri, 6 Jun 2025, Pratap Nirujogi wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-> Initialize unique name for amdisp i2c adapter, which is used
-> in the platform driver to detect the matching adapter for
-> i2c_client creation.
-> 
-> Add definition of amdisp i2c adapter name in a new header file
-> (include/linux/soc/amd/isp4_misc.h) as it is referred in different
-> driver modules.
-> 
-> Tested-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Pratap Nirujogi <pratap.nirujogi@amd.com>
-> ---
->  drivers/i2c/busses/i2c-designware-amdisp.c |  2 ++
->  include/linux/soc/amd/isp4_misc.h          | 12 ++++++++++++
+--8323328-2116048114-1749461927=:948
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-You forgot to add this new file into MAINTAINERS file.
+On Mon, 9 Jun 2025, Ilpo J=E4rvinen wrote:
 
->  2 files changed, 14 insertions(+)
->  create mode 100644 include/linux/soc/amd/isp4_misc.h
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-amdisp.c b/drivers/i2c/busses/i2c-designware-amdisp.c
-> index ad6f08338124..450793d5f839 100644
-> --- a/drivers/i2c/busses/i2c-designware-amdisp.c
-> +++ b/drivers/i2c/busses/i2c-designware-amdisp.c
-> @@ -8,6 +8,7 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/soc/amd/isp4_misc.h>
->  
->  #include "i2c-designware-core.h"
->  
-> @@ -62,6 +63,7 @@ static int amd_isp_dw_i2c_plat_probe(struct platform_device *pdev)
->  
->  	adap = &isp_i2c_dev->adapter;
->  	adap->owner = THIS_MODULE;
-> +	scnprintf(adap->name, sizeof(adap->name), AMDISP_I2C_ADAP_NAME);
->  	ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
->  	adap->dev.of_node = pdev->dev.of_node;
->  	/* use dynamically allocated adapter id */
-> diff --git a/include/linux/soc/amd/isp4_misc.h b/include/linux/soc/amd/isp4_misc.h
-> new file mode 100644
-> index 000000000000..6738796986a7
-> --- /dev/null
-> +++ b/include/linux/soc/amd/isp4_misc.h
-> @@ -0,0 +1,12 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +
-> +/*
-> + * Copyright (C) 2025 Advanced Micro Devices, Inc.
-> + */
-> +
-> +#ifndef __SOC_ISP4_MISC_H
-> +#define __SOC_ISP4_MISC_H
-> +
-> +#define AMDISP_I2C_ADAP_NAME "AMDISP DesignWare I2C adapter"
-> +
-> +#endif
-> 
+> On Fri, 6 Jun 2025, Pratap Nirujogi wrote:
 
--- 
+You also have a typo in the subject, adpater -> adapter.
+
+> > Initialize unique name for amdisp i2c adapter, which is used
+> > in the platform driver to detect the matching adapter for
+> > i2c_client creation.
+> >=20
+> > Add definition of amdisp i2c adapter name in a new header file
+> > (include/linux/soc/amd/isp4_misc.h) as it is referred in different
+> > driver modules.
+> >=20
+> > Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> > Signed-off-by: Pratap Nirujogi <pratap.nirujogi@amd.com>
+> > ---
+> >  drivers/i2c/busses/i2c-designware-amdisp.c |  2 ++
+> >  include/linux/soc/amd/isp4_misc.h          | 12 ++++++++++++
+>=20
+> You forgot to add this new file into MAINTAINERS file.
+>=20
+> >  2 files changed, 14 insertions(+)
+> >  create mode 100644 include/linux/soc/amd/isp4_misc.h
+> >=20
+> > diff --git a/drivers/i2c/busses/i2c-designware-amdisp.c b/drivers/i2c/b=
+usses/i2c-designware-amdisp.c
+> > index ad6f08338124..450793d5f839 100644
+> > --- a/drivers/i2c/busses/i2c-designware-amdisp.c
+> > +++ b/drivers/i2c/busses/i2c-designware-amdisp.c
+> > @@ -8,6 +8,7 @@
+> >  #include <linux/module.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/pm_runtime.h>
+> > +#include <linux/soc/amd/isp4_misc.h>
+> > =20
+> >  #include "i2c-designware-core.h"
+> > =20
+> > @@ -62,6 +63,7 @@ static int amd_isp_dw_i2c_plat_probe(struct platform_=
+device *pdev)
+> > =20
+> >  =09adap =3D &isp_i2c_dev->adapter;
+> >  =09adap->owner =3D THIS_MODULE;
+> > +=09scnprintf(adap->name, sizeof(adap->name), AMDISP_I2C_ADAP_NAME);
+> >  =09ACPI_COMPANION_SET(&adap->dev, ACPI_COMPANION(&pdev->dev));
+> >  =09adap->dev.of_node =3D pdev->dev.of_node;
+> >  =09/* use dynamically allocated adapter id */
+> > diff --git a/include/linux/soc/amd/isp4_misc.h b/include/linux/soc/amd/=
+isp4_misc.h
+> > new file mode 100644
+> > index 000000000000..6738796986a7
+> > --- /dev/null
+> > +++ b/include/linux/soc/amd/isp4_misc.h
+> > @@ -0,0 +1,12 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +
+> > +/*
+> > + * Copyright (C) 2025 Advanced Micro Devices, Inc.
+> > + */
+> > +
+> > +#ifndef __SOC_ISP4_MISC_H
+> > +#define __SOC_ISP4_MISC_H
+> > +
+> > +#define AMDISP_I2C_ADAP_NAME "AMDISP DesignWare I2C adapter"
+> > +
+> > +#endif
+> >=20
+>=20
+>=20
+
+--=20
  i.
 
+--8323328-2116048114-1749461927=:948--
 

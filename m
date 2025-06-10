@@ -1,156 +1,140 @@
-Return-Path: <linux-next+bounces-7122-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7123-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03DAAAD2FAB
-	for <lists+linux-next@lfdr.de>; Tue, 10 Jun 2025 10:15:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 940DBAD30B9
+	for <lists+linux-next@lfdr.de>; Tue, 10 Jun 2025 10:42:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB30C163B43
-	for <lists+linux-next@lfdr.de>; Tue, 10 Jun 2025 08:15:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39F303AE11A
+	for <lists+linux-next@lfdr.de>; Tue, 10 Jun 2025 08:41:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB1DA21ABD5;
-	Tue, 10 Jun 2025 08:15:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B377427A906;
+	Tue, 10 Jun 2025 08:42:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CEGIj4mq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I/xC8ZUW"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849641DD9D3;
-	Tue, 10 Jun 2025 08:15:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D810E1DD9D3;
+	Tue, 10 Jun 2025 08:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749543312; cv=none; b=HfN+KJ0/5hkcGYQnAMFbNnzkSLFInMdGAzofP+rQI7VW+pgyC4lAG/rH2fSaE7VY1eTLJsDlPOpOyp/wTeA3rSkmnIKixOwOldC2W6Iwogcq2i/oRgeX53VZIrL/hLOaPSyHxTboiz8LOM/ueW4akMJmqYfUL6DOUePBcJzW/AA=
+	t=1749544930; cv=none; b=iWvJGwZ+A9gZ+PYK9ozJyiF8Vtc3mmOjbcwXjKcyU0kQI1SWhCp+szyneBhSGPgYboCjraNviLBiV5jV5JjY3HGbNesXQ+d9ywiZb34+7Ehal3xJoomSJEJyE5bTWgzd7kpXEb33w4VUHrG/alnGCicqEC37yLkdZaC17zY630Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749543312; c=relaxed/simple;
-	bh=bTz2jD+cGt2XQ/Ega0J5lq5VYe60lHLquMDkJ3TPTh4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=dMX2fD1Fr7NsZl5aWQs4jsnkNgmuOS1nMVb356xBI62MrtkvAgJLf34qz13BNIwLcL4IfcPoKgbfWfYMhA4cxFRF0JAHfbQjizyH/D/865SV6KjVOnPgvBNdckzbJB8CqJsWULj+VSN2DO3XhSBVdoDueAofUoMgx6KVPAEMWq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CEGIj4mq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD998C4CEEF;
-	Tue, 10 Jun 2025 08:15:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749543312;
-	bh=bTz2jD+cGt2XQ/Ega0J5lq5VYe60lHLquMDkJ3TPTh4=;
-	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-	b=CEGIj4mq4tW1ToEzIVnsp8ZXU9S6QjDqYF2TM1c6YODY18mvNlszIZT8kNyWWwE1m
-	 wGLi/BlPKKYLqwP3hOHFZJOK68YZ+5G1ngd43RRKIKVrLEyKcPU92XUN6Tp2Hslz0d
-	 oYPPbjMzi1ivbh3FU96wxiFScZtGPCdk/YWvuZfpoDbyWgI9I14CAlpyklDiLQ7zSO
-	 epJvffFsRIZrl5cAtJ1Pwmebh/GubJK6ZAvqGL25lT+xuJjCTO9N30eHceAiOK/RKZ
-	 I7KAivRHbpt8wfKJ5uN8eaCsGdiYFSYrdNRrnd1YXxa8KV5VGJJpXlxi/vmPOa3uMx
-	 Om5JYKfu0osrw==
+	s=arc-20240116; t=1749544930; c=relaxed/simple;
+	bh=dAlJNlsK6HDm/D1KHUUl3OpVGkaXaRLFMW/O78c4LlY=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=QSWXWy6GOxMlCnsNEVZhVVBYv1FKstX+3gpGaEoCZaId67LLHBvpEUANrLCVCQVU6B1qvtM4+ufQm6L5YeOgP1r0IsMDq7SvTEF8d90Rd6F6OVoaUFd4BOoFxU/A2Xh1lBUhHrBlzE8NgC1GEDsiftsS4IET5evZkOorzTz8u20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I/xC8ZUW; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749544929; x=1781080929;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=dAlJNlsK6HDm/D1KHUUl3OpVGkaXaRLFMW/O78c4LlY=;
+  b=I/xC8ZUWpNzwrrwSoX2YNiC9zuK9Mzjk2sel8Duxt1jGxdOdBcB66DOD
+   odY9odY9XfnrCX9u7Fxl4h8uRD5H04He+8Ec7DfHOIQN+M22/zmSaBNF5
+   el//dZgYjAkTLFiidCXQo3gi6OUHIO3T9eanw+SXHZE7fcQEdxgSkDHTH
+   V375MRIuQTTGTQSwGO3SDuIv8uFZe7SqSbNisG9yF/RDA9f+Q3USD+Dqr
+   N8nrbjoj9LrkRCuksSFqmUDV6Xg5m0KhPzLbgapfbTkSOWuxE6QJPvPa2
+   GzMAnDY9g1SXOh0uX/z+XH8lDo0Miw2GGdNfVvKqgx0cV7M27yCARbov6
+   w==;
+X-CSE-ConnectionGUID: RPbpti/KS3+mMRja48HXuw==
+X-CSE-MsgGUID: aKzwq676SFKUMYCtsroEpg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11459"; a="55308750"
+X-IronPort-AV: E=Sophos;i="6.16,224,1744095600"; 
+   d="scan'208";a="55308750"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2025 01:42:08 -0700
+X-CSE-ConnectionGUID: JFC3cMuxS1G3qXqWLPFTug==
+X-CSE-MsgGUID: Zb/qwyA9SGyQcbJThwcLsA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,224,1744095600"; 
+   d="scan'208";a="151643988"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.196])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2025 01:42:03 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 10 Jun 2025 11:42:00 +0300 (EEST)
+To: Pratap Nirujogi <pratap.nirujogi@amd.com>, andi.shyti@kernel.org
+cc: rdunlap@infradead.org, Hans de Goede <hdegoede@redhat.com>, 
+    sfr@canb.auug.org.au, linux-next@vger.kernel.org, 
+    linux-i2c@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, benjamin.chan@amd.com, bin.du@amd.com, 
+    gjorgji.rosikopulos@amd.com, king.li@amd.com, dantony@amd.com
+Subject: Re: [PATCH v4 3/3] platform/x86: Use i2c adapter name to fix build
+ errors
+In-Reply-To: <20250609155601.1477055-4-pratap.nirujogi@amd.com>
+Message-ID: <570c7765-b3bc-77cd-dddb-d19e85611114@linux.intel.com>
+References: <20250609155601.1477055-1-pratap.nirujogi@amd.com> <20250609155601.1477055-4-pratap.nirujogi@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 10 Jun 2025 10:15:08 +0200
-Message-Id: <DAIPCCIHRLHW.1TDNY93G6UZM0@kernel.org>
-Cc: "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>, "Linux Next
- Mailing List" <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the rust-pin-init tree
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Stephen Rothwell" <sfr@canb.auug.org.au>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20250610142230.001af1d3@canb.auug.org.au>
- <DAIP0NGMMM90.11JRFL5O1NAW9@kernel.org>
-In-Reply-To: <DAIP0NGMMM90.11JRFL5O1NAW9@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; BOUNDARY="8323328-1148617004-1749544828=:949"
+Content-ID: <92a34faa-5ba6-b7d3-0b6a-8f83386c5e09@linux.intel.com>
 
-On Tue Jun 10, 2025 at 9:59 AM CEST, Benno Lossin wrote:
-> On Tue Jun 10, 2025 at 6:22 AM CEST, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the rust-pin-init tree, today's linux-next build (x86_64
->> allmodconfig) failed like this:
->>
->> error[E0282]: type annotations needed
->>    --> rust/kernel/configfs.rs:154:26
->>     |
->> 154 |             subsystem <- pin_init::zeroed().chain(
->>     |                          ^^^^^^^^^^^^^^^^ cannot infer type of the=
- type parameter `T` declared on the function `zeroed`
->>     |
->> help: consider specifying the generic argument
->>     |
->> 154 |             subsystem <- pin_init::zeroed::<T>().chain(
->>     |                                          +++++
->>
->> error[E0282]: type annotations needed
->>    --> rust/kernel/configfs.rs:264:22
->>     |
->> 264 |             group <- pin_init::zeroed().chain(|v: &mut Opaque<bind=
-ings::config_group>| {
->>     |                      ^^^^^^^^^^^^^^^^ cannot infer type of the typ=
-e parameter `T` declared on the function `zeroed`
->>     |
->> help: consider specifying the generic argument
->>     |
->> 264 |             group <- pin_init::zeroed::<T>().chain(|v: &mut Opaque=
-<bindings::config_group>| {
->>     |                                      +++++
->>
->> error: aborting due to 2 previous errors
->>
->> For more information about this error, try `rustc --explain E0282`.
->>
->> Caused by commit
->>
->>   0bcaea04244b ("rust: pin-init: rename `zeroed` to `init_zeroed`")
->>
->> I have used the rust-pin-init tree from next-20250606 for today.
->
-> Thanks for catching this! I didn't test with `CONFIG_CONFIGFS=3Dy`, so th=
-e
-> code was cfg'd out... I'll add it to my tests.
->
-> @Andreas I'll send a new version of the commit above with configfs
-> changed.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-(sorry forgot to add your emails and also some new info)
+--8323328-1148617004-1749544828=:949
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <0ae36a1b-f8b2-5a24-6972-ccc973c34d05@linux.intel.com>
 
-Actually, the correct change would be this in commit 0bcaea04244b
-("rust: pin-init: rename `zeroed` to `init_zeroed`"):
+On Mon, 9 Jun 2025, Pratap Nirujogi wrote:
 
-diff --git a/rust/kernel/configfs.rs b/rust/kernel/configfs.rs
-index 34d0bea4f9a5..6d566a8bde74 100644
---- a/rust/kernel/configfs.rs
-+++ b/rust/kernel/configfs.rs
-@@ -151,7 +151,7 @@ pub fn new(
-         data: impl PinInit<Data, Error>,
-     ) -> impl PinInit<Self, Error> {
-         try_pin_init!(Self {
--            subsystem <- pin_init::zeroed().chain(
-+            subsystem <- pin_init::init_zeroed().chain(
-                 |place: &mut Opaque<bindings::configfs_subsystem>| {
-                     // SAFETY: We initialized the required fields of `plac=
-e.group` above.
-                     unsafe {
-@@ -261,7 +261,7 @@ pub fn new(
-         data: impl PinInit<Data, Error>,
-     ) -> impl PinInit<Self, Error> {
-         try_pin_init!(Self {
--            group <- pin_init::zeroed().chain(|v: &mut Opaque<bindings::co=
-nfig_group>| {
-+            group <- pin_init::init_zeroed().chain(|v: &mut Opaque<binding=
-s::config_group>| {
-                 let place =3D v.get();
-                 let name =3D name.as_bytes_with_nul().as_ptr();
-                 // SAFETY: It is safe to initialize a group once it has be=
-en zeroed.
+> Use adapater->name inplace of adapter->owner->name to fix
+> build issues when CONFIG_MODULES is not defined.
+>=20
+> Fixes: 90b85567e457 ("platform/x86: Add AMD ISP platform config for OV05C=
+10")
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Link: https://lore.kernel.org/all/04577a46-9add-420c-b181-29bad582026d@in=
+fradead.org
+> Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Pratap Nirujogi <pratap.nirujogi@amd.com>
+> ---
+>  drivers/platform/x86/amd/amd_isp4.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/platform/x86/amd/amd_isp4.c b/drivers/platform/x86/a=
+md/amd_isp4.c
+> index 0cc01441bcbb..9f291aeb35f1 100644
+> --- a/drivers/platform/x86/amd/amd_isp4.c
+> +++ b/drivers/platform/x86/amd/amd_isp4.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/mutex.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/property.h>
+> +#include <linux/soc/amd/isp4_misc.h>
+>  #include <linux/string.h>
+>  #include <linux/types.h>
+>  #include <linux/units.h>
+> @@ -151,7 +152,7 @@ MODULE_DEVICE_TABLE(acpi, amdisp_sensor_ids);
+> =20
+>  static inline bool is_isp_i2c_adapter(struct i2c_adapter *adap)
+>  {
+> -=09return !strcmp(adap->owner->name, "i2c_designware_amdisp");
+> +=09return !strcmp(adap->name, AMDISP_I2C_ADAP_NAME);
+>  }
+> =20
+>  static void instantiate_isp_i2c_client(struct amdisp_platform *isp4_plat=
+form,
 
-@Miguel, @Andreas, how should I go about this? Send the commit above
-augmented with the diff, or send a patch with just the diff to the list?
-Or apply the diff directly to the commit in the pin-init-next branch &
-rebasing (potentially adding an Acked-by from Andreas)? Or some other
-way?
+Acked-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
 
----
-Cheers,
-Benno
+Andi, do you want to take this fix series through i2c tree or do you=20
+prefer me to take them through pdx86 tree?
+
+
+--
+ i.
+--8323328-1148617004-1749544828=:949--
 

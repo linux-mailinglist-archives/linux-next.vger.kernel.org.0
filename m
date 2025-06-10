@@ -1,169 +1,118 @@
-Return-Path: <linux-next+bounces-7125-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7126-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0B66AD32D5
-	for <lists+linux-next@lfdr.de>; Tue, 10 Jun 2025 11:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A19BAD32E2
+	for <lists+linux-next@lfdr.de>; Tue, 10 Jun 2025 11:56:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C0A3189554C
-	for <lists+linux-next@lfdr.de>; Tue, 10 Jun 2025 09:56:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 259D11897169
+	for <lists+linux-next@lfdr.de>; Tue, 10 Jun 2025 09:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8626228B7CC;
-	Tue, 10 Jun 2025 09:55:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5FCD28B7F0;
+	Tue, 10 Jun 2025 09:56:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tgKap9aI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F3VtcyUR"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B40B25F797;
-	Tue, 10 Jun 2025 09:55:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58133221D86;
+	Tue, 10 Jun 2025 09:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749549350; cv=none; b=kE8bnT3nki7z5cA/r+MJGap1KYFmB0KxIokZv8KUTxWf/HmZWv8rujZ4CdwPmUygZ2fptPboXOs4Fk8gZGVXl9ZoOHYsLgBu0F31moCDMk2Tn1Hd09AI7tL41oN81ru4D5uQphVEmHT5hEyDh6833eLXZzDGt/ZU9mwPedbeGvo=
+	t=1749549404; cv=none; b=de8hRrXKGJCmexxJtnt9QCKrD2epKpo21F5yesCLbkP1ZWdetH02/JQROE9j1FLtQlKmTSDfj5Cav9mcp+BrlQAniV9udIRkqz7BpFfsoNc6P+pQCudwiRgdE4vbg1l4ndsIXB4Zaqy3teSYIf3jMdr7Q9nIyNk2eixJE9Pw3vM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749549350; c=relaxed/simple;
-	bh=GqfnxPzPcKC6JM544VAwehfJVCxORTUdatZW3VeOt3o=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=K1IoMSozkOteyC3uuiN53FWwTmdySuvinV/pg2/Gf7IdumXVqFZZKWj4FhbxoBIiGalU4RXwaqaunM5a1j7cM3Rj0mZgm/EMNGlVAE5U8pG2EXkvsa1e9Sf0sRVENry3G3DOWKhQZ8UUCt535dPzg0TH60cpBlwD432Ub5ED8kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tgKap9aI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00EB3C4CEF2;
-	Tue, 10 Jun 2025 09:55:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749549350;
-	bh=GqfnxPzPcKC6JM544VAwehfJVCxORTUdatZW3VeOt3o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tgKap9aI2hGdFjN6WUUSKUHHZoUGyCh8mjzpcWGjuYvEhA6xPw68JB1V/3HaASgtH
-	 ija2jwIScaIQRR/e4Nd3EQ4KpVRqMHHlJXCiiwUdgS13XtoOjUF9Tzhw+dIqNOxHuq
-	 u6lFrweoCCa2k5ffAAISpD3BPjWw+lv+5zNmQEG29zpsithoCSn5bQeswUnBMa6uii
-	 RpjgGato4S6ybVW4Jloxom4UQxf4QMVS/mys7pbUA+KUgVqS/LXCzLzgYPWQxWA+nz
-	 wxItHQs6FoSbB5bhXvIV+xfmSaHpYRrZCM4wMIvdekf5jymzDl6atJm3GiinhA4zZy
-	 8Dd+XBP26h2fw==
+	s=arc-20240116; t=1749549404; c=relaxed/simple;
+	bh=Wmm0pbHT4UHoP8qp63Ir9hV/XZ5M4Hv1UaMdcp6adK8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p3rkhh3CQcQTSmmOLRVgjfALffGiV2RFJmyOV5dF5Sha5BzsOIDpIf39uXqFcl8flgYoAI3UVUoilea57LWkpNy7PgKZ/rtNhYAzpd98uHfDdZycAEw7hhNpP2MtShMWCC5v5zOmR0XyAY5huG1jgKTPCIE0eU4cAOhLLfP606U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F3VtcyUR; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-235248ba788so6440485ad.0;
+        Tue, 10 Jun 2025 02:56:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749549402; x=1750154202; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wmm0pbHT4UHoP8qp63Ir9hV/XZ5M4Hv1UaMdcp6adK8=;
+        b=F3VtcyUR1MAoERk6zH24yIBXmXbLn4nkc58cFxgvbNxSdCdmzjOwsATRNqdqBSp9VO
+         +52Twj7/rT/cgOw1vaZrsDig+R+Ed018lPvKTnKLTAmi41soaHKcoc2/qRvPsedHd3fU
+         ifD6v4kSqUzB8fxfZRUEYOaBRBeS1VVxY7NI+mQiSkmwBR/iMWfLVZ7A78UNowDY+SU6
+         oB/QgLY7UYHPvHaJIvl3mPaba7LJe6KuTb+ZzbrMda7TuMpDpEuguLbqlk6G/QMLUJN6
+         k4jFJldifd3lBgvWXWZt6EV7Ab5kvpJn0lf3s1FyqUFjIoo1E1aAco3RFr5sKuRr4wvc
+         ZgAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749549402; x=1750154202;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wmm0pbHT4UHoP8qp63Ir9hV/XZ5M4Hv1UaMdcp6adK8=;
+        b=wraFVMRuzYfBrYDqAYf6XZPF03x3muSdYJuN9xZyL8vxoNPL5Ocnju+faF4bFSK/2v
+         bpfHcE+ZTPIbZcZ4Hi1oynNBuFxnNmAbtJymDzwdW+WzHLsGS8k8M1OPVoqz0t3goU/p
+         T20LBReqK2CqYv7ugKG2d5Ko03++txgYJwZ3qsJ5TQ/7HGDlpKWU2I8/n34upSNPseDF
+         pjLFh5CxKV7ffV54zTXgUUzh+tjUtuQw0MGAQDyaOlZFfJI13rp+NsY3bXZMikmyS7WM
+         5zabboPevcWoRW7JwGhMeY2LTr0tIUEgW1tKH7+l5OpAuZI4XmieQyotAxUi6xi2wDmy
+         F1lw==
+X-Forwarded-Encrypted: i=1; AJvYcCUqyhuGvNH48bsUfucp6hO4RP4BqNGuPIEN67IRZ+ffGa8aNOpiZV12+QEybBhasxOJy8ZMkbq2MI0e7PU=@vger.kernel.org, AJvYcCWyQGCnSGUbd94MKx+m6sPMuDeHKNYVmPplDzMJVbR38Q7nUUzzwPL/+OKHd21eRhM2tnluOEn4OvmEFA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzT7a8cQCDlvmJjhVVOCjF1AMfHg46J7lYP6vshiQ6+PJE1oh4F
+	sOWrnZal2fiidrt6MQnfkroxo5qBgTMyz3SewIwv/CeO0eJuCYJ6u26ZAVLfb2HMkDP2LYk9OQu
+	GDlhHEt3v8OQsueC0QY91Hu3EtwF/c4GNySa/yCIihA==
+X-Gm-Gg: ASbGncs9R6jy8Po7wOx0ft/67ljPRc2b/Az/BuLvVQ8hw7O7eESYMrUnUSxpGyE8VOc
+	n03pxGm4nqO55mLRzYBuNxle9HDPG4ObiTAwJkBEkgTliHPZeIiU4anma3TOh5nCtbnSbukpgmK
+	ljBeeXqOXxepEsGQHJGrNmdqegvOSjKR3OTYAouZv8AXw=
+X-Google-Smtp-Source: AGHT+IFbqEK6hx+pyzahKdgpa87fwhv2RwBW1mGCrvqjnmO/NPe9/M/LfXxipQ7eCjzM2bFKHEZEAmqRTRjUkgjst8o=
+X-Received: by 2002:a17:902:f54b:b0:234:11cb:6f95 with SMTP id
+ d9443c01a7336-23601d22ac7mr81848765ad.6.1749549402425; Tue, 10 Jun 2025
+ 02:56:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 10 Jun 2025 11:55:47 +0200
-Message-Id: <DAIRHEFW2G16.2FHXB1PRM2HXC@kernel.org>
-From: "Benno Lossin" <lossin@kernel.org>
-To: "Andreas Hindborg" <a.hindborg@kernel.org>
-Cc: "Stephen Rothwell" <sfr@canb.auug.org.au>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Linux Kernel Mailing List"
- <linux-kernel@vger.kernel.org>, "Linux Next Mailing List"
- <linux-next@vger.kernel.org>
+MIME-Version: 1.0
+References: <20250610142230.001af1d3@canb.auug.org.au> <DAIP0NGMMM90.11JRFL5O1NAW9@kernel.org>
+ <DAIPCCIHRLHW.1TDNY93G6UZM0@kernel.org>
+In-Reply-To: <DAIPCCIHRLHW.1TDNY93G6UZM0@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 10 Jun 2025 11:56:30 +0200
+X-Gm-Features: AX0GCFtcW4ubBAGrkUsALWs26sB2MQDA3PZ5zNenT3l1emo1HSYJCwuF4WExudo
+Message-ID: <CANiq72kowA0oNZQYLnQBZfgm2caS+3Fmq7h0jPT2RF68Fjgiaw@mail.gmail.com>
 Subject: Re: linux-next: build failure after merge of the rust-pin-init tree
-X-Mailer: aerc 0.20.1
-References: <20250610142230.001af1d3@canb.auug.org.au>
- <DAIP0NGMMM90.11JRFL5O1NAW9@kernel.org>
- <e0lTxW1xgQfnXlaJP9bBC75nSMvzZEdAEAmkh1G41H1yJHHyg94Op2pxoQnOYTKtpKYyVQIJMZvjay8xS9yuuQ==@protonmail.internalid> <DAIPCCIHRLHW.1TDNY93G6UZM0@kernel.org> <87msag2b8r.fsf@kernel.org>
-In-Reply-To: <87msag2b8r.fsf@kernel.org>
+To: Benno Lossin <lossin@kernel.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Miguel Ojeda <ojeda@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue Jun 10, 2025 at 11:32 AM CEST, Andreas Hindborg wrote:
-> "Benno Lossin" <lossin@kernel.org> writes:
+On Tue, Jun 10, 2025 at 10:15=E2=80=AFAM Benno Lossin <lossin@kernel.org> w=
+rote:
 >
->> On Tue Jun 10, 2025 at 9:59 AM CEST, Benno Lossin wrote:
->>> On Tue Jun 10, 2025 at 6:22 AM CEST, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> After merging the rust-pin-init tree, today's linux-next build (x86_64
->>>> allmodconfig) failed like this:
->>>>
->>>> error[E0282]: type annotations needed
->>>>    --> rust/kernel/configfs.rs:154:26
->>>>     |
->>>> 154 |             subsystem <- pin_init::zeroed().chain(
->>>>     |                          ^^^^^^^^^^^^^^^^ cannot infer type of t=
-he type parameter `T` declared on the function `zeroed`
->>>>     |
->>>> help: consider specifying the generic argument
->>>>     |
->>>> 154 |             subsystem <- pin_init::zeroed::<T>().chain(
->>>>     |                                          +++++
->>>>
->>>> error[E0282]: type annotations needed
->>>>    --> rust/kernel/configfs.rs:264:22
->>>>     |
->>>> 264 |             group <- pin_init::zeroed().chain(|v: &mut Opaque<bi=
-ndings::config_group>| {
->>>>     |                      ^^^^^^^^^^^^^^^^ cannot infer type of the t=
-ype parameter `T` declared on the function `zeroed`
->>>>     |
->>>> help: consider specifying the generic argument
->>>>     |
->>>> 264 |             group <- pin_init::zeroed::<T>().chain(|v: &mut Opaq=
-ue<bindings::config_group>| {
->>>>     |                                      +++++
->>>>
->>>> error: aborting due to 2 previous errors
->>>>
->>>> For more information about this error, try `rustc --explain E0282`.
->>>>
->>>> Caused by commit
->>>>
->>>>   0bcaea04244b ("rust: pin-init: rename `zeroed` to `init_zeroed`")
->>>>
->>>> I have used the rust-pin-init tree from next-20250606 for today.
->>>
->>> Thanks for catching this! I didn't test with `CONFIG_CONFIGFS=3Dy`, so =
-the
->>> code was cfg'd out... I'll add it to my tests.
->>>
->>> @Andreas I'll send a new version of the commit above with configfs
->>> changed.
->>
->> (sorry forgot to add your emails and also some new info)
->>
->> Actually, the correct change would be this in commit 0bcaea04244b
->> ("rust: pin-init: rename `zeroed` to `init_zeroed`"):
->>
->> diff --git a/rust/kernel/configfs.rs b/rust/kernel/configfs.rs
->> index 34d0bea4f9a5..6d566a8bde74 100644
->> --- a/rust/kernel/configfs.rs
->> +++ b/rust/kernel/configfs.rs
->> @@ -151,7 +151,7 @@ pub fn new(
->>          data: impl PinInit<Data, Error>,
->>      ) -> impl PinInit<Self, Error> {
->>          try_pin_init!(Self {
->> -            subsystem <- pin_init::zeroed().chain(
->> +            subsystem <- pin_init::init_zeroed().chain(
->>                  |place: &mut Opaque<bindings::configfs_subsystem>| {
->>                      // SAFETY: We initialized the required fields of `p=
-lace.group` above.
->>                      unsafe {
->> @@ -261,7 +261,7 @@ pub fn new(
->>          data: impl PinInit<Data, Error>,
->>      ) -> impl PinInit<Self, Error> {
->>          try_pin_init!(Self {
->> -            group <- pin_init::zeroed().chain(|v: &mut Opaque<bindings:=
-:config_group>| {
->> +            group <- pin_init::init_zeroed().chain(|v: &mut Opaque<bind=
-ings::config_group>| {
->>                  let place =3D v.get();
->>                  let name =3D name.as_bytes_with_nul().as_ptr();
->>                  // SAFETY: It is safe to initialize a group once it has=
- been zeroed.
->>
->> @Miguel, @Andreas, how should I go about this? Send the commit above
->> augmented with the diff, or send a patch with just the diff to the list?
->> Or apply the diff directly to the commit in the pin-init-next branch &
->> rebasing (potentially adding an Acked-by from Andreas)? Or some other
->> way?
->
-> I think you should add this change directly in your tree. I think you
-> should just fold it into the breaking commit so we avoid commits that do
-> not build.
->
-> Acked-by: Andreas Hindborg <a.hindborg@kernel.org>
+> @Miguel, @Andreas, how should I go about this? Send the commit above
+> augmented with the diff, or send a patch with just the diff to the list?
+> Or apply the diff directly to the commit in the pin-init-next branch &
+> rebasing (potentially adding an Acked-by from Andreas)? Or some other
+> way?
 
-Thanks and done!
+If I understand correctly, the commit that introduced the issue
+(0bcaea04244b) is in your branch (rust/pin-init-next), thus you should
+fix it in your branch.
 
----
+Personally, I would just rebase, since you just applied them hours ago.
+
+As a maintainer, you are trusted to not introduce a change that others
+could disagree with (especially on their files) -- but you already
+told Andreas and discussed it here, so you did the right thing :)
+
+You can consider mentioning the change in the [ ... ] part, if you want.
+
+Thanks!
+
 Cheers,
-Benno
+Miguel
 

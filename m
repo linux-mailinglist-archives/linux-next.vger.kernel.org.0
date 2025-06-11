@@ -1,111 +1,105 @@
-Return-Path: <linux-next+bounces-7133-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7134-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5D20AD49F6
-	for <lists+linux-next@lfdr.de>; Wed, 11 Jun 2025 06:10:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0F03AD4A05
+	for <lists+linux-next@lfdr.de>; Wed, 11 Jun 2025 06:24:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7072189D117
-	for <lists+linux-next@lfdr.de>; Wed, 11 Jun 2025 04:10:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 401287A419A
+	for <lists+linux-next@lfdr.de>; Wed, 11 Jun 2025 04:23:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24C9E1D89FD;
-	Wed, 11 Jun 2025 04:09:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F360A1FDA94;
+	Wed, 11 Jun 2025 04:24:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="OrHStRM2"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="QgHIVjR1"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB6E21ADBA;
-	Wed, 11 Jun 2025 04:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8791779B8;
+	Wed, 11 Jun 2025 04:24:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749614991; cv=none; b=cbSNVunfp74SSkSGN/qMGttdp3e6wGLfWRtx8h92uiGzpCZlSRyAGb33NRMG66mpxrnHooc2poMoyBtZjgudKMQvPl3c5p9tqfWGx4tDI2/hNc/DgTZS8xOk5NbVI059f8oS/MRgZwhabQd9aUsHSc9D7wp41J0OgsV71rc9kII=
+	t=1749615855; cv=none; b=btucIItyCgnozT2E4M4TdUjPvi58QZ4k3NxwOzSp8rro6Zha64qX+mk+o2sI4GZrhad8Mm7vu1wGpeGQLoXML7cdd2+Xp6k/NutOGmLeBXuMfWEwXhVKSTC5HILjJcTEZRcf0T5ofiSIEQT39VVDUcprCTyOO7RV4DJW94w+AAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749614991; c=relaxed/simple;
-	bh=RQgdC8APOYJ/VnQMNqwHu7JJyOd86rIS4tIsNbOCJXk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Omcc1zcQt87BopBRV0+RtzXi8aOFW61LtlbdN5MfwTmLDy5CH1uGhtPCSRcqTuS3NRaes5lS5YlM7ukF7q5Ih62woT3S2XZcG+2e9DOftfn1bpOI4z7Mucdyheu/iqlSnl9fNXlPxl4FGO6ITYHqvmEf98of/5sNa3xLn1Duihs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=OrHStRM2; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1749615855; c=relaxed/simple;
+	bh=WiLolohheJunzLOWrT/uKOTdo3IwPO0v9wUqvC6oI2I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=oD7YcJRwQXwynP3X2hGIfCJkiHm++Q8TB/8/skveNCgXL+/Yl4AU0Mvf3DYkiXkB/QJUoS2msa8tInqZOdD/QkT8ILiYYihZdJS8MMODSshDpkm8UrOEfNoJ1s8+flAeft/4RsCKmEPpwqI36523Hws5VWoHJUGr8ECpJ0A/zkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=QgHIVjR1; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1749614975;
-	bh=l6N6qBxGbKoR75gXRlJQAPx2Ke8Xm4jzW89L0JDBexM=;
+	s=202503; t=1749615850;
+	bh=ptzmFD6VoBFqKTsbKMsJmli1kGbupzSWz0iKsBuY/IQ=;
 	h=Date:From:To:Cc:Subject:From;
-	b=OrHStRM2JMPQSfIiZhj3+tLjTPTvbat46PPxLn8Y3/CU9sosKWyrLlx8Cj+EZvnAB
-	 TSX0ui/NW7mPaD2omCsDPj03kXTFNAc5/3WKcuuNM6L0XiqiAGHR6Ubxt9cNbC+glO
-	 HKY/c8ABVdjI9J4W6X9AjyrlbIUdWefSQx26tq6+FXrZ4FtUm43cH8UbWrELukc67h
-	 7UEm0sgX6jMl3u8zDiUeb3zWy34mK1BwNmB5KLTeBHYRHP/LnQQ7LlCME+lOKre0lt
-	 csPX4+qSO46ZhBHU6KEo2pe959ipTCEOPf8rMdjDH346CycuQ5KwEnE0gMd5nlaEvu
-	 Fo7wVXhAIR8oA==
+	b=QgHIVjR1Cll0a5vd5Yeg/pjRypZOebYjzU/QnsqcXURoyPP3EwAjkUB+Z5FuPiZOI
+	 9gV8l8ulYntVZsQgEmcoLofegUpFw+zeZZYH9hBWowv+A7CpF1oMXF3qWOgPxrw0Wm
+	 YkEAKKiGDItLuc0T1qBWWo7quHRShi6nZ5Z6m4m0BV0K+1sptuv41iKTRG0QeQjYWA
+	 M6bq9tdw8yjDPwnnA0oZZVUgSwgKu0T1D+nSezmDQhHIpdPJ535bM6LRhQjI31ilLB
+	 fJ4nwnGR9Lya6oFTfxoKMHzsHjuwZQq+ifOJ5+bNdV4yK4GeqpTD1ALmtLWU1WujOH
+	 a/sgmuXjh2bDA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bHBxp5x1rz4wbR;
-	Wed, 11 Jun 2025 14:09:34 +1000 (AEST)
-Date: Wed, 11 Jun 2025 14:09:33 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bHCGd728Cz4wy6;
+	Wed, 11 Jun 2025 14:24:09 +1000 (AEST)
+Date: Wed, 11 Jun 2025 14:24:09 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Simona Vetter <simona.vetter@ffwll.ch>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Dmitry Baryshkov
- <dmitry.baryshkov@oss.qualcomm.com>, Intel Graphics
- <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the drm-misc tree
-Message-ID: <20250611140933.1429a1b8@canb.auug.org.au>
+To: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires
+ <benjamin.tissoires@redhat.com>
+Cc: Even Xu <even.xu@intel.com>, Jiri Kosina <jkosina@suse.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the hid tree
+Message-ID: <20250611142409.7d4683b0@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=ysdFscAmXuLr1BblmDBjb6";
+Content-Type: multipart/signed; boundary="Sig_/L+yomTRgBt=gic4ofSJ=rcJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/=ysdFscAmXuLr1BblmDBjb6
+--Sig_/L+yomTRgBt=gic4ofSJ=rcJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the drm-misc tree, today's linux-next build (htmldocs)
-produced these warnings:
+After merging the hid tree, today's linux-next build (htmldocs) produced
+this warning:
 
-include/drm/drm_bridge.h:943: warning: Function parameter or struct member =
-'hdmi_cec_init' not described in 'drm_bridge_funcs'
-include/drm/drm_bridge.h:943: warning: Function parameter or struct member =
-'hdmi_cec_enable' not described in 'drm_bridge_funcs'
-include/drm/drm_bridge.h:943: warning: Function parameter or struct member =
-'hdmi_cec_log_addr' not described in 'drm_bridge_funcs'
-include/drm/drm_bridge.h:943: warning: Function parameter or struct member =
-'hdmi_cec_transmit' not described in 'drm_bridge_funcs'
+Documentation/hid/intel-thc-hid.rst:200: ERROR: Unexpected indentation. [do=
+cutils]
 
 Introduced by commit
 
-  a74288c8ded7 ("drm/display: bridge-connector: handle CEC adapters")
+  45e92a093099 ("HID: Intel-thc-hid: Intel-thc: Introduce max input size co=
+ntrol")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/=ysdFscAmXuLr1BblmDBjb6
+--Sig_/L+yomTRgBt=gic4ofSJ=rcJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhJAX0ACgkQAVBC80lX
-0GwMYwf9F6YQKrArb2QjOVGfFE6WQ2RdhLqrv3HI89g0k/5fpINHl922ZxuaKyYm
-ScJ868bjjA6oFTENiuxtoZdx/xwO4y3aHRkuc+QND0o4QHr4Qhg6aw6QtTfMm4Pm
-GeDO2wU8bYeQbYSe0VStLSonRAX5+tzHYoiBrIMiOg/kj2JoE3lFiM3y2j3qNPbU
-/Gxc++SVzKVbmn/T8JcBjdxes3yvome+W6TgF05Yc1s/A7L50YUpkng/Erh8nSF2
-yHwTtYY14wvdSAqr0d8KEP9RM8BXBe5Xk7mCRzz8PYnXDs0/rpeUwppm/cDCjc/6
-kp4LRB7TscM60mQddnYa1Yr/G9boFw==
-=8xyK
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhJBOkACgkQAVBC80lX
+0GxSBwf/Uu+4tmvrV2CvReF81JeEaDqpxLtq2m2C/jwkDyKc0+8j30GBE7SJfQC6
+E4vwuy6lEprE3usgZmAb6eij96qPPNxwUOjnJ37h2Z96TelYwiE6AqHkaaknLFwa
+PfbIRGqoP91CloyIKvt9tEPwrtA9g2RQu3iSIgQ8s7tqFPM1yCNGI5b6L1DTlLXo
+18mUoU9w/0euqwiZORlajYzibRz7mCCKNCPGOf5WIr6sysNarFV8Q4QsfyMHIqdM
+2crSOcBazTkUbi5n/gzhjnK5NQJRQdTBwn5GdwEN56yIpqNQhTeCGIMUu/eFlsdj
+M/p/EwEVNsvHHVQ/tM2+oljVnInIgQ==
+=cN9H
 -----END PGP SIGNATURE-----
 
---Sig_/=ysdFscAmXuLr1BblmDBjb6--
+--Sig_/L+yomTRgBt=gic4ofSJ=rcJ--
 

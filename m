@@ -1,158 +1,1092 @@
-Return-Path: <linux-next+bounces-7153-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7154-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B262ADA644
-	for <lists+linux-next@lfdr.de>; Mon, 16 Jun 2025 04:20:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C2B4ADA69A
+	for <lists+linux-next@lfdr.de>; Mon, 16 Jun 2025 05:01:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72DB13A9942
-	for <lists+linux-next@lfdr.de>; Mon, 16 Jun 2025 02:19:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D46851890159
+	for <lists+linux-next@lfdr.de>; Mon, 16 Jun 2025 03:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49C647260B;
-	Mon, 16 Jun 2025 02:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 455481EEE6;
+	Mon, 16 Jun 2025 03:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lXC1SfUS"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TufeZZsJ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EAB423A6;
-	Mon, 16 Jun 2025 02:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22B91FC3;
+	Mon, 16 Jun 2025 03:01:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750040406; cv=none; b=lN1HKyn7qwVdIuYkEAoEe6qqHMma/XrPoejzOaAg0QPbH5v2GwcJGZZuMTlvTORfvkrYxbaNUPMSPAHPjMu/apbyWkKMXY4fNAcbxQT3YNKo4TNDPGCHtOxJE8HG/SD/YxqLikOp5JgHwHBng0slz6YzKu3tQRjMbptAiddftiw=
+	t=1750042896; cv=none; b=PiroiSJofUVCF6pTbPfPfemycgmelky8dlAb0pY9EiHSNcvlMxDoaN2JAzDEdzcVYN8StuPWf5KOflgAzR1tWVcVndEVyUy48KhBMTO6u7s5N65AtcGBAk/zBoWR63yfMWdDF2IKcRJ8tAHBe0yS32kDaGBCfseVHY21Crg/1+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750040406; c=relaxed/simple;
-	bh=b3hgF/Lbow1csUq8IcUa1wBJ57Qo7zOfK3OYewWbzCI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E098Jy6h/AIKcl5ZN/fchNlX/MZx0HRYLYoK9AOApJ8HN2247yzt1lp4kc8xAPxyjHN9jAbzDN6igjphMYn+lZjFwsaR9164MLgQSB3FOLrEOYmuPYbxjM3OAIH1wON68Hyn7BXDYy4MVdygTdPeb8vJZc0GOAoY22L8CP6pvK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lXC1SfUS; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-32b5226e6beso11809761fa.2;
-        Sun, 15 Jun 2025 19:20:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750040402; x=1750645202; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Adm7XuDI8badZxJVxnby3K6Zq8faQmVMQ1TgWod2DjI=;
-        b=lXC1SfUSYTpORj8XNq37rI40nFZ7yHuFmvllqSeUsMM5JBzq0CprJy/93yI0tbqFHU
-         73h3nM93sfSjpyv4PNB/+OA4Vj2xy3LsjYhODPLQ/JbEN6lT6gtB9CYSuI0HtcHjtVEQ
-         GddWHhLeS6vDROVAP5SX3Wr7ewIrfzAaX/Zpbk6b2VfRAdoSHDc/aXSvxSGoCPiKjFkt
-         wEcuwgx9/QNeJTyIbSvFNAKv1xiUxckRsYDKqHHpbL385ROab/23+LZYIVan/kE654aK
-         VnX+XiTrNHvdB5hnW+H5SiXQDhN0MK6YiXUJdeXznK4uyHKSC/6xGPxIX3AYtj3w7kfZ
-         GAqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750040402; x=1750645202;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Adm7XuDI8badZxJVxnby3K6Zq8faQmVMQ1TgWod2DjI=;
-        b=pO4uvB4XGbXEburZbLm3MbyutZh1A623ZFHYaGBZUhAnF8vggZQ56zw4s6vTP/nf1/
-         QNICfgfyZG+KAGNfyKo6ln7qbd+G9RT+8mCV+Onh/hloXvj0ud75bgCH7OIta37c5Tat
-         nmgPQ7TBPDHnWE07wjfrU1igAdS0PXYfJbz/WppbqHkqDnFXFh8atHQ34f//v5qoIF6F
-         NuuPwSrPStaP8HydQbFTKB5D5LVkFy2DIZMCeZhKZDJxgGtA5RDIkh/xDUdJs1445N7P
-         DMZiMHGKJx5avDuvNz2FmF91WhJ6Dh+dUSyRrR/m4hkdXMD+fTi79lno/j27r2XJ8cHY
-         Lw6w==
-X-Forwarded-Encrypted: i=1; AJvYcCW5X1btABRyLX1UTURjJ/F2iONj30tKPXpbktoa1orHbIGz4WiPY2yj/qiFm6Aq/ePAe9k0ciQy3neuAg==@vger.kernel.org, AJvYcCWIQ+0sHqBLrR0KkepRVkqh9mU2LG+oPjxW65ROGkmUvztScx4j72wYJew0ty7GPoc4a8aMZ/t/8j1YfvE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNA2+fZZ1C4Uxgd9zM7ybrcOWH8KvdfaBZuXj9clj4mzRo51D1
-	DRZ5zxvNxumVlsGkq4MnzNC/xcrTIFBcUHTYeEkqe+fR7K4CrVdjg3rlgBJyZw0pwRSlmB+FSSg
-	7SOOWSgXvvqjP0yA3D1ijR6Z0tQqIZ8M=
-X-Gm-Gg: ASbGncvxKtlLwjayok4Sose5Z6vBm2yavOoYl+DVPmY7nIzKU1PPmj/D5i1OUbZMtSu
-	Spam1ki7gzTLqcrnEBOPFiK0t4Z/8RrX33dvwDwiv4s/4mWEiWPf2FlbimeRl6i55HB+A1hPr3q
-	2aDkFbZwax/1ypsQZjHYeLzBZOadSB/knA6ynoCjAUIfs=
-X-Google-Smtp-Source: AGHT+IGKWYxnv30DZihQ0w2N6RU8FRcQfAw0BZMV5/EUEN/j0MUi5fBTXIJXQzqTJt4lAiWsilE6m23Pt0ICDLLWis4=
-X-Received: by 2002:a05:651c:79e:b0:32a:739d:fad with SMTP id
- 38308e7fff4ca-32b4a6108e4mr14588161fa.36.1750040401733; Sun, 15 Jun 2025
- 19:20:01 -0700 (PDT)
+	s=arc-20240116; t=1750042896; c=relaxed/simple;
+	bh=zTuMbMPi2+rVp97D7jsFGjRewuljHwK79wUSCkTiMOg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SCtqS/vioQeZ/jKkT6rPCh4XveB8pF5Rvsi5fRGl1p2tKIGPHXpELpISiK4qwC9SCkK1A6FG8hpazXNjcxn2vuWTVXlYGcue1UPwZOb0D4Z0YW4iDdWxfyUowPQDdE14uk9Zvra9dFX9qHf3ntiMCymLIWI+bIPWysyBEHS43J8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=TufeZZsJ; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1750042887;
+	bh=uywGkv2uoZkEWpK9FHfKipbDj5LJuwbzL+h/d9Q4jgc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=TufeZZsJ1koXL5A8wOdyDKhR/jvC5CkgGR3ClR2XD2H2+qS5YSdc0de4zqO+d+sW1
+	 Fiu77SCkjXTY2TlsM2KwffTTr7L4CcQ/axC4jA+kdsVOmbO/kdz+NYJwWvq3Cx1Ta+
+	 NoHTOFdF2t2CB2itaXHPL2hFmsLm7aFudqm6qj2a4bqaw7//LpDZnNSfRrwb3n0HAC
+	 DnEt9dlZllIj11Ci9l7nY5SEoam9gdPyXfAuRP4scUcKXgPREC4zrnzIZFjGXV8nTA
+	 erwI1o6YWWYof5MCqr8uHFfuRfT83XbmC4igFCMDS3HpG3z8vTrGXIOY07Y98KnouX
+	 jK+u+LZZsq0Eg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bLFBv00NHz4wcm;
+	Mon, 16 Jun 2025 13:01:26 +1000 (AEST)
+Date: Mon, 16 Jun 2025 13:01:26 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the sound tree
+Message-ID: <20250616130126.08729b84@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250610081759.185e7982@canb.auug.org.au> <874iwo8shn.fsf@trenco.lwn.net>
-In-Reply-To: <874iwo8shn.fsf@trenco.lwn.net>
-From: liu shouye <shouyeliu@gmail.com>
-Date: Mon, 16 Jun 2025 10:19:50 +0800
-X-Gm-Features: AX0GCFsco9XEuTsjS8HV0wL9rQCYkshAkMIjpMWIrmmY7cbYbv1m2ur_M22qIis
-Message-ID: <CAAscG3X1Rg3YE3+FvNuyK_0eRtz6Q7FgAJBW0saNYNQkigPZzw@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the jc_docs tree
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Shouye Liu <shouyeliu@tencent.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/U8PrXY8F=L+g=9.sV+twsqQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/U8PrXY8F=L+g=9.sV+twsqQ
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-From: Shouye Liu <shouyeliu@tencent.com>
+Hi all,
 
-In the AMD P-States Performance Scale diagram, the labels for "Max Perf"
-and "Lowest Perf" were incorrectly used to define the range for
-"Desired Perf".The "Desired performance target" should be bounded by the
-"Maximum requested performance" and the "Minimum requested performance",
-which corresponds to "Max Perf" and "Min Perf", respectively.
+After merging the sound tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Signed-off-by: Shouye Liu <shouyeliu@tencent.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+In file included from include/linux/uaccess.h:12,
+                 from include/linux/sched/task.h:13,
+                 from include/linux/sched/signal.h:9,
+                 from include/linux/rcuwait.h:6,
+                 from include/linux/percpu-rwsem.h:7,
+                 from include/linux/fs.h:34,
+                 from include/linux/compat.h:17,
+                 from sound/core/pcm_native.c:7:
+sound/core/pcm_compat.c: In function 'snd_pcm_ioctl_sync_ptr_x32':
+sound/core/pcm_native.c:3081:60: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'tstamp'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |                                                            ^
+arch/x86/include/asm/uaccess.h:234:22: note: in definition of macro '__put_=
+user_size'
+  234 |         __typeof__(*(ptr)) __x =3D (x); /* eval x once */          =
+       \
+      |                      ^~~
+sound/core/pcm_native.c:3081:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3081:60: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'tstamp'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |                                                            ^
+arch/x86/include/asm/uaccess.h:234:35: note: in definition of macro '__put_=
+user_size'
+  234 |         __typeof__(*(ptr)) __x =3D (x); /* eval x once */          =
+       \
+      |                                   ^
+sound/core/pcm_native.c:3081:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3081:60: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'tstamp'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |                                                            ^
+arch/x86/include/asm/uaccess.h:235:20: note: in definition of macro '__put_=
+user_size'
+  235 |         __typeof__(ptr) __ptr =3D (ptr); /* eval ptr once */       =
+       \
+      |                    ^~~
+sound/core/pcm_native.c:3081:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3081:60: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'tstamp'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |                                                            ^
+arch/x86/include/asm/uaccess.h:235:34: note: in definition of macro '__put_=
+user_size'
+  235 |         __typeof__(ptr) __ptr =3D (ptr); /* eval ptr once */       =
+       \
+      |                                  ^~~
+sound/core/pcm_native.c:3081:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3081:60: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'tstamp'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |                                                            ^
+arch/x86/include/asm/uaccess.h:237:17: note: in definition of macro '__put_=
+user_size'
+  237 |         switch (size) {                                            =
+     \
+      |                 ^~~~
+sound/core/pcm_native.c:3081:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:239:17: note: in expansion of macro '__put_u=
+ser_goto'
+  239 |                 __put_user_goto(__x, __ptr, "b", "iq", label);     =
+     \
+      |                 ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3081:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:242:17: note: in expansion of macro '__put_u=
+ser_goto'
+  242 |                 __put_user_goto(__x, __ptr, "w", "ir", label);     =
+     \
+      |                 ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3081:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:245:17: note: in expansion of macro '__put_u=
+ser_goto'
+  245 |                 __put_user_goto(__x, __ptr, "l", "ir", label);     =
+     \
+      |                 ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3081:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:146:9: note: in expansion of macro '__put_us=
+er_goto'
+  146 |         __put_user_goto(x, ptr, "q", "er", label)
+      |         ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:248:17: note: in expansion of macro '__put_u=
+ser_goto_u64'
+  248 |                 __put_user_goto_u64(__x, __ptr, label);            =
+     \
+      |                 ^~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3081:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/asm-generic/bitops/instrumented-atomic.h:14,
+                 from arch/x86/include/asm/bitops.h:429,
+                 from include/linux/bitops.h:67,
+                 from include/linux/kernel.h:23,
+                 from include/linux/cpumask.h:11,
+                 from arch/x86/include/asm/paravirt.h:21,
+                 from arch/x86/include/asm/cpuid/api.h:57,
+                 from arch/x86/include/asm/processor.h:19,
+                 from arch/x86/include/asm/timex.h:5,
+                 from include/linux/timex.h:67,
+                 from include/linux/time32.h:13,
+                 from include/linux/time.h:60,
+                 from include/linux/compat.h:10:
+arch/x86/include/asm/uaccess.h:253:34: error: passing argument 1 of 'kmsan_=
+copy_to_user' makes pointer from integer without a cast [-Wint-conversion]
+  253 |         instrument_put_user(__x, __ptr, size);                     =
+     \
+      |                                  ^~~~~
+      |                                  |
+      |                                  int
+include/linux/instrumented.h:213:28: note: in definition of macro 'instrume=
+nt_put_user'
+  213 |         kmsan_copy_to_user(ptr, &from, sizeof(from), 0);        \
+      |                            ^~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3081:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.=
+tv_sec, failed);             \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/linux/instrumented.h:13:
+include/linux/kmsan-checks.h:87:52: note: expected 'void *' but argument is=
+ of type 'int'
+   87 | static inline void kmsan_copy_to_user(void __user *to, const void *=
+from,
+      |                                       ~~~~~~~~~~~~~^~
+sound/core/pcm_native.c:3082:61: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'tstamp'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |                                                             ^
+arch/x86/include/asm/uaccess.h:234:22: note: in definition of macro '__put_=
+user_size'
+  234 |         __typeof__(*(ptr)) __x =3D (x); /* eval x once */          =
+       \
+      |                      ^~~
+sound/core/pcm_native.c:3082:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3082:61: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'tstamp'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |                                                             ^
+arch/x86/include/asm/uaccess.h:234:35: note: in definition of macro '__put_=
+user_size'
+  234 |         __typeof__(*(ptr)) __x =3D (x); /* eval x once */          =
+       \
+      |                                   ^
+sound/core/pcm_native.c:3082:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3082:61: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'tstamp'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |                                                             ^
+arch/x86/include/asm/uaccess.h:235:20: note: in definition of macro '__put_=
+user_size'
+  235 |         __typeof__(ptr) __ptr =3D (ptr); /* eval ptr once */       =
+       \
+      |                    ^~~
+sound/core/pcm_native.c:3082:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3082:61: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'tstamp'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |                                                             ^
+arch/x86/include/asm/uaccess.h:235:34: note: in definition of macro '__put_=
+user_size'
+  235 |         __typeof__(ptr) __ptr =3D (ptr); /* eval ptr once */       =
+       \
+      |                                  ^~~
+sound/core/pcm_native.c:3082:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3082:61: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'tstamp'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |                                                             ^
+arch/x86/include/asm/uaccess.h:237:17: note: in definition of macro '__put_=
+user_size'
+  237 |         switch (size) {                                            =
+     \
+      |                 ^~~~
+sound/core/pcm_native.c:3082:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:239:17: note: in expansion of macro '__put_u=
+ser_goto'
+  239 |                 __put_user_goto(__x, __ptr, "b", "iq", label);     =
+     \
+      |                 ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3082:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:242:17: note: in expansion of macro '__put_u=
+ser_goto'
+  242 |                 __put_user_goto(__x, __ptr, "w", "ir", label);     =
+     \
+      |                 ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3082:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:245:17: note: in expansion of macro '__put_u=
+ser_goto'
+  245 |                 __put_user_goto(__x, __ptr, "l", "ir", label);     =
+     \
+      |                 ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3082:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:146:9: note: in expansion of macro '__put_us=
+er_goto'
+  146 |         __put_user_goto(x, ptr, "q", "er", label)
+      |         ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:248:17: note: in expansion of macro '__put_u=
+ser_goto_u64'
+  248 |                 __put_user_goto_u64(__x, __ptr, label);            =
+     \
+      |                 ^~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3082:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:253:34: error: passing argument 1 of 'kmsan_=
+copy_to_user' makes pointer from integer without a cast [-Wint-conversion]
+  253 |         instrument_put_user(__x, __ptr, size);                     =
+     \
+      |                                  ^~~~~
+      |                                  |
+      |                                  int
+include/linux/instrumented.h:213:28: note: in definition of macro 'instrume=
+nt_put_user'
+  213 |         kmsan_copy_to_user(ptr, &from, sizeof(from), 0);        \
+      |                            ^~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3082:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3082 |         unsafe_put_user(__s.tstamp.tv_nsec, &__src->s.status.tstamp=
+.tv_nsec, failed);           \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/kmsan-checks.h:87:52: note: expected 'void *' but argument is=
+ of type 'int'
+   87 | static inline void kmsan_copy_to_user(void __user *to, const void *=
+from,
+      |                                       ~~~~~~~~~~~~~^~
+sound/core/pcm_native.c:3084:67: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'audio_tstamp'; did you mean 'audio_tstamp_sec'?
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |                                                                   ^=
+~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:234:22: note: in definition of macro '__put_=
+user_size'
+  234 |         __typeof__(*(ptr)) __x =3D (x); /* eval x once */          =
+       \
+      |                      ^~~
+sound/core/pcm_native.c:3084:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3084:67: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'audio_tstamp'; did you mean 'audio_tstamp_sec'?
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |                                                                   ^=
+~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:234:35: note: in definition of macro '__put_=
+user_size'
+  234 |         __typeof__(*(ptr)) __x =3D (x); /* eval x once */          =
+       \
+      |                                   ^
+sound/core/pcm_native.c:3084:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3084:67: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'audio_tstamp'; did you mean 'audio_tstamp_sec'?
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |                                                                   ^=
+~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:235:20: note: in definition of macro '__put_=
+user_size'
+  235 |         __typeof__(ptr) __ptr =3D (ptr); /* eval ptr once */       =
+       \
+      |                    ^~~
+sound/core/pcm_native.c:3084:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3084:67: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'audio_tstamp'; did you mean 'audio_tstamp_sec'?
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |                                                                   ^=
+~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:235:34: note: in definition of macro '__put_=
+user_size'
+  235 |         __typeof__(ptr) __ptr =3D (ptr); /* eval ptr once */       =
+       \
+      |                                  ^~~
+sound/core/pcm_native.c:3084:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3084:67: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'audio_tstamp'; did you mean 'audio_tstamp_sec'?
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |                                                                   ^=
+~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:237:17: note: in definition of macro '__put_=
+user_size'
+  237 |         switch (size) {                                            =
+     \
+      |                 ^~~~
+sound/core/pcm_native.c:3084:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:239:17: note: in expansion of macro '__put_u=
+ser_goto'
+  239 |                 __put_user_goto(__x, __ptr, "b", "iq", label);     =
+     \
+      |                 ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3084:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:242:17: note: in expansion of macro '__put_u=
+ser_goto'
+  242 |                 __put_user_goto(__x, __ptr, "w", "ir", label);     =
+     \
+      |                 ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3084:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:245:17: note: in expansion of macro '__put_u=
+ser_goto'
+  245 |                 __put_user_goto(__x, __ptr, "l", "ir", label);     =
+     \
+      |                 ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3084:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:146:9: note: in expansion of macro '__put_us=
+er_goto'
+  146 |         __put_user_goto(x, ptr, "q", "er", label)
+      |         ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:248:17: note: in expansion of macro '__put_u=
+ser_goto_u64'
+  248 |                 __put_user_goto_u64(__x, __ptr, label);            =
+     \
+      |                 ^~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3084:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:253:34: error: passing argument 1 of 'kmsan_=
+copy_to_user' makes pointer from integer without a cast [-Wint-conversion]
+  253 |         instrument_put_user(__x, __ptr, size);                     =
+     \
+      |                                  ^~~~~
+      |                                  |
+      |                                  int
+include/linux/instrumented.h:213:28: note: in definition of macro 'instrume=
+nt_put_user'
+  213 |         kmsan_copy_to_user(ptr, &from, sizeof(from), 0);        \
+      |                            ^~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3084:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3084 |         unsafe_put_user(__s.audio_tstamp.tv_sec, &__src->s.status.a=
+udio_tstamp.tv_sec, failed); \
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/kmsan-checks.h:87:52: note: expected 'void *' but argument is=
+ of type 'int'
+   87 | static inline void kmsan_copy_to_user(void __user *to, const void *=
+from,
+      |                                       ~~~~~~~~~~~~~^~
+sound/core/pcm_native.c:3085:68: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'audio_tstamp'; did you mean 'audio_tstamp_sec'?
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |                                                                    =
+^~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:234:22: note: in definition of macro '__put_=
+user_size'
+  234 |         __typeof__(*(ptr)) __x =3D (x); /* eval x once */          =
+       \
+      |                      ^~~
+sound/core/pcm_native.c:3085:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3085:68: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'audio_tstamp'; did you mean 'audio_tstamp_sec'?
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |                                                                    =
+^~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:234:35: note: in definition of macro '__put_=
+user_size'
+  234 |         __typeof__(*(ptr)) __x =3D (x); /* eval x once */          =
+       \
+      |                                   ^
+sound/core/pcm_native.c:3085:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3085:68: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'audio_tstamp'; did you mean 'audio_tstamp_sec'?
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |                                                                    =
+^~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:235:20: note: in definition of macro '__put_=
+user_size'
+  235 |         __typeof__(ptr) __ptr =3D (ptr); /* eval ptr once */       =
+       \
+      |                    ^~~
+sound/core/pcm_native.c:3085:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3085:68: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'audio_tstamp'; did you mean 'audio_tstamp_sec'?
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |                                                                    =
+^~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:235:34: note: in definition of macro '__put_=
+user_size'
+  235 |         __typeof__(ptr) __ptr =3D (ptr); /* eval ptr once */       =
+       \
+      |                                  ^~~
+sound/core/pcm_native.c:3085:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3085:68: error: 'struct snd_pcm_mmap_status_x32' ha=
+s no member named 'audio_tstamp'; did you mean 'audio_tstamp_sec'?
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |                                                                    =
+^~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:237:17: note: in definition of macro '__put_=
+user_size'
+  237 |         switch (size) {                                            =
+     \
+      |                 ^~~~
+sound/core/pcm_native.c:3085:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:239:17: note: in expansion of macro '__put_u=
+ser_goto'
+  239 |                 __put_user_goto(__x, __ptr, "b", "iq", label);     =
+     \
+      |                 ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3085:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:242:17: note: in expansion of macro '__put_u=
+ser_goto'
+  242 |                 __put_user_goto(__x, __ptr, "w", "ir", label);     =
+     \
+      |                 ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3085:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:245:17: note: in expansion of macro '__put_u=
+ser_goto'
+  245 |                 __put_user_goto(__x, __ptr, "l", "ir", label);     =
+     \
+      |                 ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3085:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:472:18: error: cast to pointer from integer =
+of different size [-Werror=3Dint-to-pointer-cast]
+  472 | #define __m(x) (*(struct __large_struct __user *)(x))
+      |                  ^
+arch/x86/include/asm/uaccess.h:483:36: note: in expansion of macro '__m'
+  483 |                 : : ltype(x), "m" (__m(addr))                      =
+     \
+      |                                    ^~~
+arch/x86/include/asm/uaccess.h:146:9: note: in expansion of macro '__put_us=
+er_goto'
+  146 |         __put_user_goto(x, ptr, "q", "er", label)
+      |         ^~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:248:17: note: in expansion of macro '__put_u=
+ser_goto_u64'
+  248 |                 __put_user_goto_u64(__x, __ptr, label);            =
+     \
+      |                 ^~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3085:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+arch/x86/include/asm/uaccess.h:253:34: error: passing argument 1 of 'kmsan_=
+copy_to_user' makes pointer from integer without a cast [-Wint-conversion]
+  253 |         instrument_put_user(__x, __ptr, size);                     =
+     \
+      |                                  ^~~~~
+      |                                  |
+      |                                  int
+include/linux/instrumented.h:213:28: note: in definition of macro 'instrume=
+nt_put_user'
+  213 |         kmsan_copy_to_user(ptr, &from, sizeof(from), 0);        \
+      |                            ^~~
+arch/x86/include/asm/uaccess.h:533:9: note: in expansion of macro '__put_us=
+er_size'
+  533 |         __put_user_size((__typeof__(*(ptr)))(x), (ptr), sizeof(*(pt=
+r)), label)
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_native.c:3085:9: note: in expansion of macro 'unsafe_put_use=
+r'
+ 3085 |         unsafe_put_user(__s.audio_tstamp.tv_nsec, &__src->s.status.=
+audio_tstamp.tv_nsec, failed);\
+      |         ^~~~~~~~~~~~~~~
+sound/core/pcm_compat.c:451:13: note: in expansion of macro 'snd_pcm_sync_p=
+tr_put_user'
+  451 |         if (snd_pcm_sync_ptr_put_user(sstatus, scontrol, src))
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/kmsan-checks.h:87:52: note: expected 'void *' but argument is=
+ of type 'int'
+   87 | static inline void kmsan_copy_to_user(void __user *to, const void *=
+from,
+      |                                       ~~~~~~~~~~~~~^~
+cc1: all warnings being treated as errors
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst
-b/Documentation/admin-guide/pm/amd-pstate.rst
-index 412423c54f25..e1771f2225d5 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -72,7 +72,7 @@ to manage each performance update behavior. ::
-   Lowest non-        |                       |
- |                       |
-   linear perf ------>+-----------------------+
- +-----------------------+
-                      |                       |
- |                       |
--                     |                       |       Lowest perf
----->|                       |
-+                     |                       |          Min perf
----->|                       |
-                      |                       |
- |                       |
-   Lowest perf ------>+-----------------------+
- +-----------------------+
-                      |                       |
- |                       |
---
-2.19.1
+Caused by (sone of) commits
 
-Jonathan Corbet <corbet@lwn.net> =E4=BA=8E2025=E5=B9=B46=E6=9C=8810=E6=97=
-=A5=E5=91=A8=E4=BA=8C 06:23=E5=86=99=E9=81=93=EF=BC=9A
->
-> Stephen Rothwell <sfr@canb.auug.org.au> writes:
->
-> > Hi all,
-> >
-> > Commit
-> >
-> >   47cbe79dedbe ("Documentation: amd-pstate:fix minimum performance stat=
-e label error")
-> >
-> > is missing a Signed-off-by from its author.
-> >
-> > Actually it looks like 2 different email addresses have been used.
->
-> Gee, I must have pushed that tree at least five minutes ago, you
-> couldn't find this sooner? :)
->
-> Shouye, can you send me a version with a matching signoff, please?
->
-> Thanks,
->
-> jon
+  2acd83beb4d3 ("ALSA: pcm: refactor copy from/to user in SNDRV_PCM_IOCTL_S=
+YNC_PTR")
+  de32a6120b80 ("ALSA: pcm: Convert snd_pcm_sync_ptr() to user_access_begin=
+/user_access_end()")
+  a0f3992ee86e ("ALSA: pcm: Replace [audio_]tstamp_[n]sec by struct __snd_t=
+imespec in struct snd_pcm_mmap_status32")
+  a9b49bf8ad59 ("ALSA: pcm: Convert SNDRV_PCM_IOCTL_SYNC_PTR to user_access=
+_begin/user_access_end()")
 
-I'm very sorry to see this email so late. This patch adds my "From"
+I have used the sound tree from next-20250613 for today.
 
-Thanks,
-Shouye
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/U8PrXY8F=L+g=9.sV+twsqQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhPiQYACgkQAVBC80lX
+0GzlNwf/bjL5Bvcl8J7GKcYGmE6kg5zllJluf014c/29ph11IbhbaoMtdwBr2JHu
+E8H3Vq9jVuCSvOsaBXh1n8gRIAxWYkBI9JSNaGnrpocAUOs7bQXiobrd437YgPu+
+G3FN0wP0ALeIezxPHNdoi2E43lKU0qCUNx8/GC1dl0dOA5236iTtJb2355oB42Xa
+IZPB28qnejhKnVvCCUTfFpEyCjgWyW+PSgnPqTI8j4sOdBt+w84SPNWoO5uc8Co6
+iZIvdJgDNH4JJemmgUpgDpmcupKTPmNR3wIm8q1LBVMP3gV0vOHRDL81ER8+f01m
+F0MN4+xey79CxdYpo0I+jo90A14Viw==
+=6RTW
+-----END PGP SIGNATURE-----
+
+--Sig_/U8PrXY8F=L+g=9.sV+twsqQ--
 

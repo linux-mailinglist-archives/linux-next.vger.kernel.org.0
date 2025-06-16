@@ -1,110 +1,103 @@
-Return-Path: <linux-next+bounces-7157-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7156-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE8EFADA7D3
-	for <lists+linux-next@lfdr.de>; Mon, 16 Jun 2025 07:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 39012ADA7AE
+	for <lists+linux-next@lfdr.de>; Mon, 16 Jun 2025 07:31:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7583016BBFD
-	for <lists+linux-next@lfdr.de>; Mon, 16 Jun 2025 05:50:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2E9616C051
+	for <lists+linux-next@lfdr.de>; Mon, 16 Jun 2025 05:31:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 954701C6FFD;
-	Mon, 16 Jun 2025 05:50:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8934118E025;
+	Mon, 16 Jun 2025 05:31:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VMKmr182"
 X-Original-To: linux-next@vger.kernel.org
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3F1C2E11CF;
-	Mon, 16 Jun 2025 05:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.236.30
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD5F2629F;
+	Mon, 16 Jun 2025 05:31:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750053039; cv=none; b=rF2iVw52asvrrEhtBoalrJH9aqpXNIomHT2qGlIiaIB0r0svShaNytZVHkgGYFBv2TTFa364UlLY7WPPsPnxGO3/w2dMwpXrkiWMOhnjTX7SvPdbkuklbucMNpy4bK+HByi8DnF0bkQ+cA3V11X8Lf99ZNKM14JuSpZ4OcoWKUc=
+	t=1750051905; cv=none; b=Nn5O+wci9bWgEJmIHBek0oNfevOuBPjbgHH6sUVt3bwRukDcIh7ZtvvkLreoxcLfuCzMXhsE3KIeDi6VRQ/X6naIc1Zlc4EE/6SyrRSwD31e5dF9uXWt8L8Mr1GUmeCQgu5XOL6Ae2Aahp60qANPjq05mMSFWwuON+lZMqzh6zI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750053039; c=relaxed/simple;
-	bh=CJAd+aKM9Pfu6e0guSrEaR+0MN/mkaAyikHCoyUr4Rw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=duIRcJ+FKvMH5HJoBfhMZwSl+tcQfPIIb3qegpE84y2HNc/XszOt4WZOlNY/2d2sZwOtVWrPbMjX0gxmsMFwI1cxoi5hy42nvvo6pUek0GuAgVDzgTwigyorSHSVJkgXqYHtvxTM4ScCGR9/f+q5sMKQK9wNmRN/rB1LECho5UY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.236.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-	by localhost (Postfix) with ESMTP id 4bLJVC6tLxz9st4;
-	Mon, 16 Jun 2025 07:29:55 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id FIWO7-Oem8zY; Mon, 16 Jun 2025 07:29:55 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase1.c-s.fr (Postfix) with ESMTP id 4bLJVC638Dz9sSD;
-	Mon, 16 Jun 2025 07:29:55 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id CDA7C8B764;
-	Mon, 16 Jun 2025 07:29:55 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id UYBXJMCF-rVY; Mon, 16 Jun 2025 07:29:55 +0200 (CEST)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 899E08B763;
-	Mon, 16 Jun 2025 07:29:55 +0200 (CEST)
-Message-ID: <20f5757c-78b3-4a68-a499-96951108d27c@csgroup.eu>
-Date: Mon, 16 Jun 2025 07:29:55 +0200
+	s=arc-20240116; t=1750051905; c=relaxed/simple;
+	bh=qYoVlq8m6Y5sCgW5dD/wQw9vDbOD0UXJ8pdJjbGNU4w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hhP7rvW+kkJDRoJ22ZxDZWyudjf5x2xXd/lzGjN8qrBs/CIdjhbeQiB6zvwKRjat2JgCLBOSX5eG8EBGhcC+0xsCkNIHadmXCeJubD63ZPOv2bkqjV0wj8d1+tp/X0vlAIXb5xM8e1QDmKRz8ynufmQGpK5cIgKY0HatIqcAUnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=VMKmr182; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1750051896;
+	bh=cLEeRM1CL5/Z5I60v9zuIYp8AFyWIY04ZQ97Zfe/p8Q=;
+	h=Date:From:To:Cc:Subject:From;
+	b=VMKmr182nFhSBXLAboBIGsXTSVCjZRIXbHbVpQbSy1OxzISvAPsNQZVsabp8g9e8u
+	 xc62yeyDPKL07E96wRlZtkV/KQnOkWyezdBIznCvxaaCEUR7FtJYfxFlyg4NrIeQG0
+	 JqMaIECG+wcKnEjDqLqpk2oLplUUl2pYMrjJ+f6WtHSzpK6vtfZajfrWaYAdtXN5YQ
+	 laYzaI2MkBGvL3sz3o3SCV8HdNwUNia6EIgG2f5lsio6TX8hKz/Pf+7M9EnhtiuN9+
+	 H6SUaXnYXi/MW5kB2SrFGFVNEbtAbj0u0TW/z+qJXe0NjpP/0nQ5k8R3erqWI9GufF
+	 SrVFNrPd8iE7w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bLJX806M1z4wbW;
+	Mon, 16 Jun 2025 15:31:34 +1000 (AEST)
+Date: Mon, 16 Jun 2025 15:31:34 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Herbert Xu <herbert@gondor.apana.org.au>, Linux Crypto List
+ <linux-crypto@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the crypto tree
+Message-ID: <20250616153134.1583c3bb@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the sound tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Takashi Iwai <tiwai@suse.de>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20250616130126.08729b84@canb.auug.org.au>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20250616130126.08729b84@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/r+UJ+0s=TH.2LYQ_FwuT=wD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/r+UJ+0s=TH.2LYQ_FwuT=wD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-Le 16/06/2025 à 05:01, Stephen Rothwell a écrit :
-> Hi all,
-> 
-> After merging the sound tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> In file included from include/linux/uaccess.h:12,
->                   from include/linux/sched/task.h:13,
->                   from include/linux/sched/signal.h:9,
->                   from include/linux/rcuwait.h:6,
->                   from include/linux/percpu-rwsem.h:7,
->                   from include/linux/fs.h:34,
->                   from include/linux/compat.h:17,
->                   from sound/core/pcm_native.c:7:
-> sound/core/pcm_compat.c: In function 'snd_pcm_ioctl_sync_ptr_x32':
-> sound/core/pcm_native.c:3081:60: error: 'struct snd_pcm_mmap_status_x32' has no member named 'tstamp'
->   3081 |         unsafe_put_user(__s.tstamp.tv_sec, &__src->s.status.tstamp.tv_sec, failed);             \
->        |                                                            ^
+After merging the crypto tree, today's linux-next build (htmldocs)
+produced this warning:
 
-...
+include/linux/padata.h:104: warning: Excess struct member 'reorder_work' de=
+scription in 'parallel_data'
 
-> 
-> Caused by (sone of) commits
-> 
->    2acd83beb4d3 ("ALSA: pcm: refactor copy from/to user in SNDRV_PCM_IOCTL_SYNC_PTR")
->    de32a6120b80 ("ALSA: pcm: Convert snd_pcm_sync_ptr() to user_access_begin/user_access_end()")
->    a0f3992ee86e ("ALSA: pcm: Replace [audio_]tstamp_[n]sec by struct __snd_timespec in struct snd_pcm_mmap_status32")
->    a9b49bf8ad59 ("ALSA: pcm: Convert SNDRV_PCM_IOCTL_SYNC_PTR to user_access_begin/user_access_end()")
-> 
-> I have used the sound tree from next-20250613 for today.
-> 
+Introduced by commit
 
-This is caused by a0f3992ee86e.
+  71203f68c774 ("padata: Fix pd UAF once and for all")
 
-Fix here : 
-https://lore.kernel.org/linux-sound/e46139ed61bc52fab51babadb8b656fa1aa15506.1750050658.git.christophe.leroy@csgroup.eu/T/#u
+--=20
+Cheers,
+Stephen Rothwell
 
-Christophe
+--Sig_/r+UJ+0s=TH.2LYQ_FwuT=wD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhPrDYACgkQAVBC80lX
+0GwJaAgAg67JURkrM4ZstGQwrdaMek0eLmL6TTqrUMK9bYOhUWk4q2BVSu0AvMBg
+D4fApkU1rnuNdhKGH/MqUVxQT5gXX1WcD4ebbDYOHgfDELsbAFcj3tjnIkNilKZU
+8mhEcO2VUGhMAsi7hw5jl+n7InbZG+Vpi6KhjQRm2PQ0r/KGDQTj+IrrnNk21AEn
+HaHMttjSzEIzqlPhUkGMAtse8PFJu70qLQ+GC24buoi4A5skay5aRaESQ6s7cMcp
+hBZUgo0CSr+E9ns8MKwbj8QtCL9oGC1kCJXiXTBedwOY/emrbPbzwzuPlopQgJ8N
+Ju0Tx1S1r+3koLw4uGQ1I4ARXMwyKw==
+=Qy/x
+-----END PGP SIGNATURE-----
+
+--Sig_/r+UJ+0s=TH.2LYQ_FwuT=wD--
 

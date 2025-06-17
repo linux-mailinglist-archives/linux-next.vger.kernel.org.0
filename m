@@ -1,107 +1,102 @@
-Return-Path: <linux-next+bounces-7160-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7161-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D97A3ADAAEB
-	for <lists+linux-next@lfdr.de>; Mon, 16 Jun 2025 10:39:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DF26ADC173
+	for <lists+linux-next@lfdr.de>; Tue, 17 Jun 2025 07:12:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7EBA7A56A8
-	for <lists+linux-next@lfdr.de>; Mon, 16 Jun 2025 08:37:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E59C118959DD
+	for <lists+linux-next@lfdr.de>; Tue, 17 Jun 2025 05:13:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B150261362;
-	Mon, 16 Jun 2025 08:38:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6F2F23B618;
+	Tue, 17 Jun 2025 05:12:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="oIZhSQc1"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VZ9tEvi3"
 X-Original-To: linux-next@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AEFE189F56;
-	Mon, 16 Jun 2025 08:38:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3F523B62F;
+	Tue, 17 Jun 2025 05:12:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750063138; cv=none; b=BAzEFRGhodJl+xYOgRmny7E4m8wmZi7BdREpwSMXcwIKaAxOwTcJ26trYt3ddLjHj6OHvK7wwgMGEUDxJX+mYm8WgvmggPxIw29md51HuGIEj5g+tL1CFcuaT3QIh4Pgh6rJMN0WiYcIvAYqoQ47NUbRxe9YQXMIFX9PzdnXfek=
+	t=1750137139; cv=none; b=eJfqzPcdxuLqC4zqgKGuE+7cCgUqAzTZh5lcsFgzk1XgHHtDYKzkxn7yYFz5+Mn6y/zZHLBQ213Ey6iamlZI7HoCE3DMvCz5gsWqkMhHd4fMpAru+iQy9MbmhxYruCasy3oQoh2o3njx9a1b+yvJl/a7lo0ag5Ns21F6qrXf4o0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750063138; c=relaxed/simple;
-	bh=cs8ODmouFFhPJh9ppcqIIdAqVeG7KRkviTSrm0mHKd0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uc9SWAo2DVoy9QZYZ4EaM1DVFVJ9KojYHjDccdPIwfcnP9Qz8A2MEU64sfr7VAhRLl0EJh1vEgB7n8AxboaYO+sDFiceBlxWFoLZv5HyTmVCOkW5G/2G69EfJDH4pXcpoqfuSNlSrXlqgURYM0AnjvrKZgkZl3f/ZwGYLn2oi5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=oIZhSQc1; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=4LqocdEhXQ0As2fdnIbbMcmHN/Z5fyN5voDLLrNKoLI=; b=oIZhSQc1uwRsFCprF8kPjONbZY
-	Di/4WoFmADFFM5gvcMEGT8g32fLITLjeUm7mRYaGQgJXAsrAAFolafDZV5hQeB7Rwfy4KA7PW/L8t
-	0kmpeSjDgMrEMtmfYF/7/6cCzUQsH9LtpX9xXPyyPTYnqmixgAy1PwaYwEA+y+p0QDK0YwDf9lELi
-	U6Et4a16pEfFyKoL7AoN37JlBoHI9MuUZ1VwDsM09EClvYY1eVVbQTFDeYva42XTBKT4cPTESjyCZ
-	QTy5bFSYklnZyi4vcx+JcbZ7tBm81hDv654BOD8tNk0h7J33HKcgz2fX8hgTENg64grWaAM328yNF
-	3d5kgPLA==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1uR57V-000M79-0u;
-	Mon, 16 Jun 2025 16:38:50 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 16 Jun 2025 16:38:49 +0800
-Date: Mon, 16 Jun 2025 16:38:49 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Crypto List <linux-crypto@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: [PATCH] padata: Remove comment for reorder_work
-Message-ID: <aE_YGbugmAlKk2tC@gondor.apana.org.au>
-References: <20250616153134.1583c3bb@canb.auug.org.au>
+	s=arc-20240116; t=1750137139; c=relaxed/simple;
+	bh=38MrfLEMkr2Z6s1k0n532lMWRaz4ITXW5CRMdd1weKo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=WjJmnDUkajR1wPce7aCLsSfTD5vyvyzThtFc2SHGIvFfOXJXHA9235pQDc7qhxd4obin07CZYCNbhpZmYHhsMTgt8k2QpHNkwbKEZ9c0ZtSeS/5mUF/71eG42QH7DzJkSBc69O8AKledEOVlXb3VNbQ4vb6PqHcWWjm1cwadhls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=VZ9tEvi3; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1750137126;
+	bh=wM8XpvZDfbyjLt097fNH9pwsD/DyzJjkPC4GPh5Ifys=;
+	h=Date:From:To:Cc:Subject:From;
+	b=VZ9tEvi3f3QpiH+6pFCvPSskpHuX9/jxCt3c+7Z0DTRmlp2ECwRc11lLHxgeqblmZ
+	 1MWQFiYy8DIbTlYEAGsjwx9GESheZBDzGKhF1xxoKef1+pEol7IuILj76gjFs7FTZr
+	 xI/bNrBNmuviWmkAGnQxXJHDJOspUz+s5yHTHmVKxsSZFs9Gh0fcB7yxkrDVHbJuxH
+	 DDNltDkmo+m8iKY9cipkmesU9+z6TQtAkpOuqXAcBgsKoOCSFiHleKlbD5uf1d0ohW
+	 E3J8x5hqOPQ+I8JoTMm/myKpQOlaJBg2jZfQZlOc/JrQbokgsNQc+5ds55SDaSwAge
+	 KR58P8rIFbitg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bLw3B5llzz4wyV;
+	Tue, 17 Jun 2025 15:12:06 +1000 (AEST)
+Date: Tue, 17 Jun 2025 15:12:05 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the vfs-brauner tree
+Message-ID: <20250617151205.617697ff@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250616153134.1583c3bb@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/8O4uT592qe+rF9QvW_FLHrY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Mon, Jun 16, 2025 at 03:31:34PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the crypto tree, today's linux-next build (htmldocs)
-> produced this warning:
-> 
-> include/linux/padata.h:104: warning: Excess struct member 'reorder_work' description in 'parallel_data'
-> 
-> Introduced by commit
-> 
->   71203f68c774 ("padata: Fix pd UAF once and for all")
+--Sig_/8O4uT592qe+rF9QvW_FLHrY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the report Stephen!
+Hi all,
 
----8<---
-Remove comment for reorder_work which no longer exists.
+After merging the vfs-brauner tree, today's linux-next build (htmldocs)
+produced this warning:
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Fixes: 71203f68c774 ("padata: Fix pd UAF once and for all")
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+include/linux/fs.h:3280: warning: Function parameter or struct member 'name=
+' not described in 'name_contains_dotdot'
 
-diff --git a/include/linux/padata.h b/include/linux/padata.h
-index b486c7359de2..765f2778e264 100644
---- a/include/linux/padata.h
-+++ b/include/linux/padata.h
-@@ -90,7 +90,6 @@ struct padata_cpumask {
-  * @processed: Number of already processed objects.
-  * @cpu: Next CPU to be processed.
-  * @cpumask: The cpumasks in use for parallel and serial workers.
-- * @reorder_work: work struct for reordering.
-  */
- struct parallel_data {
- 	struct padata_shell		*ps;
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Introduced by commit
+
+  0da3e3822cfa ("fs: move name_contains_dotdot() to header")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8O4uT592qe+rF9QvW_FLHrY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhQ+SUACgkQAVBC80lX
+0GwwGQgAmBm4yEixLTZGqALq24g6rbLpYyuO/3zKewwzV28tCU/69rFiW8aLqVr8
+VEQbmYMHdmmVtNDaURFr36tMGBbXxkReZ7an7UIuvCvqWbJw51m6slWYXLUPCtz4
+jIpHSpEENQ+lKRLZJ3KgGJSMzcn+mv4eb1fHjHzHFIiMmGa9zcnVCvHcQj/qLTtC
+Aflq3KO4l9DXkVKrZbypjstP33Xd0LoXhcWx7rWs4zlBVDGrzhvXRcL6pa1ylJBL
+CDb5pXm/FAfVbYeNW6bUYlNftRhV7+dAtGhZwfbRaM9aEX6zxByjZ3Y3Ahyh4wOv
+K6DiAeRj8jAcE1unM0IZ04QK9Gvk2Q==
+=ndsN
+-----END PGP SIGNATURE-----
+
+--Sig_/8O4uT592qe+rF9QvW_FLHrY--
 

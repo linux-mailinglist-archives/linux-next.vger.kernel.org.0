@@ -1,265 +1,125 @@
-Return-Path: <linux-next+bounces-7182-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7183-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83A57AE05FE
-	for <lists+linux-next@lfdr.de>; Thu, 19 Jun 2025 14:35:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86365AE0A44
+	for <lists+linux-next@lfdr.de>; Thu, 19 Jun 2025 17:23:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BD321885DCF
-	for <lists+linux-next@lfdr.de>; Thu, 19 Jun 2025 12:34:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EC183A6CF7
+	for <lists+linux-next@lfdr.de>; Thu, 19 Jun 2025 15:22:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4CE235055;
-	Thu, 19 Jun 2025 12:34:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17CB0221286;
+	Thu, 19 Jun 2025 15:22:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pijNqx6v"
+	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="npowBuEh"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [212.227.15.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1CFE22A4EA;
-	Thu, 19 Jun 2025 12:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6C27494;
+	Thu, 19 Jun 2025 15:22:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750336459; cv=none; b=dxfS3Rx2Fgb+PtkdT39HZaqB/5u46jen5n2nbQfdYx8hEbiyZGb/i46sJMFhAVMgPWZFgj/Ma6UUsPnqZjkVlwBdDGGD8rqlfOH6fWFO0sxN/gAUzjdRpzlmfD3gsNrAyjmvTEsqepo2afy6KIZCBREJLpa0SJWY2wM89iQ1u5A=
+	t=1750346560; cv=none; b=HYzyAJpV/rdIyWWxAG5pOjkWYqTWFsRguBeqczU0PYH5L2QkmFhsHUEVvXd2LbZxmPSS9U8NxuCMebTqD/1/5MVy2FOOMkqF/0VZhKtpHgHOmHoYKi+yc/h5Nrk1hnILGDtqqOKQWj2c0ZuB4hS9oDxAiRLZmiSxyJY+4pHbBc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750336459; c=relaxed/simple;
-	bh=aLPMbfIm5cKWZ/338XcDNfm+QiQ0j3PUZ9LyDjZmQ6I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XikRF4dcJjhSICcrbC9xQ3lTfRb1ajESFtC6cZohau84DsxBXvOeeaNubUFOTjdDRrg5jrUT69C82v5ly1Qh4olyEWze56E8OCkCA7383SpB9bUqtjGUmlmFg6HsV6nxHaQusB6w5P2JAxTTuZsjvh9Ohsor8eLyzXjNMQQeia4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pijNqx6v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3D7C4CEEA;
-	Thu, 19 Jun 2025 12:34:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750336458;
-	bh=aLPMbfIm5cKWZ/338XcDNfm+QiQ0j3PUZ9LyDjZmQ6I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pijNqx6vWdCKj87oqwDre7BeeGM5SKTB+jaTS5suiIFYOpdcbarAh6H3fDLiXkogf
-	 i3AsbxVckSeMbNz8JACD6BjaqUNxVGEim0tTzzaiuF1eu9yO5TaCNBd/SxmRg3wwI0
-	 4E5tThhcBSEVTrPq8xZHPH75r8/w7Z25ny2DpSQGgB2gGK0ysk/kW1u7oAetgPSe2C
-	 rINTHjhHw3JpO+plJK01nH5X8t4PjfRJJ1WXEgRCwGi9KL9lhFjugfEZFh/Ufhj/4U
-	 PyfEDVRwjY414VTuWjf8M5o9ZeHJfDfoONe7RVVXhPq19uq82P/3HM0H3OU8lJDI9t
-	 t0BGehz5SGjng==
-Date: Thu, 19 Jun 2025 13:50:21 +0200
-From: Joel Granados <joel.granados@kernel.org>
-To: Bert Karwatzki <spasswolf@web.de>
-Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
-	Waiman Long <longman@redhat.com>, Kees Cook <kees@kernel.org>
-Subject: Re: register_syctl_init error in linux-next-20250612
-Message-ID: <vvorpevngfle6budlgqhmj3f25lb77czzyvd5aa6jil7zkaqgp@weanygri324r>
-References: <20250612175515.3251-1-spasswolf@web.de>
+	s=arc-20240116; t=1750346560; c=relaxed/simple;
+	bh=7FXzHMHu6/S4aq8g950brYFPGQxuWBxluZclLGDr16U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oQFMIt85Xrti+TqVDf3APcz233CeMTGCTOib0iGZTpbt7uuNsRN3jhUr9qLxqVh8DiA17rO3FJ3r35kvT3+vyC5C0YcGt5q358neBDHC7TKcyrNB5xVxypL053tqEpq6IlwnYqxz23da/bPhIyzxNlQhBR8228vDZW5n99itAZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=npowBuEh; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1750346538; x=1750951338; i=spasswolf@web.de;
+	bh=7FXzHMHu6/S4aq8g950brYFPGQxuWBxluZclLGDr16U=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=npowBuEh4j2166ewWxxxU1UP4eJJCdQx013TNrSWFvfoxMl6buspegy+7dvQsbho
+	 gXqZRZ3uBzfR9q9kCQdIRzocy1weyh+asynU6XNhzzs8ciD6IUVxjN6Ng9R770ICp
+	 fU+gsHsUNkO+r69aIBXf719p9idLvfbAETpz8WRGl/WECiQ5wahNQYA9SgA4mz5vK
+	 ZQxftt6AVYmN7CwsHW8djPo2J30am7ZZJPcXE0esOxTrJNP8MItj1v2LKeyGYwRfR
+	 JtzKJeKjvpOW+Q81u0mkHIEqXD5tZ2+HwXZAVrKKjFwxFvzIKEwFMWNFMMqYnK2h1
+	 GpjZa/3h2rkFkI75tw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from localhost.localdomain ([95.223.134.88]) by smtp.web.de
+ (mrweb005 [213.165.67.108]) with ESMTPSA (Nemesis) id
+ 1MdwJO-1v13wi14ti-00ov4K; Thu, 19 Jun 2025 17:22:18 +0200
+From: Bert Karwatzki <spasswolf@web.de>
+To: Joel Granados <joel.granados@kernel.org>
+Cc: Bert Karwatzki <spasswolf@web.de>,
+	linux-kernel@vger.kernel.org,
+	linux-next@vger.kernel.org
+Subject: register_syctl_init error in linux-next-20250612
+Date: Thu, 19 Jun 2025 17:22:15 +0200
+Message-ID: <20250619152217.3450-1-spasswolf@web.de>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: 11898dd756020687c2016a37af3c948b350bdbbc.camel@web.de
+References: 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="oicuzgdo7d7ymoi3"
-Content-Disposition: inline
-In-Reply-To: <20250612175515.3251-1-spasswolf@web.de>
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:I6drH2iN2bpLiv8pX9dI87SltepBrVjv0SgJ4I6o7BNGCTXLbs1
+ y+PgMa3YGTb987d8xavvMG3D+zcW5Qbchd9yJgbkiY3N/M5S0JO53nLC8EohLY1eonY8N/8
+ YTOYE+GCz8NcKKTjOig6B2XRjb++umKMthQ9POKc53gv3RwIk1mXq3YBJRbH1gld8iNU5E6
+ hk7TKOU9VKyUMq+wegABg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:+ddzEgqYmS4=;uVUZEus7uBaphUUnqPlAiLavJZn
+ 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
+ 5qao=
 
+I just confirmed that this bug occurs only with CONFIG_PREEMPT_RT=y,
+and also occurs in your sysctl-next branch.
 
---oicuzgdo7d7ymoi3
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hey Bert
-
-Thx for the report.
-
-I just tested on my https://git.kernel.org/pub/scm/linux/kernel/git/sysctl/=
-sysctl.git/log/?h=3Dsysctl-next
-and can't see the issue. Maybe its something that I'm missing in the
-configuration. Do you happen to have your the .config that you used?
-
-On Thu, Jun 12, 2025 at 07:55:13PM +0200, Bert Karwatzki wrote:
-> When starting evolution (gnome email client) on my debian sid with
-> linux-next-20250612 I get the following error message on the terminal
-> emulator (the Gtk messages also occur  when):
->=20
-> Gtk-Message: 13:34:49.069: Failed to load module "colorreload-gtk-module"
-> Gtk-Message: 13:34:49.070: Failed to load module "window-decorations-gtk-=
-module"
-> Gtk-Message: 13:34:51.012: Failed to load module "colorreload-gtk-module"
-> Gtk-Message: 13:34:51.013: Failed to load module "window-decorations-gtk-=
-module"
-> bwrap: Can't read /proc/sys/kernel/overflowuid: No such file or directory
->=20
-> ** (org.gnome.Evolution:3327): ERROR **: 13:34:51.245: Failed to fully la=
-unch dbus-proxy: Der Kindprozess wurde mit Status 1 beendet
-> Trace/Breakpoint ausgel=F6st
->=20
-> and the following message in dmesg:
->=20
-> [  305.600587] [      T3327] traps: evolution[3327] trap int3 ip:7f64442d=
-3ab7 sp:7ffc9f4e94d0 error:0 in libglib-2.0.so.0.8400.2[66ab7,7f644428c000+=
-a1000]
->=20
-> I bisected this to commit cf47285025e6 ("locking/rtmutex: Move max_lock_d=
-epth
-> into rtmutex.c"). The absence of /proc/sys/kernel/overflow{uid,gid} seems=
- to be the related
-> to the start failure, in affected kernel version the files are absent whi=
-le they're present
-> when evolution starts normally.
->=20
-> Also when booting next-20250612 I get this error message regarding max_lo=
-ck_depth and
-> rtmutex_sysctl_table:
->=20
-> [    0.234399] [         T1] sysctl duplicate entry: /kernel/max_lock_dep=
-th
-> [    0.234402] [         T1] failed when register_sysctl_sz rtmutex_sysct=
-l_table to kernel
-> [    0.234405] [         T1] sysctl duplicate entry: /kernel/max_lock_dep=
-th
-> [    0.234407] [         T1] failed when register_sysctl_sz rtmutex_sysct=
-l_table to kernel
-that is weird. I made sure that we only call register once. Will test
-this on next and see what I get
-
->=20
-> Reverting commit cf47285025e6 in next-20250612 fixes the both the "sysctl=
- duplicate
-> entry" issue and the missing overflow{gid,uid} files and evolution starts=
- normally again.
-I would like to fix this instead of reverting. Let me give it a go and
-revert if there is no easy fix.
-
->=20
-> As there were conflicts when reverting, here the revert patch for next-20=
-250612
-> to illustrate conflict resolution:
-Thx for this.
-
->=20
-> diff --git a/include/linux/rtmutex.h b/include/linux/rtmutex.h
-> index dc9a51cda97c..7d049883a08a 100644
-> --- a/include/linux/rtmutex.h
-> +++ b/include/linux/rtmutex.h
-> @@ -18,6 +18,8 @@
->  #include <linux/rbtree_types.h>
->  #include <linux/spinlock_types_raw.h>
-> =20
-> +extern int max_lock_depth; /* for sysctl */
-> +
->  struct rt_mutex_base {
->  	raw_spinlock_t		wait_lock;
->  	struct rb_root_cached   waiters;
-> diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-> index 705a0e0fd72a..c80902eacd79 100644
-> --- a/kernel/locking/rtmutex.c
-> +++ b/kernel/locking/rtmutex.c
-> @@ -29,29 +29,6 @@
->  #include "rtmutex_common.h"
->  #include "lock_events.h"
-> =20
-> -/*
-> - * Max number of times we'll walk the boosting chain:
-> - */
-> -static int max_lock_depth =3D 1024;
-> -
-> -static const struct ctl_table rtmutex_sysctl_table[] =3D {
-> -	{
-> -		.procname	=3D "max_lock_depth",
-> -		.data		=3D &max_lock_depth,
-> -		.maxlen		=3D sizeof(int),
-> -		.mode		=3D 0644,
-> -		.proc_handler	=3D proc_dointvec,
-> -	},
-> -};
-> -
-> -static int __init init_rtmutex_sysctl(void)
-> -{
-> -	register_sysctl_init("kernel", rtmutex_sysctl_table);
-> -	return 0;
-> -}
-> -
-> -subsys_initcall(init_rtmutex_sysctl);
-> -
->  #ifndef WW_RT
->  # define build_ww_mutex()	(false)
->  # define ww_container_of(rtm)	NULL
-> diff --git a/kernel/locking/rtmutex_api.c b/kernel/locking/rtmutex_api.c
-> index 9e00ea0e5cfa..2d933528a0fa 100644
-> --- a/kernel/locking/rtmutex_api.c
-> +++ b/kernel/locking/rtmutex_api.c
-> @@ -8,6 +8,11 @@
->  #define RT_MUTEX_BUILD_MUTEX
->  #include "rtmutex.c"
-> =20
-> +/*
-> + * Max number of times we'll walk the boosting chain:
-> + */
-> +int max_lock_depth =3D 1024;
-> +
->  /*
->   * Debug aware fast / slowpath lock,trylock,unlock
->   *
-> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> index 0716c7df7243..82af6e6f5dbb 100644
-> --- a/kernel/sysctl.c
-> +++ b/kernel/sysctl.c
-> @@ -23,6 +23,14 @@
->  #include <linux/uaccess.h>
->  #include <asm/processor.h>
-> =20
-> +#ifdef CONFIG_X86
-> +#include <asm/nmi.h>
-> +#include <asm/io.h>
-> +#endif
-> +#ifdef CONFIG_RT_MUTEXES
-> +#include <linux/rtmutex.h>
-> +#endif
-> +
->  /* shared constants to be used in various sysctls */
->  const int sysctl_vals[] =3D { 0, 1, 2, 3, 4, 100, 200, 1000, 3000, INT_M=
-AX, 65535, -1 };
->  EXPORT_SYMBOL(sysctl_vals);
-> @@ -1525,6 +1533,15 @@ static const struct ctl_table kern_table[] =3D {
->  		.proc_handler	=3D proc_dointvec,
->  	},
->  #endif
-> +#ifdef CONFIG_RT_MUTEXES
-> +	{
-> +		.procname	=3D "max_lock_depth",
-> +		.data		=3D &max_lock_depth,
-> +		.maxlen		=3D sizeof(int),
-> +		.mode		=3D 0644,
-> +		.proc_handler	=3D proc_dointvec,
-> +	},
-> +#endif
->  };
-> =20
->  int __init sysctl_init_bases(void)
->=20
->=20
-> Bert Karwatzki
-
---=20
-
-Joel Granados
-
---oicuzgdo7d7ymoi3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGyBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmhT+XUACgkQupfNUreW
-QU+QxAv2KvRI9sJN8Cg3ptDIL7CXGjE14J64TPqB1Ktu6YJ+ztoR2COizm4+UkUk
-K+K8C98WdZ1quzObxfV+44yVJWiAGQw9O1nSQhJAuqklpm6MUeMx8J+l5ft9/olM
-pr6GJXabpnIyCi3pjlzN2Ripy54/9iOcvT9ei77tySX0YFnPTtjUJsdgk/3qoyTc
-QoJD/xN2aA3bEC0a6sxIekAIk007K7IkzclwPFiq/fRIBB3axHz+8n3ijhHd22wg
-3uBrD8qtNnREMCJHgwOVXmujkxyJOppeU484PdFUTcCvpjDx7RoU+Mc/+kZ5Cro9
-BbpkcN4pv7MIZmol1ambW1nN/1PYGyqOeGGVqioYK4mqkSvp9xECXvAl4H2NAMmr
-4/IqWPADOJVo0U2saQ28bkOdGIRNz56r8dwgfPOV88tcNa+3i4eGERlCWcOUJ0WG
-/36j48qtnGCjqeo/wfZmOE9XKio0a2xD05ZtWLLINVv1u0MDyqmsmEp/lapvpu9q
-Ag8p5YE=
-=qOhU
------END PGP SIGNATURE-----
-
---oicuzgdo7d7ymoi3--
+Bert Karwatzki
 

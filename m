@@ -1,118 +1,114 @@
-Return-Path: <linux-next+bounces-7175-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7176-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45200ADFDA7
-	for <lists+linux-next@lfdr.de>; Thu, 19 Jun 2025 08:31:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89B86ADFE28
+	for <lists+linux-next@lfdr.de>; Thu, 19 Jun 2025 08:57:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8543189E74F
-	for <lists+linux-next@lfdr.de>; Thu, 19 Jun 2025 06:31:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14BEB7A7FBD
+	for <lists+linux-next@lfdr.de>; Thu, 19 Jun 2025 06:55:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAABC241CAF;
-	Thu, 19 Jun 2025 06:30:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1BAF24889B;
+	Thu, 19 Jun 2025 06:56:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="qwqYusp0"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="sQ2lEZGG"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3770C24167D;
-	Thu, 19 Jun 2025 06:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D1A246772;
+	Thu, 19 Jun 2025 06:56:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750314659; cv=none; b=fXCQefY0J94V3SIHJHiMDrItOgJkoVotHvcc/mBLyCdk6X3PY/sUUJvyVWvpSK2GYTDuwPhDjcqWICLA7tEChV5ZEUr5N+oNvncjSn92KsT5WInufyeVioKFYEzxc9GSxZPgliG2tE1Y6Zns7T+uFWrI9v2syUII2WMQooQ1gWE=
+	t=1750316174; cv=none; b=lRXWRlZ7jqCMsWQa+q2zteVj9bdGnwo//5uX2nfREit2YMcN3EMz/qXShe1p/xUkQl9VXZAtxZpJg87ZvnFlshI68etnXtPP9yI/kGJE8AIE5RGgjKCv889u4AptvWiPil/5Ox+KXMbuu4rpYxVQ/OUtPFGl04qtQH3o2vOdIhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750314659; c=relaxed/simple;
-	bh=XDYDVp3L62GmYM44274ZD7YPQjqg6i8tsN/XhAKJp6Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=uO+KXWssGVXP6OqVBeZFzhKBXXQDN/YvH/eQ42YMWzab9LuaW98xRYvrQDrlZ8KQFvF34DMo8kxtpwgz09m/JgS7X9sba1t9Ey7BUihG5XJY38pc2729SmAiZGRCo2Tr28Lgl9j96XToiAzyfo7CwajTL5u08MiF8sxH5pRCY6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=qwqYusp0; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1750316174; c=relaxed/simple;
+	bh=vVSn7XKabejjo3pbl5c6nCyc1k4D4oaDiXJU5ZtAyT4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Rs886OZ/4bhMqYudOl8vNbuwREyXYc5eSp5PXcQQ35oPQPfSUO7wZ4orZ77bxLlJwlVcV6clvYHogPGw+Eq+sIFaT4skrNfJptkAr7ZodxYBVLkNEkuez5T6jVBvebxmnEeGPul9Q6wZ7M8ZRkElDSoeq9VpxaN3xaUcDdZd2Fg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=sQ2lEZGG; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1750314643;
-	bh=2wLPpUxm1cNGWwH16bxL9usJa/D5UKwe4i2r7lgYJHE=;
+	s=202503; t=1750316168;
+	bh=Sxl7KycVrcsiHgLurxxG5MbEA/FN7L99ksyML0+5SDI=;
 	h=Date:From:To:Cc:Subject:From;
-	b=qwqYusp0jj7V35sJ+YgzQfzJSSavjp+inBbmu+n5hKLCIt0r81+gnfXs/pE+N6Iid
-	 HmUubge7UlCrQUUE7WRe01I/9wAwx0HXzTEqG2Hm9niRu0DmgjxYTsOaskGRhk/jUj
-	 nS5p/ZY62UtT7iHOvCvBLUFU+4o8/gtzKhgv6PSyVEiMXParpaOVPELlosKVcnY2MT
-	 XEAlHKQN+gyYVt6edd7xLRyjNvAYYyC/jn1q9wQOp1bPbb87fB5Ykzh8xeq30qnxBl
-	 txN/BBpszWQcGMlTAfLBnaWyyKEK15UbzX/hI24bzs1TaHY9isnzJAefXHVXjWZ6er
-	 6edkcr0ZshE+w==
+	b=sQ2lEZGGrId+4G/4r9cjn+IamIL43YhEKHSHLbkKx0p443VLNBIKo/NPNzUPLVb8C
+	 Zi+yXgbMCAmdu4Ue5sXODy4GQ/BIzz5G2T5u9PUnS+1LUQdFvvhnLNu4lu6ibvI9qm
+	 rq2tYRGCJKA3exA1A7odKvNc/6eez5XnhVocR4DG7+DD8xIiZdQybleD2UaFQxwe4y
+	 LPfJuH0OU0qvDgwMGlWqC8GaUCL57MpB6tzCQzfZc8deyAyhTbMqOAlWSd99/c3lhz
+	 ivdhb9yn2UxYp838urFOJCPpOvQkdaYGtDHPIqOaAMO1rAy1G0m6uvyTHA5CRdtYp/
+	 1NnRFXGdHTYFw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bN9hz0Mmxz4x8y;
-	Thu, 19 Jun 2025 16:30:42 +1000 (AEST)
-Date: Thu, 19 Jun 2025 16:30:41 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bNBGJ15ntz4wcy;
+	Thu, 19 Jun 2025 16:56:08 +1000 (AEST)
+Date: Thu, 19 Jun 2025 16:56:07 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Greg KH <greg@kroah.com>
-Cc: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Jason Gunthorpe
- <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, Linux Kernel Mailing List
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Jiri Slaby (SUSE)"
+ <jirislaby@kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?=
- <linux@weissschuh.net>
-Subject: linux-next: manual merge of the driver-core tree with the rdma tree
-Message-ID: <20250619163041.7e4f9c96@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the tty tree
+Message-ID: <20250619165607.33403e19@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZMyv+xMeANeLTptnJTxTJtH";
+Content-Type: multipart/signed; boundary="Sig_/CfKrPqJxKFCbv7EWJ=H48aB";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/ZMyv+xMeANeLTptnJTxTJtH
+--Sig_/CfKrPqJxKFCbv7EWJ=H48aB
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the driver-core tree got a conflict in:
+After merging the tty tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-  drivers/infiniband/hw/qib/qib_sysfs.c
+ERROR: modpost: "rsa_autoconfig" [drivers/tty/serial/8250/8250_base.ko] und=
+efined!
+ERROR: modpost: "rsa_reset" [drivers/tty/serial/8250/8250_base.ko] undefine=
+d!
+ERROR: modpost: "rsa_disable" [drivers/tty/serial/8250/8250_base.ko] undefi=
+ned!
+ERROR: modpost: "rsa_enable" [drivers/tty/serial/8250/8250_base.ko] undefin=
+ed!
 
-between commit:
+Caused by commit
 
-  24baad32b710 ("RDMA/qib: Remove outdated driver")
+  5a128fb475fb ("serial: 8250: move RSA functions to 8250_rsa.c")
 
-from the rdma tree and commit:
+(or its neighbours)
 
-  fb506e31b3d5 ("sysfs: treewide: switch back to attribute_group::bin_attrs=
-")
-
-from the driver-core tree.
-
-I fixed it up (I just removed the file) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I have used the tty tree from next-20250618 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ZMyv+xMeANeLTptnJTxTJtH
+--Sig_/CfKrPqJxKFCbv7EWJ=H48aB
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhTrpEACgkQAVBC80lX
-0GyKBAf/flVo7J3UQo7cxnfxOw3AssIP+7vsKPLKXVczmfMQhXZgCD2BjgTviFp3
-+IGyy7abO09F6bttIh5nOqZnAwwiLOLGWzTiHMWJRm2qLBz2PqG/fLPZhX1OGTyp
-NMU5+SjreE5FbDAgMEJ5DmGfq0wXXO7gpEkYl4DzjdScTM09O5UV6iq9FR6yRsmc
-/tvXUty6ybhZX4Hk3i190Dw9ETBRrrnedEZvGz3ed+0HFgmBrUORV2XuzB/jC9eW
-V6KAFyTe66u91QhcexAqM7NTvwoIBdHY5br5IgSj5yjNHZVbydHoH5LvALELQ+6/
-rHwCk5OKGVxqgkV356Tb8sNYky0vIQ==
-=1/RR
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhTtIcACgkQAVBC80lX
+0Gx+qAf/Uk9aCs28YRDnbo/z87i5ngHOO8Y2LwZLJs19IXj1wAKanxGD6yQUHrTS
+1VwCFB4bWVQEf0VQJqhFQe452hpIyKTZ0kv2udKjCGoVq8MHK8ym4JWJpwL8O47H
+RgULxXL66NCo2DDB7m70NK/0BNBwu+6l/BMoweYNmaOcEphO73tKLfogsx/v2lGw
+5+TcETgP8sytcAG/iuccmP37zTNrQX4GZNuxpXujNHBC3L1CPd/WCFmKJS0A8avu
+7gc6iObbf6FZQkuCxhgSeEfCNn95T+y0NYbQVFH0nxsTXXvth3oACQd4ELydKwFG
+u4ZZtl5oUAF2aegaEcINaSYFg8X4QQ==
+=umYj
 -----END PGP SIGNATURE-----
 
---Sig_/ZMyv+xMeANeLTptnJTxTJtH--
+--Sig_/CfKrPqJxKFCbv7EWJ=H48aB--
 

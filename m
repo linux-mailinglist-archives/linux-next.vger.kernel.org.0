@@ -1,140 +1,126 @@
-Return-Path: <linux-next+bounces-7186-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7187-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B85DAAE10F1
-	for <lists+linux-next@lfdr.de>; Fri, 20 Jun 2025 04:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 52A85AE1109
+	for <lists+linux-next@lfdr.de>; Fri, 20 Jun 2025 04:18:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4986619E1FFC
-	for <lists+linux-next@lfdr.de>; Fri, 20 Jun 2025 02:11:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D580919E2521
+	for <lists+linux-next@lfdr.de>; Fri, 20 Jun 2025 02:18:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C388635E;
-	Fri, 20 Jun 2025 02:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44B6B126BF1;
+	Fri, 20 Jun 2025 02:18:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IF9APY0x"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ffUjgbHD"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 737D454640;
-	Fri, 20 Jun 2025 02:11:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C743628FD;
+	Fri, 20 Jun 2025 02:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750385494; cv=none; b=LvCeIX6N5fFELMZEQVORxPjQTkr5oZlxBRFGwrCmkpYzWPzNWqg+xy/h+6F+sjNTCzgf5UxLSIHRPte2L67PvvhfSakqewWLUsWR1Z9Olroe6TkZgoAUPbxluIBdqQyh3JtkzwGG51lRvuVZY1SL3JEkjaZxxnU4GdknwufBcpA=
+	t=1750385884; cv=none; b=uviwcGMWDgV7zYzZ/Xi2bqZAFN4SIbHNXxDZTLk2aYeObv+Hiqv+svZECVp1pnzO2rTmFyzpU6hjrdR1pQ5tgqTxL+oWOdcQyZBMaX7uLZU7MCA50UkbwBmqbE9/nByV7NsXQgVjpyLRaIoZcY3JIIPn3enKKi3fsZMQi1el7fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750385494; c=relaxed/simple;
-	bh=+fL+7lATRHrgFf9ezte8Bme9gjvIBxptmslEwxQX6sM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=V1zyZGBfyu01L3qatOJyq8wWZ1Rj72RzWmnE6L886MhHhOPKP13pZrCdz+absxsPxNEPiMzFydO9GeCHQ9WNlTjv3UbaO6Z+b/JWwEXL/ZCRWO1OhxPNaW9r84CdGDLAZjkm/OZjizHJ2k1NFjCjD++8szHyyKNXVzqiR0O0X7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IF9APY0x; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1750385483;
-	bh=6HDe+9Ljqo+nDEd8bs6ab9WT5YyIev4S5ZAFB9tvjBo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=IF9APY0xmStNXrOksWJNFwhuznP2uKSrIQTdWQnBIBBNbukJu4XZH2sS4eg9QuDbX
-	 BDN2CCf1PIzpaiUkyQcn/5oblwxkEbpNpR4Cko22vl36e6UXADEeVj/WNbbnvua3wL
-	 uI78cZeCB2WZKD0MuVp85p5XhltcwKWp3afTDwuTtvzGEuTWLTPatH9J29TEl6R+GW
-	 r+qdIathvBDb7L3uRSsai7G2q26q7qsH4oUxD86F1M39Bri8iZ46oTgq+j/XYpnvXu
-	 nuUgTR9ffgns/s3w7/x+iTiCq9jbBLa8XmFLkrOMeVsiH9KH5ugX0JPWt9YY8PNAKP
-	 +phfAsTqHZJUA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bNgvH4Hc3z4xM2;
-	Fri, 20 Jun 2025 12:11:23 +1000 (AEST)
-Date: Fri, 20 Jun 2025 12:11:22 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Christian Brauner <brauner@kernel.org>
-Cc: Jeff Layton <jlayton@kernel.org>, Networking <netdev@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the net-next tree with the vfs-brauner
- tree
-Message-ID: <20250620121122.344c1d0d@canb.auug.org.au>
+	s=arc-20240116; t=1750385884; c=relaxed/simple;
+	bh=6MCffwkdHeIHrVXhbn54erx3b/fYlg9DTNvSFcS+Igc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=IMV3x1Oxw4wQfkTp0GgsUtNTQHP4BDPxLBEPRwAtbuU+OfGM5DIMFLHRV4r5xYoHib2jHXB6/+yPnfLQjDgv2UbtxanklWtjDvxpOw7BQ69CBv2pqiWD29Wbk19VuHHbpHWTuhUAHZx/zbxt/7Q3iiC5jHmVRKlZrKPvcTReBDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ffUjgbHD; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-7481600130eso1577046b3a.3;
+        Thu, 19 Jun 2025 19:18:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750385882; x=1750990682; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CrAwGmYD6smdn/1bwvG0NE4H0xPUOXXyruWhgIcWsJo=;
+        b=ffUjgbHDrDGJaKOAtyhbaI/xhxAeehs1BAl3sixiNtH67AThkge4M5XL1k05DCAjPG
+         6aLnkrV0MtBNZLypL8xzRecPvinUg7NLus5RF8QLKDxGelg1NbdYVDYtsshnr+SSoutV
+         fKNiE9aSjDzTaYjJvdCMYcNOilhEY80rC/0kqaSo6j6UDxl+j8f8dXcxObKVsx5RPjFE
+         X1ydMBNWYeuEFwOxd8WcGwXjW98Ux37T8f2uYquBZvWZZA8HkwnbdaHXBhzvXDqwCrCP
+         f+Y5OLnhwAESJr9FWYVb1kNpyOVyxkzNKb6BLmh003TUOQcGYN/PzBnAX6fpjP5uXbTl
+         47gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750385882; x=1750990682;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CrAwGmYD6smdn/1bwvG0NE4H0xPUOXXyruWhgIcWsJo=;
+        b=T3uCk9wOlbssZtHbEBb/Thjr147L3sRzSXpAya6gTim9lTwBl4DITpTcLqOvb9HVAL
+         32kMwg6TdC75ZUONbgM+QebMyMsfLWxCDL94Xun02sZhUY9+oCf5+ALf1SrE3aAuFrYp
+         5/jobEnMGWOjxAGfBINiOn4aTE4AFUUm64s5lo61Ko+FOpRIM1j/XgCoDkiH/n9hZuO5
+         9glVujAJEMmZWmdF+0sE3sqdSROGHLGqmAuIKn+XQLbykumIs0m6KTW3M6Iu0FJ9edVo
+         EpM6qfWKTAR2BayfPJPC/adMTbkYVouBgHewa+mKkrvYx2BUxiA+o/l8e3Ehp3o2up1N
+         8BaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUdKXv/EQXGhMU8fbcra9AnuxYLt9F7gvXVQvRIvlLDJjwDDLHtVr08b3nmImU2vxqhUzw+TIBv8Fct@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkwFFXVO4THbQn2cluBzhp/1Idh52eJKXA1/7TWl0Z3keFQpIl
+	SgS/0pfLmly5MQe7auyv+ZyfKJ57n2e7d33Api7msXT/Bv+9lsdKF5u6
+X-Gm-Gg: ASbGncuYIIi8tPSvxlc997nyx33kDQibUGsGK7C4iwd8esGml1AYN05BDn0qLI/m66e
+	BK7FNJ6iqpqPRNftniJpWfrS8BaNxZSuEdmqyreC/jGvYDEJUhgexQZL2DhFBG1+dkFz1hhC1/P
+	NA+YuDPdVaHSoeTr5AtF8jTALBDsuRdnE/mOCiz8o7pWaC1L9/VhJOGsfansyk8CfBfzp/SV3HA
+	fdhdHRconyEm+r78sma5rGmZt+HPL8UitHmY23Au8y//IcARCmqVlvecF/FeeW3/Zq2FB1IQ+Bf
+	UQrLj1wB5aEVpvYYNhU26DXlPL+7GQIE+vpVsD3StGJaM6A+szfJMUI/FLGhKVguv8KvYe+TMYf
+	HWCDY8hVC6F4ifH/yuiy7CQDy+l4oCLWEhY8=
+X-Google-Smtp-Source: AGHT+IGa81kAriMSCsca0OKoBHvxPEwEHy/Ct3EWldlcMjXEdkPkRSl57mtl2UgfH04e4BDa99UnlQ==
+X-Received: by 2002:a05:6a00:170b:b0:748:eb38:8830 with SMTP id d2e1a72fcca58-7490d75a080mr1354457b3a.13.1750385881940;
+        Thu, 19 Jun 2025 19:18:01 -0700 (PDT)
+Received: from SHOUYELIU-MC0.tencent.com ([43.132.141.21])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7490a6743c5sm845105b3a.143.2025.06.19.19.18.00
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 19 Jun 2025 19:18:01 -0700 (PDT)
+From: shouyeliu <shouyeliu@gmail.com>
+To: corbet@lwn.net
+Cc: linux-kernel@vger.kernel.org,
+	linux-next@vger.kernel.org,
+	sfr@canb.auug.org.au,
+	shouyeliu@gmail.com,
+	shouyeliu@tencent.com
+Subject: [PATCH] Documentation: amd-pstate:fix minimum performance state label error
+Date: Fri, 20 Jun 2025 10:16:58 +0800
+Message-Id: <20250620021658.92161-1-shouyeliu@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+In-Reply-To: <87jz57h6us.fsf@trenco.lwn.net>
+References: <87jz57h6us.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GoVKaWfXr/MwIgi9T5i7uLR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 
---Sig_/GoVKaWfXr/MwIgi9T5i7uLR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Shouye Liu <shouyeliu@tencent.com>
 
-Hi all,
+In the AMD P-States Performance Scale diagram, the labels for "Max Perf"
+and "Lowest Perf" were incorrectly used to define the range for
+"Desired Perf".The "Desired performance target" should be bounded by the
+"Maximum requested performance" and the "Minimum requested performance",
+which corresponds to "Max Perf" and "Min Perf", respectively.
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Signed-off-by: Shouye Liu <shouyeliu@tencent.com>
+---
+ Documentation/admin-guide/pm/amd-pstate.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  net/core/net_namespace.c
+diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+index 412423c54f25..e1771f2225d5 100644
+--- a/Documentation/admin-guide/pm/amd-pstate.rst
++++ b/Documentation/admin-guide/pm/amd-pstate.rst
+@@ -72,7 +72,7 @@ to manage each performance update behavior. ::
+   Lowest non-        |                       |                         |                       |
+   linear perf ------>+-----------------------+                         +-----------------------+
+                      |                       |                         |                       |
+-                     |                       |       Lowest perf  ---->|                       |
++                     |                       |          Min perf  ---->|                       |
+                      |                       |                         |                       |
+   Lowest perf ------>+-----------------------+                         +-----------------------+
+                      |                       |                         |                       |
+-- 
+2.19.1
 
-between commit:
-
-  9b0240b3ccc3 ("netns: use stable inode number for initial mount ns")
-
-from the vfs-brauner tree and commit:
-
-  8f2079f8da5b ("net: add symlinks to ref_tracker_dir for netns")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc net/core/net_namespace.c
-index 03cf87d3b380,d0f607507ee8..000000000000
---- a/net/core/net_namespace.c
-+++ b/net/core/net_namespace.c
-@@@ -796,11 -821,10 +821,15 @@@ static __net_init int net_ns_net_init(s
-  #ifdef CONFIG_NET_NS
-  	net->ns.ops =3D &netns_operations;
-  #endif
- -	ret =3D ns_alloc_inum(&net->ns);
- +	if (net =3D=3D &init_net) {
- +		net->ns.inum =3D PROC_NET_INIT_INO;
-- 		return 0;
-++		ret =3D 0;
-++	} else {
-++		ret =3D ns_alloc_inum(&net->ns);
- +	}
-- 	return ns_alloc_inum(&net->ns);
-+ 	if (!ret)
-+ 		net_ns_net_debugfs(net);
-+ 	return ret;
-  }
- =20
-  static __net_exit void net_ns_net_exit(struct net *net)
-
---Sig_/GoVKaWfXr/MwIgi9T5i7uLR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhUw0oACgkQAVBC80lX
-0GyXQgf6AoiOljcx1KzsIjArxkW71/NjyFf/axCnp5/x8esey8QPXYn1PwOQR19M
-blLUaBSPbHc+SEksKvNmwC8SHwUmoLozs0pKxilH0+kGEvK2/Lq96iD0S8C2yihS
-0+NvIxeSxxiEINX6nn+9mn4awz7oGdB1zEfEfSD5EdW1xdlAv++lW5dngGoE/Hp/
-q/gO6e7g5Jd+H6kVERbtrmNfDOkmRvDDKjqrlJ4CCxOjflrFGEhCPacYRi7aPQAu
-lulv8nhB6fJ5HSGEyxsXD8bkhEjmVqZAeKCL6Yiuayi7Yf9Z+KjBtGw1yrEQG3A2
-9bQVzmSsz8WvtZaRS/dWb+QRK85hpQ==
-=Nc8N
------END PGP SIGNATURE-----
-
---Sig_/GoVKaWfXr/MwIgi9T5i7uLR--
 

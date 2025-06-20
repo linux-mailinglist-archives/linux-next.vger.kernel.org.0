@@ -1,118 +1,140 @@
-Return-Path: <linux-next+bounces-7185-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7186-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19675AE0DF1
-	for <lists+linux-next@lfdr.de>; Thu, 19 Jun 2025 21:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B85DAAE10F1
+	for <lists+linux-next@lfdr.de>; Fri, 20 Jun 2025 04:11:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D71C71BC5789
-	for <lists+linux-next@lfdr.de>; Thu, 19 Jun 2025 19:25:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4986619E1FFC
+	for <lists+linux-next@lfdr.de>; Fri, 20 Jun 2025 02:11:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD3BD1E8342;
-	Thu, 19 Jun 2025 19:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C388635E;
+	Fri, 20 Jun 2025 02:11:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="gHT7C1tb"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IF9APY0x"
 X-Original-To: linux-next@vger.kernel.org
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D53AF2AF1C;
-	Thu, 19 Jun 2025 19:25:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 737D454640;
+	Fri, 20 Jun 2025 02:11:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750361109; cv=none; b=ctluJqX2qC0qljgdnSMBREEqzTzQjYmv8d+GLcABsXw1kIepXWIuIyp9uQrCvVryfkZ7fTCKQ9LIzdmQ+xN3GKnNUpm+eh/5OF0KxYFVBp00OFRrUt5n58wVnqY+A8Nh0INVLm8gstudaUqF31Z1JbzEKROTLO914PIpRMiVJnQ=
+	t=1750385494; cv=none; b=LvCeIX6N5fFELMZEQVORxPjQTkr5oZlxBRFGwrCmkpYzWPzNWqg+xy/h+6F+sjNTCzgf5UxLSIHRPte2L67PvvhfSakqewWLUsWR1Z9Olroe6TkZgoAUPbxluIBdqQyh3JtkzwGG51lRvuVZY1SL3JEkjaZxxnU4GdknwufBcpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750361109; c=relaxed/simple;
-	bh=H23xrDQrYj0dexkqJELNyAClHrpIPKdoiapqes/psFQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=gzplONplfLP6W4fX3TdijMaTG6CJSsJLg+EQz3L/yH9OxOfcUzj8wjglXTR2qNTSX31s5HTgkimXsLsRsn9W8IiQgVeVFcaGNdFmFdK3tpv5O/SnlNPcJscC31iI2sbwyu7bVgEDc4mRvThNwvxQeBYHY8efRFNW74JPLKoohHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=gHT7C1tb; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net C3B0741AD8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1750361101; bh=h2xYYZOqqr8yMP/VPqfTyZFX+GzYmBARh4FQh1hqKZ4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=gHT7C1tbpcjcMCd1sss2j7A80ZEk8ZlYtzWrITGFfTdL6j8skm9xjk2F9vWmJO31k
-	 q4XvwgEb5UbxLbZ+8zQ2D2TvUV7E6xrwoinU1imlwJrUEPwI8xwsWNAPNIkCfcnQWk
-	 LYddiInvIoTyYq5LyHvRMsk8/0wKFSUucyPqddHMf3ByWYtxg5lcjN1hSb9EhLzYbn
-	 etpwb26jz+FJe0uiBF+uvYSTy7KSEa9oAqB3nuVvYJIztGZ1T93Nys+UFQ8z9ZOdsr
-	 gXiSjsuLHp/frRXDH2I6X/j7LjJ9SrZlO+P5Y93y41KSTRGoKZayRqkB6qDfjaIdkd
-	 hyoEJVlBotyBA==
-Received: from localhost (unknown [IPv6:2601:280:4600:2da9::1fe])
+	s=arc-20240116; t=1750385494; c=relaxed/simple;
+	bh=+fL+7lATRHrgFf9ezte8Bme9gjvIBxptmslEwxQX6sM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=V1zyZGBfyu01L3qatOJyq8wWZ1Rj72RzWmnE6L886MhHhOPKP13pZrCdz+absxsPxNEPiMzFydO9GeCHQ9WNlTjv3UbaO6Z+b/JWwEXL/ZCRWO1OhxPNaW9r84CdGDLAZjkm/OZjizHJ2k1NFjCjD++8szHyyKNXVzqiR0O0X7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IF9APY0x; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1750385483;
+	bh=6HDe+9Ljqo+nDEd8bs6ab9WT5YyIev4S5ZAFB9tvjBo=;
+	h=Date:From:To:Cc:Subject:From;
+	b=IF9APY0xmStNXrOksWJNFwhuznP2uKSrIQTdWQnBIBBNbukJu4XZH2sS4eg9QuDbX
+	 BDN2CCf1PIzpaiUkyQcn/5oblwxkEbpNpR4Cko22vl36e6UXADEeVj/WNbbnvua3wL
+	 uI78cZeCB2WZKD0MuVp85p5XhltcwKWp3afTDwuTtvzGEuTWLTPatH9J29TEl6R+GW
+	 r+qdIathvBDb7L3uRSsai7G2q26q7qsH4oUxD86F1M39Bri8iZ46oTgq+j/XYpnvXu
+	 nuUgTR9ffgns/s3w7/x+iTiCq9jbBLa8XmFLkrOMeVsiH9KH5ugX0JPWt9YY8PNAKP
+	 +phfAsTqHZJUA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id C3B0741AD8;
-	Thu, 19 Jun 2025 19:25:00 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: liu shouye <shouyeliu@gmail.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Shouye Liu
- <shouyeliu@tencent.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the jc_docs tree
-In-Reply-To: <CAAscG3X1Rg3YE3+FvNuyK_0eRtz6Q7FgAJBW0saNYNQkigPZzw@mail.gmail.com>
-References: <20250610081759.185e7982@canb.auug.org.au>
- <874iwo8shn.fsf@trenco.lwn.net>
- <CAAscG3X1Rg3YE3+FvNuyK_0eRtz6Q7FgAJBW0saNYNQkigPZzw@mail.gmail.com>
-Date: Thu, 19 Jun 2025 13:24:59 -0600
-Message-ID: <87jz57h6us.fsf@trenco.lwn.net>
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bNgvH4Hc3z4xM2;
+	Fri, 20 Jun 2025 12:11:23 +1000 (AEST)
+Date: Fri, 20 Jun 2025 12:11:22 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Christian Brauner <brauner@kernel.org>
+Cc: Jeff Layton <jlayton@kernel.org>, Networking <netdev@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the net-next tree with the vfs-brauner
+ tree
+Message-ID: <20250620121122.344c1d0d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/GoVKaWfXr/MwIgi9T5i7uLR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-liu shouye <shouyeliu@gmail.com> writes:
+--Sig_/GoVKaWfXr/MwIgi9T5i7uLR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> From: Shouye Liu <shouyeliu@tencent.com>
->
-> In the AMD P-States Performance Scale diagram, the labels for "Max Perf"
-> and "Lowest Perf" were incorrectly used to define the range for
-> "Desired Perf".The "Desired performance target" should be bounded by the
-> "Maximum requested performance" and the "Minimum requested performance",
-> which corresponds to "Max Perf" and "Min Perf", respectively.
->
-> Signed-off-by: Shouye Liu <shouyeliu@tencent.com>
-> ---
->  Documentation/admin-guide/pm/amd-pstate.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst
-> b/Documentation/admin-guide/pm/amd-pstate.rst
-> index 412423c54f25..e1771f2225d5 100644
-> --- a/Documentation/admin-guide/pm/amd-pstate.rst
-> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
-> @@ -72,7 +72,7 @@ to manage each performance update behavior. ::
->    Lowest non-        |                       |
->  |                       |
->    linear perf ------>+-----------------------+
->  +-----------------------+
->                       |                       |
->  |                       |
-> -                     |                       |       Lowest perf
-> ---->|                       |
-> +                     |                       |          Min perf
-> ---->|                       |
->                       |                       |
->  |                       |
->    Lowest perf ------>+-----------------------+
->  +-----------------------+
->                       |                       |
->  |                       |
-> --
-> 2.19.1
+Hi all,
 
-This patch has been severely white-space mangled by your mail client.
-Care to retry after verifying that you can send patches without this
-sort of interference?
+Today's linux-next merge of the net-next tree got a conflict in:
 
-Thanks,
+  net/core/net_namespace.c
 
-jon
+between commit:
+
+  9b0240b3ccc3 ("netns: use stable inode number for initial mount ns")
+
+from the vfs-brauner tree and commit:
+
+  8f2079f8da5b ("net: add symlinks to ref_tracker_dir for netns")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc net/core/net_namespace.c
+index 03cf87d3b380,d0f607507ee8..000000000000
+--- a/net/core/net_namespace.c
++++ b/net/core/net_namespace.c
+@@@ -796,11 -821,10 +821,15 @@@ static __net_init int net_ns_net_init(s
+  #ifdef CONFIG_NET_NS
+  	net->ns.ops =3D &netns_operations;
+  #endif
+ -	ret =3D ns_alloc_inum(&net->ns);
+ +	if (net =3D=3D &init_net) {
+ +		net->ns.inum =3D PROC_NET_INIT_INO;
+- 		return 0;
+++		ret =3D 0;
+++	} else {
+++		ret =3D ns_alloc_inum(&net->ns);
+ +	}
+- 	return ns_alloc_inum(&net->ns);
++ 	if (!ret)
++ 		net_ns_net_debugfs(net);
++ 	return ret;
+  }
+ =20
+  static __net_exit void net_ns_net_exit(struct net *net)
+
+--Sig_/GoVKaWfXr/MwIgi9T5i7uLR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhUw0oACgkQAVBC80lX
+0GyXQgf6AoiOljcx1KzsIjArxkW71/NjyFf/axCnp5/x8esey8QPXYn1PwOQR19M
+blLUaBSPbHc+SEksKvNmwC8SHwUmoLozs0pKxilH0+kGEvK2/Lq96iD0S8C2yihS
+0+NvIxeSxxiEINX6nn+9mn4awz7oGdB1zEfEfSD5EdW1xdlAv++lW5dngGoE/Hp/
+q/gO6e7g5Jd+H6kVERbtrmNfDOkmRvDDKjqrlJ4CCxOjflrFGEhCPacYRi7aPQAu
+lulv8nhB6fJ5HSGEyxsXD8bkhEjmVqZAeKCL6Yiuayi7Yf9Z+KjBtGw1yrEQG3A2
+9bQVzmSsz8WvtZaRS/dWb+QRK85hpQ==
+=Nc8N
+-----END PGP SIGNATURE-----
+
+--Sig_/GoVKaWfXr/MwIgi9T5i7uLR--
 

@@ -1,92 +1,98 @@
-Return-Path: <linux-next+bounces-7194-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7195-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1898AE271A
-	for <lists+linux-next@lfdr.de>; Sat, 21 Jun 2025 04:43:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEFFFAE2C21
+	for <lists+linux-next@lfdr.de>; Sat, 21 Jun 2025 22:11:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D0977A1607
-	for <lists+linux-next@lfdr.de>; Sat, 21 Jun 2025 02:42:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7F9C7A7AB5
+	for <lists+linux-next@lfdr.de>; Sat, 21 Jun 2025 20:10:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B91A129A78;
-	Sat, 21 Jun 2025 02:43:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF941F1313;
+	Sat, 21 Jun 2025 20:11:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="cQzNMoWH"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="GGRyvT/n"
 X-Original-To: linux-next@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74860433AD;
-	Sat, 21 Jun 2025 02:43:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDBA211F;
+	Sat, 21 Jun 2025 20:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750473806; cv=none; b=kHW2GdPdekMbV597/1x1exq7urbhLtLwf+BxVdFIqmX56aRxHKhgQWChRwZb+fT+wdKmgdOCzejYXFoIYnCkzAT/zR3wqo4vLGOd7oT34DNchyX4Cv9+HckpP3ae9FhaPfxX9rEEWRfmuoKa/NXAJrRicKfYxu2X+2BCVduOizQ=
+	t=1750536712; cv=none; b=nQ/nbdg8yjGFqxzdXxvPrbvGXC4VMMtd2t8fS23OZzcZlJtnORZNECtUREtoJQk3/5nx6vV65ww8For835s5qNs7sE3NYOzuZjKrTHExmcUG0ticjcLzvhhGojravRLI8fPYKPOgS+2/hrvhV0CFcBqd3a0kO4kI1vfoQIIZyOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750473806; c=relaxed/simple;
-	bh=/mUu8wiWZRM27Ynp507EXjtNZKfG8JErGdZOjnS3KN4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=i1K20r+purG0G0rnWBaI3Oa0Org8I1WtJR/7rTyHZYqevhSPZ1rJwl+8RJpEiljKGYsADtPJn5EbEaS6hb9DCJy+5DUPKC5WCTLRPaxWxLP/Au0aGH9d8htJ5sGflGpROlbI7MZ9z6e85R2zN62Myb3C/xesTvC5rya5jKxRxrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=cQzNMoWH; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=VuSXAJjGHGfDeGAQI0t00L+PSs0s6DTtv7L+mZ2k2xE=; b=cQzNMoWHO+ZRNfu6LICot/mnyK
-	4NMiJ9zNI1mfQoDnUm5PgxqEp6HtcT+Oh7IHtiAQOvL6ZkY7YwByf2nQ1Cy8W06OJlmylqGeIMwaf
-	0nowHA+p3BawmKPcW1XcBscMzyzxv0zn1mz5wAq4ln619wnxK8kiXf2AO2HjVrSRhTnByCqkz5OEA
-	A8jmN/byt7umWpSb0bgc1Sq6pejgvmFA3ls33AoS7+LHxAZWyn5CgI57UD2F2IUN1EaTpyNGQpHv7
-	RuR7ZC6w6ovO7fhnaxRueB/r6hOt/rKIqjPWV+Xi+r5v1Al5+iQUGS24Rcw8WDBvGw4EQp9ZsYAaw
-	M9YsjY9Q==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uSoCL-0000000EGH5-3niq;
-	Sat, 21 Jun 2025 02:43:18 +0000
-Message-ID: <969c90d3-eacf-484e-97dc-ab02c52c9453@infradead.org>
-Date: Fri, 20 Jun 2025 19:43:15 -0700
+	s=arc-20240116; t=1750536712; c=relaxed/simple;
+	bh=WqDdctZTGYONvZzYdtLkxiKROygIlGqUtAxC3/W6FpM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ql9peK/1bgT3bReA8lneZqso4OIv63K+aP/rHEAamewc4V297hAz04KS7SqOJxsh7r9VDtQfrX8mK7ZjrcKtPUXsL3ZGGzv/Yitkv5pAXO4A2Y63yVjr71Xbi8sUCUeqG0xMK8MbJTBwpP8+7YGE/2tVCN+HjYx/c4X03N8gqsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=GGRyvT/n; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E1FDE41AD8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1750536710; bh=Bwcpl3InaL+OhwjLS5pcIaxw1M92sU/tgiP4nfYxGsE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=GGRyvT/nIonW3r4pCoXeCJoExImW083nGWzW1/yrGnFqqdykrcjHmw3h5LZBZX4dA
+	 +F2SDt/rLTkGOncQZYELK1zhfrAajQXK0Y6zMt3XSxQ/V6NLdEZKppD07fjHXTrKCi
+	 6SE/wj0oilDU4G8n/VeoSu+tZxauCoB8WK4ZWVxYUh+6SJIcFfNvAusl7uIfu3lR2q
+	 TuHUdUOyjss+9TyExTkmg2AuhLUb97q9HQZnSZ+O05Dt416oRjQn0UcDz1P0dED/Te
+	 tFx2LVe+3JSevG2hWRJfuvhwi0osceH2zexMd95UqHvSftm2PhCvijrC1sAAKwiFv0
+	 /TfTWNp52lb3Q==
+Received: from localhost (unknown [IPv6:2601:280:4600:2da9:67c:16ff:fe81:5f9b])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id E1FDE41AD8;
+	Sat, 21 Jun 2025 20:11:49 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: shouyeliu <shouyeliu@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+ sfr@canb.auug.org.au, shouyeliu@gmail.com, shouyeliu@tencent.com
+Subject: Re: [PATCH] Documentation: amd-pstate:fix minimum performance state
+ label error
+In-Reply-To: <20250620021658.92161-1-shouyeliu@gmail.com>
+References: <87jz57h6us.fsf@trenco.lwn.net>
+ <20250620021658.92161-1-shouyeliu@gmail.com>
+Date: Sat, 21 Jun 2025 14:11:48 -0600
+Message-ID: <87bjqgdfcr.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Jun 20 (pinctrl-zynq)
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linus Walleij <linus.walleij@linaro.org>, linux-gpio@vger.kernel.org
-References: <20250620221305.720fedbf@canb.auug.org.au>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250620221305.720fedbf@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
+shouyeliu <shouyeliu@gmail.com> writes:
 
+> From: Shouye Liu <shouyeliu@tencent.com>
+>
+> In the AMD P-States Performance Scale diagram, the labels for "Max Perf"
+> and "Lowest Perf" were incorrectly used to define the range for
+> "Desired Perf".The "Desired performance target" should be bounded by the
+> "Maximum requested performance" and the "Minimum requested performance",
+> which corresponds to "Max Perf" and "Min Perf", respectively.
+>
+> Signed-off-by: Shouye Liu <shouyeliu@tencent.com>
+> ---
+>  Documentation/admin-guide/pm/amd-pstate.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+> index 412423c54f25..e1771f2225d5 100644
+> --- a/Documentation/admin-guide/pm/amd-pstate.rst
+> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
+> @@ -72,7 +72,7 @@ to manage each performance update behavior. ::
+>    Lowest non-        |                       |                         |                       |
+>    linear perf ------>+-----------------------+                         +-----------------------+
+>                       |                       |                         |                       |
+> -                     |                       |       Lowest perf  ---->|                       |
+> +                     |                       |          Min perf  ---->|                       |
+>                       |                       |                         |                       |
+Applied, thanks.
 
-On 6/20/25 5:13 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20250619:
-> 
-
-on i386 or x86_64, when:
-
-# CONFIG_OF is not set
-
-ld: drivers/pinctrl/pinctrl-zynq.o: in function `pinconf_generic_dt_node_to_map_all':
-pinctrl-zynq.c:(.text+0x539): undefined reference to `pinconf_generic_dt_node_to_map'
-
-or
-
-ld: vmlinux.o: in function `pinconf_generic_dt_node_to_map_all':
-include/linux/pinctrl/pinconf-generic.h:231:(.text+0x270bb2c): undefined reference to `pinconf_generic_dt_node_to_map'
-
--- 
-~Randy
-
+jon
 

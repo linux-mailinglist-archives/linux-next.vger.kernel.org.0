@@ -1,98 +1,105 @@
-Return-Path: <linux-next+bounces-7195-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7196-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEFFFAE2C21
-	for <lists+linux-next@lfdr.de>; Sat, 21 Jun 2025 22:11:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87437AE3286
+	for <lists+linux-next@lfdr.de>; Sun, 22 Jun 2025 23:53:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7F9C7A7AB5
-	for <lists+linux-next@lfdr.de>; Sat, 21 Jun 2025 20:10:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30C01164F5C
+	for <lists+linux-next@lfdr.de>; Sun, 22 Jun 2025 21:53:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CF941F1313;
-	Sat, 21 Jun 2025 20:11:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AFF91F63CD;
+	Sun, 22 Jun 2025 21:52:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="GGRyvT/n"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="soMrQf+z"
 X-Original-To: linux-next@vger.kernel.org
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDBA211F;
-	Sat, 21 Jun 2025 20:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481701553AA;
+	Sun, 22 Jun 2025 21:52:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750536712; cv=none; b=nQ/nbdg8yjGFqxzdXxvPrbvGXC4VMMtd2t8fS23OZzcZlJtnORZNECtUREtoJQk3/5nx6vV65ww8For835s5qNs7sE3NYOzuZjKrTHExmcUG0ticjcLzvhhGojravRLI8fPYKPOgS+2/hrvhV0CFcBqd3a0kO4kI1vfoQIIZyOA=
+	t=1750629176; cv=none; b=DvwbjyvIrrslQMCT/IBMM69OnVbAZQN+Tl4QEqHLPukn1j4zCYQi65dGoJTXOFJCRhjFNWljz1cwGthqYxxEebteOJTHI6y7c/l+JSr7QmzPT7iSN7hqBk+XSR7vc4eUAT89Re0axFfATlcB9RfzeU/Yr5bCDyZFh6vbekJ9YOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750536712; c=relaxed/simple;
-	bh=WqDdctZTGYONvZzYdtLkxiKROygIlGqUtAxC3/W6FpM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ql9peK/1bgT3bReA8lneZqso4OIv63K+aP/rHEAamewc4V297hAz04KS7SqOJxsh7r9VDtQfrX8mK7ZjrcKtPUXsL3ZGGzv/Yitkv5pAXO4A2Y63yVjr71Xbi8sUCUeqG0xMK8MbJTBwpP8+7YGE/2tVCN+HjYx/c4X03N8gqsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=GGRyvT/n; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E1FDE41AD8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1750536710; bh=Bwcpl3InaL+OhwjLS5pcIaxw1M92sU/tgiP4nfYxGsE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=GGRyvT/nIonW3r4pCoXeCJoExImW083nGWzW1/yrGnFqqdykrcjHmw3h5LZBZX4dA
-	 +F2SDt/rLTkGOncQZYELK1zhfrAajQXK0Y6zMt3XSxQ/V6NLdEZKppD07fjHXTrKCi
-	 6SE/wj0oilDU4G8n/VeoSu+tZxauCoB8WK4ZWVxYUh+6SJIcFfNvAusl7uIfu3lR2q
-	 TuHUdUOyjss+9TyExTkmg2AuhLUb97q9HQZnSZ+O05Dt416oRjQn0UcDz1P0dED/Te
-	 tFx2LVe+3JSevG2hWRJfuvhwi0osceH2zexMd95UqHvSftm2PhCvijrC1sAAKwiFv0
-	 /TfTWNp52lb3Q==
-Received: from localhost (unknown [IPv6:2601:280:4600:2da9:67c:16ff:fe81:5f9b])
+	s=arc-20240116; t=1750629176; c=relaxed/simple;
+	bh=MFoB1pe1Pk6OGrsdr7WmLS+bdpTvmHdl6RjAA9FZgMg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Vo47NuJKxQq5irwn2EMZvJXcw0Ts/R+VpbL5wakIxClQ7Y/oehyzcJv7OtXnT0XRiIjis5kllHORZx4Mh+UGvRN6CnG6eyE9QjI9ycHdHQxTlRuG9ustVjP4aFuztJgnX5d+LQ4wBc8SjazOG0twx7X2/E0Jpw+gQm8Wzvyf9nQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=soMrQf+z; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1750629165;
+	bh=8CojO+csQa2sT3R102SAXROdW8IVnRvkoL6GwU0YPuw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=soMrQf+z5fE8I7vzIQ2tNwh+BitiLCBfjxt2Cn4bMa2aCr0QNuApepYA1H4NFwE2u
+	 mX4NqcvJcVKeguz7tTotvY+MNdK6A5wNNpwkQMDwrjJ9L3WFmPbptmHLBSEOMJsLUG
+	 PusruXZICD2S02McegEmW7H/8f2fQLrIK7r4Ufkb4XtUgUkPC09aEQ/gsVTFtloBBM
+	 cBuYsGomJNEJb1dwpdIP/1q+yTNfuolRwENzOts7DEi/ZPXgWPBo4RMhcVkt1uhkyR
+	 3yEyRZ5BPK6QCof6amgnfUExEXzZkw+Nm6lZsRGVMAaVn0BfZ9+9yphGFc+t66G+ig
+	 lOk0hV6OFawRA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id E1FDE41AD8;
-	Sat, 21 Jun 2025 20:11:49 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: shouyeliu <shouyeliu@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
- sfr@canb.auug.org.au, shouyeliu@gmail.com, shouyeliu@tencent.com
-Subject: Re: [PATCH] Documentation: amd-pstate:fix minimum performance state
- label error
-In-Reply-To: <20250620021658.92161-1-shouyeliu@gmail.com>
-References: <87jz57h6us.fsf@trenco.lwn.net>
- <20250620021658.92161-1-shouyeliu@gmail.com>
-Date: Sat, 21 Jun 2025 14:11:48 -0600
-Message-ID: <87bjqgdfcr.fsf@trenco.lwn.net>
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bQQ1T2tJmz4wvb;
+	Mon, 23 Jun 2025 07:52:45 +1000 (AEST)
+Date: Mon, 23 Jun 2025 07:52:44 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: "Paul E. McKenney" <paulmck@kernel.org>, Frederic Weisbecker
+ <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Boqun
+ Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the rcu tree
+Message-ID: <20250623075244.49a3ef8c@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/JYckUGj1YRDw38VzwdzCBRc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-shouyeliu <shouyeliu@gmail.com> writes:
+--Sig_/JYckUGj1YRDw38VzwdzCBRc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> From: Shouye Liu <shouyeliu@tencent.com>
->
-> In the AMD P-States Performance Scale diagram, the labels for "Max Perf"
-> and "Lowest Perf" were incorrectly used to define the range for
-> "Desired Perf".The "Desired performance target" should be bounded by the
-> "Maximum requested performance" and the "Minimum requested performance",
-> which corresponds to "Max Perf" and "Min Perf", respectively.
->
-> Signed-off-by: Shouye Liu <shouyeliu@tencent.com>
-> ---
->  Documentation/admin-guide/pm/amd-pstate.rst | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-> index 412423c54f25..e1771f2225d5 100644
-> --- a/Documentation/admin-guide/pm/amd-pstate.rst
-> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
-> @@ -72,7 +72,7 @@ to manage each performance update behavior. ::
->    Lowest non-        |                       |                         |                       |
->    linear perf ------>+-----------------------+                         +-----------------------+
->                       |                       |                         |                       |
-> -                     |                       |       Lowest perf  ---->|                       |
-> +                     |                       |          Min perf  ---->|                       |
->                       |                       |                         |                       |
-Applied, thanks.
+Hi all,
 
-jon
+The following commit is also in Linus Torvalds' tree as a different commit
+(but the same patch):
+
+  02ce081ed63a ("rcu: Return early if callback is not specified")
+
+This is commit
+
+  33b6a1f155d6 ("rcu: Return early if callback is not specified")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/JYckUGj1YRDw38VzwdzCBRc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhYeywACgkQAVBC80lX
+0GwDmwf/YInwNf+2lnhknU6FKmykZ/1qTKvpyRsVkp32a/1F+jLrXM0ogwYvWAc3
+va3eKAwnfcXeJh0giBDh7ozk908gWfV96MaaBf0/mhJSDVBS6F8n8EkH8GqFcknh
+b/9GgtN/P3GbGjeOo5jHGte5guPM4R+RsQEZ6wV3o+xikyvBenRQp2JOPgiu6swZ
+mbWGb00qIYLvBuP3ucoF2pbn25RKZ+xMJFN0HIzYG+aR0zY88VC5/v8CRVqzDORP
+bbn17dTGTZgdyVjDh80m1jpmufpSYXErUs0UOTrtd5zVLAMiq6QaFdZWIsm+qKkV
+ASRpSmn2B4aSoZo3sMuw6skSRLR38A==
+=LX5I
+-----END PGP SIGNATURE-----
+
+--Sig_/JYckUGj1YRDw38VzwdzCBRc--
 

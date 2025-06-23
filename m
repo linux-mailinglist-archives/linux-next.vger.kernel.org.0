@@ -1,136 +1,109 @@
-Return-Path: <linux-next+bounces-7200-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7201-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02235AE3542
-	for <lists+linux-next@lfdr.de>; Mon, 23 Jun 2025 08:03:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54BB2AE3596
+	for <lists+linux-next@lfdr.de>; Mon, 23 Jun 2025 08:21:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 247963AD175
-	for <lists+linux-next@lfdr.de>; Mon, 23 Jun 2025 06:03:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E305716DFD3
+	for <lists+linux-next@lfdr.de>; Mon, 23 Jun 2025 06:21:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82BC61607A4;
-	Mon, 23 Jun 2025 06:03:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FE981DE2A8;
+	Mon, 23 Jun 2025 06:21:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qdaoD8Kq"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="OivJcPAt"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B817E0E4;
-	Mon, 23 Jun 2025 06:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA2570838;
+	Mon, 23 Jun 2025 06:21:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750658608; cv=none; b=eiKUS8a0BL+x9BhmPvLAF1UxRILf46MY4sq/lhX9d7lZmQmBtpBbKeu6n3GLdOFd/UcLmGz9j9UvtifnUx/Qg2JR/09IkkF+AZxOj5D/w8C8NN5F7X28gXExSEANCxl/Fs4IsrSUa0OO6swyzIHFfDoAtlvnzbGb2aUUDEFJWcg=
+	t=1750659680; cv=none; b=awL7X4e46g6sqix7aeuevGb99509gVFfiHGWHjNiAMyHKdqUinYFTZcCPmNJyMdwTlaVYZNFSm1nbKOBKIsh8g3zoetW/1/+w4r8ySEPivW+pJvfrq/j9T0CgEs58vkXEsuABMbMVEfOTtVDN08RvxuDi99/ntqP72caEvoTgQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750658608; c=relaxed/simple;
-	bh=3KveQrZhnIy9zuUxlT1bRUSD1XVzWPDIjgMAB+3MxH4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gQSTmQNK4fCQtA28KwiQzsaWkHe2m27ckOr92dxlQtbANAlf1GpgI2Gku39qLrgNLfqHcD3wUADv5LIWsetyNWsRmugG+ORqrLwQeuSWRLu1d75knZmEjApcKZibARNkUmGMQahTQ0wotnpmnlevgDAWait3EtxBUygft2Srg0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qdaoD8Kq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19925C4CEED;
-	Mon, 23 Jun 2025 06:03:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750658607;
-	bh=3KveQrZhnIy9zuUxlT1bRUSD1XVzWPDIjgMAB+3MxH4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qdaoD8KqRyKMkNla3mL9JIdkcVsleo6ik6fJtnyYV9SDaYPaKLYvuHVE6gw8UqUv4
-	 hV1fk9Yv1AvzraqXuCvgOpJ6W8MAPMgohwddVbAq0XDjJPHSyknAdXJjFbudX/k+3O
-	 ZvRoNSXO0LEZQXBXaHQMcYdn+lwxpcdxDv8l7JYTSblLCBRCHUHo5CArfrucENRAT0
-	 6+ShzluYWCNB3xYL5dMrOpNB4wzTfE5GG5sN5iCqa9+oRKsjdmtnR7J68Ywv+kcXi4
-	 oPuxaGIWpfzX0HE2Le1OyhiOnv39Eie6La50fOuKqsHv4NeK50pyAYtuptXIJ2mfLO
-	 0kDoFHtPJzn2w==
-Message-ID: <5339a303-05b8-4d2d-9f64-ac518ff2dd55@kernel.org>
-Date: Mon, 23 Jun 2025 08:03:25 +0200
+	s=arc-20240116; t=1750659680; c=relaxed/simple;
+	bh=w9ArxVT1FN7vw+Kp8reQCAfu6ps4EtTrnIiq+KM96CQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=iUV+g5Ru8kesSW58nJA9yohw6Epk0kJTO00//8PWyO+y6Fa6uCIn324lN7t6Pst5YO4c6AZzwYTifpBg6Q+dzsphIAz49mWf2bZakXI7EGBSKPlAyvVk4QhKCcJChrxduI+wt5HMBaSip69+msBEnw7p37XALbZ2Ls1gWFPZV98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=OivJcPAt; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1750659671;
+	bh=+qiHFWW8Vx9ZKoLKXtcKg9JU1VCbWzliDXLeKcRlTbc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=OivJcPAt2k8bM9+gOWewQPEIuYLveD9O59J73HlW5gyRQ1CgYLXbEkQqChaP6M7K/
+	 0oBRQi46rK/G3uj0LV9E5waP803/1mcIlacHXpN6ZXAYzY82TLw/imB91RkTU3FidL
+	 /r52wA5TWYFJ8zeQkQ1ewV9bx/X6jtTNmKFHfkw5HuhQezi0139CqGz7BdO8aAHYJ3
+	 0Y70uT5x9ay7FQGpwfQyd/hRY6ODeklhX+XRDystAu8rad4yFaV0GcqXX1vhnWbahw
+	 xZReIGSZHdRYO1GPnLcu13OZjEGFLeU+754kNrqLeCkLFN5MCI2gitQ460DQckyy3M
+	 nVjNy0+v5aTmA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bQdJ729rNz4wj2;
+	Mon, 23 Jun 2025 16:21:11 +1000 (AEST)
+Date: Mon, 23 Jun 2025 16:21:10 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
+Cc: Binbin Wu <binbin.wu@linux.intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the kvm-fixes tree
+Message-ID: <20250623162110.6e2f4241@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the tty tree
-To: Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20250619165607.33403e19@canb.auug.org.au>
- <2025061947-velvet-scarce-f5ab@gregkh>
-Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- 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
-In-Reply-To: <2025061947-velvet-scarce-f5ab@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/FF_4nBuLBv5t3N8_YCJTZUf";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 19. 06. 25, 10:19, Greg KH wrote:
-> On Thu, Jun 19, 2025 at 04:56:07PM +1000, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the tty tree, today's linux-next build (x86_64 allmodconfig)
->> failed like this:
->>
->> ERROR: modpost: "rsa_autoconfig" [drivers/tty/serial/8250/8250_base.ko] undefined!
->> ERROR: modpost: "rsa_reset" [drivers/tty/serial/8250/8250_base.ko] undefined!
->> ERROR: modpost: "rsa_disable" [drivers/tty/serial/8250/8250_base.ko] undefined!
->> ERROR: modpost: "rsa_enable" [drivers/tty/serial/8250/8250_base.ko] undefined!
->>
->> Caused by commit
->>
->>    5a128fb475fb ("serial: 8250: move RSA functions to 8250_rsa.c")
->>
->> (or its neighbours)
->>
->> I have used the tty tree from next-20250618 for today.
-> 
-> Jiri, can you send a patch to fix this, or should I revert the above
-> commit now?
+--Sig_/FF_4nBuLBv5t3N8_YCJTZUf
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fix on a way.
+Hi all,
 
-sorry and thanks,
--- 
-js
-suse labs
+After merging the kvm-fixes tree, today's linux-next build (htmldocs)
+produced these warnings:
+
+Documentation/virt/kvm/api.rst:7218: WARNING: Bullet list ends without a bl=
+ank line; unexpected unindent. [docutils]
+Documentation/virt/kvm/api.rst:7229: WARNING: Bullet list ends without a bl=
+ank line; unexpected unindent. [docutils]
+Documentation/virt/kvm/api.rst:7234: WARNING: Bullet list ends without a bl=
+ank line; unexpected unindent. [docutils]
+
+Introduced by commits
+
+  cf207eac06f6 ("KVM: TDX: Handle TDG.VP.VMCALL<GetQuote>")
+  25e8b1dd4883 ("KVM: TDX: Exit to userspace for GetTdVmCallInfo")
+  4580dbef5ce0 ("KVM: TDX: Exit to userspace for SetupEventNotifyInterrupt")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/FF_4nBuLBv5t3N8_YCJTZUf
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhY8lYACgkQAVBC80lX
+0GwXYAgAg0nPwHLdVYItZ9mq3SYqz4JfuXPvUJfbr20jutOtVvcPYizvnISgOrNv
+AW8y6qBZl2NVqTG4wjsymwzfABbtrWxTQ+byZAUv/hpl5oWakNvtA/DUEymP5zkS
+cVbx5n2IHnnTg9yC4fvtH1j8uKVcsIpxDV8/sAOPeVymYDxFzK051AAzyL8CL6QF
+8VTZ9FXhd1BAkkEbxtyrYXRY3sTMYBAkN40+W/SfFviQAUH9Ve60cR8I2pGRzIOu
+sFK2uctvRNg8THriztzDjoj/GguYUri129sFZO8gr8FbzyzWMSrtflKBBc4jrLDF
+GhjDUb5Sd66XUDG6M2avQa57IAGQ8w==
+=wNcg
+-----END PGP SIGNATURE-----
+
+--Sig_/FF_4nBuLBv5t3N8_YCJTZUf--
 

@@ -1,150 +1,213 @@
-Return-Path: <linux-next+bounces-7203-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7204-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09A20AE3798
-	for <lists+linux-next@lfdr.de>; Mon, 23 Jun 2025 09:59:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0B33AE396F
+	for <lists+linux-next@lfdr.de>; Mon, 23 Jun 2025 11:06:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96F9A170CEE
-	for <lists+linux-next@lfdr.de>; Mon, 23 Jun 2025 07:59:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 183C318961D8
+	for <lists+linux-next@lfdr.de>; Mon, 23 Jun 2025 09:07:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 365EF1DF977;
-	Mon, 23 Jun 2025 07:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8670523183C;
+	Mon, 23 Jun 2025 09:06:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="CTvDyA9f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IpZvq1Jn"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72DC7149DE8
-	for <linux-next@vger.kernel.org>; Mon, 23 Jun 2025 07:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E73122FDFF;
+	Mon, 23 Jun 2025 09:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750665548; cv=none; b=Y2BxD2MJ+xKUnYAO4SjBEDR0l1PPMAhhjrJq+LiySxGdIBnk0K6XqFW4yAQBNgyHpNiD1stUZ2YhFExQ9cLL1v59kY0ToQu7/ZqLwVzGqUolb/NDD7CNpSPdo8Jpw6ydaTJ7zhgB3BGXDDxvnaK2JdLXV8jSdqVgowvnR77RTwY=
+	t=1750669603; cv=none; b=IiXvPHKP6U5049d2gfh+fd+rRUv8onchL/s/nNZ55tfTrhEZ5kr/CIaE3ilGBiX68LiMR8q4eavM8H6xQ2JUDpyYYV6zn2op//qCZjQGurwVwdFFjlnl3IhP7ZieCG7xKxdZIvkePBsPDTUqCeEGqxJAwcl8gF06xoAXJ053huU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750665548; c=relaxed/simple;
-	bh=nI96Ff2Be3Evf1WXzSM8oKbNxUf1r8hXG8Ism039jAo=;
-	h=MIME-Version:from:Date:Message-ID:Subject:To:Cc:Content-Type; b=qM5SXNe+rFwHGrDB1RrcIDPYU6NsYZhIyC2VIAhJAMZGCrFebR8kJ+50MYh1hNEDtPCitsAn72ViKY0hCTeL5A7f+VrF1MZkxXgwWkobNAZBx1DGtGa0SSvPx2xbxqLT0gWTDViBF6a1wnrU33Sn2H6vf3rYL4KMIF4uVmk0u9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=CTvDyA9f; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e81f8679957so3050003276.2
-        for <linux-next@vger.kernel.org>; Mon, 23 Jun 2025 00:59:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1750665545; x=1751270345; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:reply-to
-         :from:mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pile0HiM5eznUIiQNtWK1hqgr3gEVWhoaFfiYXdyxD4=;
-        b=CTvDyA9fH3RhFZ3QTzOQv59leJf4D3SXnl8o4aRIXTGydpa4S6lMzbwUGGyWBu4zJM
-         MB8I+UfM8ct2wJ8jKx+DGwyNLjwcfdh3XmW9yzFoE2QRnf/cA/IN8fTL7kXvI9DdSsIC
-         qBad0E/1pclVS6+X0o59Udx+ItciJMivW+YsvyMfWkwEdZ7/13EA/NbzKXxFpbycbfAS
-         1V5E5oyXfkskh+utrDngOLGmhsl/JOtOuIEvkG/8hS5GSMiKnnrgWgO3mqokOA5qFAGK
-         zcH7jRlMLGKXZwW5duNb+P1cyrC8qnwyp9dW5iL90NB4XsyQmp4Oq3lAR1mGAUyKHy3j
-         LLyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750665545; x=1751270345;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:reply-to
-         :from:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pile0HiM5eznUIiQNtWK1hqgr3gEVWhoaFfiYXdyxD4=;
-        b=iOS2SYWI7cWph0so7LC9VIR3wJSWAvFh/rzvachBDXIaYhjv+IP/t6LolesM2omDfB
-         Hj05X2EcTNQuv3OVABJY7sq21GZDiXbx8gNa9qOZETF4D2aAV1vqBZwFTJw2VM+9q7Hw
-         1MABYZMAI8D0Q8BhwH4JBgRF3HdyozQ39GmikhUb5WA5DTDcVJgXjUQbOfpbhv79iC4m
-         yZAFPuMAQqCefuOFL3qZkhkf7UOWID6J7YcYc02r5v3sFXv4BRd3ECd2lNq5BpOZKm0v
-         G8Ad3KwTi1GcOVuqs9EDy0T4C5KcGVIDZFlWL/qs1EVzwXjhfkC1jcOUT1805Gd64oyj
-         mCSA==
-X-Forwarded-Encrypted: i=1; AJvYcCXzu6+g9rdMUzlLsdsS73xuZ3vCcBkrJ5iH/XjJxRhTJNZGo+SnS0wzzc2BGIf0H5n69fsylKJhSb8z@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXPvVm4RYLd6ROpLEV75YmSqNRkGdDHF+w6MMyRwgRGrBL4o4o
-	aLUuQdsKrRVXNAQ7W923cVleyDgq7Qb1coC8jRRymEo9lGPn6/r2ftlaKqQ0c/aBfV4b0FEsi3f
-	9uYDzJNFVoTe9KbcYXhrGGY5n+LTNIWEbjE8y+pMopBa9/GFEQxgO
-X-Gm-Gg: ASbGncv+49UL4gm9Ve/u+ipMVqUge9n6zIasBs3mdraHcuvRuaZRaVWeU9NGq3mx7hc
-	kvw0FAlVqB2Tf2XgZ12EFs5UzV+FwWxTvI2Quo8quGIap05meBDDQrSbbqD2EequiClFowwQFdo
-	blLQ5mt809HBGGvKPKIRYHJ3AHUcqO1MlzTAEUDfVZtA==
-X-Google-Smtp-Source: AGHT+IHORCN8YHKwJByuZt+PuD3p3rvz0uvxsynt0rp2tKrG57zyH5zi7e7x6T5N9ZtTk+yKhwAeunQDSsFivaomhAw=
-X-Received: by 2002:a05:6902:278a:b0:e82:61:6536 with SMTP id
- 3f1490d57ef6-e842bc6236amr15025478276.7.1750665545369; Mon, 23 Jun 2025
- 00:59:05 -0700 (PDT)
-Received: from 415818378487 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 23 Jun 2025 03:59:02 -0400
+	s=arc-20240116; t=1750669603; c=relaxed/simple;
+	bh=GVH6c9DZl4pr7m3z15pjRT1YLBqjK4aE5D2BKO766T0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BfXlawKin+6mNG5F757owrjI8iY7wjD4syfoyr+Rz4hOJoHIqTVw3nMECYcqKGgI4QodAZbnqXUl9W81I2pzpVsKy0I0Rwto2/lBSs/Z7eTMWd8SzAF0FE+7asi5EImpyWUcGwHuE+RNgBRvUp19SVNro05CSSps4iSrQSrWAt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IpZvq1Jn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B0C3C4AF09;
+	Mon, 23 Jun 2025 09:06:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750669601;
+	bh=GVH6c9DZl4pr7m3z15pjRT1YLBqjK4aE5D2BKO766T0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IpZvq1JnIygdyuu9JWXXANSByiycdWcpgh14f8+AY/Qwb2gezv4ECRDSLs4qeRAsd
+	 ydzO8cUEBjtMUTZtEL0IirTwHlN6n0yQMteh3Fj65vCUbyic692ANtye1sGH/vT07r
+	 y4YXgspuHvW99NKcq5UlIR0pJM1wuhbU5S4E9p0lYMdkPeKfB4XNkwiJIts5MDBB19
+	 vHFbDoM1K5jeClWOYiuBdn9v5NVm/gocxKil6JihXbTlHa2gw8XC3edLzH+lTnNtZy
+	 9MnIV8iYs0rvrM4OtQLME4vVY6Pm8bAZKU+2D7iiE325zOAi315c1YETkGYcWTxdaK
+	 T17htAsnjbBAw==
+Date: Mon, 23 Jun 2025 09:55:40 +0200
+From: Joel Granados <joel.granados@kernel.org>
+To: Bert Karwatzki <spasswolf@web.de>
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
+	Waiman Long <longman@redhat.com>, Kees Cook <kees@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>
+Subject: Re: register_syctl_init error in linux-next-20250612
+Message-ID: <ue32pzorcdfcj4i7xtvq5qcpkw2vcvnnc3dvuovl7t4vuxrkyi@efk3ptq7fy73>
+References: <20250612175515.3251-1-spasswolf@web.de>
+ <mve232hzw4tqc5rnqlacofzlygqks7uirkumfmibrnmzcmpywh@kpchyerpb4ju>
+ <3eec91e437e2b9861e069a6c63e80b2bfd7e9802.camel@web.de>
+ <agdzhkcb7f7w7zmcivjx6gnlilwglvd526pp3p5cgkdricwfx4@6iduwkqkerjp>
+ <bf583355c889ec19f908b1a95c4d6f73a32fcc8f.camel@web.de>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-from: KernelCI bot <bot@kernelci.org>
-Reply-To: kernelci@lists.linux.dev
-Date: Mon, 23 Jun 2025 03:59:02 -0400
-X-Gm-Features: AX0GCFu9Zpq19V02N-ovo9nnjGPAJxLs2RO1qtchIPA-C4sQdqgsGDXHMpX-Gjs
-Message-ID: <CACo-S-3ophYFr4ZC+XRVsOfzREDZA9Y5Au6Ma3S_bNwZsLq0pQ@mail.gmail.com>
-Subject: =?UTF-8?B?W1JFR1JFU1NJT05dIG5leHQvbWFzdGVyOiAoYnVpbGQpIOKAmHJhaWQ2X2VtcHR5X3plcg==?=
-	=?UTF-8?B?b19wYWdl4oCZIHVuZGVjbGFyZWQgKGZpcnN0IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKTsgZC4uLg==?=
-To: kernelci-results@groups.io
-Cc: regressions@lists.linux.dev, gus@collabora.com, linux-next@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3xfavmjctzmlngzr"
+Content-Disposition: inline
+In-Reply-To: <bf583355c889ec19f908b1a95c4d6f73a32fcc8f.camel@web.de>
+
+
+--3xfavmjctzmlngzr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Fri, Jun 20, 2025 at 01:17:15PM +0200, Bert Karwatzki wrote:
+> Am Freitag, dem 20.06.2025 um 13:11 +0200 schrieb Joel Granados:
+> > On Fri, Jun 20, 2025 at 11:37:40AM +0200, Bert Karwatzki wrote:
+> > > Am Donnerstag, dem 19.06.2025 um 14:39 +0200 schrieb Joel Granados:
+> > > > On Thu, Jun 12, 2025 at 07:55:13PM +0200, Bert Karwatzki wrote:
 
-New build issue found on next/master:
+=2E..
 
----
- =E2=80=98raid6_empty_zero_page=E2=80=99 undeclared (first use in this func=
-tion); did
-you mean =E2=80=98raid6_get_zero_page=E2=80=99? in lib/raid6/recov_rvv.o
-(lib/raid6/recov_rvv.c) [logspec:kbuild,kbuild.compiler.error]
----
+> >=20
+> > Did you have the chance to test with the patch that I sent?
+> >=20
+> > Best
+>=20
+> I did not test your patch, but it seems I independently came up with the
+> same soulution:=20
+>=20
+> It seems to be a compile/file include issue: kernel/locking/rtmutex.c is =
+not compiled
+> via a Makefile but it's included in via #include:
+>=20
+> $ rg "include.*rtmutex.c\>"
+> kernel/locking/rwsem.c
+> 1405:#include "rtmutex.c"
+>=20
+> kernel/locking/spinlock_rt.c
+> 25:#include "rtmutex.c"
+>=20
+> kernel/locking/ww_rt_mutex.c
+> 10:#include "rtmutex.c"
+>=20
+> kernel/locking/rtmutex_api.c
+> 9:#include "rtmutex.c"
+>=20
+> which in the case of PREEMPT_RT=3Dy leads to four call to init_rtmutex_sy=
+sctl().
+>=20
+> I solved this by moving the code to kernel/locking/rtmutex_api.c:
+>=20
+> diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+> index 705a0e0fd72a..cf24eacef48d 100644
+> --- a/kernel/locking/rtmutex.c
+> +++ b/kernel/locking/rtmutex.c
+> @@ -34,24 +34,6 @@
+> */
+> static int max_lock_depth =3D 1024;
 
-- dashboard: https://d.kernelci.org/i/maestro:79e6a6d6def77410fe6b7f454eb54=
-6fc8d5f9df5
-- giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
-it
-- commit HEAD:  f817b6dd2b62d921a6cdc0a3ac599cd1851f343c
+I think leaving max_lock_depth hear is not a good idea. Every time rtmutex.=
+c is
+included, it will create a private (inside the scope of the file that is
+including rtmutex.c) copy of max_lock_depth. This might not result in
+misbehavior at the outset, but it increases the potential for trouble.
 
+For now I'll push my original fix to next. Which leaves the definition
+of max_lock_depth in rtmutex_api.c avoiding multiptle definitions when
+rtmutex.c is included in other files.
 
-Log excerpt:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-lib/raid6/recov_rvv.c:168:31: error: =E2=80=98raid6_empty_zero_page=E2=80=
-=99
-undeclared (first use in this function); did you mean
-=E2=80=98raid6_get_zero_page=E2=80=99?
-  168 |         ptrs[faila] =3D (void *)raid6_empty_zero_page;
-      |                               ^~~~~~~~~~~~~~~~~~~~~
-      |                               raid6_get_zero_page
-lib/raid6/recov_rvv.c:168:31: note: each undeclared identifier is
-reported only once for each function it appears in
-lib/raid6/recov_rvv.c: In function =E2=80=98raid6_datap_recov_rvv=E2=80=99:
-lib/raid6/recov_rvv.c:206:31: error: =E2=80=98raid6_empty_zero_page=E2=80=
-=99
-undeclared (first use in this function); did you mean
-=E2=80=98raid6_get_zero_page=E2=80=99?
-  206 |         ptrs[faila] =3D (void *)raid6_empty_zero_page;
-      |                               ^~~~~~~~~~~~~~~~~~~~~
-      |                               raid6_get_zero_page
+Also: CCing maintainers to see if they have any additional info.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
+Best
 
+> -static const struct ctl_table rtmutex_sysctl_table[] =3D {
+> - {
+> - .procname =3D "max_lock_depth",
+> - .data =3D &max_lock_depth,
+> - .maxlen =3D sizeof(int),
+> - .mode =3D 0644,
+> - .proc_handler =3D proc_dointvec,
+> - },
+> -};
+> -
+> -static int __init init_rtmutex_sysctl(void)
+> -{
+> - register_sysctl_init("kernel", rtmutex_sysctl_table);
+> - return 0;
+> -}
+> -
+> -subsys_initcall(init_rtmutex_sysctl);
+> -
+> #ifndef WW_RT
+> # define build_ww_mutex() (false)
+> # define ww_container_of(rtm) NULL
+> diff --git a/kernel/locking/rtmutex_api.c b/kernel/locking/rtmutex_api.c
+> index 9e00ea0e5cfa..a133870b4519 100644
+> --- a/kernel/locking/rtmutex_api.c
+> +++ b/kernel/locking/rtmutex_api.c
+> @@ -8,6 +8,24 @@
+> #define RT_MUTEX_BUILD_MUTEX
+> #include "rtmutex.c"
+> +static const struct ctl_table rtmutex_sysctl_table[] =3D {
+> + {
+> + .procname =3D "max_lock_depth",
+> + .data =3D &max_lock_depth,
+> + .maxlen =3D sizeof(int),
+> + .mode =3D 0644,
+> + .proc_handler =3D proc_dointvec,
+> + },
+> +};
+> +
+> +static int __init init_rtmutex_sysctl(void)
+> +{
+> + register_sysctl_init("kernel", rtmutex_sysctl_table);
+> + return 0;
+> +}
+> +
+> +subsys_initcall(init_rtmutex_sysctl);
+> +
+> /*
+> * Debug aware fast / slowpath lock,trylock,unlock
+> *
+>=20
+> I tested this patch with and without CONFIG_PREEMPT_RT=3Dy and it
+> works in both cases.
+>=20
+> Bert Karwatzki
+>=20
 
-# Builds where the incident occurred:
+--=20
 
-## defconfig on (riscv):
-- compiler: gcc-12
-- dashboard: https://d.kernelci.org/build/maestro:6858fb375c2cf25042d04b7b
+Joel Granados
 
+--3xfavmjctzmlngzr
+Content-Type: application/pgp-signature; name="signature.asc"
 
-#kernelci issue maestro:79e6a6d6def77410fe6b7f454eb546fc8d5f9df5
+-----BEGIN PGP SIGNATURE-----
 
-Reported-by: kernelci.org bot <bot@kernelci.org>
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmhZCHIACgkQupfNUreW
+QU8k8Qv8DmM8lKWCPleNmDcJUZagHsovq49q62CZBsZl6n5r4BI7g9eskeApOEa+
+fd4e4O14iIfpKdaVFFxTDwPR0TawnV0cfCqJ2Hi+B6pwLA/AUcG0wSVw8+c4t612
+Bu3h4qb/40wQ9SGHkY5USAHeKfc4BPejA5bylkcS40DTzJ6U0/dzgPeomgK7vCLe
+RwrtKZePgmhanlXbK2YN3Yagld8FPUEyerDGMRGs2n8MOlgwk4PO9GHmpy14MsvJ
+wSSnq5Gg0jC/SYkA1H4tAhDupuHgnysctKJF1rY01PpZDW7nGDzYtHjb41mxh4/L
+Aspa3SxGFuMFFgqszunXSpTgT3KEvi8wFhkv5+ot61WbZlE2CwL3v3fxMYhUsYwo
+nLQNJPcKR4HnvIt0CJDhtYWJmgWLdPnd4tglVU+iJXt5L2/XdzXJodnzFB8vFtId
+IOhEoBjYfN6tNgxnFtFD23dqEsOoc67c364sYl3RER9UrUujicLqwTXGneRrKUQK
+wetPs6qL
+=+G6L
+-----END PGP SIGNATURE-----
 
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
+--3xfavmjctzmlngzr--
 

@@ -1,102 +1,126 @@
-Return-Path: <linux-next+bounces-7221-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7222-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D343BAE6001
-	for <lists+linux-next@lfdr.de>; Tue, 24 Jun 2025 10:55:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C968AE6175
+	for <lists+linux-next@lfdr.de>; Tue, 24 Jun 2025 11:53:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E96A19227F4
-	for <lists+linux-next@lfdr.de>; Tue, 24 Jun 2025 08:55:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52F8B406939
+	for <lists+linux-next@lfdr.de>; Tue, 24 Jun 2025 09:53:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 956252797B7;
-	Tue, 24 Jun 2025 08:54:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82254281372;
+	Tue, 24 Jun 2025 09:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dxqf6fyq"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VxDJZA+3"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23570253950;
-	Tue, 24 Jun 2025 08:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E7527C179;
+	Tue, 24 Jun 2025 09:51:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750755284; cv=none; b=dzL7ZxNu0q9vezgREMLOQBQbg5ArW32zzk8kOsIStiEjOQblkvyZW+E5fwYhHI0XNVr43eJ2gcaWCcZdkmQjIeIUPO+1O06erfBzbAdHR2fLBhGIA6R4/FyLYw1Ma4fP+pss3Zn3Zhq4xpW4ygAJIfva2ZrtFMusLlf61An2qMA=
+	t=1750758710; cv=none; b=RIm0xoiaIQ1kY5UtSJlw24IzafPtUkHPvoctRYjqpsVe2l3AUC3vlgAuTOlM3Pt9mHM26gcV0hWD5lCC3pOtScUFlonPY0pp/s0KQVrscuZwTKJqNbyp9VYOCD7IbbweKtNs9epSI7qulIMDegnsUBMZ2crEB3Ys6xKVWXVgVJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750755284; c=relaxed/simple;
-	bh=Bl6eH9wUdHc2uoNpPfh5jQE2lIisYdpL/oDDvuK0m8w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tur394TUb41K5CdyLzWkm/oDRcol5RPp1ZvmHn69u3jPEHc6dHDxkJUM2K2H+K+Z0V0nwbH8L0MUVmPDUFMAxR7PYaFhl+bVZnQ9MZPOu62lomC9UU8rL+YcYWqCKO/ad8Nu11CVbaTFyNPcbfLeB5/Jc8VvFETnq9hnO6OvQyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dxqf6fyq; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-235248ba788so3979215ad.0;
-        Tue, 24 Jun 2025 01:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750755281; x=1751360081; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Bl6eH9wUdHc2uoNpPfh5jQE2lIisYdpL/oDDvuK0m8w=;
-        b=Dxqf6fyqBB2l8n6E+BgOOwTaAT+dVBEps0JJCRKef2CGl//+tkC8kCBb3ZaNmqszxf
-         HbQv8KhNCpGQSZd5HI3+5DK42K9LENvxq+u8SdCBWbbjqgeRAiDwfhqE2tP2/CHC7tOh
-         PtX1qtLjQbTvXgp8hzu9oyGtWkcYOVImeM+tWvLxQKj6GCT0JFtWrsFlxlVhlvSI008Y
-         ZddAcd10CqxUhz8+QIotgSR5MLtkrrKG0JipInhuX7txoTmQEhE81s6GxFfDEcMeCsXt
-         UjWSF+WuLO0tBltGNCscXR7vq7lzk1xKXDCFN7eKtH2SU+ZYl7BncJ8F3p+pU2Q0jvVz
-         n5RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750755281; x=1751360081;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Bl6eH9wUdHc2uoNpPfh5jQE2lIisYdpL/oDDvuK0m8w=;
-        b=bMKNlPCH3XH1kdecFYIvwex3zsMbDtCUpP+YVqhqu/NHyG0bwJWTevTGXDe6xhCjlz
-         kBRVlesKm/y4uLD7vUY+WybKfLBtmktDdrMtpXq6Oy9XAbodOXGHIEFNQYiafoQy6D9F
-         M7V94W2p2xG44kGxFCiDvkDtRg5iF1VNzaaqkWeAENLqKejK/GvfcVp0HvohwcHIVpdn
-         r+VT7EYlEg5+9Wz+DfLWISwz8WokPfooo6r2baTmomzQszMiEonatjfUAk3N/ItPVOk2
-         JM9zmEb5UjdAB5IrM9RgPqCEVbtmPTfS2oO7NT9mp5Z+fMD0lACZb2UuKATEMNGzjmG7
-         f81A==
-X-Forwarded-Encrypted: i=1; AJvYcCUuLuGUBBRLky76IGij0A7YCeGSzImtJrLVydMDEWU37QBRxzQ5z1gDSwS4zHjs6wfqwCXK/Lh8J3yvmQ==@vger.kernel.org, AJvYcCWE0UzOEheYsob2F2Pk423BD8HmikYei6KV9sFsOd7rBwz4g1Loeis1bumwt2lJ6dw2oasSDOEFvZey324=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCXuoEKwngXQyX2JX+MDdHMdAynxgmjBwuQyM40bwgVW61lKTH
-	imq0m6GqpiGjtG50HBy2nOI4QrEqXpSfjeWCBq5prPymTFpG9HzjphNS0UqqMZkRx3O53dC/8M2
-	NPTWRISGxW6j/nmXdnBg4WCVoSaURwaU=
-X-Gm-Gg: ASbGncusJcN9mn+iFKRcIrQ7Kdlib0T08sZDTT1GuU4SxLLwO5vPRCgkPEZtnTgL/qD
-	AjCW2Ld3qcri2raL/wxyTZkt9esujf7k69vlCuGtkETabNRBcnID9i8Jx9/yH8i/DGPNU0f3+b0
-	Qhkvr8IsnX5oGfqiDghfvx9+4gd+vvA9CKrydp0MR8Sbk=
-X-Google-Smtp-Source: AGHT+IEj3+WVsDT/qy0LWw3vIbV0dRsOLH6ofdJvi/5wTVBaPGj7ScfnOytLEfzcGmyFE6qIIuzIcxLdnmO8YrwoWFM=
-X-Received: by 2002:a17:902:d487:b0:231:c9bb:6105 with SMTP id
- d9443c01a7336-237d94bfe5bmr92558575ad.0.1750755280954; Tue, 24 Jun 2025
- 01:54:40 -0700 (PDT)
+	s=arc-20240116; t=1750758710; c=relaxed/simple;
+	bh=V6caY+WeVL5rrT2vcH49ZSQhs2y7KlfWXKArD8x44sc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=F3nID5MGQG9lRtfXnmICyRn6HehnSroSwwqToKukB5PKGCqjbcywnZ0J21dMWiiIppOcpWBqA/slcSvJYmmM0gD4+cxEeEFWFdNJQaQ70me/fiOkE1oFlGrrDgppnlo2PP2kOV8hGGrUtgyd7GLFMDNTeTJtfJcrChxPhH0hx2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=VxDJZA+3; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1750758703;
+	bh=CXzbPmxpnN2WK8X4zwGzyPSKDkERV47aIX6ni2Jy2sk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=VxDJZA+3kZ7uSOgYQAfbG+psG36GBRVcsLps3ffqSn0D0t1y4q1nknTFtRyZHbSOt
+	 oGI5MvNghlgx6cdhBQuwIW5MMhgSp0mdYhK2Z2w2e85/ex27QkqUtmKMhPbUNYFmSm
+	 /VR/+v3fzeSkoZByUHWC4IKgy5LCGBaDHF5n1QH9YWNeOsYKeoD0OQLRbduzcnhbS7
+	 5oZ8no5ciaoFeVWoTmfeG6y1U7X5htS7zCVQt0uSDCpc80EYs81GvjbIWO5YgiE1eR
+	 tGTfK4940dZ3IKWfWi5/UUF54JR1+W5DenBQ5LVpSvoloXuxuCGbklYum6blj6b6/D
+	 j/MnJkiPHtPgA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bRKwb2S4Lz4wbY;
+	Tue, 24 Jun 2025 19:51:43 +1000 (AEST)
+Date: Tue, 24 Jun 2025 19:51:42 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andreas Hindborg <a.hindborg@kernel.org>, Danilo Krummrich
+ <dakr@kernel.org>
+Cc: Alexandre Courbot <acourbot@nvidia.com>, FUJITA Tomonori
+ <fujita.tomonori@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the rust-timekeeping tree with the
+ drm-nova tree
+Message-ID: <20250624195142.1050e147@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250624162338.7b4a03bf@canb.auug.org.au>
-In-Reply-To: <20250624162338.7b4a03bf@canb.auug.org.au>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 24 Jun 2025 10:54:28 +0200
-X-Gm-Features: Ac12FXx5bczycx_7hI4db6jGu1yR4Hk2Pu_bIbfienVFKKKJW_5exLtc5FCCPRg
-Message-ID: <CANiq72nTVRfbnWA1bxW-u+a1f+PNt=YLUCrG47vdAcdVzGQvgA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with the vfs-brauner tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Tamir Duberstein <tamird@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/nVl8cyxu_C0E=cuITrlAQCf";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/nVl8cyxu_C0E=cuITrlAQCf
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 24, 2025 at 8:23=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> I fixed it up (I used the former change) and can carry the fix as
-> necessary.
+Hi all,
 
-Looks good to me, thanks!
+After merging the rust-timekeeping tree, today's linux-next build
+(x86_64 allmodconfig) failed like this:
 
+error[E0599]: no method named `as_nanos` found for struct `Delta` in the cu=
+rrent scope
+  --> drivers/gpu/nova-core/util.rs:45:33
+   |
+45 |         if start_time.elapsed().as_nanos() > timeout.as_nanos() as i64=
+ {
+   |                                 ^^^^^^^^ method not found in `Delta`
+
+error: aborting due to 1 previous error
+
+For more information about this error, try `rustc --explain E0599`.
+
+Caused by commits
+
+  2ed94606a0fe ("rust: time: Rename Delta's methods from as_* to into_*")
+  768dfbfc98e2 ("rust: time: Make Instant generic over ClockSource")
+
+interacting with commit
+
+  a03c9bd953c2 ("gpu: nova-core: add helper function to wait on condition")
+
+from the drm-nova tree.
+
+I tried to fix it up, but this lead down a rabbit hole and my rust
+skills are poor, so I just dropped the rust-timekeeping tree for today.
+A merge resolution would be appreciated.
+
+--=20
 Cheers,
-Miguel
+Stephen Rothwell
+
+--Sig_/nVl8cyxu_C0E=cuITrlAQCf
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhadS4ACgkQAVBC80lX
+0Gz6qAgAnGN53FN6d50U7Uko/vUr5+ulVsG549M4a6h6jJtBM0BGcEXZI2p584Q8
+0uehYZfj700O708kJqZwK+PQaRWcWE0V2heK7wWhrnIsBnzPEeCu9xdxLDdra+bO
+Inh3tugCHvLpJU92L7d73g5ar48HZgFzWZswxunMGz71Y/6IWvztBpGwkf4xv0wN
+ENKmKUPewZ6yfNUhi9xB3yNC7ynpC/qZzEa5PD0eVj6P3wDtQyiaI9Lr1QlawYmt
+ulBfzeEjRurYn2rWJcs7e2cKvco+mxaD3WkYsBOHfeq0Jg39y4QDaMBgCk7madFc
+HVloSS6ZPAPaPl133zIuuBPa0bLTQQ==
+=9ZnQ
+-----END PGP SIGNATURE-----
+
+--Sig_/nVl8cyxu_C0E=cuITrlAQCf--
 

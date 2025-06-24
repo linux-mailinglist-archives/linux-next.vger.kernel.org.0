@@ -1,103 +1,110 @@
-Return-Path: <linux-next+bounces-7225-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7226-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22CCFAE6362
-	for <lists+linux-next@lfdr.de>; Tue, 24 Jun 2025 13:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C1F7CAE636C
+	for <lists+linux-next@lfdr.de>; Tue, 24 Jun 2025 13:15:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 019C81925F33
-	for <lists+linux-next@lfdr.de>; Tue, 24 Jun 2025 11:13:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A10A619264CD
+	for <lists+linux-next@lfdr.de>; Tue, 24 Jun 2025 11:15:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E96E8288C23;
-	Tue, 24 Jun 2025 11:12:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD75422A4DA;
+	Tue, 24 Jun 2025 11:15:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fkbIsOIb"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="T8gIYnqN"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDAE635953;
-	Tue, 24 Jun 2025 11:12:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB99B219E0;
+	Tue, 24 Jun 2025 11:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750763564; cv=none; b=hQG2/0Tlcek0UArf8WPEsdaVlRqWYO4fHiccNl1CEBJS04N9oJwTpIgKtQ7o6hxxRpR2s0TAmNr+mRWwEcM4Toz9X/RbVQ8U0lAheCkEaSnGiHymR5luK4UEl6r+zKsDsHosHmbsa0XhiOVKj9QDKCh+CTHwKu1ny9oegOPt1Ns=
+	t=1750763736; cv=none; b=mYGcuYKGR9hwF1l3k5KbWPKvHAySPjCzaRhBqTIFla+/uN39AN4ZOY9gOwlhaJUc02Gcn2rFnbW8aETAiCeJDd8apj/oPTO7H1koCt/Nxmk46ZWzb/1HQfvok4Qk4EwN8owJg29piyFbHY9X9hZCZFc6btF0x1R2SNjsiIsjVBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750763564; c=relaxed/simple;
-	bh=g3CbCB8jLF1TckbG87qfDePxT9szvDcnyqi4HxVYcrQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FgWIT2Szyaa04THW6XrBYAp/UgGxO6Dc4kMq1ZTrYDomDcmGXyABe/KV/9EaLMMm7ZStTrcy90BkDUTnmFQmFHaKr8D+33eUUcgoYnmsTNAMsJGEk0QXIFmabIbuprI6U7cZoamSQUsoQ+Ea5w8sK7uj7oMkq9Fl7IBGu/U4pFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fkbIsOIb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A0D8C4CEE3;
-	Tue, 24 Jun 2025 11:12:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750763564;
-	bh=g3CbCB8jLF1TckbG87qfDePxT9szvDcnyqi4HxVYcrQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fkbIsOIbuazx6+T+H0SVxbZbAD6rOiZrFC4uNhu1CxmMtDIUcCiGAioxHwOIHtb1H
-	 i9+pVy9gSKFU6mehmWB2MpesfZCy/wb5xYivls9CZ3ilx0n9WBnQTAEY3A34+e+Exs
-	 jMIvwBzSBwgrV4Md31NMAqAJnfLk58cItwq3luZiFGaVZ+4VDmwukhBqjhVFvFggfz
-	 Enjq1PvmpGCUiLeOlkN/f7xC1HmAiw8eUUy9nnJNl+S2o7zuwVfggAEy0LTyF0+55G
-	 3KNbtHT8dLo8aPFTN7R0LA7fj3SQdNS2x3pwN0sybOGDRa+PUqnGYoO+5v7KDDPClW
-	 Fm5RXO43qpCLg==
-Date: Tue, 24 Jun 2025 13:12:39 +0200
-From: Danilo Krummrich <dakr@kernel.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Lyude Paul <lyude@redhat.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Tamir Duberstein <tamird@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the rust tree
-Message-ID: <aFqIJ6aN_iqEPGAR@pollux>
-References: <20250624173114.3be38990@canb.auug.org.au>
- <CANiq72=nLeuw030T16-vDZT4A_gNyPm7WuXoK_3nFo0h0-eKJQ@mail.gmail.com>
+	s=arc-20240116; t=1750763736; c=relaxed/simple;
+	bh=TLkqf97AKaEymQttD1QvPzOUup9tkvH4B9dgCySCB34=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=NR5wheEIC8ZMMdiT7iKUkaGXOJnMrjGkBKTr049uBVnjpl0VTe/jhu382LSWCROy2koB//uWj5hOYisXnHTqeOMnwCov+vb2bNtJA46jRQZ0vhDViUAaCBCVLJhKW9QmPoWAu2XfQMqL/oZigpQ3IjARk4Py+yzI5oHsxaQB5cA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=T8gIYnqN; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1750763730;
+	bh=PPoki8NdQDT+GsOVVWlBYak8Wz+8531cXIBDBqINZag=;
+	h=Date:From:To:Cc:Subject:From;
+	b=T8gIYnqNwEX1vS1cahTd+HSdCmqHaTlFT/80YEEtgYb9k2ekKjjnH8tdMPc/4Lyh8
+	 MciW571pz5mzvEqbbwO8r6/9lwCPY2CgwgjJfyUmZnYw4svxXVs1SFkwWal7R3LCk1
+	 vZGFXdpHDFYVoMhdSMHfLBxpbHaNhmwrVpTIUcmqboKz5140XKC0aXUN5k1DfYbt8l
+	 1VftnCJKWlWzdnjRuKUNX9ow573zIf1k3/J5LxDJ219SXtifvWrGU1KLpzf/4zNSlG
+	 u2Vg0lf1aYtx0k36NqSL7sG9rLwpLQbSIdVfjpWFAgDTISVwX6mCHGWXHMIM5ftSMO
+	 mGST84cFVRK6w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bRMnF3DCNz4x0s;
+	Tue, 24 Jun 2025 21:15:29 +1000 (AEST)
+Date: Tue, 24 Jun 2025 21:15:28 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, "Borislav Petkov (AMD)"
+ <bp@alien8.de>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the tip tree
+Message-ID: <20250624211528.3b0b3bcb@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANiq72=nLeuw030T16-vDZT4A_gNyPm7WuXoK_3nFo0h0-eKJQ@mail.gmail.com>
+Content-Type: multipart/signed; boundary="Sig_/mfsg4c9pM3LCkOg0RNC4cAQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Jun 24, 2025 at 12:31:52PM +0200, Miguel Ojeda wrote:
-> By the way, I also noticed a Clippy warning in `nova-next` (on its
-> own, i.e. without merging anything) -- please see below [1].
+--Sig_/mfsg4c9pM3LCkOg0RNC4cAQ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-How do I get this warning to trigger? I did run my usual tests with rustc 1.78
-and 1.87.
+Hi all,
 
-> [1]
-> 
->     error: mutable borrow from immutable input(s)
->        --> rust/kernel/dma.rs:297:78
->         |
->     297 |     pub unsafe fn as_slice_mut(&self, offset: usize, count:
-> usize) -> Result<&mut [T]> {
+In commit
 
-I think the method isn't wrong, it is unsafe and the safety requirement
-explicitly covers this part.
+  e88b1627b86e ("x86/bugs: Allow ITS stuffing in eIBRS+retpoline mode also")
 
-However, we should consider changing it anyways.
+Fixes tag
 
->         |
->                 ^^^^^^^^
->         |
->     note: immutable borrow here
->        --> rust/kernel/dma.rs:297:32
->         |
->     297 |     pub unsafe fn as_slice_mut(&self, offset: usize, count:
-> usize) -> Result<&mut [T]> {
->         |                                ^^^^^
->         = help: for further information visit
-> https://rust-lang.github.io/rust-clippy/master/index.html#mut_from_ref
->         = note: `-D clippy::mut-from-ref` implied by `-D warnings`
->         = help: to override `-D warnings` add `#[allow(clippy::mut_from_ref)]`
+  Fixes: 8c57ca583ebf ("x86/bugs: Restructure ITS mitigation")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 61ab72c2c6bf ("x86/bugs: Restructure ITS mitigation")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/mfsg4c9pM3LCkOg0RNC4cAQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhaiNAACgkQAVBC80lX
+0Gwqcwf9GchWncrg6OGIICN5lxxZhYx7tgB0KBo7TXQzrPDAO1Kl91GFEFpoSrQi
+DWeRknS5WFMCqH23Cj47ndZSbjF9eepiig4PNVg3rXxsmky03MDcjTu34hxf2cG+
+LwMjOOCUmM856AJSWIVmWraNZD25undCA6/hr4i4qHRT/ukoZ3wuLxnrde70+7OR
+k6nrFdMySWCTNO1B+ZeVYx60L58nvFY24dZYdd/RzeK8q0/BervjgiLYn9X/D2MT
+BObzmpfPmsSSjkj9amJGEQZiW35cDAx2Npzp/NPDM0SsukbdDWwyNpw2tPRNQGhQ
+W+vHgzBcVxN71hj0B74h8T8jh6ixEw==
+=V2Y0
+-----END PGP SIGNATURE-----
+
+--Sig_/mfsg4c9pM3LCkOg0RNC4cAQ--
 

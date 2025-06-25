@@ -1,85 +1,88 @@
-Return-Path: <linux-next+bounces-7247-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7248-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 190B4AE7BA8
-	for <lists+linux-next@lfdr.de>; Wed, 25 Jun 2025 11:11:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C71E9AE9004
+	for <lists+linux-next@lfdr.de>; Wed, 25 Jun 2025 23:10:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C708F3A311B
-	for <lists+linux-next@lfdr.de>; Wed, 25 Jun 2025 09:10:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E549C7A8867
+	for <lists+linux-next@lfdr.de>; Wed, 25 Jun 2025 21:09:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C51EF29AB03;
-	Wed, 25 Jun 2025 09:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E901B211290;
+	Wed, 25 Jun 2025 21:10:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DVHE+tab"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N9j7sG+l"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A36129827B;
-	Wed, 25 Jun 2025 09:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B204820C46D;
+	Wed, 25 Jun 2025 21:10:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750842624; cv=none; b=bUmhoSceIOpFT7oHT2sZ8+L0xunRYEwAzUliv9vyLJfmjb7R1JwpJQ9WkkpmfrvRhEiRH7+Yez5GgbFe+WLpUe64Kppml4iU7qQ4xnGvCkGK7EG/B/IYub4VN0WOyiHVo0g/mQAesjJvDIgVozMuU6TJA1D2Zr20P5g2gUhp0uQ=
+	t=1750885849; cv=none; b=tziVBK5kD3zR2iC8KLuXo/RCM7CNSMZADpGWlaWOmpvLM1HznGt1hYQ4Ge3Yh1zyunVqQyl1Xg2Cx6rTF6mxLoA0E/lwXTlmNxd0SqCZy2qs8NqOWmEvoFy8f5hdhpl/ovWHD9gCGJJIWv4lcesGfc9q2kBJh7ba2CDv/J+cR5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750842624; c=relaxed/simple;
-	bh=TwT/5Vz8Ma7wzxLrrCHG2vsifHompVEwcDYXvMtMbqQ=;
+	s=arc-20240116; t=1750885849; c=relaxed/simple;
+	bh=CdZaIG6cxotiCXbEsy417Cx3IBnw+TAhglshYAGkRaw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kClSYxb9P6AeNvRfzBTRYvyCRNlir6bVz/ZKEkfcI6c3nYt8FTZE4sEJZzmpATRijDWENjhxFHy7BW8sEEikiLB564tgB5j4wa1AKs/uHWnYpJYaTBTSLczRcsytN1EGdLM3dYavkEU6GvtSZL4WgQsNvNYgGzw66yPyAgJrz7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DVHE+tab; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAFA3C4CEEA;
-	Wed, 25 Jun 2025 09:10:22 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=TnTt7I6+UY7ops8YuhMSvAqKSfTQEm0SKousr7A+JwuRhRfc7WDuZVPZQbTQ4IPYwvWMWUp0kjPmh42vyONjV8rvl50LOljRdp2UWttX5v3sEahK3CqvaWk6VGTpGCZOoo6CAmovjTLQS4z2PBidINAebA32lxpqJfQjnsWQUlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N9j7sG+l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C0CBC4CEEA;
+	Wed, 25 Jun 2025 21:10:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750842624;
-	bh=TwT/5Vz8Ma7wzxLrrCHG2vsifHompVEwcDYXvMtMbqQ=;
+	s=k20201202; t=1750885849;
+	bh=CdZaIG6cxotiCXbEsy417Cx3IBnw+TAhglshYAGkRaw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DVHE+tabPYjCqC9CRXPdH59I/hn7aoJ965K6683K1f8OVMEIzCkyUf/ReIBMKb/08
-	 +1vhb9G0uUwR1zNnPUW+/RX+w4odXjrA6Gnil38rKsk5/2YVs7Te1aiVt0AJw+djzl
-	 2QZ3Z8hVJ1eFpEEcfZDef8TOgLy2LsHNcpGnrEFkdOOo3Vc2iNZhDCxhPUJCAZyA+9
-	 aBMV0Tvu7yTt584Bh9Kutq69mStSppWCW6zLVeHEFYUn/qno2T0aYoATsnuWdzhPE1
-	 dUPM06KPdTK0sdNMVe2lSEBsi2QF+VSWnWuFdLwTK2Cj9ZmHkDQMUtxA3tN+yn1sPY
-	 yjZNZM3S3wa/w==
-Date: Wed, 25 Jun 2025 10:10:20 +0100
-From: Lee Jones <lee@kernel.org>
-To: Abinash <abinashlalotra@gmail.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Abinash Singh <abinashsinghlalotra@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the mfd tree with the mfd-fixes tree
-Message-ID: <20250625091020.GR795775@google.com>
-References: <20250620160345.48fd2d50@canb.auug.org.au>
- <CAJZ91LDiQM2kSpmDM6TvnY5m8MEqK03fXJBWa=itxx5mdX1ifw@mail.gmail.com>
+	b=N9j7sG+lbV/z/3Qr/ejg/YiL9FUMtkF6/V6l+/Shtq7Ls80WDr3FIqh5Oa1Gofg3r
+	 omrnsCGupI7SofgUm1tLRRcI7y/hcvS741P9rM5gR+Zmfanj7OU36hckuqK7q1Si2l
+	 9QU7qyPPqApIjB/047dP+8SI0+el38nF7pH81KWI8Irw6iRdwReV47OqptpyK7H5Y9
+	 JuMgJ6h/LMPU2FM590G8nYr7z2S8Tjyiue+tLVqD9Eeug1rYcmY0nuKVP6vkk1gmhh
+	 fECW3Fo3gOOEAn3pxjO2D3+x0ZbXyQM2A1diysl2ReT/38Qm6KjEWjted3eiml99Av
+	 GlqzrE+E5sz/g==
+Date: Wed, 25 Jun 2025 23:10:44 +0200
+From: Andi Shyti <andi.shyti@kernel.org>
+To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>
+Cc: Pratap Nirujogi <pratap.nirujogi@amd.com>, rdunlap@infradead.org, 
+	Hans de Goede <hdegoede@redhat.com>, sfr@canb.auug.org.au, linux-next@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+	LKML <linux-kernel@vger.kernel.org>, benjamin.chan@amd.com, bin.du@amd.com, 
+	gjorgji.rosikopulos@amd.com, king.li@amd.com, dantony@amd.com
+Subject: Re: [PATCH v4 3/3] platform/x86: Use i2c adapter name to fix build
+ errors
+Message-ID: <4exmux33fq3nyene6qbjgtum7e7zczqvzf4aqimyszzlztsewm@hvl7umgvvlov>
+References: <20250609155601.1477055-1-pratap.nirujogi@amd.com>
+ <20250609155601.1477055-4-pratap.nirujogi@amd.com>
+ <570c7765-b3bc-77cd-dddb-d19e85611114@linux.intel.com>
+ <2a74c711-0d9c-8013-dc92-82ffd0d7d416@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ91LDiQM2kSpmDM6TvnY5m8MEqK03fXJBWa=itxx5mdX1ifw@mail.gmail.com>
+In-Reply-To: <2a74c711-0d9c-8013-dc92-82ffd0d7d416@linux.intel.com>
 
-On Fri, 20 Jun 2025, Abinash wrote:
+Hi Ilpo,
 
-> Hi Stephen, Lee,
+On Tue, Jun 24, 2025 at 03:07:16PM +0300, Ilpo J�rvinen wrote:
+> Hi Andi,
 > 
-> Thanks for the heads-up. I'm the author of the patch:
+> (ping)
 > 
->   "mfd: twl4030-irq: Remove redundant 'node' variable"
+> It seems by now people are starting to send workaround fixes (build only 
+> with =m) as this series is still pending and compile is breaking because 
+> of it.
 > 
-> It looks like Arnd’s patch in `for-mfd-fixes` already removes the same
-> variable and improves compatibility by switching to `dev_fwnode()`.
-> 
-> Given the overlap, my patch can be safely dropped from `for-mfd-next`
-> during rebase if it's now redundant.
+> I'm fine with you taking the entire series through i2c, or just let me 
+> know if you want me to take it through pdx86 tree instead.
 
-Done.
+Sorry for the late reply, I've been off the radar for some time
+and now I'm catching up. I will take all the series, thanks.
 
--- 
-Lee Jones [李琼斯]
+Andi
 

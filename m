@@ -1,120 +1,127 @@
-Return-Path: <linux-next+bounces-7265-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7266-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 088B0AEB095
-	for <lists+linux-next@lfdr.de>; Fri, 27 Jun 2025 09:52:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8B7AAEB12B
+	for <lists+linux-next@lfdr.de>; Fri, 27 Jun 2025 10:22:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B3E316F63A
-	for <lists+linux-next@lfdr.de>; Fri, 27 Jun 2025 07:52:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AE9F1BC6900
+	for <lists+linux-next@lfdr.de>; Fri, 27 Jun 2025 08:22:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A4E02264CA;
-	Fri, 27 Jun 2025 07:51:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12FC823C8A2;
+	Fri, 27 Jun 2025 08:22:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="bX3RFILs"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MudI3ybf"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429802264C9;
-	Fri, 27 Jun 2025 07:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A2B23A9B3
+	for <linux-next@vger.kernel.org>; Fri, 27 Jun 2025 08:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751010717; cv=none; b=FBvYnBDvkyImhnA6joxXVlu4aqr4ylqtv3VomlUErf95BNf79RqG6g4myp1zV3znk1PT7LVR2CrgsNxZ1Ci1xZ4zifzQretWvuL/95LEJr6LOUeDRuC5E3HQ/IAG4SBRAHWMGQQDeVx69l8EC89bI7r1uVjokOzVvzvb3ku1dy0=
+	t=1751012531; cv=none; b=tFdCFA0Ou98mJGOoQa0XIc8i3FPoKdVkGlRP8lE4L3jXclwbpydw9CLxmtwmjbqrN5nLa/2BuXf4nno8WAoFNOy6YbAjFn127qLzbbkXdM/7vxrR0hSxJD2dRrFY5uofFP61wd956sOmApKGcDVbNxKwTTRuUVFHPfvfBUDXk4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751010717; c=relaxed/simple;
-	bh=ixSyEauioVu1pqSb+FZw2CFjEqM0+5U/Py+Nk6B7j7s=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qxDW9K67O3e46tvLZNJHc6KVbFROHmpdvdRy6j+ESfdXZUDT1SO8KdJLwmVdxapTD2d2VHVRL0Yx9RFOvLZB4LgWB0AGnNlE05DmYp13glbQUeamQPQ6FgG6gqGzHSpOUOmj/skqJ6JfJHKhb0cY01WMU98z1AfiZ4xe+bMLYm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=bX3RFILs; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1751010713;
-	bh=nJXZKSqjt6CJlnARd+VvGXhn3OSXKLUU2yS6mA/AdeA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bX3RFILsIqpbQYa0OAXs3aS6C2rRvzir8A9iufgFm34jITtzr7WJ5TVzEuZsjJmTh
-	 tvdVALg7xtYm27EX8hEBa3bpskfZI6xRhNvIdf5yAVCSvCZ7RkDWo5P6HE0P5gRTp9
-	 1bJlXgq7EPBCXZa1HQSYnDjF85FJ4hNEpuoQAp2WApjgfBk5VBGN3A2uQ7mvbmPO9R
-	 KCS6BHaoaeSvKhvIEuTN0ctacsCyVNbW6q8T3yOa3s1Fk3jKWx96SgoPGF8pr9lkCJ
-	 86THjlKMKzBQHH8wBL97Z3xLr4dITUYvi6E0JPEgeVygZtNr61QwFShPSXVnOftwRv
-	 loutODzfA9+3g==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bT76x2l6yz4wcn;
-	Fri, 27 Jun 2025 17:51:53 +1000 (AEST)
-Date: Fri, 27 Jun 2025 17:51:52 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the kvm-x86 tree
-Message-ID: <20250627175152.1f66c39b@canb.auug.org.au>
-In-Reply-To: <aF1ty7P9MnQK7UPr@google.com>
-References: <20250626171004.7a1a024b@canb.auug.org.au>
-	<aF1ty7P9MnQK7UPr@google.com>
+	s=arc-20240116; t=1751012531; c=relaxed/simple;
+	bh=7L7gnA+PMqOvFzB9aOAb6Z3I8wPBf+AMV/Vnk3gf7KU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Y808IEulUbO0tjMdUMAeZyywXTwA0O508wErIMqCQHcUS4bjTEFUxERByi+EqwckqSLXa8f4SGzr1KnPz3m8qC4jLoWou0gdmKKthn4TZd4s68kl0JNdKUX4Livvx/L3COpFgWNCeYpaKDb9EchxiZ9Nu5wFqmyL2UEFtXvJWGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MudI3ybf; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1751012528;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zdhaPmsWFArhsXFsISpX5ZipUl19a5SM0RfIr3emwGI=;
+	b=MudI3ybf3p4McbsDctHqXeaIJ08OchAbiBrufYnX9pFVH0rzQ8YLUVwDNrbWNeXH4fJnxj
+	UO/XUTUIxBhtZ58TnvDEbRlwm9qcWQ2WX1W0Tlqta05Khm69iL5o8x8IDmBS00SOQkDd/m
+	/RQnpYAyksEQNpGFbBOQBRqwtEDm01E=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-390-IWbEAftRNVWtkw7Byfe0kA-1; Fri, 27 Jun 2025 04:22:05 -0400
+X-MC-Unique: IWbEAftRNVWtkw7Byfe0kA-1
+X-Mimecast-MFC-AGG-ID: IWbEAftRNVWtkw7Byfe0kA_1751012524
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3a56b3dee17so1470311f8f.0
+        for <linux-next@vger.kernel.org>; Fri, 27 Jun 2025 01:22:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751012524; x=1751617324;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zdhaPmsWFArhsXFsISpX5ZipUl19a5SM0RfIr3emwGI=;
+        b=p8vCTsT9wnoyhZGgdCbU7L6BI2pAeYqzvXZAL01oWekEOM5ZzIUssabdWhZNFnPiAP
+         LQiQRWJvyrUyS3BWvmwcTUiUZSbIRe214HlxxSlSU801iNilWk6r+9bNdhYBiXjVSbui
+         K6sx4nNMNSDSr7hlNgxqCgQzyaHBESoth70I+voIEcCPhAFwDTdMWrR8vXYT2WP9ec03
+         Qri5DWr9UmbRH443NkhnMyojr3Zvhw8mJH4wewKtQYWLc0t1Smmn0p1KE5AOaS4C1mU2
+         vr17wm0cq56JKWr8EVUi+bbIiYp354SoSZgwfD0sGKOyd0WkNx9ziqWBt5dVN/1bd8ua
+         Jx9w==
+X-Forwarded-Encrypted: i=1; AJvYcCWF3/3d/2GlghAJ0GmEzQqpgYd+wTQ6K4ODds8E2JY4zR+LV1ImJZeCouD5B/p2Ekwug13pOTFrlPPU@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMEJgwIbIREFl3leM7KsZdZWTuzRcwXD+SdpjtW11x+s3BnXsw
+	/tnVBcWz2jX7hVL7qQeSD5+vgp3GMH0Suy4Cys7CM/TIGgDa3biZ6yUGc45EnGCxSO1nazXm7tx
+	/SBLaGcTWWCkyY3n9Ynsu1NNOyA14ZEMKl2joUmKHKhljwlzbabDwOLTXp6/GbC+m6NgKG7SL
+X-Gm-Gg: ASbGncsUfsT45ffav6RCslNX9cvkLseKyKLu5bHDKVujQTOHJ19vHGoGps/ElEYeTfr
+	o/o8FMxLjz2blVX/fgeTH2pvKLNjcWO8lB734+6HeQirboaOaDiaObs8fcMVE5D3Uc64BIx2saO
+	/8LVwfJsJia7vbH7j4bCOh7mO8Cl9JEe1QJ2kcfZAv6Aesymi5xaTHEbzbOSX61zXLBM9zDhDXc
+	iXsO0/nybSfaIWvi7O3viBpma/m5wPUPLEPHv8OfQngPLdUN9+fg4EXI1UBBQ0zldiqJ1PKVQFJ
+	n7t3xSngMv/pAej5jnzWy94TjzZuB7etrsZskVygdSodwQ3Pe64=
+X-Received: by 2002:adf:9cc9:0:b0:3a5:271e:c684 with SMTP id ffacd0b85a97d-3a6f3153609mr4583319f8f.24.1751012523790;
+        Fri, 27 Jun 2025 01:22:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGE6kxl77BfW2oseBFkSC1JtOT5bepuvfPux+euP6AbKgN4iSeaZr6ihXIz7XSCpkAgQOS7Lw==
+X-Received: by 2002:adf:9cc9:0:b0:3a5:271e:c684 with SMTP id ffacd0b85a97d-3a6f3153609mr4583297f8f.24.1751012523368;
+        Fri, 27 Jun 2025 01:22:03 -0700 (PDT)
+Received: from [192.168.1.108] (ip73.213-181-144.pegonet.sk. [213.181.144.73])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a892e52b9esm2024043f8f.61.2025.06.27.01.22.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Jun 2025 01:22:02 -0700 (PDT)
+Message-ID: <bdca5369-57dd-4db4-82db-a2622d26c550@redhat.com>
+Date: Fri, 27 Jun 2025 10:22:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2B3/_nXBVNB6lI18roNtIX=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build warning after merge of the bpf-next tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20250627174759.3a435f86@canb.auug.org.au>
+From: Viktor Malik <vmalik@redhat.com>
+Content-Language: en-US
+In-Reply-To: <20250627174759.3a435f86@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---Sig_/2B3/_nXBVNB6lI18roNtIX=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 6/27/25 09:47, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the bpf-next tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> kernel/bpf/helpers.c:3465: warning: expecting prototype for bpf_strlen(). Prototype was for bpf_strnlen() instead
+> kernel/bpf/helpers.c:3557: warning: expecting prototype for strcspn(). Prototype was for bpf_strcspn() instead
+> 
+> Introduced by commit
+> 
+>   e91370550f1f ("bpf: Add kfuncs for read-only string operations")
 
-Hi Sean,
+Oh, good catch, thanks for the report.
 
-On Thu, 26 Jun 2025 08:56:59 -0700 Sean Christopherson <seanjc@google.com> =
-wrote:
->
-> On Thu, Jun 26, 2025, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > After merging the kvm-x86 tree, today's linux-next build (htmldocs)
-> > produced this warning:
-> >=20
-> > Documentation/virt/kvm/x86/intel-tdx.rst:232: WARNING: Title underline =
-too short.
-> >=20
-> > KVM_TDX_TERMINATE_VM
-> > ------------------- [docutils]
-> >=20
-> > Introduced by commit
-> >=20
-> >   111a7311a016 ("KVM: TDX: Add sub-ioctl KVM_TDX_TERMINATE_VM") =20
->=20
-> Fixed (assuming I didn't botch the fixup).  Thanks Stephen!
+Just sent a fix to bpf-next [1].
 
-Looks good, thanks.
+Viktor
 
---=20
-Cheers,
-Stephen Rothwell
+[1]
+https://lore.kernel.org/bpf/20250627082001.237606-1-vmalik@redhat.com/T/#u
 
---Sig_/2B3/_nXBVNB6lI18roNtIX=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmheTZkACgkQAVBC80lX
-0Gze+Qf9FZHlXSdk9i9BuHzlk0D30ijx5M1JywxfZFFeYT1zxyAu18K2M+Hunsvr
-0QhXPNCU81O6+RE614nROfClWwu4/jjNQ4uuhwhRiP9CBxL5bpn9vYjapxQ+H9iI
-dIgeP3z3Ga/SKHoFg9/AhaTds8MimiRKGuif8Q62e9o2jyNAMFkHjWbknwh9MwX5
-GqQqaT7QIiNpU08oDH8fZvFZgn7PlUQU4qYJDibQLn5uVpw4UBhygCDPSgbwK9V8
-NJVqe2YwQz+zRw1G6rulnkyG5Pjxm3Pgok0vWUrAi128YtmBOjI3TCHFU7pekSfn
-Y0VN3xfStWAApuv6Ga8ojkFu86DUog==
-=epj8
------END PGP SIGNATURE-----
-
---Sig_/2B3/_nXBVNB6lI18roNtIX=--
 

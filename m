@@ -1,185 +1,134 @@
-Return-Path: <linux-next+bounces-7277-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7278-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45596AEDE81
-	for <lists+linux-next@lfdr.de>; Mon, 30 Jun 2025 15:13:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 924E0AEE960
+	for <lists+linux-next@lfdr.de>; Mon, 30 Jun 2025 23:15:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 748023AFF4D
-	for <lists+linux-next@lfdr.de>; Mon, 30 Jun 2025 13:09:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9BC017AB79
+	for <lists+linux-next@lfdr.de>; Mon, 30 Jun 2025 21:15:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0753528A1D4;
-	Mon, 30 Jun 2025 13:02:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2981236437;
+	Mon, 30 Jun 2025 21:15:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="kcJ1RNUT"
+	dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b="KDDuBhtW"
 X-Original-To: linux-next@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2089.outbound.protection.outlook.com [40.107.93.89])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825F628A1D0;
-	Mon, 30 Jun 2025 13:02:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.89
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751288560; cv=fail; b=u5tmI15BmIRg096vHRApEcY2RICXCwjjxf0fSyjOxbU5b8EnEEb9IUuxydy4UvmYbjwvcPv8YTUXHwOxnqWVyBkOzXyJv+QyF83y7nqCqn/aQqpO3j4tXJDZcpLw6Uk86eeD+b+ocoGVbYC2i612W93dU9rJDhysjcN8DUaSxlc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751288560; c=relaxed/simple;
-	bh=Oq9ilult3Qbs0leF0oATT/hnCGPFPuulR8qI4tHD4ds=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=B/HWVuitpdMg411+hGwSBNX9FODp6svsZttvRA+VktXwjnLn2U2OeTdwB0JNg9v7TO8it63hMU59SJq8qpeSIYvQBmoahSlLQvKknxjJqT+1SuSdInyBtSQB4DlUKkYbY7gGUoby8/Se4+Z1861Jor/lRts/0/Xwa7IRH3l1H1k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=kcJ1RNUT; arc=fail smtp.client-ip=40.107.93.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tTHkDgZmp4g0sVVSXHn0qdER59thZ5qL6vbuZbmgUZpqLxyXwbo3bduSr6P6Qc7fbB3RUT3v3dVrHdIcCvoNdwcO7hNLU79ZCrshINep3FWsLfsk7kgCwcSsvlEb+Z0C7vx/5JL7DDDvaysI1LziCPJ6qB6xaO5HCZPLiPDPgZmbX10nrS2Rh26KQhz3fnZPzyuvVkKskpKtZDdQ8IW6AVRZtt+HtM4oZ8OJTSrCAH0EvWufeEaYADGxfV+X1Hmegl4pWgHQBGaNCkcW6FhqgmouTlnPCC5vP2TChUnyHg9hO9w6HFkAKfs2Gh37m7LHd3wSL/a6OGuUB/jPIcW5hQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KXOP8zNp67YIvPOK0OF9eRwVyEW+L52swm50jUYdlSI=;
- b=spc10I5y0Hv4mlMlDpJttdyXeDaoJwyDAK69Kr9i3YpVcCfsmQR/Rrs8m6m0VQhX589anqW3w2JwMZH9B0/yB5DLtZJNgtdpWhmTLI4Qnhee10A2WNN/jk8aax6qW5X4uAtfuCUxRP89mtq2MqS5fmHq5Wo+ZuFCqb121SbvvAXj+xKLi2Nhi07PlkoT+/cnc/D+ruygIXI6pMrTEG//NjPStgKLluGyGuTuGkQf3oaQcQKJKwiLbY0Kk2bh4reuQ3LvtrMigvjEfJ89+2T8cQ7/tR0l70CggcYTG6MIGtI3SqsuAjG1XYl/FOzVdfClxcgM2qDjvDg+EpxbN3ukyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KXOP8zNp67YIvPOK0OF9eRwVyEW+L52swm50jUYdlSI=;
- b=kcJ1RNUTnYXwpBisNpSY2/f1mmJe3WwHiA+3E7Ctkq5hLUP4Wbs8U+u2WDAmhKbhaA+aexBsOMK80k4MRL6JIfwSIXFnObMBn49di2LBX9LaNE3xC/VheGqxIFuxsal7cfHzcL9DypCmwoEN+MPrkmaKemKfQJYZNjq/Z6iDxO+x2WQ0a7t4ipxAr0m9knS8rxI1YyhpPzJA7qNA0gvQ2R6ZMY1q8dH2ZhOFtr+EWOVRoMLEfFQJkbHpcdqUVCAyOfX/5S9UCmcEJRtzkbEDe3Jl5q5mDqlsjWNqwr4BjQB0657vRNfp0SakinBJ9DhrnN5W2XsaPegsVLaoT/W3WQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by CH3PR12MB8902.namprd12.prod.outlook.com (2603:10b6:610:17d::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.16; Mon, 30 Jun
- 2025 13:02:36 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%7]) with mapi id 15.20.8880.030; Mon, 30 Jun 2025
- 13:02:36 +0000
-Date: Mon, 30 Jun 2025 10:02:34 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0177C28C2A3
+	for <linux-next@vger.kernel.org>; Mon, 30 Jun 2025 21:15:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751318107; cv=none; b=gplcOCA+BljEXuygs0o0uKz/tkqvIUKsWOkqZxE/IcP8RzlUIhJSyQDhqv0BurlGFje1HnKr2Jc+06dmowFbvV6n+z+lqTOFGk5xLA+4lRYX//QJJl8dAdIJ5FWDsS1EUQEeIiV0tgMTXJ+GrMQePx3Sd1hrRwD6Qet0nGO0BEQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751318107; c=relaxed/simple;
+	bh=R/16zujFisC9NdOslvjk65nWTatAJwCxTgv8elrO20o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hW2F6cCTSeY305vZXn1MrsqFc0VwC3RQfjchu3jyaDwvncMfpg925qHSBmQANIE1zluuTh1CMI5afMwySBMLJj8v9dNzQC0IeqYdpm8Bbxp9wwEtif2vZfADG2Bhhyjh6Uvi6aEEdjYFIrh2Fqt8dhMu6ZIBbmOBQ/gI7Fod/Zg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com; spf=none smtp.mailfrom=pdp7.com; dkim=pass (2048-bit key) header.d=pdp7-com.20230601.gappssmtp.com header.i=@pdp7-com.20230601.gappssmtp.com header.b=KDDuBhtW; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pdp7.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pdp7.com
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-748e81d37a7so3559460b3a.1
+        for <linux-next@vger.kernel.org>; Mon, 30 Jun 2025 14:15:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pdp7-com.20230601.gappssmtp.com; s=20230601; t=1751318105; x=1751922905; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JUEvETXHTlKyXBMoL8O2NrqSNnjuNlXBT6Mz8VcsTmQ=;
+        b=KDDuBhtWp9lB3rcXLkSVciLkDafO6Knaz1li4YQ+YqGO0R3aluie7MDyUrIAM+AqQ9
+         k894xzvfpKhZpAQIq3EbWXZmjzZ2GCykd2ZfDMUOclTcGra1kVbPlZIsz/eAT9gzwVG9
+         LRSNjy90DCB6LauChnfB56NsCxdnaeHFKuyKfZA2mvjvlG49mvZN+ubyicPt8LtelAv9
+         qJSzXPr+6Z7c126BeGtKL2xsSyJzFSmNnqT3KjjKdZYCQoFY07yv1V5GjxgWQu4TDwY3
+         7+qvgp8QoJQrM/MLWUpBbs9aTxLDZHOAZvzYyiKXdixFaRVKvhs/QFpLiAYQ6IkFjQp6
+         bsew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751318105; x=1751922905;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JUEvETXHTlKyXBMoL8O2NrqSNnjuNlXBT6Mz8VcsTmQ=;
+        b=w9TisQ0/XOHQY/tVVZw2a++1JL1NW+7/4Zqfmgf5z0PuVTcs2iFGWqnXlOxrzDe7ft
+         OlCFePqVSwI+fhbatsz3yuAzvsHqs6y3EuRvTPBr9XzEirYeyhUUjlm2CMFwUX87LLxH
+         RIEh/DeFRsWo13HFiM4JiEgRGs47YI2irEqARPp/XJND0JqVvFzJWHfrbLlubctL1JqE
+         AjxI8OXLm5WWyEajGkcWxmwgqU2Li7+ERr7xdBoc+ooF4K64eHUI433i8U1kJ2+jWMJu
+         Cpp4j+qQHWoB4tQ6L5XPKxG6F/t0Zi0F5kwO6SchKc21bTl4MhamY/NXzqzXsSxAjwkP
+         S0mQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW8afi6w0Mk/LkujqiOPsNSOB//csrewYrPyx6epiXfLQM+GcWArvKEKgj+GqovOy4lTl/El0XoF6dT@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWbjzKzJKmDQfrNqN0gyCur982yt0dvFtbocrIrko9bz4sKq5W
+	IhPukHFTtQexAOYa8lzFeHVd1mpdMr+23ZtmfnOPllqHUb5OcuMSPC6y+wXrOAY8GglKFkzZBiB
+	J+3nA
+X-Gm-Gg: ASbGncvtx2SnHiDdV01Q14IiI4Tk2nwNYEph8YyrYZHVZWuhzXG66VRkf0L2eclz0Ur
+	PdeTkRhkalFxJCBqmSuvz4D6Yv/g5Fev/QEPZu9EjVrUE5BaEZa8FWNXQvhOcwar57zwmPbuxMU
+	wjVGpZ5OI1Tg9/2TgjtoJjBQYgBlNIj0Z9UFL3YfQipUD/b3NIDS6DqZn9D6dB+4l8LIZyJmZPB
+	OVsbHn0NqD5FOU96fbq/S5ulQIHCccikEhARIuefxQzrE53lwWWm3ZvtNVLzoQ3Gwi6Yy7NThF4
+	xozbJeKaGj+smzssUju4EsClBM9BWdOjCj4CkQqXJoOWAGz6ItqXBmSX1NpAphdIGlfwXMHfqQ=
+	=
+X-Google-Smtp-Source: AGHT+IGL/SZf2y6jdZAAifdYJBwKcWDsEsUve+zOQkExo66Ml61nMbqpN6EBJpdG9Zp/Zyiqdnqxaw==
+X-Received: by 2002:a05:6a00:3d11:b0:747:accb:773c with SMTP id d2e1a72fcca58-74af6f08200mr20130964b3a.13.1751318105082;
+        Mon, 30 Jun 2025 14:15:05 -0700 (PDT)
+Received: from x1 (97-120-252-192.ptld.qwest.net. [97.120.252.192])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-74af5574604sm10227155b3a.86.2025.06.30.14.15.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Jun 2025 14:15:04 -0700 (PDT)
+Date: Mon, 30 Jun 2025 14:15:02 -0700
+From: Drew Fustini <drew@pdp7.com>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Joerg Roedel <joro@8bytes.org>, Joerg Roedel <joerg.roedel@amd.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Nicolin Chen <nicolinc@nvidia.com>
-Subject: Re: linux-next: manual merge of the iommufd tree with the iommu tree
-Message-ID: <20250630130234.GT167785@nvidia.com>
-References: <20250630160059.49544dde@canb.auug.org.au>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250630160059.49544dde@canb.auug.org.au>
-X-ClientProxiedBy: SJ0PR13CA0074.namprd13.prod.outlook.com
- (2603:10b6:a03:2c4::19) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the thead-clk
+ tree
+Message-ID: <aGL+VmixzZNpfVpC@x1>
+References: <20250630072422.4d30412f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|CH3PR12MB8902:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1a326553-f396-45e3-e3ae-08ddb7d662a5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?QM39QPMfkt59xse1iHLIMiAjWlhLEAtdvb8Be2RCPiEZTm6y+NJXDsZI+rZp?=
- =?us-ascii?Q?tsAZiw4pPWd7GZoAYGlYcImnu79Wqpx9axctyCrwLM8oDWqCzrvoIcW+JqyU?=
- =?us-ascii?Q?EV3L9A3iw4Q/yRqeqleIqBdX6bFADlvti5TQmO8fYN/sGaWdQkbqvnMaeACL?=
- =?us-ascii?Q?MeDrqBBNFULX/7PYXldQqPls6sUXrXor3ZTBUy7lcoWRulc04VDFZKMw7FVM?=
- =?us-ascii?Q?9rXiafjt6gB4VM/U2m7E0kEBWV6yPdKdaxQDocMxT29OI7FXY1kyGr4BR/7/?=
- =?us-ascii?Q?QRk5vA0vLlPNwwuUY2TIOcwmcMeJ9LJNjX5s1FW+ACPJsyf3JZ5omWDTc8qw?=
- =?us-ascii?Q?sv5xbWJmjgYnqI/ZN4tD0geDDjdIE1wqpqm4wlcxXoiWoTjAadSxOHh0qoHc?=
- =?us-ascii?Q?0cqxdqySaRYRTi8yXv7cX+ognTsHo5Geq7hYYhTR+3lFV7zl9cUUqAhYogBj?=
- =?us-ascii?Q?lE04vCq2ZqO5RE8WFUjHHHO/mn6ui//dtHtVbk9TiiO9WqXbtpfcsz0dCFQ0?=
- =?us-ascii?Q?NZQlF4uukH/mUYzm0YrNPky4luRsC3eB1wslWuVT/G7tuXgDiKIlHVvGpmJ5?=
- =?us-ascii?Q?/RPWHOVqYEGwGW/zv7khy0imaV6DZMmtvZGBzizQ/4ufk6EyGQKM7awRjLZE?=
- =?us-ascii?Q?MjamZddpDOYLqtDKvlacfG8tkHBIrUs8s7M4Snp2t7Bou5VHcDB79xTP58gy?=
- =?us-ascii?Q?GnyE49p2xoqAFhQVXKTmbO9IGeWW/uwrGXz4BoAtBkl2rQ8S+wU0NbFwEOv5?=
- =?us-ascii?Q?49wwbgt/vr99jw259f1XX1uOFLtUYMTatF6p0FEjvoiHIm77hBJLMBs25M46?=
- =?us-ascii?Q?4wH5ZAo/WBw8hkBhNXyyRkcXro90qDHpnUG2rmfTtXnpgYI1WVwpLUl+PF2d?=
- =?us-ascii?Q?Jc8/9L+NdN5x1L61uoTZy/dymUIDryMou0cBhca46SZdIfq3BZCGYj4k0UmM?=
- =?us-ascii?Q?s7/RQLM5d0w9+1/+AlS9HCNCj3g1QVZUdF0Nx41vvqSDHPHdmo52dQu4SzEn?=
- =?us-ascii?Q?ktL0dCLnPMsX8bYFNlwR/JkTshPRt/asoS0pUAHkITdtdcdUNhcsudlCeMqs?=
- =?us-ascii?Q?5lQlq9BlyF2w5wF5sTzumZpPYMobPhKzvymqMo3dvhIzU+7yPLo/RANgRXzs?=
- =?us-ascii?Q?rz2nIXmCcLgRiErl7EoxcdvugMk8wIpU6QELW5hsFraBZSWUbFfxAujA3CWA?=
- =?us-ascii?Q?w/UlhDKlx5BSCEmhDXQZydU+P+dv4Sq1M56sUs2By/FT2k0asr67+wNFaAiS?=
- =?us-ascii?Q?x82NPkiBBFn5uK514QGUHk04aLuw6/T5tqQwqzqfu0Y2EBGTVwysrSjbPaVb?=
- =?us-ascii?Q?3ehVWVw0g0D8Gjiw+whV0wpxqcA3r9kdNpCLuMyJ/DRHN7GMQjURM9Y66FT5?=
- =?us-ascii?Q?al2H+1quBHNokrCNE+m030Dnh7DZGtYwWu+joRciAd1KwxQ1oHfXuHE+4gsW?=
- =?us-ascii?Q?/cTA7uIHgz8=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?5zdgz7oFwMAaS4JxhLyUL4pzuzCnFRvxYNmuTNeTWmq/GIP+KOLVS0SQf64I?=
- =?us-ascii?Q?cOlxspBaFTt3XvlC0yfJ+Ztkh6kbt7HqY+NIiyHhmzkeftIXyS/e84PFLEW4?=
- =?us-ascii?Q?Ka2ULMXfC+w0ZjFcfpcE0jh51339Iq0BYEAXiEA/lrfSb5cmd1bhLHHXpdP5?=
- =?us-ascii?Q?C06HVN2VpqsjlCR/yWXnIdQ2TuILKJwPKDPUzmakO7vAnRGMGmhM9/3br2xD?=
- =?us-ascii?Q?aPgsseMhoYIDAuuH7gaFJASjZz3KgMpAHnRRKf68rP4FcazUrkIw1Ww5WQRS?=
- =?us-ascii?Q?lOWKk7ZedFvdC64u0/zBo3BejNitC1/rFv5wQVhwyzVOzFmrkvULPNn0UvdB?=
- =?us-ascii?Q?XVpzJ22u5elX2svt0wU3fl2tNd53gEgZaWcqm+RAbX2sOFySONIdETwJURE6?=
- =?us-ascii?Q?LJXHyfWxQ/ggDPdGOEUsY+YPvT+Ct3v3gDCsdnherPKJqLEu9XV3FwaGap/b?=
- =?us-ascii?Q?JKt8Nkc9L4mYD2Ay40rqveGk02AUly4/umwJ8mxKl7gKjgjLEpSa2D3RDben?=
- =?us-ascii?Q?gRYq+N+FX6U/XNlTJLvYCCk+IdipMmx68oPLljoNMxn/n2BPh8WhjWROsCc/?=
- =?us-ascii?Q?X15Mo2XbQy/aoihQPzXaWQ3y8X5PiMkSuHXmaUFYZIg5/OHcb0e9akyNlWmH?=
- =?us-ascii?Q?sKXXKfBTimd1EmFlthW//ZNU4biZxZ9jUDKdc+h+I8z1RtsXCmeyCUi7TQnE?=
- =?us-ascii?Q?loyk12llYWH7iHHClp61hDG6TGv5HwmWoMFcxgyQ19ynjW0YPUpb5cynfxfF?=
- =?us-ascii?Q?2nw57BX16k5sZJSe8JVbVD8AgoY1m/y60lENH6nozqdYyUOp8tcB7xuo4gMo?=
- =?us-ascii?Q?qR1unYYJ4kK6Yi6yiFlPpGuLE+iWEwhwnkOPwLEfiIls4wR3rNaIcgSOHxbb?=
- =?us-ascii?Q?IUW5BuoPRxTTK/aEomWtxzAzijgeor9m3X4yOYmAzOznZmxf+buOEmmHOM+G?=
- =?us-ascii?Q?nbx1KGz3fZihoE1VMgn9hH4YBY6BivYZxp8lt55QF+7ilaw8+Tc/OFXMAzdq?=
- =?us-ascii?Q?QtNpRi8JkVuxngBgcnHSwqC6SgjeHTptjp0K2ljM5DtuOcHiI1EXJeu3POwU?=
- =?us-ascii?Q?IrztgeLu632WJtpSCZGFPMmb+1arugjtNxUIcOeQaXUa2yn5OoDURVTNIDqL?=
- =?us-ascii?Q?Ph8HCMbGndpQPGBiP5JIuzd5IVrxISafcmYBKteEo05np6f8ZHFyh4K7XoL5?=
- =?us-ascii?Q?oR3aHGMCpbwmDNEiuSkY1PeVMecnPeCKAi8qsz6jIK/wt3wQsKNbN3AXE4wP?=
- =?us-ascii?Q?nmSJkru4xkPRn2BpXgdTzvd6UQWeEiOPv/5mhrBKlJjwrUjeqMDKWuad4D0N?=
- =?us-ascii?Q?S305K1zJLCUqVIyryPQqMCuI9l/qApfLMX4P1ds3dB/r10xpYAW3l4daxw0x?=
- =?us-ascii?Q?kDVVe3kon0uX8XA0sDzkDLXp2GJ9fcrZJDRi3X/0b6JJn7bt4VxYNY6kPGkR?=
- =?us-ascii?Q?kNPR3m3LX3om85To6ZUbJY0EU/XHhB3cRcmH4bORpcHDWXaRkORtijy6YVzt?=
- =?us-ascii?Q?v3Qkm6KHPLd9+qFs7MR2XLiIsSZ470uw2l1IEtSe/anZLFfiKjirj4kGm8Q6?=
- =?us-ascii?Q?oFqpS/ti+nAMnfIXku0QSU4PwgUrep9SNg1zMkBp?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a326553-f396-45e3-e3ae-08ddb7d662a5
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2025 13:02:36.6668
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: d+8737tJSybiUZ3oipkLQFgrG1MJlzpMxUKdZ02jI/IYokdAKOcdGpl7iOL1kai0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8902
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="2hqjDcDDA25rk6M3"
+Content-Disposition: inline
+In-Reply-To: <20250630072422.4d30412f@canb.auug.org.au>
 
-On Mon, Jun 30, 2025 at 04:00:59PM +1000, Stephen Rothwell wrote:
+
+--2hqjDcDDA25rk6M3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Jun 30, 2025 at 07:24:22AM +1000, Stephen Rothwell wrote:
 > Hi all,
-> 
-> Today's linux-next merge of the iommufd tree got a conflict in:
-> 
->   include/linux/iommu.h
-> 
-> between commit:
-> 
->   792ea7b6cafa ("iommu: Remove ops->pgsize_bitmap")
-> 
-> from the iommu tree and commits:
-> 
->   187f146d5de6 ("iommu: Introduce get_viommu_size and viommu_init ops")
->   f842ea208e43 ("iommu: Deprecate viommu_alloc op")
-> 
-> from the iommufd tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+>=20
+> Commit
+>=20
+>   7bb23e0bdb6c ("clk: thead: Mark essential bus clocks as CLK_IGNORE_UNUS=
+ED")
+>=20
+> is missing a Signed-off-by from its committer.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
 
-Looks right, thanks
+Sorry about that and thanks for letting me know. I've now added my
+Signed-off-by tag and updated thead-clk-for-next.
 
-Jason
+Thanks,
+Drew
+
+--2hqjDcDDA25rk6M3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSy8G7QpEpV9aCf6Lbb7CzD2SixDAUCaGL+TwAKCRDb7CzD2Six
+DBv5AP9P/Mdni+PdO6gznrDG1cEkcSAPsjgWcBMdF4kOgsItaQEA4iMDSqzoJGRo
+XofsFui8fMJz2ZNK9k3oZaDUciw/XwQ=
+=8bt0
+-----END PGP SIGNATURE-----
+
+--2hqjDcDDA25rk6M3--
 

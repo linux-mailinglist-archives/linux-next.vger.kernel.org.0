@@ -1,140 +1,105 @@
-Return-Path: <linux-next+bounces-7330-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7333-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B88AAAF6F9E
-	for <lists+linux-next@lfdr.de>; Thu,  3 Jul 2025 12:03:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5487BAF7245
+	for <lists+linux-next@lfdr.de>; Thu,  3 Jul 2025 13:30:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D3691C4287C
-	for <lists+linux-next@lfdr.de>; Thu,  3 Jul 2025 10:03:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C50BE52809D
+	for <lists+linux-next@lfdr.de>; Thu,  3 Jul 2025 11:30:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A59E2E03F6;
-	Thu,  3 Jul 2025 10:03:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49FC5255E2F;
+	Thu,  3 Jul 2025 11:30:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="IE8ca/pD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="T9oIkjUK"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="hqt2k/3H"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout-a3-smtp.messagingengine.com (fout-a3-smtp.messagingengine.com [103.168.172.146])
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 066F22D7809;
-	Thu,  3 Jul 2025 10:03:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64610238C0D;
+	Thu,  3 Jul 2025 11:30:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751536994; cv=none; b=c2p07VLqZNyThNF8VxYiJSf5FRdrguxqvoEBu/sW8ll9TRpHBlFKRIbPfzX2OFdOrYlrE1ljNURnuJXIOuBub197snhufrjO+5nKn5sBmNMTVMGMMwNm8+qqJkYUqHP8+iRqBEwIpE3HWxfwlxTwvpJrFm5Y1e1EbQEIroZju8k=
+	t=1751542231; cv=none; b=M2NDt551bPSKsUjs1Q8b/1ftgI3oKdjxv2VRf/yTdsplBP3XDfjRWMqkx8cHqzYoKI3xCwe4HrDtsNAKHUfDQlpDls2Jy53Xjqt0rU9bxVztx4lI6aG80XHJwoCrcO+nwXGRRWm+Nz98tHFOaAAT6Fdnuzlq/CEUY9uO7u+ezNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751536994; c=relaxed/simple;
-	bh=7kCRXDbpJ/oqGsu45izE3VNuOcYKltui017jXi8ARqE=;
+	s=arc-20240116; t=1751542231; c=relaxed/simple;
+	bh=L7YD3bHig/KW6hapzYsFVB3o8PsscrReJ+ureajmCy8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JGikQEaOmAhVcS8j6AjlWVS2lA34qxIkEkIxWAfhJCr2zvUxu7/1KjGPFA/QvtinpMfEcdnoaEXAJUWd0rUkBZd53Ywy69NY6p70pnkie34aJjcQvMN3ifTsBH1Dp/dVVk9G4Aif/JmnR1Nr0GUk+qbG1xuTMTFYDM2UVtdsk9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=IE8ca/pD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=T9oIkjUK; arc=none smtp.client-ip=103.168.172.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
-	by mailfout.phl.internal (Postfix) with ESMTP id 2241FEC0255;
-	Thu,  3 Jul 2025 06:03:10 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Thu, 03 Jul 2025 06:03:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1751536990; x=1751623390; bh=xZedJBIhB4
-	0JxUdzvrw6oQggPvy34BJ3nOEDE2aNBtA=; b=IE8ca/pDdO2e0d3YwOeACzTB8u
-	NwGvoZ5Pqmbq/CXrfW4SDkN0dm/aWxNqB9srm+M4R94uec024oLJQuMlSY+v3yLD
-	LokAXoq7z1X5nZd9VMs6N0lAZNa//Dq0hYgZNnYNDx11Ci1u1nKs7/pGSbGuj4RF
-	NiqYcAqP6kSZ9yJyQZUaKHQlc9FfUC96hC+8nv4rAAnN2Nxez6FZRSdjknq+GfAZ
-	v1F4LcY6fl1qRvJCadiXiRU1OuUl7zqLBSr1IMM3CHA2cSJ4JQGBm1foOj8VtmqI
-	Au+/m4y9WH45Erp2m8KARIkCMrdgYAxHonPrts7V16H5rl/N9GM/9Yp/27qA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1751536990; x=1751623390; bh=xZedJBIhB40JxUdzvrw6oQggPvy34BJ3nOE
-	DE2aNBtA=; b=T9oIkjUKgtbOoS/WGssDKTwouvBU+PY716u6D0R+G6aiIWI8hZY
-	AKb6w5YlTF8mo4+y6pXkNV68KEhN9izSA4zEfG/9n5aswDw83K/e5CzYD7FPetHj
-	943oJNo4vNhlSAEs4cwe/zqmld2t/0ypJIiCvAMhTO9bleys5KDdwdVD+9CMXN/1
-	y+jBI5lM+hFWwLCBdWd5ZcQ2xqgF+aeWzXCJwIM/Dow4NJJR2Rw3ahWO2EPp/7ys
-	P/bEmPJ5zgiUw/QbMtVtUiEjlXefnTPwJbCOTZ34TAjjTIDzFMMKKVSOOyYfvK4M
-	4WNlQAR0UuQG389Ie5BlFFRAGZ2d+4+mk0g==
-X-ME-Sender: <xms:XVVmaJZAgYJzZ_Hs4E8vBeTwgcnPDO1Xy1K-6M3SCd7jrgXlI4xP7w>
-    <xme:XVVmaAZgTZeHmlowLJV3l6UNo5Yi8Ef-2wkz4ScfbjbRIY6kme64PQK0xhOyjFP8u
-    _EwzEvbpDhUmA>
-X-ME-Received: <xmr:XVVmaL-eH6HyquGs0yXFPdTU5H-UevgwrgKExEZ0eYYr9cac0rtpnCvraAV_YLrzzqZZI0vKqV0udLSnvniqW48TjgP4RDM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduleellecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcumffj
-    uceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevgeelgfeihe
-    elheejjedtfeejgfdutddtieelvdetkeduvdfhfffhkefffefgteenucffohhmrghinhep
-    fihikhhiphgvughirgdrohhrghdpuggrrhhinhhgfhhirhgvsggrlhhlrdhnvghtnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehk
-    rhhorghhrdgtohhmpdhnsggprhgtphhtthhopedutddpmhhouggvpehsmhhtphhouhhtpd
-    hrtghpthhtoheplhhiiihhihdrgihuseifihhnughrihhvvghrrdgtohhmpdhrtghpthht
-    ohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupdhrtghpthhtoheprghrnhguse
-    grrhhnuggsrdguvgdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhk
-    vghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhnvgigthesvhhgvghrrdhkvg
-    hrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:XVVmaHqdDUIhJ3ggUvKDBCRj4gKLTatvGohsn0uEXXQBXwBpsfbQvw>
-    <xmx:XVVmaEptA5Clmi8j5LsTUZ2nijG5iqfW3DquJvDJ9m76_wazIIBOlg>
-    <xmx:XVVmaNSgxNK8UjKk8SP3_xvn_n3RnAFbBTCXFsbNajnvol0zllO3TQ>
-    <xmx:XVVmaMqDRPTt0pSznQC0uPg3oWKegrmzwexZVdsF9-21y4px8oYjNg>
-    <xmx:XlVmaMGvmqeT2B9nI7K1OdqG1PmWXWNfb_PlqBCUlOTVfUvH_IfzSjr7>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 3 Jul 2025 06:03:08 -0400 (EDT)
-Date: Thu, 3 Jul 2025 12:03:07 +0200
-From: Greg KH <greg@kroah.com>
-To: "Xu, Lizhi" <Lizhi.Xu@windriver.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Arnd Bergmann <arnd@arndb.de>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=nI7FiasdKW0OcLvmAgVnTiRHevhZz5PJBKfMse9+joLXkGYw5cGnw9SR3TCI2UYxhQtZNUsdWYUy11VxJ4utGCKce2hJyvOBrjMTy3878qFRJ0XDYVnDIwhqTC9Ynx/y0IdZOSl0Dvkua1jhG7WQe+Ybp8bzYqngDjlJpjAUQ1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=hqt2k/3H; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
+	:Subject; bh=LBJrcyiBOP+fKWC86q9OLSIWWY9q5SKuo2qTzUlY+xc=; b=hqt2k/3HEQ+RZnol
+	RIjVdzxgNpdQGlZes4130Xgmi6OemrIPekHDequ5ozE01sXgf5hMbuPu/p4dixrk3un9XJcBKB9s2
+	dFu3eloIsSnhRLmEwUH4wWdsL8EFIrY8r5/9QdSPRvyBe8DQTEtepAWNcSlWmxnML4QHhyQwD9s/9
+	BKY5mHmk3Omcm7FPJBBwMPzXzXU1df9ckr5O4K6VGb8cWTITfhywDBOSh48i5LD49UTwQAQZ0ZzKt
+	fAbTh6jZPkxYGhH4TpiWHQjlAzi/DOAkqvH6vEa85OnpKlJVMDMbtJ4ioZTTgn7h5vbivvgStWvjJ
+	wNuQt8L7U578HY74EQ==;
+Received: from dg by mx.treblig.org with local (Exim 4.96)
+	(envelope-from <dg@treblig.org>)
+	id 1uXHlH-00DqYX-0z;
+	Thu, 03 Jul 2025 11:05:51 +0000
+Date: Thu, 3 Jul 2025 11:05:51 +0000
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Lee Jones <lee@kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: =?utf-8?B?5Zue5aSNOiDlm57lpI0=?= =?utf-8?Q?=3A?= linux-next:
- build failure after merge of the char-misc tree
-Message-ID: <2025070301-albatross-angriness-00c1@gregkh>
-References: <20250703171021.0aee1482@canb.auug.org.au>
- <2025070335-situated-sloped-bc1c@gregkh>
- <BL1PR11MB5979E06DF496FA3965009DFF8643A@BL1PR11MB5979.namprd11.prod.outlook.com>
- <2025070357-scrambled-exodus-a8a0@gregkh>
- <BL1PR11MB59798DB1C2D7B2B2988BE2DB8643A@BL1PR11MB5979.namprd11.prod.outlook.com>
+Subject: Re: linux-next: build failure after merge of the mfd tree
+Message-ID: <aGZkDynnq2Li4EdN@gallifrey>
+References: <20250703142348.45bb8d28@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <BL1PR11MB59798DB1C2D7B2B2988BE2DB8643A@BL1PR11MB5979.namprd11.prod.outlook.com>
+In-Reply-To: <20250703142348.45bb8d28@canb.auug.org.au>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/6.1.0-34-amd64 (x86_64)
+X-Uptime: 11:03:54 up 66 days, 19:17,  1 user,  load average: 0.05, 0.01, 0.00
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
-A: http://en.wikipedia.org/wiki/Top_post
-Q: Were do I find info about this thing called top-posting?
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-A: Top-posting.
-Q: What is the most annoying thing in e-mail?
-
-A: No.
-Q: Should I include quotations after my reply?
-
-
-http://daringfireball.net/2007/07/on_top
-
-On Thu, Jul 03, 2025 at 09:44:13AM +0000, Xu, Lizhi wrote:
+* Stephen Rothwell (sfr@canb.auug.org.au) wrote:
+> Hi all,
 > 
-> Perhaps you can focus on "struct vmci_event_ctx", whose members have already clearly defined which are the payloads.
+> After merging the mfd tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+> 
+> drivers/media/radio/radio-wl1273.c:12:10: fatal error: linux/mfd/wl1273-core.h: No such file or directory
+>    12 | #include <linux/mfd/wl1273-core.h>
+>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+> sound/soc/codecs/wl1273.c:10:10: fatal error: linux/mfd/wl1273-core.h: No such file or directory
+>    10 | #include <linux/mfd/wl1273-core.h>
+>       |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   17f5c6fa85e5 ("mfd: wl1273-core: Remove the header")
 
-I do not understand this statement at all, sorry.
+OK, so I see Lee has picked up 3/4 and 4/4 in the
+series, but the one that removes the radio-wl1273.c is the
+first one in the series; see 
+  https://lore.kernel.org/all/20250625133258.78133-1-linux@treblig.org/
 
-> On the other hand, the purpose of the patch is to prevent the data in "struct vmci_event_ctx" from being initialized before the datagram is sent, thus preventing the uninitialized data from leaking to user space.
+> I have used the mfd tree from next-20250702 for today.
 
-Great, then do this properly, again, you are just "guessing" that there
-is not going to be any padding between the structures.  Are you sure
-there isn't?  How?  Where is that enforced in your patch?
+Dave
 
-thanks,
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-greg k-h
+
+-- 
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
 

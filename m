@@ -1,191 +1,235 @@
-Return-Path: <linux-next+bounces-7358-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7359-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16230AF8BCC
-	for <lists+linux-next@lfdr.de>; Fri,  4 Jul 2025 10:33:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75C25AF8DA6
+	for <lists+linux-next@lfdr.de>; Fri,  4 Jul 2025 11:09:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7003A1892146
-	for <lists+linux-next@lfdr.de>; Fri,  4 Jul 2025 08:32:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13288B45929
+	for <lists+linux-next@lfdr.de>; Fri,  4 Jul 2025 08:37:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3030E283FD9;
-	Fri,  4 Jul 2025 08:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A3C42868B2;
+	Fri,  4 Jul 2025 08:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="ZavIZXmt"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="BMu11a/A";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="d0/71qpe";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="feLox8AO";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="SnWJdn9V"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BCA9328B12;
-	Fri,  4 Jul 2025 08:21:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC2928541F
+	for <linux-next@vger.kernel.org>; Fri,  4 Jul 2025 08:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751617308; cv=none; b=TjnIfvhVeXx/5vWl6bzd/jpcJX47WKUgi7+UXJY8Z75UfMG09DDn/vdG6uoVRX+hmZAjqLYMHfwwc+h9NtWGzbvVJH3fIMq7S+kFlTYO+dEs5P1Xh3iyKGvwerMA7A9swGQZtsP75aFVrQAs1OLM/9yjioTtusaIjYPBbsxYPU0=
+	t=1751618017; cv=none; b=sRexM6IPw45Ly/GNdS26pJIsDyRPxiFDbTjCl4XqgAiv8/mLzBh6vsQr5a7s4Y9dvpF+0Xo408qiDPvdw9blxLjqpeK6S+zC3wmgMoUcPBYEfovp7xDHazLM5I9cjm1WC1NOxszKa3FW0mW2ctf03RoW6qV9qbmfppCceE2Cwbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751617308; c=relaxed/simple;
-	bh=C39CAOss3qy24guk6Pk9qdKydSinnm2BWkFOQLmwFfo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=S4gX5gXU7RKGrupg+8MnPfRGfoJ6o9Y1EQ8ZEH9LsSO9g5eROEyIa0phgt/dyUg7K6R3SgoyVUCYdsB0jRyMiKznoeND3yGrMzCKdwxU0w2PC4q2lhwZ5QfMoyxzyDV/EOg4nB/cXgnAgZ/T/wOKSrSL+yxRYdsiazrbrIXy5Bo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=ZavIZXmt; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1751617292; x=1752222092; i=spasswolf@web.de;
-	bh=C39CAOss3qy24guk6Pk9qdKydSinnm2BWkFOQLmwFfo=;
-	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
-	 References:Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=ZavIZXmtXg/FQFT2xteQmlrDagQY6+wbWgfzTrIR29yXI3q5V0k1VrC6rdj7IiEq
-	 QxBGGfUIuehUaaCKxw7UbgMVOvQQoxRJfl5COPQ4Jp236yJ5et71wAhGgjkFTesf0
-	 0Rfdl2+h+XVa2LsjI+HNKBzn6QDnO+cfYgzdcwk2vRlLB+zek7V7H8g+IXX/SXUvV
-	 OvMyRBmhKIvMePJ09k05y1jtFCB9M4iEGmEokbfUXU3ZMTyPTOt+T4iR1+J4vEmNG
-	 Ya8YtC0L2ctZUNO2BlGWW4f5Jr0pN7tIdsAbQvLYa0DlxEoByFg1lV58vMcMjqaC/
-	 Zm56//83dAMhAQnEhA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.0.101] ([95.223.134.88]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1M9ISr-1ua5iW3alz-00DeQV; Fri, 04
- Jul 2025 10:21:31 +0200
-Message-ID: <7be4f337df6f882ac53a47db851ae92d7a2d1dc0.camel@web.de>
-Subject: Re: Warnings in next-20250703 caused by commit 582111e630f5
-From: Bert Karwatzki <spasswolf@web.de>
-To: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, Anusha
- Srivatsa	 <asrivats@redhat.com>, Christian =?ISO-8859-1?Q?K=F6nig?=	
- <christian.koenig@amd.com>, Maarten Lankhorst	
- <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
- Sumit Semwal <sumit.semwal@linaro.org>, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, 	stable@vger.kernel.org, spasswolf@web.de
-Date: Fri, 04 Jul 2025 10:21:30 +0200
-In-Reply-To: <c17428b3-6f04-4eb7-9140-92c7f27eae4f@suse.de>
-References: <20250703115915.3096-1-spasswolf@web.de>
-	 <75abf5c1-aa1a-4405-aae4-a2efccbc3bcb@suse.de>
-	 <7a56d95dc2b15fa2dac0c8a4dd20f0e253bf414f.camel@web.de>
-	 <c17428b3-6f04-4eb7-9140-92c7f27eae4f@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.56.1-1 
+	s=arc-20240116; t=1751618017; c=relaxed/simple;
+	bh=4w84hkIAd9lNjWTi1f/9sAc+yhNVWq4BrXk4z6Zpp2g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c7L6h4OBqyMD1K99+5C/i5PGXyZlZkQhXJ/LCA6q5oZVYJEMQBYOo/TmVrBlHc1xCvxF6sxCUPVrpqoL+vxS5iD3e1Iu2znGwiBPM8yEku7JvBmrQqvkBIXEEdf3N4D6jp+5Ra0+lBytlVUSFiWJmur/nLQDxRqoD0oHZrVoQ9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=BMu11a/A; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=d0/71qpe; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=feLox8AO; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=SnWJdn9V; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 04F4B1F38A;
+	Fri,  4 Jul 2025 08:33:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1751618013; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Oq5M/ptnZLMJczsHINhGjNn6mukAceeD1v2DY+Bk5Ls=;
+	b=BMu11a/AGWivWw71Vh18MsvBDxk+lGfeEgJhqVNp4RyDfiOp/+pZczBN0ZeIZy65mrrwLx
+	WWeQmbo9EqB6IfSqLxi2+2xDSACVnJneH9vHxZREGfA7D1lFTcX+7xLM2WrqdZsZkfVAk3
+	bnqwANqTMN2Dv/h8BmwQ3miWMlN5IK8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1751618013;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Oq5M/ptnZLMJczsHINhGjNn6mukAceeD1v2DY+Bk5Ls=;
+	b=d0/71qpeVhbE6nsXHgrC+gqUe8v7qwuupW2jfbINDErsFfBKnvysy/P4hQLjFpfFiSzjRX
+	p+MyYmW77GKpu6BA==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1751618012; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Oq5M/ptnZLMJczsHINhGjNn6mukAceeD1v2DY+Bk5Ls=;
+	b=feLox8AOJ5HAm0ObnToGDdlOW8M8aLOH/KwTwhpBnmmyUm118p6Vcv2UDlnDMMt77udme2
+	bNl6zdtAhzoFxzvPn8yLJ4f9gtJe3vO5CBhvHqlzYptzotC+lGAngkWw6k7brgFCATK4Mq
+	brP4k9L3hYfMM767Quc8cZ5HTGirG4Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1751618012;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Oq5M/ptnZLMJczsHINhGjNn6mukAceeD1v2DY+Bk5Ls=;
+	b=SnWJdn9VAfJA4C5YkPw1E6jfCogXQsDQKEDRNLc3hzCcv4y5Yhb7tYDaOJzyN/hhy+gnQp
+	CN1o8NIhe26WwNDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B11AB13A71;
+	Fri,  4 Jul 2025 08:33:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 6irqKduRZ2i8FAAAD6G6ig
+	(envelope-from <tzimmermann@suse.de>); Fri, 04 Jul 2025 08:33:31 +0000
+Message-ID: <a2dad7b6-3798-4f01-a05b-e0cc72bda100@suse.de>
+Date: Fri, 4 Jul 2025 10:33:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:HfCm/7Fv8dgkG6loGeHxqXFrpz+KpHQw0Z465EklLVw/e1uNhkc
- vXCMGkYddY6JUPyPiPH3se8uq5m//yXK6DestbiLP7drF3HmPBILrZdwx2uH3DFj61hY3T7
- +AA9IyMyvKKfSjDD04iqL30eOrP83LMHkwTvoSzlRD7+W0fxg7hx80iAcD0TCfEhAq8Z7Yt
- o6Wj3wOamoLkGxI0NxRcQ==
+User-Agent: Mozilla Thunderbird
+Subject: Re: Warnings in next-20250703 caused by commit 582111e630f5
+To: Bert Karwatzki <spasswolf@web.de>
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+ Anusha Srivatsa <asrivats@redhat.com>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ stable@vger.kernel.org
+References: <20250703115915.3096-1-spasswolf@web.de>
+ <75abf5c1-aa1a-4405-aae4-a2efccbc3bcb@suse.de>
+ <7a56d95dc2b15fa2dac0c8a4dd20f0e253bf414f.camel@web.de>
+ <c17428b3-6f04-4eb7-9140-92c7f27eae4f@suse.de>
+ <7be4f337df6f882ac53a47db851ae92d7a2d1dc0.camel@web.de>
+Content-Language: en-US
+From: Thomas Zimmermann <tzimmermann@suse.de>
+Autocrypt: addr=tzimmermann@suse.de; keydata=
+ xsBNBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
+ XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
+ BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
+ hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
+ 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
+ AAHNJ1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPsLAjgQTAQgAOAIb
+ AwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftODH
+ AAoJEGgNwR1TC3ojx1wH/0hKGWugiqDgLNXLRD/4TfHBEKmxIrmfu9Z5t7vwUKfwhFL6hqvo
+ lXPJJKQpQ2z8+X2vZm/slsLn7J1yjrOsoJhKABDi+3QWWSGkaGwRJAdPVVyJMfJRNNNIKwVb
+ U6B1BkX2XDKDGffF4TxlOpSQzdtNI/9gleOoUA8+jy8knnDYzjBNOZqLG2FuTdicBXblz0Mf
+ vg41gd9kCwYXDnD91rJU8tzylXv03E75NCaTxTM+FBXPmsAVYQ4GYhhgFt8S2UWMoaaABLDe
+ 7l5FdnLdDEcbmd8uLU2CaG4W2cLrUaI4jz2XbkcPQkqTQ3EB67hYkjiEE6Zy3ggOitiQGcqp
+ j//OwE0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRHUE9eosYb
+ T6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgTRjP+qbU6
+ 3Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+RdhgATnWW
+ GKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zbehDda8lv
+ hFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r12+lqdsA
+ EQEAAcLAdgQYAQgAIAIbDBYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJftOH6AAoJEGgNwR1T
+ C3ojVSkIALpAPkIJPQoURPb1VWjh34l0HlglmYHvZszJWTXYwavHR8+k6Baa6H7ufXNQtThR
+ yIxJrQLW6rV5lm7TjhffEhxVCn37+cg0zZ3j7zIsSS0rx/aMwi6VhFJA5hfn3T0TtrijKP4A
+ SAQO9xD1Zk9/61JWk8OysuIh7MXkl0fxbRKWE93XeQBhIJHQfnc+YBLprdnxR446Sh8Wn/2D
+ Ya8cavuWf2zrB6cZurs048xe0UbSW5AOSo4V9M0jzYI4nZqTmPxYyXbm30Kvmz0rYVRaitYJ
+ 4kyYYMhuULvrJDMjZRvaNe52tkKAvMevcGdt38H4KSVXAylqyQOW5zvPc4/sq9c=
+In-Reply-To: <7be4f337df6f882ac53a47db851ae92d7a2d1dc0.camel@web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[web.de];
+	RCVD_TLS_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[web.de];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid]
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:TZ/o5+bl1dU=;LZcyToSejdtbsXI4+pyo5epAmVM
- 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
+X-Spam-Level: 
+X-Spam-Score: -4.30
 
-Am Freitag, dem 04.07.2025 um 09:51 +0200 schrieb Thomas Zimmermann:
-> Hi
->=20
-> Am 03.07.25 um 19:23 schrieb Bert Karwatzki:
-> > Am Donnerstag, dem 03.07.2025 um 18:09 +0200 schrieb Thomas Zimmermann=
-:
-> > > Hi,
-> > >=20
-> > > before I give up on the issue, could you please test the attached pa=
-tch?
-> > >=20
-> > > Best regards
-> > > Thomas
-> > >=20
-> > >=20
-> > > --
-> > > Thomas Zimmermann
-> > > Graphics Driver Developer
-> > > SUSE Software Solutions Germany GmbH
-> > > Frankenstrasse 146, 90461 Nuernberg, Germany
-> > > GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-> > > HRB 36809 (AG Nuernberg)
-> > I applied the patch on top of next-20250703
-> >=20
-> > $ git log --oneline
-> > 18ee3ed3cb60 (HEAD -> drm_gem_object_handle_put) drm/amdgpu: Provide c=
-ustom framebuffer destroy function
-> > 8d6c58332c7a (tag: next-20250703, origin/master, origin/HEAD, master) =
-Add linux-next specific files for 20250703
-> >=20
-> > and it solves the issue for me (i.e. no warnings).
->=20
-> Great, thanks for testing. If nothing else, that's the minimal workaroun=
-d.
->=20
-> Here's another patch, which should solve the problem for all drivers.=20
-> Could you please revert the old fix and apply the new one and test again=
-?
->=20
-> Best regards
-> Thomas
->=20
->=20
-> >=20
-> > Bert Karwatzki
+Hi
 
-Applied your patch after reverting:
+Am 04.07.25 um 10:21 schrieb Bert Karwatzki:
+> Am Freitag, dem 04.07.2025 um 09:51 +0200 schrieb Thomas Zimmermann:
+>> Hi
+>>
+>> Am 03.07.25 um 19:23 schrieb Bert Karwatzki:
+>>> Am Donnerstag, dem 03.07.2025 um 18:09 +0200 schrieb Thomas Zimmermann:
+>>>> Hi,
+>>>>
+>>>> before I give up on the issue, could you please test the attached patch?
+>>>>
+>>>> Best regards
+>>>> Thomas
+>>>>
+>>>>
+>>>> --
+>>>> Thomas Zimmermann
+>>>> Graphics Driver Developer
+>>>> SUSE Software Solutions Germany GmbH
+>>>> Frankenstrasse 146, 90461 Nuernberg, Germany
+>>>> GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+>>>> HRB 36809 (AG Nuernberg)
+>>> I applied the patch on top of next-20250703
+>>>
+>>> $ git log --oneline
+>>> 18ee3ed3cb60 (HEAD -> drm_gem_object_handle_put) drm/amdgpu: Provide custom framebuffer destroy function
+>>> 8d6c58332c7a (tag: next-20250703, origin/master, origin/HEAD, master) Add linux-next specific files for 20250703
+>>>
+>>> and it solves the issue for me (i.e. no warnings).
+>> Great, thanks for testing. If nothing else, that's the minimal workaround.
+>>
+>> Here's another patch, which should solve the problem for all drivers.
+>> Could you please revert the old fix and apply the new one and test again?
+>>
+>> Best regards
+>> Thomas
+>>
+>>
+>>> Bert Karwatzki
+> Applied your patch after reverting:
+>
+> $ git log --oneline
+> f4e557e3ae37 (HEAD -> drm_gem_object_handle_put) drm/framebuffer: Acquire internal references on GEM handles
+> 49f9aa27dc15 Revert "drm/amdgpu: Provide custom framebuffer destroy function"
+> 18ee3ed3cb60 drm/amdgpu: Provide custom framebuffer destroy function
+> 8d6c58332c7a (tag: next-20250703, origin/master, origin/HEAD, master) Add linux-next specific files for 20250703
+>
+> again everything works without warning.
 
-$ git log --oneline
-f4e557e3ae37 (HEAD -> drm_gem_object_handle_put) drm/framebuffer: Acquire =
-internal references on GEM handles
-49f9aa27dc15 Revert "drm/amdgpu: Provide custom framebuffer destroy functi=
-on"
-18ee3ed3cb60 drm/amdgpu: Provide custom framebuffer destroy function
-8d6c58332c7a (tag: next-20250703, origin/master, origin/HEAD, master) Add =
-linux-next specific files for 20250703
+Thanks again. I'll submit this patch for review then.
 
-again everything works without warning.
+Best regards
+Thomas
 
-Bert Karwatzki
+>
+> Bert Karwatzki
+
+-- 
+--
+Thomas Zimmermann
+Graphics Driver Developer
+SUSE Software Solutions Germany GmbH
+Frankenstrasse 146, 90461 Nuernberg, Germany
+GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+HRB 36809 (AG Nuernberg)
+
 

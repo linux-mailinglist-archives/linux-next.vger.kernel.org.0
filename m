@@ -1,76 +1,76 @@
-Return-Path: <linux-next+bounces-7367-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7368-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0003AF9ABB
-	for <lists+linux-next@lfdr.de>; Fri,  4 Jul 2025 20:28:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 474C2AF9AD8
+	for <lists+linux-next@lfdr.de>; Fri,  4 Jul 2025 20:41:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD47C1887013
-	for <lists+linux-next@lfdr.de>; Fri,  4 Jul 2025 18:28:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4E104A6BF9
+	for <lists+linux-next@lfdr.de>; Fri,  4 Jul 2025 18:40:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00DB87263A;
-	Fri,  4 Jul 2025 18:26:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 250941F91F6;
+	Fri,  4 Jul 2025 18:41:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CSK5omIH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ytl8s+Qu"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBC72D836B;
-	Fri,  4 Jul 2025 18:26:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2728227B8E;
+	Fri,  4 Jul 2025 18:41:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751653581; cv=none; b=BtU5jB2Jyy2aGL4eirfiNpEgDcP3OrubVje6RkhsKRi9Z+INZPxd65iPA1IwjZ8in6f/obWFmyK3hmmiFJtxcZBKIVgv+fQ9tnLxjtOml4ZEHiXlz/J9i+JzkWWy9mjqygqBc1jujEAw0Ja/cHPS6UNBiDCMBpgppb25EZb1xeo=
+	t=1751654471; cv=none; b=kZK8s8+phYFoBcuvqRJRdSH+fzCXDQwEaQcZBvLJ2qO9+jJsjvZ5UDPqw6ZFd1JXwOPyFZcPbG0o9THqnXF1EwoMiuATmL8MFwDgX0me1MMFzlD0gXi931i5sfd5LNqLD/mK59z+Xma/HXRUuIopTs0291Iei2rUzgh+IAwBiRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751653581; c=relaxed/simple;
-	bh=ipbT/QnTBUeVAy6M/JFK1jDQZRfz8BWcFfq/b7kFN+E=;
+	s=arc-20240116; t=1751654471; c=relaxed/simple;
+	bh=4PtD/ILRXBEoCudtPmkF3ybvtqaqQYmADOya+tz7Ku4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FPqaNAooeEpNPPrCmowbo95egFzE/wdoCCC4Kc9O8kkws96kO44Q8Z8IRjN5J+H+1mJIsgBOO74qLOCcp4hmzd75aBlH0/Mvg9WBR8zfeb1zcI1VOwjIoBDH9lYDGa+pI3+PcEjgZ6jO2RX5UvzfPolMCes00ByE/1Uk0LwLNk0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CSK5omIH; arc=none smtp.client-ip=198.175.65.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=bATRT4MZ7DToBwwyR4PWszy/AMIdriOYjTl14wz8rIW2pJ3gq77OWTT/MRAkr1UqkU03rsllGTFBGZv1sMxRcecJ0UAH8X2GIehAtqUaAz+bNwLLYDOy4DtQ0HjBenbhB78Yxdeoyv50j86t21j64mEC6jla09mjAnQ7nqA/vqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ytl8s+Qu; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1751653580; x=1783189580;
+  t=1751654469; x=1783190469;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=ipbT/QnTBUeVAy6M/JFK1jDQZRfz8BWcFfq/b7kFN+E=;
-  b=CSK5omIHyKmAfukwrDCXCNwXAMg50bh8JsV97qcS1S//HJ4PdK0xNUSr
-   8EKfMwYplOxHd7+hA7qc9XJ1vExpulsxC4MdFvRo+/hEeoSbuBV6N6O8/
-   pfAo4aU7rzqnZ83eZbXz0kWcWCoUjhU+jQbrQfmQUBgLWTgTU3IUrmDTv
-   Nzn4VjGmp1NXPd4TF9xx1CcaBv9fVwi0/muWx6b65h2ewYNTMp5NfL+nj
-   Wq3gcs87AMcr2TKQGpxqSAnva9ueY9K8EBSnidiafnRIuY8OEBAhCMfJJ
-   BNQ/2YVcVuLvyxMK2NCa/hq4ZrviAgDcSPM18EahNpcUkaVrRW4a095eX
-   g==;
-X-CSE-ConnectionGUID: lyCX2bnoR/up3AXsCa2rbQ==
-X-CSE-MsgGUID: m/0DRPT9SS+VWIu/JCjKiw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="76536505"
-X-IronPort-AV: E=Sophos;i="6.16,287,1744095600"; 
-   d="scan'208";a="76536505"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 11:26:20 -0700
-X-CSE-ConnectionGUID: nkFlUfNPSamRutD/MNS/mg==
-X-CSE-MsgGUID: +pw7iWkBSmuuwv5dBLym0A==
+  bh=4PtD/ILRXBEoCudtPmkF3ybvtqaqQYmADOya+tz7Ku4=;
+  b=Ytl8s+Qut0RrorSBt1nE0OzTgUKiKBwfiqo3gkQmxZqCe94Sm99iMHM8
+   ZOhrBJCqvQ4DMwJPIK56pVfsotCBsqHOWTyWmb9KaxgY6qPbFrvX2VoYg
+   xQaKYot83mHIupSaAkc8DjmctE1ERh3VB0B5V9s1vqytH545DNcjjOx0s
+   erL/9AQi/Z6EhivAPKVbluK7LYyFBkbkcpIJ36YVksTm40+qaA9KwaXsp
+   K7QFU8pAYUwTvT/w/tu+13vEMjQ0Q6eCuHLcompBQpUKUyxlCiVfRHIZk
+   aZDo54HmxTJ+lR55DVq0Y4Q/GKQ5GBrE4SiIIDqoMpQCwYr997xkSoW/E
+   w==;
+X-CSE-ConnectionGUID: r5UZ1XSLRhG7x/+bLCS8xg==
+X-CSE-MsgGUID: 44Q2BhBPQq6vfhsY+Hrg3A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11484"; a="57795001"
+X-IronPort-AV: E=Sophos;i="6.16,288,1744095600"; 
+   d="scan'208";a="57795001"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 11:41:08 -0700
+X-CSE-ConnectionGUID: hBpJeHbcTj6a1GMhCal+Fg==
+X-CSE-MsgGUID: E1sBxAdPR7mZ3/yVwRFkOw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.16,288,1744095600"; 
-   d="scan'208";a="154780787"
+   d="scan'208";a="160221048"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 11:26:17 -0700
-Date: Fri, 4 Jul 2025 21:26:14 +0300
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2025 11:41:05 -0700
+Date: Fri, 4 Jul 2025 21:41:02 +0300
 From: Raag Jadav <raag.jadav@intel.com>
 To: =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>
-Cc: simona@ffwll.ch, Krzysztof Karas <krzysztof.karas@intel.com>,
-	airlied@gmail.com,
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	airlied@gmail.com, simona@ffwll.ch,
+	Krzysztof Karas <krzysztof.karas@intel.com>,
 	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-	Stephen Rothwell <sfr@canb.auug.org.au>, kernel-dev@igalia.com
+	kernel-dev@igalia.com
 Subject: Re: [PATCH v3 1/3] drm/doc: Fix title underline for "Task
  information"
-Message-ID: <aGgcxuT7YQx4YC2Q@black.fi.intel.com>
+Message-ID: <aGggPuSCEK_opydS@black.fi.intel.com>
 References: <20250627171715.438304-1-andrealmeid@igalia.com>
- <52c32d1b-e5c4-4f6d-82a3-cf02c0cf4681@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -80,48 +80,50 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <52c32d1b-e5c4-4f6d-82a3-cf02c0cf4681@igalia.com>
+In-Reply-To: <20250627171715.438304-1-andrealmeid@igalia.com>
 
-On Fri, Jul 04, 2025 at 01:46:07PM -0300, André Almeida wrote:
-> Raag, gently ping for reviewing this series.
+On Fri, Jun 27, 2025 at 02:17:13PM -0300, André Almeida wrote:
+> Fix the following warning:
+> 
+> Documentation/gpu/drm-uapi.rst:450: WARNING: Title underline too short.
+> 
+> Task information
+> --------------- [docutils]
+> 
+> Fixes: cd37124b4093 ("drm/doc: Add a section about "Task information" for the wedge API")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: André Almeida <andrealmeid@igalia.com>
+> ---
+> v2: Add Reported-by tag
+> ---
+>  Documentation/gpu/drm-uapi.rst | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.rst
+> index 263e5a97c080..10dea6a1f097 100644
+> --- a/Documentation/gpu/drm-uapi.rst
+> +++ b/Documentation/gpu/drm-uapi.rst
+> @@ -447,7 +447,7 @@ hang is usually the most critical one which can result in consequential hangs or
+>  complete wedging.
+>  
+>  Task information
+> ----------------
+> +----------------
+>  
+>  The information about which application (if any) was involved in the device
+>  wedging is useful for userspace if they want to notify the user about what
+> @@ -728,4 +728,4 @@ Stable uAPI events
+>  From ``drivers/gpu/drm/scheduler/gpu_scheduler_trace.h``
+>  
+>  .. kernel-doc::  drivers/gpu/drm/scheduler/gpu_scheduler_trace.h
+> -   :doc: uAPI trace events
+> \ No newline at end of file
+> +   :doc: uAPI trace events
 
-Somehow this didn't land in my inbox and I have no idea why.
+Unrelated change. Someone with a different editor added this and now
+your editor disagrees with it.
+
+Switching to binary mode usually fixes the issue.
 
 Raag
-
-> Em 27/06/2025 14:17, André Almeida escreveu:
-> > Fix the following warning:
-> > 
-> > Documentation/gpu/drm-uapi.rst:450: WARNING: Title underline too short.
-> > 
-> > Task information
-> > --------------- [docutils]
-> > 
-> > Fixes: cd37124b4093 ("drm/doc: Add a section about "Task information" for the wedge API")
-> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Signed-off-by: André Almeida <andrealmeid@igalia.com>
-> > ---
-> > v2: Add Reported-by tag
-> > ---
-> >   Documentation/gpu/drm-uapi.rst | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.rst
-> > index 263e5a97c080..10dea6a1f097 100644
-> > --- a/Documentation/gpu/drm-uapi.rst
-> > +++ b/Documentation/gpu/drm-uapi.rst
-> > @@ -447,7 +447,7 @@ hang is usually the most critical one which can result in consequential hangs or
-> >   complete wedging.
-> >   Task information
-> > ----------------
-> > +----------------
-> >   The information about which application (if any) was involved in the device
-> >   wedging is useful for userspace if they want to notify the user about what
-> > @@ -728,4 +728,4 @@ Stable uAPI events
-> >   From ``drivers/gpu/drm/scheduler/gpu_scheduler_trace.h``
-> >   .. kernel-doc::  drivers/gpu/drm/scheduler/gpu_scheduler_trace.h
-> > -   :doc: uAPI trace events
-> > \ No newline at end of file
-> > +   :doc: uAPI trace events
-> 
 

@@ -1,118 +1,96 @@
-Return-Path: <linux-next+bounces-7355-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7356-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00C2FAF8802
-	for <lists+linux-next@lfdr.de>; Fri,  4 Jul 2025 08:28:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B939AF882F
+	for <lists+linux-next@lfdr.de>; Fri,  4 Jul 2025 08:43:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C6E41CA02F8
-	for <lists+linux-next@lfdr.de>; Fri,  4 Jul 2025 06:28:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82A6017ECF4
+	for <lists+linux-next@lfdr.de>; Fri,  4 Jul 2025 06:43:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0316C256C83;
-	Fri,  4 Jul 2025 06:28:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="QecQ2JOR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E9682609FA;
+	Fri,  4 Jul 2025 06:43:08 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E374C2561DD;
-	Fri,  4 Jul 2025 06:28:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62529260571;
+	Fri,  4 Jul 2025 06:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751610504; cv=none; b=qoXoGnxBxr2TZdE028yWHiPXf4dkZkYtpJYcFjjKy7iILYU+pNpYNz1Xh9ymKrEVW0WDVSc+i1sKh6rvk5+YT0u55JewehSq+Fpof5gDMs0WuagkkMo9yCUgnsVqbKJ2/gce+1g37us4HGXCtii6BcWzvPDkkP3IewIOovpI8sU=
+	t=1751611388; cv=none; b=srEiT2hjW1aAfBiDp29umIqKkU5mKESdLu0Wt+HEnDdN9J8af38rvDIeHg7DOm4sMBQXOAz7EvwIzqNuF/D7S6Pqvmh3zxbPr1nwmZoUvNsMpx2SdgxmdG9vwnHQi9WY4LOJ+nt1L6g+5X9aLYZv29y5mF9upX66Q27QaFB/520=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751610504; c=relaxed/simple;
-	bh=Q9RYV6cUqTbv8CavUxMur1RSdGmZWCvmLmbWwv5pBfs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=tve5kMV1UeoLYDljbSqu8qIU7B/+LFU7Urce+b4w4Y7NiZ7M3NfdPSV97RlFerlVuS9KIDERFEm7IQ80CgMKaE/7UOvxXVNixoThxzltMX5dP6Hi44ZwpVJjs55z03ZKm0NsaSV6VkcMEclJtsDFZJ0buSg2bQmtJr5eJ2p0e8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=QecQ2JOR; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1751610470;
-	bh=2mhIUNlzWyrqyhDrKkHAaaSs0j4eeeqr+64tc/45pno=;
-	h=Date:From:To:Cc:Subject:From;
-	b=QecQ2JORotwtJZQ46D1I9hh1OvbUXTWllflzf5d3djnIcWSowLC35o5aO5yChMUQh
-	 KFzjEZGoQ0ev5tHXJAVu203oG+UYo2MjQt0jjROth6eH+1NOn5wShAaFUGcU3oV/cu
-	 YboiqE3Usogzuh/uNEbPNm+vXgDR+gdDYDRcgatLZA7hGlGUfNr9nKvyxRgH5nd2NG
-	 ECMVbwZizVid8bWduTye/ENCQz1ismzm/3bl6PWOZqH7i+hdb+9o7sf59FaJRvrRly
-	 I4ZdMPz5j9AfpuX3vRT3B9NjIhiz2Ds/xFzlv0RwdVpOChvYmi/+fqoSAz7uOCSksZ
-	 jTBmm0Xh7Aehw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bYNwj5VdXz4wcy;
-	Fri,  4 Jul 2025 16:27:49 +1000 (AEST)
-Date: Fri, 4 Jul 2025 16:28:17 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>
-Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>, Networking
- <netdev@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tip tree with the net-next tree
-Message-ID: <20250704162817.14314a06@canb.auug.org.au>
+	s=arc-20240116; t=1751611388; c=relaxed/simple;
+	bh=wypsT0H5v9nNmzUczEzDcC49ULMczTA7cZr7AyJGEUM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=pJxAMiNcK6yJghtIf9bixtUv1OGuCbgUoYl7+BX+/gRP+jv78I51WNfRljb0n3HzYY5GlyrisGDdkqKy8BF6iHWD548AWFUqWpeOazv4IvASauVXw0SBPR6OFfEmV20dqPAEc0P3ppEmUe/y4OqkiYmjxac2SlduwV6mVPlXNWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; arc=none smtp.client-ip=45.249.212.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4bYPD91ZLJz2Bcmr;
+	Fri,  4 Jul 2025 14:41:13 +0800 (CST)
+Received: from kwepemg500010.china.huawei.com (unknown [7.202.181.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9430D1A0188;
+	Fri,  4 Jul 2025 14:43:02 +0800 (CST)
+Received: from [10.174.178.209] (10.174.178.209) by
+ kwepemg500010.china.huawei.com (7.202.181.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 4 Jul 2025 14:43:01 +0800
+Message-ID: <d3e4f6f8-be94-4914-af7c-0a03196d53ae@huawei.com>
+Date: Fri, 4 Jul 2025 14:43:01 +0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AhwB/cwOZfTpwguigflw+lM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Fixes tag needs some work in the cifs tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Steve French <smfrench@gmail.com>
+CC: Wang Zhaolong <wangzhaolong@huaweicloud.com>, CIFS
+	<linux-cifs@vger.kernel.org>, Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	<linux-next@vger.kernel.org>
+References: <20250704082645.37b267dd@canb.auug.org.au>
+From: Wang Zhaolong <wangzhaolong1@huawei.com>
+In-Reply-To: <20250704082645.37b267dd@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemg500010.china.huawei.com (7.202.181.71)
 
---Sig_/AhwB/cwOZfTpwguigflw+lM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
 
-  kernel/time/timekeeping.c
 
-between commit:
+> Hi all,
+> 
+> In commit
+> 
+>    2799c0ada68c ("smb: client: fix race condition in negotiate timeout by using more precise timing")
+> 
+> Fixes tag
+> 
+>    Fixes: 515ccdbe9b2f ("[Backport] smb: client: fix hang in wait_for_response() for negproto")
+> 
+> has these problem(s):
+> 
+>    - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: 7ccc1465465d ("smb: client: fix hang in wait_for_response() for negproto")
+> 
 
-  5b605dbee07d ("timekeeping: Provide ktime_get_clock_ts64()")
 
-from the net-next tree and commit:
+I apologize for the oversight on my part. I’ll ensure to carefully
+verify `Fixes` tag SHA1 references in the future to avoid such mistakes.
 
-  22c62b9a84b8 ("timekeeping: Introduce auxiliary timekeepers")
+Thanks again for your help and support!
 
-from the tip tree.
-
-I fixed it up (the latter just removed a blank line where the former added
-a new function :-( ) and can carry the fix as necessary. This is now fixed
-as far as linux-next is concerned, but any non trivial conflicts should
-be mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/AhwB/cwOZfTpwguigflw+lM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhndIEACgkQAVBC80lX
-0GwNxAf/bDsnKwrgRIvS+TrCTxID+kgAT1Y6p1uVITgJZ7kji4IDnyj+5n7jhRaf
-L1G6YZ79Bz8u5YRGivsWDbrUOQEDLUWU/tyw1mrRtjmZlzt+DxSXLEY/RAr3/yng
-IYGulFLS5jIhe6u9X8qDR7SLfZVSLY9nlvoOieLHenGdITPDdXfa+LEZV6aC0Nm4
-9ObSLc76uzU0a4usnl+rX1FeA6/Sb9hi3tWQxjvC0merOLVGfbDwn4gf7ljkc6Qt
-EXQx3hLwUFtKTZIUh0dbIYY1loafjZ1HhnMP7/m/6iFa0PmK9Wk/1qnujTP1F3ia
-2MczY+WeO/Hm8r3fvwWywraNxGvYjw==
-=rJcS
------END PGP SIGNATURE-----
-
---Sig_/AhwB/cwOZfTpwguigflw+lM--
+Best regards,
+Wang Zhaolong
 

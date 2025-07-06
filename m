@@ -1,114 +1,93 @@
-Return-Path: <linux-next+bounces-7377-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7378-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC160AF9E51
-	for <lists+linux-next@lfdr.de>; Sat,  5 Jul 2025 06:53:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 271AAAFA2E5
+	for <lists+linux-next@lfdr.de>; Sun,  6 Jul 2025 05:57:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76C581C81C8B
-	for <lists+linux-next@lfdr.de>; Sat,  5 Jul 2025 04:53:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 846773B0D5D
+	for <lists+linux-next@lfdr.de>; Sun,  6 Jul 2025 03:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5235264A7F;
-	Sat,  5 Jul 2025 04:53:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D059518DB1A;
+	Sun,  6 Jul 2025 03:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="gkP1Es9f"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="C6cSl0n4"
 X-Original-To: linux-next@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD7C1E8345;
-	Sat,  5 Jul 2025 04:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15536610D;
+	Sun,  6 Jul 2025 03:57:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751691187; cv=none; b=jMDIBTLVPS9U5B/748C01HyxJMtIFlSDGTZGFpsAapTJYMzz96MGcvCZseQw92+bu/ozFAsEGHJ49pUrQi6FSL1E274Y1HyhTjwwgADTi1ikMNqtuRrqAwFBxLFJAj/rbvBfWfGQ22Wp0bxMUayIy0dC8JtIo6sJG+yfQuxX+Hg=
+	t=1751774254; cv=none; b=knBsp9C6+2TXX7ZimO41FBB7yewfkLcA4iNyrdlkXTnRoJhuszUv0ElLqsFFSM2/ztxFE10XVTbF2iLSh7huWeLBal0iVyM+P7d/ub6JD9ge0zmgZ1Oms/SypMHXsGHdu2JwW/HBysjUkp56MbshAcAcvWhq9uFVWjxoabSMdPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751691187; c=relaxed/simple;
-	bh=LiMemUJtXNNV/GBQRO0lYPu9IYQxwTYih8di6bOFILw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XAKFnTz9KQ6CF9L28nGj14V+5gSDYKbVxiWPfrGODi3Tbdpd0o8H70D6Ydgf9bNllcNPx97RAwwPbvY9oNv7AufSZRDAlrU7tk1ukbO8CYS9vB3EpHxeKUz8PcTf47ufY031+sURCRQQI+Xp5xTi1Kfejjn9SAqGB603BtTaaZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=gkP1Es9f; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=rsqiq6A8D5Ym1/QAtW0mPwsfEGt9jk+qM1g61X2FR3Y=; b=gkP1Es9fUcQF2tQGxTaQg+H7Se
-	VU287WSHGNESsqai/fq8IzK5Xf3GL9SSs5loTIsNM1QMQRGF4SiDlBbxriVUIuYqp+G+5yYvUofNC
-	QZC2/RbpPsQGRPdkbg4bwWMqUeEJaO0cBK9+ohxTD+gGmCOCLGrjXxTpIvT0d2+P9W5AQhloU57P/
-	I4VGZ/bLgs/tsay6tlYZaaGNH6IyLNaOT5Of8nuVmXjzM8P9t6LYq/qU/JfCk6+gSxG9ba19zWJLJ
-	aJhyiFiknlJCFMw0OBKp/JetuXN1zsRcKOhjMAx5tt2B5dSaUcVAvduPC8m5thz15LZksns8uf9ff
-	o4g2zqAA==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uXutZ-000000020XQ-0lCX;
-	Sat, 05 Jul 2025 04:53:01 +0000
-Message-ID: <d5136da0-51f9-4359-a283-9075b4992bfb@infradead.org>
-Date: Fri, 4 Jul 2025 21:52:58 -0700
+	s=arc-20240116; t=1751774254; c=relaxed/simple;
+	bh=Rx1JyxegzFIQK4tVItKzGHgdZz2Rc6omrsmPzvbRRCE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=uZnmvtG8W78USbgMSDuO1+MRDUh9F7S2kUYuFIOPfS7TrYA1v6c/u80cu0n/+BAF/tnKMZNt+IdTiTOUKMXMUMrQPoE0MDTJKLQiu5JZ4lISKGAEPIHmgXQEMRGSZ3qnKyl2vk4XH3Drvk75wBWXjGL1c+nAej6BZ9Ra3yEgBkE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=C6cSl0n4; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1751773695;
+	bh=x7P/zlPuI+UXIwfl3tKst5KlD1UwibDUUwj+Izaz3Bw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=C6cSl0n4E2PZ38swJWYO03H8GBa+UY1mmGYmc5E0wfZr5QtrvnexNyC9nnY92T9e5
+	 AUgjrOEEDP+bSskkeD6LZt2Vq5RlD8irUniFvAWwENfYLumw++vC1SNBXoq7PffCX6
+	 PN+jDTx6dpCl5utnZ3r0O/A0b8viVCfea6lNW5dXSJhyhK+I4wNeUDmPRKfx/zIrOU
+	 YRp+0o3dy5PpJZanvkqaqq9H1r0JVDg24o+FKP2VXXk/JKmwKpKiPFA76DTFPOCYdq
+	 gygNFlL0WtD9NnOQzMB/vWOcj4YfXfbxzFSugC7gn7Ud1jbGsyj5AzD5csyqdGSvVr
+	 bOiRSFyOVfaOA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bZYHf6cX6z4wb0;
+	Sun,  6 Jul 2025 13:48:14 +1000 (AEST)
+Date: Sun, 6 Jul 2025 13:48:53 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: no release on Monday
+Message-ID: <20250706134853.549505dd@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Jul 4 (kernel/bpf/stream.c)
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bot@kernelci.org,
- kernelci@lists.linux.dev
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org
-References: <20250704205116.551577e4@canb.auug.org.au>
- <5496b723-440f-451b-b101-f0c7c971fc9b@infradead.org>
- <f06082bf-27b5-488d-b484-fecc100014a1@infradead.org>
- <CAP01T77AWoBqDgOPpmmcL5tQFqNa8W3rxBDB+Er0J5rxogCrVA@mail.gmail.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CAP01T77AWoBqDgOPpmmcL5tQFqNa8W3rxBDB+Er0J5rxogCrVA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/47rlk/C+7trYJhvAktsmM=L";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/47rlk/C+7trYJhvAktsmM=L
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 7/4/25 9:44 PM, Kumar Kartikeya Dwivedi wrote:
-> On Sat, 5 Jul 2025 at 01:38, Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->>
->>
->> On 7/4/25 4:35 PM, Randy Dunlap wrote:
->>>
->>>
->>> On 7/4/25 3:51 AM, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> Changes since 20250703:
->>>>
->>>
->>> on i386:
->>>
->>> kernel/bpf/stream.c: In function 'dump_stack_cb':
->>> kernel/bpf/stream.c:501:53: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
->>>   501 |                                                     (void *)ip, line, file, num);
->>>       |                                                     ^
->>> ../kernel/bpf/stream.c:505:64: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
->>>   505 |         ctxp->err = bpf_stream_stage_printk(ctxp->ss, "%pS\n", (void *)ip);
->>>       |
->>>
->>>
->>
->> Also reported (earlier) here:
->>
->>   https://lore.kernel.org/linux-next/CACo-S-16Ry4Gn33k4zygRKwjE116h1t--DSqJpQfodeVb0ssGA@mail.gmail.com/T/#u
->>
-> 
-> Thanks, I will share a fix soon. Could the bot also Cc the author of
-> the commit using git blame?
+There will be no release on Monday.  Normal service will resume on Tuesday.
 
-I added the email address for the bot. We'll see if it can read email.
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-~Randy
+--Sig_/47rlk/C+7trYJhvAktsmM=L
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhp8iUACgkQAVBC80lX
+0GxEJwf/XuPHOaytAXLwThc/ufae/k9RTRhiTHjK8SYrimQCHqHdpNaou0FgyxO5
+YkXDzTwi0cnZaUp03kF9GBJ+7fi3/zfMpylzYgUAjRhFNaERv64U94g5mYuey6n0
+aX0kCX7IjYM4fooIazT6sN+MvuZ49JQTFY95u/RSi2XwHOPX5y+gaBIwjHgeAE7F
+4cAg+qpfYoCxVPpg5BvsR2vG8rGolr0YojdEruacHNCCSzYmThkF7Yb2RhdgX7zt
+iSLKWbYNj2rvQR49X9h/oqI0o84LwxVek3n7ipXkBiaXwmtGPx06vNW0k+77jAzf
+alePr0SjYaPVOkAqH8xOy+MsSUIdag==
+=21Xf
+-----END PGP SIGNATURE-----
+
+--Sig_/47rlk/C+7trYJhvAktsmM=L--
 

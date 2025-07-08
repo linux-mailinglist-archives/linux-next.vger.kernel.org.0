@@ -1,103 +1,119 @@
-Return-Path: <linux-next+bounces-7385-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7386-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2267AFBECD
-	for <lists+linux-next@lfdr.de>; Tue,  8 Jul 2025 01:51:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 934DCAFBF32
+	for <lists+linux-next@lfdr.de>; Tue,  8 Jul 2025 02:25:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7B761AA57DB
-	for <lists+linux-next@lfdr.de>; Mon,  7 Jul 2025 23:51:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB9F54A6050
+	for <lists+linux-next@lfdr.de>; Tue,  8 Jul 2025 00:25:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A2626059D;
-	Mon,  7 Jul 2025 23:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA8A32C8B;
+	Tue,  8 Jul 2025 00:25:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DZdFm7fj"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="A5eD3c93"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51CB28641B;
-	Mon,  7 Jul 2025 23:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A50288A0;
+	Tue,  8 Jul 2025 00:25:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751932282; cv=none; b=ruNZtLWQDmp53NlMOne1lFJ27RycVTJZKmrtjcOGuD80oVf9jITKqWi7XyC63HZ05Wt5BOrDCBmQkcM6RbFbJX8vs/jthoKQbeWs55FizCvwYDi1SrYuA006KMeypdkrJe2YLdlWFWiJIy9nKlr8J3FhMglsmn/BRwjLvN69trQ=
+	t=1751934316; cv=none; b=A6iGyHiCSrxOYA0/13GgsCQdOxw8kKioEEd8XLq9Vc7tbYkdxaJR4PXysTDtyQ+Vty9jnp7UeTajsDvxvm2nVJZUYZyChnOvB1jsTryRaPXgycAgSLyVpeTrzFoZKP/p0FueZj3Nzc+4PjC3hXUGiLPErf/fbdZsvJbHZOTbilk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751932282; c=relaxed/simple;
-	bh=3YPjMLZTVygdM8dEsnVyxD48BuxrOc3p56jKv+wzmFM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=P3x2rVryRw3ziFl9qT3o6tVZoDgkNtcCHoKajO3tk1jHtWNA9Fo+pp/p7Airz8xuWOvQowgqgpQIqpq+aNcSjDDmWMPXgTT/AXsfzIOVhkX5i0sE+coITmSDy+t6a9SzKbGBn4QuMKGgNeTo8974DaOvDjKmJpRN9kjjsiLvp7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=DZdFm7fj; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1751932223;
-	bh=JO3i9JPD8qnuRTsURPAV3l4t79n+m7y3BVBVrImp4us=;
-	h=Date:From:To:Cc:Subject:From;
-	b=DZdFm7fjBf/HmoVE2c4YJ+hoa/bKV9twVtr8l+FM0z9BAQH1VhU8fTGL07cNVx1gf
-	 VbeU/6YW8ZnIaOTQUiSi4dNx+JfVu4maLik0eGsxbLBfDwkI92NSLZvfdlWd8F/sQm
-	 T5qmBpksU69Ose2qj/VEiocpBBr5ucbIIDmdiHGwhCbnc8Ke/fHoNeDgHTL3OcOFqH
-	 5Ivif+0svhvmABSZaDZTuBbUQ3XQqXTMZKpgkSGD3YP8KkPks5OS7DVYt//iqtskgT
-	 jnsBZVCKXvRt2T4U3UREvZk+7OApxzd6V3BOhv+aTywXTdSAFqSjygOzmRJObK12mz
-	 CVivtFiGU5Nmw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bbgwH3pwxz4wbW;
-	Tue,  8 Jul 2025 09:50:23 +1000 (AEST)
-Date: Tue, 8 Jul 2025 09:51:18 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the vfs-brauner tree
-Message-ID: <20250708095118.58337fec@canb.auug.org.au>
+	s=arc-20240116; t=1751934316; c=relaxed/simple;
+	bh=fVPhfJhapqHfG/F4cZnKQ1B5MT2Jg25lMcyfhjkXmHg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pbFc4yp0Ym9rzi1gjw88h+0fLz+uJsnSTUfWLzKJFGZl4LK7CSZhedGNlowjByOg6xcNULuIyrJlg6/sgM35RFzBGBNF00srMKvuV1IF7NmdceesSWkOC36H/S+iwYb699nr597ECeFznkBbgIP1jzOemzVvskW0T6U3TN485MY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=A5eD3c93; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=tH50HIHpFY1eUhx7C9oew23YMRZ/kKvobodXFZfuxtA=; b=A5eD3c93QA8ixVdAwoMLmOZMIt
+	oC9Gb09MvlU7JY6Cks8ua6mPlPT4zfYEQt42slEGaxkzr8P/rYxemiLPeFFY1smOE9mWdOyP6YYw7
+	J6/lAR8WGrsL/kDzhe/O1ko0cDjM9nCdBjCtLc2k01HvnFJwFJndvIpQAQPQAd8EDykKmwUFtsawg
+	3OUpuLSLlnoyVQWd+KHemMF5f+fRVtqHPLyB5kBeEHpRUqq/fxIXgeBbHwhwGyVMTvaZKa0ZHyWDe
+	2lTR+IwSrklWAcLv+CYUtH9BCB14s+pHSkvm75TWA/LN5PpAMc5FVxU/9pBWPyVqRUcBmGRBPy8Hp
+	BKHlmXQQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uYw8z-000000051vx-2mT2;
+	Tue, 08 Jul 2025 00:25:09 +0000
+Date: Tue, 8 Jul 2025 01:25:09 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the vfs tree with the vfs-brauner
+ tree
+Message-ID: <20250708002509.GR1880847@ZenIV>
+References: <20250708093837.52e3a89d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7Uxg6u8CmbhdC2RObd8gaUK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250708093837.52e3a89d@canb.auug.org.au>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
---Sig_/7Uxg6u8CmbhdC2RObd8gaUK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jul 08, 2025 at 09:38:37AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the vfs tree got a conflict in:
+> 
+>   fs/fhandle.c
+> 
+> between commit:
+> 
+>   1c5484395f9f ("fhandle: reflow get_path_anchor()")
+> 
+> from the vfs-brauner tree and commit:
+> 
+>   8ae91ad6499b ("fold fs_struct->{lock,seq} into a seqlock")
+> 
+> from the vfs tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Hi all,
+Umm...  Let's do it that way - fs/fhandle.c chunk of that commit is
+trivially split off and the rest should not conflict at all.
 
-The following commit is also in the vfs-brauner-fixes tree as a different
-commit (but the same patch):
+Christian, would you mind throwing this on top of your vfs.pidfs?  I'm dropping
+that part from my #work.misc commit...
 
-  8c0bcafc722c ("coredump: fix PIDFD_INFO_COREDUMP ioctl check")
-
-This is commit
-
-  830a9e37cfb2 ("coredump: fix PIDFD_INFO_COREDUMP ioctl check")
-
-in te vfs-brauner-fixes tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/7Uxg6u8CmbhdC2RObd8gaUK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhsXXYACgkQAVBC80lX
-0GwQNAf8Dve1qviY4ELOddFMC57/DhJvb/TlhLloTYpX+4vbURboDteBPzl+gdFc
-p1t8xQawM7t/s/ZE6VxBtTVGa1h9wknB0BVcdfg1DR1FO8vDNmJW03i1+lFeYYwN
-gMHPODrBjCKj0t9rn3tX35xvzc9iozI6+aMBIDlyK3578FFUL0llxE8ydhQT3ojX
-nSpfLya/k1P4g929t9lwtKXY6YrkORZnOi36RnSBqHLf/Up7s09TmnBRtna6TjSh
-rVoMAZxumqIs+SzJpmxZJOHNpviMIEuD+JzhorNJKRK/fLa9raPcnnnaWtEv8we3
-I6z8TUeo5BdxI8y+qlfkVRNdGAb+xA==
-=Wc60
------END PGP SIGNATURE-----
-
---Sig_/7Uxg6u8CmbhdC2RObd8gaUK--
+[PATCH] get_path_from_fd(): don't open-code get_fs_pwd()
+    
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+---
+diff --git a/fs/fhandle.c b/fs/fhandle.c
+index b1363ead6c5e..7c236f64cdea 100644
+--- a/fs/fhandle.c
++++ b/fs/fhandle.c
+@@ -180,11 +180,7 @@ static int get_path_anchor(int fd, struct path *root)
+ 	}
+ 
+ 	if (fd == AT_FDCWD) {
+-		struct fs_struct *fs = current->fs;
+-		spin_lock(&fs->lock);
+-		*root = fs->pwd;
+-		path_get(root);
+-		spin_unlock(&fs->lock);
++		get_fs_pwd(current->fs, root);
+ 		return 0;
+ 	}
+ 
 

@@ -1,136 +1,113 @@
-Return-Path: <linux-next+bounces-7409-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7410-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 258FBAFC9F5
-	for <lists+linux-next@lfdr.de>; Tue,  8 Jul 2025 13:59:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CCDEAFCCD6
+	for <lists+linux-next@lfdr.de>; Tue,  8 Jul 2025 15:59:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 46B063A3920
-	for <lists+linux-next@lfdr.de>; Tue,  8 Jul 2025 11:58:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CB98164EB2
+	for <lists+linux-next@lfdr.de>; Tue,  8 Jul 2025 13:58:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F025622ACF3;
-	Tue,  8 Jul 2025 11:59:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 704A42DECA0;
+	Tue,  8 Jul 2025 13:58:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="SBKegI9y"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="C0by07T8"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6662926B75A
-	for <linux-next@vger.kernel.org>; Tue,  8 Jul 2025 11:59:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078B31E5B91
+	for <linux-next@vger.kernel.org>; Tue,  8 Jul 2025 13:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751975949; cv=none; b=iAB95+T+e14cXajRexQe3EIESG2lougtFnpmN6Xs4FWjm0N66+SecKjgfzACyqRfOW2HIgyR0nm9vGqkPHKtKz0+3tR7b8FA+scz7GB88Tur9pUgKtH0IwnTqByQIevDD1Bvv59v0SlnZLVclx8dcZtc7D7vpnce446tFPvwd8U=
+	t=1751983095; cv=none; b=Sx6l8r8gdZsgFblGsAclwvFg0tTZjELC/CuOQZBooUIHq6J43YxchGN1b9SDs79vAZk+DG52EYeMNHagSjN4yg40toCK8pYGF/6r9LH3TKq2yLiM3F3VcRFtZckGure8m8wdFohz9kE9P4PLX8zMnCatHUp9+V9BJPAtlEvJnJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751975949; c=relaxed/simple;
-	bh=l4YWMze/oS4h0PoeJI6+srjACyEMe2Xs4EmUu6v8QWI=;
-	h=MIME-Version:from:Date:Message-ID:Subject:To:Cc:Content-Type; b=QQK4mfwTvA0mJxNsfex5lcpqJDczK8lCIiMHOmiMVymygPfo34y5XMfVEbk0KuNubxePIuzMCMLO9RnyCaobVigNAybe8Gra/pJaOwqL2zw56BJcHImsg3s1Oy+lg5BRdthqTAmuyd49p+Ffl+UQkVsEjVwhTNb09EX6kmZ3TtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=SBKegI9y; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-70a57a8ffc3so35558287b3.0
-        for <linux-next@vger.kernel.org>; Tue, 08 Jul 2025 04:59:08 -0700 (PDT)
+	s=arc-20240116; t=1751983095; c=relaxed/simple;
+	bh=6T/LyVDkqfdGqAPt3IJFUu0IpZrh3nknqSqj9wa5YrA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kxsvB1A+dPUrBBKasTFMepYv6+sbzzwUkDxe8jwcwRY59SMdl56hMAPSIW6bh8gf1FQVG+dvo6BmyFufhoHYvOkmmkWNR+71d4ZPE3/RSCD8RBYFu+T5FmNHM7xRSsMeSdbIXkKbfvj1MCIDUVrDQ97IDMZh0KTQfVut6+ZUPeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=C0by07T8; arc=none smtp.client-ip=209.85.166.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-3df5249601cso35312315ab.1
+        for <linux-next@vger.kernel.org>; Tue, 08 Jul 2025 06:58:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1751975947; x=1752580747; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:reply-to:from:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gtzSxUVKERYTmkdWodmf6sDIEA7o3urEegtQwrIBFeo=;
-        b=SBKegI9yzc+solYOpkDHnFYaTtiwyaNAaIhfsMp55hO5Hdft7gcDfD9lMP6WDIgNV1
-         7oNN0puqIh9Jnkv7POvYFwWk+wUVd0XGNMnC27H1B6wIP4sFYcmRBhUK5jqQ/K4XLysz
-         wBNFc71m/mzaWoFFJJ2utbdIAeA90Qh1owNNg/+aX6uIoodJplOXDlsWGQx6etVlWcaI
-         nxF/mwC2PTJ5V1GxpmdEDbYpjaVMpvd1dr8ji4YreBUnQOvJSa+ims9PdLUtLJF/cAno
-         BPhXvRNGka7cTZdasgwk8ojwH/RvbysEpFHmRTcx12qfmi0BVAia18lFH7Ls7ATXiwou
-         OBKg==
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1751983092; x=1752587892; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dWG9le0tAvcM6U+B41yLxhv7xdUTFjQ9nxy+a37va4w=;
+        b=C0by07T8OHvvHZdbzBQoTC6YmkLqUQvJCS/MD5/q6zVl+/cWv+9+9dAv5euXo8ASGn
+         1SvvAQTfBJzvISPitF5UCY180Y5GfxwmWQlXV2iwU6Tkx3ppS3xH0ACcdsonPQucaYGL
+         Itu+0fMDrW5P77/YGWuBQe/Q35MlYzAYvaS765TC9FEyU6gNw6ylV+ZhrHTIj9x57+KB
+         paQ33Iize/prEc2xuE8W/Ou/dBz/xhd2HrrCoVxT6fxq1cfarISeUa2m6BOESNlTN3eg
+         LRY6/L2g6gTx8i2X0ero8fXF1UrYAZ0RlQw8nKeajWitFh/5hZKBy60tb25h1QkXNNh0
+         9FBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751975947; x=1752580747;
-        h=cc:to:subject:message-id:date:reply-to:from:mime-version
+        d=1e100.net; s=20230601; t=1751983092; x=1752587892;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gtzSxUVKERYTmkdWodmf6sDIEA7o3urEegtQwrIBFeo=;
-        b=axYxcpRAZfwrdXOFZ7M/Hifea8XCfVMTd9MvZheOR0F1f9qy9zd7SS2ERjAJTHm69o
-         bSOAxv1SFsGIYbbPg2JJq5J20yynTB7tXc2j91e+D30uF4/XYEQH7Gp1q9hUy6Hr/7eT
-         l7SC2R4knNuwsNKuQIG5ceC0EK2fG5+6HCJhHbDBFhMTFhGus0OkucOScpYk7QPEuvkA
-         C7N2YwVQT9eiMJBATDbiK10IxWYoGAxxcO1eYZQ2rtpCOsxropjVbM7mybOmxTmGv8bX
-         0pY/+Ozg7SeDRe7OwcTfErllyfC5H9QbFl2AJ+KT3hh36JuFjhLy88/ouqrLBLsNbAGl
-         yMtw==
-X-Forwarded-Encrypted: i=1; AJvYcCX3CqiPqkw6AYtzdlioy0aDKfp7PCFcMAXWPeEkIz/50Gh+/T8KlpA1pMMciL42DEdd3HYb19y/ooDk@vger.kernel.org
-X-Gm-Message-State: AOJu0YwY4VJGvjz7iyctIXfjo/5PCFCyMufdz3uhTEzmJQ1JaxeDPNsl
-	6gxjceBeeRx/4HmY3FvF1Q3VqduoHeiYprYu9hoa7hDIe81SAao1uuuXR/9wuincugOxuhpdP4s
-	2ooPMhOo9cDvUJWyEevQDDakgth0CYVPvdG+LQOOrWg==
-X-Gm-Gg: ASbGncuRYO6EFmRvsVJNkvnr5XtB5thX04C3msols8R8aGfxopGKti9p2VifKc8HOkg
-	RVNQi5TldhAQ78y7gQg59AKMs2m9vPsH9vo0M3Q3gVp3aqiAogxROHC/OXJBIH4SqGt22jag1ed
-	axFe/pxxK2ceyRBzlLJLH4lyvlaVM217lWFm2bI0uYXQ==
-X-Google-Smtp-Source: AGHT+IHldcdfL3KDEtXQ5coruO648VbCeq4DNQV8fjNhsOKR6jna0NqzlmNfbozuk89fRAZyu9pcN0kJL/if35bHIeI=
-X-Received: by 2002:a05:690c:46c8:b0:70e:2a0c:bc5 with SMTP id
- 00721157ae682-7179e464094mr49136347b3.38.1751975947430; Tue, 08 Jul 2025
- 04:59:07 -0700 (PDT)
-Received: from 415818378487 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 8 Jul 2025 04:59:05 -0700
-Received: from 415818378487 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 8 Jul 2025 04:59:05 -0700
+        bh=dWG9le0tAvcM6U+B41yLxhv7xdUTFjQ9nxy+a37va4w=;
+        b=l8nLrEx/FtAg7pZ6fxKJH1gpNN6Sp0X4L/GUoPb2f9uvL+qU6R19lGkJr5O7NSeFKT
+         hDccf8imdNRRyMKZIYrRbxeiGrxM5oxj5YTaTGSYeQ9J2VAZz5lGS8MCPWHRSObIiBG0
+         C1BcNU7kAZgVRk8AGtrHXZPXkjZOTBrE94pmAntn9nq1EGzFFvfiRhnnPl3C/gdFqcUt
+         vpQfSrpVb2xq5XgpS1qx3V/8k4CXBiKiWvKIO2N2RNIowRQsO+92F0fsn9YWjwg5mOpd
+         AsFc09Tl3n/JP8FtgnbSJWdNadWHilV1NgcFOtCDlGEKrdcwx1ZpnlN5pBXIoRYjQ0A6
+         4CZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXbDT64Y8LmiDWlPiuMWViDCgP8JImcOATqQ6VuXSGcVSjCXmfmCsqugrH/PrbTzyt13ridbN/i7XrV@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFubhDP6Jzi4wzg2D4iroGj+uuaXpYaeU7WrVMAB2IjQHUsPHH
+	e7fwtMxOe91sUnoI1h6vD4ANz0QvvxGeQiCDNxOQCToveIOcx5PrbrY44Fzx6zNOg8n/wqH74IS
+	GlZE4
+X-Gm-Gg: ASbGnctjExb84AlGmuZ1GdDkTsw0tIbIKuhLVWqWTeXJWPF9VlgsmYBzk5bUrBVcEvI
+	xlgw1hg8V5+X8hyda3Qby3chlBoBz+xMVeUpuvubo938w1Agb46SUpBs9zB4/doty3WJZTfqx0R
+	JqfjH3s9LsjGYqCYYpkRYyt9uJSP9YjQLqWOqLTE96HxAGMpUtmUvLnRh54MFOEopegp6+vh3nj
+	5tgrHvDc4Z365RNTcBcFU2XTQDJajOA5PqF/pEuxvyVuwxGOKQokfndHZx29n7UvCLubIqR5dzR
+	DRHferN/aCZIh1gqi3IQu5qY+4r5KFqAlts3NRsDIFnyfMvGQ8VEDnapRx1iFlowEKmKfw==
+X-Google-Smtp-Source: AGHT+IG09TilT5nlfG30pj55LKIE+PZrKro1O6jNo5c4L+OMtBt3Rlep/ZPBo61IfrB6cu2JV/LWjg==
+X-Received: by 2002:a05:6e02:258c:b0:3da:71c7:5c7f with SMTP id e9e14a558f8ab-3e1371fcf1bmr157473315ab.15.1751983091851;
+        Tue, 08 Jul 2025 06:58:11 -0700 (PDT)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-503b599a42csm2212527173.14.2025.07.08.06.58.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Jul 2025 06:58:11 -0700 (PDT)
+Message-ID: <7f6c2bb3-2b90-4d72-b0f3-dba6a347dc68@kernel.dk>
+Date: Tue, 8 Jul 2025 07:58:10 -0600
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-from: KernelCI bot <bot@kernelci.org>
-Reply-To: kernelci@lists.linux.dev
-Date: Tue, 8 Jul 2025 04:59:05 -0700
-X-Gm-Features: Ac12FXxdG7SBioohOVIdrl2kRCgFlhwWfZBNI-8C0Yojen0DOxGOdqxZG-1I8wc
-Message-ID: <CACo-S-0GQ5cmyK=xXjWxJrTfUu7_B2gHD0z5fO2O=QVi3CEt2g@mail.gmail.com>
-Subject: [REGRESSION] next/master: (build) variable 'sys_info_avail' is not
- needed and will not be emitted [-...
-To: kernelci-results@groups.io
-Cc: regressions@lists.linux.dev, gus@collabora.com, linux-next@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build warning after merge of the block tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20250708191115.68613291@canb.auug.org.au>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20250708191115.68613291@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello,
+On 7/8/25 3:11 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the block tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> Documentation/cdrom/index.rst:7: WARNING: toctree contains reference to nonexisting document 'cdrom/packet-writing' [toc.not_readable]
+> 
+> Introduced by commit
+> 
+>   1cea5180f2f8 ("block: remove pktcdvd driver")
 
-New build issue found on next/master:
+Thanks, killed now.
 
----
- variable 'sys_info_avail' is not needed and will not be emitted
-[-Werror,-Wunneeded-internal-declaration] in lib/sys_info.o
-(lib/sys_info.c) [logspec:kbuild,kbuild.compiler.error]
----
+-- 
+Jens Axboe
 
-- dashboard: https://d.kernelci.org/i/maestro:5c04e00f1c1b59acf474835a714df4aec7228b6a
-- giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-- commit HEAD:  58ba80c4740212c29a1cf9b48f588e60a7612209
-
-
-Log excerpt:
-=====================================================
-lib/sys_info.c:52:19: error: variable 'sys_info_avail' is not needed
-and will not be emitted [-Werror,-Wunneeded-internal-declaration]
-   52 | static const char sys_info_avail[] =
-"tasks,mem,timers,locks,ftrace,all_bt,blocked_tasks";
-      |                   ^~~~~~~~~~~~~~
-1 error generated.
-
-=====================================================
-
-
-# Builds where the incident occurred:
-
-## x86_64_defconfig on (x86_64):
-- compiler: clang-17
-- dashboard: https://d.kernelci.org/build/maestro:686cf90434612746bbb46434
-
-## x86_64_defconfig+kselftest+x86-board on (x86_64):
-- compiler: clang-17
-- dashboard: https://d.kernelci.org/build/maestro:686cf90a34612746bbb4643a
-
-
-#kernelci issue maestro:5c04e00f1c1b59acf474835a714df4aec7228b6a
-
-Reported-by: kernelci.org bot <bot@kernelci.org>
-
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
 

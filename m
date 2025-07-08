@@ -1,102 +1,106 @@
-Return-Path: <linux-next+bounces-7404-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7405-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02B43AFC6C1
-	for <lists+linux-next@lfdr.de>; Tue,  8 Jul 2025 11:11:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19CAFAFC6C3
+	for <lists+linux-next@lfdr.de>; Tue,  8 Jul 2025 11:12:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B0423B56CB
-	for <lists+linux-next@lfdr.de>; Tue,  8 Jul 2025 09:11:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F08A07AA394
+	for <lists+linux-next@lfdr.de>; Tue,  8 Jul 2025 09:10:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D91F2C0313;
-	Tue,  8 Jul 2025 09:11:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF0A22C08A9;
+	Tue,  8 Jul 2025 09:12:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Tevp2bT4"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OltLh+xc";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="sbAVD4y0"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CA12BF3EB;
-	Tue,  8 Jul 2025 09:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 453AA1E376E;
+	Tue,  8 Jul 2025 09:12:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751965882; cv=none; b=WAEb7bOjQWK/39LiNVaTZTorAP9bgsSUGQkzkKO5X3Z0HA9D9OXp3eaqOZWbmFkel3MyuJEaFZ822VdFVynU1n8vcMuVS+YyOJlMdi2KrPMxozDnCPwdMIaNmMSD7rYr+SgcDe8zLWX8YyNGzrFqhjyc9gdeUg6gxOoCwlwUfrE=
+	t=1751965928; cv=none; b=rtle6VfqdZHv44NVcDJMzLbhQ7VOCaomY6PwGXxUsnA9ZS2oNUT7g7Dbp6NFqePl9+qN6qJUjUZGUIl47WPks6zoNkTl7iRNoQHcCToz1zEUbmNXIO3me28HqPslWVH3h8/saocKkfTccJjuvALCORNjZWZeQEd6hURbF2uBNpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751965882; c=relaxed/simple;
-	bh=r1x090YX/tnqR60tHI7fzn9NINwny65K4OCQHtp8bhA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ImD4cRs1GFEwWaJsxYlQA/8rcog0Mqsp73nneNrx+Vyo6sAfwwcQ+saPDJOSTeWBugFVXhOz+NS0N3gEJrcK+tYwhSIBfzF/y64mFuWHXuiKr8z+wzJqaqOxz31P38ET96iSRHbkO/UN90w99fZqb+ixHWQMQKB9BOFeXT0ituY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Tevp2bT4; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1751965818;
-	bh=iDK/XBeVSLguiQBmA1MavzPVD6AE+YgFpRffIFyUwiA=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Tevp2bT4cWd8N5sxII4/lMAC34M7qam+T1gf+9yYK2ndTKF9Qlf4zbVPNT42yvL3c
-	 aMVyp0MZcM7LIjV9Czk3cjaZKUkerEg5DvjzXHGMW+MIACsRl89LPp9SbdIWshkSCQ
-	 Gp7O+wI7LBoEQwDw6vodHzKoJeV09phI3oIrZ/62VY+zuJoqLOM1u30IsaeMWRtBtd
-	 vHnp0I0srcnZiz4fz0btwPHh1ezIV8dsoBzoKS9WGI1kMKQYuw1XcITlkfly1yum86
-	 F4Z3I9rWKvGHLE2xZ8pRa9r/FloGFmK5AkeSDxPXcRI58aeoUbRyXcKAmf/l3iQ6yI
-	 g+k0H92FSkFuQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bbwLL2WD3z4w2J;
-	Tue,  8 Jul 2025 19:10:17 +1000 (AEST)
-Date: Tue, 8 Jul 2025 19:11:15 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the block tree
-Message-ID: <20250708191115.68613291@canb.auug.org.au>
+	s=arc-20240116; t=1751965928; c=relaxed/simple;
+	bh=mOrUgzCe43+zA2nQ+4uKKMmlZ7n6m8DSwUelXRzfUb0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gb33D4ITiNlkKaQ8qO7Qta0UnccGfWHRsYhJHjAhXhTZfbVI4POLao2qOclVQid3x2KKKRqSFA6marUxj8m4S7g3lKljOzR7LrruEruRtm5eDo04c7vHN24PuwUxaa5XwfAv9k8aIWJk4DH3/TUTMEWCGVjf7rKO5hlQFz2skTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OltLh+xc; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=sbAVD4y0; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Tue, 8 Jul 2025 11:12:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1751965924;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1VexG1NlE1fmnPv3b5oRHrElSeCoj1GvfGLcPqaM+K8=;
+	b=OltLh+xcxdJkvnu6rUG8vmOytXXZMAIxbg1dzly00ywod2v88kNFG/lyuO9LTUvCxY2NPc
+	sR59qKUEIV0RbOE5PrPWn8cXUz44ugicbPrjZvizbB1XvMGbcPY3VjJHKresag80Rzc3dz
+	4g6n3x49YG4FXIjioegRnA0NsDjh7vR7Xo3caKsOYiOSTJaed5DlIonAsljvVy/Kt8QYOq
+	6eccWWDWBu/DyaD1xo+0m5HpVWt7XHhsJxivITOkTUX1t5TwILvVk1+EIj+GzvUyKUhuoa
+	1lK0OEe16L/qYSU7MsGw46eASibiBAOgTnODSaTwBcJf39OXV4IL2526ThzFkA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1751965924;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1VexG1NlE1fmnPv3b5oRHrElSeCoj1GvfGLcPqaM+K8=;
+	b=sbAVD4y0hRLyzBZ+vcnV4mkIkAjZPMvZJdVhMyqdaS9zGbkIQl+i5wS3sVqEDHyoRVPUVq
+	KzhvcXd1zXuu39Ag==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Johannes Berg <johannes.berg@intel.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, 
+	Richard Weinberger <richard@nod.at>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Marie Zhussupova <marievic@google.com>
+Subject: Re: linux-next: manual merge of the kunit-next tree with the uml tree
+Message-ID: <20250708110852-85b541be-7e1d-4cbc-a455-9cbef4c15b3d@linutronix.de>
+References: <20250708181539.0e778563@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/P6M7tjLgMilfgc8xX/Es7cg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250708181539.0e778563@canb.auug.org.au>
 
---Sig_/P6M7tjLgMilfgc8xX/Es7cg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On Tue, Jul 08, 2025 at 06:15:39PM +1000, Stephen Rothwell wrote:
+> Today's linux-next merge of the kunit-next tree got a conflict in:
+> 
+>   lib/kunit/Kconfig
+> 
+> between commit:
+> 
+>   013c51446570 ("kunit: Enable PCI on UML without triggering WARN()")
+> 
+> from the uml tree and commit:
+> 
+>   5ac244b9cc8f ("kunit: Make default kunit_test timeout configurable via both a module parameter and a Kconfig option")
+> 
+> from the kunit-next tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-After merging the block tree, today's linux-next build (htmldocs)
-produced this warning:
+The resolution looks good to me, thanks.
 
-Documentation/cdrom/index.rst:7: WARNING: toctree contains reference to non=
-existing document 'cdrom/packet-writing' [toc.not_readable]
+Johannes:
+I expected my patch to get picked up through the KUnit tree.
+If you drop it, a Reviewed-by on the patch would be very welcome, though.
 
-Introduced by commit
 
-  1cea5180f2f8 ("block: remove pktcdvd driver")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/P6M7tjLgMilfgc8xX/Es7cg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhs4LMACgkQAVBC80lX
-0GwUkAf/fmNSnWDRXpIfPnjEv7/93CEHqhwpDMw6y0jBK7t/pOxa2isGTn6V+RRy
-EthvICdQSWknVMXQAKxSWQ/ILZN2R4c2rf2CLPMqky/b2jJ63OQDr2xr3qA+QSQ4
-4Db88hyNsmaxlXdEoGr4e2sfTKp3GeernNBtropUNPuC1AnUv92+dtb6C2M1mx6h
-/L21N3a7q461U6iqB6+nxy5dUjUjNqrOMtMGBUOkSc5mN3DC6O6EZnZWxcYkRxS3
-GxCIHl05nvZkqnPvy++7nORmExo+7oS7aYTF2pR3jb03rYpS8NPHY/+5Mf5T/wN8
-GthfsbwOFsPNZSRhqxjxuSEMnCErug==
-=G0VP
------END PGP SIGNATURE-----
-
---Sig_/P6M7tjLgMilfgc8xX/Es7cg--
+Thomas
 

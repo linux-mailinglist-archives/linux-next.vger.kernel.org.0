@@ -1,117 +1,105 @@
-Return-Path: <linux-next+bounces-7427-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7428-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59CB6AFE3DB
-	for <lists+linux-next@lfdr.de>; Wed,  9 Jul 2025 11:17:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F7F5AFE594
+	for <lists+linux-next@lfdr.de>; Wed,  9 Jul 2025 12:21:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 486A21899EF2
-	for <lists+linux-next@lfdr.de>; Wed,  9 Jul 2025 09:17:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02EAC3A6E06
+	for <lists+linux-next@lfdr.de>; Wed,  9 Jul 2025 10:20:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E30DC23D2B0;
-	Wed,  9 Jul 2025 09:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AECAB285C81;
+	Wed,  9 Jul 2025 10:21:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="CKwZzreb"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="gRFwu1W7"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F17B22DA0B;
-	Wed,  9 Jul 2025 09:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B6028B7DE;
+	Wed,  9 Jul 2025 10:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752052648; cv=none; b=PIMQ338tTcPLsjGi2heL083HHQHrvv9SRRIQ6GANtpqQJqTLLk3zOly5Jma7gPWu4oy67zbEvds29Xj0w913dhZ228mqBJr/oem4PPi3rhZg5iexrn/Yp8skHIjCTMOgd3KP8dLpyP5DhFYf6wFnqdzUHUqlu/rc8CcjpCKdbcs=
+	t=1752056476; cv=none; b=oHx8VlbQtrrMnallnFguSXHoAKEbF+6bg4BgzbXMA+3dfV30STp9WNBuviDZZ41+xKUdrgr5fYHQYpihddJWx0ab2aTGWBpL7G27+cHC/ff/px3GP6S5PE7SFiCBtsRTo8u7KU6XrMZbGj4wgFNqmFfEKVDjmP2Lt8aIQ5PkRyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752052648; c=relaxed/simple;
-	bh=SIOEIsn/iRCibzTWzmm4/iFa3isGrOWve09IOOTV9jI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qo+88jYyRzyPEPJcte6P09QNgGmy1IZqzp/D4BqjMaZvE4E+ij8bg3iSwJTnih0HkWFc1Cdl0Jps4zztsRqpwHnd/KjdnpHjNfHLJUmNMCxdpSQzmPWsNgXG40uCmEsGGsE6NjhLBU/XGByHWxcfcJYyeIZ+EAiWjQeRfUtR/Z0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=CKwZzreb; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id E3CEE40E021D;
-	Wed,  9 Jul 2025 09:17:21 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id TnW2dmxPC4_5; Wed,  9 Jul 2025 09:17:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1752052638; bh=pyoSEQoZpwnpz3kLRoC/C4gNE9qlmORS6snlCTAOP4o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CKwZzrebDbh5/eUDfyXS8ouLooCpgBdmvNe8Hsp0OxLuhjx/IQQb0N58KUo7CEciR
-	 su16cWlEMTMfcZb99alYMJJ05bgaNTn8VCNp3tu5HdkLbnBVUToWq+miEIDkcmfCbZ
-	 KRKZ1MRRf999iu+VeUXSbINApEb8nFup+1YUKBQtmxOOcWEOro4rp9bY3Dg+S7Ns1z
-	 iHFK42bL4gjXFopvcpZNPY513S7bW0sIMmHQk2bmZuQFYkKdum6Xnix+JyIgywG+dd
-	 a4/KjiQZ+XBc6Q7uVoQBXRRzWhuVN6+KAdMIPN+/VgAgcblIqjnQ5N5/5Ad04P2Sf6
-	 h0nek8vNIZ9OvFP8jrD0ru4sFuBGOC5ykoFHFm7/NZgtXKi8boGAic7yfsAS2oFnps
-	 UEvUyGWA6PPzDFrE6y+sFi/lUfvV4qL3iGb5lImU/OYL2FuvyRskN+LyPxselrNhB6
-	 5/V4FVsPNMmLe7IeFkyZQc76+f3nEZuvTzniH7S9otUZnaRjLazHcQRyORGuX9/eZA
-	 lK17/WfRXPoUJu0hwZ8bT7J1MRPzEw1bSjpNcqTz7FRBqCrP+N2XtNCfMoTsIkvTn5
-	 FISFI/TQJ3ozxZxYZQkj6YreOPsWLRyMxAFpPwgm4REH0PtLNOgwb9gJPdr6z8sQ3m
-	 671dt+834mbdvsfkNmMEnpo4=
-Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
+	s=arc-20240116; t=1752056476; c=relaxed/simple;
+	bh=l0l92xGa61BoUGWrM5RAVmmyIO8aJ73/rz1T86Gw08c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=u3vJPmZpRFMQwBPlyAbK2+3nC3MXMNcicTN4LgDZre3BxaPBd3DVutTAOX0+PmOhQ3cEieFCVH6tanGLwFpqkam0Cn2zj8WQJEG5y1kPmuR4K5Hi5FujL6PvxElW/KHZvq03NuRS1VaLIEueQKAljo3YjOcSGgpndQgrd5v7AkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=gRFwu1W7; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1752056402;
+	bh=1cCqapi5HDozYAjCte1eBQ7rrI7m6ZeWdaM6Yp1XmTA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=gRFwu1W7z4Gh65ObJf/VdMY3x1Uth95EkcEkBUBKU1WYXZpYCm/vb6hJ6arIeTdB2
+	 IwzEwSQUph2l3o04HpXilBxrJof063RZbi8nNYyXlS3fNfQbpzKOkH30hQz2N6Q9xC
+	 Fz7FzgcQHWNM7gJ8+Re+puufwPO4GzZe80Q7Yfsgb4VtG0G4glR4Lr0ltvSrpkj1X1
+	 yCMUKdBpaVH8GkXIMyaB4mTDM8ziT2v3/RrpdRa1KgroKqOqwr6mMxVNpJo7cQziYA
+	 NDwn3aV+rGkDY+DD4K2R8q/kaoiAg1tPMshmZIA9yMYM9qI1Q/hjkAv5MMcqUEe+uN
+	 ynTm9snVo5YWQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F070240E0221;
-	Wed,  9 Jul 2025 09:17:09 +0000 (UTC)
-Date: Wed, 9 Jul 2025 11:17:02 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the tip tree
-Message-ID: <20250709091702.GAaG4zjs-otcGsMyY2@fat_crate.local>
-References: <20250708160037.2ac0b55e@canb.auug.org.au>
- <20250707234817.d09fc28a3510b23c31c461b4@linux-foundation.org>
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bcYrL5sWsz4wbb;
+	Wed,  9 Jul 2025 20:20:02 +1000 (AEST)
+Date: Wed, 9 Jul 2025 20:21:07 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Gerd Hoffmann <kraxel@redhat.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the efi tree
+Message-ID: <20250709202107.6d570574@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250707234817.d09fc28a3510b23c31c461b4@linux-foundation.org>
+Content-Type: multipart/signed; boundary="Sig_/YHpjmmA=yu4w/nfl=+bRnf4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Mon, Jul 07, 2025 at 11:48:17PM -0700, Andrew Morton wrote:
-> On Tue, 8 Jul 2025 16:00:37 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> 
-> > Hi all,
-> > 
-> > The following commit is also in the mm-hotfixes tree as a different commit
-> > (but the same patch):
-> > 
-> >   f339770f60d9 ("Revert "sched/numa: add statistics of numa balance task"")
-> > 
-> > This is commit
-> > 
-> >   63afea878dc4 ("Revert "sched/numa: add statistics of numa balance task"")
-> > 
-> > in the mm-hotfixes tree.
-> 
-> Thanks, I'll drop the mm.git copy.
+--Sig_/YHpjmmA=yu4w/nfl=+bRnf4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-So we actually started adding it to tip for the time being until you send it
-to Linus so that our testing doesn't fail - it was reproducing reliably on my
-test machines.
+Hi all,
 
-So can you pls send it to Linus so that we can drop it from tip?
+After merging the efi tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-Thx. 
+ERROR: modpost: "efi_kobj" [drivers/firmware/efi/ovmf-debug-log.ko] undefin=
+ed!
 
--- 
-Regards/Gruss,
-    Boris.
+Caused by commit
 
-https://people.kernel.org/tglx/notes-about-netiquette
+  42c68c6e354f ("efi: add ovmf debug log driver")
+
+I have used the efi tree from next-20250708 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/YHpjmmA=yu4w/nfl=+bRnf4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhuQpMACgkQAVBC80lX
+0GwBHAf7Bfk6A7knSF6hkhO66iizhI+5L8NqIMMWccX5cka35W7OlPJD0cswMHIu
+EJKcqDqx2qF98uYGICD4e7sU23O8q9YxisvSV6zJ6tipqts150Q6biAsNCAU/I1B
+JUARbKD1kMf+toF0WAqXNDlcK4bB+m4CiLnCUiE/OcvQeNKd3nTbvvBCivtctMP/
+Xy6/ng5k6VX12QOdAr075a54hYRU/fW6JlwroLDTBGnjPL7BhWt4V7OboMgDCih3
+/I8hfyPQ+7nQXW4e9UHbvajyv6wmE6a+2laeEvzroGTLqp1jkVqzl6J4+e4/sV6y
+Px+VGNgI1IBhVV22p0jeudvFLgWndA==
+=uffz
+-----END PGP SIGNATURE-----
+
+--Sig_/YHpjmmA=yu4w/nfl=+bRnf4--
 

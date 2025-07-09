@@ -1,102 +1,134 @@
-Return-Path: <linux-next+bounces-7440-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7441-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06BF2AFF1FB
-	for <lists+linux-next@lfdr.de>; Wed,  9 Jul 2025 21:43:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DE9EAFF291
+	for <lists+linux-next@lfdr.de>; Wed,  9 Jul 2025 22:06:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 694CA7A38E7
-	for <lists+linux-next@lfdr.de>; Wed,  9 Jul 2025 19:42:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7E893AA6C5
+	for <lists+linux-next@lfdr.de>; Wed,  9 Jul 2025 20:05:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A912B23B63F;
-	Wed,  9 Jul 2025 19:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CBE825A2DD;
+	Wed,  9 Jul 2025 20:00:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="ETebFBcz"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T0lRNgGP"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269F78479;
-	Wed,  9 Jul 2025 19:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754A825A2B4
+	for <linux-next@vger.kernel.org>; Wed,  9 Jul 2025 20:00:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752090217; cv=none; b=VcIuX9GuhuHfzQe+1xd7ObDG0lo6Dq+gflPaotR/WrdSjD7Quv1FsxGrQSk2YV+uafnUkhpZ0/MfcoLhtajbmsAoJQIBOPu2D1NB5eRVZEAAK5JBOWkHOHdss3urjLPjNvAZDZSPlsVKPVzt7LdztgVQ40SAvhZPS1TdmTCZGYs=
+	t=1752091240; cv=none; b=iqacRoTzxtJGME5FDx30j68uQO6eUP1nLUQx1dlLaHbOZTCOsN/bxhypza1EiGuBPgZ5VnWbkrJDttzRaUjXsyRE4XZbpb7A8lEpTDv1f6Xo/gua1MLf0Yt8BQwb1EteuGp+alkSdoehAY2LIuLziLVRtO/c7H0NgiZgmv5FrSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752090217; c=relaxed/simple;
-	bh=9FdHIzmQOhgEBuP+679MDUnwv+s9R3D29PH+ku7jcqc=;
+	s=arc-20240116; t=1752091240; c=relaxed/simple;
+	bh=XRgcaPUjA2xmhy8xzFx9Agw0cbTX49MkDneqWPcRbns=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ivJRfsMSmyu51CZQnKvWWYvuH43Eeq3vPQLoB/BXLj44D7HU4/cwauaQjd4arEArC5oQp69HADeP3skxooYnO9/q0gXbLI1pQRElzfRzrIyMwYiinXUyac2HZ8JNR0l0ANUA5LEULVoX4C6hfZSqNPB7i2Mv4X8zVGJUN3lRDFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=ETebFBcz; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0C3E040E0215;
-	Wed,  9 Jul 2025 19:43:33 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id fWbZKreNMUv3; Wed,  9 Jul 2025 19:43:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1752090209; bh=9lov93nQ3Bm7COc4aN0CE+lco3dcqFGG+1042ffeQHs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ETebFBczAOGDOhMAVY0BQN44cRINYsG6exdq1ZOo6NA6AypfWj8Zdi7x9Wcsb2Oht
-	 v9zwH+D778Q/DD7m3ZwOBd2TFeHxnQ/c7fE+PQmogJXf0UotvTIVqtRSv+nkqKozs9
-	 2gI0fQ9JOOar9uUOL4T8qtuvVBuJ7G/FiPzkPXLHpew2KL2xvLCncRuFHiKgsTlrgr
-	 HeJaRKyFtX8x2j2ubfJGp/hB3hbLlr2w0YDmKQMrHNjBmFaIcPjZSSE0EAVCVJgxSK
-	 aZjzpFlU1tLI+8SeEY6+AJ/C0UVPICTYi2j1nZeTTcNtClW3I/Q0bSe9iS28uDvhWO
-	 oeevAu9E69y14we5VGAa6jLMcSrUBZgmj+0rfllFAA7tSpP/T6uEeHlDstLt/GXPAB
-	 ex+1XcRZL0gzRaMKKMOlGOxnrHesvA/mG7Qp4ImFcLOkwzGutH6fUeO4SaL/5uxF3G
-	 no5O9pIrvr0a0eQ6rThMy7Ouy7SZ6zHQaYZa7AgJxWpasSKNO8oY92200aK76JUPkG
-	 VDhwQSylvzRvFZY2/rgsHX9PqEQvNVdXwVfmla+MrqFLzXgxHWtgrDOF2l5lfs9Tnr
-	 g70YVoybOr1WoRUl7tRbP5PEHgAG82NmbjPqUXYXoi7x5E5ikQ8kgnrf508bxkdPls
-	 KVS/sqdHWiJNx88ApMRwGoWk=
-Received: from zn.tnic (p57969c58.dip0.t-ipconnect.de [87.150.156.88])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B842740E01FD;
-	Wed,  9 Jul 2025 19:43:21 +0000 (UTC)
-Date: Wed, 9 Jul 2025 21:43:14 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=eDIBUyltkZer5yVc19HjZMxZeXsMw/T3xRU0ZJrcmYpzIrn47jRns9jqxfqXlM6twavfY0OAyzxUkMnaa6AsRVZI1egNDVU4376Fkv517Y4TKWw0HWXUKNa9pZKc+fPUYOOatdrg4Vu9FMHXQoOjSh8MepgGgWklWiR8sIEaK1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T0lRNgGP; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1752091235;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KEO+y01DHcpAzZ1glkzdPAC2WZqiXMak0HQsMG2O0i0=;
+	b=T0lRNgGPHHrX1xqHqz5GlIw2QOtiA3IuXnjOcUZkpnfB/jMwAAuQlUVXI8j+rzBAt+ZL+u
+	US+XCSB8I1daVZ1YpWAqbXRVsPLWWU5mtuT9qzql7Mg5pTuakdsiDqfB3+S1IcrlRaN7/X
+	TdYNf5nDxGODxkO52Y/kiA2HKvxhuCA=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-587-om1oiYDzPcuh52nMYPBovA-1; Wed, 09 Jul 2025 16:00:32 -0400
+X-MC-Unique: om1oiYDzPcuh52nMYPBovA-1
+X-Mimecast-MFC-AGG-ID: om1oiYDzPcuh52nMYPBovA_1752091231
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-451d2037f1eso1210175e9.0
+        for <linux-next@vger.kernel.org>; Wed, 09 Jul 2025 13:00:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752091231; x=1752696031;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KEO+y01DHcpAzZ1glkzdPAC2WZqiXMak0HQsMG2O0i0=;
+        b=UyQh/wYWzsunDUCWBlpuuw9MoR8RYLdd9HhAyDEv7T/hTHVmM5u2HrC8qKkOAtczGs
+         nkTmv8rZmHB32ZdxtLv8cTwmvu9ObHqqgoV4TZLuC/1ZGV2mQtmwA8iht05sdgyIm5ti
+         XFu8GilhTxRoyjdWjNCOwopSoB2hqQKaX2ywKMZl/TBe7EohBZ91wnn0f3cHnu8Tz/5g
+         w9Tzvpwy2HnQzg73SdYgEc1neQgkIMYaS1F/R7ecxI+u9cSXuhqlMuXYaqrsqBQAeWNp
+         vOxPrtKfrKqEskGSxngzPs/jrZWwsvoDSpkvN/grHMv+muZPNsRwXu/jDB0Tza+SkAWO
+         8gNw==
+X-Forwarded-Encrypted: i=1; AJvYcCX71vovee2qoJtv8JK5RQDLWCkDrq+1iaKAcj3SA/tTtHQZIMHwj0APxO3vdhvVIKxqLbCkd19XSloV@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzyd8NoTxqrU2WOBCgjR0OBUYSgRel/wxm+TpPSYKjGV3D0G/mv
+	BmF4ifE0vSCPdHDJdZFF27PTzB7ca2GVJJ8n6veKrrVnZ+XC/BPtIqHTfuNuXYOU5VStdTQBjua
+	fkMHF0ej4n+R1tZNKh9bLIIe0rliDxq8yz8AN3iiMr6r6CaImdvCHTla+wUI6aspSxtu2Prw=
+X-Gm-Gg: ASbGncv9S6EdpG/UwLSFwb3R2NyZZHV7bD9SQX6u6pVU5fWKTv959s7OtPkeOXyw79F
+	TH93DpTNA852a80cfzmdkOdN2yc7TicnXSC/nBD3JZ4Qa1ycg7MC6jSsgz0KDY9XCaZeFl73SS+
+	BxPdVVMzeI12xwvasSTBIETHlcNhe/1/VpDvvGUKtJOfiuZ4dLcDaKqwNqb2PRDfQ3+ORbRpBAq
+	ihnyt5tSm4rsCWx7nFerJmDzcT/xwhYURoAEeqGWXxomVWXM7EAFmZja2iromVeqkpBmCeuMphh
+	Khr+Ev3XtVzBd1k=
+X-Received: by 2002:a05:600c:35ca:b0:43e:bdf7:7975 with SMTP id 5b1f17b1804b1-454db8307c1mr8031605e9.32.1752091231101;
+        Wed, 09 Jul 2025 13:00:31 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG6EqizbffultQ5UtCg8NuiwKwoWE+lK/p3pWMASqoLLv09C1oxwgfQ7sLGmuyt4kakXife3g==
+X-Received: by 2002:a05:600c:35ca:b0:43e:bdf7:7975 with SMTP id 5b1f17b1804b1-454db8307c1mr8031375e9.32.1752091230750;
+        Wed, 09 Jul 2025 13:00:30 -0700 (PDT)
+Received: from redhat.com ([2a0d:6fc0:150d:fc00:de3:4725:47c6:6809])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b472446fddsm17151822f8f.66.2025.07.09.13.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Jul 2025 13:00:30 -0700 (PDT)
+Date: Wed, 9 Jul 2025 16:00:27 -0400
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the tip tree
-Message-ID: <20250709194314.GEaG7GUpefEArfshxW@fat_crate.local>
-References: <20250708160037.2ac0b55e@canb.auug.org.au>
- <20250707234817.d09fc28a3510b23c31c461b4@linux-foundation.org>
- <20250709091702.GAaG4zjs-otcGsMyY2@fat_crate.local>
- <20250709121203.d8edc8d05253bdf04ce580c6@linux-foundation.org>
+Subject: Re: linux-next: build failure after merge of the vhost tree
+Message-ID: <20250709155616-mutt-send-email-mst@kernel.org>
+References: <20250709221905.61e77ab8@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250709121203.d8edc8d05253bdf04ce580c6@linux-foundation.org>
+In-Reply-To: <20250709221905.61e77ab8@canb.auug.org.au>
 
-On Wed, Jul 09, 2025 at 12:12:03PM -0700, Andrew Morton wrote:
-> > So can you pls send it to Linus so that we can drop it from tip?
+On Wed, Jul 09, 2025 at 10:19:05PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Yup.  Tomorrow seems likely.
+> After merging the vhost tree, today's linux-next build (x86_64
+> allnoconfig) failed like this:
+> 
+> In file included from /home/sfr/next/next/arch/x86/events/amd/ibs.c:12:
+> /home/sfr/next/next/include/linux/pci.h: In function 'pci_set_disconnect_work':
+> /home/sfr/next/next/include/linux/pci.h:2738:14: error: implicit declaration of function 'pci_device_is_present'; did you mean 'pci_dev_present'? [-Wimplicit-function-declaration]
+>  2738 |         if (!pci_device_is_present(pdev))
+>       |              ^~~~~~~~~~~~~~~~~~~~~
+>       |              pci_dev_present
+> 
+> Caused by commit
+> 
+>   b7468115b604 ("pci: report surprise removal event")
+> 
+> I have reverted that commit and the 4 following ones (just in case).
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-Cool. I'll drop it once it lands in his tree and we should be good.
 
-Thx.
+
+Weird:
+$ git grep pci_device_is_present include/linux/pci.h 
+include/linux/pci.h:bool pci_device_is_present(struct pci_dev *pdev);
+include/linux/pci.h:    if (!pci_device_is_present(pdev))
+
+and of course I did build it ... which commit should I test?
 
 -- 
-Regards/Gruss,
-    Boris.
+MST
 
-https://people.kernel.org/tglx/notes-about-netiquette
 

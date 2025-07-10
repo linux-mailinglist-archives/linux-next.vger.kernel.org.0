@@ -1,129 +1,84 @@
-Return-Path: <linux-next+bounces-7462-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7463-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D81C5B00117
-	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 14:02:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9377AB00DBA
+	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 23:28:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EED743BFD75
-	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 12:01:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A427B1CA60ED
+	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 21:28:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D8118DB03;
-	Thu, 10 Jul 2025 12:00:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26FAD2FE312;
+	Thu, 10 Jul 2025 21:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="bVQHOOV5"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="J1PBSLEA"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE45C207E1D;
-	Thu, 10 Jul 2025 12:00:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE5923506E;
+	Thu, 10 Jul 2025 21:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752148852; cv=none; b=OURnTV/HWPp8qRYXY8ZEV9H46TVhk3wrapHcf8/ASU2CXqqZBilSoV1fmmaBN+c/kcucPwdm9zP3l9VrbCsIejtTWvbatGe7jmEIPtYCokRrzcdSxQwvl0nO0VGtBy+0NROkhn52YjeKJPDUIr3P3y9E+zkKe7K1SQAIyevBhZE=
+	t=1752182878; cv=none; b=kpb8imo+1DZfyTqvsD/jwyZWYeMGcz9k9BENzvRn8NpKYL3WhvE5PXG7mUsznzVDum/OaTtDRZnxnkdVCVxnoBxuV7zARhBgVe/lsmmYDb/3RKL2joduMCglI2NSHN0xfVASp2LGMmoHRlU3+2kt07JPN66gTUIlO6g011VS5/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752148852; c=relaxed/simple;
-	bh=8aZ3wu4pDULEMT0o5wlrnZ+pfuBbJBRYNcs/POYChtc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q5GGABmwSniSXvob37xws1spmvJ7f1BC02W60AdGjXwfsbL2bUF8LoCt23ul21F8UN3b075V6ZRdoE7UkJDpzeNZpkSoSioOdetRqDjaFRy40NeoQ3Pc/Qy2Dyor5/0LfzJ795V/ZNcvsR6wU8VRU386cjseqrBIAQ5oelyPamA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=bVQHOOV5; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1752148772;
-	bh=sDi+ye7XIdRE/URF5MMZhFUiHVlg/sUPJJBg408tn5s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=bVQHOOV5cjU0jHyr6Ummr9vv5a72IM/swtVDvYeELo+Owgl1FB57NoJ9AiFQ9T1K9
-	 AnmvLSBvAeXTX0cKSB7tPp0YPGiakLro6DdTAqEbERG0+KxIBg76BSVY5sojlnUUrf
-	 lt5+CjtdpyOROXyZbyHJ+Jj8E059iMragavVv1lgwJwaShK70TMLaJkQ7vwABBca3c
-	 EnKAkrLjwd3036WcpqLyzjggXSCmEbUiYRGQ0jrqpQa2Zivg8mXMmNf+ES6XCJ8lQO
-	 SAdESheh5S3ocT/9BBlzSf7BtdiwB9ovxmk880zZKZqMqYkyLHGoc7qi53N1NLaV04
-	 s31jFWkrLzNPg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bdD0h0YL9z4wbn;
-	Thu, 10 Jul 2025 21:59:31 +1000 (AEST)
-Date: Thu, 10 Jul 2025 22:00:43 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Ben Horgan <ben.horgan@arm.com>
-Cc: Yury Norov <yury.norov@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the bitmap tree
-Message-ID: <20250710220043.22d05555@canb.auug.org.au>
-In-Reply-To: <c8c94357-8367-42b9-a817-f4ae3feacdf2@arm.com>
-References: <20250710183449.20e255b4@canb.auug.org.au>
-	<c8c94357-8367-42b9-a817-f4ae3feacdf2@arm.com>
+	s=arc-20240116; t=1752182878; c=relaxed/simple;
+	bh=zW+mMBsrEE80hDslzHG84qcFdNEtsBNyQLY7x5jD1P4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WBPq6S8pHsZw6iMMc2WJO2VIIC81FpAFSZo7eJmTuOiBaNIt2wdvg7AMF4mzRPAgYUGRqmuZJOuJFeHfAAAr3LdE5t5aJWIOsIaQqTJMLeraNzNWyN7aQ8jjEKvtFa61/68WUC6es+LCrM+QRTT/r/bwR+z1S+/wZQCrdUGgRXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=J1PBSLEA; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=gHxnev6c8WKquWK4NI89Q11xi1hHesrnV1e9QJqrv9I=; b=J1PBSLEAgeiAZBmCEkqHBT007S
+	N1gVXEPFnLGsWB+vmHd+8O+7xqT5ifzhNXj9ZJe219uov/mTiG9Q3l/3O2eoQzhlawva0NqGuXZbn
+	cqwhxCPiO763HNgvAK2USjkvBYbwSBgbd2Est7OVXoMJRkE4/9Gv6WoA7cT7kIfK4NxdJRBuxZ/lD
+	rCcewf7ppPvIG2NjDIn6SGwKxqk1K+xEcgzS/kr0Scsj4a4g2QmYwLS22AptCVtLXHPZ8berWxN9n
+	fGm77pVblt/1TvGV+5SqPxDQKgBDQIObsD5DIYeo7wanAg4gmgbpw+44CdoJWOfeyt5IMp7v+ye+d
+	FeMQeYJw==;
+Received: from [179.118.186.174] (helo=[192.168.15.100])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1uZyo1-00F6ld-1n; Thu, 10 Jul 2025 23:27:49 +0200
+Message-ID: <08de556b-e63c-420e-8ab4-c03712be9709@igalia.com>
+Date: Thu, 10 Jul 2025 18:27:45 -0300
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gcQuB3S9FVQr52l.G.T=lgg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/3] drm/doc: Fix title underline for "Task
+ information"
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>, airlied@gmail.com,
+ simona@ffwll.ch, Raag Jadav <raag.jadav@intel.com>,
+ Krzysztof Karas <krzysztof.karas@intel.com>
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ kernel-dev@igalia.com
+References: <20250704190724.1159416-1-andrealmeid@igalia.com>
+Content-Language: en-US
+From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <20250704190724.1159416-1-andrealmeid@igalia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
---Sig_/gcQuB3S9FVQr52l.G.T=lgg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Em 04/07/2025 16:07, André Almeida escreveu:
+> Fix the following warning:
+> 
+> Documentation/gpu/drm-uapi.rst:450: WARNING: Title underline too short.
+> 
+> Task information
+> --------------- [docutils]
+> 
 
-Hi Ben,
-
-On Thu, 10 Jul 2025 09:44:09 +0100 Ben Horgan <ben.horgan@arm.com> wrote:
->
-> On 7/10/25 09:34, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > After merging the bitmap tree, today's linux-next build (arm64 defconfi=
-g)
-> > produced this warning:
-> >=20
-> > arch/arm64/kvm/sys_regs.c: In function 'access_mdcr':
-> > arch/arm64/kvm/sys_regs.c:2654:17: warning: ignoring return value of 'u=
-64_replace_bits' declared with attribute 'warn_unused_result' [-Wunused-res=
-ult]
-> >   2654 |                 u64_replace_bits(val, hpmn, MDCR_EL2_HPMN);
-> >        |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >=20
-> > Introduced by commit
-> >=20
-> >    f66f9c3d09c1 ("bitfield: Ensure the return values of helper function=
-s are checked")
-> >  =20
->=20
-> Sorry to have broken your tree. However, this is a valid warning and this=
- misuse of u64_replace_bits() was the motivation for the commit.
->=20
-> The fix can be found here https://lore.kernel.org/kvmarm/20250709093808.9=
-20284-1-ben.horgan@arm.com/T/#mc9e47859302654d84b4f2b3d9032d2b595d5df49
-
-Well, normally that fix would have been applied (with appropriate ACKs)
-in the same tree and before f66f9c3d09c1 (or in a shared branch merged
-into this tree and some other tree).
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/gcQuB3S9FVQr52l.G.T=lgg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhvq2sACgkQAVBC80lX
-0GwdgQf9Eulh9zZi+hRNOCgp5ICGR5ayTDftgJ7BGEbMiKW+bhVab3WGDITu1Mb/
-QMZUEa/jIiLRw0dgo0Qn52rVDvctLVgWuwfWnLAgL82JYByNq8KewFIlrUuSjuGt
-IgXlAF4HgJqLC6hUdgocvsx26ElFWoEy2kBjzkPxqwkIq8SmMkbjJewpMtxtwYS1
-IIh3dZvVbKvo7IK3UEDcyeiUVUUeHqvXaua0Qwkb2xq1fRHGLm5Ya9uf0CZmPXwF
-36ExVhdRrJKmtxKrzaMyUjDqRQuCxaTZ/H1Zri1fhO9TtZhTccVixsqNroZficWo
-az4itYxf7CwKaAyyOn+cUR0te2f6BA==
-=mMym
------END PGP SIGNATURE-----
-
---Sig_/gcQuB3S9FVQr52l.G.T=lgg--
+This series is now merged at drm-misc-next, thanks!
 

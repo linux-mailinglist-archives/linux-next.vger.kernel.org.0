@@ -1,164 +1,125 @@
-Return-Path: <linux-next+bounces-7460-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7461-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BF10AFFE9C
-	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 11:59:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3E2BAFFF1B
+	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 12:22:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05AB77A1A82
-	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 09:57:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A31B21C27660
+	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 10:23:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72E412D4B41;
-	Thu, 10 Jul 2025 09:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C89BC2D5A18;
+	Thu, 10 Jul 2025 10:22:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="wjEiWl6c"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AAcNKBuW"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB8C1EF39F
-	for <linux-next@vger.kernel.org>; Thu, 10 Jul 2025 09:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5EC27FD5A;
+	Thu, 10 Jul 2025 10:22:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752141548; cv=none; b=W2kREnI3Ut4/y8Ai+UOJ+g2fL1EFDGVYaY1IUBgYbVpBfsSvksLQDI88o0Z7rzjEpMSRyoYmSVSKj/haDv7UUjOHlMwzaqcsXw8yslvyB5QiMCzca7v4s5BWXluQ+7Tc8TJYiWvPs6aiwRBuotCANkrF7l3LhfOqhGsPiZkXoe4=
+	t=1752142972; cv=none; b=JQv/KbwTWjy/NnTwIjaxhv6FlPmGFKJ8h2SZQcMsUeCqZ/tVZgLX/Q4VBrBQa0V0fG/d8ukFVyuGlRmbeCC4ZyheyQdv9YKvEfwmTL2IMFt8HPw2d0taOIFMZ+9bfusRzH5s8E5GGaxuDEYif1xGGk9Xqu63jg+yGDjr29XwZRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752141548; c=relaxed/simple;
-	bh=6yv5CFJYg6pTTof2JcjC8om6Vi1/YsgX1I/zy2a1V3o=;
-	h=MIME-Version:from:Date:Message-ID:Subject:To:Cc:Content-Type; b=WFGP5C0H70HGzIXnBQp4qirCoP4fhxRuMOdG5qNYbHgzv/X3Thv9P3xtSdDytx0uJFb6O9TPJrimocIBpazXwjzyFWw+C0PVq3uCxPLf4en3aKOhhYsckRORTJs/1AV/oadQy0M6IkL8om3Fs0iWf+GXzg0Osl4rzFnw0iY5w/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=wjEiWl6c; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e8259b783f6so607484276.3
-        for <linux-next@vger.kernel.org>; Thu, 10 Jul 2025 02:59:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1752141545; x=1752746345; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:reply-to
-         :from:mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tfPYL34FapnC4GPOI5oKk+QzBPVtKMCrzZZzT6Z9TGs=;
-        b=wjEiWl6crLkT+l0KUuBuL4TS8Lr+JeziceV7QUCmgev/2IKOwVzBQKJ39f/p7pUTua
-         Rps2ao+qo2eY/zkFtdX0yik/aF66sy+YOwxObBf5VOSb+CF4Y6siBuR6e2h9VoJ6H7lb
-         7wZWFy2+7sJ5iyo08YoG2pjU0EaXjBJYR3iq92ieKK6aNZ0U6RsA/2FuZZG5j2lDmIzb
-         /YJZDtdl0yE2Lks/u7VoL+njhLOs4ZS8YC52TarkWcDJO7a7aNHHBGv0xxo5JpyearqY
-         S7uK8bomDfMtaCkkdwLhG5265mkQYmgL5VPvSWsC5+rQAmBIS1K2DLCGp5WVkH8SZijD
-         0ZZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752141545; x=1752746345;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:reply-to
-         :from:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tfPYL34FapnC4GPOI5oKk+QzBPVtKMCrzZZzT6Z9TGs=;
-        b=Sh8C7Y1G+kNImJYLMrYJLheJ+8Fm/ZJgTU3O8IpzNoIKgX5kHUgFYNyHkBGgl4yn1a
-         pKpvdicGidyjjyPPyxSVhUNqNfbFQQ1qoTNEAY1nC5iYASrhEvovefirDpEnj40NGG6e
-         OaEcv/HjoXMrko8TvYPIk9arJnpxzKMMqER2p/e10Nj87AYgYTwbjuEFStotN9OHm2O+
-         qOorDaLDYs7IHhGthrptf3NoAdWuyVVeuJXO+9d7jke5FcynJxwV66WKEkPx3ARfLtYL
-         gy3UgorzSYNgF54hJpOtCzYyvzVCo6ISKibPqbQ7T9RlgvUKc47Fy2trvnibPuzEsT36
-         oYLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWBjanetrWogx6Qv1aahc/AUsnZ0oZjZ/xulAp/yjLuEXEYbWyvHMiiHELL9sVhotpKZ1R1sCc9ynu1@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjsNp8tKnKTrWGm9EdCQnptgzMFL4CZ/7naNctK3BcXHLzcqDM
-	+yKk/siQovCwRzq73pr+TDEVnNPVdoWlgDDJyzZ4YXM5urAnZ1INzaeloqfePVlE5HY3B3mynuH
-	LB47b7yUKs4UTNh9HkimGImYbxzRQOQoqnwkPkqYIog==
-X-Gm-Gg: ASbGnctn55qer5G+3ONXfr8bw+OuuKSYufAI17q0h0OM/C5y1etxGkTJcdIj5ggerAl
-	dPGojYZKeY3w7q2KafC3f/ktFHupKW0UTcw8YFAcUJSJEfzD8OvIad07E3T/U0LfTz8aQUY68xJ
-	HfhZagBiU+ylpkucXTp7cQ9pyJkGG1VZ46auD43hovdg==
-X-Google-Smtp-Source: AGHT+IEvnVOnHYxR6L/U9hATW8VlP/nRreoqxAWBxTJdckQ8TG2I2oMFRHXWKaTXYa0HCcEiTEz1z7+6bQnQfU+whgM=
-X-Received: by 2002:a05:6902:1b8f:b0:e87:9bb7:beac with SMTP id
- 3f1490d57ef6-e8b7a32b090mr2099503276.15.1752141545488; Thu, 10 Jul 2025
- 02:59:05 -0700 (PDT)
-Received: from 415818378487 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 10 Jul 2025 02:59:03 -0700
-Received: from 415818378487 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 10 Jul 2025 02:59:03 -0700
+	s=arc-20240116; t=1752142972; c=relaxed/simple;
+	bh=aIIZQ1CXQ1yODxoyueZTb2QQqz00XYiPBjdu2QjjfpU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kO6m+NBBiYzyb+Leo1j5ms5TA+w3V51QKes7V5qPHL2Jj/JJyoJoxl9tczjNW4KXw/2XdXZohRaVQkLQg1G7ZnyH03BcYkKzXAnFMcEdEV7RK9hl7V0Ayxla4oNpFWLD03m9m3+EqSO9xUIG+mTTkqJ0GnOtmamVmvIEYpwSksM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=AAcNKBuW; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1752142891;
+	bh=aIIZQ1CXQ1yODxoyueZTb2QQqz00XYiPBjdu2QjjfpU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=AAcNKBuW5cQWLR7QggFxaLjOYLfOaVs7uXdReVQ5S/qpEDsi9EPVFS41cJ/WJahJ/
+	 QKTd0aYlbnIT/TbgNgQTuQ7j2QtjB8Nb0othu0t+r+e4GBmEnjhFJqEmckKEcY4+AV
+	 lMojff8uOBqzDKRuOWmay6KppqGaBj5WtNza9s5GJzizls81F8OrSZLZxK0tkdiAgU
+	 KJx5cPr9HTObaQToTUql+clG2DAMyJ34Apx04/pyI5MqDmtpxQ/KY/JcHjb5NnrS0R
+	 zhRTS+61kOm/dvxlnS3qjtMbg6CODERmfkEmumPopZSZlB71fEqkjs6Lq38azXS4sB
+	 fgQG6MRFZHjUQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bd9qb65zRz4wcd;
+	Thu, 10 Jul 2025 20:21:31 +1000 (AEST)
+Date: Thu, 10 Jul 2025 20:22:34 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>, LKML
+ <linux-kernel@vger.kernel.org>, linuxppc-dev
+ <linuxppc-dev@lists.ozlabs.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: [next-20250709] Fails to boot on IBM Power Server
+Message-ID: <20250710202234.7fd45cd1@canb.auug.org.au>
+In-Reply-To: <fe13e9e2-8ac5-46c7-b925-b61d35104ed1@linux.ibm.com>
+References: <fe13e9e2-8ac5-46c7-b925-b61d35104ed1@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-from: KernelCI bot <bot@kernelci.org>
-Reply-To: kernelci@lists.linux.dev
-Date: Thu, 10 Jul 2025 02:59:03 -0700
-X-Gm-Features: Ac12FXwKSGRsI8--21ZXA6ao9GKzE5Y-Pb9yoM_YMb3xR8GzxcScAmYZhY7fekQ
-Message-ID: <CACo-S-0z4uY0xuN_fxBkFy2HtH19LtPWD8FkWEFsCVpMGPHGjA@mail.gmail.com>
-Subject: =?UTF-8?Q?=5BREGRESSION=5D_next=2Fmaster=3A_=28build=29_ignoring_return_va?=
-	=?UTF-8?Q?lue_of_=E2=80=98u64=5Freplace=5Fbits=E2=80=99_declared_with_attribut=2E=2E=2E?=
-To: kernelci-results@groups.io
-Cc: regressions@lists.linux.dev, gus@collabora.com, linux-next@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/l8d0fWJRapxz1o6JFJg5qXT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/l8d0fWJRapxz1o6JFJg5qXT
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hello,
+Hi Venkat,
 
-New build issue found on next/master:
+On Thu, 10 Jul 2025 14:56:38 +0530 Venkat Rao Bagalkote <venkat88@linux.ibm=
+.com> wrote:
+>
+> Greetings!!!
+>=20
+>=20
+> IBM CI has reported a boot issue on the latest linux-next(20250709) kerne=
+l fails on IBM Power servers.
+>=20
+> System entering to emergency mode.
+>=20
+>=20
+> Error:
+>=20
+>=20
+> [=C2=A0=C2=A0=C2=A0 1.071678] ibmveth 30000002 net0: renamed from eth0
+> [=C2=A0=C2=A0=C2=A0 1.074227] ibmvscsi 30000069: SRP_VERSION: 16.a
+> [=C2=A0=C2=A0=C2=A0 1.074238] ibmvscsi 30000069: Error -4 opening adapter
+> [=C2=A0=C2=A0=C2=A0 1.074255] ibmvscsi 30000069: couldn't initialize crq.=
+ rc=3D-1
+> [=C2=A0=C2=A0=C2=A0 1.181132] ibmvscsi 30000069: probe with driver ibmvsc=
+si failed with error -1
 
----
- ignoring return value of =E2=80=98u64_replace_bits=E2=80=99 declared with =
-attribute
-=E2=80=98warn_unused_result=E2=80=99 [-Werror=3Dunused-result] in
-arch/arm64/kvm/sys_regs.o (arch/arm64/kvm/sys_regs.c)
-[logspec:kbuild,kbuild.compiler.error]
----
+This has been fixed in next-20250710, just released.
 
-- dashboard: https://d.kernelci.org/i/maestro:a2914456a7f9a96dd6b9a22a0784d=
-af92bd464f3
-- giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
-it
-- commit HEAD:  b551c4e2a98a177a06148cf16505643cd2108386
-- tags: next-20250710
+See: https://lore.kernel.org/linux-next/20250709233953.7afb7a8a@canb.auug.o=
+rg.au/
 
+--=20
+Cheers,
+Stephen Rothwell
 
-Log excerpt:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
-arch/arm64/kvm/sys_regs.c:2654:17: error: ignoring return value of
-=E2=80=98u64_replace_bits=E2=80=99 declared with attribute =E2=80=98warn_un=
-used_result=E2=80=99
-[-Werror=3Dunused-result]
- 2654 |                 u64_replace_bits(val, hpmn, MDCR_EL2_HPMN);
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  CC      fs/nfs/nfstrace.o
-  CC      fs/nfs/export.o
-  CC      fs/lockd/svc4proc.o
-  CC      drivers/soc/qcom/ubwc_config.o
-  CC      lib/bsearch.o
-  CC      kernel/bpf/token.o
-  CC      net/netfilter/xt_CLASSIFY.o
-  CC      lib/find_bit.o
-  CC      lib/llist.o
-  CC      kernel/trace/trace_functions.o
-  CC      net/ethtool/pause.o
-  CC      mm/mmu_notifier.o
-cc1: all warnings being treated as errors
+--Sig_/l8d0fWJRapxz1o6JFJg5qXT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhvlGoACgkQAVBC80lX
+0Gw2QAf/eDZwYL+6yOtKX23a7y+ngUbVR35WAHoP6wLSCXCEywvQbBkier9Fdewy
+DguGV05OBY145Ea/tEz+j7iY2TfM+qaM2MRAmJWMh9uBRQ4TfMyuGFiHZwcms5RF
+gJezTBZtdDXsZQdMH9xiEIPmjptwY2Ki1WV5YdmFKvz8h7fwvbV50kYSF0/RqdTW
+f8RziQafqx0fhlHoHyRFyHcESAFxklZukyIsLHcE49xanAVXtLSCdqDB7Xr5cCSk
+l7LmN4/b7N/KERk1IwdKT8nfdrOYgsavAQWFUES/wwT1uzSBBtx1BLEAf0j8O4rr
+DLF4iZ/JxhPZ6laIhpQvlJ8SSxfWog==
+=d49c
+-----END PGP SIGNATURE-----
 
-# Builds where the incident occurred:
-
-## cros://chromeos-6.6/arm64/chromiumos-mediatek.flavour.config+lab-setup+a=
-rm64-chromebook+CONFIG_MODULE_COMPRESS=3Dn+CONFIG_MODULE_COMPRESS_NONE=3Dy
-on (arm64):
-- compiler: gcc-12
-- dashboard: https://d.kernelci.org/build/maestro:686f7f5234612746bbbdc9f7
-
-## cros://chromeos-6.6/arm64/chromiumos-qualcomm.flavour.config+lab-setup+a=
-rm64-chromebook+CONFIG_MODULE_COMPRESS=3Dn+CONFIG_MODULE_COMPRESS_NONE=3Dy
-on (arm64):
-- compiler: gcc-12
-- dashboard: https://d.kernelci.org/build/maestro:686f7f5434612746bbbdc9fa
-
-
-#kernelci issue maestro:a2914456a7f9a96dd6b9a22a0784daf92bd464f3
-
-Reported-by: kernelci.org bot <bot@kernelci.org>
-
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
+--Sig_/l8d0fWJRapxz1o6JFJg5qXT--
 

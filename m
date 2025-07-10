@@ -1,94 +1,121 @@
-Return-Path: <linux-next+bounces-7466-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7467-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E14C5B00EB7
-	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 00:30:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D151B00F06
+	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 00:49:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4446C4A4901
-	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 22:30:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B8C61CA2FEA
+	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 22:49:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 057F0292B33;
-	Thu, 10 Jul 2025 22:30:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 023532236F4;
+	Thu, 10 Jul 2025 22:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PxU9dePC"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="sX8GaYid"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC3D1DDD1;
-	Thu, 10 Jul 2025 22:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223B01D432D;
+	Thu, 10 Jul 2025 22:49:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752186618; cv=none; b=DStGQymUtG0OZufX+6V669cXHMAfDyjrRFKxS537JO2wembpapRre0+2BJZe+gKQAzFI0/zIOHTqfqqraZsvn6oN8Z7TPCEw6MsbHrdB80BBTZrzNvbS+sCG3lrFK+JpsT2SYzms/GZcapuwF1JLoLWFQaFbp73ZWTC4My8lCxk=
+	t=1752187760; cv=none; b=jpVtpJ/QA1hHOg0j6R3CmhpUuiy6nAlUlJu9iqROxT0mMmUBbESs3fW738EInKdge6MLpxLSZurQhoQ7Ta5VHluNf09bgNUzDCMCxzOmXrKM/f/3RjEqsLO8y9VME3ge/hLuhalSBtnDg6NHzoqmUWHi0GASIst0Fvw9VHS6DYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752186618; c=relaxed/simple;
-	bh=ek1erb7vbUdIvcJ4C1KbPFVIhrxIXNfZkgblEP1rQA8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Dv83hV7cppXK8w0p5oQ4atO7uZWZSTDPyqfHoTLuMQzgFHVhrjWJeXLnxYMkA7iqHy/y/BwwhdWNb+yw7jbKUFRPAIaS1kpO8752OdjYtPlS8rhFQkFLfxQRDCgW8oRQBzUOoG6jOA1155cq6WbC0BPIetAx3u1jqnnxMbG5SgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PxU9dePC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34ED6C4CEE3;
-	Thu, 10 Jul 2025 22:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1752186618;
-	bh=ek1erb7vbUdIvcJ4C1KbPFVIhrxIXNfZkgblEP1rQA8=;
+	s=arc-20240116; t=1752187760; c=relaxed/simple;
+	bh=cRBo3kGQapkGoR+8bsRxAAR+ujiJ/BvrFspvXRNlZIQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=l8P6qtmSPWXSGRZbl1qJ4Z6glf6jLRxLhjx4TPhO7N4mKq2/oKSAH2sx1CLzRN35/VwxYaD8qo8avZruRigZNK2Xs4ESAZKU/Kw7+Ptwn0d8lscrIR8vEylI3Jo00CDmAQhOx0rDSJAS2KxXUEg6f+nPZ63fVoPpE/PfKYNZ7X4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=sX8GaYid; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1752187677;
+	bh=DXxondijW1e8MsBqPbwPlbMkxosHe8r9/EBlGE/iGt4=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=PxU9dePCH2+oMhfn5JzBdoQNSjP5dTcVDR2zI//5hgRPktM/qLRrdaFUB31zlATYo
-	 00va+CC66PTAJPyCjL+URv19GsoBZZyHfpst4g68tNJXHaThFBe90t2v1lDZpPFQpY
-	 m3KWmewx3BmvYqcE6TA+G8g16e1T3Xa4oW6aK2Rk=
-Date: Thu, 10 Jul 2025 15:30:17 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
+	b=sX8GaYid3MKPW99coTCOZkR00Lc8fe/XGByPShmKhNmOI3e66Ic7mN9hGGKsIunvZ
+	 m4zkdp/D7F5UbHPtesmYtXbPe2ziT2UgIlfADiAoPHDK/1gwopxsHd7L5jxriGitor
+	 Cm5HP2UZ5QDDH7xtbfoUXUVS3EvIAJDJyWVMhLKKKK6lqG5Bs0ufI8ttOlGmdT/cch
+	 HLsF4SFkKjnm8bEJOUMTF32hFSgGnbm/ODa2gnWakL9jZduh6TL7SMsslug6vJW6qn
+	 5evs2F9c8LzV6B99ACw14CxUvBosQuCZdC+WzQBkYFmzZQM6D61Wv5LkzWI5fhoNTa
+	 qXRyDCUq9aJ/A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bdVNr5r01z4wcd;
+	Fri, 11 Jul 2025 08:47:56 +1000 (AEST)
+Date: Fri, 11 Jul 2025 08:49:12 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
 Cc: David Hildenbrand <david@redhat.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build warning after merge of the mm-unstable tree
-Message-Id: <20250710153017.c17ca59f1df36eec90db8b54@linux-foundation.org>
-In-Reply-To: <20250710175446.128c7def@canb.auug.org.au>
+Message-ID: <20250711084912.22886e3d@canb.auug.org.au>
+In-Reply-To: <20250710153017.c17ca59f1df36eec90db8b54@linux-foundation.org>
 References: <20250710175446.128c7def@canb.auug.org.au>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	<20250710153017.c17ca59f1df36eec90db8b54@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/s2wB2/2tQWD7PCemrqsn=oG";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/s2wB2/2tQWD7PCemrqsn=oG
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 10 Jul 2025 17:54:46 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi Andrew,
 
-> Hi all,
-> 
-> After merging the mm-unstable tree, today's linux-next build (htmldocs)
-> produced this warning:
-> 
-> mm/migrate.c:215: warning: Function parameter or struct member 'dst' not described in 'migrate_movable_ops_page'
-> mm/migrate.c:215: warning: Function parameter or struct member 'src' not described in 'migrate_movable_ops_page'
-> mm/migrate.c:215: warning: Function parameter or struct member 'mode' not described in 'migrate_movable_ops_page'
-> mm/migrate.c:215: warning: Excess function parameter 'page' description in 'migrate_movable_ops_page'
-> 
-> Introduced by commit
-> 
->   d5967fb0bf8e ("mm/migrate: factor out movable_ops page handling into migrate_movable_ops_page()")
+On Thu, 10 Jul 2025 15:30:17 -0700 Andrew Morton <akpm@linux-foundation.org=
+> wrote:
+>
+> How about this?
+>=20
+> --- a/mm/migrate.c~mm-migrate-factor-out-movable_ops-page-handling-into-m=
+igrate_movable_ops_page-fix
+> +++ a/mm/migrate.c
+> @@ -161,7 +161,9 @@ static void putback_movable_ops_page(str
+> =20
+>  /**
+>   * migrate_movable_ops_page - migrate an isolated movable_ops page
+> - * @page: The isolated page.
+> + * @dst: The destination page.
+> + * @src: The source page.
+> + * @mode: The migration mode.
+>   *
+>   * Migrate an isolated movable_ops page.
+>   *
+> _
+>=20
 
-How about this?
+Looks good to me (but I haven't actually tested it).
 
---- a/mm/migrate.c~mm-migrate-factor-out-movable_ops-page-handling-into-migrate_movable_ops_page-fix
-+++ a/mm/migrate.c
-@@ -161,7 +161,9 @@ static void putback_movable_ops_page(str
- 
- /**
-  * migrate_movable_ops_page - migrate an isolated movable_ops page
-- * @page: The isolated page.
-+ * @dst: The destination page.
-+ * @src: The source page.
-+ * @mode: The migration mode.
-  *
-  * Migrate an isolated movable_ops page.
-  *
-_
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/s2wB2/2tQWD7PCemrqsn=oG
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhwQ2gACgkQAVBC80lX
+0GxaBAf+M3hzgrWNpILBqFmkYVw88o8yBFqEltyYCYJlMSgNqHVwhwLSY4QSAZAM
+hJ7NHYj0xi+ujm59X2AZx/MVpuDB2xZysZzdun7bK3O7X2DyqTn6XHx22EniDn9f
+d7bvjX37hVR9svHvtoIly6SpXocX3kldoly43DbGF/K49obFdfaMrJGNXTAce1t7
+ANtoxiiHkncN5ZSb64+zE5fapBmhQqLSg2nNEskjr+Ie4jN3bi3Ewmg8MZY4VdHZ
+YIEuZSk1Q0izEZBCiZv+FN7Hiv9HXRTrDs7XzYXzepfXWFEpsSvXdCBx+fmCQXQQ
+STIBqBfb2xBNbXI95QpQLMGVms9N/w==
+=PQcW
+-----END PGP SIGNATURE-----
+
+--Sig_/s2wB2/2tQWD7PCemrqsn=oG--
 

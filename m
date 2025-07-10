@@ -1,166 +1,164 @@
-Return-Path: <linux-next+bounces-7459-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7460-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05683AFFE0A
-	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 11:27:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BF10AFFE9C
+	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 11:59:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA5BF3B8EF1
-	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 09:26:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05AB77A1A82
+	for <lists+linux-next@lfdr.de>; Thu, 10 Jul 2025 09:57:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D92829615C;
-	Thu, 10 Jul 2025 09:26:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72E412D4B41;
+	Thu, 10 Jul 2025 09:59:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="osqQgYgJ"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="wjEiWl6c"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDFA2295520;
-	Thu, 10 Jul 2025 09:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB8C1EF39F
+	for <linux-next@vger.kernel.org>; Thu, 10 Jul 2025 09:59:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752139618; cv=none; b=ezmz+Ts2bi/M2lGxooliHstodaRLs1THeL2hCK/LCtYe/i00val53iKUL8qyrUn+2AeJ6oUqN3uZ9w5H2UjGyabu2u0CoQh95gTzS9vPbQQol0kL8lhcXAA84+WxFOpj1K50T9ZtTLDAtM4MF2BWi/v6o/82rBLp5fqYRk3L3A0=
+	t=1752141548; cv=none; b=W2kREnI3Ut4/y8Ai+UOJ+g2fL1EFDGVYaY1IUBgYbVpBfsSvksLQDI88o0Z7rzjEpMSRyoYmSVSKj/haDv7UUjOHlMwzaqcsXw8yslvyB5QiMCzca7v4s5BWXluQ+7Tc8TJYiWvPs6aiwRBuotCANkrF7l3LhfOqhGsPiZkXoe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752139618; c=relaxed/simple;
-	bh=aEhaFtRvxOuaYJN/RNQWC5uaPS5w6n4iOpvzkiTvJRs=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=bdN0i9pUuk5Qbt5x4lfntHlLlMEKNXAFDEpymMIaQYoJRvUxvQdNBJ6VNSrrMpib0y1nnClDfwrBqwnH75LM/ENixm8DhpLNex07QAL+IJbJEAJ9Ra+6dWlEXOIGrzP9JGL9+pY3mpQxvW9pw9lb4JOLx94FymuXuC010Lj88sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=osqQgYgJ; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56A2HDn1017342;
-	Thu, 10 Jul 2025 09:26:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
-	content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pp1; bh=s3u6yvQkY9bYGVi7oknr9+I7sVm5
-	Oet6jhO0Uh4W4oI=; b=osqQgYgJ3tToDC5AJj0OLXtHc7svnedtWhrd3oLf9NV+
-	u755lK2il3MJO+f0kAHScSUxhLH+YcFZi1g9pVzXwIelrw1EmY+hw/w734/xGQsd
-	d8AYH/Tq4wvI70aXI5CCNcChsb0ohDSab13FxvI+9FkNxQhdbW67Jvqk5NxvrmHV
-	Qq7UfO77WW4ciPyDdpZujex2Cxir244t+2Zw6SkWbGun5BQMiBY1JfCgzcWtWJ5L
-	QlZHAGCNHrE2CazIB/uSaVlwD5064/s3TXJUmRm/6Al7lQBtWt+ytLGT+55YFgT6
-	uya4vxWVx6M8gLvYc06Q/3X+/Q8alAIQiCsDmVdl/Q==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 47puqnjubv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Jul 2025 09:26:43 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 56A9DY7E021531;
-	Thu, 10 Jul 2025 09:26:42 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 47qectw48r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 10 Jul 2025 09:26:42 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 56A9QgR81901724
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 10 Jul 2025 09:26:42 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 18BD458054;
-	Thu, 10 Jul 2025 09:26:42 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3A44B58050;
-	Thu, 10 Jul 2025 09:26:40 +0000 (GMT)
-Received: from [9.61.242.136] (unknown [9.61.242.136])
-	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 10 Jul 2025 09:26:39 +0000 (GMT)
-Message-ID: <fe13e9e2-8ac5-46c7-b925-b61d35104ed1@linux.ibm.com>
-Date: Thu, 10 Jul 2025 14:56:38 +0530
+	s=arc-20240116; t=1752141548; c=relaxed/simple;
+	bh=6yv5CFJYg6pTTof2JcjC8om6Vi1/YsgX1I/zy2a1V3o=;
+	h=MIME-Version:from:Date:Message-ID:Subject:To:Cc:Content-Type; b=WFGP5C0H70HGzIXnBQp4qirCoP4fhxRuMOdG5qNYbHgzv/X3Thv9P3xtSdDytx0uJFb6O9TPJrimocIBpazXwjzyFWw+C0PVq3uCxPLf4en3aKOhhYsckRORTJs/1AV/oadQy0M6IkL8om3Fs0iWf+GXzg0Osl4rzFnw0iY5w/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=wjEiWl6c; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e8259b783f6so607484276.3
+        for <linux-next@vger.kernel.org>; Thu, 10 Jul 2025 02:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1752141545; x=1752746345; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:reply-to
+         :from:mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tfPYL34FapnC4GPOI5oKk+QzBPVtKMCrzZZzT6Z9TGs=;
+        b=wjEiWl6crLkT+l0KUuBuL4TS8Lr+JeziceV7QUCmgev/2IKOwVzBQKJ39f/p7pUTua
+         Rps2ao+qo2eY/zkFtdX0yik/aF66sy+YOwxObBf5VOSb+CF4Y6siBuR6e2h9VoJ6H7lb
+         7wZWFy2+7sJ5iyo08YoG2pjU0EaXjBJYR3iq92ieKK6aNZ0U6RsA/2FuZZG5j2lDmIzb
+         /YJZDtdl0yE2Lks/u7VoL+njhLOs4ZS8YC52TarkWcDJO7a7aNHHBGv0xxo5JpyearqY
+         S7uK8bomDfMtaCkkdwLhG5265mkQYmgL5VPvSWsC5+rQAmBIS1K2DLCGp5WVkH8SZijD
+         0ZZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752141545; x=1752746345;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:reply-to
+         :from:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tfPYL34FapnC4GPOI5oKk+QzBPVtKMCrzZZzT6Z9TGs=;
+        b=Sh8C7Y1G+kNImJYLMrYJLheJ+8Fm/ZJgTU3O8IpzNoIKgX5kHUgFYNyHkBGgl4yn1a
+         pKpvdicGidyjjyPPyxSVhUNqNfbFQQ1qoTNEAY1nC5iYASrhEvovefirDpEnj40NGG6e
+         OaEcv/HjoXMrko8TvYPIk9arJnpxzKMMqER2p/e10Nj87AYgYTwbjuEFStotN9OHm2O+
+         qOorDaLDYs7IHhGthrptf3NoAdWuyVVeuJXO+9d7jke5FcynJxwV66WKEkPx3ARfLtYL
+         gy3UgorzSYNgF54hJpOtCzYyvzVCo6ISKibPqbQ7T9RlgvUKc47Fy2trvnibPuzEsT36
+         oYLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWBjanetrWogx6Qv1aahc/AUsnZ0oZjZ/xulAp/yjLuEXEYbWyvHMiiHELL9sVhotpKZ1R1sCc9ynu1@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjsNp8tKnKTrWGm9EdCQnptgzMFL4CZ/7naNctK3BcXHLzcqDM
+	+yKk/siQovCwRzq73pr+TDEVnNPVdoWlgDDJyzZ4YXM5urAnZ1INzaeloqfePVlE5HY3B3mynuH
+	LB47b7yUKs4UTNh9HkimGImYbxzRQOQoqnwkPkqYIog==
+X-Gm-Gg: ASbGnctn55qer5G+3ONXfr8bw+OuuKSYufAI17q0h0OM/C5y1etxGkTJcdIj5ggerAl
+	dPGojYZKeY3w7q2KafC3f/ktFHupKW0UTcw8YFAcUJSJEfzD8OvIad07E3T/U0LfTz8aQUY68xJ
+	HfhZagBiU+ylpkucXTp7cQ9pyJkGG1VZ46auD43hovdg==
+X-Google-Smtp-Source: AGHT+IEvnVOnHYxR6L/U9hATW8VlP/nRreoqxAWBxTJdckQ8TG2I2oMFRHXWKaTXYa0HCcEiTEz1z7+6bQnQfU+whgM=
+X-Received: by 2002:a05:6902:1b8f:b0:e87:9bb7:beac with SMTP id
+ 3f1490d57ef6-e8b7a32b090mr2099503276.15.1752141545488; Thu, 10 Jul 2025
+ 02:59:05 -0700 (PDT)
+Received: from 415818378487 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 10 Jul 2025 02:59:03 -0700
+Received: from 415818378487 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 10 Jul 2025 02:59:03 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Subject: [next-20250709] Fails to boot on IBM Power Server
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=FZ43xI+6 c=1 sm=1 tr=0 ts=686f8753 cx=c_pps a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=VnNF1IyMAAAA:8 a=JL_kxwBaEviHOjYOxfAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: RlLNcGwiqwLPGgoOr1YZcK6qLIPBnunh
-X-Proofpoint-ORIG-GUID: RlLNcGwiqwLPGgoOr1YZcK6qLIPBnunh
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzEwMDA3OSBTYWx0ZWRfXxI6nqg3f/71w 6+LhI+FSnZK6QcFOxISSSdWU9rHqre+HOyrg6jak3TJtgd48cWgE+VfUR33PNZZCqZvWMZIvluD 5h24r1dfW+tv/GdDygU4IGxzPEQsZ0cAuNXV/9XXyV87ABtT+N6p80K3ZkV1nA1F4Yxlt3AA7aG
- uH3hFVs3TXCkQH5q6nJN3htUp/D0aYnaVJCgaKRpQJ76HmANnv5ksIt2AK8HdygvrPcIeiVC66N o9S8oZSvxvOuZseo/OqRKW4Qr3PJid0E4XNQBZ2NowUSdTigycsm/Jk9UH7O7tMA/oHfnmU5Hk0 ay/OKcGWP7hopQcgwnRcQPe8vO/EX3y+d3cHu0nlt/IkUxgPOJje9nvKHjxki3k0EdFsbbpJDF8
- GlGpq9mvZPHQNQUKGNFyoxUj/1F6dgUR3UP2AH+lLy6Ad/LBVXFUkUSthwuFJXSq3cPcV2zU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-10_01,2025-07-09_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
- priorityscore=1501 malwarescore=0 mlxlogscore=745 clxscore=1015
- spamscore=0 bulkscore=0 phishscore=0 lowpriorityscore=0 impostorscore=0
- adultscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507100079
+from: KernelCI bot <bot@kernelci.org>
+Reply-To: kernelci@lists.linux.dev
+Date: Thu, 10 Jul 2025 02:59:03 -0700
+X-Gm-Features: Ac12FXwKSGRsI8--21ZXA6ao9GKzE5Y-Pb9yoM_YMb3xR8GzxcScAmYZhY7fekQ
+Message-ID: <CACo-S-0z4uY0xuN_fxBkFy2HtH19LtPWD8FkWEFsCVpMGPHGjA@mail.gmail.com>
+Subject: =?UTF-8?Q?=5BREGRESSION=5D_next=2Fmaster=3A_=28build=29_ignoring_return_va?=
+	=?UTF-8?Q?lue_of_=E2=80=98u64=5Freplace=5Fbits=E2=80=99_declared_with_attribut=2E=2E=2E?=
+To: kernelci-results@groups.io
+Cc: regressions@lists.linux.dev, gus@collabora.com, linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Greetings!!!
+Hello,
 
+New build issue found on next/master:
 
-IBM CI has reported a boot issue on the latest linux-next(20250709) 
-kernel fails on IBM Power servers.
+---
+ ignoring return value of =E2=80=98u64_replace_bits=E2=80=99 declared with =
+attribute
+=E2=80=98warn_unused_result=E2=80=99 [-Werror=3Dunused-result] in
+arch/arm64/kvm/sys_regs.o (arch/arm64/kvm/sys_regs.c)
+[logspec:kbuild,kbuild.compiler.error]
+---
 
-System entering to emergency mode.
+- dashboard: https://d.kernelci.org/i/maestro:a2914456a7f9a96dd6b9a22a0784d=
+af92bd464f3
+- giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
+it
+- commit HEAD:  b551c4e2a98a177a06148cf16505643cd2108386
+- tags: next-20250710
 
 
-Error:
+Log excerpt:
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+arch/arm64/kvm/sys_regs.c:2654:17: error: ignoring return value of
+=E2=80=98u64_replace_bits=E2=80=99 declared with attribute =E2=80=98warn_un=
+used_result=E2=80=99
+[-Werror=3Dunused-result]
+ 2654 |                 u64_replace_bits(val, hpmn, MDCR_EL2_HPMN);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  CC      fs/nfs/nfstrace.o
+  CC      fs/nfs/export.o
+  CC      fs/lockd/svc4proc.o
+  CC      drivers/soc/qcom/ubwc_config.o
+  CC      lib/bsearch.o
+  CC      kernel/bpf/token.o
+  CC      net/netfilter/xt_CLASSIFY.o
+  CC      lib/find_bit.o
+  CC      lib/llist.o
+  CC      kernel/trace/trace_functions.o
+  CC      net/ethtool/pause.o
+  CC      mm/mmu_notifier.o
+cc1: all warnings being treated as errors
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
 
 
-[    1.071678] ibmveth 30000002 net0: renamed from eth0
-[    1.074227] ibmvscsi 30000069: SRP_VERSION: 16.a
-[    1.074238] ibmvscsi 30000069: Error -4 opening adapter
-[    1.074255] ibmvscsi 30000069: couldn't initialize crq. rc=-1
-[    1.181132] ibmvscsi 30000069: probe with driver ibmvscsi failed with 
-error -1
-[  146.631585] dracut-initqueue[320]: Warning: dracut-initqueue: 
-timeout, still waiting for following initqueue hooks:
-[  146.632266] dracut-initqueue[320]: Warning: 
-/lib/dracut/hooks/initqueue/finished/devexists-\x2fdev\x2fdisk\x2fby-uuid\x2fc034bf95-13cb-46a0-b66e-78faa57bc520.sh: 
-"if ! grep -q After=remote-fs-pre.target 
-/run/systemd/generator/systemd-cryptsetup@*.service 2>/dev/null; then
-[  146.632493] dracut-initqueue[320]:     [ -e 
-"/dev/disk/by-uuid/c034bf95-13cb-46a0-b66e-78faa57bc520" ]
-[  146.632628] dracut-initqueue[320]: fi"
-[  146.633622] dracut-initqueue[320]: Warning: dracut-initqueue: 
-starting timeout scripts
-[  147.203267] dracut-initqueue[320]: Warning: dracut-initqueue: 
-timeout, still waiting for following initqueue hooks:
-[  147.204238] dracut-initqueue[320]: Warning: 
-/lib/dracut/hooks/initqueue/finished/devexists-\x2fdev\x2fdisk\x2fby-uuid\x2fc034bf95-13cb-46a0-b66e-78faa57bc520.sh: 
-"if ! grep -q After=remote-fs-pre.target 
-/run/systemd/generator/systemd-cryptsetup@*.service 2>/dev/null; then
-[  147.204460] dracut-initqueue[320]:     [ -e 
-"/dev/disk/by-uuid/c034bf95-13cb-46a0-b66e-78faa57bc520" ]
-[  147.204603] dracut-initqueue[320]: fi"
-[  147.205561] dracut-initqueue[320]: Warning: dracut-initqueue: 
-starting timeout scripts
-[  147.767680] dracut-initqueue[320]: Warning: dracut-initqueue: 
-timeout, still waiting for following initqueue hooks:
-[  147.768382] dracut-initqueue[320]: Warning: 
-/lib/dracut/hooks/initqueue/finished/devexists-\x2fdev\x2fdisk\x2fby-uuid\x2fc034bf95-13cb-46a0-b66e-78faa57bc520.sh: 
-"if ! grep -q After=remote-fs-pre.target 
-/run/systemd/generator/systemd-cryptsetup@*.service 2>/dev/null; then
-[  147.768649] dracut-initqueue[320]:     [ -e 
-"/dev/disk/by-uuid/c034bf95-13cb-46a0-b66e-78faa57bc520" ]
-[  147.768788] dracut-initqueue[320]: fi"
+# Builds where the incident occurred:
+
+## cros://chromeos-6.6/arm64/chromiumos-mediatek.flavour.config+lab-setup+a=
+rm64-chromebook+CONFIG_MODULE_COMPRESS=3Dn+CONFIG_MODULE_COMPRESS_NONE=3Dy
+on (arm64):
+- compiler: gcc-12
+- dashboard: https://d.kernelci.org/build/maestro:686f7f5234612746bbbdc9f7
+
+## cros://chromeos-6.6/arm64/chromiumos-qualcomm.flavour.config+lab-setup+a=
+rm64-chromebook+CONFIG_MODULE_COMPRESS=3Dn+CONFIG_MODULE_COMPRESS_NONE=3Dy
+on (arm64):
+- compiler: gcc-12
+- dashboard: https://d.kernelci.org/build/maestro:686f7f5434612746bbbdc9fa
 
 
-If you happen to fix this, please add below tag.
+#kernelci issue maestro:a2914456a7f9a96dd6b9a22a0784daf92bd464f3
 
+Reported-by: kernelci.org bot <bot@kernelci.org>
 
-Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+--
+This is an experimental report format. Please send feedback in!
+Talk to us at kernelci@lists.linux.dev
 
-
-Regards,
-
-Venkat.
-
+Made with love by the KernelCI team - https://kernelci.org
 

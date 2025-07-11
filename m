@@ -1,112 +1,134 @@
-Return-Path: <linux-next+bounces-7468-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7469-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50351B01045
-	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 02:36:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E557EB0107D
+	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 02:58:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CED11C8178A
-	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 00:36:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B17F56445F7
+	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 00:58:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C3B8F77;
-	Fri, 11 Jul 2025 00:36:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7384622EF5;
+	Fri, 11 Jul 2025 00:58:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Yf3Y15SM"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="OSJMllmz"
 X-Original-To: linux-next@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054A5B663;
-	Fri, 11 Jul 2025 00:36:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2C5101E6;
+	Fri, 11 Jul 2025 00:58:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752194194; cv=none; b=V0yRjd1fwvkTcU1kStI0PndeRiP9TBscvVlCuNq9nq/5eOzJV833JbuQwmjYW1r0QS3PiRdvAM7Uu3gVETjVPiflM/xi8EsO5guIAnczSh5s9qH99T4f0vTnZOw7K8wPSu7D4/ODpOL5UzeGM2UJMajM3RwH+4W2KtsOzfjmp5U=
+	t=1752195503; cv=none; b=cQdqkuzooQQkKBsxbEeUMno28lgnqfya5gAM1OAJq05c/2OWwdUQdQuLt6jZoRF0SQjCSeDJLpe7oIrOLbJyOvs3vBJQyv//ZvibgFEXpFqyDFTw6vnPlphBNVerlwdniJ86Yt9b4Q6bviswkefh9brQPSF5zztS3cmUFeIuVFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752194194; c=relaxed/simple;
-	bh=Po8vUnOhRBF8IeqIw0vCfKVNkWgDCOlqLqru9zQ6Mqw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GzzP4dtMR3/n6CNdZJaXVTezQuvFGb1aR5PqZwqDytyTsEkN3P9ungwxNQsMRA+D4qB7v/b5VfzW6y8fN0LeLTps2WdkrGKyBFU+lf9ElqMw/r7rWInDc/XsGjrGEx5vjYG65iB4cB3DoYDakI5xabOuYKI9MAnuAHaAtPmGrQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Yf3Y15SM; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description;
-	bh=//Z+i2Ub0h9pscQ8a583rxZLCBDnW13N4OS2udptcIM=; b=Yf3Y15SMGfV9bf03rDdIRrH8Om
-	IPGFIM/ee/pMEe5vCAol6MY6cK+F/3GFBJzBCVPZf7lCu25iAuUSHyieyHoaySJhnYl3NZg3NLkM+
-	ZKAT0KP7s0UBodD4IDjFU5dzsq0v4a8mYJTqEWmxuk50WxrDny/n4oFhLZC5Cg5GZ6wzH+INwt0f5
-	dPnxPntHULA2h07nzESaA9EP2vTVqLlkdOj7JbjNCQbd3QtuNZfx6y2cjZsvANCPiXiTSwucLR6yO
-	j6xKClSvZQxjKQOM2Y4X7COENTXsq7FMY4qgYv1m8odTeS8WEfD4Jcar63GFSBuERkdDzOfF1VO8Z
-	ghsPzi5A==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1ua1kZ-0000000AyOs-3HUQ;
-	Fri, 11 Jul 2025 00:36:28 +0000
-Message-ID: <fd96200b-dcfd-4871-80a2-add053fd70cf@infradead.org>
-Date: Thu, 10 Jul 2025 17:36:24 -0700
+	s=arc-20240116; t=1752195503; c=relaxed/simple;
+	bh=nQgbCUnHSE1BV+VKX/q2oxRSIF1tWWJbE9oHolY7rX4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=fp0GsUWxLziQTeunBQYgt7cJLvw5DX64g3z/DrvY/VxGPYnUMJv8yTgE/4asWshK/+EnbEOnnBxJqRDYWIK3fN9k4EYH9tLkzsJB85wX6JP9b4dmM2yzdcOoKJAqfIoOh0fb1mlE4SbBQC/KvxZPyIbdJfLdjkvgRovkA5Asp1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=OSJMllmz; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1752195409;
+	bh=4bVSc7zEJGZIxhXRM+75TSeVqKTSEE/z9XkoTfOCYmQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=OSJMllmzT5NS+DNSM6VfSD3iaP626/j+j4x5vSV+z2SCGJqiYZk/vr0TLZ3YrP1gq
+	 /mzDVAfzTerpcbRkE764NGWwngSufLoVDiY4y+Va9Kw7WpujDO7dZwdafvBF5UN00g
+	 mfVyGXl78/4GwC1GEgFZRDztuxGu00gXhtb1X/OmiCrUXtcvzPP41cnZhwfaEQNw9q
+	 51DeO/j2aTT2AmrWRIltfgep72SaMLcla4l7irdaUcxfefalFcW3ynPiZsBPylk0eq
+	 EoBPasQfQhqVPydKvWC2DVDUsJGRiTJFENhtubfY3CC1gazltZb0GeWAR6st2Wad2m
+	 EwdSUup/HhIKg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bdYFY2r0vz4wcd;
+	Fri, 11 Jul 2025 10:56:49 +1000 (AEST)
+Date: Fri, 11 Jul 2025 10:58:04 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm-nonmm-unstable tree
+Message-ID: <20250711105804.3447e832@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build warning after merge of the mm-unstable tree
-To: Andrew Morton <akpm@linux-foundation.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: David Hildenbrand <david@redhat.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20250710175446.128c7def@canb.auug.org.au>
- <20250710153017.c17ca59f1df36eec90db8b54@linux-foundation.org>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250710153017.c17ca59f1df36eec90db8b54@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/2eue3gnPJ5qC1KmZ.qQmvP4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/2eue3gnPJ5qC1KmZ.qQmvP4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 7/10/25 3:30 PM, Andrew Morton wrote:
-> On Thu, 10 Jul 2025 17:54:46 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> 
->> Hi all,
->>
->> After merging the mm-unstable tree, today's linux-next build (htmldocs)
->> produced this warning:
->>
->> mm/migrate.c:215: warning: Function parameter or struct member 'dst' not described in 'migrate_movable_ops_page'
->> mm/migrate.c:215: warning: Function parameter or struct member 'src' not described in 'migrate_movable_ops_page'
->> mm/migrate.c:215: warning: Function parameter or struct member 'mode' not described in 'migrate_movable_ops_page'
->> mm/migrate.c:215: warning: Excess function parameter 'page' description in 'migrate_movable_ops_page'
->>
->> Introduced by commit
->>
->>   d5967fb0bf8e ("mm/migrate: factor out movable_ops page handling into migrate_movable_ops_page()")
-> 
-> How about this?
-> 
-> --- a/mm/migrate.c~mm-migrate-factor-out-movable_ops-page-handling-into-migrate_movable_ops_page-fix
-> +++ a/mm/migrate.c
-> @@ -161,7 +161,9 @@ static void putback_movable_ops_page(str
->  
->  /**
->   * migrate_movable_ops_page - migrate an isolated movable_ops page
-> - * @page: The isolated page.
-> + * @dst: The destination page.
-> + * @src: The source page.
-> + * @mode: The migration mode.
->   *
->   * Migrate an isolated movable_ops page.
->   *
-> _
+After merging the mm-nonmm-unstable tree, today's linux-next build
+(x86_64 allmodconfig) failed like this:
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
+kernel/kexec_core.c: In function 'kernel_kexec':
+kernel/kexec_core.c:1138:2: error: label 'Resume_console' defined but not u=
+sed [-Werror=3Dunused-label]
+ 1138 |  Resume_console:
+      |  ^~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
--- 
-~Randy
+Caused by commit
+
+  fbb5aa47e7b0 ("kexec_core: fix error code path in the KEXEC_JUMP flow")
+
+I have applied the following fix patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 11 Jul 2025 10:35:39 +1000
+Subject: [PATCH] fix up for "kexec_core: fix error code path in the KEXEC_J=
+UMP flow"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ kernel/kexec_core.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+index 842611c0b51a..351cd7d76dfa 100644
+--- a/kernel/kexec_core.c
++++ b/kernel/kexec_core.c
+@@ -1135,7 +1135,6 @@ int kernel_kexec(void)
+ 		dpm_resume_start(PMSG_RESTORE);
+  Resume_devices:
+ 		dpm_resume_end(PMSG_RESTORE);
+- Resume_console:
+ 		console_resume_all();
+ 		thaw_processes();
+  Restore_console:
+--=20
+2.50.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/2eue3gnPJ5qC1KmZ.qQmvP4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhwYZwACgkQAVBC80lX
+0Gwb6QgAkKEZkdCifICMGdanjTPTdnPiTpAN837U80QyUJnn1jOZDCDZ82saC24C
+yvdPXd8iA0TtlATudKRA+V+avzLFywcDYznO7+LLqH53xKIXmHEmWLpzZIFMrUo5
+V015f35IL3yCwzTPpNK6rXKfv1INItLIZNXorrUtEBdPK2M5eSB3emVkzau34c/S
+FAi6mgwRomFbdq3XhUtz9HfcXAQUlL90+0hAWU/52HgZvuDd7D54KJL/W1yUPSbM
+rOJPrkAejrA3V6FRiHDMDx6+Dc00b0ber8rkohNZ5daA6eGGGrnsiecECOW6tl7f
+sAv3yjgjAWpB/VeGOwMlnYxeh7OHCQ==
+=1PxH
+-----END PGP SIGNATURE-----
+
+--Sig_/2eue3gnPJ5qC1KmZ.qQmvP4--
 

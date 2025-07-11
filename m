@@ -1,92 +1,96 @@
-Return-Path: <linux-next+bounces-7494-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7495-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70FF7B02070
-	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 17:30:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21F1DB0265A
+	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 23:25:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C17D15A640F
-	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 15:30:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32DEE1C47359
+	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 21:25:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DDC72E7BD4;
-	Fri, 11 Jul 2025 15:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB17E21A453;
+	Fri, 11 Jul 2025 21:25:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WThc5Z+g"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mmgCobXk"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5646E15C158;
-	Fri, 11 Jul 2025 15:30:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A26931C84A1;
+	Fri, 11 Jul 2025 21:25:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752247826; cv=none; b=dcmrc/XCGSauFlE6erso6fAIlPBLYE8cGQnr4A+i0JhWb9xLHinUO08Ivw84+jXb4gudw+WRRbpY9WdISrr7NurDB8Ad8VmbMfw7b5CGG6venly5ZNCWLR+XzlSZ/bSL2abcR87aRvHbBFybdDqvCqmht3S6r72eoLquFGRJnPo=
+	t=1752269119; cv=none; b=MRO2p3TjhdziIoj6Bp5phjO1lf4aIrVNCBFhIcYmKDcsaHlssGFZ4gSY0UD7JdNJhDco/Zxvk8UO8wgDwriiF8h52fdSfWsO7/EP41mX2aPi9+7ACvIWqkgtz3YqNt8EmdX6VM+qDxOYNo/XDfLROJNgpyDRHzWnFXsaxuI5GM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752247826; c=relaxed/simple;
-	bh=da6YyAuly7iSkZkGXj/rcmMGHObWvAwYXCp+m/VHl+I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SeF0C+b19tvqJDsNT7PIGIMKwGYh0J5ZinUFspTlvgWf6kteZsCuhgogtP9L+gte+U3WwzI1CP/J1htxZQhdW4rZPYs/8UCH5jb6mQf8rqwNFE7WaY+ibVlLIaer05KlkduROnba1HRt1IRPbpxKKzZFce47ZI4jIVd+jlAQpEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WThc5Z+g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D592AC4CEED;
-	Fri, 11 Jul 2025 15:30:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752247825;
-	bh=da6YyAuly7iSkZkGXj/rcmMGHObWvAwYXCp+m/VHl+I=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=WThc5Z+gmo6//rxP6/gDfKNdXdw9uv4ZJa+fIjDaXS078GXAc1oSF/Q77Lm+o0qRe
-	 3fmnvESyLKDh6mcMTl81FKUI1T09/ukc0ctlBwbdXlJzHgpqC3F6RZ40KsTDnA8Qat
-	 zE6Aw8ZPejCQcMhU03FZl+duQ/zURtV2kqbPh1B8snRKm5Bkq0vIvr52LgYhYZGUOh
-	 aTqNqYrJncAPOSAORsdYGIAlkuOdFa3dd0tuESHcuxzZbsYRspe80uCQrN/THC/dPP
-	 jfAQ++FVWvSoRp5HW11D5WWEi++ZCfs94Jl4MkDYFv66I/2Z2lT2eWRDWizGTu6vqy
-	 h5LqhCicPxHVQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 84FFECE0841; Fri, 11 Jul 2025 08:30:25 -0700 (PDT)
-Date: Fri, 11 Jul 2025 08:30:25 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the paulmck tree
-Message-ID: <f2bcc129-02ec-4d2a-a0b6-32319c4b977f@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20250711150655.6e18b0dd@canb.auug.org.au>
- <f12f601e-2b31-4129-9768-2a33713ce348@paulmck-laptop>
+	s=arc-20240116; t=1752269119; c=relaxed/simple;
+	bh=thzGURBJQWzPR/TzUtTzWgwVBKonSMTlH0OD9iatp/A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PId9DDd5N2VDd8mOmlHMOah4s3hkoiAJe99nQ3ry0zGFlWKSYlMd3BObxCWZ+unphkxPKcsbyrvBIhVY5t7MgyxjXpVlM77Rby05u34u/MIRNa/PV/OKyB8MEIiUH3uj2utAPjprC9Qx0udLu4SsR3aUZ8zCA5ARchq/ugQLPVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mmgCobXk; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=/5TCvZxyJm0mNelQph6qDoiq19mUElNh/nhMyYL3NcM=; b=mmgCobXk62qXUedyHlRaKKHsfu
+	dxY/en13Wrp40RNHd5mCdTFS8v83JPZ8xM4Z7d1lETzUCRN7x2Cee4HcM1q/0NckNDbXZHYUI68nh
+	haeg6QB3v78EWxvRxwkH/KtqIKAHqKTKMsKhroLkCoYFVSwKUk/bgyk5kZePcxDKK/QtK9TpCv9M1
+	trxBUa3nUZcENDLToL16P0p8SwUi20SzBjX7CFYKcXmlP0kP4zIvc7aAHjMge2QZEkvxw+jJmEa/Y
+	SuFDt+KdplQB5ihBuuAd2d+Gm2yu6RF49KxjCOEACTihphZFINbm+f0pssmvK3CSbJLiYJczEVzxk
+	jCkcj25w==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uaLF3-0000000ET0H-3jI1;
+	Fri, 11 Jul 2025 21:25:14 +0000
+Message-ID: <49080a96-2c7a-4eea-a64c-deac0b7a665b@infradead.org>
+Date: Fri, 11 Jul 2025 14:25:10 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f12f601e-2b31-4129-9768-2a33713ce348@paulmck-laptop>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Jul 11
+ [drivers/gpu/drm/amd/amdgpu/amdgpu.ko]
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux DRI Development <dri-devel@lists.freedesktop.org>,
+ Samuel Zhang <guoqing.zhang@amd.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Mario Limonciello <mario.limonciello@amd.com>,
+ amd-gfx@lists.freedesktop.org
+References: <20250711191014.12a64210@canb.auug.org.au>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250711191014.12a64210@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jul 11, 2025 at 06:58:36AM -0700, Paul E. McKenney wrote:
-> On Fri, Jul 11, 2025 at 03:06:55PM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > The following commits are also in the mm-nonmm-unstable tree as different
-> > commits (but the same patches):
-> > 
-> >   5c23ce0cb897 ("lib: Add stress test for ratelimit")
-> >   5a5c5a3de1c7 ("lib: Make the ratelimit test more reliable")
-> >   d19e9fa61f60 ("lib: Add trivial kunit test for ratelimit")
-> > 
-> > These are commits
-> > 
-> >   7074799065e7 ("lib: add stress test for ratelimit")
-> >   5ec9048eae16 ("lib: make the ratelimit test more reliable")
-> >   cf09bc65d491 ("lib: add trivial kunit test for ratelimit")
-> > 
-> > in the mm-nonmm-unstable tree.
+
+
+On 7/11/25 2:10 AM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Thank you both!  I will remove mine from -next.
+> Changes since 20250710:
+> 
 
-Never mind!  Andrew beat me to it.  If testing goes well, I will send
-this to Linus in the upcoming merge window.
+on x86_64, when
+# CONFIG_SUSPEND is not set
+# CONFIG_HIBERNATION is not set
+# CONFIG_PM is not set
 
-							Thanx, Paul
+ERROR: modpost: "pm_hibernate_is_recovering" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+
+caused by commit
+530694f54dd5e ("drm/amdgpu: do not resume device in thaw for normal hibernation")
+
+Rafael, is a stub appropriate for this case?
+
+-- 
+~Randy
+
 

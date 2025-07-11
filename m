@@ -1,134 +1,137 @@
-Return-Path: <linux-next+bounces-7469-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7470-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E557EB0107D
-	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 02:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5328FB01180
+	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 05:08:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B17F56445F7
-	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 00:58:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0BAD8641AA9
+	for <lists+linux-next@lfdr.de>; Fri, 11 Jul 2025 03:07:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7384622EF5;
-	Fri, 11 Jul 2025 00:58:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F41E195808;
+	Fri, 11 Jul 2025 03:08:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="OSJMllmz"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ZsjurWvL"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2C5101E6;
-	Fri, 11 Jul 2025 00:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B9618D;
+	Fri, 11 Jul 2025 03:07:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752195503; cv=none; b=cQdqkuzooQQkKBsxbEeUMno28lgnqfya5gAM1OAJq05c/2OWwdUQdQuLt6jZoRF0SQjCSeDJLpe7oIrOLbJyOvs3vBJQyv//ZvibgFEXpFqyDFTw6vnPlphBNVerlwdniJ86Yt9b4Q6bviswkefh9brQPSF5zztS3cmUFeIuVFk=
+	t=1752203283; cv=none; b=jYmCBx9tVwhE0OpGevv+YAGDno3dvCvKVX96MfFWXWj4YP0bsCz/2p+67tB2HZRwQ/Y8pU3MJemblww1+FXsWx3eg3++2yiOwxRnsGnyKf1ah1C6yGmuDCLZUy6WzBbbdg33i6PDepEqX5JWsVqM9MlpNnpJuvU6WKB4tOjn3Gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752195503; c=relaxed/simple;
-	bh=nQgbCUnHSE1BV+VKX/q2oxRSIF1tWWJbE9oHolY7rX4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=fp0GsUWxLziQTeunBQYgt7cJLvw5DX64g3z/DrvY/VxGPYnUMJv8yTgE/4asWshK/+EnbEOnnBxJqRDYWIK3fN9k4EYH9tLkzsJB85wX6JP9b4dmM2yzdcOoKJAqfIoOh0fb1mlE4SbBQC/KvxZPyIbdJfLdjkvgRovkA5Asp1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=OSJMllmz; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1752203283; c=relaxed/simple;
+	bh=CQMxU6opKrE0gtd03DqHhHVg+06IqQKCGWRruvwfvUI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=qPtMIh6vDjVe+MXYyVboXPHiCcWa+2oq2QFFZmQ9OoM2TpNuPbKOk4Q7irUMUkNyark5KR5ltNsSIT5xO1edzHMFMbvKeVYhv2kazFZCk+SY/lCfGkb2ewZrrDxSetBDXE00NF0yUL28+L8k0cgrq6eRggXBCq8rmcVOKcsMa5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ZsjurWvL; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1752195409;
-	bh=4bVSc7zEJGZIxhXRM+75TSeVqKTSEE/z9XkoTfOCYmQ=;
+	s=202503; t=1752203197;
+	bh=nzGCrWBxu7LxT1519Z6Jy+ivfVDpPMLSetGsisXUtks=;
 	h=Date:From:To:Cc:Subject:From;
-	b=OSJMllmzT5NS+DNSM6VfSD3iaP626/j+j4x5vSV+z2SCGJqiYZk/vr0TLZ3YrP1gq
-	 /mzDVAfzTerpcbRkE764NGWwngSufLoVDiY4y+Va9Kw7WpujDO7dZwdafvBF5UN00g
-	 mfVyGXl78/4GwC1GEgFZRDztuxGu00gXhtb1X/OmiCrUXtcvzPP41cnZhwfaEQNw9q
-	 51DeO/j2aTT2AmrWRIltfgep72SaMLcla4l7irdaUcxfefalFcW3ynPiZsBPylk0eq
-	 EoBPasQfQhqVPydKvWC2DVDUsJGRiTJFENhtubfY3CC1gazltZb0GeWAR6st2Wad2m
-	 EwdSUup/HhIKg==
+	b=ZsjurWvLDnDHx5kF87KfRDjTro+R8YJwVG90f8LNgjNaPlKVjA6ItnkR8iwAVCbvf
+	 x0ttibTOB8RguC5hTKYREf/Kg8CHY5edE0IMkoCegDqCSHlF2vcsuOPb2WXEywqeFV
+	 8ZTDblancK0HuFltFgLxm/+p8ChoG2GZLE6N/3yX8Vo0vnlJWt00MtiPp5CSK/IeLj
+	 hfjAVKevYeEi+yYsdlOzEJZQPy5OJUoDiZAt+HO+iUcap3ZiMl3lozVINnsEwnvpln
+	 0R6UFhCGft6nBIsekwENxHBXwPqonDGnRtIDJQOM12PkSNl70uLj0KNzWhcASUoaH4
+	 I+wUZNX0gfNvA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bdYFY2r0vz4wcd;
-	Fri, 11 Jul 2025 10:56:49 +1000 (AEST)
-Date: Fri, 11 Jul 2025 10:58:04 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bdc7J4wvFz4x5Z;
+	Fri, 11 Jul 2025 13:06:35 +1000 (AEST)
+Date: Fri, 11 Jul 2025 13:07:52 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm-nonmm-unstable tree
-Message-ID: <20250711105804.3447e832@canb.auug.org.au>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Networking <netdev@vger.kernel.org>, Wei
+ Liu <wei.liu@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Naman Jain
+ <namjain@linux.microsoft.com>, Shradha Gupta
+ <shradhagupta@linux.microsoft.com>
+Subject: linux-next: manual merge of the net-next tree with the hyperv-fixes
+ tree
+Message-ID: <20250711130752.23023d98@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2eue3gnPJ5qC1KmZ.qQmvP4";
+Content-Type: multipart/signed; boundary="Sig_/cmJgXqToxFCkl8lTdAN_s/5";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/2eue3gnPJ5qC1KmZ.qQmvP4
+--Sig_/cmJgXqToxFCkl8lTdAN_s/5
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mm-nonmm-unstable tree, today's linux-next build
-(x86_64 allmodconfig) failed like this:
+Today's linux-next merge of the net-next tree got a conflict in:
 
-kernel/kexec_core.c: In function 'kernel_kexec':
-kernel/kexec_core.c:1138:2: error: label 'Resume_console' defined but not u=
-sed [-Werror=3Dunused-label]
- 1138 |  Resume_console:
-      |  ^~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+  drivers/net/ethernet/microsoft/mana/gdma_main.c
 
-Caused by commit
+between commit:
 
-  fbb5aa47e7b0 ("kexec_core: fix error code path in the KEXEC_JUMP flow")
+  9669ddda18fb ("net: mana: Fix warnings for missing export.h header inclus=
+ion")
 
-I have applied the following fix patch.
+from the hyperv-fixes tree and commit:
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 11 Jul 2025 10:35:39 +1000
-Subject: [PATCH] fix up for "kexec_core: fix error code path in the KEXEC_J=
-UMP flow"
+  755391121038 ("net: mana: Allocate MSI-X vectors dynamically")
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- kernel/kexec_core.c | 1 -
- 1 file changed, 1 deletion(-)
+from the net-next tree.
 
-diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-index 842611c0b51a..351cd7d76dfa 100644
---- a/kernel/kexec_core.c
-+++ b/kernel/kexec_core.c
-@@ -1135,7 +1135,6 @@ int kernel_kexec(void)
- 		dpm_resume_start(PMSG_RESTORE);
-  Resume_devices:
- 		dpm_resume_end(PMSG_RESTORE);
-- Resume_console:
- 		console_resume_all();
- 		thaw_processes();
-  Restore_console:
---=20
-2.50.0
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/2eue3gnPJ5qC1KmZ.qQmvP4
+diff --cc drivers/net/ethernet/microsoft/mana/gdma_main.c
+index 58f8ee710912,d6c0699bc8cf..000000000000
+--- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
++++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
+@@@ -6,9 -6,11 +6,12 @@@
+  #include <linux/pci.h>
+  #include <linux/utsname.h>
+  #include <linux/version.h>
+ +#include <linux/export.h>
++ #include <linux/msi.h>
++ #include <linux/irqdomain.h>
+ =20
+  #include <net/mana/mana.h>
++ #include <net/mana/hw_channel.h>
+ =20
+  struct dentry *mana_debugfs_root;
+ =20
+
+--Sig_/cmJgXqToxFCkl8lTdAN_s/5
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhwYZwACgkQAVBC80lX
-0Gwb6QgAkKEZkdCifICMGdanjTPTdnPiTpAN837U80QyUJnn1jOZDCDZ82saC24C
-yvdPXd8iA0TtlATudKRA+V+avzLFywcDYznO7+LLqH53xKIXmHEmWLpzZIFMrUo5
-V015f35IL3yCwzTPpNK6rXKfv1INItLIZNXorrUtEBdPK2M5eSB3emVkzau34c/S
-FAi6mgwRomFbdq3XhUtz9HfcXAQUlL90+0hAWU/52HgZvuDd7D54KJL/W1yUPSbM
-rOJPrkAejrA3V6FRiHDMDx6+Dc00b0ber8rkohNZ5daA6eGGGrnsiecECOW6tl7f
-sAv3yjgjAWpB/VeGOwMlnYxeh7OHCQ==
-=1PxH
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmhwgAgACgkQAVBC80lX
+0GwMiAf/YxRVNFfPCz0lEwBVyjZYcoHqxqx+GyWaksiD7zqZibC1siOS8pxe4eAJ
+Q0+INLdK5QAgJWW/sFpBf7aPIDYccEcIl1Uh6CF1QKPFth4t0lE25S0DsNTp86w3
+EB1wL6RP98z0MHKfnvPaqA5QI6A4VGk8X8hvr/kxJkrGuc5r621jNYlr3bd17Uhp
+psbhIIXNoaQoDHmmWdltchphQeHRzV2475dL9RRrXkKJv4UVddiTJs8hML9JYQNe
++yrD/iZwte04PZW31XDttBufFfc+pQ/Tt8KrOceDmFNO0NVgf3njsYhp4tgaoeft
+B4eYQ4mZ5r9U5ya4kmp/0WkSfW4isw==
+=m7sS
 -----END PGP SIGNATURE-----
 
---Sig_/2eue3gnPJ5qC1KmZ.qQmvP4--
+--Sig_/cmJgXqToxFCkl8lTdAN_s/5--
 

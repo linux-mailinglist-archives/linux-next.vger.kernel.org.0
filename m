@@ -1,234 +1,374 @@
-Return-Path: <linux-next+bounces-7533-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7534-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF2D8B04A17
-	for <lists+linux-next@lfdr.de>; Tue, 15 Jul 2025 00:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F699B04A6A
+	for <lists+linux-next@lfdr.de>; Tue, 15 Jul 2025 00:20:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F1EE7AE20F
-	for <lists+linux-next@lfdr.de>; Mon, 14 Jul 2025 22:10:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7921F7B09FA
+	for <lists+linux-next@lfdr.de>; Mon, 14 Jul 2025 22:19:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DF50246791;
-	Mon, 14 Jul 2025 22:12:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5486F277CB6;
+	Mon, 14 Jul 2025 22:17:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="AVp2NNeU";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ckL57iNq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TFI22ITP"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51FC77464;
-	Mon, 14 Jul 2025 22:12:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752531126; cv=fail; b=Eqm3qfrtakYP/DLA+9noeJxazHSn4yYu8DXpsoKakbv1F3snvI86Q3QXuz3SFSQPjvEOTn7QRp5g+18GU1Yq54MvJAV6Jf/82WcZwRIiFlQY7OO6Gv3H2+NE9UreoH3FvqM7R5lIe/IHgamsoRxzLL/29o1U9l8xmUmAv/01mdo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752531126; c=relaxed/simple;
-	bh=bdViuGlxtWfqy+NScTCcra9nKy7/+rwDqkwmdk80Omw=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=MgDx9breZeJr+p8s7ziRpEqNfv5Ws2IxV74NQ505BpvdP8t4ECDYnhPFJTM9oP+cadyKk8A48TpGBMOjbWEcylBiMXnnx73JDITsYOP0qOhI/vfIwN6/ZvQd8q1Phtbm8C3CPnn6efGCCDp3ZgsBE35qHhGZFsqG4R8oQlo+/jM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=AVp2NNeU; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ckL57iNq; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56ELZCER013340;
-	Mon, 14 Jul 2025 22:11:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=QVXwjUhCCg0DDOOvBGrmOwCpuwOKZB4/rV4BvzRendg=; b=
-	AVp2NNeUYq0Yc86fJ8w+xDKBewiklYB1kpjt3n3rsSCkRqNwfg9yUxMWDKoFxFwv
-	Qa4WxZI+RU9NYANXCak4S8NZ3NDLRFumUJxGMLGhO+OxDQbzL1r63jiKljYz+YaP
-	3lTyIMm19jAxkvDqKyjWWH+c2+DisqOYIkVp5GVJ8kDyufJXP8UsFzDe8h7n7tXR
-	hQ36D3do/+ccLd9B1Hx2d/0askPQAOaxJn9SpOtdswkJ0C5RP1nwf7uk+WSuspdx
-	0dcJRNsloACCZjfhmqaOxOlcLaKKIxUV6yYbnUcbyzGhslDrTP4I1vMOvBIVBaFq
-	nnb7AiRhyFnxZ+TbZ8HcLw==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47uk1awaqm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 14 Jul 2025 22:11:54 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 56EM2Mn7013034;
-	Mon, 14 Jul 2025 22:11:53 GMT
-Received: from cy4pr02cu008.outbound.protection.outlook.com (mail-westcentralusazon11011011.outbound.protection.outlook.com [40.93.199.11])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 47ue58nh6c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 14 Jul 2025 22:11:53 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=afD/KmptMwMbO5sSfav0SsLFOLLrLMFYzcjYOxGPfigSKSaH9A33rMh4N6/Eu7yC6pKSrSuhs/2gHu8a0Xql/sKQIOddADnV7PCwATQoYhuY30jyOsRNtcXmtL9mtVioNU0KBd/JS2f9nYkXXWZhZ2iCg/KD8KfOBz9ej9pn4z5xs2OzZKfWKjFJfOQ7LG2x+NQUg07w7MFgz8z+wwBtX6FDcT+8hPaubBCmEodW7AhKeSbi5FuvxD/xInGsq2AYF8NhTQqykvxs7JfmQjyelJZb+qtqV7HMsPQUGmQL1MXYE8pQ/krhHIhjr20uPOWflOyhOoI8GsCMOI78QH5PCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QVXwjUhCCg0DDOOvBGrmOwCpuwOKZB4/rV4BvzRendg=;
- b=Efryaq69BgpdVgfiGBTA3SoLQAD0EaR8PNztoHgLJipOKYc8seFK6945ZkPpMsaN5gzAk8tpYKL4xdwGyqNCXzqD4MgiYuhWG4ZyITCepk9juGwKqrJ3sqLMfzYx6Fphavveuar4eQjwlTq8whM0QHer7UahjoqW5Eamx5HVS2WC0NZNTeEj3ioilWgwrpV1fpx3RMBkfl+RAYJuNbTzN2pqrYbHDo8oKef74H2EqUnf2xAMV0QKv0VOL1stjwjK/ilz7AkIsxPf94HdnMsD4FIpO2gal4bvD2mr5itU4Khj2I7rA2LQ5RP/7gcR8uI0CzsYhJmPKpDP+C+Fy9VhQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94395DF76
+	for <linux-next@vger.kernel.org>; Mon, 14 Jul 2025 22:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752531453; cv=none; b=Re42YNs86GJ4uNqOxcMWrNXmmgkc1o0rA1ae4O1DZrT2+V6Kqmi6Nr3t8+6nMy/dx8s44uxt8oKrRVScZ77D2HP6Xv4T77y1jKnmJdtnGrFi+HZPGkA0O6dffjruJvs2Ggca0VpcralYFdAvxUSTZs65883DMaS0Cv0zEGZAvwI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752531453; c=relaxed/simple;
+	bh=q6PdS6wlvZ8hWbAhQaU+AV70alnsbuxe09DmeKdhbgE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=JWenbaGV2t1w6axq6StPt3ycBXi7kQlbsPfYvNJLX9dgfcI2+qzVXRtLNU3YBQHnvr7tBhcTZJdKbOjimZcbTU45uVySWHRAY0NnwqkkwgIevigKxVm+ou+RAReXRNrDtRqSSZW2tIxWNYjp4S7QBN7k3Gjmd3Xfnp078rjS9b0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TFI22ITP; arc=none smtp.client-ip=209.85.210.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7494999de28so6723948b3a.1
+        for <linux-next@vger.kernel.org>; Mon, 14 Jul 2025 15:17:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QVXwjUhCCg0DDOOvBGrmOwCpuwOKZB4/rV4BvzRendg=;
- b=ckL57iNqzzLlUu7x+8r+4ulXv9oNWnE4PIppbM/ARseqiJHVwAvF43CBODhtvnn6Frl6Ey4NCjeYlWN2y64XbEJ5vNjdgkXC+G3TbnZDSS+J7Gn0qIfKaVDRtgV5uLSlsxGijfUOEreEdCyaFgN6lwcG+3KbesGaYNmLJNQmcq4=
-Received: from DM3PPF35CFB4DBF.namprd10.prod.outlook.com
- (2603:10b6:f:fc00::c1d) by DM3PPFEACE3F2B7.namprd10.prod.outlook.com
- (2603:10b6:f:fc00::c54) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.35; Mon, 14 Jul
- 2025 22:11:51 +0000
-Received: from DM3PPF35CFB4DBF.namprd10.prod.outlook.com
- ([fe80::731a:2be4:175e:5d0b]) by DM3PPF35CFB4DBF.namprd10.prod.outlook.com
- ([fe80::731a:2be4:175e:5d0b%4]) with mapi id 15.20.8922.025; Mon, 14 Jul 2025
- 22:11:51 +0000
-Message-ID: <e1075c6e-b676-469d-b63e-cb8eedeffad9@oracle.com>
-Date: Mon, 14 Jul 2025 17:11:48 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Signed-off-by missing for commits in the jfs tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20250715080244.375a152c@canb.auug.org.au>
-Content-Language: en-US
-From: Dave Kleikamp <dave.kleikamp@oracle.com>
-In-Reply-To: <20250715080244.375a152c@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR03CA0024.namprd03.prod.outlook.com
- (2603:10b6:610:59::34) To DM3PPF35CFB4DBF.namprd10.prod.outlook.com
- (2603:10b6:f:fc00::c1d)
+        d=google.com; s=20230601; t=1752531450; x=1753136250; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YsfqHZF2eex1fFWEZK+9hGZCkr1RmGiBcZKUCMjWg4E=;
+        b=TFI22ITPwGpOWveDiykfdPJsCXMtC0pZdHlVtwQJogOSngzh5U4LESdWY4/mJMZZAL
+         DIUMPEFydd/P40hwSaz1G2h0QfTF8Hrh8H4ZGa5xlgQJAKTgME48liU9HgbMCD3RdYBq
+         O+M0Z07JEmlaej2P5S4COk+O5/VvYd7leY9J7/aWXBfUCm3xo/xDRKAK9DxAItJsY3rD
+         5mM0X0rHcWtIQMM6Peas7VLChb/8YpWuFqPq0+VAKcVcV2pe+jgoCPxb9N0poSN5GXuJ
+         4L3eHKreAA025VjopsG1D4v3gMEjYaCkkI4ezZtcq4Q+VnqPIrVPZwaTB6cSALwPHwRe
+         qgoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752531450; x=1753136250;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YsfqHZF2eex1fFWEZK+9hGZCkr1RmGiBcZKUCMjWg4E=;
+        b=TN94a1vLHUSrevZgKPsWol38uoq532kWOZ6JLd2di6Y+KFDxQsXLONzQZHg7XwsLIo
+         itFTG0qxPFN0H9iByQT5RPG5GXUWtKXnsd0CoUIhhGWbY9gtcdWG1GNAdzlFu+WhDlc5
+         JB7NbCFuq3Q7fVdwhxHmt7xyu6UNylxpV0SXREvAWc7ggGk8NKC7YfSS8gQadFSskLAW
+         gQBmScbof3ZvD32BiZwoqBzwTLoht7ReeXubFG9omrxuWPd+cf1saJ3LB8N8bTscO0Cy
+         fHQMxJEthuatwltJZJGaLjzZs/ZHs3pbkXhXUJrBL5taFY4lIByQR9OZYNV/0xnpHQUJ
+         CPKw==
+X-Forwarded-Encrypted: i=1; AJvYcCXQAhBmdAEahgD/2R0y2+l8TMBBJO/cb0qblO1Lco5sBa329VWsUZTJJ6E9ad3vgm1xoTPON2Xf2hj5@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy35GmLIA3zHdr4Gzva4V78kO1WN1k69LbGbXiBy97LPGdTAO/7
+	TTSlXjII4qxq1rKK0u/zBiZbZRlGBInrJxfpPvBCYP0SUv/Uz2oIpOvQxOSIZ3NY+cLj0K71zwc
+	xhJof/w==
+X-Google-Smtp-Source: AGHT+IENFWroR9VdJzaKaolkunqI1VmDLzziPdV/9v1noDcfmOsawCXVJaeB2x5PgPIld5+VOoiKV62f+d8=
+X-Received: from pgac7.prod.google.com ([2002:a05:6a02:2947:b0:b2f:6290:cd48])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:e198:b0:220:9174:dd5f
+ with SMTP id adf61e73a8af0-2311e53433bmr27105907637.15.1752531449933; Mon, 14
+ Jul 2025 15:17:29 -0700 (PDT)
+Date: Mon, 14 Jul 2025 15:17:28 -0700
+In-Reply-To: <aHU1PGWwp9f6q8sk@google.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM3PPF35CFB4DBF:EE_|DM3PPFEACE3F2B7:EE_
-X-MS-Office365-Filtering-Correlation-Id: e5cf7a09-5c9c-4495-a225-08ddc3236eff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?T0dFMEFlSGNVNWtHMlRYTThidzNvR1RyTmoxR1E0Z2NJMkhoazl3Ykl4aEMy?=
- =?utf-8?B?QlpOMFJzM3V0dzBBZXIwaXpHN1g3dHBiYmZJUnREZXp2bnU0NjRKU1RNaW9Z?=
- =?utf-8?B?N0JVQWJnbytLdm1YZitPb3JCdHBBb1JmMkR2RytKNmUrOUFHVkFGbkRzSDNI?=
- =?utf-8?B?S1NpbEt0UmptRVc4aXBJQm9qTlhDR3Q4N1cva3Q2L0xYa1piQ3RWS3ZYTTVX?=
- =?utf-8?B?bk8wRmFicGQyUUprdlJIb3M0Q2x5N09LWGhVeUZ0Slg0NnNRR1hwMHRGNlhz?=
- =?utf-8?B?bTJ6d0RNcThHVTkzaFhhYzB0NW9Vei83VlRDdGRtMUIyZ1lDaXJyaGI0Q0wx?=
- =?utf-8?B?R3BIRCtiZW5JRW1xZWxab1Y1ZGJxZ2RjbFduZVo2R0NoUnJhN2NqcFFpb1pB?=
- =?utf-8?B?ZUZUZDJ4Q3dRazlONHNkdlZvVlplbTNIV2NuOFl0UmZ2N1ZoQWhTcWhNdDhY?=
- =?utf-8?B?eU5sditYazUzbzRhVTlCdFlZYkdHV1FwSGI4aC9mWmxTY21BUmlVcmJJVlJy?=
- =?utf-8?B?T0VjWUlDTDVTQzBEVkMwODVuSlRXZkY2RDU4ZjY1amdGMWxLWHl4U25CS1NW?=
- =?utf-8?B?OGZwWUloczVlZjNPcGtKTXlHQkJ0MjhuallEa0U3cnZKYU5VK085RHJRSDB4?=
- =?utf-8?B?T3pVUmlaeThseVIwTVl1cEsxQThrOHk2YkhUckdZQmQ0dE1kYncvZHkyUWFO?=
- =?utf-8?B?ZkJIRzZsS0xoQ1lRWUlKRWZtR21mMS93amFQOHFSdmVqNVpjc3dMV2VRRU9R?=
- =?utf-8?B?d1dEczg4Q0ViaE0zL1NPcGh6NlZab3I5UlZUY0xjOCtES2RpYkxhb0VSbDFS?=
- =?utf-8?B?K2ZuL25rRWZwZ2REMEdIN2QxNjdwV2w4ZXRWWXRWbGVOZ3AvajJvZzB0eXRG?=
- =?utf-8?B?VnBiSFFlaU9GOHIwZk9td09GUzh2am5xWkgvOEtnYTBUZ2hFemJyTVRQY0dt?=
- =?utf-8?B?MjlUY3ZjaGQ2OUE2NE13SUttQldKc2hnTVFHYVJCYzNTNGYvdVJvczJWWFN5?=
- =?utf-8?B?OVlQSzBwMlh6Z0VQSjFmY3FhWk9NZW1IUnpRQnJuOTUra3dkTllWQ1ZUUlNR?=
- =?utf-8?B?aktJT3FHZHQ1YUxrNzFEMnBaNWdQRnlTRDRJV0ZGZWpVMG5hZlRZMkJ0MWRQ?=
- =?utf-8?B?cVZ0RTMzaTU3OTNNYnNhTnp1QVhnUlZ1UEdVV1FMVm5hYkliRmRMdW00Yldl?=
- =?utf-8?B?d3FOM3V1ZW8wY1Qxb1ZMcjJrWHd6RHU0MUVseEZld0tjaFdBeXplVURuSy9H?=
- =?utf-8?B?aEwrU01pb0FKazVZSFRWaWVsbmdia2kvZ0JwMWVFTEJFOXZ6bXd6YmhuSnUw?=
- =?utf-8?B?VGdpN1FzNXVQVHpLTnFBa2srQ3VIRVY1cWpTTzh4QzA2V1pHUkt4SUIyTUha?=
- =?utf-8?B?c0RreU9sUFBSbEZldldDNUhqVlJLOTVaakFNa0N3U3h1azF5K3lnc3BVd05T?=
- =?utf-8?B?VUJZdkVjUUhvanVBRTJrMUE0RmE3MmFnYjg1enBwb1RWdmlISlNlQ3hBRW1t?=
- =?utf-8?B?TWgvN0ZxTWJIaFZQZlEzN3ZmVTlRd2FWM24zM09pK0xSYi9zRkpqL2NiS1BR?=
- =?utf-8?B?QTRYYnczZnpiVnZhMERHWUxrMzUwTGMwTzgzKzFMQS9rSzhVWnUyN284RUN0?=
- =?utf-8?B?SW9ZQUxIWW56UzRIaXd2WVo3dGJXR1E0OEhnb1BIbFhuekNFUElVYzZMSTY3?=
- =?utf-8?B?WUFLclozYmtWTUZ6M0wveExoL1R3eXNqelo2VnZmaVNBNGpEWUNIeS9mQUZV?=
- =?utf-8?B?cTdXVjBTVWYrMTBIWDlGU3ZqR2t2MFR1Lzhubk0zSjkwRmhHR1ZadlRUVnFy?=
- =?utf-8?B?b0cvRE1HakVsM3NOYnVHOUlYcWFSZHBCaEd5a0N3NE5FZG5PdmRvcW9nVFF2?=
- =?utf-8?B?dHFNUHNwd0xxaEo1WVBDNmNhWTN6UExDZkZwMTlqL2ViNFE9PQ==?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM3PPF35CFB4DBF.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S1lTL21ia2I4ZTduemFVVXlhQlViVTZtL2ZkY2hXcEZGNmtUazQvbWxnVXNH?=
- =?utf-8?B?LzczSTNRQ3NRVXdhM0Z5dnJuM25uTnVXQm03QTl3Tk1FUHc3ckxtQ3Z3N1dk?=
- =?utf-8?B?S3JscHJQckRuWlVmMXlmSllsS3YreVQ2Z1BXakFCRjlOQjVZdmlOME1LMExI?=
- =?utf-8?B?MjVkb05rMHdLYWtaUTRwWjlIK3VpQTFVR3ZKWmJEVG5NdzhVLzdJSlNPVkxp?=
- =?utf-8?B?cm1vWjRPbmhOeWVaZURraEhHVHZzNFpMZXdpZC9FUHZ5UWZ6cENMVVhRMWhS?=
- =?utf-8?B?WCtMUnNpUGsxN1dQVlJUdXF5L3Bic0FWb2ZSYlhIZVJOT2JYSC8rRjJDV0M0?=
- =?utf-8?B?bzdjbVI1aGUwcngydjh1NU0vSTFFMnhiajJ1cDNwaFUxN043dkxSOUJjUmx1?=
- =?utf-8?B?aTVoVHdlQ0kwWXk1WkhvcWhhSEVkVnVjZ2pHa2J0WGh6ZWg0YXR0QXpMaXRy?=
- =?utf-8?B?dndESitmOWRlU2J1S2tqeUVhWnJSalBMYTNHQmp2ZXhSKzRkOXVUbjlxY3Zz?=
- =?utf-8?B?SjZOUlk1dTRwNFhWMHFZYkFOMkNTMmRyTTljR1BMazFCMlZVL3dBb0JSRHdZ?=
- =?utf-8?B?MUltQzNuMHcxU0hlRXVURXdzVXFlNW53eVUxN3dXYlc4THEvMTlqZ21EY0tE?=
- =?utf-8?B?dXJRSHFMLzY4ZGF2ZWRBTlZvTUJpeFF1aUZHS2N1b0NrQklNYnVWYVArVXRu?=
- =?utf-8?B?WTErY29TY3pNUERzSVJoNG9hcWg5czBid1B6VWxOU1BrbS9oYTBFV0FXTkll?=
- =?utf-8?B?Z0Z2Sm5vNis1WWVxSTFiQU1vcXNwcW1oellyaHBlaWMySnBXQW1ZVng0aVJ2?=
- =?utf-8?B?aExHaEVyTHNIZng1MldocVNPek5JcHlFTmoySCtLa1R4MUNraitKTjlmQ3d0?=
- =?utf-8?B?OEZKeXRpMjhWNHFxWUp3M0Q1anJ1WjR5UUxsQVJUYmpvaVBLY0NrVVYySThN?=
- =?utf-8?B?WlkvNkhjQk9tOTBlQjJJWWxqaENJWGp3dnNrQUZlSE5wNzVZUFF2WXRnZ2x3?=
- =?utf-8?B?N3ZiM1lUU2NJbUhxY3M1ak0yaVRLcTZ1bThkWUN0MjZIYlByVy9nVWdva2RE?=
- =?utf-8?B?T292bkZDK3BhUy9hdlpZd3BMMmUyamg1NEF1TEYzQWpKK1YxQkoxbm9BZ2ZQ?=
- =?utf-8?B?TnoyYWxTVnUrVzhrQ1BpY1JSaHp2YTJkT0ZjWnJWNi8xZlVxN1Q0d2xJbmNN?=
- =?utf-8?B?UjRQSUxqdzBvQ2lPc29MZDBnUEt0V1pHUGE2V1VXZExwN2xYYys1QlF4U0FR?=
- =?utf-8?B?cEpWdzVBcHJibHRSdkFuMlduV2dDOUNrNmdaNTNPaW1YY2NtR1NxSEpFaFI4?=
- =?utf-8?B?WE9scGZaeVMvUG9WRGZVdXVGUE81dENJTnplY0tHWXpzSW42YW01UXpnNFNI?=
- =?utf-8?B?SExGd2Y4ZkhEUXpZa3FCeE5SbVl2QS9SYVBNelVFT24wem5yT2xtNC9IWHFw?=
- =?utf-8?B?ajRCSGdIZ3prd0FIYW55VytWT3E2SGdpbFdhaXpOSytvdDBTMEpTelFBamtV?=
- =?utf-8?B?NFVZQ2VCb3RUOXhsZUhuSzB1WGV0Y3ZPaTVPbXRyQWg4aTVzV2tRWmdWczdN?=
- =?utf-8?B?aFh4TG5uMXQ4T3JyV1Rkdk0yQXVtSWZPRk1ja3N5bjdoTjVNeUZjZFU2Tzh6?=
- =?utf-8?B?VXhnRlA4bzNlZGI2RStFbWlxdWtReFU3TzRQQWdVL2JIOFNBVDYwZWZvcEZu?=
- =?utf-8?B?elUzeHNncW1Id0dGY3FQMjRWMDlXOXJqS2duWG1pS2l1Qmsza3hkSW83MlJM?=
- =?utf-8?B?cVF3WTlkVjNGaklvM3BIVkZ3Q2lzTUtkOTZ4ajZNSXpPQU1FdkJWeFRLamRR?=
- =?utf-8?B?YXB3eTBmV2lwUk5qU2RsWWR4RWpIdjZHUkc4ZmgzalFSYlEwZnZYYkh3ajVP?=
- =?utf-8?B?SURHTUhkbmRQTzVtRWJBMHVPYStSYVhhT1BzRHE0U0luaHVFRk9VUkpTekNW?=
- =?utf-8?B?ZHF0MDhFcWhYVlhBUWJxQ01vNWRzekpteHYyS3E0em5YblRrL0JLV29nZ0da?=
- =?utf-8?B?UjQ3MlR0dzN4SjNCVlIwVVRSN1laY0RGbTRvK2RNYnFFd05XNzg5YmhGWUlS?=
- =?utf-8?B?NTRGajdHMGxqeC9aTzVDQVY4NjdWeDZ4Z0UrbXdqR2gybUJUUU9Sa1hGWDZD?=
- =?utf-8?B?d0NGbTZJSVRYcng1RHprcDZMSmxYK0Z6eVFWUG92WXA5WWczakdjekV2RVRN?=
- =?utf-8?B?Q0E9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	zmSg5W/QL5IXDpKrvKz4OY1DwS2CSown3aPnYEYK3w9jB7iQ6pTALsgIm310kcO+1yLQkzayaB9kQvRXi7ScsL5TYGJtdNUxng6AKRKmDFmqyGFodBbJeNSb/6bBNY3TE2EQfSWkeR7FVY3uz5X+lIhvnpBO0aYm9OsZPBW92kVuqUJhK9EZJWaJUVS4ym65qeEwxVe9Dnw1/tWQhpBeRR8TnC/nsDmKRt30NKyVkfPdfcKasS6you7lSWiPKaZdHn+y3/EJz841TBShLb20yGOvf6QWMVITp67LX20NvRqrHKW9SIkeciPnuyE8JbhDxsfM6nLA04a4r4DJWNIiXs7T7gh2hAOwLcO4f2+pvzHxFzJD7t6PqWsO8/u18+2fmlX81l6BqTniqP3Si19gkEIwESHD8847Iu1CDXg4/cvx1o701icluLnQIAAX4aSEvafjYx35YgHMPh1hcvIAP6/DrTtQbhM+L2EjdVnah2de0VgV+WNjCRlVJ/ZTp2QpDzxCRe/GOLT1YFqaeZbXFg0U9Qmska64iraTpoNWQ4tI+tnMk508e8lzPqUc4cm86BuI2QDlfWNE78gxIO51iT2sQEDbBXcnAK12vtpmsiE=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e5cf7a09-5c9c-4495-a225-08ddc3236eff
-X-MS-Exchange-CrossTenant-AuthSource: DM3PPF35CFB4DBF.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jul 2025 22:11:51.2171
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HI4VlUiz48+L2hLOfBNRPtrkUA8d1ytt+KIVBQ9ndp7rgruHLm0jJOPwyqn+hohvDsOTSed4uaDj2y6e3boRQ5T3wAkySiSiaV5STw8VA4c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PPFEACE3F2B7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-14_02,2025-07-14_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 malwarescore=0
- phishscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2505160000
- definitions=main-2507140153
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzE0MDE1MyBTYWx0ZWRfX8T/uG9OpyTHY AFxVJ+dHC56W+3n31TPkBRhKaCr+rlm3ySHm1PqFhelU1wbGw+S1Hv+SmYE6eSBXULTaqnKLCkV F8Un7sfJUmXCiVtFajsz3GIM3z0EWAwFPf7sxd//jhLkQcSnT1cm7QxHVtheVbk2Q0lgR1Agtpo
- r9gFJ6CPOKqLnXeFdS2W+Y9vfXLAvJIHOc39xShOY+3qUi5xFhJaOPnfkE/lWYydFrmvoc15InD WroWTOJISpj/rE1j/04p1jS2PDEE7J2u4ARotpDjS/MUW/ZqeWP49NWBN6N+kfAGfJAGRb/Jzyr RcwtdHP6Ko2cJ6tC/+ZqACXmvKdcZ3qrDBhVZIJT3BBOPFT9cKj13eSWN70Ub1zfplj61c2xdQM
- orBSR88RnFNBbm00bDh+fxJCHEqP0Q2/suiTRpR9aArajEUC0Jt/UQFyzGt+kSyRltKeekwd
-X-Proofpoint-GUID: UnYNQhtDDXMmC31i9CAm7RDHtLHHsG7L
-X-Proofpoint-ORIG-GUID: UnYNQhtDDXMmC31i9CAm7RDHtLHHsG7L
-X-Authority-Analysis: v=2.4 cv=J8mq7BnS c=1 sm=1 tr=0 ts=687580aa b=1 cx=c_pps a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
- a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=GoEa3M9JfhUA:10 a=OeaBf9qcd-L2rX4JhCMA:9 a=QEXdDO2ut3YA:10 a=QYH75iMubAgA:10 cc=ntf awl=host:12061
+Mime-Version: 1.0
+References: <935a82e3-f7ad-47d7-aaaf-f3d2b62ed768@amd.com> <F7AF073C-D630-45A3-8746-DE66B15FC3E1@sjtu.edu.cn>
+ <aHUYwCNDWlsar3qk@google.com> <15D0C887-E17F-4432-8716-BF62EEE61B6B@sjtu.edu.cn>
+ <aHUe5HY4C2vungCd@google.com> <aHU1PGWwp9f6q8sk@google.com>
+Message-ID: <aHWB-JPG8r_x2w-A@google.com>
+Subject: Re: [BUG] NULL pointer dereference in sev_writeback_caches during KVM
+ SEV migration kselftest on AMD platform
+From: Sean Christopherson <seanjc@google.com>
+To: Zheyun Shen <szy0127@sjtu.edu.cn>
+Cc: Srikanth Aithal <sraithal@amd.com>, linux-next@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On 7/14/25 5:02PM, Stephen Rothwell wrote:
-> Hi all,
+On Mon, Jul 14, 2025, Sean Christopherson wrote:
+> So as much as I want to avoid allocating another cpumask (ugh), it's the right
+> thing to do.  And practically speaking, I doubt many real world users of SEV will
+> be using MAXSMP, i.e. the allocations don't exist anyways.
 > 
-> Commits
+> Unless someone objects and/or has a better idea, I'll squash this:
 > 
->    4c5232572aee ("jfs: truncate good inode pages when hard link is 0")
->    96a7c5605a49 ("jfs: upper bound check of tree index in dbAllocAG")
-> 
-> are missing a Signed-off-by from their authors.
-> 
-> Please fix up these mailing list munged addresses e.g. the Reply-To
-> address is probably correct?
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 95668e84ab86..e39726d258b8 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -2072,6 +2072,17 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+>         if (ret)
+>                 goto out_source_vcpu;
+>  
+> +       /*
+> +        * Allocate a new have_run_cpus for the destination, i.e. don't copy
+> +        * the set of CPUs from the source.  If a CPU was used to run a vCPU in
+> +        * the source VM but is never used for the destination VM, then the CPU
+> +        * can only have cached memory that was accessible to the source VM.
+> +        */
+> +       if (!zalloc_cpumask_var(&dst_sev->have_run_cpus, GFP_KERNEL_ACCOUNT)) {
+> +               ret = -ENOMEM;
+> +               goto out_source_vcpu;
+> +       }
+> +
+>         sev_migrate_from(kvm, source_kvm);
+>         kvm_vm_dead(source_kvm);
+>         cg_cleanup_sev = src_sev;
+> @@ -2771,13 +2782,18 @@ int sev_vm_copy_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+>                 goto e_unlock;
+>         }
+>  
+> +       mirror_sev = to_kvm_sev_info(kvm);
+> +       if (!zalloc_cpumask_var(&mirror_sev->have_run_cpus, GFP_KERNEL_ACCOUNT)) {
+> +               ret = -ENOMEM;
+> +               goto e_unlock;
+> +       }
+> +
+>         /*
+>          * The mirror kvm holds an enc_context_owner ref so its asid can't
+>          * disappear until we're done with it
+>          */
+>         source_sev = to_kvm_sev_info(source_kvm);
+>         kvm_get_kvm(source_kvm);
+> -       mirror_sev = to_kvm_sev_info(kvm);
+>         list_add_tail(&mirror_sev->mirror_entry, &source_sev->mirror_vms);
+>  
+>         /* Set enc_context_owner and copy its encryption context over */
 
-Fixed.
+This isn't quite right either, because sev_vm_destroy() won't free the cpumask
+for mirror VMs.
 
-Sorry I missed them. I'll make sure I check this more carefully in the 
-future.
+Aha!  And KVM will also unnecessarily leak have_run_cpus if SNP decomission
+fails (though that should be an extremely rare error scecnario).
 
-Shaggy
+KVM is guaranteed to have blasted WBINVD before reaching sev_vm_destroy() (see
+commit 7e00013bd339 "KVM: SVM: Remove wbinvd in sev_vm_destroy()"), so unless I'm
+missing something, KVM can simply free have_run_cpus at the start of sev_vm_destroy().
 
+Ooh, side topic!  The fact that sev_vm_destroy() wasn't blasting WBINVD would
+have been a bug if not for kvm_arch_guest_memory_reclaimed() and
+kvm_arch_gmem_invalidate() taking care of mirror VMs.
+
+New hash for the patch:
+
+  KVM: SVM: Flush cache only on CPUs running SEV guest
+  https://github.com/kvm-x86/linux/commit/6f38f8c57464
+
+And the full contexts of what I force-pushed:
+
+--
+From: Zheyun Shen <szy0127@sjtu.edu.cn>
+Date: Thu, 22 May 2025 16:37:32 -0700
+Subject: [PATCH] KVM: SVM: Flush cache only on CPUs running SEV guest
+
+On AMD CPUs without ensuring cache consistency, each memory page
+reclamation in an SEV guest triggers a call to do WBNOINVD/WBINVD on all
+CPUs, thereby affecting the performance of other programs on the host.
+
+Typically, an AMD server may have 128 cores or more, while the SEV guest
+might only utilize 8 of these cores. Meanwhile, host can use qemu-affinity
+to bind these 8 vCPUs to specific physical CPUs.
+
+Therefore, keeping a record of the physical core numbers each time a vCPU
+runs can help avoid flushing the cache for all CPUs every time.
+
+Take care to allocate the cpumask used to track which CPUs have run a
+vCPU when copying or moving an "encryption context", as nothing guarantees
+memory in a mirror VM is a strict subset of the ASID owner, and the
+destination VM for intrahost migration needs to maintain it's own set of
+CPUs.  E.g. for intrahost migration, if a CPU was used for the source VM
+but not the destination VM, then it can only have cached memory that was
+accessible to the source VM.  And a CPU that was run in the source is also
+used by the destination is no different than a CPU that was run in the
+destination only.
+
+Note, KVM is guaranteed to do flush caches prior to sev_vm_destroy(),
+thanks to kvm_arch_guest_memory_reclaimed for SEV and SEV-ES, and
+kvm_arch_gmem_invalidate() for SEV-SNP.  I.e. it's safe to free the
+cpumask prior to unregistering encrypted regions and freeing the ASID.
+
+Cc: Srikanth Aithal <sraithal@amd.com>
+Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
+Signed-off-by: Zheyun Shen <szy0127@sjtu.edu.cn>
+Co-developed-by: Sean Christopherson <seanjc@google.com>
+Link: https://lore.kernel.org/r/20250522233733.3176144-9-seanjc@google.com
+Link: https://lore.kernel.org/all/935a82e3-f7ad-47d7-aaaf-f3d2b62ed768@amd.com
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/svm/sev.c | 71 ++++++++++++++++++++++++++++++++++++------
+ arch/x86/kvm/svm/svm.h |  1 +
+ 2 files changed, 63 insertions(+), 9 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index ed39f8a4d9df..a62cd27a4f45 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -447,7 +447,12 @@ static int __sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp,
+ 	init_args.probe = false;
+ 	ret = sev_platform_init(&init_args);
+ 	if (ret)
+-		goto e_free;
++		goto e_free_asid;
++
++	if (!zalloc_cpumask_var(&sev->have_run_cpus, GFP_KERNEL_ACCOUNT)) {
++		ret = -ENOMEM;
++		goto e_free_asid;
++	}
+ 
+ 	/* This needs to happen after SEV/SNP firmware initialization. */
+ 	if (vm_type == KVM_X86_SNP_VM) {
+@@ -465,6 +470,8 @@ static int __sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp,
+ 	return 0;
+ 
+ e_free:
++	free_cpumask_var(sev->have_run_cpus);
++e_free_asid:
+ 	argp->error = init_args.error;
+ 	sev_asid_free(sev);
+ 	sev->asid = 0;
+@@ -709,16 +716,31 @@ static void sev_clflush_pages(struct page *pages[], unsigned long npages)
+ 	}
+ }
+ 
+-static void sev_writeback_caches(void)
++static void sev_writeback_caches(struct kvm *kvm)
+ {
++	/*
++	 * Note, the caller is responsible for ensuring correctness if the mask
++	 * can be modified, e.g. if a CPU could be doing VMRUN.
++	 */
++	if (cpumask_empty(to_kvm_sev_info(kvm)->have_run_cpus))
++		return;
++
+ 	/*
+ 	 * Ensure that all dirty guest tagged cache entries are written back
+ 	 * before releasing the pages back to the system for use.  CLFLUSH will
+ 	 * not do this without SME_COHERENT, and flushing many cache lines
+ 	 * individually is slower than blasting WBINVD for large VMs, so issue
+-	 * WBNOINVD (or WBINVD if the "no invalidate" variant is unsupported).
++	 * WBNOINVD (or WBINVD if the "no invalidate" variant is unsupported)
++	 * on CPUs that have done VMRUN, i.e. may have dirtied data using the
++	 * VM's ASID.
++	 *
++	 * For simplicity, never remove CPUs from the bitmap.  Ideally, KVM
++	 * would clear the mask when flushing caches, but doing so requires
++	 * serializing multiple calls and having responding CPUs (to the IPI)
++	 * mark themselves as still running if they are running (or about to
++	 * run) a vCPU for the VM.
+ 	 */
+-	wbnoinvd_on_all_cpus();
++	wbnoinvd_on_cpus_mask(to_kvm_sev_info(kvm)->have_run_cpus);
+ }
+ 
+ static unsigned long get_num_contig_pages(unsigned long idx,
+@@ -2046,6 +2068,17 @@ int sev_vm_move_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+ 	if (ret)
+ 		goto out_source_vcpu;
+ 
++	/*
++	 * Allocate a new have_run_cpus for the destination, i.e. don't copy
++	 * the set of CPUs from the source.  If a CPU was used to run a vCPU in
++	 * the source VM but is never used for the destination VM, then the CPU
++	 * can only have cached memory that was accessible to the source VM.
++	 */
++	if (!zalloc_cpumask_var(&dst_sev->have_run_cpus, GFP_KERNEL_ACCOUNT)) {
++		ret = -ENOMEM;
++		goto out_source_vcpu;
++	}
++
+ 	sev_migrate_from(kvm, source_kvm);
+ 	kvm_vm_dead(source_kvm);
+ 	cg_cleanup_sev = src_sev;
+@@ -2707,7 +2740,7 @@ int sev_mem_enc_unregister_region(struct kvm *kvm,
+ 		goto failed;
+ 	}
+ 
+-	sev_writeback_caches();
++	sev_writeback_caches(kvm);
+ 
+ 	__unregister_enc_region_locked(kvm, region);
+ 
+@@ -2749,13 +2782,18 @@ int sev_vm_copy_enc_context_from(struct kvm *kvm, unsigned int source_fd)
+ 		goto e_unlock;
+ 	}
+ 
++	mirror_sev = to_kvm_sev_info(kvm);
++	if (!zalloc_cpumask_var(&mirror_sev->have_run_cpus, GFP_KERNEL_ACCOUNT)) {
++		ret = -ENOMEM;
++		goto e_unlock;
++	}
++
+ 	/*
+ 	 * The mirror kvm holds an enc_context_owner ref so its asid can't
+ 	 * disappear until we're done with it
+ 	 */
+ 	source_sev = to_kvm_sev_info(source_kvm);
+ 	kvm_get_kvm(source_kvm);
+-	mirror_sev = to_kvm_sev_info(kvm);
+ 	list_add_tail(&mirror_sev->mirror_entry, &source_sev->mirror_vms);
+ 
+ 	/* Set enc_context_owner and copy its encryption context over */
+@@ -2817,7 +2855,13 @@ void sev_vm_destroy(struct kvm *kvm)
+ 
+ 	WARN_ON(!list_empty(&sev->mirror_vms));
+ 
+-	/* If this is a mirror_kvm release the enc_context_owner and skip sev cleanup */
++	free_cpumask_var(sev->have_run_cpus);
++
++	/*
++	 * If this is a mirror VM, remove it from the owner's list of a mirrors
++	 * and skip ASID cleanup (the ASID is tied to the lifetime of the owner).
++	 * Note, mirror VMs don't support registering encrypted regions.
++	 */
+ 	if (is_mirroring_enc_context(kvm)) {
+ 		struct kvm *owner_kvm = sev->enc_context_owner;
+ 
+@@ -3106,7 +3150,7 @@ static void sev_flush_encrypted_page(struct kvm_vcpu *vcpu, void *va)
+ 	return;
+ 
+ do_sev_writeback_caches:
+-	sev_writeback_caches();
++	sev_writeback_caches(vcpu->kvm);
+ }
+ 
+ void sev_guest_memory_reclaimed(struct kvm *kvm)
+@@ -3119,7 +3163,7 @@ void sev_guest_memory_reclaimed(struct kvm *kvm)
+ 	if (!sev_guest(kvm) || sev_snp_guest(kvm))
+ 		return;
+ 
+-	sev_writeback_caches();
++	sev_writeback_caches(kvm);
+ }
+ 
+ void sev_free_vcpu(struct kvm_vcpu *vcpu)
+@@ -3451,6 +3495,15 @@ int pre_sev_run(struct vcpu_svm *svm, int cpu)
+ 	if (sev_es_guest(kvm) && !VALID_PAGE(svm->vmcb->control.vmsa_pa))
+ 		return -EINVAL;
+ 
++	/*
++	 * To optimize cache flushes when memory is reclaimed from an SEV VM,
++	 * track physical CPUs that enter the guest for SEV VMs and thus can
++	 * have encrypted, dirty data in the cache, and flush caches only for
++	 * CPUs that have entered the guest.
++	 */
++	if (!cpumask_test_cpu(cpu, to_kvm_sev_info(kvm)->have_run_cpus))
++		cpumask_set_cpu(cpu, to_kvm_sev_info(kvm)->have_run_cpus);
++
+ 	/* Assign the asid allocated with this SEV guest */
+ 	svm->asid = asid;
+ 
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index e6f3c6a153a0..a7c6f07260cf 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -113,6 +113,7 @@ struct kvm_sev_info {
+ 	void *guest_req_buf;    /* Bounce buffer for SNP Guest Request input */
+ 	void *guest_resp_buf;   /* Bounce buffer for SNP Guest Request output */
+ 	struct mutex guest_req_mutex; /* Must acquire before using bounce buffers */
++	cpumask_var_t have_run_cpus; /* CPUs that have done VMRUN for this VM. */
+ };
+ 
+ #define SEV_POLICY_NODBG	BIT_ULL(0)
+
+base-commit: a77896eea33db6fe393d1db1380e2e52f74546a2
+--
 

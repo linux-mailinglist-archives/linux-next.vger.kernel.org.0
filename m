@@ -1,103 +1,89 @@
-Return-Path: <linux-next+bounces-7558-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7559-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C2BCB0623D
-	for <lists+linux-next@lfdr.de>; Tue, 15 Jul 2025 17:03:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5FF7B06653
+	for <lists+linux-next@lfdr.de>; Tue, 15 Jul 2025 20:54:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4FAA165820
-	for <lists+linux-next@lfdr.de>; Tue, 15 Jul 2025 14:53:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03E261AA18A4
+	for <lists+linux-next@lfdr.de>; Tue, 15 Jul 2025 18:54:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06A5E1FDE09;
-	Tue, 15 Jul 2025 14:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 677142BE057;
+	Tue, 15 Jul 2025 18:54:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gkSYEBaS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ooPxqfr7"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40FE1531E8;
-	Tue, 15 Jul 2025 14:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409B5254AEC;
+	Tue, 15 Jul 2025 18:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752591217; cv=none; b=ildHkqMLjpaHynuv1qboFHfMjopgCE6tQYV5cmT3YFbNSgoCPICKMITXSBvmSj5e3RpIcxNC3GsyDdBzq23qXTM2hOH0u2mvCedFnI23XRvhAe8EqShGCHfaXWkO7g+FPsNze8NEeeO3mUQ2s0J4HzdE7/FLCBlhW03smBISdFg=
+	t=1752605650; cv=none; b=QobP1wTrqE1xu4DHdosgqJfTqBckZ2Crc3G+LZRWrsEXFi4e0kdPgjRKcpRpOVQFYUpD/yBg+EnDsSrMTzKHQbuFcqgLR6tdIjE3NVNTQa8ZTWLXy0fKIFOwUl1D32z5yC8MayRGS+Eq7DpxCIKN2/cLMeYed6NG64/7m5mpeI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752591217; c=relaxed/simple;
-	bh=mE3IoGz9LFfAs+5NM9TmbutbKbh+D7xl3TbT78ZqpTw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=f5wi3fvcNeSPAQ/mSP5j6U1TQDo5rQ1C5RR0z5+cBQWFjiIAzNuI3TUQHXelaZQ27bnUaUtk4EQMXMTBD22esG8bm7syqJ1z/TNVRbeVfKQ3OIHRrMHfmdP0BAPTR+oH3lfub8rUH1LoxxHztTzbPmzMa+EY+nMU/oUAe5JCv+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gkSYEBaS; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752591216; x=1784127216;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=mE3IoGz9LFfAs+5NM9TmbutbKbh+D7xl3TbT78ZqpTw=;
-  b=gkSYEBaSSbGaHh05me04AkmD3PLQoVpKDQwzoWl9ojtTHBiluHlfgEOK
-   IZ+jZUsFYvePos/aOJItwzkxIxIRw2QuyinW8fp+Nq4/KAQFe8qwm+12y
-   efC/rGptDkvn7+Xj9bedzV1eUI0UuVOz368mMSXP/KiOpj2jbsKkJHeJk
-   JgEoIYlvlS3A3odtq7k1hpfUduZiKYfCKLdm7dhrrCK8UhGWVOJr/Cysd
-   OqqDgvvQ5Wb2pnn+vreJ7GIYGNyciJSsR7d5wiKOsMJxdT4Hn0I6a231G
-   NJ3vyVyjM/D6RY2q88HQIJaWAvKYPqYNKCxBNwBGi8KNX8mMhZVHjNhN7
-   Q==;
-X-CSE-ConnectionGUID: jAXfPZSOQYK4tDgE9px5Aw==
-X-CSE-MsgGUID: da39kSbzSauCzBQNgG6eAQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="65384625"
-X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
-   d="scan'208";a="65384625"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 07:53:35 -0700
-X-CSE-ConnectionGUID: XJHboS+fRgeZEmB2fgQXtg==
-X-CSE-MsgGUID: 6eqLhlGSSAWHcZdNSfqBOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,313,1744095600"; 
-   d="scan'208";a="161801187"
-Received: from tcingleb-desk1.amr.corp.intel.com (HELO [10.125.111.148]) ([10.125.111.148])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2025 07:53:35 -0700
-Message-ID: <19a4ee38-9777-4efc-bffe-13d5a2c2f003@intel.com>
-Date: Tue, 15 Jul 2025 07:53:33 -0700
+	s=arc-20240116; t=1752605650; c=relaxed/simple;
+	bh=0jzfzycBzO8EVinIYR6sILBmsvzxui9VIyDZ/QUGcpE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=j4jN7QljwkcOFcYxQ81gQQGlENr/rufZV2tipgdsU0chSony0HW2f6I8p+Po16vLrEzHBNp5t/c+HNA9kE77lsey1I13KYzFQnFj+0wCGREu8D8sZ8qYJumt7cxv2sIZNPtPkJjC0qjTWcIbKbWRTWE4q/gd0maG0mauAhq9Om4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ooPxqfr7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A45D1C4CEE3;
+	Tue, 15 Jul 2025 18:54:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752605649;
+	bh=0jzfzycBzO8EVinIYR6sILBmsvzxui9VIyDZ/QUGcpE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ooPxqfr76h7wmrbUN3jU5oDMt2q2agFbDCpLbDlSBnEQtYBaWt6wHt2PvkRoU8lIY
+	 l4b/IaqbLn8bjkIDXywSHjUL9hyfos3qkwQC8SMSRiGtuiIgLNEXbLpwTgKdyDQUwv
+	 n2KEmsNjFMr/xNRhpvI1/hBqg+QPdu0S6vCakufSa4tWKQy3ihiMOi60ZuaU4Ao4k/
+	 MYso3ltL6RL9qdPRfkWBKZp67ML+E8SRfidj34Ccax5FVguHe17rmHyViRVfDTe+J5
+	 Hr1x+l96tBM5cbLVekrXZyU6wSmmUy1gTCANqBHeBudwp771nqWa6w7OxKytcwsgzy
+	 AMhgA7FfJzaqg==
+From: SeongJae Park <sj@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: SeongJae Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the mm-unstable tree
+Date: Tue, 15 Jul 2025 11:54:06 -0700
+Message-Id: <20250715185406.89199-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250715185549.264260b8@canb.auug.org.au>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the cxl tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Dan Williams <dan.j.williams@intel.com>
-Cc: Robert Richter <rrichter@amd.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20250715184935.7e7c75c0@canb.auug.org.au>
- <20250715185737.5d9c75e4@canb.auug.org.au>
-Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20250715185737.5d9c75e4@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Hello Stephen,
 
+On Tue, 15 Jul 2025 18:55:49 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-On 7/15/25 1:57 AM, Stephen Rothwell wrote:
 > Hi all,
 > 
-> On Tue, 15 Jul 2025 18:49:35 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> After merging the cxl tree, today's linux-next build (htmldocs) failed
->> like this:
->>
->> drivers/cxl/cxl.h:443: warning: Function parameter or struct member 'cache_size' not described in 'cxl_root_decoder'
->>
->> Caused by commit
->>
->>   8d41af0d378d ("cxl: Remove core/acpi.c and cxl core dependency on ACPI")
+> After merging the mm-unstable tree, today's linux-next build (htmldocs)
+> produced this warning:
 > 
-> This is only a warning (I ran the wrong helper script :-) ).
+> include/linux/damon.h:629: warning: Function parameter or struct member 'cleanup_target' not described in 'damon_operations'
+> include/linux/damon.h:794: warning: Excess struct member 'callback' description in 'damon_ctx'
 > 
-No worries. Should be fixed in the next linux-next pull. 
+> Introduced by commits
+> 
+>   dff2bc66ec7b ("mm/damon/core: remove damon_callback")
+>   769bd386e490 ("mm/damon/core: add cleanup_target() ops callback")
+
+Thank you for reporting, Stephen!  I just sent fixes:
+https://lore.kernel.org/20250712204650.155988-1-sj@kernel.org
+
+
+Thanks,
+SJ
+
+[...]
 

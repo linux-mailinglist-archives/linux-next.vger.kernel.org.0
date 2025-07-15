@@ -1,102 +1,104 @@
-Return-Path: <linux-next+bounces-7546-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7547-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E24BB0525C
-	for <lists+linux-next@lfdr.de>; Tue, 15 Jul 2025 09:04:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55064B05402
+	for <lists+linux-next@lfdr.de>; Tue, 15 Jul 2025 10:03:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBF0F189C1D4
-	for <lists+linux-next@lfdr.de>; Tue, 15 Jul 2025 07:04:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFB503B2E56
+	for <lists+linux-next@lfdr.de>; Tue, 15 Jul 2025 08:01:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD768BA3F;
-	Tue, 15 Jul 2025 07:04:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14684255F24;
+	Tue, 15 Jul 2025 08:02:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Zw6LstL5"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ByWN69qG"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D4380B;
-	Tue, 15 Jul 2025 07:04:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5B54A00
+	for <linux-next@vger.kernel.org>; Tue, 15 Jul 2025 08:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752563071; cv=none; b=UzVtAovfveIsHZpn05cvolbJ69qTdsNWHwRVrm1GVbUtHDt9R5xC5gp72LEhdymIDxoPTI09EUaZhb5P+QwBEVfiHGfxFGa0HP+Maw9EHvXebwTJQMDkVadDaYr9AepRKybSzBf6I/4qejasyCNXgIYdIpY0vsEVIL8QFTIapY0=
+	t=1752566530; cv=none; b=d+FWIpbU1SPLzZK3SZYxXCmgQDS8po6xf4mY3247AsZWgrkUmGaUWud86R96zOlKXFIAfFXBu4Wc/vXekTP+eDkb+N/nCGjFuQWzdXGpfMREEgDYa5hT1VBAlie5CFgG8BYJ9z4G+o1x/56akv9aotYcctRiN2STwjHJ9VUi1SQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752563071; c=relaxed/simple;
-	bh=jO2oLQhiHa9DyU6BUGb/Cd0RUwQcPr/FWpN+/pxpH30=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=NTQ0/QGGE0wKcJA2CBPXtohlA2jArudVJI6dgC7T3RBe1GYy+SIeJtb05PEdRZBeF/skypuzpaY1mgFrKxmi4rSKhvlzXtYKqKwuHoNWlskAuCB5IFKAvvezIYy7cf8iI6JCRXDZ7NgQcTy772Ym3YlEFYAzE2+1qD8hGLcaZyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Zw6LstL5; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1752562955;
-	bh=+NUOw0tOKoJJD0Vxeulx0RgVMMRx2eWfqz4C2akG2U4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=Zw6LstL5t7Zph9ePLNFykE6tvKZBQ/aUPp122TYm6D14ikOMcOzV9NHYjcEB6TPhL
-	 XgBXgh1ybuEyUZbiPgFmZlgmHzL4Rvg86hBGxt27sa9KMcjTrqDx0/4nJVuazz/ZHS
-	 ULEgD1nwXpMyIakPzZI+ynbGxT56EbD75q2b8aW+ouWspH9Oi2qOpJPU/CS/OF9qlB
-	 8mVNb6Km4rbnfH84v7vpI4sT3lOHp7HMU3+Gl96+9ldOEhCehGGXhqbkdVhSlMTBux
-	 wef1PQ3nCLfU4Ljt772QIqi5DuRS04vvU5baZLGiWoSLBmJ8ZCh74pXugV2JCRhVmm
-	 4+UcTgauCZn7w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bh99l4hWjz4wbW;
-	Tue, 15 Jul 2025 17:02:35 +1000 (AEST)
-Date: Tue, 15 Jul 2025 17:04:22 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the sound tree
-Message-ID: <20250715170422.5162c666@canb.auug.org.au>
+	s=arc-20240116; t=1752566530; c=relaxed/simple;
+	bh=bvYZ0SUaeupI17B0It6HTbZEuo0IzIFeRxB9wk5CyKM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ilfwtpuSOOyP2GJICqQGB7QBFeIWOiaRoxj7e1O/l6irPCRUjf2ZhbGd/jgbN0LZrvFaPA/uwrDr4+5kJ8uT+pIMrJk0PqmKVoQ51Hq9ZbhlEzdnP/ik9aNwqbH8T5yHQdp0vzLQBE09++OKG7f2pmsmYcSOBsokUjSeGy9VuOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=ByWN69qG; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=SrsK
+	YGNSlfQSvsh5jb+/BO418EmXot7GGbibR3jnoQQ=; b=ByWN69qGOA1fX+sd4Bc6
+	xoMW5I+tuzFAyXnHV2nUNxoh6YxCOW1IpC4p/sll59dnoq2GItLLbfy1j5yN94Z3
+	u9IFdkGReRx1EVKXiOqPAvxHUVSzyvSeC/O03Mfrc4hOSp5FWTDdIL+yEXh3hLEy
+	4F1QJV04RP5jHWd8niI55f+EYrF6hz2WAW2XSERho9WI4aDsOTRyU39gO11rTHI1
+	3H54N9gjLVDDoOg9Y7D2w5RKjCdeAsIKEbzsdB2Sbt4pEEo6VQqEzD24fxXGUt6P
+	lDHe2GAbk4w21iDz26ibhox0n9ZdQo6hH6sEwgF4N6/pv64dUdWN+8eBwd9hXaEm
+	1A==
+Received: (qmail 2790947 invoked from network); 15 Jul 2025 10:01:57 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Jul 2025 10:01:57 +0200
+X-UD-Smtp-Session: l3s3148p1@y1m3MPM5AMIgAwDPXx+vAAkEB0lWxGP4
+Date: Tue, 15 Jul 2025 10:01:57 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Wolfram Sang <wsa@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patches in the i2c tree
+Message-ID: <aHYK9RWJ7GqTzvY2@shikoro>
+References: <20250715130652.5570887f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YQrVvkNfGZLoD5mkq1/0uJY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="5MXiyYFJrbtVSoFD"
+Content-Disposition: inline
+In-Reply-To: <20250715130652.5570887f@canb.auug.org.au>
 
---Sig_/YQrVvkNfGZLoD5mkq1/0uJY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+--5MXiyYFJrbtVSoFD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-After merging the sound tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
 
-arch/arm/configs/multi_v7_defconfig:797:warning: symbol value 'm' invalid f=
-or SND_HDA_CODEC_REALTEK
+>   975b02f641ed ("i2c: stm32f7: unmap DMA mapped buffer")
+>   36ae42978569 ("i2c: stm32: fix the device used for the DMA map")
+>   cfba2fe76b2b ("i2c: omap: Fix an error handling path in omap_i2c_probe()")
+>   7c18e08f4c3a ("i2c: omap: Handle omap_i2c_init() errors in omap_i2c_probe()")
 
-Introduced by commit
+Andi, please do not rebase your host-fixes tree when I already pulled it
+but couldn't send it to Linus that week. Please only add to this branch
+but do not rebase.
 
-  aeeb85f26c3b ("ALSA: hda: Split Realtek HD-audio codec driver")
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/YQrVvkNfGZLoD5mkq1/0uJY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--5MXiyYFJrbtVSoFD
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh1/XYACgkQAVBC80lX
-0GwqOAf+OXvTs1gR9pyUaBOJZYd6IaTYx+N+cWCw8niTb4ZA9oGtmjcVlh8hG6mN
-GfUFkGYEaKg/tKieeJIYA+xmO98j7LIcOg1zxN+O+IndSy0+mMOYecrNPgQSCf/v
-+X2JVrJ++g830IX6EZz4HLdlyBb7vA1olXGttZ5+EOYdwGB/sK0q60F4Yezqi7Tp
-mJYU/t9OVuPk6LRW4NLGiPcLsUKJi0PORK5jeKC12aaaI7kKKAUHXwf7TEDIRjyC
-GFZQsFimlzL3jJL1bAgtMiu8c0UhNyU2ggAeK5dqilyOUmuitBxqBqC79cGJN9Kl
-9NGKIl6bY/inHz24dCbw/VY6vV01SA==
-=F0Nh
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmh2CvEACgkQFA3kzBSg
+KbZSRw//eo7V6w61lv4uzkvkMzJVqAldRD+rTyXN//2XCbeRcdJDiECdK3frKdLM
+FVGxQ2JH+dEhcErPUCzIarfg6i54FNnr/tn7jTwgr+RKR8r6gxKpGkJrjF/9Z4sr
+M4t5lzQmzmSn3SfS5t3MtiL5ds+4LQj2f/LjISBjOKPyZtrHO+DK3ULTyyBYnIZm
+8UhOanc2P2w8B0qfEZkpEiAlNZPDYut/NVqBWSu9b4/dk2njYZ8q6QU4LvdP67kQ
+mw3CKiI/JQUsvHS/LGac8VC6jcZFXETLqR9EcfWVCULd1/nKz16cDrakqlMEzwKm
+1/CR4OeTnQUvnO8Q6aqIUxkYBB6SrHyKwUhW85DD5yADIoSkXafKfGuE5q5KJpBs
+zEQgAn43rFlyDB+t1GPSdzmmYrm8LpjPjoM3yCfzhHO6UCyeWf8BR5nIArCkGZAK
+eR7ZfunGEaBDRXmQjgMXPFdCxj8EbFKrdNFXcyI+vCzv0NLdDwNQE9LO20ePycPm
+T48Eska1E7lOdJFEeiwUArbp9QqA+ZMesJerbDfnhtnXzrBEKpLJriAlUNvFIEiJ
+qYJJc9oQAQoPf3jOhvaYaWrh9qagPHDW8Zm9aQ5ltoczJE/a40F+aE46wX/cw01R
+nBTj4XeOE86/J8yUsDR90bz9lZ3j61pEOlaIHYTFAvM3UXIRW+I=
+=HD30
 -----END PGP SIGNATURE-----
 
---Sig_/YQrVvkNfGZLoD5mkq1/0uJY--
+--5MXiyYFJrbtVSoFD--
 

@@ -1,220 +1,115 @@
-Return-Path: <linux-next+bounces-7566-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7567-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCAA6B06CE9
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 07:03:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AC80B06DA3
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 08:08:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B73614E2B4C
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 05:02:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 754F4179F4F
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 06:08:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F6131DB95E;
-	Wed, 16 Jul 2025 05:02:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF1A727281D;
+	Wed, 16 Jul 2025 06:08:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="NdqIiKML"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jurnm2l/"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D51B80B;
-	Wed, 16 Jul 2025 05:02:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469D417A2EB;
+	Wed, 16 Jul 2025 06:08:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752642163; cv=none; b=tI3Ud9gTdckzfuMnjh5S0kecySEMeWADsufSd4DaPDHCwkSyG7GcidAOZSWEy8xaF31bhSKu5EHq8cZagM90bvOHzdJ0MXlmp5pLk/CohOm4imdJbv1k8bh+aDMHXd1bxZNZmNw/i/MNRUODd4zkbi7nbQVyAaax3kJmEiPkxEU=
+	t=1752646101; cv=none; b=in7uvZs2oa+xOSAyeRD+RhKJ64VacqDMpbdURj2v/pId2kS2hPvZoHelu2EXBPiyF44k16ZxbRu37Tih3uvxoNIzCjKGhVqc0Cve+VpxMiG7zkygHQ7Awurg0E4489ZIIVtGrhrD2RFKAVwk7Ku0PUNHaClEiRtm8GQBCfMHTiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752642163; c=relaxed/simple;
-	bh=Bdm6Z+rIcZb52afCL05qwI9t84Oprd8A8oXx3N79dWc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ZMWGvX3keT33ALIkKyHvqnlyOsGIRagHiFuSAU4w6nK+HIRNLAcSpy7ooTSP+p0GfCFJP+hcnjAGgo+HjBu2mPg+OUejX4RlpVBeL5mr5sDxyT9whWOtpca3XDVEceukduXvUZqF2sU58IdOV/F8Ag3ORoIXwamO7Btgga+8pJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=NdqIiKML; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1752646101; c=relaxed/simple;
+	bh=6gEcNwbS3mzksw1oitjVOTzbSOe+6e3BXsTfDswZZ0w=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=BVwmXf4DqyDxP1ZSO2MshamNA0kLHoLh++dOjHbpQUxfFKwPeMhm6wciJUGgreidSXjPqUK+5gdlUX6K7DVDRfN/nDQ2mBoQpXdEVAfWs+U0omwWFqYhRxeHwFuex7OCUgr56kPO8NjPjBKb94j4JGMAyDfpiq2gn/+Di9WLKtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=jurnm2l/; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1752642041;
-	bh=p97HC3PRGkP2K2c9i06BIOEYcA8nOtYu4zUjYK8Gjq8=;
+	s=202503; t=1752645976;
+	bh=xiuNGglcJ4zOe68lTes452XoRe2vjs4glbIiDIGxVjo=;
 	h=Date:From:To:Cc:Subject:From;
-	b=NdqIiKML49VUDyVb1RaegLwzCdC17TrYEzolO2q+eiBUPpZOpumTtyobc4CNOKJ10
-	 sQTRFlDbif1N58VHKXjyLv3ZwLBV4LQ5bVamYg287IN1O9tzr2/u0vRs/Cn0VyOVR1
-	 foEH739fIZfFoCV5sM0F0efiVa+tabWnvfaBC8Gpvq7rfwtHTQRyetcN4CFU9P+ELR
-	 YN5mXqMar7T+XoaTiM9PP9MXIMtcTkx6xPg3dPArxAkRKf1Af6kZRrnM1W++SfMWct
-	 HsVA/X15taRukjAvWTnGexUGxU3u//qMFnqETM3pD+VibEjLsTasH6OX7vwehSBNTP
-	 VDHe0if3GsZug==
+	b=jurnm2l/4BcQCsVaa6l0yMBMku4ttsZoBHCfIkODDxf6FUxsUNYQmv7ncR8ediCY1
+	 EklFo/elxcWXeHm2QVCMMxN2TcrMq2ei2BcSIbR1TQNtsFiJ0rGI1H5t1MFGImAXmi
+	 U/yvPu73qU39u6+9VbVTPNl3c07HR/obaPgh36ygQkd3CU4W1CAJcFI5Nsqk/UEHAd
+	 OV/TjVe1gGEKlB3Iug+zLX/FgH19B4bAxGr5HXfVoR5XsWKVMmV0bOedwR4Ql8ldTx
+	 PraFy45Yd8pU4MRQ0WrApvfszg8Yn1XkVFt45QrzutafGbw6Io+883iWZxt/nsFCNS
+	 2jej6hlqX0OWA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bhkQc3zgkz4w2Q;
-	Wed, 16 Jul 2025 15:00:40 +1000 (AEST)
-Date: Wed, 16 Jul 2025 15:02:34 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bhltJ0VTTz4wbn;
+	Wed, 16 Jul 2025 16:06:16 +1000 (AEST)
+Date: Wed, 16 Jul 2025 16:08:09 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Donghoon Yu <hoony.yu@samsung.com>, Will McVicker
+ <willmcvicker@google.com>, Youngmin Nam <youngmin.nam@samsung.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the block tree with the jc_docs tree
-Message-ID: <20250716150234.52ec0d5f@canb.auug.org.au>
+Subject: linux-next: build warning after merge of the clockevents tree
+Message-ID: <20250716160809.30045a56@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nbaLaHHG=c60=MtgujnNaI4";
+Content-Type: multipart/signed; boundary="Sig_/7at+00tyozLYnLo/9qW1Kv4";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/nbaLaHHG=c60=MtgujnNaI4
+--Sig_/7at+00tyozLYnLo/9qW1Kv4
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the block tree got a conflict in:
+After merging the clockevents tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
-  Documentation/userspace-api/ioctl/ioctl-number.rst
+WARNING: modpost: vmlinux: section mismatch in reference: mct_init_dt+0x324=
+ (section: .text) -> register_current_timer_delay (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: mct_init_dt+0x4c4=
+ (section: .text) -> register_current_timer_delay (section: .init.text)
 
-between commit:
+Introduced by commit
 
-  15afd5def819 ("Documentation: ioctl-number: Extend "Include File" column =
-width")
+  5d86e479193b ("clocksource/drivers/exynos_mct: Add module support")
 
-from the jc_docs tree and commit:
+and possibly
 
-  1cea5180f2f8 ("block: remove pktcdvd driver")
+  7e477e9c4eb4 ("clocksource/drivers/exynos_mct: Fix section mismatch from =
+the module conversion")
 
-from the block tree.
+For this build,
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+CONFIG_CLKSRC_EXYNOS_MCT=3Dy
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/userspace-api/ioctl/ioctl-number.rst
-index 677456c31228,4f1532a251d2..000000000000
---- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-+++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-@@@ -223,32 -219,31 +223,31 @@@ Code  Seq#    Include Fil
-               fs/xfs/linux-2.6/xfs_ioctl32.h,
-               include/linux/falloc.h,
-               linux/fs.h,
- -'X'   all    fs/ocfs2/ocfs_fs.h                                      conf=
-lict!
- +'X'   all    fs/ocfs2/ocfs_fs.h                                        co=
-nflict!
-- 'X'   01     linux/pktcdvd.h                                           co=
-nflict!
-  'Z'   14-15  drivers/message/fusion/mptctl.h
- -'['   00-3F  linux/usb/tmc.h                                         USB =
-Test and Measurement Devices
- -                                                                     <mai=
-lto:gregkh@linuxfoundation.org>
- -'a'   all    linux/atm*.h, linux/sonet.h                             ATM =
-on linux
- -                                                                     <htt=
-p://lrcwww.epfl.ch/>
- -'a'   00-0F  drivers/crypto/qat/qat_common/adf_cfg_common.h          conf=
-lict! qat driver
- -'b'   00-FF                                                          conf=
-lict! bit3 vme host bridge
- -                                                                     <mai=
-lto:natalia@nikhefk.nikhef.nl>
- -'b'   00-0F  linux/dma-buf.h                                         conf=
-lict!
- -'c'   00-7F  linux/comstats.h                                        conf=
-lict!
- -'c'   00-7F  linux/coda.h                                            conf=
-lict!
- -'c'   00-1F  linux/chio.h                                            conf=
-lict!
- -'c'   80-9F  arch/s390/include/asm/chsc.h                            conf=
-lict!
- +'['   00-3F  linux/usb/tmc.h                                           US=
-B Test and Measurement Devices
- +                                                                       <m=
-ailto:gregkh@linuxfoundation.org>
- +'a'   all    linux/atm*.h, linux/sonet.h                               AT=
-M on linux
- +                                                                       <h=
-ttp://lrcwww.epfl.ch/>
- +'a'   00-0F  drivers/crypto/qat/qat_common/adf_cfg_common.h            co=
-nflict! qat driver
- +'b'   00-FF                                                            co=
-nflict! bit3 vme host bridge
- +                                                                       <m=
-ailto:natalia@nikhefk.nikhef.nl>
- +'b'   00-0F  linux/dma-buf.h                                           co=
-nflict!
- +'c'   00-7F  linux/comstats.h                                          co=
-nflict!
- +'c'   00-7F  linux/coda.h                                              co=
-nflict!
- +'c'   00-1F  linux/chio.h                                              co=
-nflict!
- +'c'   80-9F  arch/s390/include/asm/chsc.h                              co=
-nflict!
-  'c'   A0-AF  arch/x86/include/asm/msr.h conflict!
- -'d'   00-FF  linux/char/drm/drm.h                                    conf=
-lict!
- -'d'   02-40  pcmcia/ds.h                                             conf=
-lict!
- +'d'   00-FF  linux/char/drm/drm.h                                      co=
-nflict!
- +'d'   02-40  pcmcia/ds.h                                               co=
-nflict!
-  'd'   F0-FF  linux/digi1.h
- -'e'   all    linux/digi1.h                                           conf=
-lict!
- -'f'   00-1F  linux/ext2_fs.h                                         conf=
-lict!
- -'f'   00-1F  linux/ext3_fs.h                                         conf=
-lict!
- -'f'   00-0F  fs/jfs/jfs_dinode.h                                     conf=
-lict!
- -'f'   00-0F  fs/ext4/ext4.h                                          conf=
-lict!
- -'f'   00-0F  linux/fs.h                                              conf=
-lict!
- -'f'   00-0F  fs/ocfs2/ocfs2_fs.h                                     conf=
-lict!
- +'e'   all    linux/digi1.h                                             co=
-nflict!
- +'f'   00-1F  linux/ext2_fs.h                                           co=
-nflict!
- +'f'   00-1F  linux/ext3_fs.h                                           co=
-nflict!
- +'f'   00-0F  fs/jfs/jfs_dinode.h                                       co=
-nflict!
- +'f'   00-0F  fs/ext4/ext4.h                                            co=
-nflict!
- +'f'   00-0F  linux/fs.h                                                co=
-nflict!
- +'f'   00-0F  fs/ocfs2/ocfs2_fs.h                                       co=
-nflict!
-  'f'   13-27  linux/fscrypt.h
-  'f'   81-8F  linux/fsverity.h
-  'g'   00-0F  linux/usb/gadgetfs.h
-
---Sig_/nbaLaHHG=c60=MtgujnNaI4
+--Sig_/7at+00tyozLYnLo/9qW1Kv4
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh3MmoACgkQAVBC80lX
-0GxOwwgAmxnFBP1MkgidiDGk0ioFO3qx4XASPDKxSv6p1X+QQ2j6kjUWECbZgd2P
-axiQd7srnLTehrR60tAOIQVhmUP+n011JqeoIZxTtzShdUfc5MMqDMYNsTCgdKS/
-Y0t+d6XF7JK9+eDJdOwltjmpEdxN1DO4PB73UpLBALKH49U0LTNld2Dqz8J3Tkan
-6REkCRe97UcjxAC1oV+sx4jA2/sWrSYTQprX/EAoZelIzUAalCBng6hOHQsbKzuR
-fL2owp6jC9jjwzfMslq/A1tcpfCvGALyKjUEVQks1inQzFkHgnctgJG0JRkZ2VB7
-7+9lbjGu6Fa2+G+uMYQbLwN8PQTlIQ==
-=b2CR
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh3QckACgkQAVBC80lX
+0GxyfQf+Iu6FK+4PJc6WdJmGVZZHfqycFyQVyWiF2AgQUItCiUjequl+N+Rz8Ewj
+8vTRgoSX7kYHaFRTyWyfjU12AkqvSUqlV8x9NHi6pb+yHygWfa86+yF+K/01RF45
+Fnqz6MP+TXxLeEeJyU2O1el6lmUK7Hcz7BH0SWWf8E2Gu861iKwFkF4cfp1Tn4vG
+ERdMoyfGs2Dr/ywN++FJ7IUz3hUeQji3U1H8b6qePnBqJNqSW7IMTySQK1uwlV4w
+UKxLWd41manuKdJ/3qm3rwuPo7dtfgf0AQlbLQwYXUy4BR281WjswfDsTzaLr/oi
+6BXUZbvkmRpTYTB6toakIeaF0R+VGA==
+=/iO9
 -----END PGP SIGNATURE-----
 
---Sig_/nbaLaHHG=c60=MtgujnNaI4--
+--Sig_/7at+00tyozLYnLo/9qW1Kv4--
 

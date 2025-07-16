@@ -1,106 +1,115 @@
-Return-Path: <linux-next+bounces-7570-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7571-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B176B0710C
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 11:00:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22366B071BE
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 11:34:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3DA757B0729
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 08:58:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71A8D580ABB
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 09:34:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0F5D2EFD93;
-	Wed, 16 Jul 2025 08:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39C062C1580;
+	Wed, 16 Jul 2025 09:34:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="A4FAfAf3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hux4SLkM"
 X-Original-To: linux-next@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025722EF9C8;
-	Wed, 16 Jul 2025 08:59:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2357253356;
+	Wed, 16 Jul 2025 09:33:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752656394; cv=none; b=g7unspr2ErmTBjRypANg20uTw6c2ODzJ4bVT0J2Yxxi+CfzGbG/+wb4tDeJQXTm5ROhbfctTw6SYIFFGoAfJQ/uHSQf9sBhbhxZu5oi4PzclSNHX+a5dcb1ihDb10OXAkR2hR8bIjdCVaem6pH/lMl3iwyO13L+v0UGxfH3MO3Y=
+	t=1752658441; cv=none; b=pju08R5PiGjc4x2fOzv9EsTNfvk4GhANmrubQTezN3gdfrYZHSl1g6OLZhpwbzcDVWriaYZBC/lwcITkmsgjdaoNHOSHRduHIrhSmyHW7h7qBXjTaD5b5bh2iiLjSxRN0pM7yNKFAbtIMYVOMSXfMAqNCANHWqny2/dvgMfoglg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752656394; c=relaxed/simple;
-	bh=omsA/uCDBuMfKRi2jS9/2tG724FfWKvFGOyfgKRKD4M=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YbGPIPgK/4CO0oEaUz0/7xoCalWLmbF3X6j/BDQKHvS+rwjf1nJHvpuzqjdj02fEIbVlkWFop+nq59AFCu5ECmjdh3c+iI3Qpxl90tGZVrp7exVNIEMrbHTqcdl6N2I0D+gTZ6ROaBQHAPAyxGTCp3nI82bhNkrKg9M215Wmrbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=A4FAfAf3; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=bNIqQCJn++oQUJ7jX7uY/k18mYpdzuADPNVvf9H5Dc0=;
-	t=1752656393; x=1753865993; b=A4FAfAf3xFvoRb24IhE0/24iQxEyGr3qTgf0KP4GiZx0ZB6
-	UGNjXoDcN7P9dNj8sjyNOz/XqtpZWPl/YQ8ZuSVbdE+W1JGvfe671k4sKJtPcyBx2iJ3xUn1nwX5J
-	y5pYA/oRh2fyHq6zwlje0HJK7112KTDUtfsNxFSLmVCTYwtQH8fMV2ozLHh1azCrVaowta0rZE4Ab
-	fEe+Prl4YmfPn877dKwZoyXsho+SVpGLoe7y9SaxLxW8I7jGnMLK/322UV9ZVvyVx1e2ugVFp/oNb
-	CbqRMTbDF9xxvsoqiWAaN+JvYzl5Pn/MB2XmCgjx2S7reLgJg3IyPkyly+rr7Ngw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.2)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1ubxzA-000000080BS-2JWa;
-	Wed, 16 Jul 2025 10:59:32 +0200
-Message-ID: <4ee6758a49e6f01c5e42b2f7c27aff905ac07dfa.camel@sipsolutions.net>
-Subject: Re: linux-next: manual merge of the wireless-next tree with the
- wireless tree
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Kalle Valo <kvalo@kernel.org>
-Cc: Wireless <linux-wireless@vger.kernel.org>, Linux Kernel Mailing List	
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List	
- <linux-next@vger.kernel.org>, Miri Korenblit
- <miriam.rachel.korenblit@intel.com>,  Pagadala Yesu Anjaneyulu
- <pagadala.yesu.anjaneyulu@intel.com>
-Date: Wed, 16 Jul 2025 10:59:31 +0200
-In-Reply-To: <20250716135252.51125baa@canb.auug.org.au>
-References: <20250716135252.51125baa@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	s=arc-20240116; t=1752658441; c=relaxed/simple;
+	bh=cHEfhWFXrCybHnY54wFHNIDzIVXMALti3G4z6Ampkx4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Pa8tYX7fH4/89BHigRWOaLonChW5Vt2YWHaiJja7ysrY6YY47UZhF9gSjR1D0UDoZfAziqqipsUU9gy6Je7Zb8Tu7gpJJ3HPBYgyrRoXUE30nZf6J9o6arurCmKPZ2Qrj1CcuDGvUdoHFOVy2aZuBayPwes40uOcbP+FVpIxmgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hux4SLkM; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1752658440; x=1784194440;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=cHEfhWFXrCybHnY54wFHNIDzIVXMALti3G4z6Ampkx4=;
+  b=Hux4SLkMt39Qu6MBoQUCgEWyFikTjHGsXP0uJ8Z1OIcykrmu+v29yVk/
+   vck/Q1raZuTzPzGxyqpjHmoYnvYQgnO7r/sTi+/xKhz6tML+JJcx/kSdE
+   wBCqy1C284bp8XZn57r+EPNQtZmlpln4+J54bqIURijc3bAiDYbV9JfCw
+   X8+DQvgG94S9nNUkFj5FpukAeD9EljN7TzNx6M6u6WN77yGrCH7mw068k
+   +xiG2wpZK1VXk1FoIdJv9qGlGsiTwMM/EEVjyWh3jM2GgtQx0gV2kX2jo
+   X23HveKBdUvyGYpJ80vCEmxqI1hKOJCmTsDWUMIla0YGQMbS9xswcSjvJ
+   g==;
+X-CSE-ConnectionGUID: ETTONqHqS1SeSqMHRiXdxQ==
+X-CSE-MsgGUID: ANUpcb+DTsSALceBPUb51g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11493"; a="77427916"
+X-IronPort-AV: E=Sophos;i="6.16,315,1744095600"; 
+   d="scan'208";a="77427916"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2025 02:33:59 -0700
+X-CSE-ConnectionGUID: m4U72yvrQR2K5QYw9WxicQ==
+X-CSE-MsgGUID: +SA32eI3TFmM0uncvx428w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,315,1744095600"; 
+   d="scan'208";a="161479108"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2025 02:33:57 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1ubyWQ-0000000FtoD-2doD;
+	Wed, 16 Jul 2025 12:33:54 +0300
+Date: Wed, 16 Jul 2025 12:33:54 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	linux-serial@vger.kernel.org,
+	"maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Subject: Re: linux-next: Tree for Jul 15
+ (drivers/tty/serial/8250/8250_ce4100.c)
+Message-ID: <aHdyAm8tA64YSdOt@smile.fi.intel.com>
+References: <20250715204504.36f41a8e@canb.auug.org.au>
+ <cdf4ee46-7bf8-4379-9245-fed9db72e7e8@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cdf4ee46-7bf8-4379-9245-fed9db72e7e8@infradead.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Wed, 2025-07-16 at 13:52 +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the wireless-next tree got conflicts in:
->=20
->   drivers/net/wireless/intel/iwlwifi/fw/regulatory.c
->   drivers/net/wireless/intel/iwlwifi/mld/regulatory.c
->=20
-> between commit:
->=20
->   5fde0fcbd760 ("wifi: iwlwifi: mask reserved bits in chan_state_active_b=
-itmap")
->=20
-> from the wireless tree and commit:
->=20
->   ea045a0de3b9 ("wifi: iwlwifi: add support for accepting raw DSM tables =
-by firmware")
->=20
-> from the wireless-next tree.
->=20
+On Tue, Jul 15, 2025 at 06:42:52PM -0700, Randy Dunlap wrote:
+> On 7/15/25 3:45 AM, Stephen Rothwell wrote:
+> > 
+> > Changes since 20250714:
+> 
+> on i386, when
+> CONFIG_X86_INTEL_CE=y
+> # CONFIG_SERIAL_8250 is not set
+> 
+> ../drivers/tty/serial/8250/8250_ce4100.c:90:13: error: redefinition of 'sdv_serial_fixup'
+>    90 | void __init sdv_serial_fixup(void)
+>       |             ^~~~~~~~~~~~~~~~
+> In file included from ../drivers/tty/serial/8250/8250_ce4100.c:12:
+> ../arch/x86/include/asm/ce4100.h:10:20: note: previous definition of 'sdv_serial_fixup' with type 'void(void)'
+>    10 | static inline void sdv_serial_fixup(void) {};
+>       |                    ^~~~~~~~~~~~~~~~
 
-Thanks for the heads-up.
+Indeed, thanks.
+I'll make a fix ASAP.
 
-I'll double-check, and give Jakub a heads-up, he's probably going to hit
-this, unless I defer the wireless-next pull request. We'll figure it
-out.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-I also just noticed that you're still sending this to Kalle - he stepped
-down as maintainer earlier this year, so you should probably change the
-contact for the wireless/wireless-next trees to just me.
 
-Thanks,
-johannes
 

@@ -1,104 +1,93 @@
-Return-Path: <linux-next+bounces-7573-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7574-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 985E7B07360
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 12:29:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27B81B0736F
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 12:31:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E00D8189E51A
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 10:30:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A49145076C3
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 10:30:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA8382F3C0F;
-	Wed, 16 Jul 2025 10:28:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C520322E3F0;
+	Wed, 16 Jul 2025 10:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ciKxhP1I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PLbEUQoc"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144A32F3C0B;
-	Wed, 16 Jul 2025 10:28:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D53B20C00B;
+	Wed, 16 Jul 2025 10:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752661716; cv=none; b=GNTMXffJmSAdGyqW4hooDbECRqmlXbcc0lyPzUr1WHSTAVCTJ8yvTJLXMtQI/V13s9q6bmOMjwhtwnw6rTZwAy5nhiuwbjLJqOmzUu/FBiVdDJxB1DRtIJjdYFnh5EjhvVOnOIwT8L6g6vHRgnZnk1EAX8eRM6BrVoYrVrn+JsI=
+	t=1752661868; cv=none; b=PsTkNVZX4LIIT/vkexQE6CFEzEWIBzmxEA8ZLLc64u5HTOWhB11ej2sebxnXBOs1t+mKppB3OoiuyDHoNWroyYzxdMBt+4M5sKQKwlrxIALbB8UFeBtiE5kXvsvx+eJG0pnZzurZYz95Jr8pVXZXZMnx99rHxUQA2DhW8ZsC8QE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752661716; c=relaxed/simple;
-	bh=/3RqJ/Hz+8XRJuqTOIQo42/svd54egMkHPgw8UyBugw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=iHE9gXM+kQCYAeydrjgKb9NDT5GlkgtXGiYBG45AFoRZOrBO7OmnhlkodvpmcA9q2B2Af46mIKBzFBEQZRahBU+DKAGEwyPxH2pY+SOh8nTdcG7ERapVFiah3LIBVx52mJkyuD4gvZqM44cddMs36nDeGoGEBqOeNMsqyyYJfg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ciKxhP1I; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1752661595;
-	bh=9k/hu5NPn05NK6bmK6nNjQOPRwx9rb+1jSmlK//VoQo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=ciKxhP1I0twFkPpcUJfKjsbB7/wmk8YkW7LeWyfxC2KroXqjg54KuT9yAVNoHAZb8
-	 SHdQiNdpqcz8hxXHVZOWKhMDKwwgLSIVeZv7ntjuwsNm2RFY5W/9e16nbkuYhcc8Wq
-	 n71Si8620Qaq/7+PIXYAE4KO1q1jGYtpV3temblEmIhUNWNGsMH8On2OpOtKUrT6dC
-	 MLAQNBuB99tuVZRhb1kbZEjXm5Nq/wUVXEStgYfCL6BGa5f5QX7jXp40T/XhOtjBy3
-	 YlkvUHoZLjnZ3OFqwjf2dt90PPWQlOeJmTd9AEEeJwTuhQLxXVZm/Iip4J/w4GxD9f
-	 z9QhYC7kQqrWw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bhsfg2qKdz4wbn;
-	Wed, 16 Jul 2025 20:26:35 +1000 (AEST)
-Date: Wed, 16 Jul 2025 20:28:31 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alex Deucher <alexdeucher@gmail.com>
-Cc: Alex Deucher <alexander.deucher@amd.com>, Ivan Lipski
- <ivan.lipski@amd.com>, Yihan Zhu <Yihan.Zhu@amd.com>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the amdgpu tree
-Message-ID: <20250716202831.68661f12@canb.auug.org.au>
+	s=arc-20240116; t=1752661868; c=relaxed/simple;
+	bh=8xjOaqal/L40o2WPaOpIYLp/RLO1gYdLXInOd8YQJwM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=gOBLagt0Gnw1VCAdSo8kulSAE2mAQK8PAqqjN7hYdwVy5g+/n3N+v8Gsl+Y8cAasyuvTgy2fjEZWpIR9vYe7Vpnic+HRvvP44MXv2vmY6sDGt3Q/5PKApZ6hJZEGxaAkdvArOTOAlna+MAM4Up8ahcUd2YsZbfaf+B9Ot+EsN5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PLbEUQoc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7204BC4CEF0;
+	Wed, 16 Jul 2025 10:31:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752661868;
+	bh=8xjOaqal/L40o2WPaOpIYLp/RLO1gYdLXInOd8YQJwM=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
+	b=PLbEUQoc8KGHbXmHGmyzzVcEje6nMuw1StUisbQClc9HnKjFSQZWYO1R56JucNMyu
+	 l4pVv5SBYHDgEJdiHTXTGLHEVe71F4sdowdeBcemJwALwrJgm4H2bvw9ViM4xRrOod
+	 0rePRKbBaiil7H+aiTCgAqSDX2BVMs7HVgyANvXFzXoanceEjA6OLdyUAwgMA7/mGC
+	 MWh8GROg1BfUibjwnsEPQ4grh7xlfTsmvlTAsW7piwxd/OQuK8/aJtrsmL9yBp8Lsz
+	 j+Ivtm+IFXZb8DXL5qYyYkhfXZKI9F55jeKr8OHG2WjmtwjAm3XImMAmCm2naJxiqa
+	 T2h64+xJCxeiw==
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4E7Idhb3kFwZXZIqRKRORX_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/4E7Idhb3kFwZXZIqRKRORX_
-Content-Type: text/plain; charset=US-ASCII
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 16 Jul 2025 12:31:04 +0200
+Message-Id: <DBDES17FT4ZZ.GVIUKUE5R9SE@kernel.org>
+Subject: Re: linux-next: manual merge of the rust tree with the drm-misc
+ tree
+Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Simona Vetter"
+ <simona.vetter@ffwll.ch>, "Alice Ryhl" <aliceryhl@google.com>, "Intel
+ Graphics" <intel-gfx@lists.freedesktop.org>, "DRI"
+ <dri-devel@lists.freedesktop.org>, "Linux Kernel Mailing List"
+ <linux-kernel@vger.kernel.org>, "Linux Next Mailing List"
+ <linux-next@vger.kernel.org>
+To: "Stephen Rothwell" <sfr@canb.auug.org.au>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20250716201656.4f0ea8d7@canb.auug.org.au>
+In-Reply-To: <20250716201656.4f0ea8d7@canb.auug.org.au>
 
-Hi all,
+On Wed Jul 16, 2025 at 12:16 PM CEST, Stephen Rothwell wrote:
+> Hi all,
+>
+> Today's linux-next merge of the rust tree got a conflict in:
+>
+>   rust/kernel/drm/gem/mod.rs
+>
+> between commit:
+>
+>   917b10d90990 ("drm: rust: rename as_ref() to from_raw() for drm constru=
+ctors")
+>
+> from the drm-misc tree and commit:
+>
+>   8802e1684378 ("rust: types: add Opaque::cast_from")
+>
+> from the rust tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-After merging the amdgpu tree, today's linux-next build (htmldocs)
-produced this warning:
-
-drivers/gpu/drm/amd/display/dc/dc.h:255: warning: Function parameter or str=
-uct member 'num_rmcm_3dluts' not described in 'mpc_color_caps'
-
-Introduced by commit
-
-  26ad78fffc66 ("drm/amd/display: MPC basic allocation logic and TMZ")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/4E7Idhb3kFwZXZIqRKRORX_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh3fs8ACgkQAVBC80lX
-0GzYnQf+LGHIY95EcYv43M6GPiX1XA4b2g/xIMZly6lbCydMhQmuhLm2tCP5iN+w
-16jl2wNerU3ELPIzCce1f2BM5ytKOSFDxZNd1PTL/1OKCsutTkDdokfobV2ABJOp
-YO/VPR5h1le3/WXaO6klttNGhuYee+KsIdoGYbQhyUxBwO9XFnoA68QDvI7S007v
-F57AUAAxmrL5Wzyu2JUM4KnTiDeedIcgrMSyQ7a0lrmPCRQftlmXiAYAcYRL5jjy
-lSOdxYNUlg4CRkz+M56V8o7bgdh4pp/V0IPC8URUxKhGxZXP5IUM1r1kH/npQN5j
-fRybK3Ga3mnb1FATebPtGQEqwJbHWg==
-=0Gnz
------END PGP SIGNATURE-----
-
---Sig_/4E7Idhb3kFwZXZIqRKRORX_--
+Looks good to me, thanks!
 

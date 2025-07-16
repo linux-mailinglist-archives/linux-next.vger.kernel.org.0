@@ -1,113 +1,92 @@
-Return-Path: <linux-next+bounces-7560-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7561-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CC5AB069DA
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 01:24:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC40CB06B2C
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 03:32:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A71743AA7A0
-	for <lists+linux-next@lfdr.de>; Tue, 15 Jul 2025 23:24:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2973A1A65AAA
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 01:32:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DE3A2D5C74;
-	Tue, 15 Jul 2025 23:24:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFEAF199935;
+	Wed, 16 Jul 2025 01:32:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fIy2kXQf"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="TVuCMCjR"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94922D028A;
-	Tue, 15 Jul 2025 23:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C647E60DCF;
+	Wed, 16 Jul 2025 01:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752621892; cv=none; b=tfJ4V25k5uwtWpDX6hpLfOD3XpoJiFVwI07OqRFSXxbOxpDz/yAvqZg7vjz1w5G1vZznEnEadI1FI2sEiIPu/K26SmGy2LFmAlS/0YkjZBBy30dz4ZQ7W2NLMtD7bh0cB3vdcIA3cDL1OiqdvnqLPhQatF6nomyUtyJSFDygmoc=
+	t=1752629526; cv=none; b=ck0bZ85ED9tnFwpuADNR/iXJ0BlE1vjbTgO3N+M7WNeIv8+sG76EPNBxwVYXgLY2MRE1NHAuxDuDiXyO2kLtiozclJR3GxZd8jkvte3gC+AIy012zHg4yPAkDnk1LZS2zgXiLnpckoyM8vO8yaxgk+kDtg1oJ4Znd+9ADQt1+ZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752621892; c=relaxed/simple;
-	bh=ojutHGyoFSRRAB3a5mqG5JRLqJy4pyKqBz8EeOc8Yec=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=cygmJRnqB1+5N0uduVDcj21xZtofeknaWI3lhYUE96mCltHRp7t0DGOiCFrQl6IxOy7AWowXLbSbxQx00Gx36MldxUh1zpDQ/3/MQfmOhqPKjYp/8nt6EpddDKComGB1ydaKLqZBFVBCLwZy3y4Ou/1X81kt1DH4QK3wteY2cbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fIy2kXQf; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1752621769;
-	bh=CTIHpG4Rv1Fg/ahKv5UThomQ+/44WaEtw+fJuo4EV4E=;
-	h=Date:From:To:Cc:Subject:From;
-	b=fIy2kXQfEky/dKrN7ZYa8FimWpA3R71QXFHydiUw/p8gSQH+xQCKfatjfMEG2Z8CM
-	 tAQGkMwJck83IrbclHme39NlOI6MWpOA8m5/R/Nl5Nb7ddFK+mahx+0/NBRkrY9Dgb
-	 hUsjYshhR7OZigQMKkK7OJDLcCvwH4JxqDHS3t77koOHf+fWDsXMDQ96c6NBsYSiKd
-	 faP+7u9f7/3ECcwxKw5PRLyaSpUPfnJPQaKEJtC6nAz3dS1aowtMNKtULfvOYFgLIE
-	 Clo/dn74KWuJRYRelTb0a6apSqZbDv2dyGVXLLuGuASjlr89xWJcE8VqZSCJCrUi+5
-	 86Kh1rR1Nb3NA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bhZwn4TWPz4wbx;
-	Wed, 16 Jul 2025 09:22:49 +1000 (AEST)
-Date: Wed, 16 Jul 2025 09:24:40 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Sterba <dsterba@suse.cz>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the btrfs tree
-Message-ID: <20250716092440.5b7361c2@canb.auug.org.au>
+	s=arc-20240116; t=1752629526; c=relaxed/simple;
+	bh=DtkaSWh/V2WSvJw2yY8ziRveuGLLjzaJsHT1iDfMJ4g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ksmjj5efqHlSmjLy+owbVrbYToB7Jf72sHSlvQvbOBjS59ntdTj0oHcDbt2Z1+Sy9iOYptWjpf004meBXSPSwDXo+rjGk5TskTnByeuXOi7vDoYenVZzbWWPESjwnQzpOiDXhEXi/Ydj0nlVHflnK8ZqAISlQQPdTqNK73kUq2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=TVuCMCjR; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=TDFua8pqQK/GY6N6TkhZB75i9+h4C3DT06uWm+96xF0=; b=TVuCMCjRkZhsfOAHB+LWnB5C+F
+	ikM2XqvXmPoFfpYzpeyN5qwBjex1ugXxBSEbqJJU0nhS2L0nlJqd8l90tMVCK/7yn4X2N9FqO/OQd
+	VUafGc4h22Pbm5zFbGL0q2UaWsGUFToW7VhyRzCENt67lwh9M/Ch07ls5bHibJi5SNFFey19g6Qp/
+	DpACtze4Tw0jX24yJwrgJjN/dP0gE5ZbyK1SLjK3H8BZDrO4LHQDcUrTAtYOzK/sfx++4LsdOxiZ/
+	tv7wGtXrWER1cUQzLv0RRQ8byDEv+BfjNjomrO9OZTpKnuC2zo0n3ILzMDgfYAH7G1BVcVHMQonqt
+	776haGVw==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1ubr06-00000006Y7q-3RTx;
+	Wed, 16 Jul 2025 01:32:02 +0000
+Message-ID: <b2c54a12-480c-448a-8b90-333cb03d9c14@infradead.org>
+Date: Tue, 15 Jul 2025 18:32:02 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sERDvpXcRSq_8Nv8TtFqK2k";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Jul 15 (drivers/cdx/cdx.o)
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Nipun Gupta <nipun.gupta@amd.com>, Nikhil Agarwal <nikhil.agarwal@amd.com>
+References: <20250715204504.36f41a8e@canb.auug.org.au>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250715204504.36f41a8e@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---Sig_/sERDvpXcRSq_8Nv8TtFqK2k
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-The following commits are also in the btrfs-fixes tree as different
-commits (but the same patches):
+On 7/15/25 3:45 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20250714:
+> 
 
-  563671745fcf ("btrfs: qgroup: fix qgroup create ioctl returning success a=
-fter quotas disabled")
-  9ec166a40f80 ("btrfs: qgroup: set quota enabled bit if quota disable fail=
-s flushing reservations")
-  15accde5ab22 ("btrfs: qgroup: fix race between quota disable and quota re=
-scan ioctl")
+on x86_64, when
+CONFIG_COMPILE_TEST=y
+# CONFIG_PCI_MSI is not set
+CONFIG_CDX_BUS=y
+# CONFIG_CDX_CONTROLLER is not set
+# CONFIG_GENERIC_MSI_IRQ is not set
 
-These are commits
+ld: drivers/cdx/cdx.o: in function `cdx_probe':
+/home/rdunlap/lnx/next/linux-next-20250715/X64/../drivers/cdx/cdx.c:314:(.text+0xc8b): undefined reference to `msi_setup_device_data'
 
-  92e6fa77b2e0 ("btrfs: qgroup: fix qgroup create ioctl returning success a=
-fter quotas disabled")
-  da08927994d8 ("btrfs: qgroup: set quota enabled bit if quota disable fail=
-s flushing reservations")
-  9eb1cf99dc45 ("btrfs: qgroup: fix race between quota disable and quota re=
-scan ioctl")
 
-in the btrfs-fixes tree.
+-- 
+~Randy
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/sERDvpXcRSq_8Nv8TtFqK2k
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh24zgACgkQAVBC80lX
-0GyQ9AgAndXTq/jzVeffg3Y1jbwbvbeTu4lpEPNcOnvulBqiRnYlHIp5JealfTGr
-I8InSK+LMy4w9NIaJF7Oa1jDVuwj5xt6rId3k7pGkrNYf6Luh87DwWNZnlHYi/G6
-tOQqFAZx07kjAijLLGmedhXEt6Rf31wHRRGicWc3dtK+Jtr8sI3allgfxRiivo8d
-0IWRHTu0hmByMojluN1McJLYZtz6hXhGOoT6RdNQZZVy1k/hDHoRkQN0IEDmqG5i
-qRhL2soZxGvvkTHQLDrUhJC2YRhmKg1Nsb3nUCElccmOtWhDsfol42ViGCA5I1mQ
-/GHhCnDLZBoPKcO6xiyi5vnhfqe5VA==
-=6N1q
------END PGP SIGNATURE-----
-
---Sig_/sERDvpXcRSq_8Nv8TtFqK2k--
 

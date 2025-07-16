@@ -1,97 +1,120 @@
-Return-Path: <linux-next+bounces-7562-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7563-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27E2CB06B3F
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 03:43:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E71DB06C78
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 05:53:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82E847B0F92
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 01:41:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F08041C203D8
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 03:53:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FF87267387;
-	Wed, 16 Jul 2025 01:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0677820110B;
+	Wed, 16 Jul 2025 03:53:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="L3iS0V2y"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lLOt6Lkw"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B67D265629;
-	Wed, 16 Jul 2025 01:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D54085260;
+	Wed, 16 Jul 2025 03:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752630175; cv=none; b=ctpJVuIOENl39oO2ywQUanjo7Sucp9oAgTJUQYFg7Qi/CMIZHzAts0JeQdo572Dpn4pfMPPriuxZLB5NBUdG2+noMvpt8wO7/WuwI3Zc5p/o34NfES03noyFapxW8+27LuftXQ+ou9rQjpbj8eQO1/RZk3AVC548irfa6gr9SDA=
+	t=1752637985; cv=none; b=J+yVXFMPeaF5kdtEqQALuYuc7SeQraZEgtaKSja60u63YYwAyiM7emU1Ew4uMBD7wT+Et6iBxdUKLj/NvlJvELJZKGvUMy6YyzZIxTY+2/XY7yRJjjEZIT+dY/L7CAbzuCOfFEnW4ioN2aWsDP4CIFzmdZwNjg31U8HlYuM5MGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752630175; c=relaxed/simple;
-	bh=8jrHdDLCectCc7kxbgsKtZpe5CPY6lgHKHvUPyjcm5I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LNxLLqI6zV84wuxzGbJwzaxmIsbZ504b9YCyDaL7pfzyuDNN1Pg3fQlOkw1K6f+UFdnpNEYBIyJs7d4z8Zu5Vp/0VcOpaXBvvg83G6XaJJtbL6gh7h2lV66Ac4KQKlJ8Q1wqQJ1r8VE6I6vQz51LCquiPm+k5z98uqaMDxuQlHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=L3iS0V2y; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=cI3lXGmPd9uRkmTEC2w5W2FpAay+HKfJYaInML9LnuY=; b=L3iS0V2y/9FTcesSq4n0t0CB5O
-	zffU6qOcpz45pUuTy7Be+ozN0lEHAGvswR7AL+zrObVoZFsGiMpdCQ6biplpsDnObiNNJg+uTsVOw
-	yJ7Cjwllae17ngFt4HMwbnnnfvjYBzbDJgmJJzDWkNR6YQGiA81PR6NDPTbWIv28cYaeSGxuhQ0j5
-	mDwbozx0dxBgzcvBueP79qPSnr/k0JQtn9BH3rpW3AeIYNbFkh2auOP3v2Wvv6xRmfDr9tccW60nR
-	fPydgonhorUPxdfP32N+HJQnqDCT+3clTjXWPdzRmYzVIEa4qw0nPnb9s6zNEWYMNQteTUStH/MpO
-	U6cbeZzw==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1ubrAa-00000006Yoc-3mfY;
-	Wed, 16 Jul 2025 01:42:52 +0000
-Message-ID: <cdf4ee46-7bf8-4379-9245-fed9db72e7e8@infradead.org>
-Date: Tue, 15 Jul 2025 18:42:52 -0700
+	s=arc-20240116; t=1752637985; c=relaxed/simple;
+	bh=wKviDJaUhwcPeyyBJley7NJLnHl6b9lnkgrlqJufIew=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=eeryFKaQVnQNy7Xl495bRyh6OeIdRRRMZQkE+nT4seodV3iyE6j1/wMNbHNx6lpekPuH7nOfTocgUU9rm+Q+crMm3F9A5OOU4BDb4pg546RVv6LummyV71u9GvYM7CXgkEVHjrppl5GzAKZWNsaTKbk9qIsHAthvhzjWi8uHtBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lLOt6Lkw; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1752637859;
+	bh=Ub4h9md7p7jPwt4hSAWgAYYr57hqxFEi68rIRktKU4w=;
+	h=Date:From:To:Cc:Subject:From;
+	b=lLOt6LkwLgwFa8cGbCdzIP4SepTRG8tTi8Is46bcQ6yVzkUJdoRYsvb1bby5a8pIC
+	 da+wgMatZQn0wCKfYfeURhigHaDrRQ3XgxutXqiSP7U4HkzjLJIY3/tE7WLG5pdykI
+	 ebu/E3scy3oOgPAHtgGrojjg54O9wIPrL3oan3j83WACVhFiETKO61CUGQWsBvJAqg
+	 +DJTgKugdw7QUtB+SGsvqCtzqLEhOXe6CH/6PjtGBa5H+gs9aSIGAdvxZ8/0JBDkZA
+	 CsJhun1LpjzOZRS7rkqLQ1aPuBtIH6Frm/HF8upPk4dPLNFqYHUGE+Uh7hvq572k4p
+	 0DxX0FEE33vCA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bhhtB401yz4w2Q;
+	Wed, 16 Jul 2025 13:50:58 +1000 (AEST)
+Date: Wed, 16 Jul 2025 13:52:52 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Kalle Valo <kvalo@kernel.org>, Johannes Berg <johannes@sipsolutions.net>
+Cc: Wireless <linux-wireless@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Miri Korenblit
+ <miriam.rachel.korenblit@intel.com>, Pagadala Yesu Anjaneyulu
+ <pagadala.yesu.anjaneyulu@intel.com>
+Subject: linux-next: manual merge of the wireless-next tree with the
+ wireless tree
+Message-ID: <20250716135252.51125baa@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Jul 15
- (drivers/tty/serial/8250/8250_ce4100.c)
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- linux-serial@vger.kernel.org,
- "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-References: <20250715204504.36f41a8e@canb.auug.org.au>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250715204504.36f41a8e@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/qWN88ZmnacKbcZLOTiM6ycI";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/qWN88ZmnacKbcZLOTiM6ycI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 7/15/25 3:45 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20250714:
-> 
+Today's linux-next merge of the wireless-next tree got conflicts in:
 
-on i386, when
-CONFIG_X86_INTEL_CE=y
-# CONFIG_SERIAL_8250 is not set
+  drivers/net/wireless/intel/iwlwifi/fw/regulatory.c
+  drivers/net/wireless/intel/iwlwifi/mld/regulatory.c
 
+between commit:
 
-../drivers/tty/serial/8250/8250_ce4100.c:90:13: error: redefinition of 'sdv_serial_fixup'
-   90 | void __init sdv_serial_fixup(void)
-      |             ^~~~~~~~~~~~~~~~
-In file included from ../drivers/tty/serial/8250/8250_ce4100.c:12:
-../arch/x86/include/asm/ce4100.h:10:20: note: previous definition of 'sdv_serial_fixup' with type 'void(void)'
-   10 | static inline void sdv_serial_fixup(void) {};
-      |                    ^~~~~~~~~~~~~~~~
+  5fde0fcbd760 ("wifi: iwlwifi: mask reserved bits in chan_state_active_bit=
+map")
 
+from the wireless tree and commit:
 
--- 
-~Randy
+  ea045a0de3b9 ("wifi: iwlwifi: add support for accepting raw DSM tables by=
+ firmware")
 
+from the wireless-next tree.
+
+I fixed it up (I just used the latter) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qWN88ZmnacKbcZLOTiM6ycI
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh3IhQACgkQAVBC80lX
+0GwLVwf8CQdLbg6guGTW4brIedUGd6PhjLkj+0rD33A9mEMi2xAw6y+GATY5APG2
+8tMx/XyWDdIQtdu1ELMxNLxxWfETqdchlDOai8oWgPi/MEQOkWYL95tlB4C15v6b
+i2lAgz5eP/TN/Eub9a5ebnOPyuVHybn0XR194yyraGcu3jkFHoFJ27SuXHFq8WgN
+f0KXvfcWlSas0PIcfPLli4QZb0BVbtlNGUCuZxNBXluun7FNM/LzK8U7sWjMhkW3
+pN7ze8YIuYBMrC+oJW6lxdW6RkPI+pJe9e1JxFfNixyu9pSZVIyEkY7pVr2cTpaT
+E9DwUMpdey/bEt3ZMV9ZLxvCozv5HQ==
+=jwVi
+-----END PGP SIGNATURE-----
+
+--Sig_/qWN88ZmnacKbcZLOTiM6ycI--
 

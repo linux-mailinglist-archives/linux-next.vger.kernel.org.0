@@ -1,233 +1,174 @@
-Return-Path: <linux-next+bounces-7568-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7569-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9F77B06DBA
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 08:12:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2F49B06DC4
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 08:20:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4579A56700C
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 06:12:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A94F63A497F
+	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 06:19:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C2228506E;
-	Wed, 16 Jul 2025 06:12:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09C25BA3D;
+	Wed, 16 Jul 2025 06:19:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F4k6Kl1g"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cAvmAHj6"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E74E27281D;
-	Wed, 16 Jul 2025 06:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AC9E271449
+	for <linux-next@vger.kernel.org>; Wed, 16 Jul 2025 06:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752646343; cv=none; b=dlDprX2sOpAYKHPWbrpiCamosUt1zlnIrw+duIpYV/9olOskbwHbK3cJWiQQoR+9FNzv65C4+MQSWdJgZ4BN2aqQ4f67RyZobF9ck5Nhg6fBOp5fXtyt05F/vmS8ORO2EECKIo56qT5lmapRdzYNMyMHAHFN1m0dEPncMqX97zc=
+	t=1752646795; cv=none; b=EXVysqTTFFalvHTFrqeBAX6tnGw4B60OOlLFq2I/65Cyn7RE9jSSTArHo5YCw95S4TWHi5hb1G51Cx+vZraqam8Jv9SECO1uwf7RUtmkLMXkw2WC1543VddjF5zDC35I1fsPpHgZpFWgnGxghRAbu+Wa8OUTCGagetD4qVmZOgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752646343; c=relaxed/simple;
-	bh=HfCdH20H8XEktj4hAhAZf4tHc1mOpanXTIyxComBIG8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CkSeBCJxRdi2vuH/je8Nx1Ihz+jXBYzvkFVEN06hlu4uu/5BBLhgSddwvykFj+69Rr5U6WZpNXeXNY97NDAj2WcrmuBPThB1lkXxUoQKpXtjdPDs/1XhvF5rCvTypsWH6fRL+rHRZ1wUCCdjEg++Pspz4H9dwDp1MwzwcOawPwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F4k6Kl1g; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-451dbe494d6so56668545e9.1;
-        Tue, 15 Jul 2025 23:12:20 -0700 (PDT)
+	s=arc-20240116; t=1752646795; c=relaxed/simple;
+	bh=N5O7Zmv+CoGIhXmzSjswUPzYw8i+fXXsX2KBPeBEbJo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CBXPr1DCLfdXMmnsI362yLKGAzm6nJDzByPdgy1ezCpWJ8DWe2s237Gw9FXeampux6meT8K7vSo9JPjpiv6PM0gTCiUymjzm4Sho6ogZOGc5W9qa8HODFd+oWFJ/lT2bvAHyhSYfx5JdhC9SY/Yg5EistNQ5+UAuabrHQxos7mM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cAvmAHj6; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3a4eb4dfd8eso935866f8f.2
+        for <linux-next@vger.kernel.org>; Tue, 15 Jul 2025 23:19:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752646339; x=1753251139; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GlP4ZdeKShV5rQiJyCVImTY0UBQ/w6pCG8WMaO+DzPo=;
-        b=F4k6Kl1gZFOA6L3Dm1u44NDiZxpMMNN9PpGnACRFRj3rAhhGLZ4rb8Py1RAHJEfZOn
-         Nh3565nxdhGQkJX4T2QJnmA1Ws4ENy591c9NqErkoKHCYZfQkiU9oHjiPlX4IMoFUw+7
-         GHzDbDsJvRQZ1qm1PsWNvAGXhJlld57BPlbh5T9bfoO5jNzOqQAVhuNxJjHQgq5f8t9H
-         RDXAkPypgFw4zbE3VINdPZ2RVaR6WDXFLewOUUCTqceQRX5ANuD/544YPsbfOgrOJJV1
-         jjBerTYJGB7Qz8pk9ng4/HywWXKDV0p6zvlpX0nOi/LtBH6GVWyvEe5f1BkhmKHonc5E
-         Xz+A==
+        d=linaro.org; s=google; t=1752646792; x=1753251592; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=UAF6zkhihHyJEjRriO3U2GgOKlyQi3H90FYrzq25aUU=;
+        b=cAvmAHj6RsTXPh+nabXG9G9ZW/8GP2pSzuTMx3vB52i522GjLDXbGjkJaSwwYBlfFg
+         RUlqAvae88Ihtqx3hw2AvkG94Qnr3g9fiXbKrVfd6t0AHhNjg5OrXRDhrKVFzc87Nlwj
+         LDKSSuHK2mp/55apzkC2ymlhQPt144cw+NmpE6CpXhYHN2ONMMMurOyJrwS3iS5iDhT4
+         +1J7cG0dYRTp/6l7BMo0oQARIs1WTurG8lhilBsedFajBQqhVlBT77xdcOl9ojWB4jyt
+         Q4nBr2naqLU6khYXXau7LwT/Z+dx7PDsF5HfRjJ2JfvVy6YyA0s4mMKz4KTBZ6ir4/mT
+         yN7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752646339; x=1753251139;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GlP4ZdeKShV5rQiJyCVImTY0UBQ/w6pCG8WMaO+DzPo=;
-        b=bnCLn+1cqvQ2E6Yd7nG0aA1Bb+qx2HZRZBV7M8OImPJoK59hAjd4LMk92wC94UeH1a
-         +zh6A+44sGSWkDe8N1mZBUd8AyZ1K+Uy+UxuUzdW/w1Y5l4N0KPB7yj4oJwee88zoKwU
-         m1fTOMOC9HfeMU7ajMtTvPnsofXlsYyLoQDkMW3/lXj1ZowWeNU9j7NudLGr39x18T/q
-         +aQRNoE835ESfIg8XkVb1jt9Q3xB8++qeVA8gh215NrNmS1M38yZ4mTbcbv6cDkGIynz
-         9LnhxWmHyBsHiS2OlYPReDqvZj4ylE8IygP5IE9vFBxVjYAlhwQgOewbGSOFKqQhCY8R
-         tGjw==
-X-Forwarded-Encrypted: i=1; AJvYcCV/YJ/XwLUVe9yGmgdpVSzbGArqzgujBnnZ62VF2OAizPUVwv2RzIUAxYMP0dgUiZYNzobCR3uXK+PG@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU/D0foHuwWS8UTFdgagHyOWsd5/MduUKhNzpXAsrX7utKLeFT
-	AkRDuN9166hHFaeP+anSlBIOIaNqk38xX4vFC2uPfZ6xu+pY2He8MAZx
-X-Gm-Gg: ASbGncuxw50CTCFpjhrp1vEe7LA6jFM+C93YI9jL/3NNNNrQgM5VkrQIq9GldQ22kgU
-	LjxhR1DNnKbhKPlUVXicRDiMHjbxjFiRFHiDJEX1SKzuVeAN7YhCA4CRcM/Ma8TgODHYrdQwE7K
-	5RfjfTXdUKCLfv0H0QwtrKBM2K4EQUXSEyPsuhIdgb8qPDz++i2XJTDkiFWYOgqJ1kwSYL0j/Lk
-	1FT0nwjKN2mghM2tTokqMnJ/7AYZyqc2zRLGgBbxEsEPXW8AJ7bq2PlUEYm63ZM/CscGg6NaZzi
-	blk8hgdYbw+JdQrC7E9IrB2oS1/aaGTk8lUso05IcKkdPO7qN8h7X9nKHMRqpHoZTi72SmiLRd+
-	WAQLAvgAdgaRVOT3nMIH5jg==
-X-Google-Smtp-Source: AGHT+IGkdl3BRlG5qAc5ojtwjIgjKfhY9MXsw8sDfXyJn213eW1Ghqc5/3NmdaYGT7qHfDqoC/8WwQ==
-X-Received: by 2002:a05:600c:4fc1:b0:43c:f44c:72a6 with SMTP id 5b1f17b1804b1-4562e37a11emr13388785e9.2.1752646338419;
-        Tue, 15 Jul 2025 23:12:18 -0700 (PDT)
-Received: from archie.me ([103.124.138.155])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4562e7f2f1bsm10526245e9.4.2025.07.15.23.12.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Jul 2025 23:12:16 -0700 (PDT)
-Received: by archie.me (Postfix, from userid 1000)
-	id 3F1AC4208F51; Wed, 16 Jul 2025 13:12:10 +0700 (WIB)
-Date: Wed, 16 Jul 2025 13:12:09 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Jens Axboe <axboe@kernel.dk>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the block tree with the jc_docs tree
-Message-ID: <aHdCuWhR23EQPXJ2@archie.me>
-References: <20250716150234.52ec0d5f@canb.auug.org.au>
+        d=1e100.net; s=20230601; t=1752646792; x=1753251592;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UAF6zkhihHyJEjRriO3U2GgOKlyQi3H90FYrzq25aUU=;
+        b=SN4EjIcdUguqvpsU6rpkMerccxKPLVm2B1VGeya55WwNYa/qYe7LGYOODiiZ0S7i4h
+         2sC8jFrl2EwMuWY9kuT+D/v+UzHM35xwaUuFh/D8WlpvYxTag1MR1dmO6QI7xdZ7k/Nl
+         RiKuaQPoT5WKiZq/xC9XHI4Lco/ewKk4FMhG9oY5Vvo1mkZqkppj197Ur4Dt5kyaJ+V0
+         zjLsPWNDHNFqG145gu8DZJOPPm44fLuEbiRVgoRCYPkIESDGjqQsL3J0VpDpcgj62Kl5
+         sEKy1OcbI/GZiGUUmoKJ+qrzhZJYCfupmp2eJCtaMoFYly/WVGHKHkgioPzw5gv/l1Rk
+         P4iA==
+X-Forwarded-Encrypted: i=1; AJvYcCU3qorwTo3WW/zQWAJIk57D2HCJHIQOto2IVvCKLhn3pGczmezhwAVjQyF1kKjM92VAYXjIRSXHw+N6@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9zMGV+n4PoYpqHN5cfpPA+KnAWSGbuaK1L1WXofVI8WA0M/6p
+	azChNKUY31W9mcRbJAxjzZjq/eFWK9MQchvKiSWLkC6ZbTATcJxmsN2MbpDzpbjSUKk=
+X-Gm-Gg: ASbGncs+A0lSn/ktBAYE28qZB6x9vD+c+/BgTeol+VcfKpaEU61OuDGW8X8uAmMNKOl
+	i3CZBe4djGz5wWahzRY16bQOj8AXGrur9x5r+IoWLFZ3t6hcE6Ez8cnPX73uGGAeuiUxL1Uuf2c
+	t6E4xVQJVsb2ZrAs8yLGvhhk5LT/k+UUtc7/u3ixK2JWoJ7jKcPDvlOLyb5JqMmn6tWvfJ4iUkI
+	Q5MrPSZ4MVyHqZYbT/q4HoGSr9Hg3PyonwIpoc2Acrw3EN2hbWPGFr19o+/qcjZd6k6+wjBAc0/
+	uT+voBMWD/a0KYM9uxsNmHg1VBMeMsOJpjFb0D+lueQ6LVqDVCX7ybwlKaCRxmbfhyoNDpwRQWa
+	wag439XTaunr85Dv93J9ua58XTjN+D5bpvVsFMBaDvA==
+X-Google-Smtp-Source: AGHT+IHI0hd/n8NAa98HjZDNO6oTeVz/r9RT2yB1ZLU6gmZTDJajNmBr9/wXERA7va12tk1kFVAPhQ==
+X-Received: by 2002:a05:6000:21c5:b0:3a3:6e85:a550 with SMTP id ffacd0b85a97d-3b60dd525aemr353932f8f.5.1752646792292;
+        Tue, 15 Jul 2025 23:19:52 -0700 (PDT)
+Received: from [192.168.1.110] ([178.197.222.89])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b5e8e1e332sm16996174f8f.79.2025.07.15.23.19.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Jul 2025 23:19:51 -0700 (PDT)
+Message-ID: <5a000710-516d-462f-8c0d-9e58e4abf4c3@linaro.org>
+Date: Wed, 16 Jul 2025 08:19:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="VoSKXlirJEnGGQs8"
-Content-Disposition: inline
-In-Reply-To: <20250716150234.52ec0d5f@canb.auug.org.au>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Jul 15 (drivers/cdx/cdx.o)
+To: Randy Dunlap <rdunlap@infradead.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Nipun Gupta <nipun.gupta@amd.com>, Nikhil Agarwal <nikhil.agarwal@amd.com>
+References: <20250715204504.36f41a8e@canb.auug.org.au>
+ <b2c54a12-480c-448a-8b90-333cb03d9c14@infradead.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ 2+47PN9NZAOyb771QoVr8A==
+In-Reply-To: <b2c54a12-480c-448a-8b90-333cb03d9c14@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+On 16/07/2025 03:32, Randy Dunlap wrote:
+> 
+> 
+> On 7/15/25 3:45 AM, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Changes since 20250714:
+>>
+> 
+> on x86_64, when
+> CONFIG_COMPILE_TEST=y
+> # CONFIG_PCI_MSI is not set
+> CONFIG_CDX_BUS=y
+> # CONFIG_CDX_CONTROLLER is not set
+> # CONFIG_GENERIC_MSI_IRQ is not set
+> 
+> ld: drivers/cdx/cdx.o: in function `cdx_probe':
+> /home/rdunlap/lnx/next/linux-next-20250715/X64/../drivers/cdx/cdx.c:314:(.text+0xc8b): undefined reference to `msi_setup_device_data'
+
+Thanks, I can reproduce it.
+
+The driver was never selecting CONFIG_GENERIC_MSI_IRQ and that part was
+missing. I wonder why arm64 compile testing without GIC, SMMU and other
+drivers, which select it, never reported it.
+
+I'll send a fix.
 
 
---VoSKXlirJEnGGQs8
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Jul 16, 2025 at 03:02:34PM +1000, Stephen Rothwell wrote:
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> <snipped>...
-> diff --cc Documentation/userspace-api/ioctl/ioctl-number.rst
-> index 677456c31228,4f1532a251d2..000000000000
-> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> @@@ -223,32 -219,31 +223,31 @@@ Code  Seq#    Include Fil
->                fs/xfs/linux-2.6/xfs_ioctl32.h,
->                include/linux/falloc.h,
->                linux/fs.h,
->  -'X'   all    fs/ocfs2/ocfs_fs.h                                      co=
-nflict!
->  +'X'   all    fs/ocfs2/ocfs_fs.h                                        =
-conflict!
-> - 'X'   01     linux/pktcdvd.h                                           =
-conflict!
->   'Z'   14-15  drivers/message/fusion/mptctl.h
->  -'['   00-3F  linux/usb/tmc.h                                         US=
-B Test and Measurement Devices
->  -                                                                     <m=
-ailto:gregkh@linuxfoundation.org>
->  -'a'   all    linux/atm*.h, linux/sonet.h                             AT=
-M on linux
->  -                                                                     <h=
-ttp://lrcwww.epfl.ch/>
->  -'a'   00-0F  drivers/crypto/qat/qat_common/adf_cfg_common.h          co=
-nflict! qat driver
->  -'b'   00-FF                                                          co=
-nflict! bit3 vme host bridge
->  -                                                                     <m=
-ailto:natalia@nikhefk.nikhef.nl>
->  -'b'   00-0F  linux/dma-buf.h                                         co=
-nflict!
->  -'c'   00-7F  linux/comstats.h                                        co=
-nflict!
->  -'c'   00-7F  linux/coda.h                                            co=
-nflict!
->  -'c'   00-1F  linux/chio.h                                            co=
-nflict!
->  -'c'   80-9F  arch/s390/include/asm/chsc.h                            co=
-nflict!
->  +'['   00-3F  linux/usb/tmc.h                                           =
-USB Test and Measurement Devices
->  +                                                                       =
-<mailto:gregkh@linuxfoundation.org>
->  +'a'   all    linux/atm*.h, linux/sonet.h                               =
-ATM on linux
->  +                                                                       =
-<http://lrcwww.epfl.ch/>
->  +'a'   00-0F  drivers/crypto/qat/qat_common/adf_cfg_common.h            =
-conflict! qat driver
->  +'b'   00-FF                                                            =
-conflict! bit3 vme host bridge
->  +                                                                       =
-<mailto:natalia@nikhefk.nikhef.nl>
->  +'b'   00-0F  linux/dma-buf.h                                           =
-conflict!
->  +'c'   00-7F  linux/comstats.h                                          =
-conflict!
->  +'c'   00-7F  linux/coda.h                                              =
-conflict!
->  +'c'   00-1F  linux/chio.h                                              =
-conflict!
->  +'c'   80-9F  arch/s390/include/asm/chsc.h                              =
-conflict!
->   'c'   A0-AF  arch/x86/include/asm/msr.h conflict!
->  -'d'   00-FF  linux/char/drm/drm.h                                    co=
-nflict!
->  -'d'   02-40  pcmcia/ds.h                                             co=
-nflict!
->  +'d'   00-FF  linux/char/drm/drm.h                                      =
-conflict!
->  +'d'   02-40  pcmcia/ds.h                                               =
-conflict!
->   'd'   F0-FF  linux/digi1.h
->  -'e'   all    linux/digi1.h                                           co=
-nflict!
->  -'f'   00-1F  linux/ext2_fs.h                                         co=
-nflict!
->  -'f'   00-1F  linux/ext3_fs.h                                         co=
-nflict!
->  -'f'   00-0F  fs/jfs/jfs_dinode.h                                     co=
-nflict!
->  -'f'   00-0F  fs/ext4/ext4.h                                          co=
-nflict!
->  -'f'   00-0F  linux/fs.h                                              co=
-nflict!
->  -'f'   00-0F  fs/ocfs2/ocfs2_fs.h                                     co=
-nflict!
->  +'e'   all    linux/digi1.h                                             =
-conflict!
->  +'f'   00-1F  linux/ext2_fs.h                                           =
-conflict!
->  +'f'   00-1F  linux/ext3_fs.h                                           =
-conflict!
->  +'f'   00-0F  fs/jfs/jfs_dinode.h                                       =
-conflict!
->  +'f'   00-0F  fs/ext4/ext4.h                                            =
-conflict!
->  +'f'   00-0F  linux/fs.h                                                =
-conflict!
->  +'f'   00-0F  fs/ocfs2/ocfs2_fs.h                                       =
-conflict!
->   'f'   13-27  linux/fscrypt.h
->   'f'   81-8F  linux/fsverity.h
->   'g'   00-0F  linux/usb/gadgetfs.h
-
-The resolution looks good, thanks!
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---VoSKXlirJEnGGQs8
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaHdCtAAKCRD2uYlJVVFO
-o6xrAP4rO+lMTYFI+IUTxoXVNo/+QUEoIE2Z8u01j44AKqto7AD+IBGKw9uzhwcw
-dfE5rfh4SdUCJ9s6QSV1+S3a2OtvvQ8=
-=IS5B
------END PGP SIGNATURE-----
-
---VoSKXlirJEnGGQs8--
+Best regards,
+Krzysztof
 

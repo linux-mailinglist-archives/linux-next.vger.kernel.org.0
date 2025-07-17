@@ -1,52 +1,52 @@
-Return-Path: <linux-next+bounces-7594-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7595-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AC8AB080D2
-	for <lists+linux-next@lfdr.de>; Thu, 17 Jul 2025 01:07:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 357E5B082CC
+	for <lists+linux-next@lfdr.de>; Thu, 17 Jul 2025 04:15:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 618794A318D
-	for <lists+linux-next@lfdr.de>; Wed, 16 Jul 2025 23:07:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E5BF17B5EB
+	for <lists+linux-next@lfdr.de>; Thu, 17 Jul 2025 02:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB4722ECD25;
-	Wed, 16 Jul 2025 23:07:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CE724503B;
+	Thu, 17 Jul 2025 02:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="KFLU13GF"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="lxSjdPs8"
 X-Original-To: linux-next@vger.kernel.org
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C0A3FE7;
-	Wed, 16 Jul 2025 23:07:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 918F8F9CB;
+	Thu, 17 Jul 2025 02:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752707263; cv=none; b=FE8Djgh4qOThVDWc0Ha7VZXhBuWFnyO02wyy6D7OhsdhrZF22Ayke/eOmY3uWi6THXXATNBjLp6E66O5LzbPw65hhOPTQu9OVXVPsSIcszem0C5ShwA1mjgOS8aoZ+RWY9Dvff/VXRbxb7F8tl4EK5tpxqwQs8MEYrNQk2MoV1M=
+	t=1752718534; cv=none; b=idWxoQZloLRqbAvtM+ddXQaBQOxTPn3Valzjl1khVheB47H0jS+Xgv+1sL8ffT0gn7fBaYL/g5RZhoY9yaFK/GydPOa9lvOundihod/aJL+t3K17SRqFhu1QsQU24mf+MlwjSk3MAqSwIhKk9kU1FXGCWJlYqyouKn0U09fSOuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752707263; c=relaxed/simple;
-	bh=BEoXnAAQJ4E+fgJTyB4gNSBQL4iMYHUyYrJsXxB9A6A=;
+	s=arc-20240116; t=1752718534; c=relaxed/simple;
+	bh=XG+cmbdvgjwQikvnpt/hczQU6adESMW10opezMODMPw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qomKISe1HjBW4FzJjvGdbkhbZ6i6+nceRovsXxU9ZK98NMWja9vURcJAaAf4lCtFyL0EMhfejlT3gARiYvc+X/LxjczRK340YD8OgfJ+GzosfA+EKKEykDxVO4ltlAEghhL5+y1j9sVA2JUFGaFafytsrlAFlOt4uG6UEgnbl84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=KFLU13GF; arc=none smtp.client-ip=198.137.202.133
+	 In-Reply-To:Content-Type; b=B7b9gOE0zuFcNOybQH2HVQyLnwKyLW+Z0U1a+O3LvJ+Kf7hH7Y6Kwqi6/Be0vMs7hfgH3+A+iM092zYWbfn/nO0PeojEglt0dB9SpXXw01sphOiddPJDWfk336VSUYUYdSL3dKCmj/v/u7CDZM+8ZhSPjQyoGi3SEWH9PAF/WDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=lxSjdPs8; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
 	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
 	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=DeMkf81B5yNrigfNCgydML/LD6DZlbT9djSrJqCL3NI=; b=KFLU13GFIsRrfZBt7JylDpgKIM
-	OHsWxOYmMRk4JiTf5nzk6kszvXMW2QZEGYqLwxu3iJAuT0UMEp0pixuApTGZwq+yKUYUy7j6AacDq
-	UidV35YHgyjbzESoCzP83FvnSzbKxzI67+UuWj9mopNW2wJaehlL0Ohj8PdtV9bvBzneODWNlveo1
-	gUmGPz26wapKtOYIwILWjJm9HFA+x2Fx7knFk04tLgKnUxLtVyGaSjh6cvWFqGnQWT1k3kq5E9s4A
-	WujcSQu2s8Vb7nYeMPziXzRJO+YMAqtCfuAJlWaTcGUf0WsOGLvgrwA3mcJ2Zv64eGpCjhAtOMi6x
-	7iDrYvBw==;
+	bh=JejxmrOVCgjiwO83S9674B0/ac8ZOFXjpXqojSrtghc=; b=lxSjdPs8V0ACFwULYBcejWAQz3
+	0FWs1YOiHasEK2Kq0zbK/KCl2sVnwXq/wTjiBDumKYXllQOSveMF+buD4B0PA48a4WV9jcCJXYzrb
+	GvnSWVi9fGxcQAgmUV/3FRRqMm+/p+FNvjIPHHzZC/sENmS4HwtNebYajli5xS9ANwH4gboWftDlp
+	wQpF0XnKqk03MwvtrLOTwVvOUoKXV6jGZozaSvg97EPHK8lgnuSpFL/k8zoIxljtEw5VZT8n0978H
+	3kmSp/aRlrTyDmvx9QcGlGeO/Tg+rvX+fPUOuiHEsP+wyGwfhr1UK+Ah+cUdrPp6iHbVsZuO5Evsh
+	/EJOqFPg==;
 Received: from [50.53.25.54] (helo=[192.168.254.17])
 	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1ucBDw-00000008qNf-0YZ9;
-	Wed, 16 Jul 2025 23:07:40 +0000
-Message-ID: <4a6fd102-f8e0-42f3-b789-6e3340897032@infradead.org>
-Date: Wed, 16 Jul 2025 16:07:38 -0700
+	id 1ucE9j-000000092yt-41wV;
+	Thu, 17 Jul 2025 02:15:32 +0000
+Message-ID: <589c2ec8-bd4e-4ab0-89ad-08a0a1c56c70@infradead.org>
+Date: Wed, 16 Jul 2025 19:15:31 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -54,48 +54,92 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Jul 16 (drivers/vfio/cdx/intr.c)
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- linux-um@lists.infradead.org, Linux KVM <kvm@vger.kernel.org>,
- Nipun Gupta <nipun.gupta@amd.com>, Nikhil Agarwal <nikhil.agarwal@amd.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20250716212558.4dd0502b@canb.auug.org.au>
+Subject: Re: linux-next: build warning after merge of the amdgpu tree
+To: "Zhu, Yihan" <Yihan.Zhu@amd.com>, Alex Deucher <alexdeucher@gmail.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, "Hung, Alex"
+ <Alex.Hung@amd.com>, "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+ "LIPSKI, IVAN" <IVAN.LIPSKI@amd.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ "Kazlauskas, Nicholas" <Nicholas.Kazlauskas@amd.com>
+References: <20250716202831.68661f12@canb.auug.org.au>
+ <IA1PR12MB6044F52C3C58284B49DD77DCE356A@IA1PR12MB6044.namprd12.prod.outlook.com>
+ <CADnq5_MUdC_odm9LM09V31=KW+Td64PkodmvS9VJuFv0e=3w4Q@mail.gmail.com>
+ <IA1PR12MB60448C621D9999334E7DF264E356A@IA1PR12MB6044.namprd12.prod.outlook.com>
 Content-Language: en-US
 From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250716212558.4dd0502b@canb.auug.org.au>
+In-Reply-To: <IA1PR12MB60448C621D9999334E7DF264E356A@IA1PR12MB6044.namprd12.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 
 
-On 7/16/25 4:25 AM, Stephen Rothwell wrote:
-> Hi all,
+On 7/16/25 12:24 PM, Zhu, Yihan wrote:
+> [AMD Official Use Only - AMD Internal Distribution Only]
 > 
-> Changes since 20250715:
+> Hi Alex,
 > 
+> I just double checked this parameter might be missing from upstream. I will work with Alex Hung or can you pls help me to add descriptions below to patch? Thanks
+> 
+> * @num_rmcm_3dluts: number of RMCM hardware instance
 
-on ARCH=um SUBARCH=x86_64:
+WorksForMe. Thanks.
 
-../drivers/vfio/cdx/intr.c: In function ‘vfio_cdx_msi_enable’:
-../drivers/vfio/cdx/intr.c:41:15: error: implicit declaration of function ‘msi_domain_alloc_irqs’; did you mean ‘msi_domain_get_virq’? [-Wimplicit-function-declaration]
-   41 |         ret = msi_domain_alloc_irqs(dev, MSI_DEFAULT_DOMAIN, nvec);
-      |               ^~~~~~~~~~~~~~~~~~~~~
-      |               msi_domain_get_virq
-../drivers/vfio/cdx/intr.c: In function ‘vfio_cdx_msi_disable’:
-../drivers/vfio/cdx/intr.c:135:9: error: implicit declaration of function ‘msi_domain_free_irqs_all’ [-Wimplicit-function-declaration]
-  135 |         msi_domain_free_irqs_all(dev, MSI_DEFAULT_DOMAIN);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
 
 
-Those missing functions are provided by CONFIG_GENERIC_MSI_IRQ
-(which is not set).
-
-Should VFIO_CDX select GENERIC_MSI_IRQ or just not build on ARCH=um?
-
+> 
+> Regards,
+> Yihan Z
+> 
+> -----Original Message-----
+> From: Alex Deucher <alexdeucher@gmail.com>
+> Sent: Wednesday, July 16, 2025 3:09 PM
+> To: Zhu, Yihan <Yihan.Zhu@amd.com>
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>; Hung, Alex <Alex.Hung@amd.com>; Deucher, Alexander <Alexander.Deucher@amd.com>; LIPSKI, IVAN <IVAN.LIPSKI@amd.com>; Linux Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux Next Mailing List <linux-next@vger.kernel.org>; Kazlauskas, Nicholas <Nicholas.Kazlauskas@amd.com>
+> Subject: Re: linux-next: build warning after merge of the amdgpu tree
+> 
+> On Wed, Jul 16, 2025 at 2:45 PM Zhu, Yihan <Yihan.Zhu@amd.com> wrote:
+>>
+>> [AMD Official Use Only - AMD Internal Distribution Only]
+>>
+>> Hi,
+>>
+>> +Alex Hung +Nick for awareness.
+>>
+>> Thanks for the information. I believe Alex helped me to add the description in another patch. Please let me know if any further actions from me.
+> 
+> Has the fix been sent out yet?  I don't remember seeing it.
+> 
+> Alex
+> 
+> 
+>>
+>> Regards,
+>> Yihan Z
+>>
+>> -----Original Message-----
+>> From: Stephen Rothwell <sfr@canb.auug.org.au>
+>> Sent: Wednesday, July 16, 2025 6:29 AM
+>> To: Alex Deucher <alexdeucher@gmail.com>
+>> Cc: Deucher, Alexander <Alexander.Deucher@amd.com>; LIPSKI, IVAN <IVAN.LIPSKI@amd.com>; Zhu, Yihan <Yihan.Zhu@amd.com>; Linux Kernel Mailing List <linux-kernel@vger.kernel.org>; Linux Next Mailing List <linux-next@vger.kernel.org>
+>> Subject: linux-next: build warning after merge of the amdgpu tree
+>>
+>> Hi all,
+>>
+>> After merging the amdgpu tree, today's linux-next build (htmldocs) produced this warning:
+>>
+>> drivers/gpu/drm/amd/display/dc/dc.h:255: warning: Function parameter or struct member 'num_rmcm_3dluts' not described in 'mpc_color_caps'
+>>
+>> Introduced by commit
+>>
+>>   26ad78fffc66 ("drm/amd/display: MPC basic allocation logic and TMZ")
+>>
+>> --
+>> Cheers,
+>> Stephen Rothwell
 
 -- 
 ~Randy
-
 

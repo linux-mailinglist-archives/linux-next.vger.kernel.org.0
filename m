@@ -1,129 +1,106 @@
-Return-Path: <linux-next+bounces-7637-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7638-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 205E4B0A8CB
-	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 18:46:52 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C813B0ABFB
+	for <lists+linux-next@lfdr.de>; Sat, 19 Jul 2025 00:09:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC9115A7BEE
-	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 16:46:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA2D87A3D22
+	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 22:07:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 540FF2E7624;
-	Fri, 18 Jul 2025 16:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F31F622126D;
+	Fri, 18 Jul 2025 22:09:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UsD5jBzU"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oJ4QEcw8"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7812E719D;
-	Fri, 18 Jul 2025 16:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F212211460;
+	Fri, 18 Jul 2025 22:08:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752857017; cv=none; b=rxlY3NY0dsJX47LOYSFrQ+ATl99tofRNLiA7ZjYeui9QfGJFLOqofKPmFFXn0gYe0+vzV1+90ft915YKcic9V51QmIb0DCZPKJYJQPXDyNszXC8y4HBE1muTu2p93wlts2JMCW+d9PV7C1S1VFfZRKVsrgqKMpokOnAVle+/Nfc=
+	t=1752876543; cv=none; b=uiIPTkoIYu1lWYMFQTKnRqmnxlVzcezcP+ZN41aLxvQOJVfPZHERq3ZBzz0DNGJxhvNsYK+aCxU8R/3vnbnru+E6/nakT2xif6e2eKUg62eSdjRWJ9NCy12Lu/vVgdnix9Bcmr5JTL5SbnDc4/I6dBhI6OIDxwCyEKLP+BPJROk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752857017; c=relaxed/simple;
-	bh=rtqU4NlziGVRj7aA6CN/HV27FZmfQ40RjbAFCqxNcG0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qsn7qAm7CDybKvixNiDDmhWCKnJBwaQbdGGhwMt+LtUYwYd2PUHceFVyD08pv76u80tsqIHqNZBZLnkNfVctm95QYSt+NZm6CJ1Aw5Qs80mZZvnvYEsZKOq/QlgVzt35j865B5BMsOYRQbkvjVgOtA3Q0u7mHfffO9BMChqNx88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UsD5jBzU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9B02C4CEEB;
-	Fri, 18 Jul 2025 16:43:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752857016;
-	bh=rtqU4NlziGVRj7aA6CN/HV27FZmfQ40RjbAFCqxNcG0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UsD5jBzUOba6pTg8ggxJD7owZjx+yZgs/nHHTUFV66EeayDqzkDiJ2ZiNWVvD4+Dl
-	 Dc+u0qBz2NgrEJ0x5vppLPZIAam69ozBDGGCEvGZycCJi/w5u41EGPUcXQCOFpCsBh
-	 1nceOW0qwWccW6JNzZd0g9l8buxFSIv/lXYJ9HqYt0++DNEQsPOh7TT406ZxkoAlSH
-	 tvsWz3lr3wuEyRDzhFewdOpVUYPN6T7BZMB//6ZJJeXYJ4+yYJ5hNnyk/+JJg8kn8C
-	 waYV9apMWBPadwfw1m1AiqEsOKxIGgAIXC1DKksb+kssvtA3rbWEkPT9C9tfBwcx8p
-	 Huymk0EhYMgpA==
-Date: Fri, 18 Jul 2025 18:43:32 +0200
-From: Danilo Krummrich <dakr@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Greg KH <greg@kroah.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Tamir Duberstein <tamird@gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with the driver-core
- tree
-Message-ID: <aHp5tFVOhioQz7ba@pollux>
-References: <20250718204653.1289b26f@canb.auug.org.au>
+	s=arc-20240116; t=1752876543; c=relaxed/simple;
+	bh=DxpaXYd0x2WTnenk/a/Q9cGK0IY2RfScwM25UrFk94w=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IxOFGcs1SrGw+xYkJUNX+zvMCHE8avc6zZCwd380ckYJirrN00CZ+7ZARNRCAAG2Lv5W97fy5TXtNLjTcHHiCWMkZGfkDYCgH4XDeA95DOovRCiHmYOgpO7ahemYu6+nfeimVu/TwIOhHlpftZWM/1PxpevLUEp0W780LHfzcto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oJ4QEcw8; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1752876402;
+	bh=DxpaXYd0x2WTnenk/a/Q9cGK0IY2RfScwM25UrFk94w=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=oJ4QEcw8Q1RqPSrGD/T36nzYcrIEgoQYHkomHnRiq4Itkhs/tVjGkH2Y6aiVm44di
+	 /v2+/BTXRi+TAtc6ncjCNx+foQW0rpu0+UK+WdTiHJQjOG5gKD3JvzIforahZx38sB
+	 XUq1bd3ycs7Y/HeqNqOrmz7XqdJ9xbQlqEWDN1bVVYk7JjUfw0RVOfAg2iRv8IdrfT
+	 wqFAqqgwFjeTznGbB+6LdJrX6LmnOuPWLlBzWarbQODzehXNxPs8jnjkgfLJytKxSf
+	 U8H6R4ZgoxMRofxtMfZlNmtpNL1sgTK6zrryo3KI5pXNY2PeFq+p5QfpCLd4590wwN
+	 pkhVeDpO2Tyuw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bkP5Y5dhYz4xQZ;
+	Sat, 19 Jul 2025 08:06:41 +1000 (AEST)
+Date: Sat, 19 Jul 2025 08:08:53 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Donghoon Yu <hoony.yu@samsung.com>, Will McVicker
+ <willmcvicker@google.com>, Youngmin Nam <youngmin.nam@samsung.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the clockevents tree
+Message-ID: <20250719080853.583fc406@canb.auug.org.au>
+In-Reply-To: <CAKnoXLynCY8dAe8k+ttTVpN2U49_-DyQFU7t1BRk-x74tfJ78Q@mail.gmail.com>
+References: <20250716160809.30045a56@canb.auug.org.au>
+	<CAKnoXLynCY8dAe8k+ttTVpN2U49_-DyQFU7t1BRk-x74tfJ78Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250718204653.1289b26f@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/Id1.TseJi6WIsko6gx.zF93";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Fri, Jul 18, 2025 at 08:46:53PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the rust tree got a conflict in:
-> 
->   rust/kernel/device_id.rs
-> 
-> between commit:
-> 
->   8d84b32075fb ("rust: device_id: split out index support into a separate trait")
-> 
-> from the driver-core tree and commit:
-> 
->   5e30550558b1 ("rust: enable `clippy::as_underscore` lint")
-> 
-> from the rust tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+--Sig_/Id1.TseJi6WIsko6gx.zF93
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, the diff looks good!
+Hi Daniel,
 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc rust/kernel/device_id.rs
-> index 8ed2c946144c,3dc72ca8cfc2..000000000000
-> --- a/rust/kernel/device_id.rs
-> +++ b/rust/kernel/device_id.rs
-> @@@ -94,16 -77,14 +94,16 @@@ impl<T: RawDeviceId, U, const N: usize
->               // SAFETY: by the safety requirement of `RawDeviceId`, we're guaranteed that `T` is
->               // layout-wise compatible with `RawType`.
->               raw_ids[i] = unsafe { core::mem::transmute_copy(&ids[i].0) };
->  -            // SAFETY: by the safety requirement of `RawDeviceId`, this would be effectively
->  -            // `raw_ids[i].driver_data = i;`.
->  -            unsafe {
->  -                raw_ids[i]
->  -                    .as_mut_ptr()
->  -                    .byte_add(T::DRIVER_DATA_OFFSET)
->  -                    .cast::<usize>()
->  -                    .write(i);
->  +            if let Some(data_offset) = data_offset {
->  +                // SAFETY: by the safety requirement of this function, this would be effectively
->  +                // `raw_ids[i].driver_data = i;`.
->  +                unsafe {
->  +                    raw_ids[i]
->  +                        .as_mut_ptr()
-> -                         .byte_offset(data_offset as _)
-> ++                        .byte_add(data_offset)
->  +                        .cast::<usize>()
->  +                        .write(i);
->  +                }
->               }
->   
->               // SAFETY: this is effectively a move: `infos[i] = ids[i].1`. We make a copy here but
+On Wed, 16 Jul 2025 11:26:15 +0200 Daniel Lezcano <daniel.lezcano@linaro.or=
+g> wrote:
+>
 
+> Right. Shall I fold the fix with the commit ?
 
+That would be up to you.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Id1.TseJi6WIsko6gx.zF93
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh6xfUACgkQAVBC80lX
+0Gy9UQf8CLMshvs3eszT971rQV7WXp4s+d5Cb5OEf14o7m9oOczKlKhpEyRScLu3
+N3HbTX9cfTeyUUwz8CwgzVxhB9uA6Hgour6wJGYeXzSmKNYM6BygfFkaQ/o/Mjvp
+6ADWsfwSU96nQRymHP1hpQkotA54AfY9z6dGGoUR5G+XaxICPr2CYA232h/RJo4x
+gpWp7b8QEFSTQZb3SwekGHgz4+qvMvZOTGuFoaLnrBwnMAXsmFCY/WsNksCKGJRZ
+OYfMN+7hpitNofubODP3AcNgi0k+bA2M4Uq1v6PkwJD94ZtijKQ/sJYjgJoZd+dH
+rkWzm0OYKJMYB1+2uhk7LPBYamyqKQ==
+=voVw
+-----END PGP SIGNATURE-----
+
+--Sig_/Id1.TseJi6WIsko6gx.zF93--
 

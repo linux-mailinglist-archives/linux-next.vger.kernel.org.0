@@ -1,79 +1,109 @@
-Return-Path: <linux-next+bounces-7624-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7625-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A53CB09E1A
-	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 10:33:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB9C0B09E3A
+	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 10:43:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11951A43918
-	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 08:33:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5FBB6189DD57
+	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 08:43:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B140292B2A;
-	Fri, 18 Jul 2025 08:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F30B292B4F;
+	Fri, 18 Jul 2025 08:43:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OKgUOx7x"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cljrBCdm"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C81820E71D;
-	Fri, 18 Jul 2025 08:33:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 823BA1DC997;
+	Fri, 18 Jul 2025 08:43:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752827601; cv=none; b=LnwfAdJlauGdaZlW57FB5P5X1AeRgYzT3cKw5RrQAHK/VNcuHnCyHVrJAPk31pL1wTtb0VC4CVGuHx4UiUb2SZ+x+2vL1kGml0zWHlpbM7ZC8401yEhT7FnLHSg5/4Os6WtYbSQGM7UZ1JCXV4+LxYVaYHPV0Z1i9f+W0bKPTyg=
+	t=1752828212; cv=none; b=KTFr09lNv6IYSc8N77ruuR2bvkALdfjQVz1kX4oA1oZj0Ywp2Q+qreHijjJQ3fAWZwehIwKnzpi/YGxj25EyXUvgFElISprIni2kvY++XJQXMJsdfHWXe7NMKo1Vt/XuXdquuvvnr2lwD6Bz0R0IDEQqBLKrdKQkY1SGyqAmCI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752827601; c=relaxed/simple;
-	bh=J0la2E51liPRAU72Jdnl5lCR48J9xdBV8TdPsieZgXc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SwrBIfqzO6sPHCSL+rV1VfMaURf6jqIsthx4DNQDLE9HsxstNoOmmSCBPjyEQwitJ5y5YytoOhbw2HkbahjpxvNhJTLz25Pss1lgnlW4a/xa5gs3zt1E+LMf+Ym0OlA0+DeIvgXSwK1ENd8p3Q7jjSQoxNCOp38kvGNzKCXzIts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OKgUOx7x; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=J0la2E51liPRAU72Jdnl5lCR48J9xdBV8TdPsieZgXc=; b=OKgUOx7x/Q074rsbXBD/OJgSLn
-	jWLaEbbtzAtmSmuwTAEDa/dzYbAwFSFwhdcUYBYTSjPUDfXF/LStMPeRe6jiEGQ2Kr0g8AmbZJzPw
-	oUrZDFYdSxd+Ne6FbbhHc1mWskeK400gL4nXujWLHrclp2jzlIrnE8K8TE6MPYA6+A246y2P9Toku
-	sgiD363eAczJ6qNAo7CZ9yiFygZJngOF30gSHUvDxe5schUrkbbpFrnsgaQTUcv9fTeOOmq2qnV+8
-	E7JgioGrJRm89tgNO90Zye+U+5W3BTWuYyfnOUPzMp3PLkwZ6y4pSyoC9SVAGM/MRkLtbgiIen5Yj
-	BzxZ0Gng==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1ucgWt-0000000C3Wi-00S1;
-	Fri, 18 Jul 2025 08:33:19 +0000
-Date: Fri, 18 Jul 2025 01:33:18 -0700
-From: Christoph Hellwig <hch@infradead.org>
-To: Carlos Maiolino <cem@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the xfs tree
-Message-ID: <aHoGzku_ey2ClrzD@infradead.org>
-References: <jZld0KWAlgFM0KGNf6_lm-4ZXRf4uFdfuPXGopJi8jUD3StPMObAqCIaJUvNZvyoyxrWEJus6A_a0yxRt7X0Eg==@protonmail.internalid>
- <20250718100836.06da20b3@canb.auug.org.au>
- <hmc6flnzhy3fvryk5c4bjgo7qehhnfpecm2w6wfyz7q7wly3a4@nvo6ow5j3ffl>
+	s=arc-20240116; t=1752828212; c=relaxed/simple;
+	bh=cXmv7rZFFjbUKRilKGfoMRbzyOD2VnoSNzU7sGVCsxI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=eGUJvige6wfpn1M3M6wltJU9X56BGNZYJmforSt/EClpDrXJuHn5aeWT/oHbVSoJUt9ZYH3QfwfkZ1oqy+iDFQUIg6UQIaGD7UW0gus7toYXI3oRhLmn0UQiE8ib1mcu5HfCZtmYtaatkUbwC2SgdeJc9zbOaZcBuyopOzM9oQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cljrBCdm; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1752828073;
+	bh=SKJLwW63F7O+yYICcK8Ia582y6foMuGX7RjBoTDoJA8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=cljrBCdmWvGLH4pwhGLxfW/tasmqrRpXW6WAMxbQORcjKk1UKpQDz05uMgKE00WSX
+	 c4KkN0or3CzNjx9IssgKVb43qG1wQdMxgd1kocbkPP0nhX44XrWSowpMgCoIR3XBG0
+	 GQeJf6EA5r19XmF7s6J766Q6XuDxqCxmeHpjQ/0Sl3ZornPxjl3FUO+m5B9t+T9G6J
+	 TQrVrrHxddxLzYuro1ruhJ9yzLIJsqXwPIp8le+ZllZqgZk8KNpvY6FAxSwMW/bbOv
+	 UGdtD9Wp96X2LPSuAJCCtSyVrmJ3npE+BNE6kHJmqSuF+zU0F/OQH9jssZ8Hg2zJxr
+	 yizFZEPxdCH9g==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bk3D94Xstz4w2H;
+	Fri, 18 Jul 2025 18:41:13 +1000 (AEST)
+Date: Fri, 18 Jul 2025 18:43:22 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Jason Wang <jasowang@redhat.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the vhost tree
+Message-ID: <20250718184322.6afe4756@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <hmc6flnzhy3fvryk5c4bjgo7qehhnfpecm2w6wfyz7q7wly3a4@nvo6ow5j3ffl>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: multipart/signed; boundary="Sig_/F7+rG9gj1+fjl46QitYnT0S";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Fri, Jul 18, 2025 at 10:30:56AM +0200, Carlos Maiolino wrote:
-> Thanks for the heads up Stephen. I didn't catch those errors while build
-> testing here. Could you please share with me the build options you usually
-> use so I can tweak my system to catch those errors before pushing them to
-> linux-next?
+--Sig_/F7+rG9gj1+fjl46QitYnT0S
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-You'll need CONFIG_MEMORY_FAILURE and CONFIG_FS_DAX to trigger this.
-All my test setups seem to lack the former.
+Hi all,
 
+After merging the vhost tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
+
+drivers/vdpa/pds/vdpa_dev.c: In function 'pds_vdpa_dev_add':
+drivers/vdpa/pds/vdpa_dev.c:647:24: error: 'struct vdpa_device' has no memb=
+er named 'dma_dev'; did you mean 'mdev'?
+  647 |         pdsv->vdpa_dev.dma_dev =3D dma_dev;
+      |                        ^~~~~~~
+      |                        mdev
+
+Caused by commit
+
+  ca3cc7f8da0a ("vdpa: rename dma_dev to map_token")
+
+I have used the vhost tree from next-20250717 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/F7+rG9gj1+fjl46QitYnT0S
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh6CSoACgkQAVBC80lX
+0GxZHAf/a/ZlZ7J17UlqKgZBaZFcpgtjUXMmuqTQXT4244Ak9ersX6+E0KLcRx2Z
+XeEZHybsX32CQq4k9fHl/mudhaH/po0BixzsurRET7J2paN+1j+/uABP7h6VItXc
+NDiRXIQdNNZF+DlXm4ha5LggnktPJYcBX2YU/7RE+ROncsljYXz+9NOMdWpZNkfM
+sZ4yn/qoAHafLEWjWo6dI89skYgTi8IXBCN2wA7/lg/CQLHnHv6qFPYioqeEhjRy
+QqCABVKdXGvSZkRCnd3eRh230z2auvlv/XBQ0oWYtYly89XTCjYN/Y2ISNWSS9X7
+Qif1GKW0aVUGaE5a8WlluZtzEDqGFA==
+=IXCc
+-----END PGP SIGNATURE-----
+
+--Sig_/F7+rG9gj1+fjl46QitYnT0S--
 

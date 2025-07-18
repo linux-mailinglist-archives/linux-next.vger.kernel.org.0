@@ -1,88 +1,129 @@
-Return-Path: <linux-next+bounces-7636-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7637-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EEC0B0A53C
-	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 15:33:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 205E4B0A8CB
+	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 18:46:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98D21168B26
-	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 13:33:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC9115A7BEE
+	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 16:46:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D013595C;
-	Fri, 18 Jul 2025 13:33:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 540FF2E7624;
+	Fri, 18 Jul 2025 16:43:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="OU/ZTkF5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UsD5jBzU"
 X-Original-To: linux-next@vger.kernel.org
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AAD812F5A5;
-	Fri, 18 Jul 2025 13:33:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D7812E719D;
+	Fri, 18 Jul 2025 16:43:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752845590; cv=none; b=VTfg2RyE38lDi7knEPUDXq+PB8Uv53jHSy8YPDrEJmvywB3Ilivl5UQNE8LebK59ckZWuWYVem0cWoalzHtPogseS/+q7wL/RRVgQ/Ct4y2owWmsgWaHomFWgqOtpqf/mbcB+j2Q1GokNRws205CSnzH9bINaRhGEDlIAnqgG9U=
+	t=1752857017; cv=none; b=rxlY3NY0dsJX47LOYSFrQ+ATl99tofRNLiA7ZjYeui9QfGJFLOqofKPmFFXn0gYe0+vzV1+90ft915YKcic9V51QmIb0DCZPKJYJQPXDyNszXC8y4HBE1muTu2p93wlts2JMCW+d9PV7C1S1VFfZRKVsrgqKMpokOnAVle+/Nfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752845590; c=relaxed/simple;
-	bh=4PfbEl1f3DHeAQCOZycNOuEWv+wGNquM1Kj2Mmlmhc8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=MhierV0Do/UzIAVt3QzzCl0sOAb4Ilc/5/2w4/l8D3QrI+W+jhxHHwhaVQzhrYZGySWyA1UpjMQ2keFBTsWJu70twmX2NtqjUaaISZ+fRv378NlD3Ez9CXhMu6J3+sYafDw+xumUucrspe87GL3XdbROGw9RnoEDCaH3JxxnBIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=OU/ZTkF5; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0872240AD0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1752845586; bh=G4lk4FsJ2qcAuacIqlErV7VdOaRptwqRW0ss5ksjS7Y=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=OU/ZTkF5ycQK173ADZPIZ28+TfFI7Hmfk4gGEKjBHw1YpcCAs9je4qrcDmthCMQfU
-	 zfOGX8jIuTMLhsTNh+mdxw+NewpZJG7/fNB38THdHD1pcdJyIZHTephEQo8xXqAPv/
-	 9O90tS6AUaotTPoB4dv7TAUjGUmS71y6Ixe2/mhGxKFZlWEbx6sKtS7n+pqGeQUbme
-	 6a1QFeH7JMZZmRiOYsfWh47Rzf5q9qpNHSTD7lil++9di2mgQvJO2/lF8cXpmyAW8U
-	 m9fu4/T/GfVrioLuY3aVvCjL1LWx9/H8OpPtbdgZ5dtiyUxkd6Ir8/KVs7GbNRACJs
-	 4ergiRourtU4A==
-Received: from localhost (unknown [IPv6:2601:280:4600:2da9::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 0872240AD0;
-	Fri, 18 Jul 2025 13:33:05 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, "Rafael J. Wysocki"
- <rafael@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the pm tree
-In-Reply-To: <20250718132702.3d15eb51@canb.auug.org.au>
-References: <20250718132702.3d15eb51@canb.auug.org.au>
-Date: Fri, 18 Jul 2025 07:33:05 -0600
-Message-ID: <87tt398vzi.fsf@trenco.lwn.net>
+	s=arc-20240116; t=1752857017; c=relaxed/simple;
+	bh=rtqU4NlziGVRj7aA6CN/HV27FZmfQ40RjbAFCqxNcG0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qsn7qAm7CDybKvixNiDDmhWCKnJBwaQbdGGhwMt+LtUYwYd2PUHceFVyD08pv76u80tsqIHqNZBZLnkNfVctm95QYSt+NZm6CJ1Aw5Qs80mZZvnvYEsZKOq/QlgVzt35j865B5BMsOYRQbkvjVgOtA3Q0u7mHfffO9BMChqNx88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UsD5jBzU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9B02C4CEEB;
+	Fri, 18 Jul 2025 16:43:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752857016;
+	bh=rtqU4NlziGVRj7aA6CN/HV27FZmfQ40RjbAFCqxNcG0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UsD5jBzUOba6pTg8ggxJD7owZjx+yZgs/nHHTUFV66EeayDqzkDiJ2ZiNWVvD4+Dl
+	 Dc+u0qBz2NgrEJ0x5vppLPZIAam69ozBDGGCEvGZycCJi/w5u41EGPUcXQCOFpCsBh
+	 1nceOW0qwWccW6JNzZd0g9l8buxFSIv/lXYJ9HqYt0++DNEQsPOh7TT406ZxkoAlSH
+	 tvsWz3lr3wuEyRDzhFewdOpVUYPN6T7BZMB//6ZJJeXYJ4+yYJ5hNnyk/+JJg8kn8C
+	 waYV9apMWBPadwfw1m1AiqEsOKxIGgAIXC1DKksb+kssvtA3rbWEkPT9C9tfBwcx8p
+	 Huymk0EhYMgpA==
+Date: Fri, 18 Jul 2025 18:43:32 +0200
+From: Danilo Krummrich <dakr@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Greg KH <greg@kroah.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Tamir Duberstein <tamird@gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the driver-core
+ tree
+Message-ID: <aHp5tFVOhioQz7ba@pollux>
+References: <20250718204653.1289b26f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250718204653.1289b26f@canb.auug.org.au>
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
-
+On Fri, Jul 18, 2025 at 08:46:53PM +1000, Stephen Rothwell wrote:
 > Hi all,
->
-> The following commit is also in the jc_docs tree as a different commit
-> (but the same patch):
->
->   efbc5b4ac98e ("Documentation: amd-pstate:fix minimum performance state label error")
->
-> This is commit
->
->   4613bf5fd045 ("Documentation: amd-pstate:fix minimum performance state label error")
->
-> in the jc_docs tree.
+> 
+> Today's linux-next merge of the rust tree got a conflict in:
+> 
+>   rust/kernel/device_id.rs
+> 
+> between commit:
+> 
+>   8d84b32075fb ("rust: device_id: split out index support into a separate trait")
+> 
+> from the driver-core tree and commit:
+> 
+>   5e30550558b1 ("rust: enable `clippy::as_underscore` lint")
+> 
+> from the rust tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Ah, I hadn't realized it had been picked up there, I can drop my copy.
+Thanks, the diff looks good!
 
-Thanks,
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc rust/kernel/device_id.rs
+> index 8ed2c946144c,3dc72ca8cfc2..000000000000
+> --- a/rust/kernel/device_id.rs
+> +++ b/rust/kernel/device_id.rs
+> @@@ -94,16 -77,14 +94,16 @@@ impl<T: RawDeviceId, U, const N: usize
+>               // SAFETY: by the safety requirement of `RawDeviceId`, we're guaranteed that `T` is
+>               // layout-wise compatible with `RawType`.
+>               raw_ids[i] = unsafe { core::mem::transmute_copy(&ids[i].0) };
+>  -            // SAFETY: by the safety requirement of `RawDeviceId`, this would be effectively
+>  -            // `raw_ids[i].driver_data = i;`.
+>  -            unsafe {
+>  -                raw_ids[i]
+>  -                    .as_mut_ptr()
+>  -                    .byte_add(T::DRIVER_DATA_OFFSET)
+>  -                    .cast::<usize>()
+>  -                    .write(i);
+>  +            if let Some(data_offset) = data_offset {
+>  +                // SAFETY: by the safety requirement of this function, this would be effectively
+>  +                // `raw_ids[i].driver_data = i;`.
+>  +                unsafe {
+>  +                    raw_ids[i]
+>  +                        .as_mut_ptr()
+> -                         .byte_offset(data_offset as _)
+> ++                        .byte_add(data_offset)
+>  +                        .cast::<usize>()
+>  +                        .write(i);
+>  +                }
+>               }
+>   
+>               // SAFETY: this is effectively a move: `infos[i] = ids[i].1`. We make a copy here but
 
-jon
+
 

@@ -1,128 +1,153 @@
-Return-Path: <linux-next+bounces-7620-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7621-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D811CB09D03
-	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 09:54:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BB96B09D73
+	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 10:12:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A59F03BC28A
-	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 07:54:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC9673AB779
+	for <lists+linux-next@lfdr.de>; Fri, 18 Jul 2025 08:12:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A9828C866;
-	Fri, 18 Jul 2025 07:54:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 155302475F2;
+	Fri, 18 Jul 2025 08:12:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="F1SnHRHE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="H7tKO8rQ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Wug6dazJ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A3A1BC3F;
-	Fri, 18 Jul 2025 07:54:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC77220F2B;
+	Fri, 18 Jul 2025 08:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752825269; cv=none; b=SfqjJxws48TffKDmzmtNFR+fEbZKTSil52IXq4bvGiZSRmmyEa47WQXejq24llv0KuhAifxh8PRDCN+BwLX7xlH65jFSucidKG6VyEwWP2IKaJIVN7/hMzsBMaHFiGAb2HvhAyvgnbto7fKJJQ0tPayd9pqkRGqVjQTvqTRv+Tk=
+	t=1752826353; cv=none; b=WoXsZm0GGzAcrrS0kojPeXS7ZMuYDpcigEu1tf8dWkfxOmB/BCuLgLJt+w3fqwhe22c64tyLq054eZ6xYs/Gmrm9CRSevuNPDTLWLLZEsfQUTG8T181uvCgTr+SpNgMlmy1lYibpBbXUez3nksxdpKha2Kvf6WEeGVyDF4fDoWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752825269; c=relaxed/simple;
-	bh=R76AnECYBN3LT7fFGfG6uSPemkYPK01kMpjvqcBEAjY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F+fuJjF0+QxO+wstOLUuJbEoLqDpXIIukxJj5O6xtX2PRSsBgHLXUPPftZEE/hRYhn9g/1Fete1hADiLiqkcuGQWTcrWa8Zvb3xZrNmZamAq3BSuEtsQimgEbgdqfPaCVpxhf4ljbXNWBKU/zX5EvLKJXbawLKmzIniL8ENNLZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=F1SnHRHE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=H7tKO8rQ; arc=none smtp.client-ip=202.12.124.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
-	by mailfout.stl.internal (Postfix) with ESMTP id 71E231D00029;
-	Fri, 18 Jul 2025 03:54:25 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Fri, 18 Jul 2025 03:54:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1752825265; x=1752911665; bh=TVh2yPvq3Z
-	2x/UaOw0w05hq0BcOjGdoZBV3rde75ngI=; b=F1SnHRHE87XXF3e0X/48tJmci6
-	yG8nYRWok1AGF6k6ceNuHvKuqMcJc3HeTu+RYUAsD7hIK7F9M93eXbVYdNaCRPRP
-	s/oZCy8VCmI4pAfY3UIJfqPluhkyGTxRXdc2BhEjNvL+gtwaEjACoFbXRpFGwj8Z
-	1GANum+Eafq6BQcehLB4sE487gHEzevbzVyxBqN7B90kj+/AfxrSay9V4pe0jl4b
-	uUcJhICFWpRSm3SZYeRjmimBVAkB4EE7TDSyVWQBhSgEjBcrklFhkoVsOrMHjEl2
-	bzZaBkU6+Te4LgZXZ6Jo4IyCBTGiKC8rMgEWh236+wd51hAuXBR+gdECXXcQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1752825265; x=1752911665; bh=TVh2yPvq3Z2x/UaOw0w05hq0BcOjGdoZBV3
-	rde75ngI=; b=H7tKO8rQqGvK+aBXG20Yb3il75vPT9EiqhLb/S19wJ7NcFKPVnX
-	D6J4YdrNQqz+NSFGk5wyB/rn+ZxLw57CpobVqZTUW60sxXyYh+NS4tTRKmEjlUPk
-	Td1Pdq8O0n2JxYVWN8sMUmrDv+RZjieBt6Yd73yuYV7hXxV/+s7NHNp+8iaCTomH
-	RTp8Pjem/W+23YHBIeOooJvmsvMUSyPFzM93M+gbl7grT8KNsoMEmjgDF2DSQetc
-	CoTz/WXAHY5BbPu0oKRm87Fb3g19ae6xbldDT/gSPtfXppSpJbtbzoKOr+hmmqsB
-	amVXpS/s1fIUaNEZJt10Kg/C0pNSfGTFz1A==
-X-ME-Sender: <xms:sP15aKBXTsxy_3dNMjVlLVXbpCBk06GyMJrRUj14GSfmwHL_MITzWA>
-    <xme:sP15aMYZQAJGqTbs5RO1xJgpTMlW_Uywizjr5O3QJWgXKfK0OZ_E5PwonQunBwb8X
-    -JJbMK8Hky4ag>
-X-ME-Received: <xmr:sP15aM88rra4X90fQCJiufs-N-Lxk1SxfhA4y32GEc3EXRvtXL5vO4MysTXI6cSmIOKUyCCNtlO8LkxWU-2pIDQBqoqfAZ8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdeivdeludcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcumffj
-    uceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeehgedvvedvle
-    ejuefgtdduudfhkeeltdeihfevjeekjeeuhfdtueefhffgheekteenucevlhhushhtvghr
-    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtg
-    homhdpnhgspghrtghpthhtohepudegpdhmohguvgepshhmthhpohhuthdprhgtphhtthho
-    pehsfhhrsegtrghnsgdrrghuuhhgrdhorhhgrdgruhdprhgtphhtthhopegrrhhnugesrg
-    hrnhgusgdruggvpdhrtghpthhtohepmhgufheskhgvrhhnvghlrdhorhhgpdhrtghpthht
-    ohephihilhhunhdrgihusehinhhtvghlrdgtohhmpdhrtghpthhtohephhgrohdrfihuse
-    hinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdr
-    khgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqnhgvgihtsehvghgvrhdrkh
-    gvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:sP15aAhm9_eqzRMvKwQu1V1FOIEmleS5eJ8FSWBV2IvPz7kBPp2VEg>
-    <xmx:sP15aHjf57iqh-KDVg_lRjpGSm9gwUkAsIchFHEVfSEPeUPxBRkDQQ>
-    <xmx:sP15aO4RHJbR5XYcTrvVawOYZA0sZURkwdgVx3YRAu9Ilxaey1evpg>
-    <xmx:sP15aBTC3d7gxEi6aqJEaw5ranN2y7TvyBuyH3Nw9SFX83NHbh34GQ>
-    <xmx:sf15aOW6dlI_lGcAkMgMpC4m7ZHDv6Tys1r5zXcB3fia9Z-TMZpcOeuc>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 18 Jul 2025 03:54:24 -0400 (EDT)
-Date: Fri, 18 Jul 2025 09:54:22 +0200
-From: Greg KH <greg@kroah.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Arnd Bergmann <arnd@arndb.de>, Moritz Fischer <mdf@kernel.org>,
-	Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the char-misc tree
-Message-ID: <2025071805-visibly-henna-b5a4@gregkh>
-References: <20250718174129.24c0e968@canb.auug.org.au>
+	s=arc-20240116; t=1752826353; c=relaxed/simple;
+	bh=e8WqeO0N/lIYLld9ZiQcTN5U4skZRZXy0znSzppFzpo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jEE5bXQUPt6BGYrA8Vd6asVz0eWPJIja4QBhjluNuWsHwolpDD/InSFcxraJrNDPDxSJVeuLrHXcuRoCMdTtLyyofJsq/zCMrVqNGAm4vf+MA5sj1nQ36t+yG8LyGUnbPe3wleyv6V2+BQWuW7cvTPDTSdczQMmGPdvwML8Wthk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Wug6dazJ; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1752826217;
+	bh=QNYzSYfRj5GUfAseK0uZu8scFuQKLSmTPjGA0brRS9w=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Wug6dazJ9DXwyqQiifkq39RmXxGw+IMUz9AT/XLhHdj+I53DRHm0enkM6UFr7rJ/z
+	 nt7NNfV794SBLUO60s3EPJOZeqCTNWRV+kS6TS07dAMouZs6ZdYpwepJe9l7f3bJdD
+	 XtItjt3dLOdvA1kmPAgk4WJ6WcNzC9TKPRRFyJrGiDgzWI6K4iKk1J6WzzNvNEV/cF
+	 mnuCVoIMU2THW1Ab9EPscbuWzppkjMkiyveKfeX2lsWf1Pk6XGem4TsD6f3zHV6h3i
+	 6LMjmgA9xK0AlCxoen78kUQeodOCagFWHkjHiBi2b+DNK/zIvExYYrTYlAn7B8l5vz
+	 lxTkC+6Y6Ya6w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bk2XT0rm4z4x3d;
+	Fri, 18 Jul 2025 18:10:17 +1000 (AEST)
+Date: Fri, 18 Jul 2025 18:12:26 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: "Michael S. Tsirkin" <mst@redhat.com>, Marek Szyprowski
+ <m.szyprowski@samsung.com>
+Cc: Jason Wang <jasowang@redhat.com>, Leon Romanovsky <leon@kernel.org>,
+ Leon Romanovsky <leonro@nvidia.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the vhost tree with the dma-mapping
+ tree
+Message-ID: <20250718181226.6343c557@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250718174129.24c0e968@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/hqojvehdv5yNWzUSXIl4nOX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Fri, Jul 18, 2025 at 05:41:29PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The following commit is also in the fpga-fixes tree as a different commit
-> (but the same patch):
-> 
->   29f4103b2585 ("MAINTAINERS: Update FPGA MANAGER maintainer")
-> 
-> This is commit
-> 
->   1c6a132cb309 ("MAINTAINERS: Update FPGA MANAGER maintainer")
-> 
-> in he fpga-fixes tree.
+--Sig_/hqojvehdv5yNWzUSXIl4nOX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yeah, I already applied this before the fpga tree did, we talked about
-it :)
+Hi all,
 
-thanks
+Today's linux-next merge of the vhost tree got a conflict in:
 
-greg k-h
+  drivers/virtio/virtio_ring.c
+
+between commit:
+
+  b420b31f009f ("kmsan: convert kmsan_handle_dma to use physical addresses")
+
+from the dma-mapping tree and commit:
+
+  d1814d4fca2c ("virtio: rename dma helpers")
+
+from the vhost tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/virtio/virtio_ring.c
+index a8421dc802d6,3f86e74dd79f..000000000000
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@@ -3143,17 -3240,17 +3240,17 @@@ EXPORT_SYMBOL_GPL(virtqueue_unmap_page_
+   * The caller calls this to do dma mapping in advance. The DMA address ca=
+n be
+   * passed to this _vq when it is in pre-mapped mode.
+   *
+-  * return DMA address. Caller should check that by virtqueue_dma_mapping_=
+error().
++  * return mapped address. Caller should check that by virtqueue_mapping_e=
+rror().
+   */
+- dma_addr_t virtqueue_dma_map_single_attrs(struct virtqueue *_vq, void *pt=
+r,
+- 					  size_t size,
+- 					  enum dma_data_direction dir,
+- 					  unsigned long attrs)
++ dma_addr_t virtqueue_map_single_attrs(const struct virtqueue *_vq, void *=
+ptr,
++ 				      size_t size,
++ 				      enum dma_data_direction dir,
++ 				      unsigned long attrs)
+  {
+- 	struct vring_virtqueue *vq =3D to_vvq(_vq);
++ 	const struct vring_virtqueue *vq =3D to_vvq(_vq);
+ =20
+- 	if (!vq->use_dma_api) {
++ 	if (!vq->use_map_api) {
+ -		kmsan_handle_dma(virt_to_page(ptr), offset_in_page(ptr), size, dir);
+ +		kmsan_handle_dma(virt_to_phys(ptr), size, dir);
+  		return (dma_addr_t)virt_to_phys(ptr);
+  	}
+ =20
+
+--Sig_/hqojvehdv5yNWzUSXIl4nOX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh6AeoACgkQAVBC80lX
+0GzLTAf+MrLPWNt6+PLl7qfouNZwfetcchyANUYB9oTCNe7pYQzljMFIbF8HILTb
+PyQWV9RsBp91Kr4GLc0RYOZs+ZDVNPna68l3/BOV0mzTcm5R0N9h5+HeQRRnLek6
+r+Mn2Qrulz2ABxWVoSWgqMfdi9nqeXph3ltieW/SIa5Ltuje4RqVkBok+qrh81mC
+AFOYMAJE4C1jlMlfhNOLJ6OmjVIDRNmib/QoB3T1V229PfkNjazRDEcUBXG+FhLe
+zP4dQnnbpJK7Iph8utJgNOdxe4mBQxJX+x0JqYPspUEhHOEmVINrhcaVYN2qEhew
+RrNyOKhq5KTFgdvGMf7SEeEHEsQsUg==
+=8SvH
+-----END PGP SIGNATURE-----
+
+--Sig_/hqojvehdv5yNWzUSXIl4nOX--
 

@@ -1,180 +1,119 @@
-Return-Path: <linux-next+bounces-7661-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7662-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C385B0C37F
-	for <lists+linux-next@lfdr.de>; Mon, 21 Jul 2025 13:43:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9C00B0C6B6
+	for <lists+linux-next@lfdr.de>; Mon, 21 Jul 2025 16:44:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 666DB4E5E17
-	for <lists+linux-next@lfdr.de>; Mon, 21 Jul 2025 11:42:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBF1217D7AA
+	for <lists+linux-next@lfdr.de>; Mon, 21 Jul 2025 14:44:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D6622D23AD;
-	Mon, 21 Jul 2025 11:42:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EB5F2980B7;
+	Mon, 21 Jul 2025 14:44:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z4ofNjYw"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="c4IuoeH1"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F8D2BFC7B;
-	Mon, 21 Jul 2025 11:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CBF7283FC3;
+	Mon, 21 Jul 2025 14:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753098149; cv=none; b=p55iT2zxHVJqyLOxT/P8F13nEvi5+E5ABNhESyz+HNstEVDIp8lInPAAWvJvoOEiS5gQA0/ehx1mKN3+Un01VazrRHV/PAnYMn5gys7Jc71rAZ8tA4DCkM6FbiIY1O3PSb5YHHUo8vBDzgoEscNrzosFicg6X+JXFs0QQEP+h18=
+	t=1753109050; cv=none; b=brvadNakMWiOrwdSQXpyvRLRCPvJ5l79LDyMWl8lUGL1pqi/0rtwWRgCwQQHt790Zn0YFkuFpcpP4n6yf7oH8VG0xTC3ai93o7QDS0OlOqotbEAjofi1ARsZU0QOFkEfwRDo/E+sesL04G4YODxjiEf3JJl3+Atnjr6GBNN5++4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753098149; c=relaxed/simple;
-	bh=WezkxZb+PXy8GmsDUb+kAjkO/qBnvKppURLnc8BKBdI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xz+ZZ1znO7Qq11kH+38k1+0+b6ePBaW6ndiVKWkxakQPdjGX9Tynr7Gh3ZwPT9jznEU6/n8ooc0aI8bwyX2tvWb+4xBFRxvqTGTsXdcLQVuplhCQXdc7Ot1UwjYGkvqtJp8MQiicTGEv+QfQJ31O8xTo7bMFFS6O942GYHTFmLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z4ofNjYw; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1753098148; x=1784634148;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WezkxZb+PXy8GmsDUb+kAjkO/qBnvKppURLnc8BKBdI=;
-  b=Z4ofNjYw50bUPz2z07+UdrFMksOc4ywmwV/ulVFDwyLWNi+ww0QJeGew
-   f65yOU8r8qVQcY7ZvmroRDvWrtRiEDRDlR/pgHWk0h7DLuhMX8r2iPqwm
-   zSWPCYgwtvQR64BR4ZG0MtZ60w4qnjMwBuq4q+a+URBZJ+JYEtQFc9Z3u
-   A/RNQY2wtKVuK8mQ40zeoxJtoXvvPdIXog4ANhDixuXvykVIPBKoXlRKB
-   TqXB//NkExdgva7nBjWvFnAuGfOaOAfNTvyskp06eMEYTkluk1cBUhn0I
-   pRzKK0KRdUazq66Ujn3nVeUWphhr4Jgkrq+9tZVy0hymqLdF/ak6+msNN
-   w==;
-X-CSE-ConnectionGUID: QIbaI1gRSNqQqfyF9e251A==
-X-CSE-MsgGUID: 0SH5F338SdaTjmC0jRp/2g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11498"; a="66658244"
-X-IronPort-AV: E=Sophos;i="6.16,328,1744095600"; 
-   d="scan'208";a="66658244"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 04:42:27 -0700
-X-CSE-ConnectionGUID: h7xVXM/FSd+STnjxiO+gSw==
-X-CSE-MsgGUID: F+SIR6XET4GP2hgSKWd4GQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,328,1744095600"; 
-   d="scan'208";a="189771089"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2025 04:42:25 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1udouU-0000000HKQ9-3aWd;
-	Mon, 21 Jul 2025 14:42:22 +0300
-Date: Mon, 21 Jul 2025 14:42:22 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	George Abraham P <george.abraham.p@intel.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: linux-next: build failure after merge of all the trees
-Message-ID: <aH4nnsecLEqrCrpK@smile.fi.intel.com>
-References: <20250721173754.42865913@canb.auug.org.au>
+	s=arc-20240116; t=1753109050; c=relaxed/simple;
+	bh=Jyt4F1VtYa+4ypVbjITcf2eTZjNkA9xO32+tYgnvyXY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=h81+4q2IDLrYAl/OOJ1GoTHfkXG83o6df7uDqPG4HWMlRJW1GPlpruqriTS0ht8O1yckGZByiEPTmAEnYYhvXQBa8txSEHzgUaATZDw+OcIbbVN2RK5ZxXy3gzuw3Xyhm/YE1tDYIRIRf/ItMDib+moSo9ur4GaVjvL+GmpFwIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=c4IuoeH1; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1753108888;
+	bh=nppH31J2VfgugOYDtJTHIKotUypAC9L6zLq6aZBhYNs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=c4IuoeH1PMtqSUkSLT02dq/YIRL6ddAZYbB46t28GKX/MSJ8yRS5jKTKkLjHMEav3
+	 ReAFkWSSlhdJ+Jpa3Oxsydz/8wF3mTNbLJeMdqMDeDTDyeFgpSFitAexDruPt4vtDL
+	 eNm9EIIZI9VVWQuN/flgaHe3k04VWcW8undCfVW9ehzBfjYBn9IQW4hEVTioCKIjdU
+	 pwbsweYsiyyZ4TnaHCBtPJ2c02a09u57CqCgjSAi+T6Es3IW67qiyXC01lolygcxLF
+	 ZYBO0rn86UR52mN0bGiesy6Vkq8l4tOZ0svhDBIP3v7RRH+A2AQkFdZJyAJSlk7VPc
+	 HXtwKgFuVMq/A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bm34S0w4lz4wbY;
+	Tue, 22 Jul 2025 00:41:28 +1000 (AEST)
+Date: Tue, 22 Jul 2025 00:43:59 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Xu Yang <xu.yang_2@nxp.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+ imx@lists.linux.dev
+Subject: Re: [PATCH] usb: core: add urb->sgt parameter description
+Message-ID: <20250722004359.598284ba@canb.auug.org.au>
+In-Reply-To: <2025072159-banjo-resisting-db29@gregkh>
+References: <20250721104417.3442530-1-xu.yang_2@nxp.com>
+	<2025072159-banjo-resisting-db29@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250721173754.42865913@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Type: multipart/signed; boundary="Sig_/vkjr2YnqWLWK1Vi_hilUwBL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Mon, Jul 21, 2025 at 05:37:54PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging all the trees, today's linux-next build (powerpc
-> allyesconfig) failed like this:
-> 
-> In file included from drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c:4:
-> include/linux/sprintf.h:11:54: error: unknown type name 'va_list'
->    11 | __printf(2, 0) int vsprintf(char *buf, const char *, va_list);
->       |                                                      ^~~~~~~
-> include/linux/sprintf.h:1:1: note: 'va_list' is defined in header '<stdarg.h>'; this is probably fixable by adding '#include <stdarg.h>'
->   +++ |+#include <stdarg.h>
->     1 | /* SPDX-License-Identifier: GPL-2.0 */
-> include/linux/sprintf.h:13:71: error: unknown type name 'va_list'
->    13 | __printf(3, 0) int vsnprintf(char *buf, size_t size, const char *fmt, va_list args);
->       |                                                                       ^~~~~~~
-> include/linux/sprintf.h:13:71: note: 'va_list' is defined in header '<stdarg.h>'; this is probably fixable by adding '#include <stdarg.h>'
-> include/linux/sprintf.h:15:72: error: unknown type name 'va_list'
->    15 | __printf(3, 0) int vscnprintf(char *buf, size_t size, const char *fmt, va_list args);
->       |                                                                        ^~~~~~~
-> include/linux/sprintf.h:15:72: note: 'va_list' is defined in header '<stdarg.h>'; this is probably fixable by adding '#include <stdarg.h>'
-> include/linux/sprintf.h:17:70: error: unknown type name 'va_list'
->    17 | __printf(2, 0) __malloc char *kvasprintf(gfp_t gfp, const char *fmt, va_list args);
->       |                                                                      ^~~~~~~
-> include/linux/sprintf.h:17:70: note: 'va_list' is defined in header '<stdarg.h>'; this is probably fixable by adding '#include <stdarg.h>'
-> include/linux/sprintf.h:18:73: error: unknown type name 'va_list'
->    18 | __printf(2, 0) const char *kvasprintf_const(gfp_t gfp, const char *fmt, va_list args);
->       |                                                                         ^~~~~~~
-> include/linux/sprintf.h:18:73: note: 'va_list' is defined in header '<stdarg.h>'; this is probably fixable by adding '#include <stdarg.h>'
-> include/linux/sprintf.h:21:55: error: unknown type name 'va_list'
->    21 | __scanf(2, 0) int vsscanf(const char *, const char *, va_list);
->       |                                                       ^~~~~~~
-> include/linux/sprintf.h:21:55: note: 'va_list' is defined in header '<stdarg.h>'; this is probably fixable by adding '#include <stdarg.h>'
-> 
-> I don't know what root caused this, but I have applied the following
-> patch for today.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 21 Jul 2025 16:15:57 +1000
-> Subject: [PATCH] sprintf.h requires stdarg.h
-> 
-> In file included from drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c:4:
-> include/linux/sprintf.h:11:54: error: unknown type name 'va_list'
->    11 | __printf(2, 0) int vsprintf(char *buf, const char *, va_list);
->       |                                                      ^~~~~~~
-> include/linux/sprintf.h:1:1: note: 'va_list' is defined in header '<stdarg.h>'; this is probably fixable by adding '#include <stdarg.h>'
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  include/linux/sprintf.h | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/include/linux/sprintf.h b/include/linux/sprintf.h
-> index 521bb2cd2648..f06f7b785091 100644
-> --- a/include/linux/sprintf.h
-> +++ b/include/linux/sprintf.h
-> @@ -4,6 +4,7 @@
->  
->  #include <linux/compiler_attributes.h>
->  #include <linux/types.h>
-> +#include <linux/stdarg.h>
->  
->  int num_to_str(char *buf, int size, unsigned long long num, unsigned int width);
->  
-> -- 
-> 2.50.1
-> 
-> Is there any good reason not to do this?
-> 
-> I guess this patch should have
-> 
-> Fixes: 39ced19b9e60 ("lib/vsprintf: split out sprintf() and friends")
+--Sig_/vkjr2YnqWLWK1Vi_hilUwBL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This sounds correct to me and your patch should be sent as a fix to the stable
-kernels as well.
+Hi Greg,
 
-> but that is not the immediate cause.  This has been exposed by the
-> inclusion of a new file
-> (drivers/crypto/intel/qat/qat_common/adf_pm_dbgfs_utils.c in commit
-> 7c68005a4610 ("crypto: qat - relocate power management debugfs helper
-> APIs").  Maybe every other use of sprintf.h also has (explicitly or
-> implicitly) an include of stdarg.h - possibly via kernel.h.
+On Mon, 21 Jul 2025 13:04:09 +0200 Greg KH <gregkh@linuxfoundation.org> wro=
+te:
+>
+> On Mon, Jul 21, 2025 at 06:44:17PM +0800, Xu Yang wrote:
+> > The parameter description of urb->sgt is lost, this will add it for
+> > completeness.
+> >=20
+> > Reported-by: Stephen Rothwell<sfr@canb.auug.org.au>
+> > Closes: https://lore.kernel.org/all/20250711182803.1d548467@canb.auug.o=
+rg.au/
+> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > ---
+> >  include/linux/usb.h | 4 ++++
+> >  1 file changed, 4 insertions(+) =20
+>=20
+> What commit id does this fix?
 
-It just a first who started using the header in the correct way without
-proxying others.
+Fixes: 488e6eaab88c ("usb: core: add dma-noncoherent buffer alloc and free =
+API")
 
+from the usb tree.
 
--- 
-With Best Regards,
-Andy Shevchenko
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/vkjr2YnqWLWK1Vi_hilUwBL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh+Ui8ACgkQAVBC80lX
+0Gyt6wf/ZjOqYfOMLMsplfozjEP6D5R2itpN1CrM2YB6XCiglx2vk0GDP+ugcJAX
+mBLFa2TwK24wzLOmCDWhd2G5HpkwrjQKQvSabu29+/JB8dviFSsTBM9bvDMXl/qy
+HHZ/4Mljph4u6tJqazlgKQWG7wahzOtVtV4UbMCPMjWXxkn2xAPBgIsD3jSCIRCy
+jH75ELPzwUUy3JL6fX1clZ7VHMWvetORUmOQBbUny33JSa4CLeTNibV5YCbtgDMz
+xtVgXYP6RsS4r2roiGjCqgDIy1yR4lJKa3PuiyMXb7XBYh7wMlu1ZN4AXf4Di0gw
+Fi3F7kc+Or4sbPqauIWieoLiCSheoQ==
+=bOvl
+-----END PGP SIGNATURE-----
+
+--Sig_/vkjr2YnqWLWK1Vi_hilUwBL--
 

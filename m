@@ -1,163 +1,128 @@
-Return-Path: <linux-next+bounces-7643-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7644-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 444C6B0BAD6
-	for <lists+linux-next@lfdr.de>; Mon, 21 Jul 2025 04:38:18 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C800B0BB01
+	for <lists+linux-next@lfdr.de>; Mon, 21 Jul 2025 04:50:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0A7F161F30
-	for <lists+linux-next@lfdr.de>; Mon, 21 Jul 2025 02:38:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFAFA3A3255
+	for <lists+linux-next@lfdr.de>; Mon, 21 Jul 2025 02:50:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AD717A13A;
-	Mon, 21 Jul 2025 02:38:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B778B1632DF;
+	Mon, 21 Jul 2025 02:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="nYVwxkes"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ZAb0OIVH"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA59D2E36EE;
-	Mon, 21 Jul 2025 02:38:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B5EBE6C;
+	Mon, 21 Jul 2025 02:50:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753065493; cv=none; b=Hd/mBSTRoOE1nsJXOMNeQAN2e8Ku7Yhvdt2eQnIReqQTijBk0ZuXtIuAHYJerzHB7tLkOCRaic8aRJL47/0du1zJ1LauT8uzfcAA2JRZzIBy3WWVq3muHExkttYoLmeor7CGDyh0g9GZ9bSnLNWk6/On0r8pjek02Xhid/t1cU4=
+	t=1753066246; cv=none; b=jPGN3OO1R0kQwTO5OKaNvwIAS72MjnTkv7dzH9EXUt6ovH9AKrrIPrfeR36yG6sY3vl3ms8TyY8IJ4ps7jbO/WAVM/AqVzuvBZD6ZbxzHAyDFxNmytTtWLiImUP7GhX7+zXHVUvuSzEm80OXM8mTNJkr6fO6fPxTkozJEXTQ778=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753065493; c=relaxed/simple;
-	bh=YFCtjeuNRWirAmt0L2XzJ/hXjgV+AvGMigT27vrVUT8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=n+KNWOL56S6bzxvQFzGRRi2cfFXPRTK7mXWd5uar+RNBVpaScSv4mCVNaBwysxZfEqHbVoB+HYj+D9iTl763jcfs2K1wFgf0Faa5xVFofqvkeRmsW8fy4wez6+/CODmbsKZHQXkGBMWRZ0aTR7AK1FFoOAXCNsZCSEH3X+NpQJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=nYVwxkes; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1753066246; c=relaxed/simple;
+	bh=92KdLajCZpHgMN16syiEmao9TtSdc+Xx8msSThxifQk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=e63QNgijyiYRN6vzAuRWP1WaHfwHsQZFtm1SdwJRqOqCTRYvgVZ2FQUbtATEjKz2vPs3bFgTfW7BbNnniXjB8OTtLY2qy4mfoydxK5LtDtAqcsl/609jldsOvnEfBRWxPaNzcyVvQ5AEGwMnw6TK0Gqo39Xtbb29NjBpET01TXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ZAb0OIVH; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1753065333;
-	bh=yem6wahpDn+9vCFM4jztkJ4anRIFrDvhlGJ/aVZO4CE=;
-	h=Date:From:To:Cc:Subject:From;
-	b=nYVwxkes4RQaPyEjpLH9ma6meX5E2RBbVMkbU46Qdu7TkwJCYcHM0APCooJ0og1cA
-	 RHOzhsAPp/jf+k6HIAb1T6P23yNYESHpsU3TOKBo1w3pmijT8lyBe9hSnclJkcugE4
-	 O1Q0o+DkaeLjxB6pifDHGBMRxFlx2Z9OwtlzG/+e26Qapx7GBTjRX3aAvt6FTjOa/2
-	 aY2AGeiiLHBDn9tAwqkgYCM4+XvRJR+v9RySnA9tctZjY0cb5ahWvFoLUWXYhFu+KW
-	 jUQCIloPvfCJx/zNptNo+HxdqbfbqQ05p08Q6EiEe3XdTjIKvt8tMu8dyKCkfrRc/L
-	 iqTtQYom+dqgw==
+	s=202503; t=1753066091;
+	bh=QNKPkR2IJqZgKeF82v1S1nbLIbKYi2iW05d4A11rPKc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ZAb0OIVHKhFHrxQ5QF+hV4vy/gxSCkOoSC4VlH7qLZ+ERv9B/6YXgs8MYAMJEEX3p
+	 7amtT5TIxHdiI+116xwuNiEpmLkrkJawbXnLi/nQza21FmQU4DJFf08gZAO9N84s6H
+	 obr2Gu5NKTT+GyxK1zMgGBs9GTZFzEBtzUEA+TpCzTX5jhUmymz6epucTUS/IFTk3f
+	 OZ6NwGFEyhF+vH6HhavBpgjJkebrCnmRdnakbiwCV4+8MXUsvhG1no174ISBUZrsIf
+	 6o2HpI/mgNpscddDRahQSBfupHfy4WYn1eTzxVOkB0sfUYtIM1Gdht3bGF7+YXDqtn
+	 nQNy/cR/qr4kw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4blkyr3CSkz4wbb;
-	Mon, 21 Jul 2025 12:35:32 +1000 (AEST)
-Date: Mon, 21 Jul 2025 12:38:01 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bllFQ0bwCz4wbb;
+	Mon, 21 Jul 2025 12:48:09 +1000 (AEST)
+Date: Mon, 21 Jul 2025 12:50:39 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Ulf Hansson <ulf.hansson@linaro.org>, Michal Simek <monstr@monstr.eu>
-Cc: Jay Buddhabhatti <jay.buddhabhatti@amd.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Michal Simek <michal.simek@amd.com>
-Subject: linux-next: manual merge of the pmdomain tree with the xilinx tree
-Message-ID: <20250721123801.78841075@canb.auug.org.au>
+To: Dave Airlie <airlied@redhat.com>
+Cc: Simona Vetter <simona.vetter@ffwll.ch>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, =?UTF-8?B?TWHDrXJh?= Canal
+ <mcanal@igalia.com>
+Subject: Re: linux-next: manual merge of the drm-misc tree with Linus' tree
+Message-ID: <20250721125039.170209b4@canb.auug.org.au>
+In-Reply-To: <20250716142322.3a681368@canb.auug.org.au>
+References: <20250716142322.3a681368@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/A=0meQQ6qxiLxJJo5tba4hA";
+Content-Type: multipart/signed; boundary="Sig_/bJ7l2V_5C4uQGTi4426rdUR";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/A=0meQQ6qxiLxJJo5tba4hA
+--Sig_/bJ7l2V_5C4uQGTi4426rdUR
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the pmdomain tree got a conflict in:
+On Wed, 16 Jul 2025 14:23:22 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the drm-misc tree got a conflict in:
+>=20
+>   drivers/gpu/drm/etnaviv/etnaviv_sched.c
+>=20
+> between commit:
+>=20
+>   61ee19dedb8d ("drm/etnaviv: Protect the scheduler's pending list with i=
+ts lock")
+>=20
+> from the origin tree and commits:
+>=20
+>   0a5dc1b67ef5 ("drm/sched: Rename DRM_GPU_SCHED_STAT_NOMINAL to DRM_GPU_=
+SCHED_STAT_RESET")
+>   8902c2b17a6e ("drm/etnaviv: Use DRM_GPU_SCHED_STAT_NO_HANG to skip the =
+reset")
+>=20
+> from the drm-misc tree.
+>=20
+> I fixed it up (I used the latter version) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-  drivers/firmware/xilinx/zynqmp.c
-
-between commit:
-
-  ef32394c6d34 ("drivers: firmware: xilinx: Add unique family code for all =
-platforms")
-
-from the xilinx tree and commits:
-
-  3da405ead651 ("firmware/pmdomain: xilinx: Move ->sync_state() support to =
-firmware driver")
-  29ea33866d6d ("firmware: xilinx: Use of_genpd_sync_state()")
-
-from the pmdomain tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+This is now a conflict between the drm tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/firmware/xilinx/zynqmp.c
-index 906a7aae719e,02da3e48bc8f..000000000000
---- a/drivers/firmware/xilinx/zynqmp.c
-+++ b/drivers/firmware/xilinx/zynqmp.c
-@@@ -2143,22 -2100,22 +2143,35 @@@ static void zynqmp_firmware_remove(stru
-  	platform_device_unregister(em_dev);
-  }
- =20
-+ static void zynqmp_firmware_sync_state(struct device *dev)
-+ {
-+ 	struct device_node *np =3D dev->of_node;
-+=20
-+ 	if (!of_device_is_compatible(np, "xlnx,zynqmp-firmware"))
-+ 		return;
-+=20
-+ 	of_genpd_sync_state(np);
-+=20
-+ 	if (zynqmp_pm_init_finalize())
-+ 		dev_warn(dev, "failed to release power management to firmware\n");
-+ }
-+=20
- +static const struct platform_fw_data platform_fw_data_versal =3D {
- +	.family_code =3D PM_VERSAL_FAMILY_CODE,
- +};
- +
- +static const struct platform_fw_data platform_fw_data_versal_net =3D {
- +	.family_code =3D PM_VERSAL_NET_FAMILY_CODE,
- +};
- +
- +static const struct platform_fw_data platform_fw_data_zynqmp =3D {
- +	.family_code =3D PM_ZYNQMP_FAMILY_CODE,
- +};
- +
-  static const struct of_device_id zynqmp_firmware_of_match[] =3D {
- -	{.compatible =3D "xlnx,zynqmp-firmware"},
- -	{.compatible =3D "xlnx,versal-firmware"},
- +	{.compatible =3D "xlnx,zynqmp-firmware", .data =3D &platform_fw_data_zyn=
-qmp},
- +	{.compatible =3D "xlnx,versal-firmware", .data =3D &platform_fw_data_ver=
-sal},
- +	{.compatible =3D "xlnx,versal-net-firmware", .data =3D &platform_fw_data=
-_versal_net},
-  	{},
-  };
-  MODULE_DEVICE_TABLE(of, zynqmp_firmware_of_match);
-
---Sig_/A=0meQQ6qxiLxJJo5tba4hA
+--Sig_/bJ7l2V_5C4uQGTi4426rdUR
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh9qAkACgkQAVBC80lX
-0GzXcAf7BsMKuk78CZfJkHzi3rwboosa7PMBRHmWLFCg1IHH5Uu08fFGlIA6O+xd
-ASpniuGWyT+0ugj9pov81RQFffB22AOYRQdNAgwWhksnEtPi/YUZhg3xmciWi1z4
-B06LY+wyZbi6zj+9Kvi2L2O48ecrudY6ggp76n7jfJ4VCjy+zFyeMfkCehQwM2IX
-7aj6VGXLD6Ig6a49ssom2DHKspI6mtpqKycEH7Pt+VAzh6jCjT4GZAA5mYcEMRms
-e+mtlijGmgjZE1swmpHVldU1aYy4CkMOlwXk1a63Nu3Yaueq2wrqeB/JbGlwCBCf
-tHJF9w0fNo0siJSyHnY2KWixPW6Xqw==
-=iafp
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh9qv8ACgkQAVBC80lX
+0GyTfAgAnocNOglVpKszMsdTmlrcycE4sIklH32mbXHUmwFXT6wPM3NYShGrmbOH
+T3hsIa7KaEM4Wr6SCS8VbGiqQUqawmn8D+YSXG2yqasWy8yiNlv+mkcTnHKMQhsL
+xBs/E9QsaF2c5R7onm9+oYQsOCIwwcAhKKB7hSm7z3jj+vey6RGP/AbR+Dkho/TE
+iNgSefonk+15op/NO/EhfvX0zWjDEeXlTse1wAyIOV1bLuxT5NSiT5NzwnyMlRqX
+Fw6eARCmbFg6qm8UPY9/t5ewpsGWd8EoeXTJBkbds75KOs4Ht6wim4Rf97nhVVJq
+M0LcT8Tr18FNY74NoAZ4K7ZczpjIiw==
+=hkH7
 -----END PGP SIGNATURE-----
 
---Sig_/A=0meQQ6qxiLxJJo5tba4hA--
+--Sig_/bJ7l2V_5C4uQGTi4426rdUR--
 

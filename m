@@ -1,118 +1,115 @@
-Return-Path: <linux-next+bounces-7646-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7647-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B5BBB0BB3E
-	for <lists+linux-next@lfdr.de>; Mon, 21 Jul 2025 05:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1197BB0BBB8
+	for <lists+linux-next@lfdr.de>; Mon, 21 Jul 2025 06:20:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1250E18970DD
-	for <lists+linux-next@lfdr.de>; Mon, 21 Jul 2025 03:14:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC4251896AD1
+	for <lists+linux-next@lfdr.de>; Mon, 21 Jul 2025 04:20:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ACFF1DF98F;
-	Mon, 21 Jul 2025 03:13:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 286A119CC28;
+	Mon, 21 Jul 2025 04:20:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="OvINISGf"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HUcz3kK6"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD7A1A3160;
-	Mon, 21 Jul 2025 03:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257EE469D;
+	Mon, 21 Jul 2025 04:20:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753067635; cv=none; b=s8FFRPqixjsgIo+iV2SUc8NqrZj+OAsBD46fQp3gjzYXbS7Ru9+rHPSa6/1TW+u35gLugqySWx9O9ZAb3zmvyng7NoA5JwLCU8qxMv5NXbvcnoY2xKacWQvOCA04bbjzM7hMUbsiO9Yg9oAy7X9GSlFpHw/lIKMEbout6qNKxBk=
+	t=1753071609; cv=none; b=cZ3bCvXGk72Dx4fHXNyFKhdUzAAtNirQXtYoTVpBAUX2vttsVnPYO5V29RYryG5yjvRyzJgclGX70hwrDAYmKTTRpJvXwnJUVpOXJyPAknoG7tSCLYw1QbOr3um5uJUSosMgkrPxzOeRMc3c0dzI8lT2sb0dkAJRBnpD1/DUNCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753067635; c=relaxed/simple;
-	bh=7PPVeVv3ncSmgWy5kT7Os6h3MKo+Zf//pmTUrjsEg/M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=a0c8iUndnvfCSpXsQkzvW56WggU/QUTep5lMommixfqv1MiR/2CHLBi07hAoiiOTfZ09FbwOMblnL9ho3q3dfEBt+jY3uqODzvVZIrI9cA2bsUBG3OY5ruBAw3b0WP6+sLEKc8EhSchtx7A/92DAQDVBUXTcfFgIzoKeYH2XaCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=OvINISGf; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1753071609; c=relaxed/simple;
+	bh=eegu8XhnliDkrtnoLhFcsI9gwuo3N6c0N4F/U8ERIOU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=WnWu/2YCU55kuLRj0XT2ntH3ugIX+gYl2/1Ao5hY9/X9KvJygXoz2mF4bmgkZE8Mx8kM6Ve0sEyYUhcU9qsAURqXxIusZcq3a5b1+TzCbQMENhK+BzT2A7RdD0MHJz0N3vLcpU9gVO4C0E67cYekSK9vSaoPor9OpUYx9zoWurA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HUcz3kK6; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1753067479;
-	bh=eIUAoe9cs1XgnuZmFk+NEW+rcfnvTGVPXZ99OmoldTU=;
+	s=202503; t=1753071452;
+	bh=HkPSkWhg3pmeStwmeYGSd5zpZ6MCM9xdxqpouVDOC7o=;
 	h=Date:From:To:Cc:Subject:From;
-	b=OvINISGflgC3V/8b4x/SgffHfS7kpxrEjT81wsIOH078Fgqi4SgplKfMmR1BkOJvE
-	 ZLSmnPrOoPO7+/7rXwhDSSzvqGMEMqyizIQ9T37DkIiZNtiQ297asa92jd+u6Cr6hZ
-	 dNbLrt35HmYdw2NPyzF2m6Q4FILFyWeFfiyZbHqlZXRE/eOiP/uWA2k4Xdc6ejigxL
-	 iGvxZNQ7xbd0ffhqUllMRu+NA7VSOfBZmKmhrUn5ps+b+uii7bl+qp2Kx4RuAtvlGy
-	 CC00+1EGkLMySaVL/67CIXqlNBHNDsdCWmxsA3/VQFq8s6Mz3Jp6okJu4LG9yaFtBy
-	 wR5fe52LSlicw==
+	b=HUcz3kK6yt4lqVlmkBCIopm8bhv1qzg69VDuyGdsS5fIB3VrnMN+tIC5hGjO0ZzJA
+	 u2rtHIpLeTga3dtWUXy7aXjufX7fO2BHtxORhNmboD/+LlZ6SIKWUw8r0mLnpTAvRX
+	 aeyOdBcDWNvdIrSq048vrO5J1nPF0Kg6A0ib/AaSoUiwRk79GCurNtSsW8enwwqcma
+	 54Y2qhgzSxOqtZmzFfBgnmHOvPc/N176qLflu08wXTWNAFWUWnz7eRSsyW06XuCtoD
+	 YzgSHE06wqzjVopBkYGB4MzKIdBK9L5HXA5bGg7EBZOq1tr0oCSv5KsDx9BjlTdpF6
+	 3yYIWkRn2CiOQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bllm714Phz4wcd;
-	Mon, 21 Jul 2025 13:11:19 +1000 (AEST)
-Date: Mon, 21 Jul 2025 13:13:48 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4blnDW4ccGz4wbb;
+	Mon, 21 Jul 2025 14:17:31 +1000 (AEST)
+Date: Mon, 21 Jul 2025 14:20:01 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jassi Brar <jassisinghbrar@gmail.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mailbox tree
-Message-ID: <20250721131348.38ba6ec8@canb.auug.org.au>
+To: Vlastimil Babka <vbabka@suse.cz>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Luiz Capitulino
+ <luizcap@redhat.com>, "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: linux-next: manual merge of the slab tree with the mm-unstable tree
+Message-ID: <20250721142001.3d1c8777@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0.hjtAA3+MuH1qKXXC=WgQy";
+Content-Type: multipart/signed; boundary="Sig_/1PuWWKKJlkMvocUc7qMcrhU";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/0.hjtAA3+MuH1qKXXC=WgQy
+--Sig_/1PuWWKKJlkMvocUc7qMcrhU
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mailbox tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the slab tree got a conflict in:
 
-drivers/mailbox/mtk-tinysys-mailbox.c: In function 'mtk_tinysys_mhu_mbox_st=
-artup':
-drivers/mailbox/mtk-tinysys-mailbox.c:95:9: error: implicit declaration of =
-function 'irq_clear_status_flags' [-Wimplicit-function-declaration]
-   95 |         irq_clear_status_flags(priv->irq, IRQ_NOAUTOEN);
-      |         ^~~~~~~~~~~~~~~~~~~~~~
-drivers/mailbox/mtk-tinysys-mailbox.c:95:43: error: 'IRQ_NOAUTOEN' undeclar=
-ed (first use in this function); did you mean 'IRQF_NO_AUTOEN'?
-   95 |         irq_clear_status_flags(priv->irq, IRQ_NOAUTOEN);
-      |                                           ^~~~~~~~~~~~
-      |                                           IRQF_NO_AUTOEN
-drivers/mailbox/mtk-tinysys-mailbox.c:95:43: note: each undeclared identifi=
-er is reported only once for each function it appears in
+  fs/proc/page.c
 
-Caused by commit
+between commit:
 
-  43a9f5ab3d17 ("mailbox: Add MediaTek TinySYS MHU-like Mailbox")
+  a602ee331e31 ("fs: stable_page_flags(): use snapshot_page()")
 
-Forgot to include linux/irq.h ...
+from the mm-unstable tree and commit:
 
-I have used the mailbox tree from next-20250718 for today.
+  d8178294c53e ("proc: Remove mention of PG_slab")
+
+from the slab tree.
+
+I fixed it up (I just used the former version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/0.hjtAA3+MuH1qKXXC=WgQy
+--Sig_/1PuWWKKJlkMvocUc7qMcrhU
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh9sGwACgkQAVBC80lX
-0GwGWQf+P96K6Mg/kT5h7HAOJzsacxyiCdudtzwCnREUL+U/B3+X6xTpa4R9r/S5
-uBErNKdWsABBtgjX2DcnBoY+CMfJ7TUwHkMfXmbwFU2MrjC55Wu4qnlmeaneTBtO
-1kWTmL1TJtk15I7Yt+wSUpZpR+Ga9DGRzmnkeh7yn4hwNNQqQISknF/3NveAeGbn
-zYkspyeZloMQv3KUp8zXYjFuzqC+s+o3kaeQJAwduLNwcCEpkEDWTEidMi7kSa8I
-P4JNC/mt9SwNymLztLj6/RS9X16OuTP87wpB4d3WV6EhkzGOB+WXeX2usCZAx4xy
-eOVhQEdXN/OXWr5/rtbde1ehRSeFpw==
-=MmUu
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh9v/EACgkQAVBC80lX
+0Gxe4Af+NuUsW41E33vKHLWwM0EEz1l951OhtbCFAveJzXqMPZly9lqdy/DbuNbC
+kMKVRO0n6w5H0Ok6yvqWnMRg6xRY2ror7ZBkVAmvdRs3tzE+V2S8vxsKsEY+RAmc
+2i/voxiEIv0qOya6bE9xtxdLJKIORQFpdoO2V+yEM97cADezMWEY6yheWKiTd/sc
+t9G8zxNkugvCRjedBlHSKtnW3j+fsZRhTHN9sdR7/lHFTeDgzkvXdWsakGBOmTXd
+be1tjyZyN48VcnXq009yk4MhXAZefbT0qL42+8pI8iEpk0OZY0dilModEgouZakf
+Tuc6qczC4OcfUj337HZlqqykVBESdQ==
+=Dygb
 -----END PGP SIGNATURE-----
 
---Sig_/0.hjtAA3+MuH1qKXXC=WgQy--
+--Sig_/1PuWWKKJlkMvocUc7qMcrhU--
 

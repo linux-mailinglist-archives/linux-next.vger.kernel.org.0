@@ -1,103 +1,100 @@
-Return-Path: <linux-next+bounces-7691-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7692-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16FE9B0DEF6
-	for <lists+linux-next@lfdr.de>; Tue, 22 Jul 2025 16:39:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 983F9B0E663
+	for <lists+linux-next@lfdr.de>; Wed, 23 Jul 2025 00:25:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2C2EAC417C
-	for <lists+linux-next@lfdr.de>; Tue, 22 Jul 2025 14:34:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 476EC3B8FB1
+	for <lists+linux-next@lfdr.de>; Tue, 22 Jul 2025 22:25:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE2682EB5A5;
-	Tue, 22 Jul 2025 14:33:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E1062877E8;
+	Tue, 22 Jul 2025 22:25:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BbRijO5S"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="EHTibmcp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 826732EB5A1;
-	Tue, 22 Jul 2025 14:33:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E24926A0FD;
+	Tue, 22 Jul 2025 22:25:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753194837; cv=none; b=U4p67MVmEGTf9q8CT+0GIsGPDGOfw9oHdONPfL31/JUFxRyX1zucUf5doiDaeu8V3pKg1w3saHZKjC9743ZA6kpFQiDrq9QO7DACWqTExeqkavV08cIBb8Ecm7d/z51cqUFtC0SPdlID9jhk0QnoNHO1hs2XBYxHPiwycOK+Tpw=
+	t=1753223135; cv=none; b=ofjOVqj6WuRUsL8JZsjdnC9070fdGg2kD1EB7VTUK7l23U6ljeIPm+mmoKoKJyKTK9XIqy7riG+xk1SSS8MrcGe0ZdDQiqQSULZekFIY6IHJTMh4e1Y2A0lODsREzrjhMSSs9D+2be9Ltl4aM0Ot9v30KUOoD/OaiPyZHGRyxG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753194837; c=relaxed/simple;
-	bh=K192NpMj7rcBD1vebJP5mJu6UpyCRmqyL45mPGrycI8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=iPPc/Zny3OUj30PIt+qsknaaPJbbKRQPrl3mnJ0QjPdH0B1qQg3qsVr8gTLR4lIzLFdtPBxy8XK70BKOpQnyi/T4BpJ/h1j7gc5UajxClQiLOG/Nj5N4yfljjKJCmQFAIOMYmiJRwEhFxl59oAmRNFEB49zwDKYxrgRFzJATQTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BbRijO5S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F0E5C4CEEB;
-	Tue, 22 Jul 2025 14:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753194836;
-	bh=K192NpMj7rcBD1vebJP5mJu6UpyCRmqyL45mPGrycI8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=BbRijO5SKvXPpof3AfLHhoV+ISe42MvbLaOxncfc8nFyVk7qks+ZQISptRynYKxoi
-	 yH6xyLpVp4Slw3xx9xjpOk8oG3iS0BKWTs1FIXqgH5efbdRXI8EfBa+BzEzyyUkKJk
-	 L8emOZyGK59rAk+H79hipCgmIYW5tgzUmpSjn/ucl6S/jarEy8WBjqxTA472f5VOqm
-	 mzfK0G1TGUU/VARXsdePzs9iYl08GS6TsIeVMR06ZJUMPa+g0Q6FbesAkUKCcaLh6W
-	 tYcgVpOGH+W7Ik7KIukIVhfvjkgjH909lkz/cX1m2guO9RIW6ZPIHps4MUPJLuUeXC
-	 gWs/P5uXqhc2A==
-From: Mark Brown <broonie@kernel.org>
-To: Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc: lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com, 
- pierre-louis.bossart@linux.dev, peter.ujfalusi@linux.intel.com, 
- sfr@canb.auug.org.au, boqun.feng@gmail.com, linux-next@vger.kernel.org, 
- linux-sound@vger.kernel.org, patches@opensource.cirrus.com
-In-Reply-To: <20250722102754.2514351-1-ckeepax@opensource.cirrus.com>
-References: <20250722102754.2514351-1-ckeepax@opensource.cirrus.com>
-Subject: Re: [PATCH] ASoC: SDCA: Check devm_mutex_init() return value
-Message-Id: <175319483403.46177.1552499643444873384.b4-ty@kernel.org>
-Date: Tue, 22 Jul 2025 15:33:54 +0100
+	s=arc-20240116; t=1753223135; c=relaxed/simple;
+	bh=QA+8Ul0XKkfiVIdSd3iCDgTk4q3hDNT5m1xUjumrgD4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=fYuCa/QgKiXkLr/xMKgxQ5WHx2KwMdDTfdX/rsxPuFdXqBaBuuDxYM/y9U6h4sIwpGj9jVPrxBdwtJ8wy2S9PusI8aaZhVLtbXWsXLz4uSaThiMHE8UpO4T2JuKPcHoWBJ4tyxx7MsbBpaDwatq2YSLySUYGYYu1o+7BgCUPT08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=EHTibmcp; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1753222965;
+	bh=Ct4LHIoK4jMUZEbprcTPdhuEbh2QXr6A2F7FmlF9nhA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=EHTibmcpEGexpIHleeeHNENs7wAU/rUw4F3Ql2n5YFWVn9TkWhITv0Cp6Qcj3lpf5
+	 h6AzSzGrEzo1/2QSxL8ByR18NkBrK2IepZIds6+M4hQZlmZrXvEb3you60jpOFfPav
+	 Nu9zvThGi7Okk8FMeNJGfg6AH36Pa2wXo/0F0MIigfzuPjbKX4If1dSA5nC4VCVKVv
+	 ihRrjziDkwfbghpTuMTtjyykXm/icMMG5vzbxO3tQ4oOaWApUi8w3TlmOr+kcXpb4/
+	 C0TDLS1DgxscY2McWeA8Tbmm9lm/HJYuuIztdIX+crnqijKEukHI7DQYHE2gyU0DWC
+	 zojMmrK6aZBDQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bmsGF2nFyz4w2D;
+	Wed, 23 Jul 2025 08:22:44 +1000 (AEST)
+Date: Wed, 23 Jul 2025 08:25:27 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: ARM <linux-arm-kernel@lists.infradead.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the arm-soc tree
+Message-ID: <20250723082527.31bafc56@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-cff91
+Content-Type: multipart/signed; boundary="Sig_/tx57dIAk6MugSyohkUUcM2H";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, 22 Jul 2025 11:27:54 +0100, Charles Keepax wrote:
-> Fix interaction with commit daec29dcc873 ("locking/mutex: Mark
-> devm_mutex_init() as __must_check"), add return value check. There is no
-> need for additional complex error handling here, failure to init the
-> mutex means the code can't progress, so the failure just needs to be passed
-> up to the caller.
-> 
-> 
-> [...]
+--Sig_/tx57dIAk6MugSyohkUUcM2H
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Applied to
+Hi all,
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Commit
 
-Thanks!
+  12702f0c3834 ("soc: fsl: qe: convert set_multiple() to returning an integ=
+er")
 
-[1/1] ASoC: SDCA: Check devm_mutex_init() return value
-      commit: 5b838a24e9942d8b8da208f924701d0f989778cf
+is missing a Signed-off-by from its committer.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+--=20
+Cheers,
+Stephen Rothwell
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--Sig_/tx57dIAk6MugSyohkUUcM2H
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+-----BEGIN PGP SIGNATURE-----
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiAD9cACgkQAVBC80lX
+0GyZagf/ZHWj/491scqAW16aHlUBK2aPSwSWUZDSZxDs4+hqMRlSB6+dG0kE3VGO
+ijxACYqCOLDBM9qFpeffJD+Bn6rJrVRM3nQpT1Mo+zMTBPAL3pzrH48Im0SSa3pK
+1AnNd/wU946BmiCi/rnd4kC9PNS1piOcMKUA0Y7pNnclp+ymvB3s1LjPZRGp3SQG
+ORXaZfSw833dUgcr6ZH6iPSbpb0KcFcQb/1OeOrn+qRuMiIDEiMt1hFC1wXH8qcU
+svMk/oGYhiCv94X/x48nmH4n7fXR0ZM3m8sJO+Gt9FQvaxpBZsxfKUOMYkDLthl6
+h0YX0RGajt1lZA5brN2PvtAk9511FA==
+=OJIz
+-----END PGP SIGNATURE-----
 
-Thanks,
-Mark
-
+--Sig_/tx57dIAk6MugSyohkUUcM2H--
 

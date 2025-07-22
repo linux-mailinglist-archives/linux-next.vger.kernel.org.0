@@ -1,227 +1,110 @@
-Return-Path: <linux-next+bounces-7686-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7687-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27EE2B0D665
-	for <lists+linux-next@lfdr.de>; Tue, 22 Jul 2025 11:58:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFB7CB0D743
+	for <lists+linux-next@lfdr.de>; Tue, 22 Jul 2025 12:25:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D38CF3BD4CA
-	for <lists+linux-next@lfdr.de>; Tue, 22 Jul 2025 09:58:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E497C164C56
+	for <lists+linux-next@lfdr.de>; Tue, 22 Jul 2025 10:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 009002BF007;
-	Tue, 22 Jul 2025 09:58:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B31CD2DE1E5;
+	Tue, 22 Jul 2025 10:24:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CT8sh2cb"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tcdjoWrX"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A9128C873;
-	Tue, 22 Jul 2025 09:58:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8D228B400
+	for <linux-next@vger.kernel.org>; Tue, 22 Jul 2025 10:24:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753178333; cv=none; b=kmU7o6gQnjEF0aQ0nrzv6v0FYneW1VPdFPTOYtC5WTsK7qEZzJjyOgDjSS+kJlYH0ohqvHmXkDAs37rmL2N7vkk4Hics0Vh+U0t1m16+bN6haRscomIFzs/0CPMKZ1O5ySxLyrlo9xoxW4mpLMSNeVp7C7rZZLymwcp4qVprc28=
+	t=1753179899; cv=none; b=Gkdj9vH90B0zm435/0Tkaazua51N8jvUObPtxX/Qhtcn5X41r68zRwD6KSyI70vWiHzjY0oVFScsFjlFJtZyZimIXcWkCgBvT3eQfBBIv0/QOaWYMTRW+MFUS3yWudqyA8WY0nqUTHrQ7Op7IXKymJMGcuWbSnHFF+zci1xl2Q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753178333; c=relaxed/simple;
-	bh=qEeWfk6RMw0ttB9++h2U3jo0V/IeWqr7albfrVsTTOQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NCjcigcnyxD87lmbhZrzvq38xAmRBdz/4WJ4hN9PoafFYMts/qxCkKJ47U2Wjr3XdLd7MB5jl7xixHAHqdrWwSOfFcJvdkukwpkfT+8d0ahsBgGLkYsgKGxKbDba36o2Pfs0fQnfi3A2OHGKiEBBLe95IKR0VK1VY82Jc7BeQQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CT8sh2cb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC9F0C4CEEB;
-	Tue, 22 Jul 2025 09:58:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753178333;
-	bh=qEeWfk6RMw0ttB9++h2U3jo0V/IeWqr7albfrVsTTOQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CT8sh2cbnPBOabSSjlEaI0mTXUClBT9FBUgNopwaM+SsRWYmKBIErMSJttydoupWu
-	 D4I7WH2N2PtoWMOaz9XIiitcS9EZE2Lij6PQN0FtKfuT2TffB7oTmMK5l1+65ZVbf1
-	 FFH9jMt55hIuiP6Rn71r73Poby+Sm8UU9xiG5PjJtWFuobUoGdsbB8HwEPms4e60rQ
-	 G32GVoNzUKOfxhTuQr+5pgREaXNz5e5LijGZKFIfSwRlkWdMOqDAPORVvVOEPusH8u
-	 RWvOLLh96OMQw+k5DdsQ+fjpowV+rVxV9hBsxQ0ij09lhcl4PPZS80LyIiYd5QiIqQ
-	 2mL/jhj/rXM5A==
-Date: Tue, 22 Jul 2025 11:58:48 +0200
-From: Joel Granados <joel.granados@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, Feng Tang <feng.tang@linux.alibaba.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the sysctl tree with the
- mm-nonmm-unstable tree
-Message-ID: <lzabgfj2r5uf4gnmuibx6vhgdddi7bhqv3wj3ty6arnquu4itw@wsj4knxljyv6>
-References: <20250708190003.4eabc8ab@canb.auug.org.au>
+	s=arc-20240116; t=1753179899; c=relaxed/simple;
+	bh=x1EmevJHHSzjWxhFuCNXDb9xmI8bRp167e5+cwIXvVw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Gqn4DSIAK2a2tbGO8LSvgp9UrNBuHMMtbqHqTvbZiX34MO15CFVckVyIHImyOEXsBtmRetBBIQz3xObt+1hBRFLA2qhAwdPp7+VSIVjGYqqf+l/bK8etXSveKaOshrTI4JpxHp3XjAsFTQmUvhSiHH5E6LSwgZ64x6Jkyuk59zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tcdjoWrX; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5f438523d6fso7242a12.1
+        for <linux-next@vger.kernel.org>; Tue, 22 Jul 2025 03:24:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1753179896; x=1753784696; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=33XB74HPhFwcjRRLvueU8G9hXMQh0Pw0WGRpEoj9zY4=;
+        b=tcdjoWrX7dc/yZCmGx2KrsRJxv3+dpPTFWN0VqNdpG1DaCg+u+raCY/O1BLNyhce1b
+         /juPfmTDHglFlv5wXx+yd0i58sKWBk7JUIi816DzhKUqaH2RC6a5etdZKZPeHDkypFSp
+         zn+w4cu4tIfJD0qqvNnWJfLCqIu5nSQFqg9ObyX3S438o6KUTN7esFDAD687hzjiawmV
+         04Y+v4z8MCXCdZeXH8tawzTRfGX5jiAYB0qpiPdBvwHWo0MMhMPpQpF7zrSb5MyHx9wZ
+         UTsjWJhYB2xWapsWPpMnOAUibiRpj39V3PxPM3YI5ASLyOXX6qq4Ko0CK3IrMbv01MJL
+         Ja0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753179896; x=1753784696;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=33XB74HPhFwcjRRLvueU8G9hXMQh0Pw0WGRpEoj9zY4=;
+        b=j1JE9Yssf1ev7oXl3I5LcbygUJgdtQryQ3fulr/ICgXiqIgzABKkuS/TdMN3hPhnTN
+         VYasdI9nQEd6x7MEs7pUsGfxlzxp16X42CRBiq9LnldgTs5EGPw/O0+aO/4RgDck3BcG
+         0/elJnYrOLaaqO7J0GBbcSTMz10G+6yggD6/aoGldZV5uguZZC4ygH+mb2z4+ruFeAA0
+         73/5tJKx+6l/oT+3qj3KMmW5hViwI4AHYnRM8n7PgzdlVYh+SAUWWaLsy0D4zNLIWJhx
+         4dOB5JEGVtwCSKZcVqKvGq33lxDmlsRDz5CuL4j4M6bO27+72qC+ll/8c/8XDJ3VI87J
+         Rxrg==
+X-Forwarded-Encrypted: i=1; AJvYcCWk17TmTwhYNlUa46F3f2JKlpILFF9xWYb6MrVJLSBv+/yk3Ece6SKGqNbl5cQExdEKZGOs07xbe7QE@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqdRpEseFpV3T6+gb3F9osVi94+qV4cmOjU16rSp4OfV71bsm/
+	8gR7k/w3+4CXqwQ9wE9fD0O3wgiV1ZZx0/s2nVfSUhFaTyQ2xprhFmvUMS4XRjUIZlHyU/WPo71
+	ujUBMVxy6WbKBJ/E4ordoJssHLvIOCM6qE9sNM/TB
+X-Gm-Gg: ASbGncu5Mzf3LmSbV+tw7se1MbsIkYPqd76guVmv3gYuDWewe9H+4WoyYCz41hg9T8t
+	/ZGPUSrr7UpW1wk+dVWpzzosvnQnERVD6WDpiC7Hc9+fl1ixJSsEAlwDVme0EmBoxha8oZBFPpG
+	UJxV8XOgzpAiYoOOfBdmzM5KplNMbmTxeLJ5m9IMbri+NHr/+4lpPJz6t+7444N29sWQOe4MoOA
+	1l1BYLrp2X9fapzDOMjSOJe5au2CkjgI/0K
+X-Google-Smtp-Source: AGHT+IG03V+yzghRURs8YdytmvIJHF5yr+WXRATyvIvO3+HoYcZiNehpR1ls15DCd5VKlpOc3HjceWHMlfX18OINB3k=
+X-Received: by 2002:a05:6402:5191:b0:611:ff6c:50de with SMTP id
+ 4fb4d7f45d1cf-61348ee0a07mr102263a12.4.1753179895656; Tue, 22 Jul 2025
+ 03:24:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3olfnkpid3bjzui6"
-Content-Disposition: inline
-In-Reply-To: <20250708190003.4eabc8ab@canb.auug.org.au>
-
-
---3olfnkpid3bjzui6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250717173655.10ecdce6@canb.auug.org.au>
+In-Reply-To: <20250717173655.10ecdce6@canb.auug.org.au>
+From: Jann Horn <jannh@google.com>
+Date: Tue, 22 Jul 2025 12:24:18 +0200
+X-Gm-Features: Ac12FXy3Wg8RO93ommd0k5kc23jSfedk795eUdOqzg9aTFqA0BK54fd2Bl0SLJo
+Message-ID: <CAG48ez1ZpL0L0-8ZZe+RmL51YShmoHU90PnO2jq_nU=UEYbg-g@mail.gmail.com>
+Subject: Re: linux-next: build warnings after merge of the vfs-brauner tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Christian Brauner <brauner@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 08, 2025 at 07:00:03PM +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the sysctl tree got a conflict in:
->=20
->   kernel/panic.c
->=20
-> between commits:
->=20
->   f8dbd6138e05 ("panic: add 'panic_sys_info' sysctl to take human readabl=
-e string parameter")
->   3699d83ae18b ("panic: add note that panic_print sysctl interface is dep=
-recated")
->=20
-> from the mm-nonmm-unstable tree and commits:
->=20
->   48f1dc94d25e ("sysctl: Move tainted ctl_table into kernel/panic.c")
->   9aa4e27ef60c ("sysctl: Move sysctl_panic_on_stackoverflow to kernel/pan=
-ic.c")
->=20
-> from the sysctl tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+On Thu, Jul 17, 2025 at 9:36=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+> After merging the vfs-brauner tree, today's linux-next build (htmldocs)
+> produced these warnings:
+>
+> fs/eventpoll.c:2197: warning: Function parameter or struct member 'ep' no=
+t described in 'ep_get_upwards_depth_proc'
+> fs/eventpoll.c:2197: warning: Function parameter or struct member 'depth'=
+ not described in 'ep_get_upwards_depth_proc'
+>
+> Introduced by commit
+>
+>   f2e467a48287 ("eventpoll: Fix semi-unbounded recursion")
 
-I double checked these, and they seem ok from the sysctl side.
-
-@Stephen: Do you prefer an actual acknowledgement that everything is
-good? Or would you prefer no answer to these merge conflict advisories?
-I personally, always make sure that things look sane, but always feel
-that sending out the ACK is a bit of a waste.
-
-Best
-
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc kernel/panic.c
-> index df92b763f857,64e58835086d..000000000000
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@@ -78,13 -84,50 +78,56 @@@ ATOMIC_NOTIFIER_HEAD(panic_notifier_lis
->   EXPORT_SYMBOL(panic_notifier_list);
->  =20
->   #ifdef CONFIG_SYSCTL
->  +static int sysctl_panic_print_handler(const struct ctl_table *table, in=
-t write,
->  +			   void *buffer, size_t *lenp, loff_t *ppos)
->  +{
->  +	pr_info_once("Kernel: 'panic_print' sysctl interface will be obsoleted=
- by both 'panic_sys_info' and 'panic_console_replay'\n");
->  +	return proc_doulongvec_minmax(table, write, buffer, lenp, ppos);
->  +}
->  =20
-> + /*
-> +  * Taint values can only be increased
-> +  * This means we can safely use a temporary.
-> +  */
-> + static int proc_taint(const struct ctl_table *table, int write,
-> + 			       void *buffer, size_t *lenp, loff_t *ppos)
-> + {
-> + 	struct ctl_table t;
-> + 	unsigned long tmptaint =3D get_taint();
-> + 	int err;
-> +=20
-> + 	if (write && !capable(CAP_SYS_ADMIN))
-> + 		return -EPERM;
-> +=20
-> + 	t =3D *table;
-> + 	t.data =3D &tmptaint;
-> + 	err =3D proc_doulongvec_minmax(&t, write, buffer, lenp, ppos);
-> + 	if (err < 0)
-> + 		return err;
-> +=20
-> + 	if (write) {
-> + 		int i;
-> +=20
-> + 		/*
-> + 		 * If we are relying on panic_on_taint not producing
-> + 		 * false positives due to userspace input, bail out
-> + 		 * before setting the requested taint flags.
-> + 		 */
-> + 		if (panic_on_taint_nousertaint && (tmptaint & panic_on_taint))
-> + 			return -EINVAL;
-> +=20
-> + 		/*
-> + 		 * Poor man's atomic or. Not worth adding a primitive
-> + 		 * to everyone's atomic.h for this
-> + 		 */
-> + 		for (i =3D 0; i < TAINT_FLAGS_COUNT; i++)
-> + 			if ((1UL << i) & tmptaint)
-> + 				add_taint(i, LOCKDEP_STILL_OK);
-> + 	}
-> +=20
-> + 	return err;
-> + }
-> +=20
->   static const struct ctl_table kern_panic_table[] =3D {
->   #ifdef CONFIG_SMP
->   	{
-> @@@ -134,13 -183,16 +183,23 @@@
->   		.mode           =3D 0644,
->   		.proc_handler   =3D proc_douintvec,
->   	},
->  +	{
->  +		.procname	=3D "panic_sys_info",
->  +		.data		=3D &panic_print,
->  +		.maxlen         =3D sizeof(panic_print),
->  +		.mode		=3D 0644,
->  +		.proc_handler	=3D sysctl_sys_info_handler,
->  +	},
-> + #if (defined(CONFIG_X86_32) || defined(CONFIG_PARISC)) && \
-> + 	defined(CONFIG_DEBUG_STACKOVERFLOW)
-> + 	{
-> + 		.procname	=3D "panic_on_stackoverflow",
-> + 		.data		=3D &sysctl_panic_on_stackoverflow,
-> + 		.maxlen		=3D sizeof(int),
-> + 		.mode		=3D 0644,
-> + 		.proc_handler	=3D proc_dointvec,
-> + 	},
-> + #endif
->   };
->  =20
->   static __init int kernel_panic_sysctls_init(void)
-
-
-
---=20
-
-Joel Granados
-
---3olfnkpid3bjzui6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmh/YM0ACgkQupfNUreW
-QU+7gAv8CbB+tvR1CAoqpttZiblZm595dw0OX5Jq9gGGXP/Tj9Ri1QO14LbpQTWx
-5G0bn7e4tGGfwV5JScHnYM30XO3IW6NRmt2FTNacieXhQ6Meg4hJ1umAZXuT65sR
-DfpzY1QdDs1zWUXD5Ef5dXTs9X92VuHN+Ux339KNz3LTHskP/fj0d/kQE42ywqvk
-nngLF6fMD/nuFgA+nI+5JS6rwW08gdmGjjYt1gnS9TTmPyxPsl4b27YpmNDTXr05
-Gu5WsAJAFKdnD2cE/j4v288wyfV2k+azrVv5g0Xt9cqiLU56ySVOK1a2ay9dw9ee
-kvHOSBkIAl9f+rDQka0bZyWA6YvnkcSwvM73JP9cp/j/3i/5rzPdyOkCyTkNA8it
-UJTiCw8FuM8oRTHQPB6/GxZqgfmAROUyVGuAibXjbIvZ+Olf3Y2JFdHXm6Uhg1oX
-jICa3lW1Mtc2vtHqhU60d+KAlCTc2VWPmzISLExjhb5oNpFnoh+ejl8bahySpXQZ
-tDcjr2Ky
-=YUf+
------END PGP SIGNATURE-----
-
---3olfnkpid3bjzui6--
+Thanks for the heads-up, I've sent
+https://lore.kernel.org/all/20250721-epoll-sphinx-fix-v1-1-b695c92bf009@goo=
+gle.com/
+to address this.
 

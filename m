@@ -1,106 +1,102 @@
-Return-Path: <linux-next+bounces-7674-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7675-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CE88B0CEA9
-	for <lists+linux-next@lfdr.de>; Tue, 22 Jul 2025 02:18:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 685A7B0CED2
+	for <lists+linux-next@lfdr.de>; Tue, 22 Jul 2025 02:44:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 759B77B1C24
-	for <lists+linux-next@lfdr.de>; Tue, 22 Jul 2025 00:16:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EF115415C2
+	for <lists+linux-next@lfdr.de>; Tue, 22 Jul 2025 00:44:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8891876;
-	Tue, 22 Jul 2025 00:18:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D4B578F51;
+	Tue, 22 Jul 2025 00:44:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DYuCVrvi"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Ms8b75j+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C81241388;
-	Tue, 22 Jul 2025 00:17:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E42548EE;
+	Tue, 22 Jul 2025 00:44:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753143484; cv=none; b=e5l7aSLCyADGWVuymmbSJRWMCbtQSStHP8kKSH1EDgSnqOxhaogiyoLaTQFMbXVUThP8FD3hPn7oHHvtbV5K1oIUBBMgztZuzvKsgG5LSGVl3ZdWzRKvCOar+Tc49hB3fWe5pkgahaqSTk/xFYsCu58Xswx1pffR91lQyU7ddB8=
+	t=1753145052; cv=none; b=Pd2g8H9y02/X4c/zdvIkLzw840MG2NutDj6tbBhgM9//V1c9EErg/x9IWhVkgqjsJI+U2LA5SibXd3hmuKDKrmdbPVbOFj6u2HJQgPh2jG2u8Tj4UvHUnIkRawqjcEAS94cekmNvW/75fcxVm2g5wWI5ePFcpgjQ47g65PIElmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753143484; c=relaxed/simple;
-	bh=QOGxX4Ex1zBcTzisu11nQ+ZEFsC9wpK644WaSn7XLHM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=e5mvadB2V7b5RRaXX8Gq1YlpYEjTkiZnp+gUdg3fYyof7sb/mXkqk85QINSh8ES1+CvHZ2/gn77tOkTqZOLhjzMtHhqjesFNT+deF5bFRXDdUP75U1GmKb8HrL+mizEY/Yp+Em/YF8x+YgRiXjnvmfmuU3TpVkdTMpkXCJqhrNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=DYuCVrvi; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1753143321;
-	bh=Ip1rpg8tH7CwBm6qxnB8lmPFPIJENFQ9M4qTy5yBDYU=;
-	h=Date:From:To:Cc:Subject:From;
-	b=DYuCVrviuH9W1xobzCr+6duAApDpTnNyLlFTfxkqL0aNWDRBX8DjV4i78TiDKITq+
-	 /vSVhhJEP113/feJRTsh9EspNsCP/9fzc8BRt9CGXTH0W+jJxLJrm2bgmywLEa74QD
-	 8lwVHC8ZtA9o0gBUZPnoGYNuGl/L9lDJ8EjtR9eBCIo8k56MFw56q/4AHUx1EEOlZc
-	 DDfNP6DIZzGh6nJoPjYd5abvT5kb7fw4lwhXsdMASqFlPjdHpaQ39dI8Ui7KM1ikhW
-	 b/ub20ewFs4HsJl++gz6iN9Rhel4n/o4AlU/ngh4v28lczqDac0Fbg+UYt+SuWNQvg
-	 /rm6t9PRGMp8g==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bmHpd3RtZz4wvb;
-	Tue, 22 Jul 2025 10:15:21 +1000 (AEST)
-Date: Tue, 22 Jul 2025 10:17:57 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Jeffery <andrew@codeconstruct.com.au>, Joel Stanley
- <joel@jms.id.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the bmc tree
-Message-ID: <20250722101757.76c39d41@canb.auug.org.au>
+	s=arc-20240116; t=1753145052; c=relaxed/simple;
+	bh=Y1iZgiOzwKTp90jxUc90E2mBt/a0rdRCwCTMB/1BlLw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YfsJjZaPrlTAc6ebGiquqdUxI4UyQabSnTCVLjPu2hHnnuAfKG8d1lZRLtArrdgNgeyaWTAQmQoh5Aw2g7WEbcJz14EX9QnWvQB0eKKEfQfrxJ+lTUidIz0DD+berx8vNr5v3Nl8T8E+iZsgGYU/a7zEqAAPKBG6mMU6meVbbgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Ms8b75j+; arc=none smtp.client-ip=115.124.30.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1753145040; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=gZkB6oAI3ayRod1op0xsOxq89vDBkQO5DG9RVIOAOG4=;
+	b=Ms8b75j+vPqnwiiioBv3eZy/JLSOT220rZ1ES65tJvkLtq6cABNfOavY7adARyl/dsyX0nb40bWd1RGwsszfk5JfLjcpHyeipDjtH4aj930g72oMz+oBUPYBn64MmoRcSCbGdETOk/WYItJ0fOKR+vdAik6VRtZsw8liZeMBGCU=
+Received: from 30.170.233.0(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0WjTR0ng_1753145038 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 22 Jul 2025 08:43:59 +0800
+Message-ID: <293202c8-68e0-45fd-aed8-5ec9aac39872@linux.alibaba.com>
+Date: Tue, 22 Jul 2025 08:43:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aKjoULI32.t+HhehiwuTXmu";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Jul 21 (fs/erofs/*.c)
+To: Randy Dunlap <rdunlap@infradead.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-fsdevel@vger.kernel.org, Gao Xiang <xiang@kernel.org>,
+ Chao Yu <chao@kernel.org>, linux-erofs@lists.ozlabs.org,
+ Bo Liu <liubo03@inspur.com>
+References: <20250721174126.75106f39@canb.auug.org.au>
+ <b555f01c-4e9e-4b42-aa5a-2d35ef9c1c50@infradead.org>
+From: Gao Xiang <hsiangkao@linux.alibaba.com>
+In-Reply-To: <b555f01c-4e9e-4b42-aa5a-2d35ef9c1c50@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---Sig_/aKjoULI32.t+HhehiwuTXmu
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Randy,
 
-Hi all,
+On 2025/7/22 05:31, Randy Dunlap wrote:
+> 
+> 
+> On 7/21/25 12:41 AM, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Changes since 20250718:
+>>
+> 
+> on i386 (i.e., 32-bit):
+> 
+> In file included from ../include/linux/bits.h:5,
+>                   from ../include/linux/string_helpers.h:5,
+>                   from ../include/linux/seq_file.h:7,
+>                   from ../fs/erofs/super.c:8:
+> ../fs/erofs/internal.h: In function 'erofs_inode_in_metabox':
+> ../include/vdso/bits.h:7:40: warning: left shift count >= width of type [-Wshift-count-overflow]
+>      7 | #define BIT(nr)                 (UL(1) << (nr))
+>        |                                        ^~
+> ../fs/erofs/internal.h:305:38: note: in expansion of macro 'BIT'
+>    305 |         return EROFS_I(inode)->nid & BIT(EROFS_DIRENT_NID_METABOX_BIT);
+>        |                                      ^~~
+> 
 
-The following commit is also in the arm-soc tree as a different commit
-(but the same patch):
+Thanks for the report.
 
-  532bdc65a79f ("arm64: dts: nuvoton: npcm8xx: Drop the GIC "ppi-partitions=
-" node")
+I checked this just now. This warning is due to another
+helper erofs_inode_in_metabox().
 
-This is commit
+I've fixed it up and just push it out but not sure if
+it will catch up with the today's next (20250722).
 
-  8e7e63fc479a ("arm64: dts: nuvoton: npcm8xx: Drop the GIC "ppi-partitions=
-" node")
-
-in the arm-soc tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/aKjoULI32.t+HhehiwuTXmu
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmh+2LUACgkQAVBC80lX
-0Gzbdwf+L3++kJzcxCtxJDhaaZ0vQDCC/jyB+xgpE8thZFUj4pu1yftrlzU5zEwP
-VJSnvcFRw0d4ThqzJalTt94ZjLs6gYrsD6u/2iFuiO7jRZP+7gQRT2Te14V1xeKS
-+d9GvBM63va1gGgrryxOVBySI1s1jh7n/1uMxXWnm7uWal8DCk4cgCnicet5IsSB
-jza5mb5/JSnXjio8uQeeVVXZ0rLcZwVTY8pMY1Jvm2ozNyoiKF+6Lvk4VF7eMUvu
-6KEuQBlkDUTjCc3u4x9GRdZ0BnO1WjJGehMxq4pmiUqJ3sA0HkcD66B0aLDQDw8b
-ZrjBz+wQI0W1a6fJY+weFVMXREIrGA==
-=5Yg2
------END PGP SIGNATURE-----
-
---Sig_/aKjoULI32.t+HhehiwuTXmu--
+Thanks,
+Gao Xiang
 

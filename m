@@ -1,112 +1,86 @@
-Return-Path: <linux-next+bounces-7719-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7720-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A19CFB11A12
-	for <lists+linux-next@lfdr.de>; Fri, 25 Jul 2025 10:38:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47BBAB11DAC
+	for <lists+linux-next@lfdr.de>; Fri, 25 Jul 2025 13:36:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D55B4E6D9F
-	for <lists+linux-next@lfdr.de>; Fri, 25 Jul 2025 08:37:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7191716C362
+	for <lists+linux-next@lfdr.de>; Fri, 25 Jul 2025 11:36:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723E81DE3A7;
-	Fri, 25 Jul 2025 08:38:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8940929E0F8;
+	Fri, 25 Jul 2025 11:35:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c10RfowW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LdCIUE60"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B26DA2BEC59
-	for <linux-next@vger.kernel.org>; Fri, 25 Jul 2025 08:38:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1582367CD;
+	Fri, 25 Jul 2025 11:35:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753432705; cv=none; b=efwgxfj5XjYn5zFA5/dp/ZLjUSg81HimBwLac1oZN+bkn2FFdhLs8KHNsj8UOPOMM7Jjdx25OyYxKiysHFU3B2KP6OPVB5sxTalpDKX82pt1+FoL8n4JEtrVt4tr2kb6+K79mu5ENa4FXF41W084wsg9LO355+6U49DLjiSRtvs=
+	t=1753443358; cv=none; b=QLRCSVcV2faNcOh4eXAGMQT1iBc081wxSQHgXjRNknK/mQRZNGU3l4JXnxfxZek1QxQRRO7FTgScn1B+Yg6otDyW0AwvfrWwfNBl1NNA0+40FNsZO0jMXEpldq/LCVx4tELWw7zayLRR2fFcHOJlifYr9a9P/YdrsPsMEz5PEK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753432705; c=relaxed/simple;
-	bh=TXwNMHahCwTnrJfL9xKeS40A5b6CJKKrcTK+pyajkkA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EgrS+Yc6RfZmbSP07yGKqt9YXYiVt+iQds6qcwofhVXVvRdafpmS0hZJbT3I4FwE/QbYVLcpQIBexqgFsmfsb7n8e4cmB7juo6Iic3jvvU9T2pE7v3qGbiTg940P5s5yLIqlQkgvwIzPYJzMdI9R7qWG3gylMigp7solGrpRiHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c10RfowW; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1753432702;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TXwNMHahCwTnrJfL9xKeS40A5b6CJKKrcTK+pyajkkA=;
-	b=c10RfowWp1PMCrXYlScFz+gOWYI+JmRb1Df37qiYoD1rZjd4udQr+DLpSqTTCDhPdGDQud
-	nPBbW8diHtN+mAL6mksm5DPIdwKEDTFFNwBwWn9bqjFinoB6nReTIUyE2JzcLDDht2YQRj
-	gAP5ovt96TY3Uo1YozJ0Ic393JfwuZ4=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-390-iZeuFzujO8KaGjwT39Larg-1; Fri, 25 Jul 2025 04:38:18 -0400
-X-MC-Unique: iZeuFzujO8KaGjwT39Larg-1
-X-Mimecast-MFC-AGG-ID: iZeuFzujO8KaGjwT39Larg_1753432698
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-234f1acc707so18263535ad.3
-        for <linux-next@vger.kernel.org>; Fri, 25 Jul 2025 01:38:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753432698; x=1754037498;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TXwNMHahCwTnrJfL9xKeS40A5b6CJKKrcTK+pyajkkA=;
-        b=bfkLpNkNE+speteHA3bIeyfb900hrp+R9GjBvo+w/uvCY7Jvji9kUMxi5sh6ch2Cfx
-         olD23hqTtmTUw3iF/p/OtMuNuX8UfL4pkvL/HrLHLblv0lmkHerTMHYTHjr0Z/h0Rexz
-         tpyHdSEXF/nch4DIIhnHrm835wYdQdOirKEXf7O1sUfwwbWyQiaLeUh3dhn7B5le4Trv
-         cyEd1vfbhmoHZQhh00FPKSuR7l7c6xFzOJoENEKb/mE/2UVQ/XTrvu+kjM6qC+SWgpj+
-         Cul3VS5R8JSoE9h7EN3RyxistcQMmlPLM0iJpWE6n15rdQT9OuRwBsASskRpPEyXY9Ux
-         +8cQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVO3y1AmYIeQKQK0cctrQnPzkWdj/Bfgx69vrvTWZhHZ+EQFu3Sm1rXszmyD1t6vCFQdHqolKo3mSdW@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvPgYbeCy9tf4NnT6GZaJSL7u6whshVaaghfWG/ECLZzk28kG0
-	J3zcMq8qQOixfmvOeg7wroVMOSPdZWEQ3CDVCM19Yjvfi8UEVpjVpIag8IkuPbz31E1QvlPdtMk
-	TNfECc34UoohCCPXBuRwT3v9dmn+Vdv08sOK42jDhziuwq3F2Jorv0z0veOY5BZhhEHNVGeTYVX
-	kRmdDD0tXpuop1qvz4RThQBvk1Ip7evHK3s0Z1fg==
-X-Gm-Gg: ASbGncue68b4PKz9ebqFz7Y3pmE3SNxIYJzxC0H3myPP4SybgsWHCetRxAJH3Grjaxx
-	EwEc7jvWFXBpCn5eUC8OyS7xK6eZMaawzRg858U3JKUUYEcnxE+BzFuwxB8vnHZwdx3m4fz/SSq
-	3sEgig9VY0WUEXh9RUqrLx
-X-Received: by 2002:a17:902:ea02:b0:234:9375:e081 with SMTP id d9443c01a7336-23fb319041emr15224865ad.42.1753432697784;
-        Fri, 25 Jul 2025 01:38:17 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHHxiXGFsVJ6VCDQe69iuWZ8IkeaAljBvCSgmtMhHsWEWWFbjBiBJy5Wl237ze4kjSg2FPfsWB5YeRg80cn+io=
-X-Received: by 2002:a17:902:ea02:b0:234:9375:e081 with SMTP id
- d9443c01a7336-23fb319041emr15224615ad.42.1753432697398; Fri, 25 Jul 2025
- 01:38:17 -0700 (PDT)
+	s=arc-20240116; t=1753443358; c=relaxed/simple;
+	bh=+PL5Ce46pzzEvE5wbz43WCE0ZQpyW3u8CV4e5f9V7WU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dne59Jl/k3U/AKsanUwPxncXAqDg0EBEkZHJqAQYlbY0FSLAo/NHx2y0o5fzILMDIYZ5UwWPkriGSmHsU2S9Vb0cy5EmBux1ZQT+S5OkQEWyYiIN0wXT0rvksLVHuqwhkaCkebLLDvk+/D079DQnACilT9Xh/lbQyHjz09KTcWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LdCIUE60; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74337C4CEE7;
+	Fri, 25 Jul 2025 11:35:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753443357;
+	bh=+PL5Ce46pzzEvE5wbz43WCE0ZQpyW3u8CV4e5f9V7WU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LdCIUE603IEMZwVAMQub69g3JUAfY4Axyb5S53r0VqEjed8cHWrz77xcSZtk5Y+yE
+	 Z308hsoyDDs1Lox/W68/IMJAEeGVMzJf+9owAcUM60mlWLZh7ht/5LRxJSdkyyaskw
+	 KF15GAyt1hIi5XQjJRbP/DEFtY2fiEcSK2Ofj7lshn7rTbWvV6FRb6vFaMOSKMoFW+
+	 2B9fQfU24fjHM7sX5Mz+Gd2e8hI9bXD7y0fuBUZ4SfM1b8Ia4M1x+9ppdgrBSkO2ge
+	 YaCC4ZGUuOodeLqB2Yddm1H2RKT6A6uJxAWglP9bmO5jFK9/TsXV+zVu6BOnVeF8r+
+	 49U84M63+dciQ==
+Date: Fri, 25 Jul 2025 12:35:39 +0100
+From: Lee Jones <lee@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	ARM <linux-arm-kernel@lists.infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the mfd tree
+Message-ID: <20250725113539.GB11056@google.com>
+References: <20250725113657.039aa5ce@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <175341594422.117.11494999566960779174@508e4dbc6f9f> <d2e84599-bf73-44bb-a0f4-a5fe4086978e@infradead.org>
-In-Reply-To: <d2e84599-bf73-44bb-a0f4-a5fe4086978e@infradead.org>
-From: Jason Wang <jasowang@redhat.com>
-Date: Fri, 25 Jul 2025 16:38:06 +0800
-X-Gm-Features: Ac12FXwJd96XrGIsW0Jv49edVkL7BCbWfeMwc-34kp0AVdNMEzvYogs4x3NChbM
-Message-ID: <CACGkMEuFbNMiFUY-aYHgZTvLcypFJWatgAuGB_M25f7QyzqTEw@mail.gmail.com>
-Subject: Re: [REGRESSION] next/master: (build) variable 'id' is uninitialized
- when used here [-Werror,-Wuninitial...
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: kernelci@lists.linux.dev, kernelci-results@groups.io, 
-	regressions@lists.linux.dev, gus@collabora.com, linux-next@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250725113657.039aa5ce@canb.auug.org.au>
 
-On Fri, Jul 25, 2025 at 1:03=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org=
-> wrote:
->
-> due to commit 60c060930f481:
->
-> +cc Jason Wang
+On Fri, 25 Jul 2025, Stephen Rothwell wrote:
 
-I've posted a fix:
+> Hi all,
+> 
+> The following commit is also in the arm-soc tree as a different commit
+> (but the same patch):
+> 
+>   ba9ae011e837 ("soc: apple: rtkit: Make shmem_destroy optional")
+> 
+> This is commit
+> 
+>   0445eee835d6 ("soc: apple: rtkit: Make shmem_destroy optional")
 
-https://lore.kernel.org/virtualization/20250725083635.73355-1-jasowang@redh=
-at.com/T/#u
+Odd.  I don't see an applied email for this.
 
-Thanks
+This was applied to MFD and a pull-request was provided for the other subsystems:
 
+https://lore.kernel.org/all/20250724102529.GA11056@google.com/
+
+-- 
+Lee Jones [李琼斯]
 

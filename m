@@ -1,184 +1,133 @@
-Return-Path: <linux-next+bounces-7711-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7712-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19F2EB10BDB
-	for <lists+linux-next@lfdr.de>; Thu, 24 Jul 2025 15:49:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2645DB115C0
+	for <lists+linux-next@lfdr.de>; Fri, 25 Jul 2025 03:22:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F146D4E25D4
-	for <lists+linux-next@lfdr.de>; Thu, 24 Jul 2025 13:48:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CECA585BC2
+	for <lists+linux-next@lfdr.de>; Fri, 25 Jul 2025 01:22:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26C7D2D8DBA;
-	Thu, 24 Jul 2025 13:49:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC2E1DE2D8;
+	Fri, 25 Jul 2025 01:22:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rrRHwbsv"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UUR65iHI"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED71C2D6614;
-	Thu, 24 Jul 2025 13:49:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB032B9A4;
+	Fri, 25 Jul 2025 01:21:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753364965; cv=none; b=sNZo4dyfZ85OtYdRo7TP2d27/Nkh6Hv/pcwkSGENruN7howaQbi4IhGf0IqSvVGPwZcq7CdwNGSgsMyFXbdNrwJOALGn1FJBm1MwxMnox7XgSHv+oxAIplDi284evUh2jdn+0PMBvqLbEVq3j+jr5WBkoEyR03xrXabZZ9wPfs0=
+	t=1753406520; cv=none; b=K7aZiRKZH9hhFEuu0H9NZ7yIG8UtzSy9Mz+fZWkJCZT4wBDpBt9d1nM4RteUEdq3lVGTkDeRXO5b81xmybh2U+YBiomxHTAKF7oHCRuCawWW4Vxe+TyUo11ygBMtC88aoZib03EQlKkXOpCLN437bDhhyg0nyV3Kr4Aml807GBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753364965; c=relaxed/simple;
-	bh=C+VK9E45zhavmmZ7zZic1kk5tDmpgiK9enCL/Nt6HJs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HPB66f+9jGPIJbztIDv/6sxpuWkTthwyqOuIa1FPR4gPirUQkzW8eOJUpp1oL1sHBsa6yi3bFZznfJ2SIhkEc3OJyhJ9k+wXeNlsZCKDGno/j2lup+WtgB9/7MoswUR1JPUpr4hdBHYLLPMrffpHIOHG+qWCj7kwi/+jHQAjZSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rrRHwbsv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85087C4CEED;
-	Thu, 24 Jul 2025 13:49:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753364964;
-	bh=C+VK9E45zhavmmZ7zZic1kk5tDmpgiK9enCL/Nt6HJs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=rrRHwbsvmewjuO2ODNtc+AEDzbQmkZsspvR0lgt22HLbV72077LKMYJGX6N9SYQzv
-	 tEoOom6onnC92EgJrJsjklwRNA/6swPlLgGR+YD6ElI1ggekTURly1ra10+fPAagIG
-	 c3WZftDOL/IfhCaqUdlvL1jVs2vD2xd6ZCkYcZI1aHqvaji7sFsB7CwsTW2w1FOB5r
-	 Px+MvvORNXGm08eSC+VF+F0L/ehJaP7OSBRRSUZOdZkpZMZkwmPCxrYv+NI4hcIdy7
-	 /lE4WqXD39vBvdp6NoO9zSmi+87F9d2XW1O6+9haPIlDEWzmzUbHOemlP5uIVZLkpa
-	 KwV1Y2wxeDVag==
-Date: Thu, 24 Jul 2025 14:49:16 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Mark Brown <broonie@kernel.org>, Greg KH <greg@kroah.com>, Arnd Bergmann
- <arnd@arndb.de>, David Lechner <dlechner@baylibre.com>, Jonathan Cameron
- <Jonathan.Cameron@huawei.com>, Jonathan Santos
- <Jonathan.Santos@analog.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, linux-iio@vger.kernel.org
-Subject: Re: linux-next: manual merge of the iio tree with the spi tree
-Message-ID: <20250724144916.436a29b3@jic23-huawei>
-In-Reply-To: <20250721125545.6db07df5@canb.auug.org.au>
-References: <20250703163824.2f08d866@canb.auug.org.au>
-	<20250703093122.00000684@huawei.com>
-	<b0b0443d-143f-4e41-b8b8-91c6726e838f@baylibre.com>
-	<20250706115053.368ce9e9@jic23-huawei>
-	<ca0be466-6673-425d-97ab-292791253a63@baylibre.com>
-	<20250721125545.6db07df5@canb.auug.org.au>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1753406520; c=relaxed/simple;
+	bh=a64Nlreg3EFRWT0iwq52KTZxDycBriYfWDiHt/Q4GtI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jSJwJ0LNfqrImLmq8qRdkuBMq3CZd6vZNXZ1tT7RfHWrdWsYP2oJYSLxUr//Gx7AtnabA5Y/pWmA2vcpGSfd0F8Fh0+aablJIPviAZSJDgD7qsJB+y4F0GMeZziVZvghkxgcK055C0zlcv9i+HBYd8etRyxuC//QmDQb6BB8kqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=UUR65iHI; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1753406335;
+	bh=MV4A8Nf4qSUgF3poJHBdrZQqJXGzedWOrRVchFfo0+Y=;
+	h=Date:From:To:Cc:Subject:From;
+	b=UUR65iHIXZWIlR2Yo6wOdM3GeGzPfb2LsLhFW/pM1MeD60AnQQFjg5Sb1/pV21O1q
+	 C1K9FtRp+E4IIosor1eEW67f7vApCebq9bkk1x2XZh4LRGpH3k7NxsyKv74/GBrLid
+	 53G5vlb60s+l7B6LF544N9T/bphnpcH3fgAw1TSQBxBWugIFzWGtuACHdihn+1vTeE
+	 bI8OETrNlTdjOHFN8tcvqIH1AULv/MaNdrp7F0DHyIvMctfyNWOnjYjeARpgGzzXC5
+	 yzX6uUOOvH2Y/J8NUCsmePVPzuq4hSBJzYwV/bVhf4RY63XMDQV87ysd29XlLgx114
+	 BjZUInJiE61Iw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bp94Z5tFgz4x11;
+	Fri, 25 Jul 2025 11:18:54 +1000 (AEST)
+Date: Fri, 25 Jul 2025 11:21:51 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Bjorn Helgaas <bhelgaas@google.com>, Lorenzo Pieralisi
+ <lpieralisi@kernel.org>, Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?=
+ <kwilczynski@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Mario Limonciello
+ <mario.limonciello@amd.com>, Sean Christopherson <seanjc@google.com>
+Subject: linux-next: manual merge of the pci tree with Linus' tree
+Message-ID: <20250725112151.599e12b0@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/t7eBgaqwcgw+a5tKOyCNQOy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/t7eBgaqwcgw+a5tKOyCNQOy
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 21 Jul 2025 12:55:45 +1000
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Hi all,
 
-> Hi all,
-> 
-> On Sun, 6 Jul 2025 11:15:14 -0500 David Lechner <dlechner@baylibre.com> wrote:
-> >
-> > On 7/6/25 5:50 AM, Jonathan Cameron wrote:  
-> > > On Thu, 3 Jul 2025 07:28:07 -0500
-> > > David Lechner <dlechner@baylibre.com> wrote:
-> > >     
-> > >> On 7/3/25 3:31 AM, Jonathan Cameron wrote:    
-> > >>> On Thu, 3 Jul 2025 16:38:24 +1000
-> > >>> Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >>>       
-> > >>>> Today's linux-next merge of the iio tree got a conflict in:
-> > >>>>
-> > >>>>   MAINTAINERS
-> > >>>>
-> > >>>> between commit:
-> > >>>>
-> > >>>>   e47a324d6f07 ("dt-bindings: trigger-source: add ADI Util Sigma-Delta SPI")
-> > >>>>
-> > >>>> from the spi tree and commit:
-> > >>>>
-> > >>>>   0dd88eaa7126 ("dt-bindings: trigger-source: add generic GPIO trigger source")
-> > >>>>
-> > >>>> from the iio tree.
-> > >>>>
-> > >>>> I fixed it up (see below) and can carry the fix as necessary. This
-> > >>>> is now fixed as far as linux-next is concerned, but any non trivial
-> > >>>> conflicts should be mentioned to your upstream maintainer when your tree
-> > >>>> is submitted for merging.  You may also want to consider cooperating
-> > >>>> with the maintainer of the conflicting tree to minimise any particularly
-> > >>>> complex conflicts.
-> > >>>>      
-> > >>> Thanks Stephen,
-> > >>>
-> > >>> David, do you prefer these merged or kept as separate entries?      
-> > >>
-> > >> Ah, shoot, I forgot that we had added the gpio one and just made
-> > >> one section like this.
-> > >>
-> > >> I think it would make sense to also merge the new adi one with
-> > >> the reset to keep things compact.
-> > >>    
-> > > Is there a path to do that cleanly given the multiple trees things are
-> > > coming from?  Maybe this is a let things resolve whatever way this cycle
-> > > and tidy up next?    
-> > 
-> > Agree, waiting seems the simplest option.
-> >   
-> > >     
-> > >>>
-> > >>> I don't think it matters either way in practice though this is the
-> > >>> more complex merge (the other being just putting the blocks in order.
-> > >>>
-> > >>> We can put a note in the pull request on preference but ultimately Linus
-> > >>> will resolve this however he prefers! 
-> > >>>
-> > >>> Jonathan
-> > >>>
-> > >>>       
-> > >>>> -- 
-> > >>>> Cheers,
-> > >>>> Stephen Rothwell
-> > >>>>
-> > >>>> diff --cc MAINTAINERS
-> > >>>> index dd764b947dab,d0809d62ff48..000000000000
-> > >>>> --- a/MAINTAINERS
-> > >>>> +++ b/MAINTAINERS
-> > >>>> @@@ -25333,19 -25201,15 +25341,20 @@@ TRADITIONAL CHINESE DOCUMENTATIO
-> > >>>>   M:	Hu Haowen <2023002089@link.tyut.edu.cn>
-> > >>>>   S:	Maintained
-> > >>>>   W:	https://github.com/srcres258/linux-doc
-> > >>>>  -T:	git git://github.com/srcres258/linux-doc.git doc-zh-tw
-> > >>>>  +T:	git https://github.com/srcres258/linux-doc.git doc-zh-tw
-> > >>>>   F:	Documentation/translations/zh_TW/
-> > >>>>   
-> > >>>> + TRIGGER SOURCE
-> > >>>> + M:	David Lechner <dlechner@baylibre.com>
-> > >>>> + S:	Maintained
-> > >>>> + F:	Documentation/devicetree/bindings/trigger-source/gpio-trigger.yaml
-> > >>>> + F:	Documentation/devicetree/bindings/trigger-source/pwm-trigger.yaml
-> > >>>> + 
-> > >>>>  +TRIGGER SOURCE - ADI UTIL SIGMA DELTA SPI
-> > >>>>  +M:	David Lechner <dlechner@baylibre.com>
-> > >>>>  +S:	Maintained
-> > >>>>  +F:	Documentation/devicetree/bindings/trigger-source/adi,util-sigma-delta-spi.yaml
-> > >>>>  +
-> > >>>> - TRIGGER SOURCE - PWM
-> > >>>> - M:	David Lechner <dlechner@baylibre.com>
-> > >>>> - S:	Maintained
-> > >>>> - F:	Documentation/devicetree/bindings/trigger-source/pwm-trigger.yaml
-> > >>>> - 
-> > >>>>   TRUSTED SECURITY MODULE (TSM) INFRASTRUCTURE
-> > >>>>   M:	Dan Williams <dan.j.williams@intel.com>
-> > >>>>   L:	linux-coco@lists.linux.dev      
-> 
-> This is now a conflict between the char-misc tree and the spi tree.
+Today's linux-next merge of the pci tree got a conflict in:
 
-Ah. Sorry Greg, I meant to mention this in the pull request.
-In earlier discussion we concluded that best bet was to let it resolve as
-separate entries (as Stephen has) and then we'll clean it up next cycle
-if it makes sense to unify more of them.
+  drivers/pci/pci.c
 
-Thanks Stephen for dealing with our mess!
+between commit:
 
-Jonathan
+  907a7a2e5bf4 ("PCI/PM: Set up runtime PM even for devices without PCI PM")
 
-> 
+from Linus' tree and commit:
 
+  5c0d0ee36f16 ("PCI: Support Immediate Readiness on devices without PM cap=
+abilities")
+
+from the pci tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/pci/pci.c
+index 9e42090fb108,fbe1281073aa..000000000000
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@@ -3266,10 -3209,6 +3209,7 @@@ void pci_pm_init(struct pci_dev *dev
+  		pci_pme_active(dev, false);
+  	}
+ =20
+- 	pci_read_config_word(dev, PCI_STATUS, &status);
+- 	if (status & PCI_STATUS_IMM_READY)
+- 		dev->imm_ready =3D 1;
+ +poweron:
+  	pci_pm_power_up_and_verify_state(dev);
+  	pm_runtime_forbid(&dev->dev);
+  	pm_runtime_set_active(&dev->dev);
+
+--Sig_/t7eBgaqwcgw+a5tKOyCNQOy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiC3C8ACgkQAVBC80lX
+0GwDqgf/ZSIz+/oRkYoltFu3gpvqlHvBBaBtqq0yP8xhAlpJ+0Zq9RPo2oRPVQcO
+NywyZCk94S/cDo/hbXY67OcEYMWMqOVHBE6lnJCu9WjGQiTavsEbAmsfRHKMZuyr
+uh1p3V7zVELqJkHiaC+leI2YH0vdiA9VC97pjYgNXX7F8akvzCBqiJxeqtI/OL/Z
+wT9XBg6SyRya+frz7K1LMDsE6qknEqzfKdbPs5NAZNIg7hBJlVGladuZYz5/QOEX
+VCAF72hiPW7f0ulV+uvdYsSp6XykWyDKChNPy30C5C2xcYOFfG67pB0MjkfGB83S
+ODJx237cft88FH2qy1Lb53aEBc6lpw==
+=2U7s
+-----END PGP SIGNATURE-----
+
+--Sig_/t7eBgaqwcgw+a5tKOyCNQOy--
 

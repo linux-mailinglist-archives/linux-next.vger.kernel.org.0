@@ -1,204 +1,156 @@
-Return-Path: <linux-next+bounces-7724-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7725-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09955B12612
-	for <lists+linux-next@lfdr.de>; Fri, 25 Jul 2025 23:12:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 369FAB13291
+	for <lists+linux-next@lfdr.de>; Mon, 28 Jul 2025 02:00:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00974188FD8F
-	for <lists+linux-next@lfdr.de>; Fri, 25 Jul 2025 21:13:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A61063B27A8
+	for <lists+linux-next@lfdr.de>; Sun, 27 Jul 2025 23:59:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C50525D536;
-	Fri, 25 Jul 2025 21:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BB391E48A;
+	Mon, 28 Jul 2025 00:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="VBuEiJTW"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lzU85r33"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E06CDDA9;
-	Fri, 25 Jul 2025 21:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BECB4A35;
+	Mon, 28 Jul 2025 00:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753477977; cv=none; b=Ii80LoOzX6ewnNjlIuHqUR+xnU1x3a16AETbaziLldspvdtP82ZvObj8OWG0o9MyswIVdbULGIEhYjDJAH96dqT1baxFkZmpxFLZV5kq5zsNTOjmi/Kmm+DTYmTKXj2duL94QnbH1Qm2utFpLewTTEwUbzGA77YNl9msVygt3yw=
+	t=1753660818; cv=none; b=cTWdkwfmrLSc0+1mgOqsywduYJGwyuqfcZFY5ypv/H+3n4E7hcKFzxMaJEGcbuoj5PRJA1knicQlEm1vZC+nNH2P5VA4Qrd/YAxQ1P8rIngmFfcXlLA7JroLdt6TfLjvYY4o1A+3j633VCHMWSAYPGa4iMhh+XhoO49ErOFUkwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753477977; c=relaxed/simple;
-	bh=vbL+HbP+4YaLPyRV7WLoA2cPjJ+7WNluyxp4IXrjLDg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QMz7qaMvjy+9cws3SYEtNd3cZKOo04EeJSHCpMs26QrOkooWnOv9Wk7wtH2ayQ8g7bQLIgoWTkfhEjnsBTuatKDerfQ6GOFdN+kTrra0lYrhfbOzMbVHx4QHZ9fQhz2eUO40dUp3krsRyfcsRYynPsllDgflEGbLo7bGM5gr3YI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=VBuEiJTW; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=t6PQlTi/al6jK8DK8azc4vIg+nja1nQodGRzg5cDH9o=; b=VBuEiJTW5vNg9VdoaB9vhHN9+n
-	p6C9Jhsg/pKWx1szw/63FWfgMvGxsT/yPfUHDDYoy9WUJZcBVKlBNi+vdUdt6zPLx198tyLUwk4MO
-	GUA4xumlYkdwUi20xlKHTqowCMYI96sxjVqUHKHwKaqnY6FDaSSYlzWONbTisMkOUqlimS8yC3WVA
-	XU+oQxt/Iy435GvXcPDSszDGJO+EQFShDiDdYf7B/YD0mErBBjdLX5MiR8OzI8tpjvU3doKxHSUtM
-	HlE6Hj3I1uzcXyVbzFyea3KDRlLvYJFAQaF18UpVj7awCCh/SnLl9pJJcMBQZSBhtn5iqfFCuwPUq
-	vA2hrnSA==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1ufPio-0000000AiB7-2WsO;
-	Fri, 25 Jul 2025 21:12:54 +0000
-Message-ID: <1c4a5faf-7c1f-4d84-9a9f-ec88b3e6c860@infradead.org>
-Date: Fri, 25 Jul 2025 14:12:53 -0700
+	s=arc-20240116; t=1753660818; c=relaxed/simple;
+	bh=7FOlBTRmd8dEpKVhrzJny7SLB1U+9S1mQl0p3vHcy/E=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=qb4GblF1qWUUsM5X0x/fMX7/7t6gEfGu13ZhhljKmwoqckEoN9FQwWMSaq3/dbCNq/Yfe29EqwMinqazpXyisDDZ/EdNANuLyBDS7Bq1FZaqEh3PKMXZH0CC+lEzTdzVo7wDnqQsxFKe3wcVp5/0eMub74gKfpEvX17rIHEB/VU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lzU85r33; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1753660605;
+	bh=Od/wQZLkvSFzPvwQn//E457WOuGEkjFsp/yYgUZauwg=;
+	h=Date:From:To:Cc:Subject:From;
+	b=lzU85r33v3LoNqXUQWVpqqa4G4IOSwNeapQzem8tGogQ+9agLAC52npiXBS4uZHTm
+	 d7e9LAmHW0lJUTlaAgWxM+5mMuNMu1giYZ1tPqu92H8rFvUhoIwjvUxwQHDzl+qr3n
+	 P9q5qIAlW/w04Qm/1STz9lLdKRTih8rPrs3O072THX6sc0q+/JbySaKYfg/MPjm7Hs
+	 QFt4o6kkl5IUtOTxTD24Byt9qqs9T41fHm08lAN704pcLYcJaBHJ3hTxFHcwcKGnUf
+	 BZrX2o7l9T8QS/8RCCeTYmj5jGlYUnTuz8BJ14AurSTQqdnei2em00IRT2p62DaGUG
+	 UcbgUD//4TdGg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bqz6N4sCNz4wxJ;
+	Mon, 28 Jul 2025 09:56:44 +1000 (AEST)
+Date: Mon, 28 Jul 2025 09:59:37 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar
+ <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra
+ <peterz@infradead.org>
+Cc: Jinjie Ruan <ruanjinjie@huawei.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the ftrace tree with the tip tree
+Message-ID: <20250728095937.13043cd0@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Jul 25 (nfc/nfrmrvl/ and nfc/s3fwrn5/)
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>, netdev@vger.kernel.org
-References: <20250725124835.53f998d0@canb.auug.org.au>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250725124835.53f998d0@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/sxzXOrs+CYdBtw4VPNTESWS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/sxzXOrs+CYdBtw4VPNTESWS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 7/24/25 7:48 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20250724:
-> 
+Today's linux-next merge of the ftrace tree got a conflict in:
 
-on ARCH=um SUBARCH=x86_64, when
-# CONFIG_GPIOLIB is not set
+  include/linux/entry-common.h
 
-../drivers/nfc/nfcmrvl/main.c: In function ‘nfcmrvl_nci_register_dev’:
-../drivers/nfc/nfcmrvl/main.c:115:13: error: implicit declaration of function ‘gpio_is_valid’; did you mean ‘uuid_is_valid’? [-Wimplicit-function-declaration]
-  115 |         if (gpio_is_valid(priv->config.reset_n_io)) {
-      |             ^~~~~~~~~~~~~
-      |             uuid_is_valid
-../drivers/nfc/nfcmrvl/main.c:116:22: error: implicit declaration of function ‘gpio_request_one’ [-Wimplicit-function-declaration]
-  116 |                 rc = gpio_request_one(priv->config.reset_n_io,
-      |                      ^~~~~~~~~~~~~~~~
-../drivers/nfc/nfcmrvl/main.c:117:39: error: ‘GPIOF_OUT_INIT_LOW’ undeclared (first use in this function)
-  117 |                                       GPIOF_OUT_INIT_LOW,
-      |                                       ^~~~~~~~~~~~~~~~~~
-../drivers/nfc/nfcmrvl/main.c:117:39: note: each undeclared identifier is reported only once for each function it appears in
-../drivers/nfc/nfcmrvl/main.c:176:17: error: implicit declaration of function ‘gpio_free’; did you mean ‘kfifo_free’? [-Wimplicit-function-declaration]
-  176 |                 gpio_free(priv->config.reset_n_io);
-      |                 ^~~~~~~~~
-      |                 kfifo_free
-../drivers/nfc/nfcmrvl/main.c: In function ‘nfcmrvl_chip_reset’:
-../drivers/nfc/nfcmrvl/main.c:238:17: error: implicit declaration of function ‘gpio_set_value’; did you mean ‘pte_set_val’? [-Wimplicit-function-declaration]
-  238 |                 gpio_set_value(priv->config.reset_n_io, 0);
-      |                 ^~~~~~~~~~~~~~
-      |                 pte_set_val
-../drivers/nfc/s3fwrn5/phy_common.c: In function ‘s3fwrn5_phy_set_wake’:
-../drivers/nfc/s3fwrn5/phy_common.c:22:9: error: implicit declaration of function ‘gpio_set_value’; did you mean ‘pte_set_val’? [-Wimplicit-function-declaration]
-   22 |         gpio_set_value(phy->gpio_fw_wake, wake);
-      |         ^~~~~~~~~~~~~~
-      |         pte_set_val
-../drivers/nfc/s3fwrn5/i2c.c: In function ‘s3fwrn5_i2c_parse_dt’:
-../drivers/nfc/s3fwrn5/i2c.c:158:14: error: implicit declaration of function ‘gpio_is_valid’; did you mean ‘uuid_is_valid’? [-Wimplicit-function-declaration]
-  158 |         if (!gpio_is_valid(phy->common.gpio_en)) {
-      |              ^~~~~~~~~~~~~
-      |              uuid_is_valid
-../drivers/nfc/s3fwrn5/i2c.c: In function ‘s3fwrn5_i2c_probe’:
-../drivers/nfc/s3fwrn5/i2c.c:200:15: error: implicit declaration of function ‘devm_gpio_request_one’ [-Wimplicit-function-declaration]
-  200 |         ret = devm_gpio_request_one(&phy->i2c_dev->dev, phy->common.gpio_en,
-      |               ^~~~~~~~~~~~~~~~~~~~~
-../drivers/nfc/s3fwrn5/i2c.c:201:37: error: ‘GPIOF_OUT_INIT_HIGH’ undeclared (first use in this function)
-  201 |                                     GPIOF_OUT_INIT_HIGH, "s3fwrn5_en");
-      |                                     ^~~~~~~~~~~~~~~~~~~
-../drivers/nfc/s3fwrn5/i2c.c:201:37: note: each undeclared identifier is reported only once for each function it appears in
-../drivers/nfc/s3fwrn5/i2c.c:207:37: error: ‘GPIOF_OUT_INIT_LOW’ undeclared (first use in this function)
-  207 |                                     GPIOF_OUT_INIT_LOW, "s3fwrn5_fw_wake");
-      |                                     ^~~~~~~~~~~~~~~~~~
-../drivers/nfc/s3fwrn5/uart.c: In function ‘s3fwrn82_uart_parse_dt’:
-../drivers/nfc/s3fwrn5/uart.c:100:14: error: implicit declaration of function ‘gpio_is_valid’; did you mean ‘uuid_is_valid’? [-Wimplicit-function-declaration]
-  100 |         if (!gpio_is_valid(phy->common.gpio_en))
-      |              ^~~~~~~~~~~~~
-      |              uuid_is_valid
-../drivers/nfc/s3fwrn5/uart.c: In function ‘s3fwrn82_uart_probe’:
-../drivers/nfc/s3fwrn5/uart.c:147:15: error: implicit declaration of function ‘devm_gpio_request_one’ [-Wimplicit-function-declaration]
-  147 |         ret = devm_gpio_request_one(&phy->ser_dev->dev, phy->common.gpio_en,
-      |               ^~~~~~~~~~~~~~~~~~~~~
-../drivers/nfc/s3fwrn5/uart.c:148:37: error: ‘GPIOF_OUT_INIT_HIGH’ undeclared (first use in this function)
-  148 |                                     GPIOF_OUT_INIT_HIGH, "s3fwrn82_en");
-      |                                     ^~~~~~~~~~~~~~~~~~~
-../drivers/nfc/s3fwrn5/uart.c:148:37: note: each undeclared identifier is reported only once for each function it appears in
-../drivers/nfc/s3fwrn5/uart.c:154:37: error: ‘GPIOF_OUT_INIT_LOW’ undeclared (first use in this function)
-  154 |                                     GPIOF_OUT_INIT_LOW, "s3fwrn82_fw_wake");
-      |    
+between commit:
 
+  a70e9f647f50 ("entry: Split generic entry into generic exception and sysc=
+all entry")
 
-Possibly this:
+from the tip tree and commit:
+
+  bfab6646e9d9 ("unwind_user/deferred: Add unwind cache")
+
+from the ftrace tree.
+
+I fixed it up (I used the former version of this file and applied the
+following merge fix patch) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 28 Jul 2025 09:53:01 +1000
+Subject: [PATCH] fix up for "unwind_user/deferred: Add unwind cache"
+
+interacting with "entry: Split generic entry into generic exception and
+syscall entry" from the tip tree.
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- drivers/nfc/nfcmrvl/Kconfig |    3 +++
- drivers/nfc/s3fwrn5/Kconfig |    3 +++
- 2 files changed, 6 insertions(+)
+ include/linux/irq-entry-common.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- linux-next-20250725.orig/drivers/nfc/nfcmrvl/Kconfig
-+++ linux-next-20250725/drivers/nfc/nfcmrvl/Kconfig
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config NFC_MRVL
- 	tristate
-+	depends on GPIOLIB
- 	help
- 	  The core driver to support Marvell NFC devices.
- 
-@@ -10,6 +11,7 @@ config NFC_MRVL
- config NFC_MRVL_USB
- 	tristate "Marvell NFC-over-USB driver"
- 	depends on NFC_NCI && USB
-+	depends on GPIOLIB
- 	select NFC_MRVL
- 	help
- 	  Marvell NFC-over-USB driver.
-@@ -23,6 +25,7 @@ config NFC_MRVL_USB
- config NFC_MRVL_UART
- 	tristate "Marvell NFC-over-UART driver"
- 	depends on NFC_NCI && NFC_NCI_UART
-+	depends on GPIOLIB
- 	select NFC_MRVL
- 	help
- 	  Marvell NFC-over-UART driver.
---- linux-next-20250725.orig/drivers/nfc/s3fwrn5/Kconfig
-+++ linux-next-20250725/drivers/nfc/s3fwrn5/Kconfig
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config NFC_S3FWRN5
- 	tristate
-+	depends on GPIOLIB
- 	select CRYPTO
- 	select CRYPTO_HASH
- 	help
-@@ -11,6 +12,7 @@ config NFC_S3FWRN5
- config NFC_S3FWRN5_I2C
- 	tristate "Samsung S3FWRN5 I2C support"
- 	depends on NFC_NCI && I2C
-+	depends on GPIOLIB
- 	select NFC_S3FWRN5
- 	default n
- 	help
-@@ -24,6 +26,7 @@ config NFC_S3FWRN5_I2C
- config NFC_S3FWRN82_UART
-         tristate "Samsung S3FWRN82 UART support"
-         depends on NFC_NCI && SERIAL_DEV_BUS
-+	depends on GPIOLIB
-         select NFC_S3FWRN5
-         help
-           This module adds support for a UART interface to the S3FWRN82 chip.
+diff --git a/include/linux/irq-entry-common.h b/include/linux/irq-entry-com=
+mon.h
+index 8af374331900..0cd828b4a444 100644
+--- a/include/linux/irq-entry-common.h
++++ b/include/linux/irq-entry-common.h
+@@ -7,6 +7,7 @@
+ #include <linux/context_tracking.h>
+ #include <linux/tick.h>
+ #include <linux/kmsan.h>
++#include <linux/unwind_deferred.h>
+=20
+ #include <asm/entry-common.h>
+=20
+@@ -240,6 +241,7 @@ static __always_inline void exit_to_user_mode(void)
+ 	lockdep_hardirqs_on_prepare();
+ 	instrumentation_end();
+=20
++	unwind_reset_info();
+ 	user_enter_irqoff();
+ 	arch_exit_to_user_mode();
+ 	lockdep_hardirqs_on(CALLER_ADDR0);
+--=20
+2.50.1
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/sxzXOrs+CYdBtw4VPNTESWS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-~Randy
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiGvWoACgkQAVBC80lX
+0Gyz1Af6A8FhiDEvJexDRmRdyLSoim0L1JbHu30uQt6T4cIdHevhFq0vuKig49sU
+m4maZgpoQVen4iD8ocVLgCDx4Qzr+RuRMY66JFNCwgsaulZVFJM0YM+es8Y1SDBB
+fOkMFJEnZmet9b4Y7Y/1VQDeqqPQvFg+aOkNgnd3PW8FxZpvRQSZZUzCIQnkqkyo
+25GsUtgClBNQySzRoLpVPjCE2qZvbHoGT7MoVlifaUNmh8dadBfMY8BXPACYgj4q
+sGwK7Ton6YlJ+hce3v8vr96DKKRZTKNCzyPu+aK4xNqMiWzXjfxt96yZrTNTZZis
+B4jZOn1zuQd4tkI/rdGtFtdxVYgkSw==
+=pqw0
+-----END PGP SIGNATURE-----
+
+--Sig_/sxzXOrs+CYdBtw4VPNTESWS--
 

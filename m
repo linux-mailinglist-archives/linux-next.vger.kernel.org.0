@@ -1,157 +1,102 @@
-Return-Path: <linux-next+bounces-7729-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7730-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4104B144C0
-	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 01:39:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B9E8B14500
+	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 01:48:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7EE07A32F5
-	for <lists+linux-next@lfdr.de>; Mon, 28 Jul 2025 23:37:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B37C1714F1
+	for <lists+linux-next@lfdr.de>; Mon, 28 Jul 2025 23:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B547238C03;
-	Mon, 28 Jul 2025 23:39:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB02C237708;
+	Mon, 28 Jul 2025 23:48:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="pT7Bf6pB"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="WhArENUV"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A59238C35;
-	Mon, 28 Jul 2025 23:39:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0842E2367D2;
+	Mon, 28 Jul 2025 23:48:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753745949; cv=none; b=VFAjvRw4RjeUNrNmhhJcJIDYqHwOWuzemSM/Pl8j74xoT4TtWA7IaOTOajUCuWL0ZWgEqEb5yPgchOBR+G0ikYy/VWgLYHe6KuTilAGd1FHgLscAcVmWQtKHNjucXfj/hC7N4eSDRl+uEqqoapjAIT7ibuexenzfu5GPkQo00iY=
+	t=1753746486; cv=none; b=X/tmILQO2nw2GFyp9ie6hEXE564mkBTEkRSoSfAZS59cFmSu7GpYCZ2AJTao6k9p8gtAxMIBbT3PI6qVTTZMq/CjNIYU8meh6THKI7RfPF27kMuTCaxLvwr0LAoXrtV8+SiEWE/93i+HmleNmz9XakxHOxUmUdtxZ52Bf3eYR7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753745949; c=relaxed/simple;
-	bh=/T8UuzPObJHErlTUQwxtuFC6jCxKUV+YJQ+2ZGk46Ck=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=X6d/4h4a/7fv5voEIdFCS+7DtEN+RLrw5lH5de3NxXRRXRsYcaJH8M+Hjsc8nD9AHCoiOiU8MeC4DnNOQBEJiodH0LZWDTqpKn17BQnQd8YmEMR8MOZ859CoVTO2MHlOM1LqXaCM/Ba+f7ffQS+hrf3CNaj13kunt2XZnyD5OAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=pT7Bf6pB; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1753746486; c=relaxed/simple;
+	bh=HAssU1iuyVPQX5H3SJXQdA05rhGCePIiE5k+AQjMF5E=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=kRCXQLa7K35Bd5IB6S7X0fP2MfbVVDu0OldtvG6uY7GrTDKPNNvmkeveMfrsx8aG0H0CbluzFbIpV0/JyKI9KJTbRSDhA6PPj1VvrXgJRWCKNacFAv9d0LVALw+mgkRxIm3cIWj8LPB5G3MYg6UrJEvN4VzH9Oy6I7npG2ZarjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=WhArENUV; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1753745737;
-	bh=P6aPRjcgZ0UmDvuH8/g7TWfwU39ztlV1xDp/3KzlwlU=;
+	s=202503; t=1753746274;
+	bh=9Mnc9dF1jENvmUCinLDRP3FBhqsKZtMHqsuLsWUY8Fw=;
 	h=Date:From:To:Cc:Subject:From;
-	b=pT7Bf6pB7LH9+ttNeg4qPeyUhjtbKcgTAiU7O5QEn6pHm+E9sOsBbWtwv9AiQsJGS
-	 7/yIldnLGGL5ymbQwZLekZjbEWhVZ5i4kGOjLLBky6LM50UejZqrHPFTsaNqeMpUfV
-	 4CUQquBlsoII8rgpJEWm7VwwjrgU0CGFAJh6+E0WzilYr0GVptaf8SNmh8lpSBDqrW
-	 mvK5AiRphI3aEm+Zu8o1dZE2fdIQ0rIHc1i8hofXClzRBnBUU/DaIEEyjU38ipBZhf
-	 OEbR/7Tc93d2Y4P9eiWqcvyXBueNq95oA/sZe09I20Hm5Fm4ED6S+O2XGzZZctbxPe
-	 SHcZuPMxvqsMA==
+	b=WhArENUVtotLUSV16E6ptzPInJDgles3rTK/d52mob7ebP2VRvglEO6EExcbNh1XJ
+	 p62Yy84+URcc3t/pnDhbgK6uBha/GfFy1fbPP+s2jXk0UiI0yZQuucHucUbrA3D8lG
+	 G4OUxPo3jnBWTW8gMeV7Bhpfi+OHU6ZYO+X6XCXzVea5xtL3d/tEZsvQhgM6eAKGGc
+	 oT4Ph1hipl8h1n7FYR+tLq0GbhvIguVDaMO08ukC1fx25Y4BIy35JrYnkR0vCEXeI6
+	 l3Vqn5eo6BvPWwGcUCbp4YKXC4cqL2l06MR/urFceV3kxvUpu0KWcF10OhWi+V+T9Z
+	 y2WSzweCEE5SA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4brZbY0xb2z4w2N;
-	Tue, 29 Jul 2025 09:35:36 +1000 (AEST)
-Date: Tue, 29 Jul 2025 09:39:03 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4brZnt1FKjz4wbd;
+	Tue, 29 Jul 2025 09:44:33 +1000 (AEST)
+Date: Tue, 29 Jul 2025 09:48:00 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Dave Airlie <airlied@redhat.com>
-Cc: Alex Deucher <alexdeucher@gmail.com>, DRI
- <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: bad merge of the drm tree with Linus' tree
-Message-ID: <20250729093903.386848f3@canb.auug.org.au>
+To: David Sterba <dsterba@suse.cz>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the btrfs-fixes tree
+Message-ID: <20250729094800.4a67451a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/g_fgtX5w1WT5HzhjFJZq6Yr";
+Content-Type: multipart/signed; boundary="Sig_/3+65nJlCODvVjzn7s_0EJCF";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/g_fgtX5w1WT5HzhjFJZq6Yr
+--Sig_/3+65nJlCODvVjzn7s_0EJCF
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Merging the drm tree with Linus' tree results in two copies of the
-dc_get_host_router_index() function (due to a duplicated commit in
-Linus' tree).  I have been applying the following merge fix for a while
-- originally to the merge of the amdgpu tree and recently to the merge
-of the drm tree.
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 20 Jun 2025 14:51:48 +1000
-Subject: [PATCH] fix up bad merge of the amdgpu tree
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/amd/display/dc/core/dc.c | 28 ------------------------
- 1 file changed, 28 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd=
-/display/dc/core/dc.c
-index 2628f16f77c1..c744aa9d830f 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-@@ -6384,35 +6384,6 @@ unsigned int dc_get_det_buffer_size_from_state(const=
- struct dc_state *context)
- 	else
- 		return 0;
- }
--/**
-- *************************************************************************=
-**********************
-- * dc_get_host_router_index: Get index of host router from a dpia link
-- *
-- * This function return a host router index of the target link. If the tar=
-get link is dpia link.
-- *
-- * @param [in] link: target link
-- * @param [out] host_router_index: host router index of the target link
-- *
-- * @return: true if the host router index is found and valid.
-- *
-- *************************************************************************=
-**********************
-- */
--bool dc_get_host_router_index(const struct dc_link *link, unsigned int *ho=
-st_router_index)
--{
--	struct dc *dc =3D link->ctx->dc;
--
--	if (link->ep_type !=3D DISPLAY_ENDPOINT_USB4_DPIA)
--		return false;
--
--	if (link->link_index < dc->lowest_dpia_link_index)
--		return false;
--
--	*host_router_index =3D (link->link_index - dc->lowest_dpia_link_index) / =
-dc->caps.num_of_dpias_per_host_router;
--	if (*host_router_index < dc->caps.num_of_host_routers)
--		return true;
--	else
--		return false;
--}
-=20
- /**
-  * dc_get_host_router_index: Get index of host router from a dpia link
+  92e6fa77b2e0 ("btrfs: qgroup: fix qgroup create ioctl returning success a=
+fter quotas disabled")
+  9eb1cf99dc45 ("btrfs: qgroup: fix race between quota disable and quota re=
+scan ioctl")
+  da08927994d8 ("btrfs: qgroup: set quota enabled bit if quota disable fail=
+s flushing reservations")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/g_fgtX5w1WT5HzhjFJZq6Yr
+--Sig_/3+65nJlCODvVjzn7s_0EJCF
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiIChcACgkQAVBC80lX
-0Gx+wAgAoA8XH5Owmxu/ZtqVJWzPJw+fKh6dftKWQtxfCA0dwJpuyEcQHrUQ4FGj
-P6fPu4noenV7yIfIbNEbzGygQn70Q8ymBxJR9MW+PuBP5Afc/GX/vIGeSxzSEbBa
-LlFubqubLtRuCakrsISSU7FG3AnSW5yefte4Q6w8icENs+dP1I0wnIsIChN36eRo
-tcYICIuUgMBfH7Dvm2A6rbWDQUUzqXsRpUbrh+hTQ6tOiMzCzEddyE8oiqpEnTc+
-MYZ6JqZi0mzmDszBFBWuXNx3LxWXUCDCKR5XpDBOv3ty8zJWQ/TGnorFSs1ajLWd
-nuz1Rn6gGx/zBueSsHFpG03CLtoNWg==
-=jMID
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiIDDAACgkQAVBC80lX
+0Gwy4wf+L171UF1UqHs7B6djcgELP5TsjkZd1e1uiBnf57UCcAtlSQ6oCiM0dfhM
+lfuJSGicHGgblkCcj4AmHoZfxnxY5bahYylLx/8xBKAtV9wyquzK/WdTZphJqZXh
+E/cWbK8v77jQFWVKIMScsyLkJxSeHWkoE530skW965glAdgN2e7ZtQ1jgdz0LZXW
+UQ8aTOyCKN4s1y79rmKYnc97iZnphR8rGgyrQRy9f5adVgbIIKVBvAZQwHvkrIjW
+ilT+tKczOXjqpkfWod9aBP60dgLW9bwJGqBHOJHed+2DoRSte6sJxhIPjzGkp+vc
+1Ay5ZW3EMlkChV1pOTx3B5oRhDpY0A==
+=X6M+
 -----END PGP SIGNATURE-----
 
---Sig_/g_fgtX5w1WT5HzhjFJZq6Yr--
+--Sig_/3+65nJlCODvVjzn7s_0EJCF--
 

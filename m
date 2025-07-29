@@ -1,103 +1,103 @@
-Return-Path: <linux-next+bounces-7749-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7750-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B290FB14B0F
-	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 11:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A25BB14BF0
+	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 12:08:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 135881885F68
-	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 09:20:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3D6D1AA4C80
+	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 10:08:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 774EF23535E;
-	Tue, 29 Jul 2025 09:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAB2D2749DA;
+	Tue, 29 Jul 2025 10:08:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b="sNATE1mm"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pbhPnC5U"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx.olsak.net (mx.olsak.net [37.205.8.231])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4586022538F;
-	Tue, 29 Jul 2025 09:18:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.205.8.231
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B16C19F135;
+	Tue, 29 Jul 2025 10:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753780802; cv=none; b=XJKl9wlryHMBXVBAY/WMbnIbFp+qM+XyOqgijfi75haRGZrGFJnd5TJznF/kBRQZWIQAFr48Hu38sjJ5uGIJBWsr7ygaGY2l485J2JZYlFitmL6IxAAdjfoj1cH3WAHUigufWbj0C6gSO7NObgMXXlqsHxNROUwlCtoQoa0yGmI=
+	t=1753783705; cv=none; b=AtDE6mp7Awi22xDEAF3XRW4QqryWw5GZuSNs5yjiMqHHmdhWNhhh4WElxCfxyBCavxso6bHSppy/sxYfyGIjhi9ahJScLgsSwsa+f58LZgb+K6fZxmTgbxVFpG3CJAMxGJZEZDaROLK8bLBLGlc2YjG6htCB6yUbW51EcWPm90Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753780802; c=relaxed/simple;
-	bh=nWxrqj2kUyxmcv6mdjkaK20IW4Wz6SYRTXTZnZ3Px6I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q72W+lUIyROWkd0ceDfhEZKowcH3fJthQNnr2orW+lr/UpKjYxqiI7oQstnnYXOY8Ecuh4MRhfTgWwosKvGi+NyXjjOtrcRV8vsYvBYFTDtLAb3Y3VsozJVX35H1CWjdtReaFCJQGJtN7HQECHcuI4XbfdnVeW3EPen/hKqrEFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz; spf=pass smtp.mailfrom=dujemihanovic.xyz; dkim=pass (2048-bit key) header.d=dujemihanovic.xyz header.i=@dujemihanovic.xyz header.b=sNATE1mm; arc=none smtp.client-ip=37.205.8.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=dujemihanovic.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dujemihanovic.xyz
-DKIM-Signature: a=rsa-sha256; bh=0FX94LO7FBG853z0deALFB9wglwXmVAtfiI/k+zwf+c=;
- c=relaxed/relaxed; d=dujemihanovic.xyz;
- h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:In-Reply-To:Message-Id:Message-Id:References:References:Autocrypt:Autocrypt:Openpgp;
- i=@dujemihanovic.xyz; s=default; t=1753780697; v=1; x=1754212697;
- b=sNATE1mmnB27c7gYFPLV3+i36LbmX0ue9FYHXt+9JHE+vmdbMjukkICF2pWl+KBxGIGGZGqH
- 9BSdoRf07MgTcGVz6sGv4Lrt5RxWVV8DZwwBKwYzzPHxVN2aQOxo6M1PIiKemN/X2o2MsmOsZuI
- jLNtltSf55f8YX1iLssgQqb4Jb7NOTOk0Ht/wr1aFStUJO6za5v0NmQP3GBPprwhNsrmwaysbGP
- R4mKd/nW0OLZBJTR+0dDg4Z6/TgeIYXI86YndlDnB/g8E8i88b1EKLb+cqq2hk+eiJK4vsaZRPR
- gJeH5ckWotsXmqXCdH9YcHu+qcDo5aMFn48TE9pehy/Aw==
-Received: by mx.olsak.net (envelope-sender <duje@dujemihanovic.xyz>) with
- ESMTPS id 5e0832d2; Tue, 29 Jul 2025 11:18:17 +0200
-From: Duje =?UTF-8?B?TWloYW5vdmnEhw==?= <duje@dujemihanovic.xyz>
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Randy Dunlap <rdunlap@infradead.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux DRI Development <dri-devel@lists.freedesktop.org>,
- linux-leds@vger.kernel.org
-Subject: Re: linux-next: Tree for Jul 29 (BACKLIGHT_KTD2801)
-Date: Tue, 29 Jul 2025 11:18:16 +0200
-Message-ID: <5002743.GXAFRqVoOG@radijator>
-In-Reply-To: <b6c481bb-e854-405e-a428-90301789fe20@infradead.org>
-References:
- <20250729153510.3781ac91@canb.auug.org.au>
- <b6c481bb-e854-405e-a428-90301789fe20@infradead.org>
+	s=arc-20240116; t=1753783705; c=relaxed/simple;
+	bh=5fNC/UPaGkwV99491pG0EBYdapDegM5tvoJS3Iagj/w=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=OsNlbZ8iFIh7DWxEL9mpVhh0CgPkReCegF+iliZRvM4DBkXkpicHULKtF84twZc8UG6X4PFH93wk2VL6e1/IHcFXwgNwWdnVCqiLJS4RwkkM82eUBa1Wm4pAEBB64YkUqOpb9xPX4o/Q7U77onmA3TwWr39jmDKWhHZKm940J0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pbhPnC5U; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 50B46205AE;
+	Tue, 29 Jul 2025 10:08:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1753783701;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UAkGJnZnTYflyNKOv3fSpVH6Z6Frd5MXsw6XzHEQa6A=;
+	b=pbhPnC5USrbXG7BF+V7WvyN5eJZ2bULD1ZVdXMmN5dWYIACXw3JNLgTqiEr09bK+mtJR+Z
+	TnxHNfWanm3F/Medalz0TKVM0njQY918RcmW9FbklvAc1U8FO0YEG70gilx2U9dedVOa8j
+	HQxQ8ikHA2pWZzCTU8n9y2gZ6+YqcwXyX+vj5rxCNSLchvGc2SK2NlV5FiNMIy1HNWttck
+	qOuJJz2XSw+2MDsCPLQIjA4dhg1o/ZAxNvvaTt6ioE+lHovl1KrkXT5Y+pWHEE3Dqjahb/
+	XOSH2gwGFO1uZpyIAVvRcmUS8sN+Oum32HqaDyUzCs+ccKqzy/EO6C49TtY+4g==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Mark Brown <broonie@kernel.org>,  Boris Brezillon
+ <boris.brezillon@collabora.com>,  Gabor Juhos <j4g8y7@gmail.com>,  Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>,  Linux Next Mailing
+ List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the spi tree with the nand tree
+In-Reply-To: <20250729103816.5354a528@canb.auug.org.au> (Stephen Rothwell's
+	message of "Tue, 29 Jul 2025 10:38:16 +1000")
+References: <20250729103816.5354a528@canb.auug.org.au>
+User-Agent: mu4e 1.12.7; emacs 30.1
+Date: Tue, 29 Jul 2025 12:08:20 +0200
+Message-ID: <87bjp3pawb.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Autocrypt: addr=duje@dujemihanovic.xyz;
- keydata=
- mDMEZokhzhYJKwYBBAHaRw8BAQdAWJZ0hsI/ytTqHGFV8x6tzd5sB596cTeeDB4CQsTf+wC0KER
- 1amUgTWloYW5vdmnEhyA8ZHVqZUBkdWplbWloYW5vdmljLnh5ej6ImQQTFgoAQRYhBG3/QdYN8x
- S1t2umMK0xk1JFj60DBQJmiSHOAhsDBQkJZgGABQsJCAcCAiICBhUKCQgLAgQWAgMBAh4HAheAA
- AoJEK0xk1JFj60D1GABAJVSorZdMOlrp/oQtCSH/G53NE56x/JHA8VX+ZQBd/H3AP4/EcUf6eef
- DUxVMh2bdkmuQKsVZGgOGiXpMksrVntWBrQpRHVqZSBNaWhhbm92acSHIDxkdWplLm1paGFub3Z
- pY0Bza29sZS5ocj6ImQQTFgoAQRYhBG3/QdYN8xS1t2umMK0xk1JFj60DBQJmiSH/AhsDBQkJZg
- GABQsJCAcCAiICBhUKCQgLAgQWAgMBAh4HAheAAAoJEK0xk1JFj60Dlw8A/i4lPOL7NaYoYePDq
- l8MaJaR9qoUi+D+HtD3t0Koi7ztAQCdizXbuqP3AVNxy5Gpb1ozgp9Xqh2MRcNmJCHA1YhWAbg4
- BGaJIc4SCisGAQQBl1UBBQEBB0DEc9JeA55OlZfWKgvmRgw6a/EpBQ8mDl6nQTBmnd1XHAMBCAe
- IfgQYFgoAJhYhBG3/QdYN8xS1t2umMK0xk1JFj60DBQJmiSHOAhsMBQkJZgGAAAoJEK0xk1JFj6
- 0DG5MA/iuo4l2GDEZ1Zf+XaS//8FwdXDO9nHkfbV2MHjF4NZXwAQDroMzBdMcqVvc8GABFlTTgG
- j7KrRDz2HwWNyF8ZeprAQ==
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdelgeejjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefujghffgffkfggtgfgsehtqhertddtreejnecuhfhrohhmpefoihhquhgvlhcutfgrhihnrghluceomhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepffeghfejtdefieeguddukedujeektdeihfelleeuieeuveehkedvleduheeivdefnecukfhppeeltddrkeelrdduieefrdduvdejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepledtrdekledrudeifedruddvjedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepiedprhgtphhtthhopehsfhhrsegtrghnsgdrrghuuhhgrdhorhhgrdgruhdprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegsohhrihhsrdgsrhgviihilhhlohhnsegtohhllhgrsghorhgrrdgtohhmpdhrtghpthhtohepjhegghekhiejsehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgp
+ dhrtghpthhtoheplhhinhhugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-On Tuesday, 29 July 2025 10:32:13 Central European Summer Time Randy Dunlap 
-wrote:
-> so BACKLIGHT_KTD2801 should:
-> 	depends on GPIOLIB
+Hello,
 
-Sounds good to me.
+On 29/07/2025 at 10:38:16 +10, Stephen Rothwell <sfr@canb.auug.org.au> wrot=
+e:
 
-> Also, in drivers/leds/Kconfig, does it need duplicate entries for this?
-> Can't the second entry be removed?
-> (asking since Duje made both entries)
+> Hi all,
+>
+> Today's linux-next merge of the spi tree got a conflict in:
+>
+>   include/linux/mtd/nand-qpic-common.h
+>
+> between commit:
+>
+>   8e37aaf97153 ("mtd: nand: qpic-common: remove a bunch of unused defines=
+")
+>
+> from the nand tree and commit:
+>
+>   0dc7e656ddd5 ("mtd: nand: qpic-common: add defines for ECC_MODE values")
+>
+> from the spi tree.
 
-That's an oversight on my end, and as such the second one (the one inside the 
-"if NEW_LEDS" block) should be removed.
+Indeed, I forgot about this change which conflicts. I'll drop the patch
+from my tree, it is not urgent anyway. Gabor, please resend after a
+rebase at -rc1, sorry for the extra work..
 
-Would you like me to send a patch to fix these?
-
-Regards,
--- 
-Duje
-
-
+Thanks,
+Miqu=C3=A8l
 

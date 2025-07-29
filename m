@@ -1,109 +1,106 @@
-Return-Path: <linux-next+bounces-7744-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7745-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC3A3B149AF
-	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 10:02:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15A43B14A25
+	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 10:32:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEDA418A1654
-	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 08:02:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5774B3B05B8
+	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 08:31:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD2F926B0B6;
-	Tue, 29 Jul 2025 08:02:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E938127CCF2;
+	Tue, 29 Jul 2025 08:32:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JvOCthVP"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Sf+9n6uc"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A579C130AC8;
-	Tue, 29 Jul 2025 08:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5630D188006;
+	Tue, 29 Jul 2025 08:32:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753776141; cv=none; b=II3C1adI4SJKxO/pDP9ng6d0apj/QnXJOc+R05IdYxK4vY/COHfJPEGSYZ1JvJ/nCDMpqyKwjAneoszxJ5BMOlGtfECyAcLu2eUDkx8Ne2eFae3eqE0uL7m4LZcFSxF3lrlDX5mcPLtvkvdvJJUcVbseL6p9ZEGQk+Ga6Xnk8Jg=
+	t=1753777938; cv=none; b=qYZocBt4VADj29KGsPjQO2Jys6gm2JqPV7xwov1+wH1Od5RYlJOy8AuIEs7edpAhCPs1YesUmAbfeHtKfspVj8z9q/YnQ2SD8LtKSCkVyaA+MKJWwavPKBQdbPKpqNn774GnfsJq805dK7lM5gc4wNcVpzpQKtaWlJl9Iv4ZnOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753776141; c=relaxed/simple;
-	bh=ZmSqoSQuUbPwJKP9gq7L9+fuw/CWVaENt5XFi3mZ4Gg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LWtRrnX4j4I7CpUmJiBKItniYUvU7HKyXGgWLWu0zk6hD6uWtuKJUalTQbgm+Hvwy7bbFLmPICsdqCRLgPBYw+I7cXyO1kVeLgbBT73s4Me9LdefyPYKtsnjXSRNjxXkUjb7Cj269HVro3ukMkr1I5muf540P2fmaC+3cN1mg1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JvOCthVP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 251FFC4CEEF;
-	Tue, 29 Jul 2025 08:02:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753776141;
-	bh=ZmSqoSQuUbPwJKP9gq7L9+fuw/CWVaENt5XFi3mZ4Gg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JvOCthVPjRLcYwRj3lbsoogeDZltV+LZUGB6HsJ5RCbec41YlSYx5F7r5Ft9QygPi
-	 9meJqNSFMPJSefQHPBxl80Kjb4e913myLJodPCdQmKqtS5lOItdE0WJ3Ao/U0Wvqt9
-	 l1ibj+XuN26YkzYRW6spDCjwRHdmWTwLvZ8EON+mJSDwApV2ZMkj0FWZbL6DmxNEJI
-	 On7/sEl6XMBHdlvzRQVCO1bzFlU+MrHpdv3iK8gEF9v9NCP6uZ841JlWsVB+NESVjU
-	 F67Bf6oys/vkoMLffnhmO3QlNDYrLcffEL0N8554Nmvoo86O3feoSEZ+XCctVxHlG/
-	 m9P+SVceETI+Q==
-Date: Tue, 29 Jul 2025 11:02:15 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the paulmck tree with the
- mm-nonmm-unstable tree
-Message-ID: <aIiABxMGqYg2bGZ5@kernel.org>
-References: <20250729104245.6be6957a@canb.auug.org.au>
- <e8191e3c-a3cf-4926-95cd-be3e3db4b86c@paulmck-laptop>
+	s=arc-20240116; t=1753777938; c=relaxed/simple;
+	bh=+XABJZ1Y+l4x9gpWb/ZBne0JFnnqqRxCjQW8cw5+ybk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jCjSfIr80oFRTV1vohmfsUpAExvj/XAOjn07gafYR3DThtoWPG5jHnuyEnfydxjjFwTAWnPTClgrKL2ZeYZ/W5p2LfxbF1z8qVpkkTQrF1CyaP473hvKUeygKaSnwSawCwnso6pTKRTi2QcSDPqPP7Pl7CZuQMn9GKH10HXDYbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Sf+9n6uc; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=Ny6TTgLU/SMwi1VgsRmQeRrVFh08FienZHwG6QcdxfU=; b=Sf+9n6ucYRkz2uSDSDBZF8BxDS
+	guhE72SQVW+BZV1de/8bXrTpgFKrpGF0+y91PVKs/QQXe4hLbl3bCKOdCmjRMSlxtYrRJz/J098xs
+	+eHk0Q2Bt5eoH6kSXSE/SVC1/kLm/LIfIiGbjEwnPbw+e+MeMYM15bqOe6YqryxU5CRP2Wx6lWYia
+	xyfQM3BhKqlLuKeddSYad4uuUDm9NbjpeoV9nBJfXHzQu/3xYHGn3McXhWJyVyj5xgqQb/ogD6q6R
+	S1twO3QfWRK5Mh3D0i/NVD2BtvbtQglFV6h4zwk3dFNKbJ4n2vEBxU+bGdmlxXH8zw0JZ7Z9nczkk
+	wltECnBQ==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1ugfks-0000000GGM8-0wb6;
+	Tue, 29 Jul 2025 08:32:14 +0000
+Message-ID: <b6c481bb-e854-405e-a428-90301789fe20@infradead.org>
+Date: Tue, 29 Jul 2025 01:32:13 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e8191e3c-a3cf-4926-95cd-be3e3db4b86c@paulmck-laptop>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Jul 29 (BACKLIGHT_KTD2801)
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje.mihanovic@skole.hr>,
+ Linux DRI Development <dri-devel@lists.freedesktop.org>,
+ linux-leds@vger.kernel.org
+References: <20250729153510.3781ac91@canb.auug.org.au>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250729153510.3781ac91@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Stephen,
 
-On Mon, Jul 28, 2025 at 09:28:08PM -0700, Paul E. McKenney wrote:
-> On Tue, Jul 29, 2025 at 10:42:45AM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Today's linux-next merge of the paulmck tree got a conflict in:
-> > 
-> >   lib/Kconfig.debug
-> > 
-> > between commit:
-> > 
-> >   c2d288f7ab13 ("kho: add test for kexec handover")
-> > 
-> > from the mm-nonmm-unstable tree and commit:
-> > 
-> >   d19e9fa61f60 ("lib: Add trivial kunit test for ratelimit")
-> > 
-> > from the paulmck tree.
-> > 
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
+
+On 7/28/25 10:35 PM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Thank you, and this looks plausible to me.
+> Changes since 20250728:
 > 
-> There is an extra blank line, but worse things could happen.
 
-Yeah, what Paul said :)
+on ARCH=um SUBARCH=i386, when
+# CONFIG_GPIOLIB is not set
 
-> 							Thanx, Paul
-> 
-> > -- 
-> > Cheers,
-> > Stephen Rothwell
-> > 
+WARNING: unmet direct dependencies detected for LEDS_EXPRESSWIRE
+  Depends on [n]: GPIOLIB [=n] || NEW_LEDS [=y] && GPIOLIB [=n]
+  Selected by [y]:
+  - BACKLIGHT_KTD2801 [=y] && HAS_IOMEM [=y] && BACKLIGHT_CLASS_DEVICE [=y]
+
+
+so BACKLIGHT_KTD2801 should:
+	depends on GPIOLIB
+
+Also, in drivers/leds/Kconfig, does it need duplicate entries for this?
+Can't the second entry be removed?
+(asking since Duje made both entries)
+
+config LEDS_EXPRESSWIRE
+	bool
+	depends on GPIOLIB
+
+
+Thanks.
+
 
 -- 
-Sincerely yours,
-Mike.
+~Randy
+
 

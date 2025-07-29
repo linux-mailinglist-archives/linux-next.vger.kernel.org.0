@@ -1,111 +1,147 @@
-Return-Path: <linux-next+bounces-7738-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7739-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD702B1472D
-	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 06:22:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A2C2B1473F
+	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 06:28:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2069754339F
-	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 04:22:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6864D16D2FA
+	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 04:28:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CDE0230981;
-	Tue, 29 Jul 2025 04:22:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C70CE227B83;
+	Tue, 29 Jul 2025 04:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="crOwAMm1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o9JGlKd6"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA47622D9E3;
-	Tue, 29 Jul 2025 04:22:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CF042E3708;
+	Tue, 29 Jul 2025 04:28:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753762948; cv=none; b=rz/VetBp2IFDVnAleV5A8RFKGmwQiorIEdVBwRmmjfyCpJ/A6IoR5HRhDIc9Vm6+wt6iio4jr0S4bFUL0ilrKIFOW9SBIaWZaLUM8dU5bLe4kwaMJnU9YlNPL3ggk35hSx3SyJ/ac5R+E1QJlHFwzaCSFPox5x0ty+qOTbF1h9U=
+	t=1753763289; cv=none; b=LcsFd/5ClG2SDdP4SMvLyKIG8tFEGVN73WT4/cOof2BZaturP+nGV//NG7IlWjNvGUMSBpbb45bMyMfQzBIDeVt+ItFDHanHaEzzWf01H0LF/Xr2Ps3lQCpxINXzj6rpKsBetPKMcMzDNI6Yyg43kxYsfpFdxVYJF7prQtbRO7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753762948; c=relaxed/simple;
-	bh=ol1UriP10WVoMhKOoE2Ub9lirBxAK6LDSTDvbvhG+K0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=u69WXUw+fnvkqc6Ze1a6Ng7tigIsYzyQxR0yDWamhI88+5c24ilwy+FlMLdF5AyGObgt3a/KtIHSpY2ChVb/YA35fdCH6amKft2+yg0ayY/MWd34UT1ynMmRgnSCKzyLUfiIAUliWyx0EILB8lUm3X/315pbYU3G1xVIScPQBRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=crOwAMm1; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1753762732;
-	bh=b1pgfzOeL6zW7c/f+GSXABLpurJPDHjEPmQJcVaOv/Q=;
-	h=Date:From:To:Cc:Subject:From;
-	b=crOwAMm1WSUpvXwkSdRAhZb6WOAni3HJqe07kTD6CRMhwMvPdlaEnUbhcoA5v4frL
-	 MPoc2cONvA/mUGf1lbeEmV7owccLx6TPN80VPXBA4i0GgA/BaOmX+hmF4J6g9AfjwX
-	 +4VNxl+jdikwZpUvAdt/qhYIsDUXUQ1F/x1LzZt2stHVVUD3SG9xvDZh+lkWLONNsy
-	 FI3mIzhMMI0gpJ35NmotYzB8LQ+odakwuPLYvIl0aaW1v+lScSvDI8+FohjJaURyTm
-	 K7NUlf2OETgCok5GS+v8ETzWuK8y4C1KuiDGHBSOK7i3R5VNk2sZw5rbFjnkMqyPeM
-	 hDIlml249LeKQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4brhtM4Wm0z4x43;
-	Tue, 29 Jul 2025 14:18:51 +1000 (AEST)
-Date: Tue, 29 Jul 2025 14:22:17 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Christoffer Dall <cdall@cs.columbia.edu>, Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oliver.upton@linux.dev>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the kvm-arm tree
-Message-ID: <20250729142217.0d4e64cd@canb.auug.org.au>
+	s=arc-20240116; t=1753763289; c=relaxed/simple;
+	bh=2ozTGxu0fPTHFlcMWVB3uzPseyVMI/povk3gNuCyEnc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d/A3cJt79rSXSytb3+mqtOf3ASET9zIGX2dk+uS1THI1CnnLpcuhpHjRgnZPUQtZCQSjDJTU0DfKuNsV/jRHqYctNfZhq8j4pUC8ssGsdRWJy79KQmNAxa5STVKn2otyHqCthf5ez/EJC9KZi9g5jkq087sfIcfWp7TjSKL+rv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o9JGlKd6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2781DC4CEF5;
+	Tue, 29 Jul 2025 04:28:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753763289;
+	bh=2ozTGxu0fPTHFlcMWVB3uzPseyVMI/povk3gNuCyEnc=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=o9JGlKd6sw09kNcholhe2wvH8GeNtQYvTH7VqzwqQ1MwNLv6vQOUMJlTLMJKzQwZP
+	 SUCK78kXxHqg7Qf7mrOjM/nNajFByKP9ZKjMYVzxZ8M9qHP8CkdQWD3Jn0jQfSnzN5
+	 65ENnmcWOCNoAE+YHzx+OM1go5vI7fQmJ0TVS1hMsfN8b1uzznhQGE/mhPYlxRkb8O
+	 qZJBz4ef0MPPZrkl+fTBGLeFt77+Xrtw8SQXwbhRQ9uVTQlUJPNZxzgACRT8oGPtXj
+	 b/tbqryo0jMzgvKzjKwsJFBjZuZTNWfhcr3yeMPAsWR2DirrZRUGLr4tKRib6Ubn6A
+	 HyLIzx0sQ/7jg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id BA643CE0F52; Mon, 28 Jul 2025 21:28:08 -0700 (PDT)
+Date: Mon, 28 Jul 2025 21:28:08 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Subject: Re: linux-next: manual merge of the paulmck tree with the
+ mm-nonmm-unstable tree
+Message-ID: <e8191e3c-a3cf-4926-95cd-be3e3db4b86c@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20250729104245.6be6957a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KprrsJ8NBy9QldrZb_cea=W";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250729104245.6be6957a@canb.auug.org.au>
 
---Sig_/KprrsJ8NBy9QldrZb_cea=W
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jul 29, 2025 at 10:42:45AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the paulmck tree got a conflict in:
+> 
+>   lib/Kconfig.debug
+> 
+> between commit:
+> 
+>   c2d288f7ab13 ("kho: add test for kexec handover")
+> 
+> from the mm-nonmm-unstable tree and commit:
+> 
+>   d19e9fa61f60 ("lib: Add trivial kunit test for ratelimit")
+> 
+> from the paulmck tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Hi all,
+Thank you, and this looks plausible to me.
 
-After merging the kvm-arm tree, today's linux-next build (htmldocs)
-failed like this:
+There is an extra blank line, but worse things could happen.
 
-Using /home/sfr/kernels/next/next/scripts/kernel-doc.pl
+							Thanx, Paul
 
-Sphinx parallel build error:
-docutils.utils.SystemMessage: Documentation/virt/kvm/devices/arm-vgic-v3.rs=
-t:128: (SEVERE/4) Unexpected section title or transition.
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc lib/Kconfig.debug
+> index 54f11c2713b9,d69d27f80834..000000000000
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@@ -3235,27 -3225,17 +3235,38 @@@ config TEST_OBJPOO
+>   
+>   	  If unsure, say N.
+>   
+>  +config TEST_KEXEC_HANDOVER
+>  +	bool "Test for Kexec HandOver"
+>  +	default n
+>  +	depends on KEXEC_HANDOVER
+>  +	help
+>  +	  This option enables test for Kexec HandOver (KHO).
+>  +	  The test consists of two parts: saving kernel data before kexec and
+>  +	  restoring the data after kexec and verifying that it was properly
+>  +	  handed over. This test module creates and saves data on the boot of
+>  +	  the first kernel and restores and verifies the data on the boot of
+>  +	  kexec'ed kernel.
+>  +
+>  +	  For detailed documentation about KHO, see Documentation/core-api/kho.
+>  +
+>  +	  To run the test run:
+>  +
+>  +	  tools/testing/selftests/kho/vmtest.sh -h
+>  +
+>  +	  If unsure, say N.
+>  +
+>  +
+> + config RATELIMIT_KUNIT_TEST
+> + 	tristate "KUnit Test for correctness and stress of ratelimit" if !KUNIT_ALL_TESTS
+> + 	depends on KUNIT
+> + 	default KUNIT_ALL_TESTS
+> + 	help
+> + 	  This builds the "test_ratelimit" module that should be used
+> + 	  for correctness verification and concurrent testings of rate
+> + 	  limiting.
+> + 
+> + 	  If unsure, say N.
+> + 
+>   config INT_POW_KUNIT_TEST
+>   	tristate "Integer exponentiation (int_pow) test" if !KUNIT_ALL_TESTS
+>   	depends on KUNIT
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-Caused by commit
-
-  eed9b1420907 ("Documentation: KVM: arm64: Describe VGICv3 registers writa=
-ble pre-init")
-
-I have reverted that commit for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/KprrsJ8NBy9QldrZb_cea=W
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiITHkACgkQAVBC80lX
-0Gw8CggAjByaNZy0QUPZymea4xAijNsebWi4eYv7myXTyyXOOZXqYpj/R+0wKe/b
-Lde99dbXB41aVXhK2yznNdF32REp45LOZboUtquWI98OwOaY+SJI/fVKQFbYB8g1
-Qwnna55JRn3FMhJD/d+EI+iy5tuuq9grsMx+mItUf6h0q2VYRc7o5NW+1cNs6O9B
-nlcfRqpuMGZJ3DbbBFD2BXypusivsBddk1cITSwsuzYN3mS4RxSiHZV9fKS69sfk
-AQ5G/2DOae4fv7Ktduq9fevzfzr91Hy7+nn+bpsYfrLZZ7iAIz+UlEnSjHvzV6mx
-mQi6MSc7N08KDHmkKwYdMZG3YZFOlw==
-=aG6k
------END PGP SIGNATURE-----
-
---Sig_/KprrsJ8NBy9QldrZb_cea=W--
 

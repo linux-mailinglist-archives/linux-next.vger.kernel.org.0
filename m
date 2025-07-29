@@ -1,97 +1,90 @@
-Return-Path: <linux-next+bounces-7752-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7753-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEC60B150D2
-	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 18:06:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47B20B15275
+	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 20:05:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C0D27A67E5
-	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 16:04:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C0FE162AE4
+	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 18:05:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D25231E3DCD;
-	Tue, 29 Jul 2025 16:06:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E3B92989A2;
+	Tue, 29 Jul 2025 18:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="p8ulU+Nf"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Zaa2WEx6"
 X-Original-To: linux-next@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B7810E9;
-	Tue, 29 Jul 2025 16:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F63318BC3D
+	for <linux-next@vger.kernel.org>; Tue, 29 Jul 2025 18:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753805164; cv=none; b=QWnBd0ppu4Vc9KRiBqls1LcVjD7nscULxSRLZm9VCXCyUbrw+QwsL2uBTC6OPL5Jh2gB7kKTROcXRnFommMRuft5dfHEA8bvauuvbwsBRM63KN2Hx46OqYUSy7VIE+/EE8yjVPyNndjhG5Fn+wMmLKVEOCE4OegnpkYHDmEtcTw=
+	t=1753812329; cv=none; b=cBKKwLsz+QMW+kQvt44szcUYLPOseuXFQrPymUn4IdY3uwI6/DxhdlRYIpYkgI6boCqa8ioVLiAiZOl1bQ/dTe6lQn+IpksgmDb/zd2LcpJlTJ5UCfvOBNqwLRFJDIw4/pAL01tcOOrrQZpMSQlp1BpaDTmued8mWbKafxj/6As=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753805164; c=relaxed/simple;
-	bh=CpB8GERMfYRs0+4ZAgyTxuIfXpQluNdMs0VJWf7CkzM=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=kV/TKacs3Oo3FIZfzUtmikGd5W4puyyD6ralS3YVos9JIm9l49fwtQFHKedzkl7xJ9wQChUrMVJkuvbwp8ICOWLaW+ivwUEzZxBlOJdPIWJXsNMh/5bRQ/RI86/u5MYQwVuU4f7i37OuazJVxZmWcgpPUcP4KOAU9gm7Mvm3SpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=p8ulU+Nf; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=Vj2Y5Htk0TdwQIPD29EKrTANnYA57kMQx2/+EiD5PZA=; b=p8ulU+Nfn7Z+lRd63HWUpZDRGu
-	3clUC0Bin8TVQ+eSuOwAVxh0/ug/HmZXpgolSMwzSQWgEO6xUFB0TEI5zTcAI5LCX2NDMn5Ck2JV9
-	p27oo3x2F8BM8zfzMD9+X15imt5minFPXuIBDyd1h0dbj+Rv/89ICAqkibrH+qblBRmrfRhlYfMSW
-	1DpcywvrUhRCZfj5rXtPqX4xOMx5KzefKZ7a3g3iNFWKa/0tHKcnRr9cYNdamQqJGcm//a664JS/5
-	vsuqTgysPb4stxN6Q5UY9epYGFcW7uIJOiq3AccMZhVDF/MEeVTehuzyVKzL1qxgNn/JkEodzvOOi
-	lXc7ihjA==;
-Received: from [50.53.25.54] (helo=[127.0.0.1])
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1ugmpv-0000000CefU-29Dl;
-	Tue, 29 Jul 2025 16:05:56 +0000
-Date: Tue, 29 Jul 2025 09:05:52 -0700
-From: Randy Dunlap <rdunlap@infradead.org>
-To: =?UTF-8?Q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>,
- Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-CC: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux DRI Development <dri-devel@lists.freedesktop.org>,
- linux-leds@vger.kernel.org
-Subject: Re: linux-next: Tree for Jul 29 (BACKLIGHT_KTD2801)
-User-Agent: K-9 Mail for Android
-In-Reply-To: <5002743.GXAFRqVoOG@radijator>
-References: <20250729153510.3781ac91@canb.auug.org.au> <b6c481bb-e854-405e-a428-90301789fe20@infradead.org> <5002743.GXAFRqVoOG@radijator>
-Message-ID: <B2E29C08-674C-4D8A-B187-7F6A6B5DC76F@infradead.org>
+	s=arc-20240116; t=1753812329; c=relaxed/simple;
+	bh=o2uOx/9DDXOjZds4QpTIR1dsdEDrzOwxn7GuDkknRh4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LBsxUFn3JqH+/UxJu9sgImY4bhrvjoqkZEBMP4b66GRRQ+1u9w2j4oDyTt9gvm8vx2hfr8EJ1IvmH4qkm0fzMVH/Rk7tbTe/awEvL5sxZ8tgC8NKbx1efRTZXQPjcPVYu8rsyU4nrPqbPUOoQDTwJfcgVWgI3UO0e3nPRqVqMug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Zaa2WEx6; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Tue, 29 Jul 2025 11:05:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1753812324;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nM4nlhGBKk9TJFfMI5coGlV3H5DaYYv57dOteLwW4qw=;
+	b=Zaa2WEx68vTu/qUljq/ttOoZqe7frdFhE0b6g+oUeyo49z5Y+DvcaWqfi50bjpOgIYAttH
+	jZBe/ah4scRE0jpZaEYlfEpkGYCioABp1EK7Ak+6coA+MLGq6lp72lk2Xl+HsWU9CMsfjo
+	6FCgdv/JwzXMM8OcoYiJjF2loAnFxxA=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Oliver Upton <oliver.upton@linux.dev>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Christoffer Dall <cdall@cs.columbia.edu>, Marc Zyngier <maz@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the kvm-arm tree
+Message-ID: <aIkNYWAwkA0vf2EQ@linux.dev>
+References: <20250729142217.0d4e64cd@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250729142217.0d4e64cd@canb.auug.org.au>
+X-Migadu-Flow: FLOW_OUT
 
-On July 29, 2025 2:18:16 AM PDT, "Duje Mihanovi=C4=87" <duje@dujemihanovic=
-=2Exyz> wrote:
->On Tuesday, 29 July 2025 10:32:13 Central European Summer Time Randy Dunl=
-ap=20
->wrote:
->> so BACKLIGHT_KTD2801 should:
->> 	depends on GPIOLIB
->
->Sounds good to me=2E
->
->> Also, in drivers/leds/Kconfig, does it need duplicate entries for this?
->> Can't the second entry be removed?
->> (asking since Duje made both entries)
->
->That's an oversight on my end, and as such the second one (the one inside=
- the=20
->"if NEW_LEDS" block) should be removed=2E
->
->Would you like me to send a patch to fix these?
+On Tue, Jul 29, 2025 at 02:22:17PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the kvm-arm tree, today's linux-next build (htmldocs)
+> failed like this:
+> 
+> Using /home/sfr/kernels/next/next/scripts/kernel-doc.pl
+> 
+> Sphinx parallel build error:
+> docutils.utils.SystemMessage: Documentation/virt/kvm/devices/arm-vgic-v3.rst:128: (SEVERE/4) Unexpected section title or transition.
+> 
+> =====================
+> 
+> Caused by commit
+> 
+>   eed9b1420907 ("Documentation: KVM: arm64: Describe VGICv3 registers writable pre-init")
+> 
+> I have reverted that commit for today.
 
-Yes, please=2E=20
-Thanks=2E=20
+Thanks for taking care of this. Paolo has queued the fix after pulling
+from kvmarm, should go away tomorrow.
 
+https://git.kernel.org/pub/scm/virt/kvm/kvm.git/commit/?h=next&id=6836e1f30fe90e4c19f6a3749e97ba1e44a840ef
 
-
-~Randy
+Best,
+Oliver
 

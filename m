@@ -1,127 +1,142 @@
-Return-Path: <linux-next+bounces-7760-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7761-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1A7EB155DF
-	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 01:21:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1D2DB155F4
+	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 01:27:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FA3616C48D
-	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 23:21:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0597716680B
+	for <lists+linux-next@lfdr.de>; Tue, 29 Jul 2025 23:27:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A160F27816B;
-	Tue, 29 Jul 2025 23:21:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0814C285042;
+	Tue, 29 Jul 2025 23:27:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PjDkBChr"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tU7aTxra"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8842C111A8;
-	Tue, 29 Jul 2025 23:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B62319D8BC;
+	Tue, 29 Jul 2025 23:27:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753831281; cv=none; b=ec3O/nuZUepTyLudjv9YYmIXOgzRwPSh3mN2mE1qU+hz2VZipTxgQkfa4OEWDdijalqMeGgh6LXpd9XlIm8nzgWYnC2P9f0EmW/fn7APMC6BJhMuqUB2COee+BtSkOKv57ke/g53P1aWfVgObokVP5uFEtTEIn3BzPFszf595ks=
+	t=1753831672; cv=none; b=NY2v/2Oj1Pke/YjdK+6iFwt1CMKta4mmX67LWaeg5Pcss4/yzbtJYteS4edUls9otQ51OXP4lrRhnI/4qCnUZAeSkukexwBL7s7pZMcUSd7XnpRgiYDqT6zMiQDkxlwxIzRyK4zbYzEQbO9ZJG/Ts3jS20sAse3UDp3NBUa4EVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753831281; c=relaxed/simple;
-	bh=4q/ctHPDc+JUlxtdQ+w2LMxH74RHELm1Y4rGpvfoVvM=;
+	s=arc-20240116; t=1753831672; c=relaxed/simple;
+	bh=uwSpHf7Svq/Z+HcDlHfqihJ9wMTLx3vVkNJZ8UnB8Ko=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mGA+XzolVKaassJOylOyg/G5S4omIn1b+Msu5Cx6vfoLO3J4H4XpyZbSNTKtY5Rwu/SNWaGQvw44scUsJco6uf+12vhPbkg6Pfrek8HaeYqwVkaK6iq39pXGoVcJytSZq4ypB0wHzhspyLj8EfwQLc2JVLGRMh32Jfvv94j8FWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=PjDkBChr; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=rKrR/7hlflnO5V1zOkUPsBYXiCbChthj9KHPuO2taafOfbr+vZ4y2FEaflNELkjjcxfTRCxDeRtJyiap4e6o00N4sHR3Um4GTZFJXhuLnrkrdNOeW3oi0HevFEuAbhDcxOPoR6ivJ/O/O/d4HZvg7RBEkOwYu00yyTxerObuxAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tU7aTxra; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1753831062;
-	bh=g+wqqBr//Ejw8+yRcgKFpbIa0Ch9PxhKUQTYkC2V2IU=;
+	s=202503; t=1753831455;
+	bh=6mTBlnRa8PfraSaaxyB4E03DncCpm/bdVtGK3eHDw28=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=PjDkBChr8mR+Cttka4jefw7w62zrz7MUj9yWMANLGnwV6hs1wbE/1ci2RzL3EnT+K
-	 J6hXrv8TXM6oI0MxvD3WWVkhjDOuCR3N/AOFy9kb/Vy4r2j2GiaJx+iuS035ObgI7U
-	 CYfYc7BerjwnK/TtNDcplJaAqVmoU1sJfIBkDseOqHSIoHT1xIGOeDlrBNoTuYCDzn
-	 Cp9zaoo8AYfUHhZ//YGD/7S1TFQKO8x82iBYUepdxFDzSSfa2yke87ofFc8O/dpH7J
-	 HLJb0vHnmDNTy6hiIaBQ93rsIXgDoIXWdP4DhL6YSRWE4mnR1pbuJuPyfYV4Efmbh7
-	 RgsmTV+gtqbtA==
+	b=tU7aTxranuaaz+DwfXamuiJ/PpaLzLGSReMsdUZgXmLOHRlhUihAJRQ7xeG8ET8N6
+	 BSjXVXF/DsVBMbT4Xtr+uziHC7jNV1ezuY9hTGjoyk23SgzBNLVuHIisuslBFUW+qo
+	 HNaVzs5PQzB9eAJQu6ZPsHzyz+b0E1FAEv4PW557NRP3JGnAbOVh8IS7PdqEPbLHWn
+	 fu6Y0VaZOvSKML3e2A0XLJPg1TlpFYzdTmV0bnCK6dJOG3pQwBh5jySLSr34HeveKh
+	 mjcX6P11IzxTM6EhbGULbzRkJYZrQ1J4JEFBCv2oTgXrlmC2ZopXyVx/MSP102qDi6
+	 P12CytnqSM31Q==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bsB8P63Ftz4wb0;
-	Wed, 30 Jul 2025 09:17:41 +1000 (AEST)
-Date: Wed, 30 Jul 2025 09:21:13 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bsBHy73Dcz4w2R;
+	Wed, 30 Jul 2025 09:24:14 +1000 (AEST)
+Date: Wed, 30 Jul 2025 09:27:46 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Networking
- <netdev@vger.kernel.org>, Linux Kernel Mailing List
+To: Dave Airlie <airlied@redhat.com>
+Cc: Greg KH <greg@kroah.com>, Danilo Krummrich <dakr@kernel.org>, Alexandre
+ Courbot <acourbot@nvidia.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Raju Rangoju <Raju.Rangoju@amd.com>
-Subject: Re: linux-next: manual merge of the tip tree with the net-next tree
-Message-ID: <20250730092113.0c9cc43f@canb.auug.org.au>
-In-Reply-To: <20250722114246.2c683a44@canb.auug.org.au>
-References: <20250722114246.2c683a44@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, DRI <dri-devel@lists.freedesktop.org>
+Subject: Re: linux-next: manual merge of the driver-core tree with the
+ drm-nova tree
+Message-ID: <20250730092746.1576eaa3@canb.auug.org.au>
+In-Reply-To: <20250701155159.47b914a3@canb.auug.org.au>
+References: <20250701155159.47b914a3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IeIBYXYcuqeFqkvlsjBZ79Y";
+Content-Type: multipart/signed; boundary="Sig_/AMgr8NzSUK_p=U_yMkTt9h=";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/IeIBYXYcuqeFqkvlsjBZ79Y
+--Sig_/AMgr8NzSUK_p=U_yMkTt9h=
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 22 Jul 2025 11:42:46 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Tue, 1 Jul 2025 15:51:59 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >=20
-> Today's linux-next merge of the tip tree got a conflict in:
+> Today's linux-next merge of the driver-core tree got a conflict in:
 >=20
->   drivers/net/ethernet/amd/xgbe/xgbe-ptp.c
+>   drivers/gpu/nova-core/driver.rs
 >=20
 > between commit:
 >=20
->   fbd47be098b5 ("amd-xgbe: add hardware PTP timestamping support")
+>   94a08721435c ("gpu: nova-core: increase BAR0 size to 16MB")
 >=20
-> from the net-next tree and commit:
+> from the drm-nova tree and commit:
 >=20
->   e78f70bad29c ("time/timecounter: Fix the lie that struct cyclecounter i=
-s const")
+>   f5d3ef25d238 ("rust: devres: get rid of Devres' inner Arc")
 >=20
-> from the tip tree.
+> from the driver-core tree.
 >=20
-> I fixed it up (the former removed the function updated by the latter) and
-> can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+>=20
+> diff --cc drivers/gpu/nova-core/driver.rs
+> index 518ef8739550,110f2b355db4..000000000000
+> --- a/drivers/gpu/nova-core/driver.rs
+> +++ b/drivers/gpu/nova-core/driver.rs
+> @@@ -1,6 -1,6 +1,6 @@@
+>   // SPDX-License-Identifier: GPL-2.0
+>  =20
+> - use kernel::{auxiliary, bindings, c_str, device::Core, pci, prelude::*,=
+ sizes::SZ_16M};
+>  -use kernel::{auxiliary, bindings, c_str, device::Core, pci, prelude::*,=
+ sync::Arc};
+> ++use kernel::{auxiliary, bindings, c_str, device::Core, pci, prelude::*,=
+ sizes::SZ_16M, sync::Arc};
+>  =20
+>   use crate::gpu::Gpu;
+>  =20
 
-This is now a conflict between the net-next tree and Linus' tree.
+This is now a conflict between the drm tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/IeIBYXYcuqeFqkvlsjBZ79Y
+--Sig_/AMgr8NzSUK_p=U_yMkTt9h=
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiJV2oACgkQAVBC80lX
-0GykFggAhcQKtzGOGIRQOVB392aAfVTUu+HZISqd9Hj8HcVoZH3CmQ2o75BJKqlt
-is0w+hmBvJJiq6ZrK08xC/K3yeNMG1CLSQe1IKjdi7xEcMpnqyutgWKPVQXR3i7K
-wmc0ygj26RmJloeh4lKLSjCB387fW7wEBPL8cnUSXwJBIC+u6f/qnN/Z/O5t2ut6
-fgF/EjfshNOg2LW4NnWWcb0R75fpTlPgAgEUb0xAQl+PI/h5QAYgAvTHdZWxl9Mq
-0rU3tYjHnr/TD53QDT/i+W8w22n45aVkyUiddSLZNMUF6eLt0zMpVrDhwVKPo5Ok
-sWwbeCNHivIqwuk3A8CJeBsGVTra4w==
-=fLtq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiJWPIACgkQAVBC80lX
+0Gwbcgf/RCYzMVrfgLKrYwOzn0BcMoNWMGL7Z5Ew3wMyRelaWSOrkIvFHSL6m290
+luqRdmfLxE1SPmZfD1mfW7f4sxEbzixFa0n8LCkGr+1NtfgMryLYrLAje9o1Tz5w
+QvlFxuBSifzmMV4EKTSoKW6PLc1Ay9rQgk0ACcKkZ/QGBhVwqotFzLZElwTR5y5m
+wjF0s0b8wTwqEl76qhkHRDS9ILaaA8XLQwWL3Hxy8IILm9siVQlngRsa+au1HqHf
+HazP4ciXAWVkm4kxxLPg+z/mXlln7uGozB5m7Jn137tEjtAhhjQipKqiCQsx23pj
+8wT6Jvwv/t/4+CVZJZ3GnL2nDEmiag==
+=xobR
 -----END PGP SIGNATURE-----
 
---Sig_/IeIBYXYcuqeFqkvlsjBZ79Y--
+--Sig_/AMgr8NzSUK_p=U_yMkTt9h=--
 

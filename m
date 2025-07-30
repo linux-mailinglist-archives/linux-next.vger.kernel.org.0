@@ -1,142 +1,96 @@
-Return-Path: <linux-next+bounces-7772-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7773-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 107ACB1603A
-	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 14:23:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33019B160E9
+	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 15:01:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 412B61884B38
-	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 12:22:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72508566CFB
+	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 13:01:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C49C042A82;
-	Wed, 30 Jul 2025 12:22:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DFE11B0420;
+	Wed, 30 Jul 2025 13:01:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LIxdnV8k"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="lA595RJB"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC2D2E36F9
-	for <linux-next@vger.kernel.org>; Wed, 30 Jul 2025 12:22:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835FE17C220;
+	Wed, 30 Jul 2025 13:01:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753878152; cv=none; b=E2d3y4Zv/2O6X//gZw6NgZlmTl+fEcJkeXTrk5f5SzU4VAb++rVJAESZ3N0VCaaZH+sgF6PIeAxQRD1OJnzhK7dIiRBAqTaWoSVqZxnLwfRqUndMVYcUj6if4kjL1+CsF3PR1Jg8SEZyW9iVNaH0iCJDp/wGFQHay+prb8NtcWI=
+	t=1753880485; cv=none; b=T+Nh84+hihMS93dmIzPysSy2LPSYN5jtvyWrztcINakRKBW4ac0bIiSP59iU7Wd3w9WzHA5409C23s/d1ue0zMmr9l6Jvda/cJfIgctuaWFnHfVn+SO487aQwEPGNNSMSpcYlyhg7aX/uioP2aKR8C8+P1ZfiBRKOkqh4Q5dDv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753878152; c=relaxed/simple;
-	bh=EM2SeeEDeL1kFD6kgQfv5p7+jZ0ToNtVz+ZdTeIR22g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XxQJ0YeyV5S6MgZOzddX+ab2Vcb0+u+2gKhBeVfe/+e37Z1DC9y4QLFTX2E/Ztt3KvC70wV19w61Na+EApPHUT9St6BXQD+ORh9F1a8sGn4v56AUMCrru8SqQ9/vbV6fQSeRKx9rYHL5TBDJljJQQiIsLidJ3RM16TbxCpw5ibk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LIxdnV8k; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4561514c7f0so63135095e9.0
-        for <linux-next@vger.kernel.org>; Wed, 30 Jul 2025 05:22:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1753878149; x=1754482949; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lUEKxJ5rgjXe1YyHgv4NRENeR2LO4lvKY16JCFZwTMM=;
-        b=LIxdnV8kCrMKGgqQ5Bv/xbqFtCQzWjjwm/QU5/ONatS7oxPEubepeB+84Q8x7o+Pve
-         LRRgyJLZogPyRFOnnjte3+ofVIWrzVGNWYFMNeHrsYf0rJl3CM/GwZ1LBuSHFAe+d/nO
-         LohKWbka6nTwCGhpQhac0CzQthPfwJe4SdZmhxEBEuC5JBu405uvS8SzMFD5o4O0vuop
-         8T+hMhD6VK3vodtT2CmTbfjTRA57kfJbRrLQOhBZc85ZAWlyiv2IrgMCHrUxUa0yCVyY
-         RDfpzCpzDlFj2P+BjJL5ND4Cxh04piLFzjTrpMrc7IDoaWfUalUvgS4qjpJnqWs603a7
-         QJcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753878149; x=1754482949;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lUEKxJ5rgjXe1YyHgv4NRENeR2LO4lvKY16JCFZwTMM=;
-        b=o5zxXMgp3PU+iiUA9ihTuturlKOse67gBPUBfAiJyH871k/5UtYc+e9qqCFq0Y2jYK
-         laS6+kshzoZuzjdTwfVShSdp3lxnkYS+Wo+iAUqelJH59wSf+cqpPlAC9L2WuCeuySlW
-         T9p8QneCC3YFYduzxyaAfKoDQ81DVm/8cQVQTBf8mCTMeFGPUBCJVdpr2rUt/jUdSUvH
-         scql3lIDP+Z8mog579V09mZPb8AI+8fi2tSWW367mSGdNObG5tT7voHzeuymffUERcjI
-         5+FSa3Tz5esdbvSC1TY/QpKZGWs9rK31kucoS5rRIfjX7O3gN14/OHRDW42B1TIr7gYd
-         zGNA==
-X-Forwarded-Encrypted: i=1; AJvYcCWUCpdOtWxk0ZiHQhgelUhAE8rI75H3MZvP2WG5pytSwEWGNmnQcdrWMrYBnsfWKwi9t7onxY3I5y7p@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3kfLcdXlmpy7YxZ5hkv8/+1st7VKg10212xz8GV4MRQCqjxjo
-	ekRpPLc9i3yx/ed25Ttq3OK2elNPSIXlm/UklhBOJGB9yRaYF3jUg0hHuT0L/Sm6tcI=
-X-Gm-Gg: ASbGncuV6mKV47tEI8VknQIdO+gzW1ybh35nSBeqXaeeZ7QKlYOmFVPGLFUWS6KOnZ9
-	piCtuOMFMqCRmbpHPhdnvROMHjVzWEdijOe6QX3uWGzrOqdl4At/t5n2Zo5w/vhu5NThJTYIAVT
-	GpNBBOa6UmcaaKnmJXNbVudaCwKQF0sxMI9/48LYUZpbaF+goiLqolnbxsYqHP/R0NKVlZsf3v7
-	5YZX8B2Azfl5GlQC8S0xCyDtxr5gAA+tGhRgXO6nVBOrKY7pP5PLjK+ktvuxiJEHfa702bctvDA
-	r3UrV4tC6vH91WOkZVQgCudKh3C1hVW53esG5p7RcciCxUHskapXGf2XOMRCnuzaw0VhoC6IsM+
-	O0qWgiZcjzEbGGU/rnmnQkUjhFZC0F7mVB0c5kXxti9css2MjtXTvAncEb8x5ZA==
-X-Google-Smtp-Source: AGHT+IFHgIPDAvCDwsGBDdTU9OFJARdnfPOtF5aFPjgRrA/x3zrrr25gAt3sbRb8qonK3Xud+Sbecw==
-X-Received: by 2002:a05:600c:1da6:b0:458:6733:fb43 with SMTP id 5b1f17b1804b1-45892bbf7f3mr28149845e9.19.1753878149097;
-        Wed, 30 Jul 2025 05:22:29 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4588dd375e0sm45991465e9.2.2025.07.30.05.22.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Jul 2025 05:22:28 -0700 (PDT)
-Message-ID: <e8e2bc93-1639-433d-9689-d1ce9f28b877@linaro.org>
-Date: Wed, 30 Jul 2025 14:22:27 +0200
+	s=arc-20240116; t=1753880485; c=relaxed/simple;
+	bh=20+yCl0UgV7MQtrmNVtfYxhv9J8TWXYL2c/YM07XBi0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=DOg5H23E6mtuWoMynkrcfAMgKMbZxOdSSdra45BAyifcMhmrK61BjvvG5P3M7SVwQqKoIXPIY5f40OLemkuJaXlj8mw+GkNUFl2UjIVfP8VflBkW3Sxvirsc3nZilSwe/NHGxctqENLMJFbYhotvleCDn1mj0efEjbCgLjYiWOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=lA595RJB; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 77DE340AB3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1753880482; bh=FxcW5AfQBhvjZrDjimNxBz0i81/wjNEByJW8vvVde5o=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=lA595RJBybnULCZpOmXQwqCuUmLbELW+ZzKl4dROmbltJ0rWJ6gs7712S6NfboGIp
+	 btbdYE0JD+x1r2Gfy8vV0lDhqoAWNqMtFVDbpeStCcujRnqQdGny/B3/+fUj1stQoA
+	 GoN42GixCjGr5V1qnHDYuZDRh8F9H1c7b2mtbobrIOvF2Y4y68OHZjoKXnhTwc/q9d
+	 SU/kejmxrbQsBN8fQjK5UyO7ipfV5k5tmb7hYMnj7GkFK61JLxdWvnBJws1UUbXXVQ
+	 TnfFM5A3ssSTffP0ZlrHZ5ux/9G+eIqbVz+ok7NhP7aO2L7tqYMSwhHHbMKvOd8Nep
+	 O8RqO3iJ8GE5w==
+Received: from localhost (unknown [IPv6:2601:280:4600:2da9::1fe])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id 77DE340AB3;
+	Wed, 30 Jul 2025 13:01:22 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Madhavan Srinivasan
+ <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>
+Cc: PowerPC <linuxppc-dev@lists.ozlabs.org>, Vishal Parmar
+ <vishistriker@gmail.com>, Brigham Campbell <me@brighamcampbell.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the jc_docs tree
+In-Reply-To: <20250730102931.6334022c@canb.auug.org.au>
+References: <20250730102931.6334022c@canb.auug.org.au>
+Date: Wed, 30 Jul 2025 07:01:21 -0600
+Message-ID: <87cy9hx272.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build warning after merge of the clockevents tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Donghoon Yu <hoony.yu@samsung.com>,
- Will McVicker <willmcvicker@google.com>,
- Youngmin Nam <youngmin.nam@samsung.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-References: <20250716160809.30045a56@canb.auug.org.au>
- <20250729114037.03a2d884@canb.auug.org.au>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20250729114037.03a2d884@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-On 29/07/2025 03:40, Stephen Rothwell wrote:
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+
 > Hi all,
-> 
-> On Wed, 16 Jul 2025 16:08:09 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> After merging the clockevents tree, today's linux-next build (arm
->> multi_v7_defconfig) produced this warning:
->>
->> WARNING: modpost: vmlinux: section mismatch in reference: mct_init_dt+0x324 (section: .text) -> register_current_timer_delay (section: .init.text)
->> WARNING: modpost: vmlinux: section mismatch in reference: mct_init_dt+0x4c4 (section: .text) -> register_current_timer_delay (section: .init.text)
->>
->> Introduced by commit
->>
->>    5d86e479193b ("clocksource/drivers/exynos_mct: Add module support")
->>
->> and possibly
->>
->>    7e477e9c4eb4 ("clocksource/drivers/exynos_mct: Fix section mismatch from the module conversion")
->>
->> For this build,
->>
->> CONFIG_CLKSRC_EXYNOS_MCT=y
-> 
-> I am still seeing these warnings.  The above commit is now also commit
-> 
->    338007c44c7f ("clocksource/drivers/exynos_mct: Add module support")
-> 
-> in the tip tree.
+>
+> After merging the jc_docs tree, today's linux-next build (htmldocs)
+> produced this warning:
+>
+> Documentation/arch/powerpc/index.rst:7: WARNING: duplicated entry found in toctree: arch/powerpc/htm
+>
+> Introduced by commit
+>
+>   c361f76da696 ("docs: powerpc: Add htm.rst to table of contents")
+>
+> interacting with commit
+>
+>   19122a7c28ed ("docs: powerpc: add htm.rst to toctree")
+>
+> from the powerpc tree.
 
-This should be fixed now.
+Did that just get added there?  I've had that fix since early June...I'd
+rather not drop it (and have to redo my 6.17 pull request) now if
+possible...
 
-Also the clockevent branch has been reset.
+Thanks,
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+jon
 

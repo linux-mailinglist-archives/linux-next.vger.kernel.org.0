@@ -1,111 +1,117 @@
-Return-Path: <linux-next+bounces-7763-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7764-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BE49B1567F
-	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 02:29:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AF34B158C3
+	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 08:12:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31D493AF6D8
-	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 00:29:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 112B87A4BCC
+	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 06:11:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59D2D84D13;
-	Wed, 30 Jul 2025 00:29:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E7831EDA2F;
+	Wed, 30 Jul 2025 06:12:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="RE0Nqw9k"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="rPfTo4pH"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7E2290F;
-	Wed, 30 Jul 2025 00:29:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FDB1BA33;
+	Wed, 30 Jul 2025 06:12:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753835383; cv=none; b=UCw7Orpm2XHfbRkkrjWb93iejG0iJW0OBmJIM1x3sN69F6Gpp6C28c4IxiSOP2LAFhw8BBr0maKMeurBid+3nlpWHRCw+gpWtUSXJQtUpYYt3NPW3w3Qp9dIfwIm6Gep74gC+hriNNdxiesyGBSVkQfNZ+UguZL3S4C4uIJJp1c=
+	t=1753855957; cv=none; b=SUs/k6zHMxIdqH/vWtfLy3iuDORcdNOnG6eV7SVIktz7XewLxR7PUgHvXuq7nUepGm+wU5VKo8p9tnyLY0efQ+SJaqKgr2+qGSwTpJzoI7c/+Fk3T8xHOfoSshFV/MPTOeaC+e/3CgbdTz22hpM1DLwyzYzFcvw0AhAiPKNsuYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753835383; c=relaxed/simple;
-	bh=XYFasknZk32uGAKl7LQ+hveZuZNsa9AOC5PeoM1d/7c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=djttYE4L2HwRqmxg47721CyBhHdO92O/lkvEtGoayIBSCrOwQV6iVsF/5P6AHZw0g9nBThbjllXIcp6MEip9J/JcubXQj0dnrAYNhUdjrP1Jn4aNVpzEXrywfBgcuh3ix2eb0M2S3cMMfNPw1s8Gd8CLYZo1c5bI3HKsssik8VQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=RE0Nqw9k; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1753855957; c=relaxed/simple;
+	bh=2BT1Z1S6iTeykHNqXcrkycusX5E0ggnIMrBS7ppZ0T0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=juD3TZhGfmCxRDtKJjruJ52lle17DhN8RcXBtc8b+h0HccxevHQeu72Yd6U4btmpVhTwsYkA5Hhkpokrqg+owqWMqdgG9C/D843R+ixxgcWoWupj3I3mxhCSmEVLj9oI//O3+S7l+po15xgSo/zZdKprn8/dyFHNZthf2DdQuwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=rPfTo4pH; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1753835159;
-	bh=MSlCwx1gEE9AsSIwltpcL7wIUH0dl9DJ7I/zv5IelgI=;
+	s=202503; t=1753855728;
+	bh=ia/2yOai/k/V9kw8CqqoTrNjod81er8ho8pfFmXLZjQ=;
 	h=Date:From:To:Cc:Subject:From;
-	b=RE0Nqw9kcjufROkpz27ymZSMU+o4YUvSdd5R0TITTjByUgYfAPi3OUeh6mgXylH6v
-	 hQHLyXYFnjFMJkPaOYv69n93Mf86PCSoqJEKCM0fhz9DIAoUKU/ZgeafN7/w9IXXyk
-	 mCo7L9n+iB7DctQRQNzeOk/vxasTcVpNlX1ecdgvPen54wbhIhVYIoCW4eWhEQ8UEr
-	 MIOxA86hqrL4icnFTcbB3CO0GbeKAJpYkuknhCz4NnF2b2qd1qYfbJSLZLpCahjza4
-	 Aj6tYTHckacQamGDdJ4bSogzbHWnXJVCPvlaqaehdydZhAMmZn+YcS9aG6rz3T+Xij
-	 oeT+Q6CDpcI+Q==
+	b=rPfTo4pHZqeEFVDPq2bk3GjX0WV6T68u3opdSKjjObDuQ6FR2qrdAYMpjTByCw01g
+	 FtjeVZOj/5eLmXmAftKdsnB3AqOmzWR4O9obkxwsZIqPEQnzeOwVle0+KKuNdZM2vT
+	 LRPnDognL/8g/ykbfa5JTTyWpnyxdHIu2vGozXWflw846hREDcIiYzPo2150oVhzvQ
+	 37T6nUBr/P1pDpdTt5BmNTFr+Oh18irEsBrt8DFa9+khVm12cmVuODbZAfgnxfU3Y5
+	 sDptOdFMVrTFmdHaQJpIxvjxyLOcMpGrOcQ2F4G8UXIePj+cQ+omkvRTCyj7Kyw6Xr
+	 nerh64CEAh23A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bsCgC1r9Vz4wbY;
-	Wed, 30 Jul 2025 10:25:58 +1000 (AEST)
-Date: Wed, 30 Jul 2025 10:29:31 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4bsMGm5gWrz4x4m;
+	Wed, 30 Jul 2025 16:08:48 +1000 (AEST)
+Date: Wed, 30 Jul 2025 16:12:23 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan
- <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>
-Cc: PowerPC <linuxppc-dev@lists.ozlabs.org>, Vishal Parmar
- <vishistriker@gmail.com>, Brigham Campbell <me@brighamcampbell.com>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Alexey Gladkov <legion@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the jc_docs tree
-Message-ID: <20250730102931.6334022c@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the kbuild tree
+Message-ID: <20250730161223.63783458@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+/tkyWy/rkEDMHrJaY+v0_9";
+Content-Type: multipart/signed; boundary="Sig_/2KKpC_ADqE0_dTk/f=fyqn2";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/+/tkyWy/rkEDMHrJaY+v0_9
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/2KKpC_ADqE0_dTk/f=fyqn2
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the jc_docs tree, today's linux-next build (htmldocs)
-produced this warning:
+After merging the kbuild tree, today's linux-next build (i386 defconfig)
+failed like this:
 
-Documentation/arch/powerpc/index.rst:7: WARNING: duplicated entry found in =
-toctree: arch/powerpc/htm
+ld: .vmlinux.export.o: in function `__ksymtab___builtin_memcmp':
+.vmlinux.export.c:(___ksymtab+__builtin_memcmp+0x0): undefined reference to=
+ `__builtin_memcmp'
 
-Introduced by commit
+Caused by commit
 
-  c361f76da696 ("docs: powerpc: Add htm.rst to table of contents")
+  c4b487ddc51f ("modpost: Create modalias for builtin modules")
 
-interacting with commit
+I have reverted that commit, along with its parent and child, for
+today.  It's parent commit
 
-  19122a7c28ed ("docs: powerpc: add htm.rst to toctree")
+  66ef3890c628 ("modpost: Add modname to mod_device_table alias")
 
-from the powerpc tree.
+generated this warning in the i386 defconfig build:
+
+scripts/mod/file2alias.c: In function =E2=80=98handle_moddevtable=E2=80=99:
+scripts/mod/file2alias.c:1480:25: warning: variable =E2=80=98modnamelen=E2=
+=80=99 set but not used [-Wunused-but-set-variable]
+ 1480 |         size_t typelen, modnamelen;
+      |                         ^~~~~~~~~~
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+/tkyWy/rkEDMHrJaY+v0_9
+--Sig_/2KKpC_ADqE0_dTk/f=fyqn2
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiJZ2wACgkQAVBC80lX
-0GyFgAf/e8O/qM6WHKkMC0MFGF2+dwbIDoaQrTn+Gz9GVqE/w/+4A3ObPaxNLivb
-OilnG1b0HtuXqwfhMZ02wD2SpkaqNqs4a7HPVLFRaNjLoul4EjQcEcsYBXyYcwJU
-mXz5ZLBMPuut5MJUrLHF3HnTIKp6ajtTgnJ3H54AnFVMo8cjI5G3lkTjaE2jspzI
-CZNjygQA1QBNYyn8YGgVhf2eQBl+XunHkb0kSY7J/9/saoRyAPHYOz3EAzD4hsP9
-cdCmAchh7JxheeJvvTjM6ju3ZIBff+u/Ff+zJmsfwEfAbZYU2IVFuFAg4b8Qenmx
-QC53XTdsOIRtrvXZLpqybDZSUuf59g==
-=zwVq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiJt8cACgkQAVBC80lX
+0GwiTgf/f9eQSsRuk8FCGxMnbQHwpvuDY5Pn8YbM5i7ZIAixBXNiH7iyOJeOXCox
+THtel9d2OmUKjSblitpOLQPAVhZI2uHhAc/8oKLFjGTMYJoxAq2nsxYVKJ2EkI75
+p6NGcnTteIFMqP9KiC+8XcAgxSAcf+1O1QwLKtR9O9RqUW2sWEHvG9KucQtK0JxZ
+IO4Lu8GQXmk8soXZnjher5nDho5Lv5MeX1zWIO2E3p8zW89Z9N1wOtuBp6YB2b5/
+px2iUSJnibjPrm8XKjQi+7TwyvfiyofQo7dQhF6sLgapUE4WQGRZqRacsShXqVIQ
+znnjbJzSC15C9OrlPXBVWSxUqsBbrA==
+=b87L
 -----END PGP SIGNATURE-----
 
---Sig_/+/tkyWy/rkEDMHrJaY+v0_9--
+--Sig_/2KKpC_ADqE0_dTk/f=fyqn2--
 

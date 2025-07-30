@@ -1,114 +1,147 @@
-Return-Path: <linux-next+bounces-7781-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7782-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A084B16372
-	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 17:14:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CB03B1667C
+	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 20:45:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8866A189849F
-	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 15:14:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD77516386F
+	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 18:45:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E83F8277036;
-	Wed, 30 Jul 2025 15:14:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 026891F37C5;
+	Wed, 30 Jul 2025 18:45:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="aLKsDrfg"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="ArWMqwR7";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hiKK4tUW"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C012DC345;
-	Wed, 30 Jul 2025 15:14:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D9CABE6C;
+	Wed, 30 Jul 2025 18:45:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753888455; cv=none; b=IjJjU2b2Z1fClvXStYweK6E7f3IpU6eCFjXkye3wc2/nO+kaF9J1wtcmjqL5RJMxa+OX7iMgukDLi4AsiQkAfURhQ781PqD9JwRoEFfW6WCK1haLG2CK5npz7EbiDU5bwYSF4XKMydLZlN4kwKq8vTCsMvT6tNm75RqlEtZO1S8=
+	t=1753901145; cv=none; b=Ty3CYneJNEwx73umpBKottwtT4MXnLSXtPYB2CpPAlEF0wC+vq4sJf/kVOztNbm+FGsqDdf9q6mwwa3ePwSqGxoAC6CPx1jEbx/zBvfMz8beXj5+upZPEz31PgoJsBbuW4XgHF4f2MSx9xE7AwuqPkp6EOlWmj4V2mviPRUIh+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753888455; c=relaxed/simple;
-	bh=rXgxOJXKazwcCCy2Fo+fCW58qMIKsjE4k03ekkUv2ME=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r3YTxfUCRsW1T7Qrb4k7T1egcLbMYP+3bx5UkWTjqW7ou6wYQsXU344oVZ4tBweVOPbe4rBn93SfLD1GjU7K7BN0uVN5HuM0cwlfL+ZIw9r7/82/EsuIic4+TLeOpDRrAWnozZSSrzkD20dhnthbArPsDDta11ru7FyciGxFHR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=aLKsDrfg; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=m+oXDpSbXkFh02pwXQyjxgNWqMEN7+TwK51jzavy4dI=; b=aLKsDrfgV3sov/S+dwotba19Rr
-	NSv7IwEYsciotk4atSDJHXMTBFeSjc3JdOf5RA3qyzMIZ0kQYfUtDNlTPtzZoUlQ2W4f7NhMnY00A
-	6Rcip4sjW0bCZBtxgXIlU4AbJta+AERHElD/pHf4ndlnYATDk4QBpVjwEDiY8oSwROZRydRu3yaTb
-	dzXbcwVOvxMOSzQptRDj/mFimyhWizXZ7ez9UtCfeHBZVK0ZsuKO+fccFFNGrPAa5htWjgciTKp+Q
-	jEcZlLepI7SKxc5DVbO2only1mreG1D+Kde/Xbnhnbsjz1JURzGwm5waVYXMcr6T/S2cyQwQiodho
-	GIrMrxyQ==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uh8VK-00000001pES-3Y92;
-	Wed, 30 Jul 2025 15:14:06 +0000
-Message-ID: <7cedcdd9-c89e-4194-98ad-d3426a240863@infradead.org>
-Date: Wed, 30 Jul 2025 08:14:05 -0700
+	s=arc-20240116; t=1753901145; c=relaxed/simple;
+	bh=DML+pxg5472XMdWo/I3gaHRPJpUv/4fnoxH1XWFvbfE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=FWKsApg47l7NJ+zKxEsaLUCUZZks6OaVOHl8wacwCgpIdrV/oJ5544KDZ/FYVkhvVz/HNQq4tU8I6KF14nwTTlIzudbS7nhY1qeZnPU0nYWSO+DlcgivIyyYwh051iNW35oRC89SXvVdEHvNKCWO1OYM+zoyjy5LHN+7NAAYVVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=ArWMqwR7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hiKK4tUW; arc=none smtp.client-ip=202.12.124.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 11F761D0043E;
+	Wed, 30 Jul 2025 14:45:42 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Wed, 30 Jul 2025 14:45:42 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1753901141;
+	 x=1753987541; bh=/r6ceY6wuLmPZxO2obp4/gZdNM/4IXxHbonw4d2nQfE=; b=
+	ArWMqwR7hD/w3J7bUCFuYrLZ0HhCHqnrWbhyP9BMFTm4mVMZqAgQXEShxcJG4Ixc
+	BxC8QnsMVChteLA+HQSqbqiQZlOKbYI/G5Z8ANgYh1jGZ9Pal9jF58lUwuBE/Ajm
+	Li4IpppdpFamfWhnTSheYPmAadCP1HC4115+ngguegX1Zq2eDOhm7UJNUBMee1Sx
+	DjnoI7tmrTbvI5TByJP9V2i8HnQmeWYZMkd0dgGFDn+joPpG3HORYQoHwAS9w45/
+	ft2d5BpjffF1plJJF7iip8c+OriCOloRnNxgAKU3YfqrF5RQ0LgaHVvYKZbP0UDp
+	eBjOIzKZHaqPLbRSycDatg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1753901141; x=
+	1753987541; bh=/r6ceY6wuLmPZxO2obp4/gZdNM/4IXxHbonw4d2nQfE=; b=h
+	iKK4tUWkuF4NE53qXW3FYuI9zWT/7elSOZ19zYsdxd3/4I/WAcvIR0riPUDInqRF
+	XrOYokynhJuwKQTWuSYDoIrKR2bA01L2fhldxJ1E+U9YdqhYLjxUjtDRiY0svDLc
+	00MiUtPOLetvD9UHgdeNeQsMu2WdvxU0Tire7QVFCKVieZM7+a+ZU/cfj1OSs9Bx
+	ags8ezt1CijxjQhFr/8CceQ1D3ZlIPC0ICRJM2Dj9a7FgiFXZE7p/BLTqIHiFCaS
+	HojzZ1Uuyj3zj8jgeQjDHtdc1o/N3aNb3edFi1nhABVmJiG3eEI/mh7Ewol6PLNR
+	vEaiyiRD9N1wnK2s/sTFQ==
+X-ME-Sender: <xms:VGiKaM3-og9oeXNg7TDOo9wljsRBftFKFsjTpO4s458ZOsk9vLCx-g>
+    <xme:VGiKaHHHRAxbLFba3De9JzwDTwyXJQUa1APUMi6iGipUn7JBRdQVbVP05MkzuZxql
+    K3rdwZ0_d0qMDjDNu8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdelkeeilecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeejvdefhedtgeegveehfeeljeen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeeipdhmohguvgepshhmthhpohhuthdp
+    rhgtphhtthhopegsrhhglhessghguggvvhdrphhlpdhrtghpthhtohepshhfrhestggrnh
+    gsrdgruhhughdrohhrghdrrghupdhrtghpthhtoheptghhrhhishhtohhphhgvrdhlvghr
+    ohihsegtshhgrhhouhhprdgvuhdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnh
+    gvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehlihhnuhig
+    qdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuh
+    igqdhnvgigthesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:VGiKaBOxyL1D1VkqoeaUWlVyV-Mx2RU2WOGCxHDnpRmQmZybpTxYoQ>
+    <xmx:VGiKaLnS6EjiD1xQV4aynnKIZJL06uNeP9BKAbdLNe7cqlLRJZ-tCg>
+    <xmx:VGiKaN7paHc0r3hlbiQjYgD9lFzfDm9FaiDpspvdSII-aemPzHSRTw>
+    <xmx:VGiKaH3F_cn6W738_4EnDnFxoqQH3TpAiRIcE4b0OuRm1xPyCJMIBg>
+    <xmx:VWiKaKV10Wj1loCmHSPdnPbPGBciNAEO1-pLjKWAh7nTjP-52Stwb6Ch>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id BABB6700065; Wed, 30 Jul 2025 14:45:40 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build warning after merge of the jc_docs tree
-To: Christophe Leroy <christophe.leroy@csgroup.eu>,
- Jonathan Corbet <corbet@lwn.net>, Stephen Rothwell <sfr@canb.auug.org.au>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>
-Cc: PowerPC <linuxppc-dev@lists.ozlabs.org>,
- Vishal Parmar <vishistriker@gmail.com>,
- Brigham Campbell <me@brighamcampbell.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20250730102931.6334022c@canb.auug.org.au>
- <87cy9hx272.fsf@trenco.lwn.net>
- <f10f6457-1a19-47cf-86d1-eb787badd6dd@csgroup.eu>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <f10f6457-1a19-47cf-86d1-eb787badd6dd@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-ThreadId: T1270fe1a31e2c778
+Date: Wed, 30 Jul 2025 20:45:19 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Bartosz Golaszewski" <brgl@bgdev.pl>
+Cc: ARM <linux-arm-kernel@lists.infradead.org>,
+ "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+ "Stephen Rothwell" <sfr@canb.auug.org.au>,
+ linux-next <linux-next@vger.kernel.org>
+Message-Id: <1457d4cc-512b-4dfe-bf2f-375af1fdbe94@app.fastmail.com>
+In-Reply-To: <0b738b01-8574-49b1-b89c-3c96e9a56b28@csgroup.eu>
+References: <20250723094558.5bcfca69@canb.auug.org.au>
+ <627cbb55-2a55-4124-8f6e-7b4ba0441558@csgroup.eu>
+ <6eac14b4-765b-4a29-b278-364dba47e0e9@app.fastmail.com>
+ <0b738b01-8574-49b1-b89c-3c96e9a56b28@csgroup.eu>
+Subject: Re: linux-next: duplicate patch in the fsl tree
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Jul 30, 2025, at 16:23, Christophe Leroy wrote:
+> Le 30/07/2025 =C3=A0 15:55, Arnd Bergmann a =C3=A9crit=C2=A0:
+>> On Wed, Jul 30, 2025, at 15:41, Christophe Leroy wrote:
+>>>
+>>> Le 23/07/2025 =C3=A0 01:45, Stephen Rothwell a =C3=A9crit=C2=A0:
+>>>
+>>> I was going to send a pull request for this fix but I see the duplic=
+ate
+>>> patch is already tagged in the soc tree:
+>>>
+>>> $ git tag --contains 12702f0c3834
+>>> next-20250728
+>>> next-20250730
+>>> soc-drivers-6.17
+>>>
+>>> Shall I do anything or just ignore it and drop it from my tree ?
+>>=20
+>> Linus has already pulled the soc-drivers-6.17 tags, so I think
+>> both copies of the patch ended up in mainline and there is nothing
+>> left you can do to change that.
+>
+> The one in my tree is in Linux next, nowhere else for the time being a=
+s=20
+> far as I know, as it was not included in the pull request I sent three=20
+> weeks ago.
 
+Ah right. I thought I saw it included in the branch I pulled
+from you when I looked earlier today, but I see I made a mistake
+now, as I had checked out a branch based on top of linux-next that
+included yours.
 
-On 7/30/25 7:30 AM, Christophe Leroy wrote:
-> 
-> 
-> Le 30/07/2025 à 15:01, Jonathan Corbet a écrit :
->> Stephen Rothwell <sfr@canb.auug.org.au> writes:
->>
->>> Hi all,
->>>
->>> After merging the jc_docs tree, today's linux-next build (htmldocs)
->>> produced this warning:
->>>
->>> Documentation/arch/powerpc/index.rst:7: WARNING: duplicated entry found in toctree: arch/powerpc/htm
->>>
->>> Introduced by commit
->>>
->>>    c361f76da696 ("docs: powerpc: Add htm.rst to table of contents")
->>>
->>> interacting with commit
->>>
->>>    19122a7c28ed ("docs: powerpc: add htm.rst to toctree")
->>>
->>> from the powerpc tree.
->>
->> Did that just get added there?  I've had that fix since early June...I'd
->> rather not drop it (and have to redo my 6.17 pull request) now if
->> possible...
->>
-> 
-> There was a ping from Randy about it recently so that Maddy added it the powerpc tree, see https://lore.kernel.org/all/5ac25ceb-023d-409d-8e7e-014d010c5028@infradead.org/
-
-IDK. Maybe the patch that I replied to there was made against mainline instead of linux-next.
-I should have checked linux-next.
-
--- 
-~Randy
-
+      Arnd
 

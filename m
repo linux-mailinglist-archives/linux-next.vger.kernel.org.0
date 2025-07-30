@@ -1,55 +1,80 @@
-Return-Path: <linux-next+bounces-7771-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7772-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47EB0B15DF3
-	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 12:18:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 107ACB1603A
+	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 14:23:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7EC625475D4
-	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 10:18:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 412B61884B38
+	for <lists+linux-next@lfdr.de>; Wed, 30 Jul 2025 12:22:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6E102737E7;
-	Wed, 30 Jul 2025 10:18:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C49C042A82;
+	Wed, 30 Jul 2025 12:22:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="N0uHC08+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LIxdnV8k"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B40F1229B15;
-	Wed, 30 Jul 2025 10:17:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC2D2E36F9
+	for <linux-next@vger.kernel.org>; Wed, 30 Jul 2025 12:22:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753870682; cv=none; b=TypEsV3aWX06PdegEGuR5SLvDRKDqgmYHNzgTL3CSsjJRCZ6YwrVcjz1NDQyCk/XKWVWmkFtpSJ8JGo5CYOYcEJ+5AQISsVPc8gtwUiLxeNQZcfqHERMSXc6lxvSgkRmmJFLriW1XJBzIgJq7/TEWtYErFO55Xi9rwkVj6GeUGI=
+	t=1753878152; cv=none; b=E2d3y4Zv/2O6X//gZw6NgZlmTl+fEcJkeXTrk5f5SzU4VAb++rVJAESZ3N0VCaaZH+sgF6PIeAxQRD1OJnzhK7dIiRBAqTaWoSVqZxnLwfRqUndMVYcUj6if4kjL1+CsF3PR1Jg8SEZyW9iVNaH0iCJDp/wGFQHay+prb8NtcWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753870682; c=relaxed/simple;
-	bh=upTR70gIg3zojuI+8yXe3uiEaayEAuKNA6sj87tKFRI=;
+	s=arc-20240116; t=1753878152; c=relaxed/simple;
+	bh=EM2SeeEDeL1kFD6kgQfv5p7+jZ0ToNtVz+ZdTeIR22g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KLgKrfgudN9xaSIiM/lSWEwp21ZM3B286Q3Y/IBcJRScB2gl9NGc2bx6bnfxK9U5Q0ffoB9JPrhzNX9XiaC1dQHyZGy3z1iyix+Au0f2opxiBLFJ4WduaGXp4M3LZ5QC4SPYvnCk9HPVGbqovAYBu6emJVO2479hqXSSqAOHq9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=N0uHC08+; arc=none smtp.client-ip=185.125.188.121
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from [192.168.192.85] (unknown [50.47.147.87])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 221E940F79;
-	Wed, 30 Jul 2025 10:17:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1753870677;
-	bh=eFJMiJUkipbOyilRVRpyqJR89oEgqdEDeuyKkrnkzxQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type;
-	b=N0uHC08+KERUMsvbY2kl/yhhMBIo1NFKwPElrW8mJHPLVTdbWpohS+dZjvmrnQ3NP
-	 a+bzmMNjpK7xXgJjrmdu/0QVD6hmYI7/2svxu33bNo/djE56zVyWxPhOr/Ajk5Hpvi
-	 7Uqd2kMDIia4xFX4o9l3qz+5VNgy8Y3RkFuco3Y8vm9c/Z9eSyls3q3YS0NuOgXX3/
-	 CLty1ROWow8975/WskYH8Ta4LhhfvIg3BUfF4Vok6sz/OeOfgOv3QEhNs6VpCKT4U3
-	 MuZSkMKY68BSaMcpL4D9JwLQwYvNVjZStPHh7FMu+yF9M1rXsjs5SaIFfF2MDd5j2W
-	 RHpSzTDG/Q4xg==
-Message-ID: <2a6074ec-59ca-49af-87e8-d468cffc4a87@canonical.com>
-Date: Wed, 30 Jul 2025 03:17:52 -0700
+	 In-Reply-To:Content-Type; b=XxQJ0YeyV5S6MgZOzddX+ab2Vcb0+u+2gKhBeVfe/+e37Z1DC9y4QLFTX2E/Ztt3KvC70wV19w61Na+EApPHUT9St6BXQD+ORh9F1a8sGn4v56AUMCrru8SqQ9/vbV6fQSeRKx9rYHL5TBDJljJQQiIsLidJ3RM16TbxCpw5ibk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LIxdnV8k; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4561514c7f0so63135095e9.0
+        for <linux-next@vger.kernel.org>; Wed, 30 Jul 2025 05:22:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1753878149; x=1754482949; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lUEKxJ5rgjXe1YyHgv4NRENeR2LO4lvKY16JCFZwTMM=;
+        b=LIxdnV8kCrMKGgqQ5Bv/xbqFtCQzWjjwm/QU5/ONatS7oxPEubepeB+84Q8x7o+Pve
+         LRRgyJLZogPyRFOnnjte3+ofVIWrzVGNWYFMNeHrsYf0rJl3CM/GwZ1LBuSHFAe+d/nO
+         LohKWbka6nTwCGhpQhac0CzQthPfwJe4SdZmhxEBEuC5JBu405uvS8SzMFD5o4O0vuop
+         8T+hMhD6VK3vodtT2CmTbfjTRA57kfJbRrLQOhBZc85ZAWlyiv2IrgMCHrUxUa0yCVyY
+         RDfpzCpzDlFj2P+BjJL5ND4Cxh04piLFzjTrpMrc7IDoaWfUalUvgS4qjpJnqWs603a7
+         QJcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753878149; x=1754482949;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lUEKxJ5rgjXe1YyHgv4NRENeR2LO4lvKY16JCFZwTMM=;
+        b=o5zxXMgp3PU+iiUA9ihTuturlKOse67gBPUBfAiJyH871k/5UtYc+e9qqCFq0Y2jYK
+         laS6+kshzoZuzjdTwfVShSdp3lxnkYS+Wo+iAUqelJH59wSf+cqpPlAC9L2WuCeuySlW
+         T9p8QneCC3YFYduzxyaAfKoDQ81DVm/8cQVQTBf8mCTMeFGPUBCJVdpr2rUt/jUdSUvH
+         scql3lIDP+Z8mog579V09mZPb8AI+8fi2tSWW367mSGdNObG5tT7voHzeuymffUERcjI
+         5+FSa3Tz5esdbvSC1TY/QpKZGWs9rK31kucoS5rRIfjX7O3gN14/OHRDW42B1TIr7gYd
+         zGNA==
+X-Forwarded-Encrypted: i=1; AJvYcCWUCpdOtWxk0ZiHQhgelUhAE8rI75H3MZvP2WG5pytSwEWGNmnQcdrWMrYBnsfWKwi9t7onxY3I5y7p@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3kfLcdXlmpy7YxZ5hkv8/+1st7VKg10212xz8GV4MRQCqjxjo
+	ekRpPLc9i3yx/ed25Ttq3OK2elNPSIXlm/UklhBOJGB9yRaYF3jUg0hHuT0L/Sm6tcI=
+X-Gm-Gg: ASbGncuV6mKV47tEI8VknQIdO+gzW1ybh35nSBeqXaeeZ7QKlYOmFVPGLFUWS6KOnZ9
+	piCtuOMFMqCRmbpHPhdnvROMHjVzWEdijOe6QX3uWGzrOqdl4At/t5n2Zo5w/vhu5NThJTYIAVT
+	GpNBBOa6UmcaaKnmJXNbVudaCwKQF0sxMI9/48LYUZpbaF+goiLqolnbxsYqHP/R0NKVlZsf3v7
+	5YZX8B2Azfl5GlQC8S0xCyDtxr5gAA+tGhRgXO6nVBOrKY7pP5PLjK+ktvuxiJEHfa702bctvDA
+	r3UrV4tC6vH91WOkZVQgCudKh3C1hVW53esG5p7RcciCxUHskapXGf2XOMRCnuzaw0VhoC6IsM+
+	O0qWgiZcjzEbGGU/rnmnQkUjhFZC0F7mVB0c5kXxti9css2MjtXTvAncEb8x5ZA==
+X-Google-Smtp-Source: AGHT+IFHgIPDAvCDwsGBDdTU9OFJARdnfPOtF5aFPjgRrA/x3zrrr25gAt3sbRb8qonK3Xud+Sbecw==
+X-Received: by 2002:a05:600c:1da6:b0:458:6733:fb43 with SMTP id 5b1f17b1804b1-45892bbf7f3mr28149845e9.19.1753878149097;
+        Wed, 30 Jul 2025 05:22:29 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4588dd375e0sm45991465e9.2.2025.07.30.05.22.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Jul 2025 05:22:28 -0700 (PDT)
+Message-ID: <e8e2bc93-1639-433d-9689-d1ce9f28b877@linaro.org>
+Date: Wed, 30 Jul 2025 14:22:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -57,79 +82,61 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [apparmor?] linux-next test error: WARNING in
- apparmor_unix_stream_connect
-To: Alexander Potapenko <glider@google.com>
-Cc: apparmor@lists.ubuntu.com, jmorris@namei.org, john@apparmor.net,
- linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
- linux-security-module@vger.kernel.org, paul@paul-moore.com,
- serge@hallyn.com, sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-References: <687e09e3.a70a0220.693ce.00eb.GAE@google.com>
- <CAG_fn=WSae7yjaHh=_iUc7eFALHX1vLQFMw8ryfas4-ijgFTiQ@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the clockevents tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Donghoon Yu <hoony.yu@samsung.com>,
+ Will McVicker <willmcvicker@google.com>,
+ Youngmin Nam <youngmin.nam@samsung.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+References: <20250716160809.30045a56@canb.auug.org.au>
+ <20250729114037.03a2d884@canb.auug.org.au>
 Content-Language: en-US
-From: John Johansen <john.johansen@canonical.com>
-Autocrypt: addr=john.johansen@canonical.com; keydata=
- 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 lT9Q
-Organization: Canonical
-In-Reply-To: <CAG_fn=WSae7yjaHh=_iUc7eFALHX1vLQFMw8ryfas4-ijgFTiQ@mail.gmail.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20250729114037.03a2d884@canb.auug.org.au>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/28/25 01:16, Alexander Potapenko wrote:
-> On Mon, Jul 21, 2025 at 11:35 AM syzbot
-> <syzbot+cd38ee04bcb3866b0c6d@syzkaller.appspotmail.com> wrote:
->>
->> Hello,
->>
->> syzbot found the following issue on:
+On 29/07/2025 03:40, Stephen Rothwell wrote:
+> Hi all,
 > 
-> John, do you have an idea what's going on?
-> This is pretty likely to be related to your "apparmor: make sure unix
-> socket labeling is correctly updated." patch.
+> On Wed, 16 Jul 2025 16:08:09 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> After merging the clockevents tree, today's linux-next build (arm
+>> multi_v7_defconfig) produced this warning:
+>>
+>> WARNING: modpost: vmlinux: section mismatch in reference: mct_init_dt+0x324 (section: .text) -> register_current_timer_delay (section: .init.text)
+>> WARNING: modpost: vmlinux: section mismatch in reference: mct_init_dt+0x4c4 (section: .text) -> register_current_timer_delay (section: .init.text)
+>>
+>> Introduced by commit
+>>
+>>    5d86e479193b ("clocksource/drivers/exynos_mct: Add module support")
+>>
+>> and possibly
+>>
+>>    7e477e9c4eb4 ("clocksource/drivers/exynos_mct: Fix section mismatch from the module conversion")
+>>
+>> For this build,
+>>
+>> CONFIG_CLKSRC_EXYNOS_MCT=y
+> 
+> I am still seeing these warnings.  The above commit is now also commit
+> 
+>    338007c44c7f ("clocksource/drivers/exynos_mct: Add module support")
+> 
+> in the tip tree.
 
-yeah it is being caused by that patch. Specifically it introduces using
-security_sk_alloc() to make sure the sk is given a default label which
-makes this check now incorrect the fix is just to drop the check. I have
-added the fix with the syzbot ref
+This should be fixed now.
 
+Also the clockevent branch has been reset.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 

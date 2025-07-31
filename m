@@ -1,137 +1,107 @@
-Return-Path: <linux-next+bounces-7798-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7799-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C7DFB1765A
-	for <lists+linux-next@lfdr.de>; Thu, 31 Jul 2025 21:02:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EB38B17958
+	for <lists+linux-next@lfdr.de>; Fri,  1 Aug 2025 01:19:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77EF9560892
-	for <lists+linux-next@lfdr.de>; Thu, 31 Jul 2025 19:01:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 092AC1C27871
+	for <lists+linux-next@lfdr.de>; Thu, 31 Jul 2025 23:19:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA68C3A8C1;
-	Thu, 31 Jul 2025 19:01:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EDBE26056D;
+	Thu, 31 Jul 2025 23:18:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GxcrQpeF"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HJAw2AZs"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95357A29
-	for <linux-next@vger.kernel.org>; Thu, 31 Jul 2025 19:01:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4BA21FF4D;
+	Thu, 31 Jul 2025 23:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753988499; cv=none; b=RUBgKxgfsELmHIICoOTlq8P8NEtQKwVDHSjTMkElZ7A9vCF/oeDTlpDFtoSeSEWYR3IOnSoCeYv00MkRjg8UIdo6zzayPmdDex3AZEq3kQzDoKL2VbJen2kamDoY13N5xX4xscZ7mKG2R+Z9sllqgEUCjUeu+CPHUVexAE+k5Io=
+	t=1754003935; cv=none; b=C5YRocyXDWKOCd50JXMe0sTTOwiyo0GkJS4Tf/nvS5aa6UKngyO8ZPpoevs+IXHQ6Rx3VJJfEj2c6eUn6cEop2xuz40birOppmoM/GpOeZ/TIQnP0JTWYWkJm0CHw/rlRpAu7qSOpaS0DdPxpmN4nXm2Xfi5XkdnNpIZnerM7g8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753988499; c=relaxed/simple;
-	bh=jFRy8D/uMyEpm99e7t7mFshpQp5ReIy/WWIZ0D9wB5E=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=KOu/Y41Kcnqh21Jd7Bg8UoJkBSWuQnjpwsJU3zq0445V35LcocbP5AuzQ0eF6R6BNotR+DE+36950vvyj0zT9wQydDlyGoWLwIb4foNu95V00kwzUa5H7Bu3fDzvcEnObsNe4BUwyNUs9eeG8YscwoBcYN9BadgUNvecGMK0xD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GxcrQpeF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E80C4AF0B;
-	Thu, 31 Jul 2025 19:01:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753988499;
-	bh=jFRy8D/uMyEpm99e7t7mFshpQp5ReIy/WWIZ0D9wB5E=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=GxcrQpeFvQ01BQYfW/Ts2DfMDAiqT1yZFMlIaYidMMkTiD89OayIUVD78ownNWnTh
-	 Sll6yxnXBZClj9F9tV3msDJXmzAh+cxNAvTZBNhfqV6iaqQb8xdYfQrzdRyRHdRP/k
-	 QspkzRv2Hc/s1EIyOGuT51BrTg65fCMwQG1hU28YzSs1oe+cZirbLeeLVmLEYeZFrz
-	 G9qctKtdu7Stns49ztn6kDAMMkDF+Ns1GTbmmc6No4n1HyEEgbPtNCST7U6/QCygVo
-	 sONoWkSYecih28PnBOxTqL7Ts6Do2ekCyTCwD56IhKaZGKZqkwduYdwe3Yu0uMGmWW
-	 WLlMRQu6kzi2w==
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 1518DF40066;
-	Thu, 31 Jul 2025 15:01:38 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Thu, 31 Jul 2025 15:01:38 -0400
-X-ME-Sender: <xms:kb2LaMPdhEyW64fyqp1VO8RHIpFvuzzJNgnjenLlxT7kHEpx92Tn2w>
-    <xme:kb2LaC-6icXJS7UWZNeLmNBEp32qiyf5RcUNAIh4w0Q9u_b28ew8hjo4JIOyfxSXs
-    rleM8XIA5Sc-zBDzj0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddutdduiedtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrfgrth
-    htvghrnhepjeejffetteefteekieejudeguedvgfeffeeitdduieekgeegfeekhfduhfel
-    hfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduvdekhedujedtvdeg
-    qddvkeejtddtvdeigedqrghrnhgupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrdguvg
-    dpnhgspghrtghpthhtohepudejpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopedu
-    kedvheehuddujeduheelseduieefrdgtohhmpdhrtghpthhtohepjhhinhhgohhohhgrnh
-    dusehgmhgrihhlrdgtohhmpdhrtghpthhtohepsghhvghlghgrrghssehgohhoghhlvgdr
-    tghomhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtth
-    hopehkfihilhgtiiihnhhskhhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlphhi
-    vghrrghlihhsiheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrnhhisehkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthht
-    oheprghgohhruggvvghvsehlihhnuhigrdhisghmrdgtohhm
-X-ME-Proxy: <xmx:kb2LaINGGnQ7DvuKpwF_i4KfxlJVEYjnrCK4aerUN_Gthw1WyL_lew>
-    <xmx:kr2LaAYKPVf3w585Yo30KFi9BxRZh74HuzyV9cHu_gmJkX1G8u8umw>
-    <xmx:kr2LaKrgPJLD-On5iCdpVaVJAQ48EXh-Q_FVuE9bxVxVIwYJ_Oxltw>
-    <xmx:kr2LaNxY25iszNoqnYxqMyUteItYl8Y_tfJ_RoyeiZAJvIWYECoMXQ>
-    <xmx:kr2LaCJV3FaR3I0DI_lj9e-l6dcyYaqr-jXVpQpAVaH-Q4qU_HKbH4IB>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id CB4FB700068; Thu, 31 Jul 2025 15:01:37 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1754003935; c=relaxed/simple;
+	bh=M2a63tJrc8tqZdthdnhnaTh0mVPu6EJ/n+9KgsduVpw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=I2qCVM7IGILXTANkQJlVbgDostoXeOnAT9yvKbhU24kRYbFhAjNP8YkvBHFCmG+/EzJrRAvSUNGz6XLa+eqKzTgLTyDjz4ZAwp07gIpY6XjAFa08GVJyx/H4ww7QAIxcrHvfhbhjIFOWeHkzhe66RAlPjedgkTbGs9hq6mt2XUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HJAw2AZs; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1754003694;
+	bh=DICQ/ozQ+3WlYXVC4uaWMmEf69BvCyNApGqBFuBRRMc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=HJAw2AZsAK0tQNMMuM7yzTVDzlM8vdA9/HnbEcxWoNgjb94UUQrLrLM2oXBzUiHob
+	 rnHVa62MykeZ6cUrroYVJz0jzEA4RyKRwkt7qyRkqILZfxxWxDRG8pCHaCYj7k/yLf
+	 shcheuxtV6uKTE9HCSkaqchnMoDoQVBwKps8fu2G3uZp7P2mBAhrIKi5oX321PBfhm
+	 NeoaLXK9AOCTLXjHNIuSL+XMThqguSTsO9+ft5k64wj1YmB1PPEFVZC5TYAR4IaqQN
+	 mW2fcG7LLzdzlvURO2rTxHxY+7M6XsQFiZxkVJj0IuZIi41XnZptzaec7B1Jo1IvDR
+	 C98e72jT/36rQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4btQ0G0TPzz4x5Z;
+	Fri,  1 Aug 2025 09:14:54 +1000 (AEST)
+Date: Fri, 1 Aug 2025 09:18:41 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Lee Jones <lee@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the mfd tree
+Message-ID: <20250801091841.6f21ae5d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Tea76caf5b1f73f76
-Date: Thu, 31 Jul 2025 21:01:17 +0200
-From: "Arnd Bergmann" <arnd@kernel.org>
-To: "Bjorn Helgaas" <helgaas@kernel.org>, "Gerd Bayer" <gbayer@linux.ibm.com>
-Cc: "Hans Zhang" <18255117159@163.com>, bhelgaas@google.com,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- jingoohan1@gmail.com,
- =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
- linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
- linux-next <linux-next@vger.kernel.org>, linux-pci@vger.kernel.org,
- "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
- "Manivannan Sadhasivam" <mani@kernel.org>, "Rob Herring" <robh@kernel.org>,
- "Niklas Schnelle" <schnelle@linux.ibm.com>
-Message-Id: <6e34b4af-dff9-4360-b3da-c95ca7c740c9@app.fastmail.com>
-In-Reply-To: <20250731183944.GA3424583@bhelgaas>
-References: <20250731183944.GA3424583@bhelgaas>
-Subject: Re: [PATCH] PCI: Fix endianness issues in pci_bus_read_config()
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/KIB9xn9wG9oyRT0AQa27U_i";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, Jul 31, 2025, at 20:39, Bjorn Helgaas wrote:
-> On Thu, Jul 31, 2025 at 07:38:58PM +0200, Gerd Bayer wrote:
->>  
->> -	if (size == 1)
->> -		return pci_bus_read_config_byte(bus, devfn, where, (u8 *)val);
->> -	else if (size == 2)
->> -		return pci_bus_read_config_word(bus, devfn, where, (u16 *)val);
->> -	else if (size == 4)
->> -		return pci_bus_read_config_dword(bus, devfn, where, val);
->> -	else
->> -		return PCIBIOS_BAD_REGISTER_NUMBER;
->> +	if (size == 1) {
->> +		rc = pci_bus_read_config_byte(bus, devfn, where, (u8 *)val);
->> +#if (IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
->> +		*val = ((*val >> 24) & 0xff);
->> +#endif
->
-> Yeah, this is all pretty ugly.  Obviously the previous code in
-> __pci_find_next_cap_ttl() didn't need this.  My guess is that was
-> because the destination for the read data was always the correct type
-> (u8/u16/u32), but here we always use a u32 and cast it to the
-> appropriate type.  Maybe we can use the correct types here instead of
-> the casts?
+--Sig_/KIB9xn9wG9oyRT0AQa27U_i
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Agreed, the casts here just add more potential for bugs.
+Hi all,
 
-The pci_bus_read_config() interface itself may have been a
-mistake, can't the callers just use the underlying helpers
-directly?
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
-      Arnd
+  b6bf74c82178 ("mfd: dt-bindings: Convert TPS65910 to DT schema")
+  3221ed185d18 ("mfd: Minor Cirrus/Maxim Kconfig order fixes")
+  d5526eba3f47 ("mfd: Remove redundant pm_runtime_mark_last_busy() calls")
+
+These are commits
+
+  006aa8f57f55 ("mfd: dt-bindings: Convert TPS65910 to DT schema")
+  73e52f871fc0 ("mfd: Minor Cirrus/Maxim Kconfig order fixes")
+  8b96324c75d8 ("mfd: Remove redundant pm_runtime_mark_last_busy() calls")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/KIB9xn9wG9oyRT0AQa27U_i
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiL+dEACgkQAVBC80lX
+0GwriQgAkWKaF5RO6Pgm7/WiVy8RniaQvyd+HCOO1+WYaGMdPbIX1FbxtvZRIgy9
+SssR/fGMthQPQ4jA7Hnm5mR8Hkb+TtyVZjBRdV3pBGeWd7S3wyU1pdJyq/3UYhlu
+VUHfsYVBBq+d8+Vg6vY96VRFyXspbmu6YQM/mq30Zy+86Pxsy8rKxx3g/m+4lvX4
+AU2lSFRQQuUzrNl9USrC6DP4ze61XK4f71IWqcBFZ6kqJzzwgpmTGW4XLm66k1wx
+lTvmyBYTHEXFO4r0l23B3qCzPlWkWGyespgte8AkvipVl8+UchpOcs8l+v+Ezw3D
+whQ9AshbagxMUHOSn9iKKsoQy5pPbw==
+=Rv4S
+-----END PGP SIGNATURE-----
+
+--Sig_/KIB9xn9wG9oyRT0AQa27U_i--
 

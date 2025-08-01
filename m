@@ -1,111 +1,283 @@
-Return-Path: <linux-next+bounces-7821-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7822-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09CADB181CF
-	for <lists+linux-next@lfdr.de>; Fri,  1 Aug 2025 14:31:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECDBEB18604
+	for <lists+linux-next@lfdr.de>; Fri,  1 Aug 2025 18:48:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 378B57AB043
-	for <lists+linux-next@lfdr.de>; Fri,  1 Aug 2025 12:29:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1512F16A3CE
+	for <lists+linux-next@lfdr.de>; Fri,  1 Aug 2025 16:48:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9924D1A315C;
-	Fri,  1 Aug 2025 12:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 548F01C861D;
+	Fri,  1 Aug 2025 16:48:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bqBQ3O8d"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="G0Tg2Wsm"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED3521CA14;
-	Fri,  1 Aug 2025 12:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80A5419F11B;
+	Fri,  1 Aug 2025 16:48:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754051458; cv=none; b=B2kkxu7mdhRMBHI3RDzRPeQ0GBKJw9Zaf0BQF4fL4gOl1YwgaMz4wlS3sosnm4MquVqJ5c46J/nOnA0z5bTk20U3R+Dm8rdWwHRk95f8auklVHbIwiouIV8TnKjZGGZSnKGqFzH6zXQ3NzZ/bFeHUD+XkEqNr336c81QRuUwXck=
+	t=1754066916; cv=none; b=SnqEONWu49rwclvi3VSPUguQTHbhYrWD71pdDt7Fgg8wL+AsTRyZKnxb0sQWIhrg3KjFEgfbQVVW1chThuYaK3Cdq1OSxXLaY2gdO42pg5uC5SbCndVB5BCnI4hmXj1CB6DtmVStXoNapChWlynviYslsymkmDLktSjGh8JKZfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754051458; c=relaxed/simple;
-	bh=oTT6Qz+SneJ5LxxvLs9eP6XXlBe4Gg3V73pIe4Tjo9E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JYpydD6VDE3OVMv8Oe/zkT7LupWAlMyPeQOa7uzDWXxj6EdBH1cWHQ4hGgLa1aqh//k+baji8+pfbQNoFIgtA5KAToI5caaG9qImSe8dA+BLNlQAXlO+vPKTuEP1OIkL1Jo0DVJOVZ/Nh+ZE5aVNVeb2Qu8yoYLs9ttmcHgY230=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bqBQ3O8d; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-7183d264e55so22051357b3.2;
-        Fri, 01 Aug 2025 05:30:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754051456; x=1754656256; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eSzDDzXl284InWcvg3r7d40H9tFzezH31xclbEAuGIc=;
-        b=bqBQ3O8denRL2nVzLEN4k1/CKulyej+hgG6b+zHkLG7DXHo7j9SB/A/8oRuGk5WIcd
-         HyY6FNYsHsvup57ST0Asm11Yo0fZXZApNiWdPkcv/qOk9QgFB1mbLmWuzFoA1aC39EU+
-         jXW8Nbm9Xomh09fhEiXTG6aWU5Ru+8P3tLa8KfVvbN5hV+/ngYy5jI30dgXfkXL6tkA0
-         Mrw8rPmILfTDHCRu8sIXZIvLCUCBrtwhV5kyUUz82zcW1VAf4WQ2azRf6JS8yief2ScM
-         DbSGgP0cZikl8Dn88ADYWV+NRFwVA0dkZWMCe9LO2e0B87bgpcSQEwWG+PO0Cdm93gO+
-         LVdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754051456; x=1754656256;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eSzDDzXl284InWcvg3r7d40H9tFzezH31xclbEAuGIc=;
-        b=sMApLidrG1HSgyFr34Hov/Lr7SOgilixbLAJEAIDfYi6mG+SDgkZP0wOgLijMTV8vJ
-         cQgK1ALTr+71nr/GcpUrL5iZKtmfgJGvaPxyPYlLqyNv0+WZNRHdu28m+2NHlUs9Rg9e
-         o74T8om1A1Fx+mKAYOhmG1WWmIqHTUm3SRk3pHUhhEPgC51zbQNuPotNZp/iAbTloxsr
-         L4V6VHXyjBvwKp15snoZ9q/i7F1ywMcJrctiS5/djxEuUhUisibFjYJS+iEoC9fBBwl3
-         xu31sywmi09lrETzoCkOp3j9KLto8aNtlm+iDri8eG9daS7G1mP6uTQq4exmweMFIMi1
-         fiOA==
-X-Forwarded-Encrypted: i=1; AJvYcCVNflKvBc73KhKWfL5pu/l59gZCnj80ZHRXaAz232AHP4DFufSyidNTJTLzCrAJQ7KIgprKTGNeztN9@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcYCISVhOMzfcsfhvFVhy/HEY/Rts93ZvY7pHpwFakXnjzhyT+
-	8bHu3EoF3ja5zvRtRwayjnl/yHelcBi5sLtSglGTYXgKsTMHP+gmbPQ1qem65Q==
-X-Gm-Gg: ASbGncujPDqs9rVV+ikTZ7JAyzwpN0T6s3uCwTBnnE3/XxKaFs2OKiwIHoAboJRLuuT
-	lWhvJpVIds89dMmeyXU/cbtMSLTPcTbNc9gdTxRBUmOKyg8MnliWCu04TYvTa15Uk6umNi2wzHZ
-	reeu6T1aaDEOkyWDJM+qJjeyLjXa1UIlZiUddWmasDT8/KKrLC0YUhrYXoaD8aszAM/fB47qWPM
-	wUrzEFpKVAvjUJfLCgGH2Zjfq02A+sz0kw8x5uyPICypOMvp/hhdcSt96ihNPU1YVibH2LBdONg
-	EhydoLsEkjziKcQWZdhE0gPQIh8bI10P8JwZyNZ9Oo8BAP5uPJ8xcbSrQDARlKd5O4pUdOfwtAI
-	o4F4JohQ2/voAVVgX7ID79vdx1KFamqVQ8Q/iy1YaegBeCsA0Oo7hZfS3Bw==
-X-Google-Smtp-Source: AGHT+IHnSF7IxrMCWPAsp75TMyLWYuoSVW3eY65SQAqayjC8YHfZdJ/gTrO/YYd+RG4DP2TkQpN6jw==
-X-Received: by 2002:a05:690c:c08:b0:71a:23b3:13c1 with SMTP id 00721157ae682-71a46539cd7mr142719057b3.7.1754051455824;
-        Fri, 01 Aug 2025 05:30:55 -0700 (PDT)
-Received: from localhost (c-73-224-175-84.hsd1.fl.comcast.net. [73.224.175.84])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-71b5a3a9b63sm9775627b3.13.2025.08.01.05.30.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Aug 2025 05:30:55 -0700 (PDT)
-Date: Fri, 1 Aug 2025 08:30:54 -0400
-From: Yury Norov <yury.norov@gmail.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the bitmap tree
-Message-ID: <aIyzfjoZuzN6G6o6@yury>
-References: <20250801112727.17d6e604@canb.auug.org.au>
+	s=arc-20240116; t=1754066916; c=relaxed/simple;
+	bh=ER9+A0AQoiNiR8H7LAXm3gGnSWm591ietRBP/qtDclg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sfQIX1okwNfQgHrtb1Ax/kDgTDgCEz8gtDxALv4GritSnzl8qUyOBIlf2+bLTHevOij076Hd0+8GUeodCqyb2KfQkfZ5pfhOm+Q12lMsCnneW/dxLk8dldixD57ZXtMHs0XSnozIb2iO3HjBWXW7SCvuccUWkxSRecVUek6hzuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=G0Tg2Wsm; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=EuM2jIdoJNNlb/WdA0ZGl2UlMubVd2wOiR6EDWunrvU=;
+	b=G0Tg2WsmgYqUNWajbdw3ELSQGqEYioLEoLoGp2OvqbxGXYqvPg5xuaX74lYWuP
+	2Y5dp3q576p42YLrB3VOks/ZUzkmS7MyR0IGyRhRhSvpKaWnIlLefJkFXCEdHNjT
+	M88bEu0msBjo0xmwaDqZGTrwrTpfV9qAu3mj9/t3qSTTY=
+Received: from [IPV6:240e:b8f:919b:3100:ecd9:c243:2a5f:12dd] (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wCHV0a774xoRDSkIw--.11070S2;
+	Sat, 02 Aug 2025 00:47:56 +0800 (CST)
+Message-ID: <f28be780-445e-4823-a0c5-44c61241d93f@163.com>
+Date: Sat, 2 Aug 2025 00:47:55 +0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250801112727.17d6e604@canb.auug.org.au>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] PCI: Fix endianness issues in pci_bus_read_config()
+To: Manivannan Sadhasivam <mani@kernel.org>,
+ Hans Zhang <hans.zhang@cixtech.com>
+Cc: Arnd Bergmann <arnd@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+ Gerd Bayer <gbayer@linux.ibm.com>, bhelgaas@google.com,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ jingoohan1@gmail.com, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?=
+ <kwilczynski@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-s390@vger.kernel.org, linux-next <linux-next@vger.kernel.org>,
+ linux-pci@vger.kernel.org, Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Rob Herring <robh@kernel.org>, Niklas Schnelle <schnelle@linux.ibm.com>,
+ geert@linux-m68k.org
+References: <20250731183944.GA3424583@bhelgaas>
+ <6e34b4af-dff9-4360-b3da-c95ca7c740c9@app.fastmail.com>
+ <vf65usnffqzlkgijm72nuaslxnflwrugc25vw6q6blbn2s2d2s@b35vjkowd6yc>
+ <9a155e45-f723-4eec-81d3-2547bfe9a4e9@cixtech.com>
+ <ofsbfhor5ah3yzvkc5g5kb4fpjlzoqkkzukctmr3f6ur4vl2e7@7zvudt63ucbk>
+ <c8ffdd21-9000-40c2-9f4d-4d6318e730b5@cixtech.com>
+ <cu7qdbwmnixqjce4aetr5ldwe3sqoixgq4fuzmzajzphjdywqq@yw6ojbgeqktm>
+Content-Language: en-US
+From: Hans Zhang <18255117159@163.com>
+In-Reply-To: <cu7qdbwmnixqjce4aetr5ldwe3sqoixgq4fuzmzajzphjdywqq@yw6ojbgeqktm>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:_____wCHV0a774xoRDSkIw--.11070S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Wr1kGFWxWrWUCryxKr4Durg_yoWxJw1DpF
+	W5JFW2yr4UJF13Arn2q3WFqr1Iyr9rJF1UXrn5W34UZFn0vr1FqFy0gF4YgFy0gr48JF4I
+	vws0qFW3u34qyFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UtuciUUUUU=
+X-CM-SenderInfo: rpryjkyvrrlimvzbiqqrwthudrp/1tbiWwCco2iM6bG1mgAAs3
 
-On Fri, Aug 01, 2025 at 11:27:27AM +1000, Stephen Rothwell wrote:
-> Hi all,
+
+
+On 2025/8/1 18:54, Manivannan Sadhasivam wrote:
+> On Fri, Aug 01, 2025 at 06:06:16PM GMT, Hans Zhang wrote:
+>>
+>>
+>> On 2025/8/1 17:47, Manivannan Sadhasivam wrote:
+>>> EXTERNAL EMAIL
+>>>
+>>> On Fri, Aug 01, 2025 at 05:25:51PM GMT, Hans Zhang wrote:
+>>>>
+>>>>
+>>>> On 2025/8/1 16:18, Manivannan Sadhasivam wrote:
+>>>>> EXTERNAL EMAIL
+>>>>>
+>>>>> On Thu, Jul 31, 2025 at 09:01:17PM GMT, Arnd Bergmann wrote:
+>>>>>> On Thu, Jul 31, 2025, at 20:39, Bjorn Helgaas wrote:
+>>>>>>> On Thu, Jul 31, 2025 at 07:38:58PM +0200, Gerd Bayer wrote:
+>>>>>>>>
+>>>>>>>> -  if (size == 1)
+>>>>>>>> -          return pci_bus_read_config_byte(bus, devfn, where, (u8 *)val);
+>>>>>>>> -  else if (size == 2)
+>>>>>>>> -          return pci_bus_read_config_word(bus, devfn, where, (u16 *)val);
+>>>>>>>> -  else if (size == 4)
+>>>>>>>> -          return pci_bus_read_config_dword(bus, devfn, where, val);
+>>>>>>>> -  else
+>>>>>>>> -          return PCIBIOS_BAD_REGISTER_NUMBER;
+>>>>>>>> +  if (size == 1) {
+>>>>>>>> +          rc = pci_bus_read_config_byte(bus, devfn, where, (u8 *)val);
+>>>>>>>> +#if (IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+>>>>>>>> +          *val = ((*val >> 24) & 0xff);
+>>>>>>>> +#endif
+>>>>>>>
+>>>>>>> Yeah, this is all pretty ugly.  Obviously the previous code in
+>>>>>>> __pci_find_next_cap_ttl() didn't need this.  My guess is that was
+>>>>>>> because the destination for the read data was always the correct type
+>>>>>>> (u8/u16/u32), but here we always use a u32 and cast it to the
+>>>>>>> appropriate type.  Maybe we can use the correct types here instead of
+>>>>>>> the casts?
+>>>>>>
+>>>>>> Agreed, the casts here just add more potential for bugs.
+>>>>>>
+>>>>>
+>>>>> Ack. Missed the obvious issue during review.
+>>>>>
+>>>>>> The pci_bus_read_config() interface itself may have been a
+>>>>>> mistake, can't the callers just use the underlying helpers
+>>>>>> directly?
+>>>>>>
+>>>>>
+>>>>> They can! Since the callers of this API is mostly the macros, we can easily
+>>>>> implement the logic to call relevant accessors based on the requested size.
+>>>>>
+>>>>> Hans, could you please respin the series based the feedback since the series is
+>>>>> dropped for 6.17.
+>>>>>
+>>>>
+>>>> Dear all,
+>>>>
+>>>> I am once again deeply sorry for the problems that occurred in this series.
+>>>> I only test pulling the ARM platform.
+>>>>
+>>>> Thank you very much, Gerd, for reporting the problem.
+>>>>
+>>>> Thank you all for your discussions and suggestions for revision.
+>>>>
+>>>> Hi Mani,
+>>>>
+>>>> Geert provided a solution. My patch based on this is as follows. Please
+>>>> check if there are any problems.
+>>>> https://lore.kernel.org/linux-pci/CAMuHMdVwFeV46oCid_sMHjXfP+yyGTpBfs9t3uaa=wRxNcSOAQ@mail.gmail.com/
+>>>>
+>>>> Also, please ask Gerd to help test whether it works properly. Thank you very
+>>>> much.
+>>>>
+>>>>
+>>>> If there are no issues, am I sending the new version? Can this series of
+>>>> pacth 0001 be directly replaced?
+>>>>
+>>>
+>>> What benefit does this helper provide if it simply invokes the accessors based
+>>> on the requested size? IMO, the API should not return 'int' sized value if the
+>>> caller has explicitly requested to read variable size from config space.
+>>>
+>>
+>> Dear Mani,
+>>
+>> This newly added macro definition PCI_FIND_NEXT_CAP is derived from
+>> __pci_find_next_cap_ttl. Another newly added macro definition,
+>> PCI_FIND_NEXT_EXT_CAP, is derived from pci_find_next_ext_capability. The
+>> first one has no return value judgment, while the second one has a judgment
+>> return value. So, pci_bus_read_config is defined as having an int return
+>> value.
+>>
 > 
-> The following commits are also in Linus Torvalds' tree as different
-> commits (but the same patches):
-> 
-> (all the commits in the bitmap tree)
-> 
-> The tree seems to have been rebased for no good reason.  Please clean
-> it up.
+> Sorry, my previous reply was not clear. I was opposed to returning 'u32 *val'
+> for a variable 'size' value. The API should only return 'val' of 'size' ie. if
+> size is 1, it should return 'u8 *val' and so on. It finally breaks down to
+> calling the underlying accessors. So I don't see a value in having this API.
 
-Hi Stephen,
+Dear Mani,
 
-I didn't rebase it intentionally. Anyway, now the tree is rebased on
-top of master. Hopefully it will clean the error.
+In this series, I had similar confusion before.
+https://lore.kernel.org/linux-pci/4d77e199-8df8-4510-ad49-9a452a29c923@163.com/
 
-Thanks,
-YUry
+
+I think there are a few pieces of code that stand out, such as:
+
+Forced type conversion is also used here. (*value = (type)data;)
+
+
+drivers/pci/access.c
+#define PCI_OP_READ(size, type, len) \
+int noinline pci_bus_read_config_##size \
+	(struct pci_bus *bus, unsigned int devfn, int pos, type *value)	\
+{									\
+	unsigned long flags;						\
+	u32 data = 0;							\
+	int res;							\
+									\
+	if (PCI_##size##_BAD)						\
+		return PCIBIOS_BAD_REGISTER_NUMBER;			\
+									\
+	pci_lock_config(flags);						\
+	res = bus->ops->read(bus, devfn, pos, len, &data);		\
+	if (res)							\
+		PCI_SET_ERROR_RESPONSE(value);				\
+	else								\
+		*value = (type)data;					\
+	pci_unlock_config(flags);					\
+									\
+	return res;							\
+}
+
+
+This function also uses u32 *val as its return value.
+
+int pci_generic_config_read(struct pci_bus *bus, unsigned int devfn,
+			    int where, int size, u32 *val)
+{
+	void __iomem *addr;
+
+	addr = bus->ops->map_bus(bus, devfn, where);
+	if (!addr)
+		return PCIBIOS_DEVICE_NOT_FOUND;
+
+	if (size == 1)
+		*val = readb(addr);
+	else if (size == 2)
+		*val = readw(addr);
+	else
+		*val = readl(addr);
+
+	return PCIBIOS_SUCCESSFUL;
+}
+EXPORT_SYMBOL_GPL(pci_generic_config_read);
+
+
+And it's the same here.
+drivers/pci/controller/dwc/pcie-designware.c
+int dw_pcie_read(void __iomem *addr, int size, u32 *val)
+{
+	if (!IS_ALIGNED((uintptr_t)addr, size)) {
+		*val = 0;
+		return PCIBIOS_BAD_REGISTER_NUMBER;
+	}
+
+	if (size == 4) {
+		*val = readl(addr);
+	} else if (size == 2) {
+		*val = readw(addr);
+	} else if (size == 1) {
+		*val = readb(addr);
+	} else {
+		*val = 0;
+		return PCIBIOS_BAD_REGISTER_NUMBER;
+	}
+
+	return PCIBIOS_SUCCESSFUL;
+}
+EXPORT_SYMBOL_GPL(dw_pcie_read);
+
+
+Mani, I'm not here to refute you. I just want to ask if there are bugs 
+everywhere here?
+
+I think it's a good idea as mentioned in Gerd's latest reply email. For 
+dw_pcie_read_cfg() and cdns_pcie_read_cfg, I can delete it and provide 
+the macro definition function of {_byte/_word/_dword}.
+
+Similar to this macro definition:
+PCI_OP_READ(byte, u8, 1)
+PCI_OP_READ(word, u16, 2)
+PCI_OP_READ(dword, u32, 4)
+https://lore.kernel.org/linux-pci/06f16b1a55eede3dc3e0bf31ff14eca89ab6f009.camel@linux.ibm.com/
+
+
+Best regards,
+Hans
+
 

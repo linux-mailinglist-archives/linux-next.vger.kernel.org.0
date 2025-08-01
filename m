@@ -1,176 +1,171 @@
-Return-Path: <linux-next+bounces-7811-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7812-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7F9EB17D5C
-	for <lists+linux-next@lfdr.de>; Fri,  1 Aug 2025 09:18:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72EF8B17DCF
+	for <lists+linux-next@lfdr.de>; Fri,  1 Aug 2025 09:53:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E249D586F1A
-	for <lists+linux-next@lfdr.de>; Fri,  1 Aug 2025 07:18:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 247E24E2C72
+	for <lists+linux-next@lfdr.de>; Fri,  1 Aug 2025 07:53:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74750158545;
-	Fri,  1 Aug 2025 07:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="mOCEVgP4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F6B81F4199;
+	Fri,  1 Aug 2025 07:53:14 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3783F3C26;
-	Fri,  1 Aug 2025 07:18:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C491273FD;
+	Fri,  1 Aug 2025 07:53:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754032706; cv=none; b=H8cQkvPEcvAyieMiAH/srHUATVMf0pI3pt0PyApFtnDAVnNDFaPFwJxcc6cqc3HGxTwoOl4XR/laWP7R1JYWZ4UD2AbV8aXt9+XxUW0LHV2EXoKB0ZjEuHmS6OrnKWt/4ZtJ4dW0DiSCL/paJdrO2yuM2nB0B8kZoA8qZo0jPfU=
+	t=1754034794; cv=none; b=ORuHGUx1Uqr5WPlN5c5uMbce2gwhhFjFDT/YkznnTBQcZQxhcEGbGmvDIKIYSvR/0ADh/GSo0U78gmJLsGsEcrByca0MJkM6biCdIExFSGoQUR207YnY7gqrdrAmADUmNI6ACXxuHXD/Fz69fDhDRKC3MVEG1++htDUzpIZXrsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754032706; c=relaxed/simple;
-	bh=BOFyJw4ktBxPJF/jujwd4GVuA44Bxw4UBKAzqLYfmFY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ohf5ocnSU1GEKOEqqaZPyJW8ZBSm27sK6cfL+RtL0g3twlo9R86Im5QJjY/i2q7TrP/IIk5rH8IMTMw1wtu0hmhu5E660q8BYub5t3h3Azyn3PdPwWRLMHpJ4YCfDJ+8FrFrudvXyQWlLgivq0BKdj/ZlhSYdYqQf7tjtbkYsSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=mOCEVgP4; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1754032466;
-	bh=P/wEHpx1naDCEcAHIdugG1tNSMJQxPoJ4fhM/JvwLug=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=mOCEVgP4D8NUoGMxs+CJC4wg2sDHE0LL0TyC+OciHTDZyDPahMVZh8zbIW6jpQu8Y
-	 wZmjEMowJq7VsOMBEOiLUE1vjrmgoLCp/3bddZeucNHJsdW8Pb/5jAd6QaqQD+eVr9
-	 fA8b31Gmw2q3R6q/OMIWZ5UtZJ4UWtouxTF+sd4M68jgBXpV0dByV2T0WXhy6RDITY
-	 DLtfRo21fedBSu+KpO5BnLBoCzJ4YLXo7qkPCKuJTjBqv/RZ6uVMdJPJg1k+XS7zD3
-	 0PPYclPz2+g8V9Z8pw//zqP+VMv0uGH2JcAH9S0RdGjNOd7thfntucfpu08Kb2ljOF
-	 LWbiE724S3ahA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4btcdZ32zsz4xQW;
-	Fri,  1 Aug 2025 17:14:26 +1000 (AEST)
-Date: Fri, 1 Aug 2025 17:18:16 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>
-Cc: Andreas Hindborg <a.hindborg@kernel.org>, Alexandre Courbot
- <acourbot@nvidia.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the rust-timekeeping tree with the
- drm-nova tree
-Message-ID: <20250801171816.1af66375@canb.auug.org.au>
-In-Reply-To: <20250624195142.1050e147@canb.auug.org.au>
-References: <20250624195142.1050e147@canb.auug.org.au>
+	s=arc-20240116; t=1754034794; c=relaxed/simple;
+	bh=oLgt1/cGb6EuE5nSEM0TtuVrL7A1aY7RnNmfEhjf0n8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g0PLYgi3Wz066GhZoNd1bApQ0e59gkDKByZLZW3Oyub6ljNo7nKqpJr722aEeRxYaGXhNvV2exK/igvYWqUd7Q8wN/bCD9UxoYash+1W9cbT6m1d+kVnwJbocbaPRc/BVxLqlLHgS+y1NKcQwWHRIaiPASl6UE/k+0ocBpaiVWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-4efbfe9c7a5so1911453137.0;
+        Fri, 01 Aug 2025 00:53:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754034792; x=1754639592;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DzFKrk5qEr4Es0kahjlnt5GIGR4PQyQRZQNgTseC61A=;
+        b=vryZUWSRRCI44yxBAjBHKelBomnZ2acDL5oLyJJLahRklYO9wm64G/aFFasYdw51iT
+         CsN+sQa/uoWaskdNW649GlTtL+sTE1YDL7Ay6Zrik4zkJZqvknprEYRG61mopv7nTOvs
+         8JAKoWschVh4TIJNza3r81LVluw/G01wVcRz4RX5Kd7YukW7QTCZ7SC/3G4r0AXipOvJ
+         Cx03fVc38btJGz9vJN7IJryArUazkvomH0PFixEAwh/6MFSw4u/V8aAIfXZU0fOFR/RT
+         D99cXbjfleHysMyI68NxN/vNG5K/M0CYdSostkvfII4NOnY9hKQZj32noD8OG5qSXifk
+         a/EQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUCUb4Zq8eidVQYYMIFjMc63FOwciGEAzqIr3IDedI3b061NSEpiBwuos87GQ1tx5XdQ+TjFoSJVo/TZg==@vger.kernel.org, AJvYcCUdNNGXbwfi2/I/q0fSBwPfznZk5qIbICBJjwvtyb9Z701nP92QhCCzLjwl9uCpSaFvPbZjovMO8i7oqQw=@vger.kernel.org, AJvYcCUvqv2ySP5whsoIpXyPL23jFX1mxlEKFp2YgzamqlYVs6COqP9ZXIt4nYK8QCf3DwfJHGjELDRw02Iu@vger.kernel.org, AJvYcCXHiZC4T8AVbT/5N2d968rOZtLv/G+njlby6/sNsfsErAi9p/qWF8fUvrPeR+2Gxnh7ay4e+qMAP2W+Og==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxs/icqbCPrUZTO1jhxuoKChFX3/0EoxhFqbxtWl/cLOFWnocYB
+	OenYADsmSafiu1iwHzk8MyI1ZUY6oKpKVOHFIQv0iY2MVUe9XpK6OEqRvI+XXbXV
+X-Gm-Gg: ASbGncvDbXoMGbaJEJPNa9cUEYzxfiXjAqmTobfrcZZYvd8UsF8eM2GTUcMfoeqVDib
+	UGiIoIl/lje80WiJkiqStMi3IbhGKH+GE/FHLwtRUMEqNe8FnQzvGvjJbZ9jYXdPY0jXSConZkn
+	pzlZlQRxXLEqJbPxd7oqxqMMoEENVgkZsnwat8Bi3NhM4hW+PsbFZ5far+litpRGZ9W4KBR1MKf
+	OBo6wm3DKN1FTXAinkBElYpz0jkBEHQ+FtJ3TRqjUDFQoJSGWvwC9UAOEX4KK5r+BSi2CBn9KAb
+	0NJiWOcJmHyvWEQCFi/RBPpk9pXofLTkgJ2srJQjEtw80gv3lpCIM9jBYqSlc/tVQK9UnUk7/C1
+	djCghDjTdIOSgAK7Mb3z71vjgHYBy6J6BCacIc+zBHkOQh85C1JfKH199kvPM
+X-Google-Smtp-Source: AGHT+IH8ZCF1y9qER27dQCY8WWuoBK9OLgaVzKvECUpp4rg+YPt02uN4bfERbxFbjgUdHD1tauAoJw==
+X-Received: by 2002:a05:6102:324e:10b0:4f3:2f5f:c2e8 with SMTP id ada2fe7eead31-4fc0fe5e086mr1838199137.1.1754034791710;
+        Fri, 01 Aug 2025 00:53:11 -0700 (PDT)
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com. [209.85.217.49])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-88d8f3f0c5dsm754672241.13.2025.08.01.00.53.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Aug 2025 00:53:10 -0700 (PDT)
+Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-4fc2132cc97so538634137.1;
+        Fri, 01 Aug 2025 00:53:10 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWSAkB8dMewm47egHPwhelcGYuhFEE57+rhCo1mKCwGhm+7eLi7MEr2pTyLL1ZWw33UcjjdI+DeLpM/tVo=@vger.kernel.org, AJvYcCX4cQ3aArJw8nVnqS5OMX1BROBpt3Ir4KwsiR2FdgRwOxKoeQnHPUzSTeGoedOieaUKVA+qPLtLXL+d@vger.kernel.org, AJvYcCX4qh0yT+F8IrFCZMSwzuZh5h3JO/waU8jkDGvL8p3T6hUv/TQZKjtl/hEAwDwJB6bPyN88wmnfTkd9EQ==@vger.kernel.org, AJvYcCXAuoD9ZlDWx+KDhut2KvIkBMwqFhrgwjG0cM21mvK2HbcG01Hf3drkOT0GDuz1n8hV9NHkmOm3ShgDKw==@vger.kernel.org
+X-Received: by 2002:a05:6102:6102:10b0:4fb:f495:43ec with SMTP id
+ ada2fe7eead31-4fc1014a568mr1725889137.12.1754034790307; Fri, 01 Aug 2025
+ 00:53:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RQb=0kK9bxoKZr9_/R35wlL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <4e10bea3aa91ee721bb40e9388e8f72f930908fe.camel@linux.ibm.com> <20250731173858.1173442-1-gbayer@linux.ibm.com>
+In-Reply-To: <20250731173858.1173442-1-gbayer@linux.ibm.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 1 Aug 2025 09:52:58 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVwFeV46oCid_sMHjXfP+yyGTpBfs9t3uaa=wRxNcSOAQ@mail.gmail.com>
+X-Gm-Features: Ac12FXxryTPC1ndd8ms1Hjwe7h8qRvkBWHnbRS0kseU5i-4Dc5zEC3g15MUQeuA
+Message-ID: <CAMuHMdVwFeV46oCid_sMHjXfP+yyGTpBfs9t3uaa=wRxNcSOAQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI: Fix endianness issues in pci_bus_read_config()
+To: Gerd Bayer <gbayer@linux.ibm.com>
+Cc: 18255117159@163.com, bhelgaas@google.com, helgaas@kernel.org, 
+	agordeev@linux.ibm.com, borntraeger@linux.ibm.com, 
+	ilpo.jarvinen@linux.intel.com, jingoohan1@gmail.com, kwilczynski@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linux-next@vger.kernel.org, linux-pci@vger.kernel.org, lpieralisi@kernel.org, 
+	mani@kernel.org, robh@kernel.org, schnelle@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
 
---Sig_/RQb=0kK9bxoKZr9_/R35wlL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Gerd,
 
-Hi all,
-
-On Tue, 24 Jun 2025 19:51:42 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Thu, 31 Jul 2025 at 20:57, Gerd Bayer <gbayer@linux.ibm.com> wrote:
+> Simple pointer-casts to map byte and word reads from PCI config space
+> into dwords (i.e. u32) produce unintended results on big-endian systems.
+> Add the necessary adjustments under compile-time switch
+> CONFIG_CPU_BIG_ENDIAN.
 >
-> After merging the rust-timekeeping tree, today's linux-next build
-> (x86_64 allmodconfig) failed like this:
->=20
-> error[E0599]: no method named `as_nanos` found for struct `Delta` in the =
-current scope
->   --> drivers/gpu/nova-core/util.rs:45:33 =20
->    |
-> 45 |         if start_time.elapsed().as_nanos() > timeout.as_nanos() as i=
-64 {
->    |                                 ^^^^^^^^ method not found in `Delta`
->=20
-> error: aborting due to 1 previous error
->=20
-> For more information about this error, try `rustc --explain E0599`.
->=20
-> Caused by commits
->=20
->   2ed94606a0fe ("rust: time: Rename Delta's methods from as_* to into_*")
->   768dfbfc98e2 ("rust: time: Make Instant generic over ClockSource")
->=20
-> interacting with commit
->=20
->   a03c9bd953c2 ("gpu: nova-core: add helper function to wait on condition=
-")
->=20
-> from the drm-nova tree.
->=20
-> I tried to fix it up, but this lead down a rabbit hole and my rust
-> skills are poor, so I just dropped the rust-timekeeping tree for today.
-> A merge resolution would be appreciated.
+> pci_bus_read_config() was just introduced with
+> https://lore.kernel.org/all/20250716161203.83823-2-18255117159@163.com/
+>
+> Signed-off-by: Gerd Bayer <gbayer@linux.ibm.com>
 
-This is now a conflict between the rust tree and Linus' tree.
+Thanks for your patch!
 
-The resolution being used is:
+> --- a/drivers/pci/access.c
+> +++ b/drivers/pci/access.c
+> @@ -89,15 +89,24 @@ int pci_bus_read_config(void *priv, unsigned int devfn, int where, u32 size,
+>                         u32 *val)
+>  {
+>         struct pci_bus *bus = priv;
+> +       int rc;
+>
+> -       if (size == 1)
+> -               return pci_bus_read_config_byte(bus, devfn, where, (u8 *)val);
+> -       else if (size == 2)
+> -               return pci_bus_read_config_word(bus, devfn, where, (u16 *)val);
+> -       else if (size == 4)
+> -               return pci_bus_read_config_dword(bus, devfn, where, val);
+> -       else
+> -               return PCIBIOS_BAD_REGISTER_NUMBER;
+> +       if (size == 1) {
+> +               rc = pci_bus_read_config_byte(bus, devfn, where, (u8 *)val);
+> +#if (IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+> +               *val = ((*val >> 24) & 0xff);
+> +#endif
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 25 Jun 2025 16:00:14 +1000
-Subject: [PATCH] fix up for "rust: time: Make Instant generic over ClockSou=
-rce"
+IMHO this looks ugly and error-prone.  In addition, it still relies
+on the caller initializing the upper bits to zero on little-endian.
 
-interacting with "gpu: nova-core: add helper function to wait on
-condition" from the drm-nova tree
+What about:
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/nova-core/util.rs | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+    u8 byte;
 
-diff --git a/drivers/gpu/nova-core/util.rs b/drivers/gpu/nova-core/util.rs
-index 64fb13760764..76cedf3710d7 100644
---- a/drivers/gpu/nova-core/util.rs
-+++ b/drivers/gpu/nova-core/util.rs
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
-=20
- use kernel::prelude::*;
--use kernel::time::{Delta, Instant};
-+use kernel::time::{Delta, Instant, Monotonic};
-=20
- pub(crate) const fn to_lowercase_bytes<const N: usize>(s: &str) -> [u8; N]=
- {
-     let src =3D s.as_bytes();
-@@ -33,7 +33,7 @@ pub(crate) const fn const_bytes_to_str(bytes: &[u8]) -> &=
-str {
- /// TODO[DLAY]: replace with `read_poll_timeout` once it is available.
- /// (https://lore.kernel.org/lkml/20250220070611.214262-8-fujita.tomonori@=
-gmail.com/)
- pub(crate) fn wait_on<R, F: Fn() -> Option<R>>(timeout: Delta, cond: F) ->=
- Result<R> {
--    let start_time =3D Instant::now();
-+    let start_time =3D Instant::<Monotonic>::now();
-=20
-     loop {
-         if let Some(ret) =3D cond() {
+    rc = pci_bus_read_config_byte(bus, devfn, where, &byte);
+    *val = byte;
 
---=20
-Cheers,
-Stephen Rothwell
+> +       } else if (size == 2) {
+> +               rc = pci_bus_read_config_word(bus, devfn, where, (u16 *)val);
+> +#if (IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+> +               *val = ((*val >> 16) & 0xffff);
+> +#endif
 
---Sig_/RQb=0kK9bxoKZr9_/R35wlL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+and:
 
------BEGIN PGP SIGNATURE-----
+    u16 word;
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiMajgACgkQAVBC80lX
-0GxSxQf+LKPXq/Zq7qSk/o+YCOlGPNZXPzHIdC5XgK1N5uSHsVvt6/hy7BgdJGMT
-s/m6TWc0NVefyOZqKkXp6ZdZ7TF0nmQ7k0cIrICrZjY/BaPjOmTTzztufTiYlaEU
-ZY2ZTWIQsoWa64rzZNcDmtC82bJRY3fQ943iGXJrnEuSl+4pp/4C/ZVeiSOqkRJZ
-dvCWseT9+eFcjTJtUpzJEpV+wnnmijeqMb+NA7bDSAlrN/ZY+rEXpi8yIztFrCnp
-X8CgztqMFX4NZHX68hEHHZQEqWo2osT/rounrzDC0+LrogRaLrN3TvRmEiyRDbHB
-Qdddc/+TZSkGWVd2vm5XOEhj7FxKlA==
-=b+am
------END PGP SIGNATURE-----
+    rc = pci_bus_read_config_word(bus, devfn, where, &word);
+    *val = word;
 
---Sig_/RQb=0kK9bxoKZr9_/R35wlL--
+> +       } else if (size == 4) {
+> +               rc = pci_bus_read_config_dword(bus, devfn, where, val);
+> +       } else {
+> +               rc =  PCIBIOS_BAD_REGISTER_NUMBER;
+> +       }
+> +       return rc;
+>  }
+>
+>  int pci_generic_config_read(struct pci_bus *bus, unsigned int devfn,
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 

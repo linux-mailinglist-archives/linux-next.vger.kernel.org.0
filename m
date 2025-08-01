@@ -1,65 +1,65 @@
-Return-Path: <linux-next+bounces-7823-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7824-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 602B4B18612
-	for <lists+linux-next@lfdr.de>; Fri,  1 Aug 2025 18:55:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2371BB18726
+	for <lists+linux-next@lfdr.de>; Fri,  1 Aug 2025 20:09:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CE83A820B1
-	for <lists+linux-next@lfdr.de>; Fri,  1 Aug 2025 16:55:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F1B91890B59
+	for <lists+linux-next@lfdr.de>; Fri,  1 Aug 2025 18:09:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05F031DB122;
-	Fri,  1 Aug 2025 16:55:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D001F3BBB;
+	Fri,  1 Aug 2025 18:09:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="YiczCgXe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iiSLwHpR"
 X-Original-To: linux-next@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 529C013B58D;
-	Fri,  1 Aug 2025 16:55:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CBC0188CC9;
+	Fri,  1 Aug 2025 18:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754067311; cv=none; b=dCl5Y4HCtrpAwOeUSkJr0Ol5LwWksL38GpqHeXu7NrdtwtJrVY7j42IsmHus0aiETIgnJ0zz9GV1L2B/q5/dwiF5aump5d4mNeQbFInuH/SK23I0VFOlFU2pKAmmvj/jzZEMqHtzGMUH8d6ucSmRMQcnWktBKtIiDTh9s54plao=
+	t=1754071742; cv=none; b=sgGgOYqANm6b0Ze/FXR3aZaldzBaYEiTmj/2fElm3JpEVrXOo3kUYSsVE34/ujueNf/PBM+/4J807M26x9j1wtj7oPLjk+v9d4SihNphb7QMO13SrjI50BvEj1yMuxojIQqgKKNDlrn+hnm/vC6dFxboFvc3uTZldAz5ViNN8IE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754067311; c=relaxed/simple;
-	bh=E1oHwcjz1UkMy5n80W7KOoeyrVlY8354cvfcN9IThP8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D7uCPrPyyH+fFNV1Bsh2f6j0jWZdHfgf7JJliHRXmSOkyOB98OXHyefFvQVSh/jruHntUAnber7Zoj1pH6+yJDZwS1CjLrcDR4NUxBtto1tyKxIsAw+It3MK2o0ypRf3/TqqDvgZ7rlPt6MAjpPaSbatRRYWnnkB/QaizMcvthg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=YiczCgXe; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=ZHD4zlqBg4vyKNckG/xTKO9RRemj+oorW2za/dflA9A=;
-	b=YiczCgXe8uRiXNXEQutI/0eyQsKmiCUAjO63yc6w1YHPv53KfWNx+lGGz+wZm2
-	SaomrFgD5jXGiYHR2KteTkIeeGW9GVL8eJ/ahMCD8OSD3u0hd81pu3XA14b5RH9b
-	1DlAOkK9y7DO67g1T1gcmEQUXo1jmcF2c7I54XQ1GQoDE=
-Received: from [IPV6:240e:b8f:919b:3100:ecd9:c243:2a5f:12dd] (unknown [])
-	by gzga-smtp-mtada-g0-1 (Coremail) with SMTP id _____wDnn5VD8YxoofS4Iw--.19322S2;
-	Sat, 02 Aug 2025 00:54:29 +0800 (CST)
-Message-ID: <659b8389-16a7-423b-a231-5489c7cc0da9@163.com>
-Date: Sat, 2 Aug 2025 00:54:27 +0800
-Precedence: bulk
-X-Mailing-List: linux-next@vger.kernel.org
-List-Id: <linux-next.vger.kernel.org>
-List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+	s=arc-20240116; t=1754071742; c=relaxed/simple;
+	bh=P7L2cubhAgXEB6EZdVMzRyHwCAk6GbODDnnzBqOIslc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jfs/6zLlu+jmjoTPo+Oz8Km9RS8vAPf6qvilwjaZ84ApnouxP5a42eQ/nS3WknzEu3bSIbm5AfFxrowgctznZJWWCOcESAqTnGecmfycvQHlUeV910ceDTJqzgRgjdFsk1Wdr5sxNgcglbbKBWRRpCac2sh6ge9xiUBb6p+wIwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iiSLwHpR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5694C4CEE7;
+	Fri,  1 Aug 2025 18:09:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754071742;
+	bh=P7L2cubhAgXEB6EZdVMzRyHwCAk6GbODDnnzBqOIslc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iiSLwHpR4qPaT8zHyzBFYi1+V2nfjEasrfYAJMGFvJttrKti9VG5YGoY0tUXgN/1a
+	 64F4vdbR4K5q7R6kBr8QrGtFLoEBUtvkYBQGr+elBhUc6K65aur8CDtHK+ffH3Dugi
+	 TXpnN6n+jkZcYcFNt0wO+B3XnRLtD+soDyDY5sitq9klYpPq/BJQduDixJqSXBZLCH
+	 FEQ4TZ0amgmU6WBI344SgjOaaQbZXAUXkew2F932ndSI0B/0N8EfLMzPEervm15gER
+	 d3pjxhyVdigTuYFPJIG3TC8tuyJoeyeCX+igv+Mj2GCXEuuiFb0cRri8IW0Q9rRj9V
+	 SvaBxK2DrSj7Q==
+Date: Fri, 1 Aug 2025 12:08:58 -0600
+From: Keith Busch <kbusch@kernel.org>
+To: Hans Zhang <18255117159@163.com>
+Cc: Gerd Bayer <gbayer@linux.ibm.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Hans Zhang <hans.zhang@cixtech.com>,
+	Arnd Bergmann <arnd@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+	bhelgaas@google.com, Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	jingoohan1@gmail.com,
+	Krzysztof =?iso-8859-1?Q?Wilczy=B4nski?= <kwilczynski@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-next <linux-next@vger.kernel.org>, linux-pci@vger.kernel.org,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Niklas Schnelle <schnelle@linux.ibm.com>, geert@linux-m68k.org
 Subject: Re: [PATCH] PCI: Fix endianness issues in pci_bus_read_config()
-To: Gerd Bayer <gbayer@linux.ibm.com>, Manivannan Sadhasivam
- <mani@kernel.org>, Hans Zhang <hans.zhang@cixtech.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
- bhelgaas@google.com, Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- jingoohan1@gmail.com, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?=
- <kwilczynski@kernel.org>, linux-kernel@vger.kernel.org,
- linux-s390@vger.kernel.org, linux-next <linux-next@vger.kernel.org>,
- linux-pci@vger.kernel.org, Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Rob Herring <robh@kernel.org>, Niklas Schnelle <schnelle@linux.ibm.com>,
- geert@linux-m68k.org
+Message-ID: <aI0CupiFvyOvgNQY@kbusch-mbp>
 References: <20250731183944.GA3424583@bhelgaas>
  <6e34b4af-dff9-4360-b3da-c95ca7c740c9@app.fastmail.com>
  <vf65usnffqzlkgijm72nuaslxnflwrugc25vw6q6blbn2s2d2s@b35vjkowd6yc>
@@ -68,201 +68,67 @@ References: <20250731183944.GA3424583@bhelgaas>
  <c8ffdd21-9000-40c2-9f4d-4d6318e730b5@cixtech.com>
  <cu7qdbwmnixqjce4aetr5ldwe3sqoixgq4fuzmzajzphjdywqq@yw6ojbgeqktm>
  <06f16b1a55eede3dc3e0bf31ff14eca89ab6f009.camel@linux.ibm.com>
-Content-Language: en-US
-From: Hans Zhang <18255117159@163.com>
-In-Reply-To: <06f16b1a55eede3dc3e0bf31ff14eca89ab6f009.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_____wDnn5VD8YxoofS4Iw--.19322S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxJw18XFy3AryrGFWfAryxKrg_yoWrtr1fpF
-	W5Aayjyr48tr1ayrn2va18Xw1jyFn7tF4UZF1fG342vFn0yr1SqryjgF4agr1jqw48XF18
-	Z39YgFZ7Cw1DAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UulksUUUUU=
-X-CM-SenderInfo: rpryjkyvrrlimvzbiqqrwthudrp/1tbiOgyco2iM6Nr5SgAAss
+ <659b8389-16a7-423b-a231-5489c7cc0da9@163.com>
+Precedence: bulk
+X-Mailing-List: linux-next@vger.kernel.org
+List-Id: <linux-next.vger.kernel.org>
+List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <659b8389-16a7-423b-a231-5489c7cc0da9@163.com>
 
-
-
-On 2025/8/1 19:30, Gerd Bayer wrote:
-> On Fri, 2025-08-01 at 16:24 +0530, Manivannan Sadhasivam wrote:
+On Sat, Aug 02, 2025 at 12:54:27AM +0800, Hans Zhang wrote:
+> As I mentioned in my reply to Mani's email, the data ultimately read here is
+> also a forced type conversion.
 > 
-> <--- snip --->
+> #define PCI_OP_READ(size, type, len) \
+> int noinline pci_bus_read_config_##size \
+> 	(struct pci_bus *bus, unsigned int devfn, int pos, type *value)	\
+> {									\
+> 	unsigned long flags;						\
+> 	u32 data = 0;							\
+> 	int res;							\
+> 									\
+> 	if (PCI_##size##_BAD)						\
+> 		return PCIBIOS_BAD_REGISTER_NUMBER;			\
+> 									\
+> 	pci_lock_config(flags);						\
+> 	res = bus->ops->read(bus, devfn, pos, len, &data);		\
+> 	if (res)							\
+> 		PCI_SET_ERROR_RESPONSE(value);				\
+> 	else								\
+> 		*value = (type)data;					\
+> 	pci_unlock_config(flags);					\
+> 									\
+> 	return res;							\
+> }
 > 
->>>>>>> The pci_bus_read_config() interface itself may have been a
->>>>>>> mistake, can't the callers just use the underlying helpers
->>>>>>> directly?
->>>>>>>
->>>>>>
->>>>>> They can! Since the callers of this API is mostly the macros, we can easily
->>>>>> implement the logic to call relevant accessors based on the requested size.
->>>>>>
->>>>>> Hans, could you please respin the series based the feedback since the series is
->>>>>> dropped for 6.17.
->>>>>>
->>>>>
->>>>> Dear all,
->>>>>
->>>>> I am once again deeply sorry for the problems that occurred in this series.
->>>>> I only test pulling the ARM platform.
->>>>>
->>>>> Thank you very much, Gerd, for reporting the problem.
+> And this function. Could it be that I misunderstood something?
+
+The above macro retains the caller's type for "value". If the caller
+passes a "u8 *", the value is deferenced as a u8.
+
+The function below promotes everything to a u32 pointer and deferences
+it as such regardless of what type the user passed in.
+ 
+> int pci_generic_config_read(struct pci_bus *bus, unsigned int devfn,
+> 			    int where, int size, u32 *val)
+> {
+> 	void __iomem *addr;
 > 
-> no worries!
+> 	addr = bus->ops->map_bus(bus, devfn, where);
+> 	if (!addr)
+> 		return PCIBIOS_DEVICE_NOT_FOUND;
 > 
->>>>> Thank you all for your discussions and suggestions for revision.
->>>>>
->>>>> Hi Mani,
->>>>>
->>>>> Geert provided a solution. My patch based on this is as follows. Please
->>>>> check if there are any problems.
->>>>> https://lore.kernel.org/linux-pci/CAMuHMdVwFeV46oCid_sMHjXfP+yyGTpBfs9t3uaa=wRxNcSOAQ@mail.gmail.com/
->>>>>
->>>>> Also, please ask Gerd to help test whether it works properly. Thank you very
->>>>> much.
->>>>>
+> 	if (size == 1)
+> 		*val = readb(addr);
+> 	else if (size == 2)
+> 		*val = readw(addr);
+> 	else
+> 		*val = readl(addr);
 > 
-> I found Geert's proposal intriguing for a quick resolution of the
-> issue. Yet, I have not tried that proposal, though.
-> 
-
-Hi Gerd,
-
-As I mentioned in my reply to Mani's email, the data ultimately read 
-here is also a forced type conversion.
-
-#define PCI_OP_READ(size, type, len) \
-int noinline pci_bus_read_config_##size \
-	(struct pci_bus *bus, unsigned int devfn, int pos, type *value)	\
-{									\
-	unsigned long flags;						\
-	u32 data = 0;							\
-	int res;							\
-									\
-	if (PCI_##size##_BAD)						\
-		return PCIBIOS_BAD_REGISTER_NUMBER;			\
-									\
-	pci_lock_config(flags);						\
-	res = bus->ops->read(bus, devfn, pos, len, &data);		\
-	if (res)							\
-		PCI_SET_ERROR_RESPONSE(value);				\
-	else								\
-		*value = (type)data;					\
-	pci_unlock_config(flags);					\
-									\
-	return res;							\
-}
-
-And this function. Could it be that I misunderstood something?
-
-int pci_generic_config_read(struct pci_bus *bus, unsigned int devfn,
-			    int where, int size, u32 *val)
-{
-	void __iomem *addr;
-
-	addr = bus->ops->map_bus(bus, devfn, where);
-	if (!addr)
-		return PCIBIOS_DEVICE_NOT_FOUND;
-
-	if (size == 1)
-		*val = readb(addr);
-	else if (size == 2)
-		*val = readw(addr);
-	else
-		*val = readl(addr);
-
-	return PCIBIOS_SUCCESSFUL;
-}
-EXPORT_SYMBOL_GPL(pci_generic_config_read);
-
-> Instead I spent some more cycles on Lukas' and Mani's question about
-> the value of the pci_bus_read_config() helper. So I changed
-> PCI_FIND_NEXT_CAP and PCI_FIND_NEXT_EXT_CAP to use size-aware versions
-> of read_cfg accessor functions like this:
-> 
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index ac954584d991..9e2f75ede95f 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -109,17 +109,17 @@ int pci_bus_read_config(void *priv, unsigned int
-> devfn, int where, u32 size,
->   ({
-> \
->          int __ttl = PCI_FIND_CAP_TTL;
-> \
->          u8 __id, __found_pos = 0;
-> \
-> -       u32 __pos = (start);
-> \
-> -       u32 __ent;
-> \
-> +       u8 __pos = (start);
-> \
-> +       u16 __ent;
-> \
->                                                                        
-> \
-> -       read_cfg(args, __pos, 1, &__pos);
-> \
-> +       read_cfg##_byte(args, __pos, &__pos);
-> \
->                                                                        
-> \
->          while (__ttl--) {
-> \
->                  if (__pos < PCI_STD_HEADER_SIZEOF)
-> \
->                          break;
-> \
->                                                                        
-> \
->                  __pos = ALIGN_DOWN(__pos, 4);
-> \
-> -               read_cfg(args, __pos, 2, &__ent);
-> \
-> +               read_cfg##_word(args, __pos, &__ent);
-> \
->                                                                        
-> \
->                  __id = FIELD_GET(PCI_CAP_ID_MASK, __ent);
-> \
->                  if (__id == 0xff)
-> \
-> @@ -158,7 +158,7 @@ int pci_bus_read_config(void *priv, unsigned int
-> devfn, int where, u32 size,
->                                                                        
-> \
->          __ttl = (PCI_CFG_SPACE_EXP_SIZE - PCI_CFG_SPACE_SIZE) / 8;
-> \
->          while (__ttl-- > 0 && __pos >= PCI_CFG_SPACE_SIZE) {
-> \
-> -               __ret = read_cfg(args, __pos, 4, &__header);
-> \
-> +               __ret = read_cfg##_dword(args, __pos, &__header);
-> \
->                  if (__ret != PCIBIOS_SUCCESSFUL)
-> \
->                          break;
-> \
->                                                                        
-> \
-> 
-> 
-> This fixes the issue for s390's use-cases. With that
-> pci_bus_read_config() becomes unused - and could be removed in further
-> refinements.
->                                                                        
-> However, this probably breaks your dwc and cdns use-cases. I think,
-> with the accessor functions for dwc and cadence changed to follow the
-> {_byte|_word|_dword} naming pattern they could be used straight out of
-> PCI_FIND_NEXT_{EXT_}CAP, too. Then, dw_pcie_read_cfg() and
-> cdns_pcie_read_cfg become obsolete as well.
-> 
-> Thoughts?
-
-In my opinion, it's no problem. I can provide the corresponding function 
-of {_byte / _word / _dword}. But it is necessary to know Bjorn, Mani, 
-Arnd, Lukas... Their viewpoints or suggestions.
-
-Best regards,
-Hans
-
+> 	return PCIBIOS_SUCCESSFUL;
+> }
 

@@ -1,156 +1,124 @@
-Return-Path: <linux-next+bounces-7826-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7827-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B5A3B18F30
-	for <lists+linux-next@lfdr.de>; Sat,  2 Aug 2025 17:24:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 362F4B18F35
+	for <lists+linux-next@lfdr.de>; Sat,  2 Aug 2025 17:30:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1AF7189CCFD
-	for <lists+linux-next@lfdr.de>; Sat,  2 Aug 2025 15:24:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F94F7AA9E1
+	for <lists+linux-next@lfdr.de>; Sat,  2 Aug 2025 15:29:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F8B9246BB0;
-	Sat,  2 Aug 2025 15:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84E0128F4;
+	Sat,  2 Aug 2025 15:30:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Yok6GSQO"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dhqv1rnz"
 X-Original-To: linux-next@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 371FB15C158;
-	Sat,  2 Aug 2025 15:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF53435977
+	for <linux-next@vger.kernel.org>; Sat,  2 Aug 2025 15:30:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754148255; cv=none; b=L6wbDfvxukC4GSU6yN5//bcY2nTYtt7cgScDt4JTqA338YI/uREo7f/xXiWrElRz/GiM0drSSgs5S+ZLRNunpPrzR0nw9lpeHLg9uOgkEUrUf6TZ4+44sawGFRMUXvHFhoSbhM/YT7v59U4qd3KuB/UJuMS0ohqqJtIyTNSAmOA=
+	t=1754148645; cv=none; b=T2IFp0pmuaRiF7nfI+Ug5gdHYGx4QDpipUiF3Z5geLCMnMYdKxUBEFKMksdR2qsNoAt5ZP67NU3bhxShDpyJMDdIksXRb7zp9aLRgul4tXEG2b4gwYnR1pae1geDwgzVc2rOe+wO7PomSApHsNxNwB5X8ebvgAVH0GV0hjuJap0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754148255; c=relaxed/simple;
-	bh=7SwuS0e5Mm7qBSNVIoorKKIp0KpAUiVnT7Ez9QhYRNM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J5GNzxOydWkiT+LxacETc8K6H2QxlEG4a48UlS7wTaavMShSEVHBab+vmog9us8BsiJRIpRG4JnBo+4ne9t6uh1hNhAH6xn9QvVvtwsrK0iOVyFYybaIOaiH4iWj1DFLDQMlHbmiF9gOB0TWYS8JdIXpwZ71sSvf3CIs4DSHhLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Yok6GSQO; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=qo72/01PN/hdR6lvl9jgxOqtELAkEE3dNJ7kNf8Dy4s=;
-	b=Yok6GSQOtap/8Ngzi0apy2swWSbV1qpuj+qp3AdJdU4SAABisbK5frg3ZxuONE
-	nd5ZVFyeeI8YI7SCkXjOf630uRWc0CmXXbABArWQidGrC2H//ouJOjPrM9RulPvu
-	AK4EGTMJKi8FEgDNhPOflGYmmWhOJ+F3dbmikNzqIXYQg=
-Received: from [IPV6:240e:b8f:919b:3100:ecd9:c243:2a5f:12dd] (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wAXprp2LY5oEFSLJQ--.61565S2;
-	Sat, 02 Aug 2025 23:23:35 +0800 (CST)
-Message-ID: <d2240ab0-5d91-4b41-945f-e29b40f7b7f4@163.com>
-Date: Sat, 2 Aug 2025 23:23:34 +0800
+	s=arc-20240116; t=1754148645; c=relaxed/simple;
+	bh=i+1M7H5bBwgwpgyJRLJONuTCe3kmewfhAcInKqptKtA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c1/NSkZO/pzIu2ZHZ9EudfkKfxK2sJqrE4sfXtzjPni2nM8vCFOn9io1DyzfdmchKVz7JPo25whioDEHVdTzrIL3BnLzVFyCsbUFueNKRLiFkec3cG47AEHOXIcg+AO3IbIggzZfJBmir90w0vFuhGacK18MosUz0sXTzLXCG7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dhqv1rnz; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Sat, 2 Aug 2025 11:30:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1754148640;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZNr+MvD9kEy2GM2CfeheJEuFgMa5Y5JfdFKErWGgmEQ=;
+	b=dhqv1rnzJWRFXfWxOgf4LfJgHAExN5ArA/ox/53SzczjAQAaksF58ocPSuCmrbybyE0FCe
+	1CP/0vzkO/mdABhscqw5+RRaor6xxb9NlALHFSIvo7ItCWKil1z3GmqmjpLLL3Firc8H7s
+	2PZyyrNq4K/U02VLBE4Ka4ZxYfp99NI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Kent Overstreet <kent.overstreet@linux.dev>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>, 
+	linux-bcachefs@vger.kernel.org
+Subject: Re: Build failure on next-20250801
+Message-ID: <un3cqgfe2yzfgiuthmk46f4ypq4krhlun7q3zp65ebttbjvxw7@ff4tpgu4mcua>
+References: <b390beb2-441f-4a3d-b53d-3f554b308be2@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] PCI: Fix endianness issues in pci_bus_read_config()
-To: Keith Busch <kbusch@kernel.org>
-Cc: Gerd Bayer <gbayer@linux.ibm.com>, Manivannan Sadhasivam
- <mani@kernel.org>, Hans Zhang <hans.zhang@cixtech.com>,
- Arnd Bergmann <arnd@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
- bhelgaas@google.com, Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- jingoohan1@gmail.com, =?UTF-8?Q?Krzysztof_Wilczy=C2=B4nski?=
- <kwilczynski@kernel.org>, linux-kernel@vger.kernel.org,
- linux-s390@vger.kernel.org, linux-next <linux-next@vger.kernel.org>,
- linux-pci@vger.kernel.org, Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Rob Herring <robh@kernel.org>, Niklas Schnelle <schnelle@linux.ibm.com>,
- geert@linux-m68k.org
-References: <20250731183944.GA3424583@bhelgaas>
- <6e34b4af-dff9-4360-b3da-c95ca7c740c9@app.fastmail.com>
- <vf65usnffqzlkgijm72nuaslxnflwrugc25vw6q6blbn2s2d2s@b35vjkowd6yc>
- <9a155e45-f723-4eec-81d3-2547bfe9a4e9@cixtech.com>
- <ofsbfhor5ah3yzvkc5g5kb4fpjlzoqkkzukctmr3f6ur4vl2e7@7zvudt63ucbk>
- <c8ffdd21-9000-40c2-9f4d-4d6318e730b5@cixtech.com>
- <cu7qdbwmnixqjce4aetr5ldwe3sqoixgq4fuzmzajzphjdywqq@yw6ojbgeqktm>
- <06f16b1a55eede3dc3e0bf31ff14eca89ab6f009.camel@linux.ibm.com>
- <659b8389-16a7-423b-a231-5489c7cc0da9@163.com> <aI0CupiFvyOvgNQY@kbusch-mbp>
-Content-Language: en-US
-From: Hans Zhang <18255117159@163.com>
-In-Reply-To: <aI0CupiFvyOvgNQY@kbusch-mbp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_____wAXprp2LY5oEFSLJQ--.61565S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WF4DGw1UuFy7KFWkXryrJFb_yoW8AFWrpF
-	y5ta18tF4kJrySvw1vq34vq3WSvanrKayDAr9xu3sIv3Z0yw1FvFyjgFy2qrWYga1kuF48
-	Zw43JFW3Cw1qyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UtuciUUUUU=
-X-CM-SenderInfo: rpryjkyvrrlimvzbiqqrwthudrp/1tbiWw6do2iOJ0KXvAAAsD
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b390beb2-441f-4a3d-b53d-3f554b308be2@oss.qualcomm.com>
+X-Migadu-Flow: FLOW_OUT
 
-
-
-On 2025/8/2 02:08, Keith Busch wrote:
-> On Sat, Aug 02, 2025 at 12:54:27AM +0800, Hans Zhang wrote:
->> As I mentioned in my reply to Mani's email, the data ultimately read here is
->> also a forced type conversion.
->>
->> #define PCI_OP_READ(size, type, len) \
->> int noinline pci_bus_read_config_##size \
->> 	(struct pci_bus *bus, unsigned int devfn, int pos, type *value)	\
->> {									\
->> 	unsigned long flags;						\
->> 	u32 data = 0;							\
->> 	int res;							\
->> 									\
->> 	if (PCI_##size##_BAD)						\
->> 		return PCIBIOS_BAD_REGISTER_NUMBER;			\
->> 									\
->> 	pci_lock_config(flags);						\
->> 	res = bus->ops->read(bus, devfn, pos, len, &data);		\
->> 	if (res)							\
->> 		PCI_SET_ERROR_RESPONSE(value);				\
->> 	else								\
->> 		*value = (type)data;					\
->> 	pci_unlock_config(flags);					\
->> 									\
->> 	return res;							\
->> }
->>
->> And this function. Could it be that I misunderstood something?
+On Sat, Aug 02, 2025 at 12:04:07PM +0200, Konrad Dybcio wrote:
+> Hi, just hit the below on next-20250801
 > 
-> The above macro retains the caller's type for "value". If the caller
-> passes a "u8 *", the value is deferenced as a u8.
+> Reverting
+> 
+> 4c3205637f1e ("bcachefs: CLASS(btree_iter)")
+> ...
+> 69c862491582 ("Revert "bcachefs: Convert bch2_bkey_get_mut() to
+> CLASS(btree_iter)"")
+> 
+> (mostly as dependencies for clean reverts)
+> 
+> gets it to build again.
 
-Dear Keith,
-
-In this macro definition, bus->ops->read needs to ensure the byte order 
-of the read, as Lukas mentioned; otherwise, there is also a big-endian 
-issue at this location.
+Already have fixed versions in my for-next branch :)
 
 > 
-> The function below promotes everything to a u32 pointer and deferences
-> it as such regardless of what type the user passed in.
-
-I searched and learned that readb/readw/readl automatically handle byte 
-order, so there is no big-endian order issue.
-
->   
->> int pci_generic_config_read(struct pci_bus *bus, unsigned int devfn,
->> 			    int where, int size, u32 *val)
->> {
->> 	void __iomem *addr;
->>
->> 	addr = bus->ops->map_bus(bus, devfn, where);
->> 	if (!addr)
->> 		return PCIBIOS_DEVICE_NOT_FOUND;
->>
->> 	if (size == 1)
->> 		*val = readb(addr);
->> 	else if (size == 2)
->> 		*val = readw(addr);
->> 	else
->> 		*val = readl(addr);
->>
->> 	return PCIBIOS_SUCCESSFUL;
->> }
-
-
-Best regards,
-Hans
-
+> 
+> In case that matters (which I believe it doesn't), I'm using clang
+> on x86, version 20.1.8
+> 
+> 
+> fs/bcachefs/backpointers.c:391:7: error: cannot jump from this goto statement to its label
+>   391 |                 if (fsck_err(trans, backpointer_to_missing_device,
+>       |                     ^
+> fs/bcachefs/error.h:140:2: note: expanded from macro 'fsck_err'
+>   140 |         __fsck_err(c, FSCK_CAN_FIX|FSCK_CAN_IGNORE, _err_type, __VA_ARGS__)
+>       |         ^
+> fs/bcachefs/error.h:117:26: note: expanded from macro '__fsck_err'
+>   117 | #define __fsck_err(...)         fsck_err_wrap(bch2_fsck_err(__VA_ARGS__))
+>       |                                 ^
+> fs/bcachefs/error.h:111:3: note: expanded from macro 'fsck_err_wrap'
+>   111 |                 goto fsck_err;                                          \
+>       |                 ^
+> fs/bcachefs/backpointers.c:398:20: note: jump bypasses initialization of variable with __attribute__((cleanup))
+>   398 |         CLASS(btree_iter, alloc_iter)(trans, BTREE_ID_alloc, bucket, 0);
+>       |                           ^
+> 1 error generated.
+> make[4]: *** [scripts/Makefile.build:287: fs/bcachefs/backpointers.o] Błąd 1
+> make[4]: *** Oczekiwanie na niezakończone zadania....
+> fs/bcachefs/alloc_background.c:2097:7: error: cannot jump from this goto statement to its label
+>  2097 |                 if (fsck_err(trans, lru_entry_to_invalid_bucket,
+>       |                     ^
+> fs/bcachefs/error.h:140:2: note: expanded from macro 'fsck_err'
+>   140 |         __fsck_err(c, FSCK_CAN_FIX|FSCK_CAN_IGNORE, _err_type, __VA_ARGS__)
+>       |         ^
+> fs/bcachefs/error.h:117:26: note: expanded from macro '__fsck_err'
+>   117 | #define __fsck_err(...)         fsck_err_wrap(bch2_fsck_err(__VA_ARGS__))
+>       |                                 ^
+> fs/bcachefs/error.h:111:3: note: expanded from macro 'fsck_err_wrap'
+>   111 |                 goto fsck_err;                                          \
+>       |                 ^
+> fs/bcachefs/alloc_background.c:2107:20: note: jump bypasses initialization of variable with __attribute__((cleanup))
+>  2107 |         CLASS(btree_iter, alloc_iter)(trans, BTREE_ID_alloc, bucket, BTREE_ITER_cached);
+>       |                           ^
+> 1 error generated.
+> 
+> 
+> Konrad
 

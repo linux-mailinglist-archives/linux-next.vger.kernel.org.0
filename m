@@ -1,185 +1,181 @@
-Return-Path: <linux-next+bounces-7842-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7843-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FDE6B19D91
-	for <lists+linux-next@lfdr.de>; Mon,  4 Aug 2025 10:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DB97B19F7D
+	for <lists+linux-next@lfdr.de>; Mon,  4 Aug 2025 12:10:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BBE67A1DBE
-	for <lists+linux-next@lfdr.de>; Mon,  4 Aug 2025 08:24:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B3ABB7A416A
+	for <lists+linux-next@lfdr.de>; Mon,  4 Aug 2025 10:08:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F01124166F;
-	Mon,  4 Aug 2025 08:26:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6927F23D2B4;
+	Mon,  4 Aug 2025 10:10:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="e+6ibFyJ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UY9Vi8HB"
 X-Original-To: linux-next@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D327241673;
-	Mon,  4 Aug 2025 08:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3882200113;
+	Mon,  4 Aug 2025 10:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754295986; cv=none; b=XrP2sGE/2HpnMN+O+UtVhyfjehxnrGyY3Zjm6yjrZSd2DgEgqPef3elEDn34Qw3Dyn5DWTYFK+D7aY3YggUV3jZs95LsPJ8mkC64iIVeZsXvPzNR4vVhjAzJxszyePKJzNc1hCdarNO3vaSz81TEt3ihoQaZSd980myANZFMhug=
+	t=1754302208; cv=none; b=aq1i8MeNtoJVP/TksOQ3pdQWKCpIqPyOyJ3faaUMoFR+6Z2D2jjZ2i/qCcSLGmAeoW36ijG6UAZHHRiJ00AIFMgUHmJ325eeqeZYLFJgSE7Jlv7kNGoxT5PtM1s/zDFsgblrA7SCGsJlDQxv3wJ+93XXr0x8dOQi5yNDnI9VHu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754295986; c=relaxed/simple;
-	bh=4nz2pQeFXCsvdMKj0bF/k07bhoSmBAiNp2ChdL1jFzo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=frUe/QE8MxWKGgTt5BfLTjmU/H8Ln4FrLLfkdOCApE8yt6SITRRlLqAfArBoewLQLvor+KXZLuRADPU9Y4XtWb90n+HfaLN2DlsMZtEEhN/FxzJxn09JQ3Pu+3QnIRBwIFP7XT0Ju0b7PTs6UF2o8Wxrmb5YV1/BzgcLYhGYWi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=e+6ibFyJ; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
-	Content-Type; bh=hf1vje5kyoKYOcmhLP1VHV7D/dW4HdknY9UdhcGoZdM=;
-	b=e+6ibFyJF1BjSOiseLpLnkNuk553jPYcnTOS2E5AGSqDF9L0hXkZZChIeIbDux
-	0QhKjaqnhF2RKC1eqiFYZHeCRjFCFixMVWaciK9yGq0SPhCLqsJX6Y767k2yYx+T
-	rZmHGs2rLSXhapWARp+KpSztDCRo4Qaj94jPGlTHWzk8A=
-Received: from [192.168.106.52] (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wCHQqGAbpBohEodJg--.27698S2;
-	Mon, 04 Aug 2025 16:25:39 +0800 (CST)
-Message-ID: <f4dfc405-1841-4254-95e9-2079c183277d@163.com>
-Date: Mon, 4 Aug 2025 16:25:35 +0800
+	s=arc-20240116; t=1754302208; c=relaxed/simple;
+	bh=kCIchFC91452xWiDloGI6pBYIBOUJAAvwMrZE/NTCJE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=F2jKOVpRZjbLNQP3MgN3A0NrHi+b+EAqamkpe8SizqDzUgplVJkKmAyQZOxevMSQVYw6SCz1AcP5KYE0HTJ5TAb3ymsPujtAHmrYyhGNDHLzpgj+EcETMd49VxO+7dcLf0nrlgLDX5QBsloEWC51ok/W+i98zr207dPG3XTK2wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=UY9Vi8HB; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5744Y4d7023414;
+	Mon, 4 Aug 2025 10:09:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=kCIchF
+	C91452xWiDloGI6pBYIBOUJAAvwMrZE/NTCJE=; b=UY9Vi8HB7cvg0CNVS4+YgH
+	QhZjl91sJ7RvUL0RFfLBiZ8XuqWC8AfkSh4hVRKGCbHTS3oJXv5EvWRTdxbQ7Vuh
+	lccBuFbJKTWZ4jPHLIp613jpW/v+4qT5ch87wS4womSGMtatY7n6EUjmwptaACxk
+	SQ+ENRAw0MsC3+wAsuTWS6dsiYP/S0IB5ZXDJwE6RW+mhIDqFR8vcKozmDFtNSm7
+	pp5r1ii+kyu5v+0ASyGNCtku4TCZix0kf0xNYrvobIuHEao4LgRlmM50k9Lpu4LT
+	+dvMwQUEz1zodHGVpcFmaUUfFjBkiLZ2LHf760lvVnQ3H7KVmJYZQkHksfbO7blg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48a4a9v802-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 Aug 2025 10:09:56 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 5749vnmU011650;
+	Mon, 4 Aug 2025 10:09:55 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48a4a9v800-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 Aug 2025 10:09:55 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5749lLPB001893;
+	Mon, 4 Aug 2025 10:09:54 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 489wcywc8y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 04 Aug 2025 10:09:53 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 574A9o7I19333514
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 4 Aug 2025 10:09:50 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 06A8A20091;
+	Mon,  4 Aug 2025 10:09:50 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 127F12009C;
+	Mon,  4 Aug 2025 10:09:49 +0000 (GMT)
+Received: from [9.111.44.231] (unknown [9.111.44.231])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  4 Aug 2025 10:09:48 +0000 (GMT)
+Message-ID: <6efa10219a41907ebdd7b75fc8d9249e115e8864.camel@linux.ibm.com>
+Subject: Re: [PATCH] PCI: Fix endianness issues in pci_bus_read_config()
+From: Gerd Bayer <gbayer@linux.ibm.com>
+To: Hans Zhang <18255117159@163.com>, Manivannan Sadhasivam
+ <mani@kernel.org>,
+        Hans Zhang <hans.zhang@cixtech.com>
+Cc: Arnd Bergmann <arnd@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+        bhelgaas@google.com, Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian
+ Borntraeger <borntraeger@linux.ibm.com>,
+        Ilpo =?ISO-8859-1?Q?J=E4rvinen?=
+ <ilpo.jarvinen@linux.intel.com>,
+        jingoohan1@gmail.com,
+        Krzysztof
+ =?UTF-8?Q?Wilczy=C5=84ski?=	 <kwilczynski@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-next
+ <linux-next@vger.kernel.org>, linux-pci@vger.kernel.org,
+        Lorenzo Pieralisi
+ <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Niklas Schnelle
+ <schnelle@linux.ibm.com>, geert@linux-m68k.org
+Date: Mon, 04 Aug 2025 12:09:48 +0200
+In-Reply-To: <06012cc6-824d-4a7d-85c9-9995ec915382@163.com>
+References: <20250731183944.GA3424583@bhelgaas>
+	 <6e34b4af-dff9-4360-b3da-c95ca7c740c9@app.fastmail.com>
+	 <vf65usnffqzlkgijm72nuaslxnflwrugc25vw6q6blbn2s2d2s@b35vjkowd6yc>
+	 <9a155e45-f723-4eec-81d3-2547bfe9a4e9@cixtech.com>
+	 <ofsbfhor5ah3yzvkc5g5kb4fpjlzoqkkzukctmr3f6ur4vl2e7@7zvudt63ucbk>
+	 <c8ffdd21-9000-40c2-9f4d-4d6318e730b5@cixtech.com>
+	 <cu7qdbwmnixqjce4aetr5ldwe3sqoixgq4fuzmzajzphjdywqq@yw6ojbgeqktm>
+	 <06f16b1a55eede3dc3e0bf31ff14eca89ab6f009.camel@linux.ibm.com>
+	 <06012cc6-824d-4a7d-85c9-9995ec915382@163.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] PCI: Fix endianness issues in pci_bus_read_config()
-To: Arnd Bergmann <arnd@kernel.org>, Gerd Bayer <gbayer@linux.ibm.com>,
- Manivannan Sadhasivam <mani@kernel.org>, Hans Zhang <hans.zhang@cixtech.com>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, bhelgaas@google.com,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- jingoohan1@gmail.com, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?=
- <kwilczynski@kernel.org>, linux-kernel@vger.kernel.org,
- linux-s390@vger.kernel.org, linux-next <linux-next@vger.kernel.org>,
- linux-pci@vger.kernel.org, Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Rob Herring <robh@kernel.org>, Niklas Schnelle <schnelle@linux.ibm.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20250731183944.GA3424583@bhelgaas>
- <6e34b4af-dff9-4360-b3da-c95ca7c740c9@app.fastmail.com>
- <vf65usnffqzlkgijm72nuaslxnflwrugc25vw6q6blbn2s2d2s@b35vjkowd6yc>
- <9a155e45-f723-4eec-81d3-2547bfe9a4e9@cixtech.com>
- <ofsbfhor5ah3yzvkc5g5kb4fpjlzoqkkzukctmr3f6ur4vl2e7@7zvudt63ucbk>
- <c8ffdd21-9000-40c2-9f4d-4d6318e730b5@cixtech.com>
- <cu7qdbwmnixqjce4aetr5ldwe3sqoixgq4fuzmzajzphjdywqq@yw6ojbgeqktm>
- <06f16b1a55eede3dc3e0bf31ff14eca89ab6f009.camel@linux.ibm.com>
- <06012cc6-824d-4a7d-85c9-9995ec915382@163.com>
- <74c17623-f1b5-4b28-a118-4e828e1e711a@app.fastmail.com>
-Content-Language: en-US
-From: Hans Zhang <18255117159@163.com>
-In-Reply-To: <74c17623-f1b5-4b28-a118-4e828e1e711a@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_____wCHQqGAbpBohEodJg--.27698S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXFykWF4DAF45JrW7Zr1rCrg_yoW5CryDpF
-	Z8Cr4Fyw45Grn2krW0v3W0q3W0qa1rtFsIkwn5X34UuFsYgr13GFWY9w4a9r1ak3y8X3WI
-	vFZrKFy7G3Z0yFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jbR6wUUUUU=
-X-CM-SenderInfo: rpryjkyvrrlimvzbiqqrwthudrp/1tbiWxafo2iQaIvKrgAAsO
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: OZzhOq8J5iZn496zPRbscm-5Hy0dBrtO
+X-Authority-Analysis: v=2.4 cv=dNummPZb c=1 sm=1 tr=0 ts=689086f4 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=KeptLckSEblKyysDGeUA:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: j6p5zJLpsip5j-2v6i90-PlIrzZuLfHR
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA0MDA1MyBTYWx0ZWRfX6aNNP/68Zpyr
+ 8lpqw2QcidMFKrCzDxDrKDKQtaQhnZnnhaW5MyvRF/wzvR1lklNLeZE53DsQwtU72NNYXxpo8O6
+ dpivStlLuL8nzhybh2j8vaXk+vN+pALHKh92OR9DzrnXXXaPVRPikwBjsR6rjOWfpjQto57Axo+
+ +41/yohAugkeJX6QlN0GyqdPqiNsUE/EvrQkBrQN8yEJt3+ixkFU8CqwOp8BfDKvfry2CFHqFFN
+ yEoB2fdweG1nsFm0naIhGOhKStSmoce5DX6EUN5urVkZNVfy5cLWX4GtRBgKeDlHEL43HPVJwZF
+ 4D/WXX37Uir8pTwm6hWFc+aen0fQ0X8eh0WZ8v5SCJZD3jkwKLIo+YdWANJBZNTl9hCLPBrItbY
+ TRnCuec3P3YVHPDFKC2qL7/Ihhq5NDELATMOcQ0mbEoFFEX0msYqYoToWq4tTBCw6x8N4qzP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-04_04,2025-08-04_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 bulkscore=0 mlxscore=0 clxscore=1015 mlxlogscore=970
+ malwarescore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0 spamscore=0
+ suspectscore=0 impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2508040053
 
+On Mon, 2025-08-04 at 11:06 +0800, Hans Zhang wrote:
+>=20
+> On 2025/8/1 19:30, Gerd Bayer wrote:
+> > On Fri, 2025-08-01 at 16:24 +0530, Manivannan Sadhasivam wrote:
+> >=20
+> > <--- snip --->
+> >=20
+> > > > >=20
+>=20
+> Dear all,
+>=20
+> According to the issue mentioned by Lukas and Mani. Gerd has already=20
+> been tested on the s390. I have tested it on the RK3588 and it works=20
+> fine. RK3588 uses Synopsys' PCIe IP, that is, the DWC driver. Our=20
+> company's is based on Cadence's PCIe 4.0 IP, and the test function is=20
+> normal. All the platforms I tested were based on ARM.
+>=20
+> The following is the patch based on the capability-search branch. May I=
+=20
+> ask everyone, do you have any more questions?
+>=20
+> Gerd, if there's no problem, I'll add your Tested-by label.
 
+Before you add that I'd like to re-test with the "final" patch.
 
-On 2025/8/4 16:03, Arnd Bergmann wrote:
-> On Mon, Aug 4, 2025, at 05:06, Hans Zhang wrote:
->> On 2025/8/1 19:30, Gerd Bayer wrote:
->>> On Fri, 2025-08-01 at 16:24 +0530, Manivannan Sadhasivam wrote:
->>    }
->>
->> +#define CDNS_PCI_OP_READ(size, type, len)		\
->> +static inline int cdns_pcie_read_cfg_##size		\
->> +	(struct cdns_pcie *pcie, int where, type *val)	\
->> +{							\
->> +	if (len == 4)					\
->> +		*val = cdns_pcie_readl(pcie, where);	\
->> +	else if (len == 2)				\
->> +		*val = cdns_pcie_readw(pcie, where);	\
->> +	else if (len == 1)				\
->> +		*val = cdns_pcie_readb(pcie, where);	\
->> +	else						\
->> +		return PCIBIOS_BAD_REGISTER_NUMBER;	\
->> +							\
->> +	return PCIBIOS_SUCCESSFUL;			\
->> +}
->> +
->> +CDNS_PCI_OP_READ(byte, u8, 1)
->> +CDNS_PCI_OP_READ(word, u16, 2)
->> +CDNS_PCI_OP_READ(dword, u32, 4)
->> +
-> 
-> This is fine for the calling conventions, but the use of a macro
-> doesn't really help readability, so I'd suggest just having
-> separate inline functions if they are even needed.
-> 
+> Branch:=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/log/?h=3Dcapa=
+bility-search
+>=20
+> Patch:
 
-Dear Arnd,
+<--- snip --->
 
-Thank you very much for your reply.
+Please bear with me while I'm working on that.
 
-Will change.
-
->> @@ -112,17 +110,17 @@ int pci_bus_read_config(void *priv, unsigned int
->> devfn, int where, u32 size,
->>    ({									\
->>    	int __ttl = PCI_FIND_CAP_TTL;					\
->>    	u8 __id, __found_pos = 0;					\
->> -	u32 __pos = (start);						\
->> -	u32 __ent;							\
->> +	u8 __pos = (start);						\
->> +	u16 __ent;							\
->>    									\
->> -	read_cfg(args, __pos, 1, &__pos);				\
->> +	read_cfg##_byte(args, __pos, &__pos);				\
->>    									\
->>    	while (__ttl--) {						\
->>    		if (__pos < PCI_STD_HEADER_SIZEOF)			\
->>    			break;						\
->>    									\
->>    		__pos = ALIGN_DOWN(__pos, 4);				\
->> -		read_cfg(args, __pos, 2, &__ent);			\
->> +		read_cfg##_word(args, __pos, &__ent);			\
->>    									\
->>    		__id = FIELD_GET(PCI_CAP_ID_MASK, __ent);		\
->>    		if (__id == 0xff)					\
-> 
-> I still don't feel great about this macro either, and suspect
-> we should have a better abstraction with fixed types and a
-> global function to do it, but I don't see anything obviously
-> wrong here either.
-
-
-Here is the history of communication with Bjorn and Ilpo. Because 
-variable parameters need to be used, otherwise it will be very difficult 
-to unify. I'll also think about your proposal again.
-
-
-Bjorn:
-https://lore.kernel.org/linux-pci/20250715224705.GA2504490@bhelgaas/
- > > I would like this a lot better if it could be implemented as a
- > > function, but I assume it has to be a macro for some varargs reason.
- > >
- >
-Hans:
-https://lore.kernel.org/linux-pci/903ea9c4-87d6-45a8-9825-4a0d45ec608f@163.com/
- > Yes. The macro definitions used in combination with the previous review
- > opinions of Ilpo.
-
-Ilpo:
-https://lore.kernel.org/linux-pci/d59fde6e-3e4a-248a-ae56-c35b4c6ec44c@linux.intel.com/
-The other option would be to standardize the accessor interface signature
-and pass the function as a pointer. One might immediately think of generic
-PCI core accessors making it sound simpler than it is but here the
-complication is the controller drivers want to pass some internal
-structure due to lack of pci_dev so it would need to be void
-*read_cfg_data. Then we'd need to deal with those voids also in some
-generic PCI accessors which is a bit ugly.
-
-
-Best regards,
-Hans
-
+Thanks, Gerd
 

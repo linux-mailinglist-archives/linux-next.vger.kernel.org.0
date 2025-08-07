@@ -1,200 +1,117 @@
-Return-Path: <linux-next+bounces-7863-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7864-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D04F6B1CC33
-	for <lists+linux-next@lfdr.de>; Wed,  6 Aug 2025 20:52:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0364B1D028
+	for <lists+linux-next@lfdr.de>; Thu,  7 Aug 2025 03:40:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B8093BA041
-	for <lists+linux-next@lfdr.de>; Wed,  6 Aug 2025 18:52:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0443256552E
+	for <lists+linux-next@lfdr.de>; Thu,  7 Aug 2025 01:40:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9573129DB88;
-	Wed,  6 Aug 2025 18:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49B5A195FE8;
+	Thu,  7 Aug 2025 01:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="tHUqBro+"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="PkM2EYBL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mout.web.de (mout.web.de [217.72.192.78])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C20D727146E;
-	Wed,  6 Aug 2025 18:52:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C33D410E9;
+	Thu,  7 Aug 2025 01:40:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754506353; cv=none; b=HVDEv+aeex3rfvs4wd5kSkaM45bLasrzOfZdpVsZbqL4n8Og+9yYPuGAVtgE4M6PI6gIjcItJ1+yf1YYoCjQHUYRPdnbKLEg7b0ZSG06Ka8US7s9BEkVNkD9nXDlCC06VdC+reEFYQP1tx6/xwKGyVEtQhPNuyQT7pubeW+coNc=
+	t=1754530826; cv=none; b=KzRFAx3lXdyetDquY8+fsDgQFpYZ0MwKJYv9BoBZbOCCsdwVn5rBhMaRoBh9d7mhpQpI4CME7Lr3/rF7zfhwjxjSmyaWh955IsjF10yuC5saU8gTL1REKT6dgF5To31GtoeUzwZv2Rrwt/xg97S3hV7l1b7uxekYWYfKPCyqWsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754506353; c=relaxed/simple;
-	bh=HYuKE2kt/iqUMs4m+a4Sm4HmB9N+1ME1xjxGoQb+KMc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TY7yEY0swbWaC1VbAoU1+0OLLCHorGTeD4K6Luto0TinGrz8vKWm7hOqLrlovUNYC8RD6JHn7QKuxRI3ix8sGBM2ODu8BRvacWwNnwqbUOZdwZh5WHjIYYyJ5D9WI1w7Nus3cMSBxVCFvO6MD0/MLIfELWMXDqfak8+b0XsRvF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=tHUqBro+; arc=none smtp.client-ip=217.72.192.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1754506323; x=1755111123; i=spasswolf@web.de;
-	bh=txQRTnixhS7Vyqs9XSLq+j3Zi7aCn+VHrpqWjB5kKCU=;
-	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
-	 References:Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=tHUqBro+4SZ5ot8mt/OOOB2YP86YgHAIggQ8FYaJ2qixE+Njql4yzfXpjUrnrUDP
-	 YdEeWpnY5bb46Em9dOXgdJH9YohgsS4pJ8+db5aahK5lSnjl2Inu3uVdtc3fdnOJC
-	 C/WoeSLBofST5QE8r8bDmUK49zq2t/fAVJZlGkVukMBqFAZ5n90JTcDLin1GsmQmu
-	 D3xgQltt789OT4Q6vkMsNOn/2okdgmYqvkGx3DIzsPqog6SBw6OOH1QRFZEY60tpF
-	 POOyaDf8S5TTspYlVj7Iz3I68RtaHYPyhgnHzXEY00MVeqHP36+31etTQPo2c1xvk
-	 miKaKAJd8KeQt2t0Lw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.0.101] ([95.223.134.88]) by smtp.web.de (mrweb106
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MFJjP-1uq2uJ3kRF-00A9O6; Wed, 06
- Aug 2025 20:52:02 +0200
-Message-ID: <d501ba67cbae1113c50fccf97155c1fa67a533ae.camel@web.de>
-Subject: Re: loading amd-pstate-ut kernel module crashes with PREEMPT_RT
-From: Bert Karwatzki <spasswolf@web.de>
-To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
-	linux-rt-devel@lists.linux.dev, linux-pm@vger.kernel.org, Huang Rui	
- <ray.huang@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, 
- Sebastian Andrzej Siewior	 <bigeasy@linutronix.de>, Clark Williams
- <clrkwllms@kernel.org>, Steven Rostedt	 <rostedt@goodmis.org>,
- spasswolf@web.de
-Date: Wed, 06 Aug 2025 20:52:01 +0200
-In-Reply-To: <aJI9xbIllYV7ON8S@BLRRASHENOY1.amd.com>
-References: <20250731092316.3191-1-spasswolf@web.de>
-	 <aJI9xbIllYV7ON8S@BLRRASHENOY1.amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.56.1-1 
+	s=arc-20240116; t=1754530826; c=relaxed/simple;
+	bh=Lrpz/rQsmPtlTB0aV7ECFfRkBbimsLZ+UO1/WuDhCuw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Lg3QCSHGn/EJKko2xVfdhAYn5G6isb3APwx+nEN8mQ0gGtqeQzR3gMNiLjwuRMRw5hFWtqgqTULysJ+hFgQonQ89x5sRiH+oFn4YKDxN6IajhHh3vLmHeolWr7SbIlqFLMfKpFNnthHRH/CVf8kI+/bcNBpSD7PFcRsAWtMEnLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=PkM2EYBL; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1754530811;
+	bh=qf72l415B4gPbQygeTi94z6VL1WKUjCCFAbJieWnsb8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=PkM2EYBLWB8sMTnFqYoboavENs2EPJyDIBi/fF1s7XFAIJ/RzH3sfxwmy1mgWVscv
+	 SBYMibYQNnYa40k0XTZoLlIRoHjCJin2Vl2fDaZEwkQ4LdsiUfb7zwXzWB2cA7bJhr
+	 MUDk207jvhb7uNM9YKaKug9bC1mRF7PBm6W8UpJdrjpHghtrYXFpYOYDgDVL1QNl1s
+	 IomkTjN6FxxmPwJU9nQqvj+bobdW3R2WDdGHC8Y7czkLOGhhafu5ER5+K+VJtDrqjW
+	 KDK/Xnizv4/7SRVC15mTaLHTxsMXT9trmC2B+3owHodstnNaqUrMiZ2jVnBNx9YrtP
+	 CzRHujr5zGm9w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4by8x4026wz4x7j;
+	Thu,  7 Aug 2025 11:40:07 +1000 (AEST)
+Date: Thu, 7 Aug 2025 11:40:06 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc: Alexandre Ghiti <alexghiti@rivosinc.com>, Deepak Gupta
+ <debug@rivosinc.com>, Zong Li <zong.li@sifive.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the risc-v tree
+Message-ID: <20250807114006.548d5f32@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/pQEjjmPyPhctgQqYenlE0do";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/pQEjjmPyPhctgQqYenlE0do
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:pcUqTZUVdT2z0lA07waNdR6KGE1zn0paiDuL1/0vZNQC9slurIN
- CnVqvMETuoag868vDAbzBowhjK/71mbVnu/dn71IBhmp5M7Cb0gHppvsf+I4YnNAdmFv5O/
- bXiERZJXr0R5uM4sFry0N2FU0vCp1eRNhQonpSVFEpBIi5oh/9je07PtzBLqpH5WpgdhuEn
- +o6xk0XPcOVfOETvGqMMQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:npk0z5mYoGk=;7d5svnN8GomrtjGKApg95O9rH77
- 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
 
-Am Dienstag, dem 05.08.2025 um 22:52 +0530 schrieb Gautham R. Shenoy:
-> Hello Bert,
->=20
-> On Thu, Jul 31, 2025 at 11:23:15AM +0200, Bert Karwatzki wrote:
-> > When loading the amd-pstate-ut kernel module (which is supposed to tes=
-t
-> > the amd-pstate cpufreq driver) the following crash occurs (most of the=
-=20
-> > time the loading has to be repeated several times):
->=20
-> Thank you for reporting this. I haven't run amd-pstate with PREEMPT_RT
-> yet. But for the following issue to occur, we need the schedutil()
-> governor's sugov_update_single_perf() (which will eventually acquire
-> the read side of the cpufreq_driver_lock) to race with some call that
-> acquires the cpufreq_driver_lock on the write-side, thus forcing the
-> read-side to take the slowpath which can block on PREEMPT_RT .
->=20
-> The amd-pstate-ut has the amd_pstate_ut_check_driver() which will test
-> switching between one mode to another. These mode-switches involve
-> unregistering the driver, and that callpath involves write-acquire of
-> the cpufreq_driver_lock.
->=20
-> So the race should potentially occur when the following code-path
-> through the amd_pstate_ut_check_driver()
->=20
->=20
-> amd_pstate_ut_check_driver()
-> > -> amd_pstate_set_mode()
->  |-> amd_pstate_update_status()
->   |-> cpufreq_unregister_driver()
->    |->subsys_interface_unregister()
->     |-> cpufreq_remove_dev()
->       |-> cpufreq_policy_free(policy-cpu-X)
->        |-> write_lock_irqsave(&cpufreq_driver_lock)
->=20
-> running concurrently with the schedutil governor on another CPU.
->=20
-> sysvec_apic_timer_interrupt()
-> > -> try_to_wake_up()
->  |-> ttwu_do_activate()
->   |-> enqueue_task_fair()
->    |-> enqueue_entity()
->     |-> update_load_avg()
->      |->sugov_update_single_freq()
->       |-> amd_pstate_adjust_perf()
->        |->cpufreq_cpu_get(on CPU Y)
->         |-> read_lock_irqsave(&cpufreq_driver_lock)
->=20
->=20
-> Here, the read_lock_irqsave() has to take a slow-path in the presence
-> of the writer, which can sleep on PREEMPT_RT. But this is illegal as
-> this is invoked from the interrupt context.
->=20
-> Can you please check if you can generate the same lock-up with the
-> following script without relying on the amd-pstate-ut driver?
->=20
-> -------------x8------------------x8------------------------------
-> #!/bin/bash
->=20
-> while ((1));
-> do
->      echo "disable" > /sys/device/system/cpu/amd_pstate/status;
->      echo "guided" >  /sys/device/system/cpu/amd_pstate/status;
-> done
-> -------------x8------------------x8------------------------------
->=20
+Hi all,
 
-Yes, this script also causes the system to lock up.
+After merging the risc-v tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-Bert Karwatzki
->=20
+Documentation/arch/riscv/zicfilp.rst:42: WARNING: Literal block ends withou=
+t a blank line; unexpected unindent. [docutils]
+Documentation/arch/riscv/zicfiss.rst:106: WARNING: Inline emphasis start-st=
+ring without end-string. [docutils]
+Documentation/arch/riscv/zicfilp.rst:114: WARNING: Unparseable C cross-refe=
+rence: 'SIGSEV`'
+Invalid C declaration: Expected end of definition. [error at 6]
+  SIGSEV`
+  ------^
+Documentation/arch/riscv/zicfiss.rst:129: WARNING: Unparseable C cross-refe=
+rence: 'SIGSEV`'
+Invalid C declaration: Expected end of definition. [error at 6]
+  SIGSEV`
+  ------^
+
+Introduced by commit
+
+  9868b87525d9 ("riscv: Documentation for landing pad / indirect branch tra=
+cking")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/pQEjjmPyPhctgQqYenlE0do
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiUA/YACgkQAVBC80lX
+0GymKQf6AxwCBpCkn5OHcybFBHF6AK55Q0+Xr7k2xt1/DFg1TGCYERvVJpMxU51K
+w//sG5QknhnFjrRxArC4dmTox5UM6vVcOh+MV9RY/lDG31LEIbeTC8lut7e2e5EN
+8zcEkUbZauQVxxu+WcRUkZZXXOJHoTqIWdh3VAcUoREz5t3uX6jB6cxqv9k4G9BI
+dtnjSfCPDo5dwrPJkGSGDynp8p5gMViKbYi6a48/oXvMNCUOvWzKzkuJdFvKwS4i
+7pBSJC1QL0rrHwMyUdDgsjCiywzJqW+fJdyIN9rGgLFgTASXYC7aOHcm4XShvz3k
+jJLxvAXsKuHhqNoS7s5fhwUknnrscg==
+=LfG0
+-----END PGP SIGNATURE-----
+
+--Sig_/pQEjjmPyPhctgQqYenlE0do--
 

@@ -1,102 +1,112 @@
-Return-Path: <linux-next+bounces-7868-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7869-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 922F0B1D9AA
-	for <lists+linux-next@lfdr.de>; Thu,  7 Aug 2025 16:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 14FA6B1DF52
+	for <lists+linux-next@lfdr.de>; Fri,  8 Aug 2025 00:22:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 524A7621049
-	for <lists+linux-next@lfdr.de>; Thu,  7 Aug 2025 14:08:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9DC73B4F82
+	for <lists+linux-next@lfdr.de>; Thu,  7 Aug 2025 22:22:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2041A262FE4;
-	Thu,  7 Aug 2025 14:08:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C015D2517B9;
+	Thu,  7 Aug 2025 22:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Q8W6czGP"
 X-Original-To: linux-next@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 629C81F4625;
-	Thu,  7 Aug 2025 14:08:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99EE246BA4;
+	Thu,  7 Aug 2025 22:22:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754575724; cv=none; b=ISOeX71JPB5gVh35g+VFH5aR4U0NefqOVb/YcbegcLjjtYswDcp58XmhldxzAncNfDZB0xVPg/0wx3Ry667b9aDkmXnaaDv8Lg1K3HP3fsGLrP6BqDGn/V7XSWKdrLtOqBP7EasJLujnSOsFhR83mldsyhDTRpZwjJSn+QPpx2I=
+	t=1754605348; cv=none; b=kQRFvu3EiMCoFg7E4mjNNPxs8mTOsp+lAXNyTylpRGQmxr/YHqxuYOO6uElBotgIaInAzQZ9fLhvrMAPO8i3hEny031yPpi3jJeFO7+hhavmhXzjYLgSWXoIkUQ0cpCyVQsyaKQdKByNO7AL7fWkcaamYRBryU+l+68/4IrzAdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754575724; c=relaxed/simple;
-	bh=JOMXt7Dp00eXlXvY7ODv3ajXGYgyfV5NqudHZFP99tY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KRD9M4UBDJ1FHBkGrijKHKHe3XMdGi0HPZVaJVlXjIX/QpNfH61G7+MCJH/I6kvtA9fZENB/oU/VaRkQwX8rHBtFY9DvMKNCJF7+ChBw5j9GzOVa+ngBXXVBCmD7t2bWZgIC4J392C2LPrbPniW3jukuZ29do39ji1QG/b7dhzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 624CD1756;
-	Thu,  7 Aug 2025 07:08:31 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F3A373F738;
-	Thu,  7 Aug 2025 07:08:37 -0700 (PDT)
-Date: Thu, 7 Aug 2025 15:08:35 +0100
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: "Aithal, Srikanth" <sraithal@amd.com>
-Cc: Zhen Ni <zhen.ni@easystack.cn>, <Markus.Elfring@web.de>,
-	<jassisinghbrar@gmail.com>, <linux-acpi@vger.kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>, <stable@vger.kernel.org>,
-	"Linux-Next Mailing List" <linux-next@vger.kernel.org>
-Subject: Re: [PATCH v4] mailbox: pcc: Add missed acpi_put_table() to fix
- memory leak
-Message-ID: <20250807-rampant-otter-of-persistence-b4436d@sudeepholla>
-References: <20250804121453.75525-1-zhen.ni@easystack.cn>
- <20250805034829.168187-1-zhen.ni@easystack.cn>
- <88a0618f-121f-4752-ad65-e9724403cc16@amd.com>
+	s=arc-20240116; t=1754605348; c=relaxed/simple;
+	bh=JSpf2ptRywNd2j8GJ35NjosfBhP+dq3rNvcJKUUd4qQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=om9NaS0a5GzEYoInztKqaE9PCVBdlBIRUSeev5zRn+yLq9IxUpHIAGkR4VeQ7lrsHGjLVMOomRT3vV8UzvauqwPcrIVj6FfKwROXhIDBGq2MmF5hsfciYzzd4GHJhR5UJvvvzlWq9NSohJuux704pLyw1762KE6yUebO+h4U1L0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Q8W6czGP; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1754605339;
+	bh=pgecB+cd0d7chm+o1LDyp4M6rsvKMQCOem0wHxfohYE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Q8W6czGP6QAI/Ct8344x9HH+2JK3W1Asfh3ShEwZqeyyoYIFSj4EIgiU8XFDSZCPO
+	 eGQhkBlXcjZKT/2ahfADDoQYCbshWwYERNkcQny3RM9IKgxfwbkgAaaho7h2BUCYoY
+	 YlfwwV5HKiZ173etDrsWj3Xtauyi2t41XnMmtn3aSLC8BCDjszTrm3rkoj17l/uklp
+	 WIxMUPJZzxr5cXP3+a4vV+tGxrTJSzpQQp6MfgZE5wLdRDmXkvzK47KgjUxS5wNsN3
+	 EVWFgnjRP3urTiRyQXl57AtBKkk6E2tMw4CILtXZCnHU5cXLhqH8T0Nc9+kc8/uGxS
+	 QJnHeXXxFekVQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4byhVM4XTBz4w2H;
+	Fri,  8 Aug 2025 08:22:19 +1000 (AEST)
+Date: Fri, 8 Aug 2025 08:22:17 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Igor Torrente <igor.torrente@collabora.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the vhost tree
+Message-ID: <20250808082217.6503856d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <88a0618f-121f-4752-ad65-e9724403cc16@amd.com>
+Content-Type: multipart/signed; boundary="Sig_/u6_nzrL_jY8tlG=t5Fw.EMO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, Aug 07, 2025 at 07:10:35PM +0530, Aithal, Srikanth wrote:
-> Hello,
-> 
-> This commit, now part of next-20250807[1], is causing kernel boot crash on
-> AMD EPYC Milan platform.
-> 
-> commit c3f772c384c8ec0796a73c80f89a31ff862c1295 (HEAD)
-> Author: Zhen Ni <zhen.ni@easystack.cn>
-> Date:   Tue Aug 5 11:48:29 2025 +0800
-> 
->     mailbox: pcc: Add missed acpi_put_table() to fix memory leak
-> 
->     Fixes a permanent ACPI memory leak in the success path by adding
->     acpi_put_table().
->     Renaming generic 'err' label to 'put_table' for clarity.
-> 
->     Fixes: ce028702ddbc ("mailbox: pcc: Move bulk of PCCT parsing into
-> pcc_mbox_probe")
->     Cc: stable@vger.kernel.org
->     Signed-off-by: Zhen Ni <zhen.ni@easystack.cn>
->     Signed-off-by: Jassi Brar <jassisinghbrar@gmail.com>
-> 
-> 
-> Attaching both the dmesg and kernel config here.
-> 
-> If I go back 1 commit [i.e 75f1fbc9fd409a0c232dc78871ee7df186da9d57], things
-> work fine.
-> 
-> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tag/?h=next-20250807
-> 
->
+--Sig_/u6_nzrL_jY8tlG=t5Fw.EMO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the report. I analysed the report and concluded that we can't
-drop the reference to the table unless we may a copy of some GAS registers
-as we access them at runtime.
+Hi all,
 
-Zhen,
+In commit
 
-Sorry, I must withdraw my Reviewed-by.
+  878676525147 ("Revert "virtio: reject shm region if length is zero"")
 
--- 
-Regards,
-Sudeep
+Fixes tag
+
+  Fixes: 206cc44588f7 ("virtio: reject shm region if length is zero` breaks=
+ the Virtio-gpu `host_visible")
+
+has these problem(s):
+
+  - Subject does not match target commit subject
+    Just use
+        git log -1 --format=3D'Fixes: %h ("%s")'
+
+Thus:
+
+Fixes: 206cc44588f7 ("virtio: reject shm region if length is zero")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/u6_nzrL_jY8tlG=t5Fw.EMO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiVJxoACgkQAVBC80lX
+0GyPQgf/eAZ0m3Ggy0j0bZ1gYLgDuRdhtYpmh5vqkhc3ls4CryxwJRKd682dvdgt
+QozUPDsibntOYsi/H70MgYRZcY77ENQ2SdspuZUiYW65zCt6qksE+L5QaFSkCLVL
+yIkEez5pCbBzZ6c0ouaZXjrl+N1Jmz+lmUo1WLb/oLqXNvz9IRo6aJ+0rJrranQt
+/uBB2zHsHmC+RKOkgrkfD4D3t2vYs4AjGvvBpWrq3KWEE7gdy2K6DEOz5e4p18w7
+wqSfvJQaICzRXJJzYhIXuvaa9/cUAvNcILjE++9KmnKZzjrvZKXonOXMW81WDQ3/
+hZ/9TnN9uttw0QqlyPGft/w0TEs2CA==
+=d0aC
+-----END PGP SIGNATURE-----
+
+--Sig_/u6_nzrL_jY8tlG=t5Fw.EMO--
 

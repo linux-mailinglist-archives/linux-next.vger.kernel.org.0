@@ -1,112 +1,99 @@
-Return-Path: <linux-next+bounces-7881-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7882-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E649DB1F126
-	for <lists+linux-next@lfdr.de>; Sat,  9 Aug 2025 00:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 77FE4B1F13C
+	for <lists+linux-next@lfdr.de>; Sat,  9 Aug 2025 01:15:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A10443B8F71
-	for <lists+linux-next@lfdr.de>; Fri,  8 Aug 2025 22:53:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AF8B7265D5
+	for <lists+linux-next@lfdr.de>; Fri,  8 Aug 2025 23:15:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ADC5246771;
-	Fri,  8 Aug 2025 22:52:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C3A23FE7;
+	Fri,  8 Aug 2025 23:15:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b="uPEC8Jde"
+	dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b="aXlq+E4G"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5698921D5BB
-	for <linux-next@vger.kernel.org>; Fri,  8 Aug 2025 22:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355C57346F
+	for <linux-next@vger.kernel.org>; Fri,  8 Aug 2025 23:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754693577; cv=none; b=LosYyuQ8CIb1lZ0b3Ut79LA9mnZ+uP0ObaBrPom6nYgCLR3UTPtiZr8wTTpmEXlls9QbpQBxQjj8mV10oVT+2u9zJ4bGaVAobe2xJT66uKdG3HwTywaG8IVkoxV5KBxp6HraCvDQ+VIawPE5Te+bavIfDwg0+QC44d797bcnqmY=
+	t=1754694947; cv=none; b=D2luFunIVssQOcEXFKwn37xQGXLOno8l9DbrfTZx4U+KUsvJ+WaX8Bv2OAIdzzSh0Z2XoDYRqQri4ZkYk2XShwpwEmZuY7EtCQPpOFq5pOEu0jFgXjOv+7AoURHDXYgXc6JPl5hy8d23QLfWqKQGQi2Ujufp7yTyZceXNN3C3qY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754693577; c=relaxed/simple;
-	bh=W0aHi5CgiI/35oW0CEFqvMzcz8kn9R1PdjRkFz+HHHM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UnS0QEdsjhzi6QcbLFEdyBfPdTwS6f2CR63QFJbqvP+FJYmZRr5/4M6hzCXG04JGoTXbVuKU2Ed5Nep8nzOxAe1ihCQ3DlvtuvPKsqWKLy/Il7Cp/KjUZfFhJ+q62I9SVGgUGwpddvHpRYuv7nilJgro7CRPn272Bro888CxWRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b=uPEC8Jde; arc=none smtp.client-ip=80.241.56.172
+	s=arc-20240116; t=1754694947; c=relaxed/simple;
+	bh=9HKrAgSiQMXQRMsG67SqiL0IkcMfPSyhJjUvSiEADqU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=ZK3kstxzZebsSTEKzafituocZU0pSLW5PPY846EDvhYgl5qcjsaOwZtMLXy+/Kk6RRRTQPrMgqdS4vqRyNYfnoPKYPknwX9ojL19EwQCdCvz1Nxrkf5MD7VysWZvTj6OSR9frOMrXd2b/z7Hpnq7kCP9fL2b9Vlw4JXEVXUlwhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b=aXlq+E4G; arc=none smtp.client-ip=80.241.56.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=listout.xyz
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4bzK7844GJz9t1G;
-	Sat,  9 Aug 2025 00:52:52 +0200 (CEST)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4bzKdT4m8Mz9tCJ;
+	Sat,  9 Aug 2025 01:15:41 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=listout.xyz; s=MBO0001;
-	t=1754693572;
+	t=1754694941;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AoCzKBpu2Jxv88ZyAsLhizqpgOm2OwFBGMZsZf5hDwE=;
-	b=uPEC8JdeN0SNqQ3gpVTiIErKBXBs2SmifNB8pZGIWWaf3ergxltAGu6QKwJeVgNwgl/3LE
-	X+RMZ7IQdJ50YPHqkOUefJvFYjx4nK7Kv7VLr3mq/zU2h8WPXmSTb6xhPqHDilajC6Fjrk
-	LUOgJdP/KC+0eXW9zMwHC0S1eyAK8L8khaPSGTKSpYWJ6xVYm31bvv3XeweHhJAWCa3/bU
-	64JXOLFUlpbiaQ1UJ9XG2lpo9RqPg8WvqJ7xbgD5xcwuDmIf27iY8T8/AuFpcy/3LUuMby
-	RZo553NmIGIGJ3MJZHQT47b6y20CsxCyjPPle645Ab1IyU/SZjkacyy9J71Kjw==
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=e6Jw1zDVtjTA2grbtCPb82zxpM0vKtOPY3V4HAN/9GA=;
+	b=aXlq+E4GuZQDVxVshkb1a47xbWzfnSNnuOWmTkYUuLeH7BHPYDEy3wL7jZoq7bBcpn2leT
+	bVZiaM9r7tHWVgafy+917E08EuPBpnCUbgLt4bIic51TzfALx0lJ1Uwrn5PDoU366TVBiR
+	P7wmQ3gMh6hY81C2ygLV/3nt3z4socOLGj2LzIhsMdcVlDBgMzW36qYTzroKhgktMe7stG
+	mj6UJv8cymD6dqld4WgclI5XxK6BOsrHkFgN3hGP07D7i4KIQUB+Hpw74pLcVJmyJrDD4+
+	Tv31nK5bx2crWqaEhlIoFGaq7H+whaSSYCjWJr7864a00i+sMwy8TXR+jsJ+5g==
+Date: Sat, 9 Aug 2025 04:45:38 +0530
 From: Brahmajit Das <listout@listout.xyz>
-To: intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org,
-	linux-next@vger.kernel.org
-Cc: jani.nikula@linux.intel.com,
-	rodrigo.vivi@intel.com,
-	joonas.lahtinen@linux.intel.com,
-	tursulin@ursulin.net,
-	simona@ffwll.ch
-Subject: [RFC PATCH 2/2] drm/i915: use new debugfs device-centered functions
-Date: Sat,  9 Aug 2025 04:22:26 +0530
-Message-ID: <20250808225226.30465-3-listout@listout.xyz>
-In-Reply-To: <20250808225226.30465-1-listout@listout.xyz>
-References: <20250808225226.30465-1-listout@listout.xyz>
+To: linux-next@vger.kernel.org, amd-gfx@lists.freedesktop.org
+Cc: alexander.deucher@amd.com, christian.koenig@amd.com
+Subject: drm/radeon/r600_cs: Build failures with GCC 16
+Message-ID: <pqpvdwxmqler2mg4ou665v56g6qe36vwi5jeavqeszj2mrk5m7@io6dy7jsvuhe>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-Replace the use of drm_debugfs_create_files() with the new
-drm_debugfs_add_files() function, which centers the debugfs files
-management on the drm_device instead of drm_minor.
+Hello Developers,
 
-Signed-off-by: Brahmajit Das <listout@listout.xyz>
----
- drivers/gpu/drm/i915/display/intel_display_debugfs.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Building linux-next with GCC 16 results in this following build error
 
-diff --git a/drivers/gpu/drm/i915/display/intel_display_debugfs.c b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-index ce3f9810c42d..92db369f1b94 100644
---- a/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-+++ b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-@@ -805,7 +805,7 @@ static const struct file_operations i915_fifo_underrun_reset_ops = {
- 	.llseek = default_llseek,
- };
- 
--static const struct drm_info_list intel_display_debugfs_list[] = {
-+static const struct drm_debugfs_info intel_display_debugfs_list[] = {
- 	{"intel_display_caps", intel_display_caps, 0},
- 	{"i915_frontbuffer_tracking", i915_frontbuffer_tracking, 0},
- 	{"i915_sr_status", i915_sr_status, 0},
-@@ -825,9 +825,8 @@ void intel_display_debugfs_register(struct intel_display *display)
- 	debugfs_create_file("i915_fifo_underrun_reset", 0644, minor->debugfs_root,
- 			    display, &i915_fifo_underrun_reset_ops);
- 
--	drm_debugfs_create_files(intel_display_debugfs_list,
--				 ARRAY_SIZE(intel_display_debugfs_list),
--				 minor->debugfs_root, minor);
-+	drm_debugfs_add_files(minor->dev, intel_display_debugfs_list,
-+			      ARRAY_SIZE(intel_display_debugfs_list));
- 
- 	intel_bios_debugfs_register(display);
- 	intel_cdclk_debugfs_register(display);
+$ make
+  CALL    scripts/checksyscalls.sh
+  DESCEND objtool
+  INSTALL libsubcmd_headers
+  CC      drivers/gpu/drm/radeon/r600_cs.o
+drivers/gpu/drm/radeon/r600_cs.c: In function ‘r600_texture_size’:
+drivers/gpu/drm/radeon/r600_cs.c:1411:29: error: variable ‘level’ set but not used [-Werror=unused-but-set-variable=]
+ 1411 |         unsigned offset, i, level;
+      |                             ^~~~~
+cc1: all warnings being treated as errors
+make[6]: *** [scripts/Makefile.build:287: drivers/gpu/drm/radeon/r600_cs.o] Error 1
+make[5]: *** [scripts/Makefile.build:556: drivers/gpu/drm/radeon] Error 2
+make[4]: *** [scripts/Makefile.build:556: drivers/gpu/drm] Error 2
+make[3]: *** [scripts/Makefile.build:556: drivers/gpu] Error 2
+make[2]: *** [scripts/Makefile.build:556: drivers] Error 2
+make[1]: *** [/home/listout/linux/Makefile:2011: .] Error 2
+make: *** [Makefile:248: __sub-make] Error 2
+
+I'm not sure whether this is kernel bug or GCC bug at the moment. But
+building with GCC 15 does not give this error, hence I'm more inclined
+towards the latter.
+Planning to also report this on GCC side, wanted to get some
+opinion/feedback from kernel devs as well.
+I'm on GCC 16.0.0_p2025080.
+
 -- 
-2.50.1
-
+Regards,
+listout
 

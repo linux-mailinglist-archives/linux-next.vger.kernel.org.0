@@ -1,57 +1,54 @@
-Return-Path: <linux-next+bounces-7895-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7896-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC226B209EC
-	for <lists+linux-next@lfdr.de>; Mon, 11 Aug 2025 15:17:34 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A16F0B209EB
+	for <lists+linux-next@lfdr.de>; Mon, 11 Aug 2025 15:17:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 098A6188A468
-	for <lists+linux-next@lfdr.de>; Mon, 11 Aug 2025 13:17:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4130B4E02BA
+	for <lists+linux-next@lfdr.de>; Mon, 11 Aug 2025 13:17:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE4AB6FC3;
-	Mon, 11 Aug 2025 13:17:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFEA319F115;
+	Mon, 11 Aug 2025 13:17:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b="nuxsY5Op"
+	dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b="sUyyJZ4z"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49FAC148
-	for <linux-next@vger.kernel.org>; Mon, 11 Aug 2025 13:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC651C148
+	for <linux-next@vger.kernel.org>; Mon, 11 Aug 2025 13:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754918245; cv=none; b=HR3CbNd6CGaRAdpREaTNr9EEQ5lxClnvEjA1KOdslpibMkVGD8RnKzYbB7vn+7fqMN80pMe6fgE4pb44iWWwgL9oQXILV2ol601Xt+xx+glIuWNekKcrw9i6ReJVXx5gAaWZFXcz1Hpu5z46NnCmRZGogmhEViiFHC4ynEPyAQI=
+	t=1754918249; cv=none; b=LascVyYJQ3Pk1fU65wh7zYCYKKLfQJzgmmH5wgcDCCRYADZKnwMQFtXJfCCN18tOvO4QLdSTYfsHkPA4PVAm0v8NTpgz4BzyzZusuhaOnrscvk32GymQXxYcGPWFk4viIe4uzrAHuYtMQoxUKyVWn01K4oxp+Av4xGuGLmA8+6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754918245; c=relaxed/simple;
-	bh=XV3RR5XMlYRW89Y6zznhZyWorO0HYcekJNMY7HsMbFA=;
+	s=arc-20240116; t=1754918249; c=relaxed/simple;
+	bh=xKscAHT6AE8Mvyi7fTFzjmSKeQ5wcIc622ssPtwzyxo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oFs/PpIeWTZbLnWkzvmdq9yKuDC/3ZcMcZBhN5k8IsiN3S2C0QkyplAR9luPiEqDdU7tQ60Wmt7lI3DZYhIiu3zrR2rN4GpZeYqIKtrFGPSPE4gE0yc3uV84xqSHLyzAiJX4klJVAIHKXwks/O3mYmd7VpBnJGdWBYrSJUedQCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b=nuxsY5Op; arc=none smtp.client-ip=80.241.56.171
+	 MIME-Version; b=EcgS6mmJ8kH60AXQ5JVmCr5xmHodNuPPrHyucDxNAsB9YzIHUymfylvnqb9M7KAVjm2D7ge/qK0YTMebCgCrxCFTOTaiUdeWS+wpIGwRO0Ei9A+2X6iRrbqIVBEPwEtNjHiz3FkBpycsRkTitcZxngZlCSq+UaNhS2W4OIvISEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b=sUyyJZ4z; arc=none smtp.client-ip=80.241.56.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=listout.xyz
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4c0wCg6KGhz9sTZ;
-	Mon, 11 Aug 2025 15:17:19 +0200 (CEST)
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4c0wCm0ncgz9sWL;
+	Mon, 11 Aug 2025 15:17:24 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=listout.xyz; s=MBO0001;
-	t=1754918239;
+	t=1754918244;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=D/60RwIO/b0dOS1Vd6kdShsnw/FwFxOCsLj3X7+hP30=;
-	b=nuxsY5Op4iWaKO+yRzT+kGXjHj0yqMjwne3ySyzP+imQ7KxlAVsxElvXV+Rj8VYXN4xhjM
-	MxqRpz0EHO0wy7yUEn/iHAjQLxSUV0th70FxyH0KWg64+7gxJ40n450RFR6c7Ml/3+8qt9
-	+WgLj55TKU2ECyKStpISYCA88PB26fT6ZC/9JU+QDxOROI19/mG7G9eJvqhLDHlDUbRmKb
-	ZMuQWJDnE3OqvXqtVD08VYlKDan0Ik5i9jxEIZ8m6k5AFTC3OkQgiUHHtk7ePMJmBo44pH
-	DqlrtaXgD6wdy7VTUEJA5JSkbjzhG+G1KOCEGBsbYi0a7AIOwFpkllwV2NqfAw==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of listout@listout.xyz designates 2001:67c:2050:b231:465::1 as permitted sender) smtp.mailfrom=listout@listout.xyz
+	bh=+H2ZqlQ2Jh2MhyNBjLJU7iks+MBvU2kShwz8Ja2mpHA=;
+	b=sUyyJZ4zN8QxD6X8CE/vc4qfamgzyTC4fJiw4cavytHI3tk3WUffDhDIe2FKjxwesb/dyk
+	jExnCbtx8axb6WXMZvddeF56/g8IA7oTSUqal65N9ixTsgB8oVw8k1c7/+fl+5hTE4vVv+
+	43Cqguirl6cjDdNxh+n+SPypfNaSO8DCgTJ/xaR14YhCTeNAfMeZu2theLDMhZsrp0JSOR
+	cP6iLDkBPOJErFrWVeEw0P9OcNfL0/w+gTUOrbfoxTIAn7ge9WIlsU/d70th/kCWEtYV/K
+	Ws6eGjhpBr+u5G3e6e/o1h8g46Vbcgdy825xS5vwvJuP6SEcXHBy5w/gSYcctg==
 From: Brahmajit Das <listout@listout.xyz>
 To: jani.nikula@linux.intel.com
 Cc: dri-devel@lists.freedesktop.org,
@@ -63,11 +60,12 @@ Cc: dri-devel@lists.freedesktop.org,
 	rodrigo.vivi@intel.com,
 	simona@ffwll.ch,
 	tursulin@ursulin.net
-Subject: [RFC PATCH 0/2] use new debugfs device-centered functions
-Date: Mon, 11 Aug 2025 18:47:06 +0530
-Message-ID: <20250811131708.82865-1-listout@listout.xyz>
-In-Reply-To: <32c55ab0b1452a1fd8ef49e8a1ca640ad5bd9d76@intel.com>
+Subject: [RFC PATCH v2 1/2] drm/i915/debugfs: use new debugfs device-centered functions
+Date: Mon, 11 Aug 2025 18:47:07 +0530
+Message-ID: <20250811131708.82865-2-listout@listout.xyz>
+In-Reply-To: <20250811131708.82865-1-listout@listout.xyz>
 References: <32c55ab0b1452a1fd8ef49e8a1ca640ad5bd9d76@intel.com>
+ <20250811131708.82865-1-listout@listout.xyz>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -75,25 +73,41 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4c0wCg6KGhz9sTZ
 
 Replace the use of drm_debugfs_create_files() with the new
 drm_debugfs_add_files() function, which centers the debugfs files
-management on the drm_device.
+management on the drm_device instead of drm_minor.
 
-V2 changes: based on drm-tip.
+Signed-off-by: Brahmajit Das <listout@listout.xyz>
+---
+ drivers/gpu/drm/i915/i915_debugfs.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-Refer:
-https://docs.kernel.org/gpu/todo.html#clean-up-the-debugfs-support
-
-Brahmajit Das (2):
-  drm/i915/debugfs: use new debugfs device-centered functions
-  drm/i915: use new debugfs device-centered functions
-
- drivers/gpu/drm/i915/display/intel_display_debugfs.c | 7 +++----
- drivers/gpu/drm/i915/i915_debugfs.c                  | 7 +++----
- 2 files changed, 6 insertions(+), 8 deletions(-)
-
+diff --git a/drivers/gpu/drm/i915/i915_debugfs.c b/drivers/gpu/drm/i915/i915_debugfs.c
+index 23fa098c4479..e411ff3ac1fd 100644
+--- a/drivers/gpu/drm/i915/i915_debugfs.c
++++ b/drivers/gpu/drm/i915/i915_debugfs.c
+@@ -699,7 +699,7 @@ static const struct file_operations i915_forcewake_fops = {
+ 	.release = i915_forcewake_release,
+ };
+ 
+-static const struct drm_info_list i915_debugfs_list[] = {
++static const struct drm_debugfs_info i915_debugfs_list[] = {
+ 	{"i915_capabilities", i915_capabilities, 0},
+ 	{"i915_gem_objects", i915_gem_object_info, 0},
+ 	{"i915_frequency_info", i915_frequency_info, 0},
+@@ -735,9 +735,8 @@ void i915_debugfs_register(struct drm_i915_private *i915)
+ 				    i915_debugfs_files[i].fops);
+ 	}
+ 
+-	drm_debugfs_create_files(i915_debugfs_list,
+-				 ARRAY_SIZE(i915_debugfs_list),
+-				 debugfs_root, i915->drm.primary);
++	drm_debugfs_add_files(&i915->drm, i915_debugfs_list,
++			      ARRAY_SIZE(i915_debugfs_list));
+ 
+ 	i915_gpu_error_debugfs_register(i915);
+ }
 -- 
 2.50.1
 

@@ -1,118 +1,155 @@
-Return-Path: <linux-next+bounces-7897-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7898-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 740FAB209ED
-	for <lists+linux-next@lfdr.de>; Mon, 11 Aug 2025 15:17:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E525BB20A5D
+	for <lists+linux-next@lfdr.de>; Mon, 11 Aug 2025 15:35:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87F911623BD
-	for <lists+linux-next@lfdr.de>; Mon, 11 Aug 2025 13:17:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08D102A4F54
+	for <lists+linux-next@lfdr.de>; Mon, 11 Aug 2025 13:35:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E613E7E0E8;
-	Mon, 11 Aug 2025 13:17:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 829B619342F;
+	Mon, 11 Aug 2025 13:35:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b="G6sT/Mgv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TjRQ05Lt"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198876FC3
-	for <linux-next@vger.kernel.org>; Mon, 11 Aug 2025 13:17:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0518F14658D
+	for <linux-next@vger.kernel.org>; Mon, 11 Aug 2025 13:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754918253; cv=none; b=JhidyvxsqXMazcaKbWdKLNh6ubx4hGxwKwt/LcP3sb5Pf2KYvDgcHF6GPVpK+ZxcinIQZ3oWYsI8oX/+UJjDjWrWP9xSDPQXmjIWsTz+caKDjI5ZlDQzi/5Qsd3EX4/Q/p/xiKPtWF+uveX5mWpUAwh66EWrJyS+CWzysDPpPTc=
+	t=1754919314; cv=none; b=NXP5ixW+qrKy8unDDY1TS0CUxZlm15ub5X5HxHWIRxFb0s/7OMxxRRsP/bIkJuDN5oW96G3WhmFxQmvh6ldg7O0vhyvZFugQIDHp5D5Xfpdq3OEPaCFRxXHeby/H6XGZu7P0/G9b2OZIkU11VrkFHbbLksAlcUf1hw3J2wazztM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754918253; c=relaxed/simple;
-	bh=3JAuCm+v4as0W2cfNyFw3ejmM663Qv8MIVpyGSkzAiY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=u3UnyCQYPhztYCe90HjNQ3uhzelMiPEh23+5iMCjYuyUKL2GSb3Qf/UEMYWsIZSnCk/zq3mfz84IOywnHZZ1UG8cpyCZvAPx3Pczz2kRTpau5WAoT230MekTq6v1q/JigjM9NkfdhwcTTDOHl6n7bas+cmRBEigljgRYZUyOkwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b=G6sT/Mgv; arc=none smtp.client-ip=80.241.56.161
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=listout.xyz
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4c0wCr3bSwz9ss7;
-	Mon, 11 Aug 2025 15:17:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=listout.xyz; s=MBO0001;
-	t=1754918248;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UI/W08Ip0w1mJpRHFBOQx1iqeKP+LOT32N+lmudcjhU=;
-	b=G6sT/MgvyhYdmd8XD9je7MRLzM4BEnd0NQCDOnVmdasygg24pwlUXyevh6fpCvGsyTJHjR
-	U7oB/sUYYXra9B5Pd6Li5eHF/q9UBQYmuUpPoZzbSfwUX7irLcLcZmNzyyLiDmO3nMYAbh
-	kSQ1ow4T0Zdm6oIZ0nJEeU2zgdIo8FcYrsNNFXQ76343Ps7SepnpnBFUnMBCOl+d8Xtz7X
-	4S1tgM7nTolxZBXpglwBKQGm02HkgN2j2TJ+05foDc+WLGkDgwGmY+HC/FRWDkuebvTG7o
-	udZOxb1Xh2zRvxOAggwx4NBZoYjLiyRregZgYR3P5eVD9wvOhjPLW2ghmz+XIw==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of listout@listout.xyz designates 2001:67c:2050:b231:465::1 as permitted sender) smtp.mailfrom=listout@listout.xyz
-From: Brahmajit Das <listout@listout.xyz>
-To: jani.nikula@linux.intel.com
-Cc: dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org,
-	joonas.lahtinen@linux.intel.com,
-	linux-next@vger.kernel.org,
-	listout@listout.xyz,
-	rodrigo.vivi@intel.com,
-	simona@ffwll.ch,
-	tursulin@ursulin.net
-Subject: [RFC PATCH v2 2/2] drm/i915: use new debugfs device-centered functions
-Date: Mon, 11 Aug 2025 18:47:08 +0530
-Message-ID: <20250811131708.82865-3-listout@listout.xyz>
-In-Reply-To: <20250811131708.82865-1-listout@listout.xyz>
-References: <32c55ab0b1452a1fd8ef49e8a1ca640ad5bd9d76@intel.com>
- <20250811131708.82865-1-listout@listout.xyz>
+	s=arc-20240116; t=1754919314; c=relaxed/simple;
+	bh=fK7+/N26I1H4Kn9nT6ZWSvsAHeSZyeoTH3n6GPiDDZA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FPMdy9FfAgUsSZGEkb3G25SA2hT+Wri/EGfJxTZUWeNr5TxBct6H5/R4xD2krlGSaY4X9WmD9WsbMx9ewThnd9CsRVI4MPM3btyEdUU984EILDFCpLzzcSjvcYMA0MNEzmMAmGDmj38eJBBky9v55D7r1QRhfWdkylVSB0C/evc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TjRQ05Lt; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-24286ed452fso4391345ad.1
+        for <linux-next@vger.kernel.org>; Mon, 11 Aug 2025 06:35:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1754919312; x=1755524112; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=84sNkZvrOW1k1PWbS/vBQaH01fKqFeP8Lnq34vdgDlE=;
+        b=TjRQ05LtXnnI/Yiwjv2vccMzLuqb0xYrA077kskJ0RDsFREeColk26rVngvtiiQqM3
+         hsLtgaU6cHgDSJhNygtrPUnki9FTRkB8DqlsLARVq1g/840/Rn3F1i4LVX2chnvIOwmh
+         l6IHM0QM3MgkQnEZlzSWAS4u+fyRstSFwm95/husyb3wAN7qZtY2UiFEYb1EjN2jIpYa
+         +sYH1DBeEiBuqniejtdjzQC0WkVUWaOVeaHJdctmYoegLvJY9gsxMb4qfzKPHNEhWiWm
+         HVYXEwyIQNoJiKKuusM1XqDqOUggj4HT9E5JKJbMR6HSfvOvAcshHsiuK19Wz2JCgs0f
+         rtVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754919312; x=1755524112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=84sNkZvrOW1k1PWbS/vBQaH01fKqFeP8Lnq34vdgDlE=;
+        b=AzJef1pLAOrqrg69QxFXd+pzaLSB8HnxlU3XvmmKH5oAgfPYEWNYaOnVJoSY4SqMiL
+         6zIBnZDZjoDkt/8gmEtfcrtaZi1e22L3o4rTK1/9SNdJ6Z57gjNLd4LED6m/UNjBJWEs
+         fTR2FnZmJWIeis1kNv8ZNSpUgiOsNvom1kyD+0tEvgB1Kmnu1AYdo2dug1M6aUAiO0fe
+         zGV4jCI2D/OigiN6fLWPRE3TNr+tUeVtviFF6dw1qbMa+ruh3PTvAk2CVRezKCAwmjqA
+         EFbtc9tFbLSTzsKSMA5/dZuRnGEF4EcTyvA6D4AIPdLbaEuQxCfk2EMNv/ZLOfSSUSEi
+         Apog==
+X-Forwarded-Encrypted: i=1; AJvYcCUhHAuPuaTybnkhnJpSoffWbZf+zwIGIHk+zaEaFArYPq3UVNr+EQqbCFEpAM6mFRBjWpjgYJbxPvc9@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy02YtbEbr4yjNejrbLUkzm+NEKXKmoNZqr7TTXpxEQ9BaI6dp4
+	YO4tqyPgbinoSEaDXWQElwXy8Xt0cK1CD58+2J70lOW1SaDrmn8tXKCb4iCOgU3qd+ib+Xk4cFc
+	tuFgpmvx2jfJJFeOFOFAyTaSrpOMshxk=
+X-Gm-Gg: ASbGncvsodyXjVv2nWMzh+hKL4nRvOPNLQgTVv+Mtseqgbm3T5QJn2DKiaSyN+x5r1W
+	Wmk5u+C+C9liofP9bsJvx7YgcbbHIvVIFXoipQg0WGxUKTuhJYvqNrYC6hszpj18xQG+t1Rxo0t
+	N6Ko7UshFY4qppPsG10bT13GViEFotVsbTm/kuU2XkKzNdE69OaiBlmcu7/CWEOiJMLiT1hebgE
+	xQRS2StuOqspNx3RA==
+X-Google-Smtp-Source: AGHT+IHykrwNnrf4q7gUeWlVpSMzF3Sgc+KqbTwg0mDXjVcieClbsteVE8gcQXaErn0BALVWv/pwqwJaMAhNoJlmf8Y=
+X-Received: by 2002:a17:903:2449:b0:242:d186:5bce with SMTP id
+ d9443c01a7336-242d383451fmr59257895ad.3.1754919312124; Mon, 11 Aug 2025
+ 06:35:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4c0wCr3bSwz9ss7
+References: <9846b386-87c4-4f86-ae11-6361470cbce7@amd.com> <20250811092125.22630-1-listout@listout.xyz>
+ <a6da8462-e0c4-4bba-b65d-25ba3f5cdacc@amd.com>
+In-Reply-To: <a6da8462-e0c4-4bba-b65d-25ba3f5cdacc@amd.com>
+From: Alex Deucher <alexdeucher@gmail.com>
+Date: Mon, 11 Aug 2025 09:35:00 -0400
+X-Gm-Features: Ac12FXw-e0ywhoHK7Z0ZKlIK4kTRwiALit1X0nC7Kn7H_E-i-z1susch16guNcs
+Message-ID: <CADnq5_MimooPVJXu9SnpL_1Yhkz0ZOfsXWDnnWAKmt+ymH=HRg@mail.gmail.com>
+Subject: Re: [PATCH] drm/radeon/r600_cs: clean up of dead code in r600_cs
+To: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Brahmajit Das <listout@listout.xyz>, airlied@redhat.com, alexander.deucher@amd.com, 
+	amd-gfx@lists.freedesktop.org, linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Replace the use of drm_debugfs_create_files() with the new
-drm_debugfs_add_files() function, which centers the debugfs files
-management on the drm_device instead of drm_minor.
+Applied.  Thanks!
 
-Signed-off-by: Brahmajit Das <listout@listout.xyz>
----
- drivers/gpu/drm/i915/display/intel_display_debugfs.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Alex
 
-diff --git a/drivers/gpu/drm/i915/display/intel_display_debugfs.c b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-index 10dddec3796f..e191665f7832 100644
---- a/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-+++ b/drivers/gpu/drm/i915/display/intel_display_debugfs.c
-@@ -805,7 +805,7 @@ static const struct file_operations i915_fifo_underrun_reset_ops = {
- 	.llseek = default_llseek,
- };
- 
--static const struct drm_info_list intel_display_debugfs_list[] = {
-+static const struct drm_debugfs_info intel_display_debugfs_list[] = {
- 	{"intel_display_caps", intel_display_caps, 0},
- 	{"i915_frontbuffer_tracking", i915_frontbuffer_tracking, 0},
- 	{"i915_sr_status", i915_sr_status, 0},
-@@ -825,9 +825,8 @@ void intel_display_debugfs_register(struct intel_display *display)
- 	debugfs_create_file("i915_fifo_underrun_reset", 0644, debugfs_root,
- 			    display, &i915_fifo_underrun_reset_ops);
- 
--	drm_debugfs_create_files(intel_display_debugfs_list,
--				 ARRAY_SIZE(intel_display_debugfs_list),
--				 debugfs_root, display->drm->primary);
-+	drm_debugfs_add_files(display->drm, intel_display_debugfs_list,
-+			      ARRAY_SIZE(intel_display_debugfs_list));
- 
- 	intel_bios_debugfs_register(display);
- 	intel_cdclk_debugfs_register(display);
--- 
-2.50.1
-
+On Mon, Aug 11, 2025 at 8:53=E2=80=AFAM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> On 11.08.25 11:21, Brahmajit Das wrote:
+> > GCC 16 enables -Werror=3Dunused-but-set-variable=3D which results in bu=
+ild
+> > error with the following message.
+> >
+> > drivers/gpu/drm/radeon/r600_cs.c: In function =E2=80=98r600_texture_siz=
+e=E2=80=99:
+> > drivers/gpu/drm/radeon/r600_cs.c:1411:29: error: variable =E2=80=98leve=
+l=E2=80=99 set but not used [-Werror=3Dunused-but-set-variable=3D]
+> >  1411 |         unsigned offset, i, level;
+> >       |                             ^~~~~
+> > cc1: all warnings being treated as errors
+> > make[6]: *** [scripts/Makefile.build:287: drivers/gpu/drm/radeon/r600_c=
+s.o] Error 1
+> >
+> > level although is set, but in never used in the function
+> > r600_texture_size. Thus resulting in dead code and this error getting
+> > triggered.
+> >
+> > Fixes: 60b212f8ddcdb ("drm/radeon: overhaul texture checking. (v3)")
+> > Signed-off-by: Brahmajit Das <listout@listout.xyz>
+>
+> Acked-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+>
+> > ---
+> >  drivers/gpu/drm/radeon/r600_cs.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/radeon/r600_cs.c b/drivers/gpu/drm/radeon/=
+r600_cs.c
+> > index ac77d1246b94..811265648a58 100644
+> > --- a/drivers/gpu/drm/radeon/r600_cs.c
+> > +++ b/drivers/gpu/drm/radeon/r600_cs.c
+> > @@ -1408,7 +1408,7 @@ static void r600_texture_size(unsigned nfaces, un=
+signed blevel, unsigned llevel,
+> >                             unsigned block_align, unsigned height_align=
+, unsigned base_align,
+> >                             unsigned *l0_size, unsigned *mipmap_size)
+> >  {
+> > -     unsigned offset, i, level;
+> > +     unsigned offset, i;
+> >       unsigned width, height, depth, size;
+> >       unsigned blocksize;
+> >       unsigned nbx, nby;
+> > @@ -1420,7 +1420,7 @@ static void r600_texture_size(unsigned nfaces, un=
+signed blevel, unsigned llevel,
+> >       w0 =3D r600_mip_minify(w0, 0);
+> >       h0 =3D r600_mip_minify(h0, 0);
+> >       d0 =3D r600_mip_minify(d0, 0);
+> > -     for(i =3D 0, offset =3D 0, level =3D blevel; i < nlevels; i++, le=
+vel++) {
+> > +     for (i =3D 0, offset =3D 0; i < nlevels; i++) {
+> >               width =3D r600_mip_minify(w0, i);
+> >               nbx =3D r600_fmt_get_nblocksx(format, width);
+> >
+>
 

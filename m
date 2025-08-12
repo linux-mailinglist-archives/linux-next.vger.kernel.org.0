@@ -1,109 +1,188 @@
-Return-Path: <linux-next+bounces-7913-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7914-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED1B8B21E89
-	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 08:45:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F422B2207D
+	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 10:16:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76E9A1892BA8
-	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 06:45:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9510B685879
+	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 08:15:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91406279DAA;
-	Tue, 12 Aug 2025 06:44:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A40296BAC;
+	Tue, 12 Aug 2025 08:15:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="OdVQuMfh"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="SKBwReyO"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91532DDC3;
-	Tue, 12 Aug 2025 06:44:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CECE92D9ECF
+	for <linux-next@vger.kernel.org>; Tue, 12 Aug 2025 08:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754981084; cv=none; b=Vt7PRHIUTWrfE4b1YWVDZrYEakUd8V4pSmQ15ElMuNkHqb563Nbgcg5DWxQ4g9EcStmvk95974jaClZy/bkO99EJphwF4z3P3Am7CQRQcCzq5UXBxA6PkgqZUC5+4M4VqLIYXExnu2VZGt5g2QJobMvvsc+CzVzRO5aEumQIoXk=
+	t=1754986514; cv=none; b=dxrK8e/lN4KIkOVhQkzXb+csW01ejVnDqVpnb3RnOFepr8dOwk5Kr4aqyL7FQJL8LZE0RxnZ5vGe9dumYcF7mYHp8ZWgO5+elbbwHas+I66BbfJHJTeHmkl7VUhV+STeyAm02uptTS85fxU0FjLphE/LIJ8JTpwjlTMWTQpQMTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754981084; c=relaxed/simple;
-	bh=oSSI4tuEwKmctPFFNs3rhIvGXN3Xpdi74WZsmBv8Y2g=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=JVUCZdjwt74OXIPw0CCzHJcoq+GVFK9gat4RiHCacFKJgJ2ONiEnz88pcQIV6zC3eE1qwUQTfsvRkAeMFfutUGWzUZNBoEkOgkLfEdin0DgHy5Z5q/ZDeJMVFbPbQmL8eTMj7FytfmdnwkKDMkznGvbJAEt4rTfXfU+rJeXdRZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=OdVQuMfh; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1754981076;
-	bh=BiJp9XjGaPrIJJd6/v7qPyLt7cvw8zpMyvinyA5PGME=;
-	h=Date:From:To:Cc:Subject:From;
-	b=OdVQuMfhSJ9I/dFoTiK3gmyds8sUKkIiTMJ2GfFHe6BvSLS9KzRNUl4pLY7DdYvOM
-	 mN3CiZ3MNKIO+XMgGGvjRmwj121hxy7viYAhFuMAWffKUeR4LSj8TiE5skt/MkhozM
-	 DddZ71/jM/hi/NXgPzWbUdcEEvwWplVQdk5ggr0IGfwlePyOqLrmFwLBGK7CmJsyvl
-	 mpb5Aww3kVncGCOzw03citqFJQmw7RnqGrHTczJ5Tk3fnOmSUEKTZei40K2toEi+uE
-	 PVJzEnYFJEeyzTYaci7QztnYBvR/N/EeOP7HU1ukm8y1e+oTq23GDX2plnoH6eyx6s
-	 gbr4ctNr6cPjw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c1MS45f8Rz4wcn;
-	Tue, 12 Aug 2025 16:44:36 +1000 (AEST)
-Date: Tue, 12 Aug 2025 16:44:36 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the mm-hotfixes tree
-Message-ID: <20250812164436.557c805f@canb.auug.org.au>
+	s=arc-20240116; t=1754986514; c=relaxed/simple;
+	bh=oNlOSf9lwria5g4P4bcAt70Ozfm2fLJztO1p5+bHdpc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YYkyapya0LeuoI4a6H4aiR6f4Vd6b6Fgz+IhFSiAX8tmZh3p8TOvOlLuDLjeo4w6f4dLFgIsuJg2q5Tse8dsG1C1xZ5JBwpS5XMUHJB/2Qba36XgMbCeP/qGCOwAgLVvOf64SBZdnTeoOSsfOR/SoacwqZegnl89GKmpaBXcJxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=SKBwReyO; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-45a11f20e03so3066855e9.2
+        for <linux-next@vger.kernel.org>; Tue, 12 Aug 2025 01:15:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1754986509; x=1755591309; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=r0RU+EVA/oXhr6629uj/gRIC4NsMhB00Ff4FYPm+o0w=;
+        b=SKBwReyOysOJoArO7ntlF3K5xPrid/kUvBQJv622dX08DGOJfXwqbHAIjciVkXtnch
+         vUzksxG89WzP/kaSIrQl746Pkl/VP/NuJFqPSGEWWP20oq9cVguAVaO+uniQy7ybvfHK
+         sEOyXS+szFodrLp4UIb7Adl9CTGnsXZb7+WVDKV29u/CF+sy/raeZDSyMF2YX2ey9Ds7
+         u/FXRBefg9ESjGntDoH8xxq12v2Nq7vWGbhgqF0FZXrx/BlbVrhR0UZcCCCoJ6kg040Z
+         dID2af7PQ9wCdcTtT1d2pfvxXFiP/UISq9XzqbeggvbTHsTpTgYl+EPOqB9QxSOu1/Q4
+         LaPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754986509; x=1755591309;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=r0RU+EVA/oXhr6629uj/gRIC4NsMhB00Ff4FYPm+o0w=;
+        b=NSCksHzYfRw7bJxm6Z2BvioMgQabl+HFgx2bi79olMG1GWa890yoLh5Cud7fOe10bh
+         gCQZOqTI7NJ7JqxTQ20FLDXlvE+7dtbdO3BV2eQPtDV4Saj5cuxBDI/rXtQA+4BxbSwM
+         S4AT0TPeJXuO6N3Pza/UGBalileEEYbbQ9vF7Xz/p9H6AIeyaGmZmEjur369YvbTAv65
+         5hEzziSCh0sXuNGdP5XWWOdGzZ5JEgOqFwCS9BmBlm3P1A+cJc8gxp/7XBYUBuZOYrs4
+         IPqIMvZ7zeZIqKkDKOIVo4uvIBUXunfNNAKXXN6vCvj6iUbupr7A5yTrSC4HbFEgFn5S
+         z91Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUFJv7W0jlm0fG4ixTkS/cIzDeiSclbR44Wxi/i3fF7qqhfoPX00EJMn1JQDPao9IOVngddEN9dMhiG@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzsd6RCCS6O5hrd1LscKDZdlWias7+n88CuiJ3nda/4+bYEMqum
+	2TaAZsL0udLaYE1UxVkjLLgogAJ1QfT4EZoxJBmWANI4YQA2Ra/P4JxaFlO2AB1yCvA=
+X-Gm-Gg: ASbGncv07lf1r/91EfsrJSn8Suq+YhlGA3+9dQENXcwwzYFpEgGrQ5ha2SIfpTyzCuQ
+	I2whlUud0W4nUf5+68e6LgTdM1tBd2BNPTOKqojcKpEAuarCetyLOLuJAr+I26RsgWOjpE016Kz
+	FnOOq3RFEpfaNU6E/ix37YLsx94RpI4118ZIy+M+DhOHUSIAMqVl9XBV8ot1LWGFLGPIs0dCDJd
+	eLvd3dGxjPyYz5q+QkQk6wFvqf5YoNPeV2Ornkemmttza/95fBVsxm9bN2lREMKn1N5DDGpRHm8
+	+lhhjLoXxC0CA0EfOkQSiJ8FNe2q7tMZZC0ZsRyWZIdu+EF3MohV208ZB8ARaEz6/yzc5sd9hOW
+	NRd3PAIbtSUv7Ig+fopq6wxQE1D9oaNHbzUChgQEuNSbY1V/zEzaxKrnPls6tRxE2
+X-Google-Smtp-Source: AGHT+IFzfwjMr91Rwcp22dDBo2pGbAACNReQ2jizIX66xTl6+mHxOZwy9Tcfm2HCsLai3a6BpHWpNA==
+X-Received: by 2002:a05:600c:b99:b0:459:e20e:be2f with SMTP id 5b1f17b1804b1-45a10baf6ecmr22994835e9.14.1754986509045;
+        Tue, 12 Aug 2025 01:15:09 -0700 (PDT)
+Received: from localhost (p200300f65f06ab0400000000000001b9.dip0.t-ipconnect.de. [2003:f6:5f06:ab04::1b9])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3b79c46ee84sm42292918f8f.57.2025.08.12.01.15.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Aug 2025 01:15:08 -0700 (PDT)
+Date: Tue, 12 Aug 2025 10:15:06 +0200
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
+To: linux-pwm@vger.kernel.org
+Cc: Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Clemens Gruber <clemens.gruber@pqgruber.com>, 
+	linux-gpio@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	linux-next@vger.kernel.org
+Subject: Re: [PATCH v2] pwm: Provide a gpio device for waveform drivers
+Message-ID: <kzjwaczug2m6lfxh3bncoi5tuupbearhpdawhcuhm3uy6zl6ic@6vkvutgfgl5e>
+References: <20250717151117.1828585-2-u.kleine-koenig@baylibre.com>
+ <533s3ekqhn2lbk5j7xkwfoi473lkl4prpr6bc5qjd7vzawlmqq@tevygtxqobzv>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/b.KZglyq9/36ZZ2eOi5t9vc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zn54w7fsxqkmu2f2"
+Content-Disposition: inline
+In-Reply-To: <533s3ekqhn2lbk5j7xkwfoi473lkl4prpr6bc5qjd7vzawlmqq@tevygtxqobzv>
 
---Sig_/b.KZglyq9/36ZZ2eOi5t9vc
-Content-Type: text/plain; charset=US-ASCII
+
+--zn54w7fsxqkmu2f2
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2] pwm: Provide a gpio device for waveform drivers
+MIME-Version: 1.0
 
-Hi all,
+Hello again,
 
-In commit
+On Fri, Aug 01, 2025 at 12:03:20PM +0200, Uwe Kleine-K=C3=B6nig wrote:
+> On Thu, Jul 17, 2025 at 05:11:16PM +0200, Uwe Kleine-K=C3=B6nig wrote:
+> > A PWM is a more general concept than an output-only GPIO. When using
+> > duty_length =3D period_length the PWM looks like an active GPIO, with
+> > duty_length =3D 0 like an inactive GPIO. With the waveform abstraction
+> > there is enough control over the configuration to ensure that PWMs that
+> > cannot generate a constant signal at both levels error out.
+> >=20
+> > The pwm-pca9685 driver already provides a gpio chip. When this driver is
+> > converted to the waveform callbacks, the gpio part can just be dropped.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@baylibre.com>
+>=20
+> Applied to
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/ukleinek/linux.git pwm/fo=
+r-nexxt
+>=20
+> as 6.18-rc1 material. (I just claimed the same for the v1 patch, that's
+> of course bogus and this v2 is on for-nexxt.)
 
-  25ee3c404f35 ("kho: mm: don't allow deferred struct page with KHO")
+Now that 6.17-rc1 is tagged I rebase my tree and squash the following
+change into the commit for this patch:
 
-Fixes tag
+diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
+index b05186b9569e..ec4112e6209a 100644
+--- a/drivers/pwm/core.c
++++ b/drivers/pwm/core.c
+@@ -2511,7 +2511,7 @@ int __pwmchip_add(struct pwm_chip *chip, struct modul=
+e *owner)
+ 			.request =3D pwm_gpio_request,
+ 			.free =3D pwm_gpio_free,
+ 			.get_direction =3D pwm_gpio_get_direction,
+-			.set_rv =3D pwm_gpio_set,
++			.set =3D pwm_gpio_set,
+ 			.base =3D -1,
+ 			.ngpio =3D chip->npwm,
+ 			.can_sleep =3D true,
+diff --git a/include/linux/pwm.h b/include/linux/pwm.h
+index 6e7d02c24991..549ac4aaad59 100644
+--- a/include/linux/pwm.h
++++ b/include/linux/pwm.h
+@@ -322,6 +322,7 @@ struct pwm_ops {
+  * @npwm: number of PWMs controlled by this chip
+  * @of_xlate: request a PWM device given a device tree PWM specifier
+  * @atomic: can the driver's ->apply() be called in atomic context
++ * @gpio: &struct gpio_chip to operate this PWM chip's lines as GPO
+  * @uses_pwmchip_alloc: signals if pwmchip_allow was used to allocate this=
+ chip
+  * @operational: signals if the chip can be used (or is already deregister=
+ed)
+  * @nonatomic_lock: mutex for nonatomic chips
 
-  Fixes: 990a950fe8fd ("kexec: add config option for KHO")
+The first hunk is to make the code compile after commit d9d87d90cc0b
+("treewide: rename GPIO set callbacks back to their original names").
+The second to please `make htmldocs`.
 
-has these problem(s):
+Both issues were highlighted by Stephen Rothwell, a big =E2=9D=A4=EF=B8=8F =
+for the
+tedious work to build the next integration tree each day and pointing
+out these issues.
 
-  - Target SHA1 does not exist
+Best regards
+Uwe
 
-Maybe you meant
-
-Fixes: 4e1d010e3bda ("kexec: add config option for KHO")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/b.KZglyq9/36ZZ2eOi5t9vc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--zn54w7fsxqkmu2f2
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmia4tQACgkQAVBC80lX
-0Gwh8gf+PzY1oVOcFZUshlJJ+TOPZlsh3vTCRKxdvTBVM56nq7d544KUJmULBJv5
-SXGgrCLY9BskzzR1+2JdUwmVaaDDeu+O130Vci+oK4+FAn7JcKcbCltCBeNzxRD9
-B7wn0jiFypS8kE1w2YPqo/trPozqs5n2oOYSjv/dSE46Kjk+1qIsbH+z3dKNRd8D
-y1Csv+j8VtsfWNKNXgaKmfQBpLZWmfIzEV6iBgIh+Jd1TIojSxxQRHyPrBRpV3+l
-YoY7Xb/CbBeslRMx/9WumCTOECE292t8Cg7jl1af3qJ8DHs5ZofaxKMxYlNAYBsv
-5+139pShJ72h8P/ymtRME8YS5NcsFA==
-=PJQP
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmia+AgACgkQj4D7WH0S
+/k6UTAf9FgJsxYHtV8rKBcpj0hEIR4eM7klz3prj5Kttcl6n+W/O/cyZ6Rc7PGkF
+l+uljY9KLXRPWN1zclh643Z+glt7SBYx9U6P0d4lRkhEOn3uA+lT5tDuJ4T6R1kp
+qcgTGDJ4MmaEwfmOMeEAIdjF0aTg63PKfNvma+6k35E8cHVMFrCckUkyYz7ojMeZ
+zbdR+4Q23eLTvN4ei+3f5uu+ITUcrtfNJcaj4ihfcVbNYaXtZ3aSWqnuEiieucDN
+aXPB901VrXibGSgHuzdLtzycDi8eD5IB+G//+vW6dkAbcV0Sywa2Q05mo7czwN0U
+eOvyTDDz/ieKGd5yP1MEd5SSLmKceQ==
+=5max
 -----END PGP SIGNATURE-----
 
---Sig_/b.KZglyq9/36ZZ2eOi5t9vc--
+--zn54w7fsxqkmu2f2--
 

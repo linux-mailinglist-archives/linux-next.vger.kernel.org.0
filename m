@@ -1,124 +1,135 @@
-Return-Path: <linux-next+bounces-7915-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7916-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33F79B2296F
-	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 15:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA309B22B0F
+	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 16:51:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37E5B681F61
-	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 13:48:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63941624854
+	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 14:45:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B93D287252;
-	Tue, 12 Aug 2025 13:47:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C67FC2ECE8F;
+	Tue, 12 Aug 2025 14:44:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="K0THCnpe"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="hSn9NDoP"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67159286D44
-	for <linux-next@vger.kernel.org>; Tue, 12 Aug 2025 13:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEDFB2C159B;
+	Tue, 12 Aug 2025 14:44:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755006457; cv=none; b=FMwPWCG+CDWyHECF0QWbHNS2nORD90ntMnvBdeKaqQnWOTsgTueoNj1YkYChY/37hwTy6nGAU/MJgYJKhoWbrRub4O3M2Z6Rd9Vlyu4HzJuzgrKsOT/+zhgBbRkd3LdjVtwUBKKd+QnWo8ROLxdc+bg/U7tXFVvm1kRLLmOVu0Y=
+	t=1755009881; cv=none; b=AnDn7hbKdrmQ2vhAwo9f5iPpeLw/fg7K8/R5qKljuErXC6vt5++csrQ4j8wQFKAAj/n99Z7iBVT07I+qhcUR0wQNh0JCn7sDW7qjMj7wHR8qaHp4cYHCt+RlXysQYrnZK2bMUPxt524jJHkLT7k4SsrT+S6kVtLgZ/Z0ErRAzMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755006457; c=relaxed/simple;
-	bh=ZEQS7dHy4bqa5xEK/OWh6tiW9JpSTnxX7NCQEJRoP3I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D/MxDyVd+sjIh8bTcLhm0FgdDEV+AjbnhJyfdqGsNpU8kbRyi1nQ+Jcki58j8rFxO2W7xZouY0rghTVCbkDTjXNyyBTtZGeJ3YmGcJvcRSzZL6QhXmWJc6otAMZHQKpMtBWC8Q8mXpEHGOjN34FQGf5hYpsy67Vn2D0VbjPvM3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=K0THCnpe; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4b0a2dd3a75so58913701cf.0
-        for <linux-next@vger.kernel.org>; Tue, 12 Aug 2025 06:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=soleen.com; s=google; t=1755006454; x=1755611254; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oiaiHLfj5U8yaY5aeIgIVQg9pcSst1kk2u6M/Lgbw4w=;
-        b=K0THCnpeTjOMO+wmtK6BXCJiNqGiOI8E/zYggQPT5DSu/DlHxQylnBcBWtAujk1D8I
-         IdRRq7AK0to8H5ZxTlXUo9Og85GnOdqb5eUXv0/u4FZL1eiORkLaoQqpzYqHImicS2O5
-         iIzYxIKTWl4Py9CFJcnK27fyl8Po+OERdIbufRP7fru/9fCyR13XnRCXJHGl2gmKR8t8
-         dRKQVst+PEfSiFNwgAjXZk5XaXBRrZR6/gvLokiX60z8fKHTqmM6tY4OdIttClwQEJ6v
-         qaSLzjdgu0/vLz7wcdutWb0JCH7SjJQCuDSwzm5lYrLtpAizlZ9DFHS3vEUHdPfjZHmc
-         uV3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755006454; x=1755611254;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oiaiHLfj5U8yaY5aeIgIVQg9pcSst1kk2u6M/Lgbw4w=;
-        b=Db8EcFgBs/BszWxbj0J1+5ZxglC8PLoB5+qqwUBlzvz/a3qYx3gqrEcAIQXG+QrIyZ
-         E/w8bYruh4zFRnomK4Hkl89DwuirVjGxo2G774W4AHnAlGP0f1dV2D0w6WaVXkpx+4aw
-         rFp1OZNG4ljw7Usj5OUxdTI3NTUpsv0kjEDQ3J8yv8FQ18k5BGEFYrDa2GAs5BeAXfJ/
-         rgUeE4ZGuMNTM5IuzrlqxGp82OzFObA11Y0X5b3GeRrvTyQvkXqZHzt6bLBi8/cEHIKx
-         Ix1U/0IGG7wtrcrPNZ/bFsY86sy/5TVy0Ds4wZaTEsWEqhgQb5Upi5ftqv3kMhsyI4VH
-         XcrA==
-X-Forwarded-Encrypted: i=1; AJvYcCVfZS55bz6jvw7fGi9BebHyU/jEp8wnYf0aBqBhli1SPVLIjamwm4fkTig25AW+poQ4ooZV6AjL3Nle@vger.kernel.org
-X-Gm-Message-State: AOJu0YykJF2kK2xneWqqhKqaMomH2iFwPt+bQG3pL2qWkloqhfigbqFU
-	FJPHEc2s0fpfl2VCXkhJOVBduXObnfm1pRniZCNKUiWtvx1BryLQJUE4Q2GZ+Z54J1fDpneHQF/
-	w0WyE5h/gGODvNDJr/P2Ya6LrrwtKmxzjCTiWfkMjmA==
-X-Gm-Gg: ASbGncvCghMMbiBp3C5ASJgeLumyzKTuKepwjQXkqg69z2KUPYjL+nXaWODTxLf9MyE
-	GFAvROLR7QEmeqEvBuV5uw93ohiqXMx47GZUde9Nrpk7kktv9XXKR/SAerKGxEx3OboUBMqzdIB
-	g3wELG8GqmZGppuD8xrlv3KypMoOYDj3kilpkbOnaxXgGbrfb5XX2+/rXdK3GvsVRxxbg/0mqRg
-	gPd
-X-Google-Smtp-Source: AGHT+IF9FZQj5pw4nHAwLVl/go1Y++Pq0B8DDhdGaT/iuEWOeTWwC7Lzx4CQw7oh7nPUzVFMmTtXLbUtj63G3OrsETo=
-X-Received: by 2002:a05:622a:230d:b0:4b0:a098:1f75 with SMTP id
- d75a77b69052e-4b0ecbb0bc3mr37690691cf.8.1755006454033; Tue, 12 Aug 2025
- 06:47:34 -0700 (PDT)
+	s=arc-20240116; t=1755009881; c=relaxed/simple;
+	bh=xuGaNBZVtuATaDvw043eDtsOmUQ4CSlU6fJHQ6dnGP8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EWm6lakr/kdCYPmA5NzwAfIH30ZamW6JPK6+5QzBLDJ2CC45u4ZySC7239GWRFJ30aB85/+YvatLrdY5/Hf/tQnTVZARoxZLSSnM9YvGQf9TNhAbuSGfiKccU+0j9V6QxpaqwBsEj3Emlpf38t3eOpSJFmvJ4kEH0JqYvYjN7Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=hSn9NDoP; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=ZhsbIXFNOoOJ8ZX4+6Y1Tfv+zUQqehas4lLbJyxnt9U=;
+	b=hSn9NDoPDyVhJnamiV1TQi5v2FbGParWsrEUpuyRTzLUf6FBtm1rShLeKJBBid
+	FL1mEVeHMijfXyuRQC3YGTNVXGwfAyZMoHcG51t0wq5UeEhStFvixibXvzhecrWo
+	kWeK52d4wF+kzzTxmS7B+5o91Aihk2LDJL7OUvMIxUrMg=
+Received: from [IPV6:240e:b8f:919b:3100:3980:6173:5059:2d2a] (unknown [])
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgD3XxQ2U5toJw+iAA--.23507S2;
+	Tue, 12 Aug 2025 22:44:08 +0800 (CST)
+Message-ID: <9d0cce06-25fa-4ca6-8cd1-388e932d1ffc@163.com>
+Date: Tue, 12 Aug 2025 22:44:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250812164436.557c805f@canb.auug.org.au>
-In-Reply-To: <20250812164436.557c805f@canb.auug.org.au>
-From: Pasha Tatashin <pasha.tatashin@soleen.com>
-Date: Tue, 12 Aug 2025 13:46:57 +0000
-X-Gm-Features: Ac12FXzdOr9gxDZaTKBaBDu-lCxDswcINL4uysL5NReZ5kaQL2LOxR3gFpp4Bto
-Message-ID: <CA+CK2bA=thKfEuiFZ-Nmr1ZNALC7ZcKv5uPVy2RCgc-Jy96Now@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the mm-hotfixes tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] PCI: Fix endianness issues in pci_bus_read_config()
+To: Gerd Bayer <gbayer@linux.ibm.com>, Manivannan Sadhasivam
+ <mani@kernel.org>, Hans Zhang <hans.zhang@cixtech.com>
+Cc: Arnd Bergmann <arnd@kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+ bhelgaas@google.com, Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ jingoohan1@gmail.com, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?=
+ <kwilczynski@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-s390@vger.kernel.org, linux-next <linux-next@vger.kernel.org>,
+ linux-pci@vger.kernel.org, Lorenzo Pieralisi <lpieralisi@kernel.org>,
+ Rob Herring <robh@kernel.org>, Niklas Schnelle <schnelle@linux.ibm.com>,
+ geert@linux-m68k.org
+References: <20250731183944.GA3424583@bhelgaas>
+ <6e34b4af-dff9-4360-b3da-c95ca7c740c9@app.fastmail.com>
+ <vf65usnffqzlkgijm72nuaslxnflwrugc25vw6q6blbn2s2d2s@b35vjkowd6yc>
+ <9a155e45-f723-4eec-81d3-2547bfe9a4e9@cixtech.com>
+ <ofsbfhor5ah3yzvkc5g5kb4fpjlzoqkkzukctmr3f6ur4vl2e7@7zvudt63ucbk>
+ <c8ffdd21-9000-40c2-9f4d-4d6318e730b5@cixtech.com>
+ <cu7qdbwmnixqjce4aetr5ldwe3sqoixgq4fuzmzajzphjdywqq@yw6ojbgeqktm>
+ <06f16b1a55eede3dc3e0bf31ff14eca89ab6f009.camel@linux.ibm.com>
+ <06012cc6-824d-4a7d-85c9-9995ec915382@163.com>
+ <6efa10219a41907ebdd7b75fc8d9249e115e8864.camel@linux.ibm.com>
+Content-Language: en-US
+From: Hans Zhang <18255117159@163.com>
+In-Reply-To: <6efa10219a41907ebdd7b75fc8d9249e115e8864.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:PCgvCgD3XxQ2U5toJw+iAA--.23507S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww15tF4fGFyUKryxuF47twb_yoW8Jw1fpF
+	WSyF4akF4kGrWxJFWIgw1UXF1j93yvyryfu395Gwn8A3Z09r1rJrs3ZF4YgF9rGr97ur4Y
+	va13ZF1aqryjvaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UZiSLUUUUU=
+X-CM-SenderInfo: rpryjkyvrrlimvzbiqqrwthudrp/1tbiQw+no2ibT2J2SgAAsq
 
-On Tue, Aug 12, 2025 at 6:44=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> Hi all,
->
-> In commit
->
->   25ee3c404f35 ("kho: mm: don't allow deferred struct page with KHO")
->
-> Fixes tag
->
->   Fixes: 990a950fe8fd ("kexec: add config option for KHO")
->
-> has these problem(s):
->
->   - Target SHA1 does not exist
->
-> Maybe you meant
->
-> Fixes: 4e1d010e3bda ("kexec: add config option for KHO")
 
-Yes, this is the correct one. Thank you!
 
-Andrew, do you want me to send a new patch version to update the commit log=
-?
+On 2025/8/4 18:09, Gerd Bayer wrote:
+> On Mon, 2025-08-04 at 11:06 +0800, Hans Zhang wrote:
+>>
+>> On 2025/8/1 19:30, Gerd Bayer wrote:
+>>> On Fri, 2025-08-01 at 16:24 +0530, Manivannan Sadhasivam wrote:
+>>>
+>>> <--- snip --->
+>>>
+>>>>>>
+>>
+>> Dear all,
+>>
+>> According to the issue mentioned by Lukas and Mani. Gerd has already
+>> been tested on the s390. I have tested it on the RK3588 and it works
+>> fine. RK3588 uses Synopsys' PCIe IP, that is, the DWC driver. Our
+>> company's is based on Cadence's PCIe 4.0 IP, and the test function is
+>> normal. All the platforms I tested were based on ARM.
+>>
+>> The following is the patch based on the capability-search branch. May I
+>> ask everyone, do you have any more questions?
+>>
+>> Gerd, if there's no problem, I'll add your Tested-by label.
+> 
+> Before you add that I'd like to re-test with the "final" patch.
+> 
+>> Branch:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/log/?h=capability-search
+>>
+>> Patch:
+> 
+> <--- snip --->
+> 
+> Please bear with me while I'm working on that.
 
-Pasha
 
->
-> --
-> Cheers,
-> Stephen Rothwell
+Dear Gerd,
+
+May I ask if there is any update?
+
+
+
+I plan to submit the v15 version of my series based on v6.17-rc1.
+The modification method is like the previous comment:
+https://lore.kernel.org/linux-pci/06012cc6-824d-4a7d-85c9-9995ec915382@163.com/
+
+Best regards,
+Hans
+
 

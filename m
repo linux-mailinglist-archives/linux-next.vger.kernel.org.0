@@ -1,188 +1,124 @@
-Return-Path: <linux-next+bounces-7914-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7915-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F422B2207D
-	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 10:16:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33F79B2296F
+	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 15:59:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9510B685879
-	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 08:15:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37E5B681F61
+	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 13:48:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A40296BAC;
-	Tue, 12 Aug 2025 08:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B93D287252;
+	Tue, 12 Aug 2025 13:47:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="SKBwReyO"
+	dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b="K0THCnpe"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CECE92D9ECF
-	for <linux-next@vger.kernel.org>; Tue, 12 Aug 2025 08:15:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67159286D44
+	for <linux-next@vger.kernel.org>; Tue, 12 Aug 2025 13:47:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754986514; cv=none; b=dxrK8e/lN4KIkOVhQkzXb+csW01ejVnDqVpnb3RnOFepr8dOwk5Kr4aqyL7FQJL8LZE0RxnZ5vGe9dumYcF7mYHp8ZWgO5+elbbwHas+I66BbfJHJTeHmkl7VUhV+STeyAm02uptTS85fxU0FjLphE/LIJ8JTpwjlTMWTQpQMTs=
+	t=1755006457; cv=none; b=FMwPWCG+CDWyHECF0QWbHNS2nORD90ntMnvBdeKaqQnWOTsgTueoNj1YkYChY/37hwTy6nGAU/MJgYJKhoWbrRub4O3M2Z6Rd9Vlyu4HzJuzgrKsOT/+zhgBbRkd3LdjVtwUBKKd+QnWo8ROLxdc+bg/U7tXFVvm1kRLLmOVu0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754986514; c=relaxed/simple;
-	bh=oNlOSf9lwria5g4P4bcAt70Ozfm2fLJztO1p5+bHdpc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YYkyapya0LeuoI4a6H4aiR6f4Vd6b6Fgz+IhFSiAX8tmZh3p8TOvOlLuDLjeo4w6f4dLFgIsuJg2q5Tse8dsG1C1xZ5JBwpS5XMUHJB/2Qba36XgMbCeP/qGCOwAgLVvOf64SBZdnTeoOSsfOR/SoacwqZegnl89GKmpaBXcJxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=SKBwReyO; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-45a11f20e03so3066855e9.2
-        for <linux-next@vger.kernel.org>; Tue, 12 Aug 2025 01:15:10 -0700 (PDT)
+	s=arc-20240116; t=1755006457; c=relaxed/simple;
+	bh=ZEQS7dHy4bqa5xEK/OWh6tiW9JpSTnxX7NCQEJRoP3I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=D/MxDyVd+sjIh8bTcLhm0FgdDEV+AjbnhJyfdqGsNpU8kbRyi1nQ+Jcki58j8rFxO2W7xZouY0rghTVCbkDTjXNyyBTtZGeJ3YmGcJvcRSzZL6QhXmWJc6otAMZHQKpMtBWC8Q8mXpEHGOjN34FQGf5hYpsy67Vn2D0VbjPvM3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com; spf=pass smtp.mailfrom=soleen.com; dkim=pass (2048-bit key) header.d=soleen.com header.i=@soleen.com header.b=K0THCnpe; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=soleen.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=soleen.com
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4b0a2dd3a75so58913701cf.0
+        for <linux-next@vger.kernel.org>; Tue, 12 Aug 2025 06:47:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1754986509; x=1755591309; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r0RU+EVA/oXhr6629uj/gRIC4NsMhB00Ff4FYPm+o0w=;
-        b=SKBwReyOysOJoArO7ntlF3K5xPrid/kUvBQJv622dX08DGOJfXwqbHAIjciVkXtnch
-         vUzksxG89WzP/kaSIrQl746Pkl/VP/NuJFqPSGEWWP20oq9cVguAVaO+uniQy7ybvfHK
-         sEOyXS+szFodrLp4UIb7Adl9CTGnsXZb7+WVDKV29u/CF+sy/raeZDSyMF2YX2ey9Ds7
-         u/FXRBefg9ESjGntDoH8xxq12v2Nq7vWGbhgqF0FZXrx/BlbVrhR0UZcCCCoJ6kg040Z
-         dID2af7PQ9wCdcTtT1d2pfvxXFiP/UISq9XzqbeggvbTHsTpTgYl+EPOqB9QxSOu1/Q4
-         LaPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754986509; x=1755591309;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=soleen.com; s=google; t=1755006454; x=1755611254; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=r0RU+EVA/oXhr6629uj/gRIC4NsMhB00Ff4FYPm+o0w=;
-        b=NSCksHzYfRw7bJxm6Z2BvioMgQabl+HFgx2bi79olMG1GWa890yoLh5Cud7fOe10bh
-         gCQZOqTI7NJ7JqxTQ20FLDXlvE+7dtbdO3BV2eQPtDV4Saj5cuxBDI/rXtQA+4BxbSwM
-         S4AT0TPeJXuO6N3Pza/UGBalileEEYbbQ9vF7Xz/p9H6AIeyaGmZmEjur369YvbTAv65
-         5hEzziSCh0sXuNGdP5XWWOdGzZ5JEgOqFwCS9BmBlm3P1A+cJc8gxp/7XBYUBuZOYrs4
-         IPqIMvZ7zeZIqKkDKOIVo4uvIBUXunfNNAKXXN6vCvj6iUbupr7A5yTrSC4HbFEgFn5S
-         z91Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUFJv7W0jlm0fG4ixTkS/cIzDeiSclbR44Wxi/i3fF7qqhfoPX00EJMn1JQDPao9IOVngddEN9dMhiG@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzsd6RCCS6O5hrd1LscKDZdlWias7+n88CuiJ3nda/4+bYEMqum
-	2TaAZsL0udLaYE1UxVkjLLgogAJ1QfT4EZoxJBmWANI4YQA2Ra/P4JxaFlO2AB1yCvA=
-X-Gm-Gg: ASbGncv07lf1r/91EfsrJSn8Suq+YhlGA3+9dQENXcwwzYFpEgGrQ5ha2SIfpTyzCuQ
-	I2whlUud0W4nUf5+68e6LgTdM1tBd2BNPTOKqojcKpEAuarCetyLOLuJAr+I26RsgWOjpE016Kz
-	FnOOq3RFEpfaNU6E/ix37YLsx94RpI4118ZIy+M+DhOHUSIAMqVl9XBV8ot1LWGFLGPIs0dCDJd
-	eLvd3dGxjPyYz5q+QkQk6wFvqf5YoNPeV2Ornkemmttza/95fBVsxm9bN2lREMKn1N5DDGpRHm8
-	+lhhjLoXxC0CA0EfOkQSiJ8FNe2q7tMZZC0ZsRyWZIdu+EF3MohV208ZB8ARaEz6/yzc5sd9hOW
-	NRd3PAIbtSUv7Ig+fopq6wxQE1D9oaNHbzUChgQEuNSbY1V/zEzaxKrnPls6tRxE2
-X-Google-Smtp-Source: AGHT+IFzfwjMr91Rwcp22dDBo2pGbAACNReQ2jizIX66xTl6+mHxOZwy9Tcfm2HCsLai3a6BpHWpNA==
-X-Received: by 2002:a05:600c:b99:b0:459:e20e:be2f with SMTP id 5b1f17b1804b1-45a10baf6ecmr22994835e9.14.1754986509045;
-        Tue, 12 Aug 2025 01:15:09 -0700 (PDT)
-Received: from localhost (p200300f65f06ab0400000000000001b9.dip0.t-ipconnect.de. [2003:f6:5f06:ab04::1b9])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3b79c46ee84sm42292918f8f.57.2025.08.12.01.15.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Aug 2025 01:15:08 -0700 (PDT)
-Date: Tue, 12 Aug 2025 10:15:06 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: linux-pwm@vger.kernel.org
-Cc: Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Clemens Gruber <clemens.gruber@pqgruber.com>, 
-	linux-gpio@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	linux-next@vger.kernel.org
-Subject: Re: [PATCH v2] pwm: Provide a gpio device for waveform drivers
-Message-ID: <kzjwaczug2m6lfxh3bncoi5tuupbearhpdawhcuhm3uy6zl6ic@6vkvutgfgl5e>
-References: <20250717151117.1828585-2-u.kleine-koenig@baylibre.com>
- <533s3ekqhn2lbk5j7xkwfoi473lkl4prpr6bc5qjd7vzawlmqq@tevygtxqobzv>
+        bh=oiaiHLfj5U8yaY5aeIgIVQg9pcSst1kk2u6M/Lgbw4w=;
+        b=K0THCnpeTjOMO+wmtK6BXCJiNqGiOI8E/zYggQPT5DSu/DlHxQylnBcBWtAujk1D8I
+         IdRRq7AK0to8H5ZxTlXUo9Og85GnOdqb5eUXv0/u4FZL1eiORkLaoQqpzYqHImicS2O5
+         iIzYxIKTWl4Py9CFJcnK27fyl8Po+OERdIbufRP7fru/9fCyR13XnRCXJHGl2gmKR8t8
+         dRKQVst+PEfSiFNwgAjXZk5XaXBRrZR6/gvLokiX60z8fKHTqmM6tY4OdIttClwQEJ6v
+         qaSLzjdgu0/vLz7wcdutWb0JCH7SjJQCuDSwzm5lYrLtpAizlZ9DFHS3vEUHdPfjZHmc
+         uV3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755006454; x=1755611254;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=oiaiHLfj5U8yaY5aeIgIVQg9pcSst1kk2u6M/Lgbw4w=;
+        b=Db8EcFgBs/BszWxbj0J1+5ZxglC8PLoB5+qqwUBlzvz/a3qYx3gqrEcAIQXG+QrIyZ
+         E/w8bYruh4zFRnomK4Hkl89DwuirVjGxo2G774W4AHnAlGP0f1dV2D0w6WaVXkpx+4aw
+         rFp1OZNG4ljw7Usj5OUxdTI3NTUpsv0kjEDQ3J8yv8FQ18k5BGEFYrDa2GAs5BeAXfJ/
+         rgUeE4ZGuMNTM5IuzrlqxGp82OzFObA11Y0X5b3GeRrvTyQvkXqZHzt6bLBi8/cEHIKx
+         Ix1U/0IGG7wtrcrPNZ/bFsY86sy/5TVy0Ds4wZaTEsWEqhgQb5Upi5ftqv3kMhsyI4VH
+         XcrA==
+X-Forwarded-Encrypted: i=1; AJvYcCVfZS55bz6jvw7fGi9BebHyU/jEp8wnYf0aBqBhli1SPVLIjamwm4fkTig25AW+poQ4ooZV6AjL3Nle@vger.kernel.org
+X-Gm-Message-State: AOJu0YykJF2kK2xneWqqhKqaMomH2iFwPt+bQG3pL2qWkloqhfigbqFU
+	FJPHEc2s0fpfl2VCXkhJOVBduXObnfm1pRniZCNKUiWtvx1BryLQJUE4Q2GZ+Z54J1fDpneHQF/
+	w0WyE5h/gGODvNDJr/P2Ya6LrrwtKmxzjCTiWfkMjmA==
+X-Gm-Gg: ASbGncvCghMMbiBp3C5ASJgeLumyzKTuKepwjQXkqg69z2KUPYjL+nXaWODTxLf9MyE
+	GFAvROLR7QEmeqEvBuV5uw93ohiqXMx47GZUde9Nrpk7kktv9XXKR/SAerKGxEx3OboUBMqzdIB
+	g3wELG8GqmZGppuD8xrlv3KypMoOYDj3kilpkbOnaxXgGbrfb5XX2+/rXdK3GvsVRxxbg/0mqRg
+	gPd
+X-Google-Smtp-Source: AGHT+IF9FZQj5pw4nHAwLVl/go1Y++Pq0B8DDhdGaT/iuEWOeTWwC7Lzx4CQw7oh7nPUzVFMmTtXLbUtj63G3OrsETo=
+X-Received: by 2002:a05:622a:230d:b0:4b0:a098:1f75 with SMTP id
+ d75a77b69052e-4b0ecbb0bc3mr37690691cf.8.1755006454033; Tue, 12 Aug 2025
+ 06:47:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zn54w7fsxqkmu2f2"
-Content-Disposition: inline
-In-Reply-To: <533s3ekqhn2lbk5j7xkwfoi473lkl4prpr6bc5qjd7vzawlmqq@tevygtxqobzv>
-
-
---zn54w7fsxqkmu2f2
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+References: <20250812164436.557c805f@canb.auug.org.au>
+In-Reply-To: <20250812164436.557c805f@canb.auug.org.au>
+From: Pasha Tatashin <pasha.tatashin@soleen.com>
+Date: Tue, 12 Aug 2025 13:46:57 +0000
+X-Gm-Features: Ac12FXzdOr9gxDZaTKBaBDu-lCxDswcINL4uysL5NReZ5kaQL2LOxR3gFpp4Bto
+Message-ID: <CA+CK2bA=thKfEuiFZ-Nmr1ZNALC7ZcKv5uPVy2RCgc-Jy96Now@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the mm-hotfixes tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] pwm: Provide a gpio device for waveform drivers
-MIME-Version: 1.0
 
-Hello again,
+On Tue, Aug 12, 2025 at 6:44=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> In commit
+>
+>   25ee3c404f35 ("kho: mm: don't allow deferred struct page with KHO")
+>
+> Fixes tag
+>
+>   Fixes: 990a950fe8fd ("kexec: add config option for KHO")
+>
+> has these problem(s):
+>
+>   - Target SHA1 does not exist
+>
+> Maybe you meant
+>
+> Fixes: 4e1d010e3bda ("kexec: add config option for KHO")
 
-On Fri, Aug 01, 2025 at 12:03:20PM +0200, Uwe Kleine-K=C3=B6nig wrote:
-> On Thu, Jul 17, 2025 at 05:11:16PM +0200, Uwe Kleine-K=C3=B6nig wrote:
-> > A PWM is a more general concept than an output-only GPIO. When using
-> > duty_length =3D period_length the PWM looks like an active GPIO, with
-> > duty_length =3D 0 like an inactive GPIO. With the waveform abstraction
-> > there is enough control over the configuration to ensure that PWMs that
-> > cannot generate a constant signal at both levels error out.
-> >=20
-> > The pwm-pca9685 driver already provides a gpio chip. When this driver is
-> > converted to the waveform callbacks, the gpio part can just be dropped.
-> >=20
-> > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@baylibre.com>
->=20
-> Applied to
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/ukleinek/linux.git pwm/fo=
-r-nexxt
->=20
-> as 6.18-rc1 material. (I just claimed the same for the v1 patch, that's
-> of course bogus and this v2 is on for-nexxt.)
+Yes, this is the correct one. Thank you!
 
-Now that 6.17-rc1 is tagged I rebase my tree and squash the following
-change into the commit for this patch:
+Andrew, do you want me to send a new patch version to update the commit log=
+?
 
-diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-index b05186b9569e..ec4112e6209a 100644
---- a/drivers/pwm/core.c
-+++ b/drivers/pwm/core.c
-@@ -2511,7 +2511,7 @@ int __pwmchip_add(struct pwm_chip *chip, struct modul=
-e *owner)
- 			.request =3D pwm_gpio_request,
- 			.free =3D pwm_gpio_free,
- 			.get_direction =3D pwm_gpio_get_direction,
--			.set_rv =3D pwm_gpio_set,
-+			.set =3D pwm_gpio_set,
- 			.base =3D -1,
- 			.ngpio =3D chip->npwm,
- 			.can_sleep =3D true,
-diff --git a/include/linux/pwm.h b/include/linux/pwm.h
-index 6e7d02c24991..549ac4aaad59 100644
---- a/include/linux/pwm.h
-+++ b/include/linux/pwm.h
-@@ -322,6 +322,7 @@ struct pwm_ops {
-  * @npwm: number of PWMs controlled by this chip
-  * @of_xlate: request a PWM device given a device tree PWM specifier
-  * @atomic: can the driver's ->apply() be called in atomic context
-+ * @gpio: &struct gpio_chip to operate this PWM chip's lines as GPO
-  * @uses_pwmchip_alloc: signals if pwmchip_allow was used to allocate this=
- chip
-  * @operational: signals if the chip can be used (or is already deregister=
-ed)
-  * @nonatomic_lock: mutex for nonatomic chips
+Pasha
 
-The first hunk is to make the code compile after commit d9d87d90cc0b
-("treewide: rename GPIO set callbacks back to their original names").
-The second to please `make htmldocs`.
-
-Both issues were highlighted by Stephen Rothwell, a big =E2=9D=A4=EF=B8=8F =
-for the
-tedious work to build the next integration tree each day and pointing
-out these issues.
-
-Best regards
-Uwe
-
---zn54w7fsxqkmu2f2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmia+AgACgkQj4D7WH0S
-/k6UTAf9FgJsxYHtV8rKBcpj0hEIR4eM7klz3prj5Kttcl6n+W/O/cyZ6Rc7PGkF
-l+uljY9KLXRPWN1zclh643Z+glt7SBYx9U6P0d4lRkhEOn3uA+lT5tDuJ4T6R1kp
-qcgTGDJ4MmaEwfmOMeEAIdjF0aTg63PKfNvma+6k35E8cHVMFrCckUkyYz7ojMeZ
-zbdR+4Q23eLTvN4ei+3f5uu+ITUcrtfNJcaj4ihfcVbNYaXtZ3aSWqnuEiieucDN
-aXPB901VrXibGSgHuzdLtzycDi8eD5IB+G//+vW6dkAbcV0Sywa2Q05mo7czwN0U
-eOvyTDDz/ieKGd5yP1MEd5SSLmKceQ==
-=5max
------END PGP SIGNATURE-----
-
---zn54w7fsxqkmu2f2--
+>
+> --
+> Cheers,
+> Stephen Rothwell
 

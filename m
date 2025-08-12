@@ -1,157 +1,124 @@
-Return-Path: <linux-next+bounces-7906-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7907-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 177E0B21B3C
-	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 05:04:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 943D5B21B65
+	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 05:10:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EF196216C6
-	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 03:02:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE8283B11F1
+	for <lists+linux-next@lfdr.de>; Tue, 12 Aug 2025 03:10:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44C2E19E83C;
-	Tue, 12 Aug 2025 03:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BC6626529E;
+	Tue, 12 Aug 2025 03:10:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="MIJLHOit"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="qReQtZv0"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61371946DF;
-	Tue, 12 Aug 2025 03:01:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E3532D9EE1;
+	Tue, 12 Aug 2025 03:10:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754967697; cv=none; b=Miv/vfGJAEFu/h11Hs9UYEw36iiBt5DDT0X8PE9z4JxSnwL7ilX+1yjqa8w+SAPQUQ0ss5hkajVtxiG00v+QGxL0FYuffOsKg8gCpFNVNfSS3jtOVG4j4npV6GA4PcDUC2X+WtLa/I2Si6a0cVGeoiu5cyD6I5FcItddonQdSpU=
+	t=1754968230; cv=none; b=B+FGCyYny8DXRIE/bkQXyEx93//+sM5BcOEwONgGlkNBRjY4+Q5Sd8vmP/V2IAf5dPjnqhzZSxA6PZ067T3R5Anb3M1SZ33BaLv5j/GNMXZmlYGKmGfwOGSdJAj3+XNs1NMzZAQHs0vAF1y8vPm/TzPzIgaF7vAe7w5sYnp13kA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754967697; c=relaxed/simple;
-	bh=DU1zdGbeQJ/d5cgbUObAYxms8t9eChfcU6gQ6uHUDtU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=tkB4HQc9VgVv/BcHPL3YCNBAIo1QC6e3xYeHaB+Dj1NHZBLhoytaWFNbVWiV0zxQiuMNq7df0akhJsL9WKA5qtuT/wmyraDubLtJEgT2KeSvdwsdYs57CNZUWF7YLYNVYXQDPxEa7g/tIZcbcRPg/oyiVjk9l7qNMTAyUv6SnhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=MIJLHOit; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1754968230; c=relaxed/simple;
+	bh=uCzb8kwAgH49gwxC/mQBrfjRJdkSNorM5rsO1dmnWRs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OOjAQmqPD0trEoB86O2xIZWN4b/7aSJ0TfEXjr7Ufi5wpGOCbm9Aj0mjIRd7PkdlJ0v7xvDfF2OJOBeBvv13dQxePd+hbpAgWmEGXz51rjgFmZBNrzee+x1f10z5DjJ10kZXZlPHQK73eZSj2wnmItYBTbAYaAV7LCM/jdhgf6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=qReQtZv0; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1754967685;
-	bh=UbyDXgVR2fBm66dYP6vu8P9kH6wcxaDF0cudUM+pQ+k=;
-	h=Date:From:To:Cc:Subject:From;
-	b=MIJLHOitylZrQ70XHjxdlgkrz4W3B60D3mJEOq7FJgxb0An3plmPESdaLTXMzI5hK
-	 4VGoDPkSnpWMUlh0M8dHbofvP5OCG0EsWB/1ecePmzGk1CxNxMACfAu+5UTwqy4Me6
-	 zMAbRAiagdzjJLWXslfECe2Cd1vESPz5UNBKMD0O7vTY5m01BKIalbFeo0sBDAUE+Y
-	 3gueYMF71PQdfNZOs1mmLsMG4ZOB9Vpo6OtMvxlfBtW5PXw3wG448pRqDx5r4DIjzY
-	 RuGUbiX38DdfaM9YEw0qL15CnIzLlXdj72/Cztv5Jlw3Vnw1XOLAtlnBpHtdlGA1Iz
-	 WOwNQRtt1ZOJg==
+	s=202503; t=1754968225;
+	bh=vMNmzonxsB8Gvf2Yi9uKhjeVXOh4rfCdWKNyJyjnkq0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=qReQtZv0bHyzZTb9AV7fe67IfeJ1V5RVsl0pfG2LwK81k0cK3CY1rHbVPQtA7RuZZ
+	 xwBZZ37IR3B7ett/71v4z/yXjbQeED7nTKcX2/yy4p/3wTJB4WLLYnjIIJZgqM1c1L
+	 exEsWCOQbd0xgG4W3WN3/JVTeCHsGbXklTCPtX76J1DgapI8e0/y+W1DMs+oTBXTl6
+	 /xykfBSiQpUqw/D4dn3Ro7yexeMCEsgB0SryccHl2T8Dg21bwzYA6zY4tFgTEmeq7m
+	 M5muCyTjg9MaHe+filL+xJube68lHD+zATRK2ybIyOXlXtaz4G9i9+M/THGlI/MNAG
+	 uqdUCocxVnE5Q==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c1GVY2CpXz4xf5;
-	Tue, 12 Aug 2025 13:01:25 +1000 (AEST)
-Date: Tue, 12 Aug 2025 13:01:11 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c1Ghx2MxLz4x6n;
+	Tue, 12 Aug 2025 13:10:25 +1000 (AEST)
+Date: Tue, 12 Aug 2025 13:10:24 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <ukleinek@kernel.org>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Uwe
- =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@baylibre.com>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge the pwm tree with Linus' tree
-Message-ID: <20250812130029.2a06ca7c@canb.auug.org.au>
+To: Len Brown <lenb@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the turbostat tree
+Message-ID: <20250812131024.2b83c815@canb.auug.org.au>
+In-Reply-To: <20250610141414.205a3b82@canb.auug.org.au>
+References: <20250407065923.47f0049c@canb.auug.org.au>
+	<20250610141414.205a3b82@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VVTRkzdJ.FEivUpY5uX07oo";
+Content-Type: multipart/signed; boundary="Sig_/B9HFmJwO=RLM2=9czl1rspB";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/VVTRkzdJ.FEivUpY5uX07oo
+--Sig_/B9HFmJwO=RLM2=9czl1rspB
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Len,
 
-After merging the pwm tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+On Tue, 10 Jun 2025 14:14:14 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Mon, 7 Apr 2025 06:59:23 +1000 Stephen Rothwell <sfr@canb.auug.org.au>=
+ wrote:
+> >
+> > The following commit is also in Linus Torvalds' tree as a different com=
+mit
+> > (but the same patch):
+> >=20
+> >   447c98c1ca4a ("tools/power turbostat: Add idle governor statistics re=
+porting")
+> >=20
+> > This is commit
+> >=20
+> >   ed625c61b85c ("tools/power turbostat: Add idle governor statistics re=
+porting")
+> >=20
+> > in Linus' tree. =20
+>=20
+> Due to more changes in Linus' tree, this is now causing a conflict.
+> Since this former commit si the only commit in the turbostat tree
+> (git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git#next),
+> maybe it could be dropped.
 
-drivers/pwm/core.c: In function '__pwmchip_add':
-drivers/pwm/core.c:2514:26: error: 'struct gpio_chip' has no member named '=
-set_rv'
- 2514 |                         .set_rv =3D pwm_gpio_set,
-      |                          ^~~~~~
-drivers/pwm/core.c:2514:35: error: initialization of 'int (*)(struct gpio_c=
-hip *, unsigned int)' from incompatible pointer type 'int (*)(struct gpio_c=
-hip *, unsigned int,  int)' [-Wincompatible-pointer-types]
- 2514 |                         .set_rv =3D pwm_gpio_set,
-      |                                   ^~~~~~~~~~~~
-drivers/pwm/core.c:2514:35: note: (near initialization for '(anonymous).dir=
-ection_input')
-
-Caused by commit
-
-  1c84bb7fc0ad ("pwm: Provide a gpio device for waveform drivers")
-
-interacting with commit
-
-  d9d87d90cc0b ("treewide: rename GPIO set callbacks back to their original=
- names")
-
-from Linus' tree.
-
-I have applied this merge fix patch for today:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 12 Aug 2025 12:38:34 +1000
-Subject: [PATCH] fix up for "pwm: Provide a gpio device for waveform driver=
-s"
-
-interacting with commit
-
-  d9d87d90cc0b ("treewide: rename GPIO set callbacks back to their original=
- names")
-
-from Linus' tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/pwm/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c
-index b05186b9569e..ec4112e6209a 100644
---- a/drivers/pwm/core.c
-+++ b/drivers/pwm/core.c
-@@ -2511,7 +2511,7 @@ int __pwmchip_add(struct pwm_chip *chip, struct modul=
-e *owner)
- 			.request =3D pwm_gpio_request,
- 			.free =3D pwm_gpio_free,
- 			.get_direction =3D pwm_gpio_get_direction,
--			.set_rv =3D pwm_gpio_set,
-+			.set =3D pwm_gpio_set,
- 			.base =3D -1,
- 			.ngpio =3D chip->npwm,
- 			.can_sleep =3D true,
---=20
-2.50.1
+And another unnecessary conflict today :-(  You should just reset the
+turbostat tree to v6.17-rc1.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/VVTRkzdJ.FEivUpY5uX07oo
+--Sig_/B9HFmJwO=RLM2=9czl1rspB
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiarncACgkQAVBC80lX
-0GwKpgf9HBoKEGhuO1OaTDPUrjJ4rxdFIj8XcwvOWIfDHv4qH71CUOgV0tFKk3n0
-RAJHBCbwWlGO8PDrboacVgpLtqTbGneDXzVtQzdEYVA+2bV2j+kMX24JcZJdRm69
-5GxlMpCYv6xnuqJcsDmT3fjRamlc9WGL6J2qrS6/haWTNERt7m6HQ+6JuAk9QW9n
-LomyxK6sGK/QqV9xcvBg7E2XBXdcDRue7nm1lxuoPSGe37bPtX7c4spXhPAJRytw
-rVnnryIsvksVvy40G0JZfcWqQOgGha1YAtkJyNV//C/IY066BzyLqazNXuKr2YRc
-QBT66gnMfocUq4VVKa8YQ1eLbWgL2w==
-=xqOR
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiasKAACgkQAVBC80lX
+0Gw0Uwf+JACsXbgc/BVsQ1IZr2q4r8EPcIyj5MxCtyIkFP1++eg4VRtrPQxKuJRq
+C0EcLxFFmSMb4NhUPJD5FXc5Ziv21iXgjSmvdPw5mnYNG2H+5q6pYk10vYoNYMJd
+P8broddDW2gxhFCRCKL60+YkkYCwnHDaRr7pMfIVRV4OA8cLerEezr6cW/9chIbg
+zEUPeLDYQ1vHSEJGoKIn8L6+IVTj9d8yrXreoYG1Xl267kgN2x5ywTMGpsmD2LAp
+q+w/7CH/BACpOpj5M4OmUfKYtqShWtYnnWqPItHr7D96shlmn5u0M3L9jDHAEKJ+
+4RXvAcXjDESu9koYHkX6YYOPHHBxmg==
+=pWP9
 -----END PGP SIGNATURE-----
 
---Sig_/VVTRkzdJ.FEivUpY5uX07oo--
+--Sig_/B9HFmJwO=RLM2=9czl1rspB--
 

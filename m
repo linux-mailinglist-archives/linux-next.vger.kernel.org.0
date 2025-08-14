@@ -1,79 +1,139 @@
-Return-Path: <linux-next+bounces-7936-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7937-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 450EAB25227
-	for <lists+linux-next@lfdr.de>; Wed, 13 Aug 2025 19:30:49 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FB9AB258D9
+	for <lists+linux-next@lfdr.de>; Thu, 14 Aug 2025 03:17:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1EC524E53EE
-	for <lists+linux-next@lfdr.de>; Wed, 13 Aug 2025 17:30:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7A462A84E6
+	for <lists+linux-next@lfdr.de>; Thu, 14 Aug 2025 01:17:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9358A303C9E;
-	Wed, 13 Aug 2025 17:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C0535963;
+	Thu, 14 Aug 2025 01:17:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UhEq2FrV"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="M+wq6Apv"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CBEA303C82;
-	Wed, 13 Aug 2025 17:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484F1163;
+	Thu, 14 Aug 2025 01:17:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755106244; cv=none; b=r8wUNGVdbVOB6kn74mSmps398nmq+Nxa2i2+tXNhVCpsSXZUfY7RyQ2gX/7PT8aV6WcRFki4hWHnfEHxQ7paCAG9jc06kfGo8Z8JEWmrS1gjG1iNJc9ZvHLq+OBNBsOMOOesYdG4f4IndlFTw3jAncdFDxGH1acSl/adfJFwTQ0=
+	t=1755134233; cv=none; b=jbUAAenJbHkQi8l/nuDzCN0NTNQYZrvcOcFQDDBnhM4+z3gTQQyuraHmIaUPoFZxhuMvOV3og/y3Eq0fu+NKOtyppYSVE5jVZBLC5LdKLu4N2KZ0mRuGtfPJYSsN1YqHTdkFawhLdk9MEGa3c2DabREP+qgUoUuXD1NHdZFUZVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755106244; c=relaxed/simple;
-	bh=vkLB7a4VicTO+02Fi1mYDkZouCIcofMubKLvSx0CDEg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=HAZ1FeyY7BOetQRiLnS00Y7VEQtqDvzLO0Bm4y6bZMSEjs6fv/Fi0s+aKTx7CS6qRLzzU2ZeTrpcdZI2rY7jLd1NrcRhKXSkRuFuraLrPeLNkeMZO0Cb7Nso7PvXy16ybMQvb4dToV4T3A+pcsYrEUfgpghEcgrvkU9t5VJC9f0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UhEq2FrV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C65F5C4CEEB;
-	Wed, 13 Aug 2025 17:30:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755106242;
-	bh=vkLB7a4VicTO+02Fi1mYDkZouCIcofMubKLvSx0CDEg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=UhEq2FrVKOmHpp+HrYxeluEC7/pDOEPcfqvj+bQ1JHTlACUpUKTLPBRLTs74MNLSV
-	 zyogIUVZHDqzCw+bGalltnInYr76IN7HBaG8niqR4BVQ3CeWMQUJ6gKGYXMIG5zRQ8
-	 aI2yxKEXeDx1bKb4lev3bz25n1Ftu7DdpTQebCm/a4I97bvMlICxgruUzUdAQCBSCf
-	 7FouKeuJE97cbFZ8gRJnA4dn3C44X1Sr1oHHJoSefOrJDYvafVHDKHcAdwPsC2FsY0
-	 lMLR1fn3UuKnUC2PiLzZqg47rZrBebYnOYWpqXVIHnpY+aQcGUC004Damjel5BWc6Z
-	 0JF6PPBHgzX0g==
-Date: Wed, 13 Aug 2025 12:30:41 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the devicetree tree
-Message-ID: <20250813173041.GA280259@bhelgaas>
+	s=arc-20240116; t=1755134233; c=relaxed/simple;
+	bh=zwCXeunyU8bKt3ROR7W1CsDnrNwSg2sEDZ+EO5XVu8Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=TDMkGTgsF3cNJQY/SVpjCCalaHYVTXMWMTUT+7g1VEg32bZrUsw628aR/Us5+vgwUiWfEdMvfkjuGFkB96M0GgJ1Ci0B3yG4XwBQC0WyJOi+7gTOHwUKKXgeOkvoP5y6+STkbfN07vTWnA93cATj32ytQHroxXX8QVR1xYOi1PU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=M+wq6Apv; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1755134219;
+	bh=k+K1zwUewEgQ96unfGotQ7+9QaAZj9kIzNJmBcvl7bU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=M+wq6ApvQ+2eMxIFtXRgUDxdVfxiaixhyFogS3VzO52dKLE1DNz+uwwOeH8ObUkuK
+	 HAB5F+mnDl7uvSyisoR7766gFFo+OIDE1BF2+7nFSLHCf5fnmUxWeZy+jlWF28dbY1
+	 YCJOjEloC7EEZRgZCb8FukboNDP0eETBe5bd/yYPWt3Xk6Y0t9ErbFGGi0Ct5qFExs
+	 13H6fSIWb0Lx2c6J2/Q5rT+NrgwtBdtN9coFe99AlRzYGL2KCR+Sm9epMpZfkLRTYf
+	 /FB6u9B9vYzPBvMEqqzlvyvJYirJvpBVcg27Rwf1R4R3tnR+zXKN403U4pX6bJ3ugc
+	 6eEGkPR+1lt5Q==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c2S5675L9z4wcg;
+	Thu, 14 Aug 2025 11:16:58 +1000 (AEST)
+Date: Thu, 14 Aug 2025 11:16:57 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Marc Zyngier <maz@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the clockevents tree
+Message-ID: <20250814111657.7debc9f1@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250813121447.4a1d3383@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/uqCTQJ3i+cB50wE=C_m.pr_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, Aug 13, 2025 at 12:14:47PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The following commit is also in the pci tree as a different commit
-> (but the same patch):
-> 
->   684339e80a93 ("dt-bindings: PCI: Add missing "#address-cells" to interrupt controllers")
-> 
-> This is commit
-> 
->   ddb81c5c9112 ("dt-bindings: PCI: Add missing "#address-cells" to interrupt controllers")
-> 
-> in the pci tree.
+--Sig_/uqCTQJ3i+cB50wE=C_m.pr_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Dropped from the pci tree, thanks!
+Hi all,
+
+After merging the clockevents tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
+
+In file included from include/linux/bitops.h:6,
+                 from include/linux/log2.h:12,
+                 from include/asm-generic/div64.h:55,
+                 from arch/arm/include/asm/div64.h:114,
+                 from include/linux/math.h:6,
+                 from include/linux/math64.h:6,
+                 from include/linux/time.h:6,
+                 from include/uapi/linux/timex.h:56,
+                 from include/linux/timex.h:56,
+                 from include/linux/clocksource.h:13,
+                 from include/linux/clockchips.h:14,
+                 from drivers/clocksource/arm_arch_timer_mmio.c:13:
+drivers/clocksource/arm_arch_timer_mmio.c: In function 'arch_timer_mmio_set=
+up':
+include/linux/bits.h:47:9: warning: conversion from 'long long unsigned int=
+' to 'long unsigned int' changes value from '72057594037927935' to '4294967=
+295' [-Woverflow]
+   47 |         ((t)(GENMASK_INPUT_CHECK(h, l) +                        \
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   48 |              (type_max(t) << (l) &                              \
+      |              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
+      |               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/bits.h:52:33: note: in expansion of macro 'GENMASK_TYPE'
+   52 | #define GENMASK_ULL(h, l)       GENMASK_TYPE(unsigned long long, h,=
+ l)
+      |                                 ^~~~~~~~~~~~
+include/linux/clocksource.h:153:32: note: in expansion of macro 'GENMASK_UL=
+L'
+  153 | #define CLOCKSOURCE_MASK(bits) GENMASK_ULL((bits) - 1, 0)
+      |                                ^~~~~~~~~~~
+drivers/clocksource/arm_arch_timer_mmio.c:264:66: note: in expansion of mac=
+ro 'CLOCKSOURCE_MASK'
+  264 |         clockevents_config_and_register(&at->evt, at->rate, 0xf, CL=
+OCKSOURCE_MASK(56));
+      |                                                                  ^~=
+~~~~~~~~~~~~~~
+
+Introduced by commit
+
+  fbdd82d7f782 ("clocksource/drivers/arm_arch_timer: Add standalone MMIO dr=
+iver")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/uqCTQJ3i+cB50wE=C_m.pr_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmidOQkACgkQAVBC80lX
+0Gz1bwf/aGeZe5rfSh10K6Xtmw599aF3echfAiXW74uKtduQbplNjQ1xzuzYWA2F
+C9NUjoBuEKFUmCRlNNoPEFPd7TcIsqF0W47eibaoRgyeBUMxdwBt9HYqcZVvFD3y
+8zSUfQyI+Yqtm0e4xTFxa0DK9ClRNb89VTbDwvxKfqxS3GDTLS7efPW72qc5BLQu
+hyn/YdqROQXakQrf0ygtNntCVKNbScoVeAGwaj2Oo1ctAFr/trda8bzYnHE9Kr7T
+nLjsC1OJoVCLntfBYiHTvF6ewc66eZBCVS138wylg+EncbynwdD4LJwfEccYagt6
+ip8ez8yuh5e98sPd3dajZrKSsmx/Iw==
+=0k0T
+-----END PGP SIGNATURE-----
+
+--Sig_/uqCTQJ3i+cB50wE=C_m.pr_--
 

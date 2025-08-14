@@ -1,101 +1,60 @@
-Return-Path: <linux-next+bounces-7946-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7948-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 041B0B25B49
-	for <lists+linux-next@lfdr.de>; Thu, 14 Aug 2025 07:52:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF5EBB25B32
+	for <lists+linux-next@lfdr.de>; Thu, 14 Aug 2025 07:50:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9B5D188432A
-	for <lists+linux-next@lfdr.de>; Thu, 14 Aug 2025 05:49:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F34A9A26FE
+	for <lists+linux-next@lfdr.de>; Thu, 14 Aug 2025 05:49:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E3052264CF;
-	Thu, 14 Aug 2025 05:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="bActRxYv";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="5YVVCBbF";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="bActRxYv";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="5YVVCBbF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B394223DC0;
+	Thu, 14 Aug 2025 05:49:03 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E61021FF58
-	for <linux-next@vger.kernel.org>; Thu, 14 Aug 2025 05:48:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9AE022333B
+	for <linux-next@vger.kernel.org>; Thu, 14 Aug 2025 05:49:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755150536; cv=none; b=mdIxPXyWDbVmX59cRmTeS6pvtBsbQMe/iO0Ew2buUK8SjYOB9ka0wzw1c7B/nWDpV805Ud8X0R3alEUIoHNwtFuS5fNKb3c+RO0750ZGNnKRxf8n/fozHXbSWqL22un17v81eguktkVUyx81kmeCztb6bIYfpaohfQUuPTfUYlw=
+	t=1755150543; cv=none; b=YzDTBxLXNKC9seu+06fWEe7hpBQp12Qvqkac0sMWhiVckA3d9448lEGWYpVSCkq/t4RpkMkUCFxvFAUHabyBmn/iSI4C4FMeh1DDDXOeFvZUREUMUqUUScutFoJNvJ2RnQvrGAniyRhbJboYgaQvWIq8VvDG2/EarmKxTWbvkoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755150536; c=relaxed/simple;
-	bh=GGrohtwC6NbDUwDq9BT3jJaIAlNnzGJZIG4kt0idbSQ=;
+	s=arc-20240116; t=1755150543; c=relaxed/simple;
+	bh=HGi17eMVCpQMU0BXMWpfsRRH5sM6D7CsU7NRp6Qh8IM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BYq61mi6j2eTP6gU6cL3+mcCUVyChWv4fgS5y1k+UY3Yc+GWaDL5GPT+w/1teqARo3j5moRZmceu5ccM6fegrpGhuWn1lEHcFbzLBYNgbbTBvvMsv7UFPaYvuT1xc0CvBXse27tLSk1xPYVQ7nBFlS5T9xh3VVSB/4CqoadlrgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=bActRxYv; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=5YVVCBbF; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=bActRxYv; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=5YVVCBbF; arc=none smtp.client-ip=195.135.223.131
+	 MIME-Version; b=q4DDEAfbZD9ihyeaqcF/92OuyjCf5v83FleGkUkTvSIqtxTWlt3u33G1GzV+ZsExsrOK0d/12pds+85+v18DiQ6x1eYNUtN/fentRLzuNg4btMwhXowUhO/YTVAcBekNTRcM20vpHdSh8xNh3FQTAFVtCrZPOxEgOb7Rw5/k8LY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 483EF1F7CD;
-	Thu, 14 Aug 2025 05:48:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1755150524; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IvZ1fIen0Q9X3JJDvdn7/FlFTERaK5IQyVgY5iDRbF0=;
-	b=bActRxYvJenQBkTYZnR4txqLk1mC3lRgbOZcL+us1m1+1s0P/dQ741WfbhcwqD1qN/64UC
-	o0dcPNDPws1tlU4JMbwbD8uK3u+wYaG4rczrK6g8eCSnX4knmQiZPPAF91rc4nmBoKk5Ea
-	pp86ymBBUPtpRxKS9u9XMhFSFrWaWYE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1755150524;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IvZ1fIen0Q9X3JJDvdn7/FlFTERaK5IQyVgY5iDRbF0=;
-	b=5YVVCBbFbRsa5ox52blxc9Qb1fuMKIZ6M+xt0SYshHgety5LMwiEmpffgz8E5Dtl3fCTbV
-	n1WBrkCpasOq8LAw==
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 7D2631F7C7;
+	Thu, 14 Aug 2025 05:48:46 +0000 (UTC)
 Authentication-Results: smtp-out2.suse.de;
 	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1755150524; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IvZ1fIen0Q9X3JJDvdn7/FlFTERaK5IQyVgY5iDRbF0=;
-	b=bActRxYvJenQBkTYZnR4txqLk1mC3lRgbOZcL+us1m1+1s0P/dQ741WfbhcwqD1qN/64UC
-	o0dcPNDPws1tlU4JMbwbD8uK3u+wYaG4rczrK6g8eCSnX4knmQiZPPAF91rc4nmBoKk5Ea
-	pp86ymBBUPtpRxKS9u9XMhFSFrWaWYE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1755150524;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IvZ1fIen0Q9X3JJDvdn7/FlFTERaK5IQyVgY5iDRbF0=;
-	b=5YVVCBbFbRsa5ox52blxc9Qb1fuMKIZ6M+xt0SYshHgety5LMwiEmpffgz8E5Dtl3fCTbV
-	n1WBrkCpasOq8LAw==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 838A713479;
-	Thu, 14 Aug 2025 05:48:42 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C2C6513479;
+	Thu, 14 Aug 2025 05:48:44 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id kOZMD7p4nWiEYQAAD6G6ig
-	(envelope-from <ddiss@suse.de>); Thu, 14 Aug 2025 05:48:42 +0000
+	id YFyxHrx4nWiEYQAAD6G6ig
+	(envelope-from <ddiss@suse.de>); Thu, 14 Aug 2025 05:48:44 +0000
 From: David Disseldorp <ddiss@suse.de>
 To: linux-kbuild@vger.kernel.org,
 	linux-fsdevel@vger.kernel.org
 Cc: linux-next@vger.kernel.org,
 	David Disseldorp <ddiss@suse.de>
-Subject: [PATCH v2 2/7] gen_init_cpio: support -o <output_path> parameter
-Date: Thu, 14 Aug 2025 15:18:00 +1000
-Message-ID: <20250814054818.7266-3-ddiss@suse.de>
+Subject: [PATCH v2 3/7] gen_init_cpio: attempt copy_file_range for file data
+Date: Thu, 14 Aug 2025 15:18:01 +1000
+Message-ID: <20250814054818.7266-4-ddiss@suse.de>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250814054818.7266-1-ddiss@suse.de>
 References: <20250814054818.7266-1-ddiss@suse.de>
@@ -106,99 +65,76 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-6.80 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_HAS_DN(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCPT_COUNT_THREE(0.00)[4];
-	RCVD_TLS_ALL(0.00)[]
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Rspamd-Action: no action
 X-Spam-Flag: NO
-X-Spam-Score: -6.80
+X-Spam-Level: 
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	REPLY(-4.00)[]
+X-Rspamd-Queue-Id: 7D2631F7C7
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
+X-Spam-Score: -4.00
 
-This is another preparatory change to allow for reflink-optimized
-cpio archives with file data written / cloned via copy_file_range().
-The output file is truncated prior to write, so that it maps to
-usr/gen_initramfs.sh usage. It may make sense to offer an append option
-in future, for easier archive concatenation.
+The copy_file_range syscall can improve copy performance by cloning
+extents between cpio archive source and destination files.
+Existing read / write based copy logic is retained for fallback in case
+the copy_file_range syscall is unsupported or unavailable due to
+cross-filesystem EXDEV, etc.
+
+Clone or reflink, as opposed to copy, of source file extents into the
+output cpio archive may (e.g. on Btrfs and XFS) require alignment of the
+output to the filesystem block size. This could be achieved by inserting
+padding entries into the cpio archive manifest.
 
 Signed-off-by: David Disseldorp <ddiss@suse.de>
 ---
- usr/gen_init_cpio.c | 19 +++++++++++++++----
- 1 file changed, 15 insertions(+), 4 deletions(-)
+ usr/gen_init_cpio.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/usr/gen_init_cpio.c b/usr/gen_init_cpio.c
-index d8779fe4b8f1f..563594a0662a6 100644
+index 563594a0662a6..64421d410a88b 100644
 --- a/usr/gen_init_cpio.c
 +++ b/usr/gen_init_cpio.c
-@@ -110,7 +110,7 @@ static int cpio_trailer(void)
- 	 || push_pad(padlen(offset, 512)) < 0)
- 		return -1;
+@@ -1,4 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <stdint.h>
+@@ -353,6 +354,7 @@ static int cpio_mkfile(const char *name, const char *location,
+ 	int namesize;
+ 	unsigned int i;
+ 	uint32_t csum = 0;
++	ssize_t this_read;
  
--	return 0;
-+	return fsync(outfd);
- }
+ 	mode |= S_IFREG;
  
- static int cpio_mkslink(const char *name, const char *target,
-@@ -532,7 +532,7 @@ static int cpio_mkfile_line(const char *line)
- static void usage(const char *prog)
- {
- 	fprintf(stderr, "Usage:\n"
--		"\t%s [-t <timestamp>] [-c] <cpio_list>\n"
-+		"\t%s [-t <timestamp>] [-c] [-o <output_path>] <cpio_list>\n"
- 		"\n"
- 		"<cpio_list> is a file containing newline separated entries that\n"
- 		"describe the files to be included in the initramfs archive:\n"
-@@ -569,7 +569,8 @@ static void usage(const char *prog)
- 		"as mtime for symlinks, directories, regular and special files.\n"
- 		"The default is to use the current time for all files, but\n"
- 		"preserve modification time for regular files.\n"
--		"-c: calculate and store 32-bit checksums for file data.\n",
-+		"-c: calculate and store 32-bit checksums for file data.\n"
-+		"<output_path>: write cpio to this file instead of stdout\n",
- 		prog);
- }
+@@ -428,9 +430,19 @@ static int cpio_mkfile(const char *name, const char *location,
+ 		 || push_pad(padlen(offset, 4)) < 0)
+ 			goto error;
  
-@@ -611,7 +612,7 @@ int main (int argc, char *argv[])
- 
- 	default_mtime = time(NULL);
- 	while (1) {
--		int opt = getopt(argc, argv, "t:ch");
-+		int opt = getopt(argc, argv, "t:cho:");
- 		char *invalid;
- 
- 		if (opt == -1)
-@@ -630,6 +631,16 @@ int main (int argc, char *argv[])
- 		case 'c':
- 			do_csum = true;
- 			break;
-+		case 'o':
-+			outfd = open(optarg,
-+				     O_WRONLY | O_CREAT | O_LARGEFILE | O_TRUNC,
-+				     0600);
-+			if (outfd < 0) {
-+				fprintf(stderr, "failed to open %s\n", optarg);
-+				usage(argv[0]);
-+				exit(1);
++		if (size) {
++			this_read = copy_file_range(file, NULL, outfd, NULL, size, 0);
++			if (this_read > 0) {
++				if (this_read > size)
++					goto error;
++				offset += this_read;
++				size -= this_read;
 +			}
-+			break;
- 		case 'h':
- 		case '?':
- 			usage(argv[0]);
++			/* short or failed copy falls back to read/write... */
++		}
++
+ 		while (size) {
+ 			unsigned char filebuf[65536];
+-			ssize_t this_read;
+ 			size_t this_size = MIN(size, sizeof(filebuf));
+ 
+ 			this_read = read(file, filebuf, this_size);
 -- 
 2.43.0
 

@@ -1,174 +1,112 @@
-Return-Path: <linux-next+bounces-8019-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7987-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4440B2C84A
-	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 17:19:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77A1BB2B355
+	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 23:24:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 855801BC2E63
-	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 15:18:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A6B8178190
+	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 21:24:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51D58284669;
-	Tue, 19 Aug 2025 15:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8846A2236EB;
+	Mon, 18 Aug 2025 21:24:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bD6Nm8hx"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="G72pRFXY"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14A2021FF48;
-	Tue, 19 Aug 2025 15:17:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C2933451D0;
+	Mon, 18 Aug 2025 21:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755616666; cv=none; b=GOikiTw25HMIaWcxIhl9HgAJen0wEpHEMq0GAz4xzKwJgD0UPyrNYLb5xS7lsv6S9PTf4Bo3ZFPQmyMVa0ql6aYmlsgtauObkqDHg8YXFTx4optN8j7ZWfD+bmr0A0jAOgh13S1rezzx4mXg8c2UCqmCWVugWwqDjnaIwZd0mRA=
+	t=1755552255; cv=none; b=XHJVZCzpntZ6HpRLp2DmKHlndNFQ5rkbEMf/VZz+zuszj1vfnrcBgCNJ24eeKbP9hhlMvwTP9CGSDqGSM8dkAKgD1pLqQOiKSXGQ/xD7+BIAPEB8hFF3dYEudSRh7uMfamyfaM0Di7pOCzPqJLOBKYeDmPdb3ieyn/2CcsYR2hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755616666; c=relaxed/simple;
-	bh=YC3YqkY+ubMJ+BckfgV8x/v8nTzqCv3hnNV1WNYIJqA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C9OticoUjFR81/LZ1mxWK71qyoI2JzSVXhtV1xC9CqUaSw6R2JeWygbtwADJb9lrJAijWXNrhMHNa3lqxWltRp4r9ANxiYY697EV4e5tNBmxB9qgD4vjh1k7Bg/RpRyNFs9hJW/1V4jJLvlKZZLkD+IW2mP+PxPrWrIyFjGW/p0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bD6Nm8hx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A38DC4CEF1;
-	Tue, 19 Aug 2025 15:17:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755616665;
-	bh=YC3YqkY+ubMJ+BckfgV8x/v8nTzqCv3hnNV1WNYIJqA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bD6Nm8hxsVqxV6iX0p8kZ95x/tUAVmv+VI7eQPr5Jd0OewxBu+WwuPok1kZiL9MfK
-	 zXcheZ5nVB3l7NQCxUqXAvrveLMeeXaFRE6VwBqtNbdmzldBlAJgPSGuCszNZwYd4A
-	 jDDH/hPB2yyjRFvoggiNU2TAv4GygI/iwznAIaQR/V10I+sqrwmZshlvnzMvH+vQDk
-	 4x0O/cN3oq4keY0xgornwcUx/U1F2hjRgoTA4hvqyhk1hRsDwPpoCUF/qB0bvv4NRp
-	 hiu+rL5hRGT91qdCmifo37zUFRDQNFPKhAz5dftSbKacOVTm/Oc7r5yDeJJ2oLdk1N
-	 mZ/xLrIak4efA==
-Date: Mon, 18 Aug 2025 21:23:36 +0200
-From: Nicolas Schier <nsc@kernel.org>
-To: David Disseldorp <ddiss@suse.de>
-Cc: linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-next@vger.kernel.org
-Subject: Re: [PATCH v2 7/7] gen_init_cpio: add -a <data_align> as reflink
- optimization
-Message-ID: <aKN9uMf0HeD1Fgqk@levanger>
-References: <20250814054818.7266-1-ddiss@suse.de>
- <20250814054818.7266-8-ddiss@suse.de>
+	s=arc-20240116; t=1755552255; c=relaxed/simple;
+	bh=ekjT8zu5mtRL34qSYlLxoND/4cFMOxhaaNd03ZHsNac=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=MRcOfJJi+DY12LGeDdTiIX076TchQV08uiTWlidjf+RXoXHMupUrRCt6i73Yr36GibJvhXIVX3czWfV/5ayuPs2IvA0WEA1RprDlszp/koqBMpNNOzU6QIgm7l9jIJokLuLPEKzNzteVRXC2VmXhZO8nT+DYNHIExKIBS7zK84c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=G72pRFXY; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1755552249;
+	bh=eULIdFDx/i3XYrZXExG7p3i3YNMfjTRyAaMpr5DSuBM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=G72pRFXY8KEYM7KZny9AfomRrK46TtNxMdKLvW01ZcnFP2XmxvQMJrXhhuwgH7GgH
+	 gAp4Am9eO7g+5982n9I1zZ4Y40k/Yq2zKBgce+2koOelVBNl7JFIUCNjnmOp1NXRJT
+	 Vo1PQ3mRmpxLZR15qWHxCYrO3mw7zvTNkNQSQ8ZCa+FVUSdAaYxE//BfbYEydIdVCj
+	 DoZA7WF0u5M9cNja+JQx95qnCBIvkVjQnZDmTshXXpKp84P9gFVbN14OwP3EK+u7gR
+	 bE/vV0vA7LDWSDUViq24tlFs3WsgJ6PRvzfvvahB6bakDuzWHW5kf7ckgAF6RP4vsy
+	 /0bZhfwp5AioQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c5Qh90M9Jz4wbc;
+	Tue, 19 Aug 2025 07:24:08 +1000 (AEST)
+Date: Tue, 19 Aug 2025 07:23:28 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Sang-Heon Jeon <ekffu200098@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the mm-unstable tree
+Message-ID: <20250819072328.509608a3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250814054818.7266-8-ddiss@suse.de>
+Content-Type: multipart/signed; boundary="Sig_/8nmMSgUskQvNoF9U_wHFGqy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, Aug 14, 2025 at 03:18:05PM +1000, David Disseldorp wrote:
-> As described in buffer-format.rst, the existing initramfs.c extraction
-> logic works fine if the cpio filename field is padded out with trailing
-> zeros, with a caveat that the padded namesize can't exceed PATH_MAX.
-> 
-> Add filename zero-padding logic to gen_init_cpio, which can be triggered
-> via the new -a <data_align> parameter. Performance and storage
-> utilization is improved for Btrfs and XFS workloads, as copy_file_range
-> can reflink the entire source file into a filesystem block-size aligned
-> destination offset within the cpio archive.
-> 
-> Btrfs benchmarks run on 6.15.8-1-default (Tumbleweed) x86_64 host:
->   > truncate --size=2G /tmp/backing.img
->   > /sbin/mkfs.btrfs /tmp/backing.img
->   ...
->   Sector size:        4096        (CPU page size: 4096)
->   ...
->   > sudo mount /tmp/backing.img mnt
->   > sudo chown $USER mnt
->   > cd mnt
->   mnt> dd if=/dev/urandom of=foo bs=1M count=20 && cat foo >/dev/null
->   ...
->   mnt> echo "file /foo foo 0755 0 0" > list
->   mnt> perf stat -r 10 gen_init_cpio -o unaligned_btrfs list
->   ...
->             0.023496 +- 0.000472 seconds time elapsed  ( +-  2.01% )
-> 
->   mnt> perf stat -r 10 gen_init_cpio -o aligned_btrfs -a 4096 list
->   ...
->            0.0010010 +- 0.0000565 seconds time elapsed  ( +-  5.65% )
-> 
->   mnt> /sbin/xfs_io -c "fiemap -v" unaligned_btrfs
->   unaligned_btrfs:
->    EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
->      0: [0..40967]:      695040..736007   40968   0x1
->   mnt> /sbin/xfs_io -c "fiemap -v" aligned_btrfs
->   aligned_btrfs:
->    EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
->      0: [0..7]:          26768..26775         8   0x0
->      1: [8..40967]:      269056..310015   40960 0x2000
->      2: [40968..40975]:  26776..26783         8   0x1
->   mnt> /sbin/btrfs fi du unaligned_btrfs aligned_btrfs
->        Total   Exclusive  Set shared  Filename
->     20.00MiB    20.00MiB       0.00B  unaligned_btrfs
->     20.01MiB     8.00KiB    20.00MiB  aligned_btrfs
-> 
-> XFS benchmarks run on same host:
->   > sudo umount mnt && rm /tmp/backing.img
->   > truncate --size=2G /tmp/backing.img
->   > /sbin/mkfs.xfs /tmp/backing.img
->   ...
->            =                       reflink=1    ...
->   data     =                       bsize=4096   blocks=524288, imaxpct=25
->   ...
->   > sudo mount /tmp/backing.img mnt
->   > sudo chown $USER mnt
->   > cd mnt
->   mnt> dd if=/dev/urandom of=foo bs=1M count=20 && cat foo >/dev/null
->   ...
->   mnt> echo "file /foo foo 0755 0 0" > list
->   mnt> perf stat -r 10 gen_init_cpio -o unaligned_xfs list
->   ...
->             0.011069 +- 0.000469 seconds time elapsed  ( +-  4.24% )
-> 
->   mnt> perf stat -r 10 gen_init_cpio -o aligned_xfs -a 4096 list
->   ...
->             0.001273 +- 0.000288 seconds time elapsed  ( +- 22.60% )
-> 
->   mnt> /sbin/xfs_io -c "fiemap -v" unaligned_xfs
->    unaligned_xfs:
->    EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
->      0: [0..40967]:      106176..147143   40968   0x0
->      1: [40968..65023]:  147144..171199   24056 0x801
->   mnt> /sbin/xfs_io -c "fiemap -v" aligned_xfs
->    aligned_xfs:
->    EXT: FILE-OFFSET      BLOCK-RANGE      TOTAL FLAGS
->      0: [0..7]:          120..127             8   0x0
->      1: [8..40967]:      192..41151       40960 0x2000
->      2: [40968..40975]:  236728..236735       8   0x0
->      3: [40976..106495]: 236736..302255   65520 0x801
-> 
-> The alignment is best-effort; a stderr message is printed if alignment
-> can't be achieved due to PATH_MAX overrun, with fallback to non-padded
-> filename. This allows it to still be useful for opportunistic alignment,
-> e.g. on aarch64 Btrfs with 64K block-size. Alignment failure messages
-> provide an indicator that reordering of the cpio-manifest may be
-> beneficial.
-> 
-> Archive read performance for reflinked initramfs images may suffer due
-> to the effects of fragmentation, particularly on spinning disks. To
-> mitigate excessive fragmentation, files with lengths less than
-> data_align aren't padded.
-> 
-> Signed-off-by: David Disseldorp <ddiss@suse.de>
-> ---
->  usr/gen_init_cpio.c | 50 ++++++++++++++++++++++++++++++++++-----------
->  1 file changed, 38 insertions(+), 12 deletions(-)
+--Sig_/8nmMSgUskQvNoF9U_wHFGqy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks!  Testing with a massively oversized initramfs (600MB) was fun:
-from 2:44 down to 38s.
+Hi all,
 
+In commit
 
-Questions that pop up in my mind:
-Now, how can we make other benefit from this?  Might it make sense to
-introduce a kconfig variable for initramfs alignment -- even though this
-is just a build-time optimisation of few seconds?
+  1ce24beaff3f ("selftests/damon: change wrong json.dump usage to json.dump=
+s")
 
+Fixes tag
 
-Kind regards,
-Nicolas
+  Fixes: 441f487d6ebf ("selftests/damon: test no-op commit broke DAMON stat=
+us")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: a0b60d083fb6 ("selftests/damon: test no-op commit broke DAMON status=
+")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8nmMSgUskQvNoF9U_wHFGqy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmijmdAACgkQAVBC80lX
+0Gy/pAf7BcYlj+q3gxjKbx8/hg2sxWhIL8gNCLnlTeB+FFfgIlqUQDr4DCo2+WRA
+kTAH8ibngjeG4b5vXljvFX3fKjvUhCMuqBkjL0/auRFTk0vG2pmKlMoVZRE5WosJ
+EQxiVWsi7un5Jh6VKD+xG09ACxB/xiBKxxNRvA7vmbqPDCwWj9z/GeR0htdbj50L
+PGNT/4FnbAJar2Qt0T+RBifVrCkcugl27B0ML7EvRW0wEviDEcXxEmRmZOUGFBb1
+enYdim+VqssRdke71zIYkuVB03MJl2pTVFQRCN1DNJ0PfICZjTPky++8rmhSwMBp
+Z627uq50zI2KKYtJFNjY7IMbLnzmqg==
+=xiR1
+-----END PGP SIGNATURE-----
+
+--Sig_/8nmMSgUskQvNoF9U_wHFGqy--
 

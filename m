@@ -1,102 +1,129 @@
-Return-Path: <linux-next+bounces-7970-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7971-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 185ADB2971D
-	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 04:41:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04B22B297A0
+	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 06:03:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8FA5201A0C
-	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 02:41:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B599188E7CC
+	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 04:02:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05A08257846;
-	Mon, 18 Aug 2025 02:41:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66DE525B1C5;
+	Mon, 18 Aug 2025 04:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="JDQ82g3L"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jyAi2zTx"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4FE1487E9;
-	Mon, 18 Aug 2025 02:41:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5412E253358;
+	Mon, 18 Aug 2025 04:01:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755484889; cv=none; b=uz2nCH2hBFEkI2AMK+nS+SEkD97th3cxKSa66pdTyplCLgwgvDL0S/WXXQirRcvt2028RIctK9sJQ6eQyWsW/Fp989r568Ww/fRBYd5HA2vm45WzPW7b+xjq2rQAAJWSVJDKH/3SWL2eq7RbU+h1KmwOSh/X0LAGvaWkm9/VcrI=
+	t=1755489712; cv=none; b=mx6W7VGyI+zXD/G9DCsc4P32qzp/8Wjo7muAgKrCcMkEUBl3pgydiMkmtSVXl26Fi8NT72sBTjnNLL9OwPH7dV8r9aBsJ8ItK/mMH9xje5ZHH51m8eIoxk4HlPuR3uDHl9ydr/c4EQW5zemXFf5n1uDYWBI275MD5sZBlWDr/Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755484889; c=relaxed/simple;
-	bh=OYJ2wV7YEGlvd8sEDJAFrhHuUSIj06ibu6OWBTnRzNA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hVkjQ49jAHBGej7xNVZKxbpoTgl9S3n3SdDamfzuATW7kWgs5rWhPUJCqHCa+OSPyN5PFL/026Dh1M+nbdfc/dxnytnpOsVezlfPQbBFMEdgWvk2Ba2mtCPzQ9AOskaP54+EEYOMuaXF4Z9l4Zajb3hVsn0AAROSu/H72f00njA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=JDQ82g3L; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1755489712; c=relaxed/simple;
+	bh=nrmEJCoMuwYtFoxWhiybnwMBRWASv3Wr+PLPNb2f5y4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=LtEuxlBmfcdFwpTtN2fu6pM0Rrz+tLvC57SD4rIuEzATtgBSj5gSSzdBoZmi6R4yF7LsjYNQ7MdYPLCPZlns7UE2a+9hxOYc9P5E0JA8EnQ3tCty52OvgwuXOJx1pLOoZhy5GZ6iKSM8s2ySMvFW1pt1Yq9c7YNIrPuxpj/RaA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=jyAi2zTx; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1755484885;
-	bh=91ewaRB55Qgui8mCKdfj/EGnVi6e8/XSVqU1CqvlLts=;
+	s=202503; t=1755489704;
+	bh=WfOOvlr0+MAPH1A71JD+gU8R2p6rlYIbY0wcgyMExsc=;
 	h=Date:From:To:Cc:Subject:From;
-	b=JDQ82g3LrHVrl/1gsxqNrYp81p4r3pmDujIpCxJ5kX2vEzV/RAa89pFLwZuYNoroO
-	 5ROudGemaxJ7mnf7vEu4gVsMVVtkaayyPZHLyg/WpGRNHakLt06dTRC69QbVXWhYvw
-	 yjfeBNow4BRhKIWmwds0XS2itwYN6FxJXDxxdMT80/aAhT4Xo/mXm+lIjB4bSrQXAV
-	 B1W3+oT6TjVeUuT2GQ7+OVLxyUuhQecktYc9xBGx0c3DJmrREW8Nti9jKQlsgCzqe3
-	 t0TS0Hx1rWvWmgfSjF5oi7ypfthpxGZCGVuzJsee8z2YZJMewW5rT4/lDcZ8Zabtew
-	 aErUxSfOPW62w==
+	b=jyAi2zTxPHmZVv2ONoIl9FUBdn4JX2CGob0BdXRN9+iEKiXILoIEwvOYbIuMJlU4h
+	 nkWFEBjk/l8lS72VMbD4LTKyZO9MUgocclpQpf4oMKE21adA42mmdLmtBX48GE/52t
+	 YI1X2r+ac7MNzIwzI9UHWYE4L5248agLmbKCu7wHXH3HUVhVLrbasO6f4XJ3JPO2fj
+	 +Fd09uhSH+81G0EnEVQ47PlKsw4F0wrl5asp3I/mHtw1yC8PO7LvSFb716CaMsvTJE
+	 2iHUA5LQbFt52gVJAxyh+UcG0CFPnAwPlVBv/0Gc1lC5kMax2W7QePl1wPTyGvXu6D
+	 qBObn6d44+8tA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c4xmj4jltz4wbr;
-	Mon, 18 Aug 2025 12:41:25 +1000 (AEST)
-Date: Mon, 18 Aug 2025 12:41:24 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c4zYN0yRvz4wbr;
+	Mon, 18 Aug 2025 14:01:44 +1000 (AEST)
+Date: Mon, 18 Aug 2025 14:01:43 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-Cc: Lothar Rubusch <l.rubusch@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+Cc: Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas.weissschuh@linutronix.de>,
+ KBuild Mailing List <linux-kbuild@vger.kernel.org>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the iio tree
-Message-ID: <20250818124124.5b978e64@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the kbuild tree
+Message-ID: <20250818140143.61b8c466@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SkvU42YCu9jiRIKc7gQxG05";
+Content-Type: multipart/signed; boundary="Sig_/ovvRU1uAHs_+LC_gn/Ukq7d";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/SkvU42YCu9jiRIKc7gQxG05
+--Sig_/ovvRU1uAHs_+LC_gn/Ukq7d
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the iio tree, today's linux-next build (htmldocs) produced
-this warning:
+After merging the kbuild tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-Documentation/iio/adxl345.rst:161: ERROR: Unexpected indentation. [docutils]
+/usr/bin/ld: /usr/lib/gcc/powerpc64le-linux-gnu/14/../../../powerpc64le-lin=
+ux-gnu/libgcc_s.so.1: error adding symbols: file in wrong format
+collect2: error: ld returned 1 exit status
+make[5]: *** [scripts/Makefile.userprogs:29: samples/pfsm/pfsm-wakeup] Erro=
+r 1
+make[5]: Target 'samples/pfsm/' not remade because of errors.
 
-Introduced by commit
+an so on for lots more ...
 
-  fdcb9cb9178a ("docs: iio: add documentation for adxl345 driver")
+Caused by commit
+
+  478494044bb4 ("kbuild: userprogs: also inherit byte order and ABI from ke=
+rnel")
+
+I have reverted that commit for today.
+
+Build was done on ppc64le, POWER9
+
+$ gcc --version
+gcc (Debian 14.2.0-19) 14.2.0
+$ ld --version
+GNU ld (GNU Binutils for Debian) 2.44
+
+CONFIG_VDSO32=3Dy
+CONFIG_CPU_BIG_ENDIAN=3Dy
+# CONFIG_CPU_LITTLE_ENDIAN is not set
+CONFIG_PPC64_ELF_ABI_V2=3Dy
+CONFIG_CC_HAS_ELFV2=3Dy
+CONFIG_CC_HAS_PREFIXED=3Dy
+CONFIG_CC_HAS_PCREL=3Dy
+CONFIG_64BIT=3Dy
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/SkvU42YCu9jiRIKc7gQxG05
+--Sig_/ovvRU1uAHs_+LC_gn/Ukq7d
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiiktQACgkQAVBC80lX
-0GzL8wf/WRGcGuhWBBIeKf3QsMO/X8K4mFT7wHQB5PH7KjzDT4NOKYSwy6N9UlFu
-j8LD3cnLLawrfMcxXgWpPHTIpZKFKMncJ6yoPhpI7rkNV8d/g4wyHxEe5/c+jU92
-dgjq5KUKKnS4sSQRpQfUbxhvHxpIF+lbr9Lb6Be5xybhXa34NaX+tQEhlgieNAx1
-x5kfx1WUFksP2uML6gQiSPnRnV6WJw/5azZOo+iuguVbS/wW1hntGg4CPL9poO6t
-7h9UKzzXVu//t9Vh1p3bUJpK28aDttRq/iVoIwWRLEJYKPKTNEoI2TSAnrnQG+Cl
-uqmpCTRfRi8Q+yCuPAQjFwmnONPOlg==
-=0Xsr
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiipacACgkQAVBC80lX
+0GzE5gf+JSkPZUXCKeKLkMa8+U/jSaqBCuxpI8lQ/bq8xpq4occUxrr9a/sW0ken
+r0LEHZW2QgUmAUXKnYYQIv1jQMyVGXnWsGc9x5VyX9BLIS9oAgZ9AP8SHeI8qhAu
+XacIqu+hOQcQrcb/qFbuxqGzXDQL9bl+URUihfg5btQFRvkiM0Sx5uANtFl9xJXQ
+R+EIClicTuzqyuNT25wnZQlICaJ41nek5kN9DAp30icC0EKQZugX+sE8KPHgN3I8
+cNZ2b1tJHodL2c0LnzJ6AdISWvfTR2y3rLAWKGcs8S9REJVvo/ECUCcTwWu1/jDn
+6Xny1dQM+VC+yWTSfHcoOgKFdWbrow==
+=xYBS
 -----END PGP SIGNATURE-----
 
---Sig_/SkvU42YCu9jiRIKc7gQxG05--
+--Sig_/ovvRU1uAHs_+LC_gn/Ukq7d--
 

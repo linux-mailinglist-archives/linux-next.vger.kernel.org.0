@@ -1,105 +1,113 @@
-Return-Path: <linux-next+bounces-7979-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7980-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A701AB2A136
-	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 14:13:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A438B2A9B8
+	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 16:23:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A16417D9AD
-	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 12:03:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BFD3624B2C
+	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 14:08:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46C4130F532;
-	Mon, 18 Aug 2025 12:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C7E258EF1;
+	Mon, 18 Aug 2025 14:00:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M2i//Nwr"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kIqT3YN+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 169DE31AF15;
-	Mon, 18 Aug 2025 12:03:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633F7183CC3;
+	Mon, 18 Aug 2025 14:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755518591; cv=none; b=p5+y5QSk3FmOP5pj1qJYHoCw5RMM80X9Nu1WTTpqxTNgvMxd+IJfNuLza0I9WtiheZjkGB6pQfVTtYjWYRJCmbVFPEmNzxdFNh6GeebaaEOxoHAjpujtPkgnNa2HdKSCw0bMJcl+eJ/CPDBZSG1DjdNgzrQsjn3h6NbPNvUagVw=
+	t=1755525625; cv=none; b=tmL8xPAThAXTYfu+cCG+AeyxMsng/ITSugXAFm7aKyc2//mtA+2rQxsAZc9hja43HPzXWkd7F3HWJu8EiW96UkureZHkvFQYHxuTZFOCLyIDWe9xgJZGqHhwVcMR1UCNoFnLDCD4GZUCH6cUZl+2JmXomxGT+YH1JBTdEyWzMIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755518591; c=relaxed/simple;
-	bh=XUJOys1V5JSAwLbQ+pbzrv6OniPyIsaE6/aIrkHotsU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=iSfRWXocozKfvtlvtx16KFnCmPTMHr7H/u8nW/VjsjUFl7J+0ZU6asIJAnwYoRfg49ANPXobPoufleDMf7UL/mmPzOWunQnm9tkzxVRi1/vCvi3E3FFNqu80XxsZTkYAIKuS4lp6ofgwJN2Mgk2vuWgJuxh4gQObMOGarqC9+10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M2i//Nwr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA215C4CEEB;
-	Mon, 18 Aug 2025 12:03:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755518590;
-	bh=XUJOys1V5JSAwLbQ+pbzrv6OniPyIsaE6/aIrkHotsU=;
-	h=Date:To:From:Subject:Cc:References:In-Reply-To:From;
-	b=M2i//Nwr0MQypaY5HSo8V6GCctpILdUsuP/NbH+3/aqLxFUmRxb5jOsv4eop/2Wbf
-	 KwoJGggrOTbFUZijWl5XBZZqpWFPj1e840X6wwU5U6ZMFpHgqtAuMMiSJ4Ygpl7KfN
-	 P98bE3LNU8eYH5Ax3jzHaPMIuQwIVWqw4Ln5V3QMQttbg6TYyrzr77yEpXyBWn0poc
-	 aMzeR5V4h2ZWERmWlENyaQRtrvdINMCLONyjPISCI4aPqMu7sqcIVh/aJdT9GxFdWq
-	 YT2GqLFh4u4+w04QaYp9jFbzE6EvddDvWlSuZfW7IBN855HGRuGqwAR3+B0u0DJu1g
-	 mp6UUhpmx33Cg==
+	s=arc-20240116; t=1755525625; c=relaxed/simple;
+	bh=ZTwwiQqg8YWCKAQ9AdBcal0Stvl+BcAR6E+dFv2obgk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=clI04/WbyNWvOevCLtLewZC99WklVZWGse/cYg3AW4BWEBa2sgb4kY0/JQJ4Inq7SnPebU24jrBhVmC6Pn0mwZTVz/MQLH4z2+35s20xz08OsiaiuWm1PZuvZpogqAoqRZao/2BV3Q89pO0fUOmwP4LJf681ag/EBzm4gZuZUZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=kIqT3YN+; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1755525613;
+	bh=v/QfW53mgXG7d/FIfMt0p3DdvVqhjKl/YihrBSThHuw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=kIqT3YN+5EONoA/OJUICiMSOKvWHOGOyR486xdYR4aingE9cEvATYe5XkuYFeXZT/
+	 TxcHAij+nGkJyXKV4Y+ruypcFvcU6aqyaFcCK+E8OGl3Ujr65s5Madmpy0Y6rwPiHy
+	 He4h7yGJR035WuEweTwcCY6JXLhHJ3CJKi7M0FV66RzKqaQG/ZNVjVppQMdPlb2Cn/
+	 h3vUglk/42yhW04yxwHyb6JSa+pDFNNHavhlarwNi9zPbGt9zLPF51Nc+QQKRuprOZ
+	 WjHsNhTfbVz3SwsB1/bNugr2LOw5T0yRHpaGXFBgvbU6BTdrFV02BcdUIfHfqqONeJ
+	 cpWRqPSvf90LQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c5Dqw45Q9z4xjM;
+	Tue, 19 Aug 2025 00:00:12 +1000 (AEST)
+Date: Tue, 19 Aug 2025 00:00:07 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Petr Mladek <pmladek@suse.com>
+Cc: Jiri Kosina <jikos@kernel.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Miroslav Benes <mbenes@suse.cz>, Joe Lawrence <joe.lawrence@redhat.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: please clean up the livepatching tree
+Message-ID: <20250819000007.7cf7b8d9@canb.auug.org.au>
+In-Reply-To: <aKMBV6LfqCYw1wQm@pathway.suse.cz>
+References: <20250818121456.378af88b@canb.auug.org.au>
+	<aKMBV6LfqCYw1wQm@pathway.suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/bJYWiQ8NhVFlcOj2aWj2BcN";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/bJYWiQ8NhVFlcOj2aWj2BcN
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 18 Aug 2025 14:03:05 +0200
-Message-Id: <DC5JEGJSBBCP.38DNGTBOVH9OB@kernel.org>
-To: "Thorsten Leemhuis" <linux@leemhuis.info>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH v2 0/2] Take ARCH_KMALLOC_MINALIGN into account for
- build-time XArray check
-Cc: "Alice Ryhl" <aliceryhl@google.com>, "Lorenzo Stoakes"
- <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Matthew Wilcox" <willy@infradead.org>, "Tamir Duberstein"
- <tamird@gmail.com>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Miguel
- Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo"
- <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Trevor
- Gross" <tmgross@umich.edu>, <linux-mm@kvack.org>,
- <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Stephen
- Rothwell" <sfr@canb.auug.org.au>, "Linux Next Mailing List"
- <linux-next@vger.kernel.org>, "Andrew Morton" <akpm@linux-foundation.org>
-References: <20250811-align-min-allocator-v2-0-3386cc94f4fc@google.com>
- <DC38NDRET9NB.31UDI8FHB7WAY@kernel.org>
- <8aa05f08-ef6e-4dfe-9453-beaab7b3cb98@leemhuis.info>
-In-Reply-To: <8aa05f08-ef6e-4dfe-9453-beaab7b3cb98@leemhuis.info>
 
-On Mon Aug 18, 2025 at 1:09 PM CEST, Thorsten Leemhuis wrote:
-> error[E0428]: the name `ARCH_KMALLOC_MINALIGN` is defined multiple times
->       --> /builddir/build/BUILD/kernel-6.17.0-build/kernel-next-20250818/=
-linux-6.17.0-0.0.next.20250818.423.vanilla.fc44.aarch64/rust/bindings/bindi=
-ngs_generated.rs:134545:1
->        |
-> 9622   | pub const ARCH_KMALLOC_MINALIGN: u32 =3D 8;
->        | ----------------------------------------- previous definition of=
- the value `ARCH_KMALLOC_MINALIGN` here
-> ...
-> 134545 | pub const ARCH_KMALLOC_MINALIGN: usize =3D 8;
->        | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `ARCH_KMALLOC_MINALI=
-GN` redefined here
->        |
->        =3D note: `ARCH_KMALLOC_MINALIGN` must be defined only once in the=
- value namespace of this module
+Hi Petr,
+
+On Mon, 18 Aug 2025 12:32:55 +0200 Petr Mladek <pmladek@suse.com> wrote:
 >
-> error: aborting due to 1 previous error
+> Just to be sure. What is exactly the problem, the merge commits or
+> that it has not been updated since March, please?
 
-Thanks for reporting, the diff below should fix it, I'll send a patch soon.
+The merge commits.  Everyday linux-next contained those 70 merges that
+added nothing except to complicate the history.
 
-diff --git a/rust/bindgen_parameters b/rust/bindgen_parameters
-index 0f96af8b9a7f..02b371b98b39 100644
---- a/rust/bindgen_parameters
-+++ b/rust/bindgen_parameters
-@@ -34,3 +34,4 @@
- # We use const helpers to aid bindgen, to avoid conflicts when constants a=
-re
- # recognized, block generation of the non-helper constants.
- --blocklist-item ARCH_SLAB_MINALIGN
-+--blocklist-item ARCH_KMALLOC_MINALIGN
+I don't start looking to drop branches from linux-next until they have
+not been updated for over a year.
+
+> I have just removed the merge commits.
+
+Thanks.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/bJYWiQ8NhVFlcOj2aWj2BcN
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmijMegACgkQAVBC80lX
+0Gz0agf+LfdkbeO5396keublE255UtdHMQ7PVaGdQPAgfYrxH0hz8+t/ZdhheQth
+X/LQ5LxjDYE6KgJI7H2pWyKYB7u3czj1mUeH5IlcRaFN4okdQkCSo9ZBf6qArKbe
+lhJ5tcz2uqqEeckfaWtv04bHjJiV7K7lcYspC1bV+24xjBe6+uJNhd18olRV7XLL
+PuFonZegc1GQykqIOfpIeFv5RylNRH4qCin693AI4iBG0UQ9Opfa2ma3mW4QUbdc
+WtrwK3PP5EnSmbxNFYT71Pa9gpvw773YXYvKqUMjXCmOC2q97vASaGqleMSoaByk
+DiBNDebbDgjVga6v+3jn+EVjjSLRmA==
+=kZBZ
+-----END PGP SIGNATURE-----
+
+--Sig_/bJYWiQ8NhVFlcOj2aWj2BcN--
 

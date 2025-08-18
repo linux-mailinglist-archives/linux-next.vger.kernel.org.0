@@ -1,144 +1,130 @@
-Return-Path: <linux-next+bounces-7968-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7969-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D66EFB296E7
-	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 04:21:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E517B29718
+	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 04:39:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB9CE2004DF
-	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 02:21:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DD661964D65
+	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 02:39:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99BB624729A;
-	Mon, 18 Aug 2025 02:20:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8D52571B9;
+	Mon, 18 Aug 2025 02:39:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="e0Ei1AGh"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CzSJpoG/"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ABA9221FBD;
-	Mon, 18 Aug 2025 02:20:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1591A1487E9;
+	Mon, 18 Aug 2025 02:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755483659; cv=none; b=qR+jcCMT+H0OqnSZvZ3QlT1+7lCmxD5TD5ldDoxULpRXwbIKLJB5qCa3YtyTRjACrzDkec68gHYc/zvy4LWxbUZZ7Mzqw6JLYA19dc0vnGewVBlivAW4sRlyJ+saK0jGDnrOLmWcwucX3QRxLcIkLjqyyksxsWnw+VOQATcsLUs=
+	t=1755484740; cv=none; b=DTMnaEZkGz9ZPDtBvnDlJpT5zgJhV/7b/7LWUeUXy66iBq/RFPyftXQEuXYfn+J5QHpKwPCAEyQVfhJXPL5PlDpmBspx9cRXBtRvjxXuBzwVRa57mbJ/QJrhpfZ18gr50x2edcgkn05PLEQdzfZcre84KUHzIQeTIeYoTEbskpI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755483659; c=relaxed/simple;
-	bh=wFFY6Y1z8mkKZV6fJ9NdHzhb9mcxeSaRV8HDOGEU2bE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=CyHuRtBU9kwFpzraKzwOVN4K+0dGkcsH7xeY1tXIOra75sOjOobIJuDwq4si9Te54PLbNrCqGOp+huJSlL6VTVWNZFqW/NrWW33bNmUXcJxcibOnefBEBgXEx68ph/iRBtYLtoUHkdwshmPrX60sLI+Yg1ZiOz070zWb+H5JYXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=e0Ei1AGh; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1755484740; c=relaxed/simple;
+	bh=3Yqh3EVomf82xiiL/vIrr8WQJ4PscX/SkdGcVji9qGk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=qfKo61Tc1oMcJv1TBHvGSvJ2NnwvmxQY4yvG7K3MvFu9s0122VNXxJpbfq4f2RO/2inN3L+ZRMptUizGh9+rbwGsBjtvbrLlj4vPxKt9TRbF3gpO9QArgtAfRkYNIP+49euO8xcugeFDYKQPRr8OVjX6dvIyj8XyWZ4Tq3qx/80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CzSJpoG/; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1755483655;
-	bh=e4WJeoY+sT0i+glkr2xZTCFn5C1cuz7QBLe+xX0etfY=;
+	s=202503; t=1755484735;
+	bh=/EDNXDGvVfSLRGFAXKGz2eTcc7Spw0fcXsFzzN/5iQU=;
 	h=Date:From:To:Cc:Subject:From;
-	b=e0Ei1AGhJtaW5tb6jMoMUVOsqXhkUk588paWEl9bW9Y7dIPK67l8/y9Dhi+KPLr7e
-	 uK+woIf4t6PdoXRd9z2HNSsM2dTgHT64xQq1tpQYrJ9USQr4B4QEEuS2FENKStVeFg
-	 4Lbnvkx6UPW9NvUAjPEb+uRanuWatGaIFHkVsIZDBcDn2aS0HNJW0kpIgoPhEFTDz9
-	 MW4Q1rhBpvx1zmTBUJvy7sO4E+QX4Sv75uwZeG+0yNTdGknUsgDFK8+PH2WGS/KNBd
-	 EpEuvH7xKeM6AcwKR2pHSjqF6zx4Nq0A0+4AcdBaMj+LuMD8uHh5eV+IjZQTPRjDKq
-	 nOJOH+fbcWfYQ==
+	b=CzSJpoG/GgfU3PY9O6GYZQTK4BTk3TntijldJ+X3foNUkaFWj1OoaxpTOugdQTBio
+	 7VE+p4y4hrFksFU1MfM6mF2n5CLsovO0BcdjlPJP+Kz4O+oYf9r6k/U33pDv2HlNMP
+	 GG7/G6JBa7hcFI9MY+tOb6MQtRyr4RTvnZBROFmD0c925zljg2NCjJ1hFQ0eNl8djf
+	 GFSUigrfKwvjzQSKbDMKPHip4XTQvz7kc29uGOER0Ts+xWxdqxPay0LjE306/tcyg4
+	 LsniPvgflACICgUa4+z0iAbM7odf75g18BjctdVoHSaodvD3AZqKDVNic2xwNxqbNM
+	 QOjO5LxuwW2yw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c4xK20zG3z4wbd;
-	Mon, 18 Aug 2025 12:20:54 +1000 (AEST)
-Date: Mon, 18 Aug 2025 12:20:53 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c4xjp279Lz4wbn;
+	Mon, 18 Aug 2025 12:38:54 +1000 (AEST)
+Date: Mon, 18 Aug 2025 12:38:53 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Danilo Krummrich <dakr@kernel.org>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Alice Ryhl <aliceryhl@google.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Vitaly Wool <vitaly.wool@konsulko.se>
-Subject: linux-next: manual merge of the rust-alloc tree with the
- mm-unstable tree
-Message-ID: <20250818122053.355aab17@canb.auug.org.au>
+To: Simona Vetter <simona.vetter@ffwll.ch>, Rob Clark <robdclark@gmail.com>,
+ Sean Paul <seanpaul@chromium.org>
+Cc: Bagas Sanjaya <bagasdotme@gmail.com>, Rob Clark
+ <robin.clark@oss.qualcomm.com>, Danilo Krummrich <dakr@kernel.org>, Javier
+ Garcia <rampxxxx@gmail.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the drm-misc-fixes tree
+Message-ID: <20250818123853.51aa3bc4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WeXLFtwET+VHwIYR3eHxXKn";
+Content-Type: multipart/signed; boundary="Sig_/7yr2msOT_t5hQ/B_590u7Cu";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/WeXLFtwET+VHwIYR3eHxXKn
+--Sig_/7yr2msOT_t5hQ/B_590u7Cu
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the rust-alloc tree got a conflict in:
+After merging the drm-misc-fixes tree, today's linux-next build (htmldocs)
+produced these warnings:
 
-  rust/kernel/alloc.rs
+Documentation/gpu/drm-mm:506: drivers/gpu/drm/drm_gpuvm.c:2446: ERROR: Unex=
+pected indentation. [docutils]
+Documentation/gpu/drm-mm:506: drivers/gpu/drm/drm_gpuvm.c:2448: WARNING: Bl=
+ock quote ends without a blank line; unexpected unindent. [docutils]
+Documentation/gpu/drm-mm:506: drivers/gpu/drm/drm_gpuvm.c:2452: WARNING: De=
+finition list ends without a blank line; unexpected unindent. [docutils]
+Documentation/gpu/drm-mm:506: drivers/gpu/drm/drm_gpuvm.c:2453: WARNING: De=
+finition list ends without a blank line; unexpected unindent. [docutils]
+Documentation/gpu/drm-mm:506: drivers/gpu/drm/drm_gpuvm.c:2457: ERROR: Unex=
+pected indentation. [docutils]
+Documentation/gpu/drm-mm:506: drivers/gpu/drm/drm_gpuvm.c:2458: WARNING: De=
+finition list ends without a blank line; unexpected unindent. [docutils]
+Documentation/gpu/drm-mm:506: drivers/gpu/drm/drm_gpuvm.c:2459: WARNING: De=
+finition list ends without a blank line; unexpected unindent. [docutils]
+Documentation/gpu/drm-mm:506: drivers/gpu/drm/drm_gpuvm.c:2460: WARNING: De=
+finition list ends without a blank line; unexpected unindent. [docutils]
 
-between commit:
+Introduced by commit
 
-  defab7872312 ("rust: add support for NUMA ids in allocations")
+  6cc44e9618f0 ("drm: Add directive to format code in comment")
 
-from the mm-unstable tree and commit:
+interacting with commit
 
-  1b1a946dc2b5 ("rust: alloc: specify the minimum alignment of each allocat=
-or")
+  bb324f85f722 ("drm/gpuvm: Wrap drm_gpuvm_sm_map_exec_lock() expected usag=
+e in literal code block")
 
-from the rust-alloc tree.
+from the drm-msm-fixes tree.  Both get applied.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+The drm-misc-fixes commit is unneeded.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc rust/kernel/alloc.rs
-index b39c279236f5,907301334d8c..000000000000
---- a/rust/kernel/alloc.rs
-+++ b/rust/kernel/alloc.rs
-@@@ -164,7 -137,15 +164,15 @@@ impl NumaNode=20
-  /// - Implementers must ensure that all trait functions abide by the guar=
-antees documented in the
-  ///   `# Guarantees` sections.
-  pub unsafe trait Allocator {
-+     /// The minimum alignment satisfied by all allocations from this allo=
-cator.
-+     ///
-+     /// # Guarantees
-+     ///
-+     /// Any pointer allocated by this allocator is guaranteed to be align=
-ed to `MIN_ALIGN` even if
-+     /// the requested layout has a smaller alignment.
-+     const MIN_ALIGN: usize;
-+=20
- -    /// Allocate memory based on `layout` and `flags`.
- +    /// Allocate memory based on `layout`, `flags` and `nid`.
-      ///
-      /// On success, returns a buffer represented as `NonNull<[u8]>` that =
-satisfies the layout
-      /// constraints (i.e. minimum size and alignment as specified by `lay=
-out`).
-
---Sig_/WeXLFtwET+VHwIYR3eHxXKn
+--Sig_/7yr2msOT_t5hQ/B_590u7Cu
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiijgUACgkQAVBC80lX
-0GyL+Af/R+fNw42l3RXkbAn6PlS9VG44J1v4eIchQRPgvSHkvE3IM1XPKGpEYvab
-xyh8vw61mRkATJYY78X7aOFLtyd3M7KkHjsVbWpK3Vz04QiX6unVaOhKb8DrgD7S
-9USGBeKxKGrJg8d1esm1vIbRCkBcR1Pjiz0UEHq+3b+Kk6H+A9fhwsHfzUhUM5ps
-R7x0sw1nabZUswZhXrl3mhdJEcHbTVuZqWu4sDD75v9RzexzIQ9LyyyYsQuQ3Iv1
-bek7VPcFkuTp60XDIMS/lqSEpEy15RK+PY/apS4OGiFlEWJT9+QNzyVHtd/ooZAD
-iI1wPa9cBKYXVkkY49JiOMb78U3+yA==
-=WX2B
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiikj0ACgkQAVBC80lX
+0Gz1tAgAgAhVdDzeptXMLx88AmQAPNlAy0Xzi9slrZrZ1hwwDh6oyS41qYbLy9/J
+9flRTMeEFCjFYu04qzmk3Eb8L0tdy2O3CTpXY47upNERgWuXhjU25TCLRvQ0Pqms
+CtTixVhqEDLaV8C53UMj4R/a1aImOvS0OfwGnNKk1QQqfObErG0Qi0WF5sUfPI2S
+5kHDIjJ6WAX2Pr0HARYzhKHIMPreQxq3LdScTWwovdedE4XNZ1rAvFTr3qHRzke2
+JLBdjQaTswwDfxwDLHs3XaEn4LnUWjb1o0wATNCfljJeJ4jBTvfY6htEWjKv/0Wt
+HVf3FtpWq23lzX9dgALG99VBdZC4hw==
+=TljA
 -----END PGP SIGNATURE-----
 
---Sig_/WeXLFtwET+VHwIYR3eHxXKn--
+--Sig_/7yr2msOT_t5hQ/B_590u7Cu--
 

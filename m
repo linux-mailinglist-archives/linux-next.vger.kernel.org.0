@@ -1,158 +1,130 @@
-Return-Path: <linux-next+bounces-7981-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7982-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41431B2AE40
-	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 18:33:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FCF8B2B0A7
+	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 20:41:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00BBB166FB1
-	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 16:32:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31E5718A0BB9
+	for <lists+linux-next@lfdr.de>; Mon, 18 Aug 2025 18:41:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E352E3376BA;
-	Mon, 18 Aug 2025 16:32:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C00E926B74F;
+	Mon, 18 Aug 2025 18:41:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KwHagKGV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hjjs97Rw"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D640F25229C
-	for <linux-next@vger.kernel.org>; Mon, 18 Aug 2025 16:32:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 924FE2594BE;
+	Mon, 18 Aug 2025 18:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755534765; cv=none; b=Thr7vUiPd2w2h2j9h54RJSa4cXd3+1GcIr/WJhTykvot+zHG0o9P5aTHnAQpqtwsJHZnZU3xRJX8H+/LAbWSuIVtF+XeHr4HqpekGMJRM4mENC4xowF9qbERreF1BQcXKZFX2sEXQW9lF9o9mj8WRuo1cteE7Pn7hPgIiBTfWVI=
+	t=1755542471; cv=none; b=CYBSE7fkclgS1QVhxA141SY3fLd5YoCJ4cdUPWBWaDdgv8kYsU8kfjKzKOC3tW5NCSZlvvwh2mee5kbyo8CVd63XdIv3OzS8mHOzzuu+qomfu/K4lb8/QDZCd8GPsL3i0mzONMRECpgbzCXeVp6wkp5vK42m4+4wQ86SMVxd0Zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755534765; c=relaxed/simple;
-	bh=g9SN5xmqbpq88QtLkj1Fl2e7nlIcxSCkoV9Qkug1WLY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dbJBGdLGoftXmkdNbcQHjf4oE8HGGBZy9iGHMvsLmB/4J57PcIJ1Q1SaReresBqjG+OSEZxZ8QIgbd+z+HZqJb9hpbSExlha0eTwnhify5ZfXzdySj76Hb2ou6wGPCN/byNBUrMwhxwDHR1tX1Wa5em3X8znzr/xjZYIOJO9mAk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KwHagKGV; arc=none smtp.client-ip=209.85.166.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-3e571d400daso21691185ab.1
-        for <linux-next@vger.kernel.org>; Mon, 18 Aug 2025 09:32:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1755534763; x=1756139563; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ntC7EoOgFPYWmn/kl+XayyvV6WCpKaQ8QN9jhl3W0oc=;
-        b=KwHagKGV+odrEjElgsHyoYL9ugu9ewXCo35H7oYDRzTeUDlKMJJsuDODT2lk1vwMNP
-         9qPD3pFcTlzdULkzrsJhXLJeEtTdYhbNilvV0GLjRw90TrFhmTsQDb+PXMTFSv+lwcQI
-         XP3BxDp6KghkJ13QfsiJF996x8IF6BEqSqjAM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755534763; x=1756139563;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ntC7EoOgFPYWmn/kl+XayyvV6WCpKaQ8QN9jhl3W0oc=;
-        b=asW8lweVNtbOflqBFXELwJSi0G6xvK1y17OMhXupXcA4V2/cWE9O2xAXnOQV7u+GGt
-         Qe443AsM7EktS3KbyeSMULRZ69TI1JgVX2m2+0oMp/hZLO0S/b+V6NTC8RrsIXZErR5G
-         iaLoJlOlSNnqoeYRAwcW3YQQNFGiD3dL4ZYBn7PKDsW3gGh2Ose1CtVqYQn3bAfdNWSd
-         WVN8f0VlPvszJ1rhsWBGoZKQm2hpqLHjAB/QeGKJM/7LIrnrhi1/M9hc031wkLoInJLl
-         KrGfweMbbqp/fJcIjgfLIsT9jcgoQRixFAYvXpCz80tqTFWwI4RnPCfMUqhulg7oPbh7
-         Zr1g==
-X-Forwarded-Encrypted: i=1; AJvYcCUiJnEaSMCTgEoQshfvRDAYqXW95M6PbxrMTOcLzcx8+c8/YB3kErV/nJAFvLGWsb18zp507CWmNxxG@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzt+x8PpOQNfyE3JujytHYsjeDt1TD3O7urF8rV5DpRxdRwF5Jt
-	LfZ5Mjz97XpRFjfuAHaQoDmxD+NTjKclh2NH6bdcGnhsBQiuwtTMWTv4eq+cLpHgQRc=
-X-Gm-Gg: ASbGnctVges35ryaO32YByrCsjgXGujcun4sYdiBfxdYMHmkhSqBE+7QzmIXCLVwvZE
-	ESAIC4upCbu9Ncj3gVLTw+cyrkrep3aafLK0hICzd351OiRIA9JVmRWkQgeDh/xLpHP6ROlWVQf
-	ImupwuN6uh/VfGu16chlJBf+LRhmYksDRHhc8mz+u9GtmRs+2mKH5GbKYSMJb4v9AZwiZu4hIDG
-	ZROUSOARK135YZSHI+sP+GlF8peINBwdpd8TIdV9a/VKoa8MTp1n3KWp5SRiXlBWkCtQ+BO9vLE
-	p85bYnPo5/4GrUMZWHyy9aAhHVWYN0M9YzEH1UDb7QRt7BAkBm3Nr8a0vyz7DFhukPB/SobuOlC
-	Ku4ApiK/eMpQ9iJzngJe41KP6I6FAh2TYElg=
-X-Google-Smtp-Source: AGHT+IHgg2qIQn3xXshhFvkUFW5Rviw8PPMHY9fVWzLdQzkPLeNNzXlM2TGiJH1UIVmxe7rjBkvSDg==
-X-Received: by 2002:a05:6e02:1a6e:b0:3e5:4b2e:3b00 with SMTP id e9e14a558f8ab-3e57e80e257mr235375945ab.4.1755534762819;
-        Mon, 18 Aug 2025 09:32:42 -0700 (PDT)
-Received: from [192.168.1.14] ([38.175.187.108])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-50c9477ef61sm2787685173.8.2025.08.18.09.32.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Aug 2025 09:32:42 -0700 (PDT)
-Message-ID: <1befd7ab-f343-450f-9484-0cef21fe2da8@linuxfoundation.org>
-Date: Mon, 18 Aug 2025 10:32:41 -0600
+	s=arc-20240116; t=1755542471; c=relaxed/simple;
+	bh=00jJjtQgwxgQYc0vYn1fSx5RCac3GGXo8k5yfg3ZyBQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hDZ9+jf1hUoRSz0JEugKnXd26kWQii6T+apm1OI+CSWPpwK8aI8AiNymSQOc+M5J51CwxF/eH42Vp4LRQWh4J9qycvp8yt31h0pweRneQPBUQQeFn6IfJ16l+OMIRtCUY2IKkM0avL+TIb0owWOCrDBsyAMcFhYiyxNVWoC2U1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hjjs97Rw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C06ABC4CEEB;
+	Mon, 18 Aug 2025 18:41:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755542471;
+	bh=00jJjtQgwxgQYc0vYn1fSx5RCac3GGXo8k5yfg3ZyBQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Hjjs97RwCoyJS+jrSYYKqzhr9A7RRgWdp/k+4jWP/XOxoFEP/WfaWosrhWoq04ehg
+	 ZkQoqhsEoe7/Zo14YTwsl0dinWCA7X/+Fg8nNg8Zk2cqQ6ojjgrxdSgOof/CofVHIX
+	 YQqwHTN1ZzQv9S2LtNFSJ/Hev21qmEqk4t38MuJKaVoLnLTtw06AceUQf8zjDNuaF+
+	 rReoKt0Tidw0p9LbzDYmEK1YagAW44gkvFEBZpSdrIbVQE9g0h0EXlaJ1Zd0+ulkG2
+	 9PU48rS0zr5dq0gKsOyb+T9J2wsAD/Yr4dxFhVNRZePlRuOQahx+yIpLJ83lkVja7o
+	 OzkeqoU0desVQ==
+Date: Mon, 18 Aug 2025 20:40:23 +0200
+From: Nicolas Schier <nsc@kernel.org>
+To: David Disseldorp <ddiss@suse.de>
+Cc: linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-next@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] gen_init_cpio: add copy_file_range / reflink
+ support
+Message-ID: <aKNzl1Oo2zzPYGQP@levanger>
+References: <20250814054818.7266-1-ddiss@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the kunit-next tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>, David Gow <davidgow@google.com>,
- Marie Zhussupova <marievic@google.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- KUnit Development <kunit-dev@googlegroups.com>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250818120846.347d64b1@canb.auug.org.au>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250818120846.347d64b1@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="TvJB5GczmYFhf6cP"
+Content-Disposition: inline
+In-Reply-To: <20250814054818.7266-1-ddiss@suse.de>
 
-On 8/17/25 20:08, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the kunit-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
 
-Thank you Stephen. I did a allmodconfig build on 6.17-rc1 base - didn't
-see the error.
+--TvJB5GczmYFhf6cP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Marie, David, can you take a look this. Looks like conflict with drm
-in next?
+On Thu, Aug 14, 2025 at 03:17:58PM +1000, David Disseldorp wrote:
+> This patchset adds copy_file_range() support to gen_init_cpio. When
+> combined with data segment alignment, large-file archiving performance
+> is improved on Btrfs and XFS due to reflinks (see 7/7 benchmarks).
+>=20
+> cpio data segment alignment is provided by "bending" the newc spec
+> to zero-pad the filename field. GNU cpio and Linux initramfs extractors
+> handle this fine as long as PATH_MAX isn't exceeded.
+>=20
+> Changes since v1 RFC
+> - add alignment patches 6-7
+> - slightly rework commit and error messages
+> - rename l->len to avoid 1/i confusion
+>=20
+> David Disseldorp (7):
+>       gen_init_cpio: write to fd instead of stdout stream
+>       gen_init_cpio: support -o <output_path> parameter
+>       gen_init_cpio: attempt copy_file_range for file data
+>       gen_init_cpio: avoid duplicate strlen calls
+>       gen_initramfs.sh: use gen_init_cpio -o parameter
+>       docs: initramfs: file data alignment via name padding
+>       gen_init_cpio: add -a <data_align> as reflink optimization
+>=20
+>  .../driver-api/early-userspace/buffer-format.rst   |   5 +
+>  usr/gen_init_cpio.c                                | 234 ++++++++++++++-=
+------
+>  usr/gen_initramfs.sh                               |   7 +-
+>  3 files changed, 166 insertions(+), 80 deletions(-)
+>=20
+>=20
 
-> 
-> In file included from include/kunit/static_stub.h:18,
->                   from drivers/gpu/drm/xe/xe_bo.c:20:
-> drivers/gpu/drm/xe/tests/xe_bo.c:610:48: error: initialization of 'const void * (*)(struct kunit *, const void *, char *)' from incompatible pointer type 'const void * (*)(const void *, char *)' [-Wincompatible-pointer-types]
->    610 |         KUNIT_CASE_PARAM(xe_ccs_migrate_kunit, xe_pci_live_device_gen_param),
->        |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/kunit/test.h:210:38: note: in definition of macro 'KUNIT_CASE_PARAM'
->    210 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
->        |                                      ^~~~~~~~~~
-> drivers/gpu/drm/xe/tests/xe_bo.c:610:48: note: (near initialization for 'xe_bo_tests[0].generate_params')
->    610 |         KUNIT_CASE_PARAM(xe_ccs_migrate_kunit, xe_pci_live_device_gen_param),
->        |                                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/kunit/test.h:210:38: note: in definition of macro 'KUNIT_CASE_PARAM'
->    210 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
->        |                                      ^~~~~~~~~~
-> drivers/gpu/drm/xe/tests/xe_bo.c:611:45: error: initialization of 'const void * (*)(struct kunit *, const void *, char *)' from incompatible pointer type 'const void * (*)(const void *, char *)' [-Wincompatible-pointer-types]
->    611 |         KUNIT_CASE_PARAM(xe_bo_evict_kunit, xe_pci_live_device_gen_param),
->        |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/kunit/test.h:210:38: note: in definition of macro 'KUNIT_CASE_PARAM'
->    210 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
->        |                                      ^~~~~~~~~~
-> drivers/gpu/drm/xe/tests/xe_bo.c:611:45: note: (near initialization for 'xe_bo_tests[1].generate_params')
->    611 |         KUNIT_CASE_PARAM(xe_bo_evict_kunit, xe_pci_live_device_gen_param),
->        |                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/kunit/test.h:210:38: note: in definition of macro 'KUNIT_CASE_PARAM'
->    210 |                   .generate_params = gen_params, .module_name = KBUILD_MODNAME}
->        |                                      ^~~~~~~~~~
-> drivers/gpu/drm/xe/tests/xe_bo.c:624:51: error: initialization of 'const void * (*)(struct kunit *, const void *, char *)' from incompatible pointer type 'const void * (*)(const void *, char *)' [-Wincompatible-pointer-types]
->    624 |         KUNIT_CASE_PARAM_ATTR(xe_bo_shrink_kunit, xe_pci_live_device_gen_param,
->        |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/kunit/test.h:223:38: note: in definition of macro 'KUNIT_CASE_PARAM_ATTR'
->    223 |                   .generate_params = gen_params,                                \
->        |                                      ^~~~~~~~~~
-> drivers/gpu/drm/xe/tests/xe_bo.c:624:51: note: (near initialization for 'xe_bo_shrink_test[0].generate_params')
->    624 |         KUNIT_CASE_PARAM_ATTR(xe_bo_shrink_kunit, xe_pci_live_device_gen_param,
->        |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/kunit/test.h:223:38: note: in definition of macro 'KUNIT_CASE_PARAM_ATTR'
->    223 |                   .generate_params = gen_params,                                \
->        |                                      ^~~~~~~~~~
-> 
-> Caused by commit
-> 
->    444be9072fca ("kunit: Pass parameterized test context to generate_params()")
-> 
-> I have used the kunit-next tree from next-20250815 for today.
-> 
+Thanks for the series!  I have found only a minor nick pick and some few
+bike-shedding things.
 
-thanks,
--- Shuah
+Reviewed-by: Nicolas Schier <nsc@kernel.org>
 
+Kind regards,
+Nicolas
+
+--TvJB5GczmYFhf6cP
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmijc5IACgkQB1IKcBYm
+Emnfpw/+LnSnZraMATj6DEcbSZSNQls5OfXXPLBEy+MTIbHCKirNdUuF9Ql8Ee3Z
+g5XzyjvYvoocN4fhJrbs1kkwHyN8erwtPdD29pLsAVobHdVROBPH9QibE2bsnf79
+HoOoMucHvi7CnvdNOwm5Hyk/n1nKuAc6+ZLRsFOv7Ki/2cDJog5duwpmIXaYnSo9
+9HCegIlW8WEBcfyTpmO0RNf2GzBIiSzn7WTOOLkf/9tkj6I+EeByeY56awyEI0t+
+QhgR0DhF2aJ8DYZpriWH6ZsQG3Sg3WSPIcKCgIlD0PrjCYhYQyyH2lMZZts5f2nl
+d0JwK+pjNJtUBjeQz65gmjzHsaXBpAzPAeMOlbxZZsQmLyD3NpTgNkhENLDh4C+q
+yARM3blndryvDRt1201C2TgE+HzKqRi/PPctn2BErlBqBt0lKcvk+mZVMgpiGhYx
+ix6XAxZPzGCtST7Xd5K3fiIHkg/r6LAyHd6oTvWXokID4RUVUJX0nA8xhg5Gwqxs
+KvpR1CU1tzBMjxfh7vhpy6BbKPz68ryI26gQGl2sCkiOjiujthq95GNVd06pmMYc
+oJmd0HGNakPpxpbeiuIB8oRwQ+Q8I92fbOkK80nibWAwee9iKBkZv5jHtpccCJZk
+9uEJw17fkET7z4GXRvwYvNrbKHdEV2FdNS/CkNAfjSNsCVrjfj0=
+=saYz
+-----END PGP SIGNATURE-----
+
+--TvJB5GczmYFhf6cP--
 

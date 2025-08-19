@@ -1,125 +1,174 @@
-Return-Path: <linux-next+bounces-8010-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8011-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CA75B2B9F9
-	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 08:57:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5AC6B2BADA
+	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 09:34:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4414E7B1327
-	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 06:55:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45BD3626726
+	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 07:34:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90AF212B28;
-	Tue, 19 Aug 2025 06:56:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFF092BD030;
+	Tue, 19 Aug 2025 07:34:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yo4T5DgQ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I0xHpxeq"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pf1-f202.google.com (mail-pf1-f202.google.com [209.85.210.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1122765D4;
-	Tue, 19 Aug 2025 06:56:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CA7D24BCE8
+	for <linux-next@vger.kernel.org>; Tue, 19 Aug 2025 07:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755586603; cv=none; b=tOdPvQJfmztjQd/VuSk6+R2MwL5bP/8DFj8dcaZ4OOi4MszLwAsm5IWHByTQcRUt0PZkhtx9ZKj9FjTUR1C6gvnHohQGYkMvcWEnCHgDhZLEJPSWDJzdEJZD6ViLA+vIaha4Vcrg2hjjD4Fhqoehh3APgrBqDMwYA/RDjPL6Z+0=
+	t=1755588880; cv=none; b=eabFEfieewgllNB7CCY/8y63qZ8GRItnpx/aHzrQ9XysdShkw6zJ+F+xVbAeF91EyK83M5Fp++BEU2cH0ZRXR6+M1st3PeA3gCB9903/peEW7FJUQhkkaDgE0I7h0nJ3VNB6VOhkIBZoQEOl/2jsnEhbhWdGuAjosDE/BjaBWGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755586603; c=relaxed/simple;
-	bh=vNXgdxN+kluD/yWOhq924Fn3UPJmWPDAIuAfll0YTTA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KlSHjzk4VeOwEs6plUmk6+LyPZYsnNdE0wRfcFBIYCHsZri9sbVR9TuZW8cO4ARY5VHfYQ1JfgnI6U4eJZ7KydOwCghvBAOp1fenK7QkLkzBqS8BB/U1c/ntNZfIQpYDbsyASYLJW1fXgpWMfR6Oo1CcfpuDQ77a63ArF6CieZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yo4T5DgQ; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-24457f581aeso37776145ad.0;
-        Mon, 18 Aug 2025 23:56:42 -0700 (PDT)
+	s=arc-20240116; t=1755588880; c=relaxed/simple;
+	bh=mo6QMFKDxyh3t+yNV9NKO9AzDGESDf5V9BefxEECWhA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=SpXi/7fwxpzzm7u2Ts4gJI+28UT6SczoRFWc0fJZxUJ9jYZSfe0MpjGqzA3BqxoBndwmgbCAYUYkaIm8wMrw98PB1lw3njsAXb3VCrezh1fHZm2gvm9gkMJPG6uCA8q4/7ZwkpI5EKnKHhTf3q9QCM3iXDZnjVBmY+4+ZKQdzD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I0xHpxeq; arc=none smtp.client-ip=209.85.210.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+Received: by mail-pf1-f202.google.com with SMTP id d2e1a72fcca58-76e2e890901so9704806b3a.1
+        for <linux-next@vger.kernel.org>; Tue, 19 Aug 2025 00:34:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755586601; x=1756191401; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PkWkn7qInL7a6O5o73NNNgB4L+lhSZNkbw93KfVeFnQ=;
-        b=Yo4T5DgQapwOtCz6DU9nIHWLJkWKKtfBsAQSCqMauCxtJabfWfICTcsStJ9Xf5HmiK
-         6gbyHB6UKHMbdEuPbeAA8p14twiydnxJDUD8YHL/qwiJ5NNhVVDVUzkjBC1rI0fsTRPC
-         kCbHZYtuMPk4TES6nyLqxX/6Mlhldcuevl7mRUUEjAY0d7CxL7tBSzty+VDAEh4VHFwj
-         Rn8nZj3VdspooxgSb3Jbp+9j3yglRo96COd1ffHPCKjyKGbXI8GA26mHkRBVF3feXaCj
-         jqTPbG01pBAIKMLEY1rhdETmvpSS2f7dMGs1gs4GexaCXykXMOtOSaMZHQfGoypWVdRr
-         ER/w==
+        d=google.com; s=20230601; t=1755588877; x=1756193677; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0gjQmJyLWyyM34EUsK6b+yflZfBy/ykkULtt1gmp0aw=;
+        b=I0xHpxeqAh+IXQhF7OW+Z6mlEj03Q5XhDn6qE/6roPBbNQzN+OgDjP+o+48mRY+wSG
+         fv3A9WlgtEyDLQ1qfiPCCdHs8/xPS5/w5UjHs5FrRVDNXdy2SUvR03RfYtC6dODNtDKW
+         daBnTJ1EAGqTCenEquu3PcQGril4pj1TRSVTzkWlDpXoOe0K69xwIGDCLvFHfoBkpB9N
+         ZcFirVJ3oLy5Jdlce12EFdWrHNe+/+SZk7I20scgkYGzBF/VDA0WC7hjNIkICM7GKx6y
+         coBvfOclsggnp6kOGdJHn40hXUH/OMRnazWD7zUC/48b9obg9VJm7wabQSRUh6re8D4p
+         qJ6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755586601; x=1756191401;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PkWkn7qInL7a6O5o73NNNgB4L+lhSZNkbw93KfVeFnQ=;
-        b=MfjiRWQJ2KvuTUJBC0tBErraLf7ls1aGlvD9w7p7HwZ4h6pYgppZltQpZh7PiRSntP
-         +d21/h4+MlpjfIlRZjcNPpvhKF7BQG+Pn8KFTLNQp9IgdAYDq60j16vQMDSMmtr/yUji
-         IBsZmAdlzrh71onVMvq0DJym18OAHLe8u9QkjM6yqVNLK9p0KkVy9gNeFtY3I4sqJAaU
-         72DS/+6IMnWNfFT0oGjvvfzDbZVWXTUM2dgoGrtSB/7Zlvrm+v6avKNMqMljOaPKemGK
-         4mwMarFeF5rRY3aBMUPSL51t4knPwPQK7VJYRKweGzlmX6FnA2jjbZA28LKW6D995VWb
-         xgXg==
-X-Forwarded-Encrypted: i=1; AJvYcCU2JR/P3HHXStyMkWxSQTSIeyTo3e6LIc34UMClEQ6CxiCT/v/o1eY1QFgMKLq3qaW89KzgKjp+S7XB5w==@vger.kernel.org, AJvYcCXa2p7aMqADkr5JQEV7fBkZ6G7ixtsO5jaiF4KedOYlWew0o8czpXfhrlN1F+LcE3/+7iR0uHdcuZ38TrQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqEnIqSbxfRtXEf/2tqmbtuLitD65hXH1VmitC/qDzOzU+GTpf
-	FFUW6naZu8NcGE2qltVfmPdi4g5EDFrk9SXijOlOK7//rVnqOK1aPDxh
-X-Gm-Gg: ASbGncv9XSF3stD6ZmqqwW/YIq/inmdggwnVYeVBdvy7OlTJUvT4kEOUsl65laxb49D
-	x0nC4bTLCggIaq47FBBD9jrrnl5vKou72DculziKrWDj4akNoaHQuqJtdvg6HfGV8mi++Ndz/dA
-	KTPyxD1IFpJ0VaLHvhaTG5kvvXmiCkIQNQyKZ/vz7FfyqJcfLl71zZw2VEHOXTszYV8XE/1F8Fp
-	SSTu3ZMDkE4BLR+HxK6Id53emFJle2MQdGduwbu8PO2Ss7BxR6A7XN9ko/Hxl+Q1bM2lKYkO4X0
-	h2D/Beu10atEoaNTtism5FGMKmwNcKuE70o2ykN6p71gYKtOmP4YHa7w7IkwoVFaYUn3mhqQWK6
-	1kjNYA8ZW+zPVXarNh/GcJ1Bsx/YWckixF3d5Nuf2
-X-Google-Smtp-Source: AGHT+IEVq7SABUS+vJlZ0PnQScyaOjgU653Sbpd1EGdtwq4fQJrl7o+MKVKfmXyokFJqc3zVVWKRcQ==
-X-Received: by 2002:a17:903:4b47:b0:243:3fe:4294 with SMTP id d9443c01a7336-245e02d5107mr19354335ad.12.1755586601498;
-        Mon, 18 Aug 2025 23:56:41 -0700 (PDT)
-Received: from localhost ([192.19.38.250])
-        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b472d5a6e01sm9765490a12.3.2025.08.18.23.56.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Aug 2025 23:56:40 -0700 (PDT)
-From: Xing Guo <higuoxing@gmail.com>
-To: sfr@canb.auug.org.au
-Cc: Jonathan.Cameron@Huawei.com,
-	l.rubusch@gmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org,
-	shuah@kernel.org,
-	Xing Guo <higuoxing@gmail.com>
-Subject: [PATCH] docs: iio: Fix unexpected indentation for adxl345.
-Date: Tue, 19 Aug 2025 14:56:34 +0800
-Message-ID: <20250819065634.1154322-1-higuoxing@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250818124124.5b978e64@canb.auug.org.au>
-References: <20250818124124.5b978e64@canb.auug.org.au>
+        d=1e100.net; s=20230601; t=1755588877; x=1756193677;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0gjQmJyLWyyM34EUsK6b+yflZfBy/ykkULtt1gmp0aw=;
+        b=jhj1a1Jwdl1AVCbcO7oqmMAtkLdAq6EU+A6FDaSPkODY8hDIQgCHu6aUMcBD47hH/Q
+         RunXBpwB3IvH4FxLUb6uEMU6Wi4LPDdEK0BPE0VIm93HCOaQlmxFFEVfv742KyNHX9FN
+         rvjxV6N2EBdMAIUNT/fGhVAPqxlM50XrPqImZ7KZykHBYfulcoSvhcba1nkRDNZqlvF1
+         SvxRYG7FWezhF6AMPVPceFg6VrKQ/H3kXMaP8hWZa2Kb7AV4Ut1p0C0n5KKiVP/cDWsB
+         2ZmB7lMnbFXUCsj+LG5ozF5GAP1HGcGqo+DmDRN3FV9k36A8FC8h6bKcBDhVqT0IPkCw
+         WmhA==
+X-Forwarded-Encrypted: i=1; AJvYcCVIrQFjnbGmmR+VciI1ytaOuB5IZRpDXukcuLMIVbrBDJQJh6HHjqlBtqOIocpY4qfU/qekxJtJgteL@vger.kernel.org
+X-Gm-Message-State: AOJu0YymekulsPX6MdIT+AP/A7XMVj88u9nYZTge8Y3j6Irt2fK+A/n1
+	8bnyscivGDltGxoNcX61gd9Qf+9QbGDAj6l5lXpdQIzMOJFY+pO7Q08xyX/zjXoVqlNRtQ47kN5
+	d7k1DUjyjD+cAmQ==
+X-Google-Smtp-Source: AGHT+IEQNZ2+f6e9TNwetvOQ+hPmPxwMV2Wzkl2ILCeYpSP1rxXPD78DlfuwZr89GPZOqtlPyVjHcqV/V+GqUA==
+X-Received: from pfbfy8.prod.google.com ([2002:a05:6a00:8288:b0:768:7cb5:740a])
+ (user=davidgow job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a00:2184:b0:76e:7ae5:ec90 with SMTP id d2e1a72fcca58-76e8111212emr1805413b3a.26.1755588876576;
+ Tue, 19 Aug 2025 00:34:36 -0700 (PDT)
+Date: Tue, 19 Aug 2025 15:34:32 +0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.rc1.167.g924127e9c0-goog
+Message-ID: <20250819073434.1411114-1-davidgow@google.com>
+Subject: [PATCH 1/2] drm/xe/tests: Fix some additional gen_params signatures
+From: David Gow <davidgow@google.com>
+To: Rae Moar <rmoar@google.com>, Marie Zhussupova <marievic@google.com>, marievictoria875@gmail.com, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: David Gow <davidgow@google.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, intel-xe@lists.freedesktop.org, 
+	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Resolved the following building error:
+In 444be9072fca ("kunit: Pass parameterized test context to generate_params()")
+prototype used for gen_params functions was changed to add a struct
+kunit parameter. However, a few of these used in xe were not updated.
 
- Documentation/iio/adxl345.rst:161: ERROR: Unexpected indentation. [docutils]
+Update these so that the xe_pci tests build and run again.
 
-Fixes: fdcb9cb9178a ("docs: iio: add documentation for adxl345 driver")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Closes: https://lore.kernel.org/linux-next/20250818124124.5b978e64@canb.auug.org.au
-Signed-off-by: Xing Guo <higuoxing@gmail.com>
+Fixes: 444be9072fca ("kunit: Pass parameterized test context to generate_params()")
+Signed-off-by: David Gow <davidgow@google.com>
 ---
- Documentation/iio/adxl345.rst | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/iio/adxl345.rst b/Documentation/iio/adxl345.rst
-index 4bd038cb4a37..afdb35f8b72e 100644
---- a/Documentation/iio/adxl345.rst
-+++ b/Documentation/iio/adxl345.rst
-@@ -157,6 +157,7 @@ sensor terms, free-fall is defined using an inactivity period ranging from 0.000
- to 1.000 seconds.
+This should fix the issues found with the linux-next merge:
+https://lore.kernel.org/linux-next/20250818120846.347d64b1@canb.auug.org.au/
+
+The following should reproduce them:
+./tools/testing/kunit/kunit.py run --arch x86_64 --kunitconfig drivers/gpu/drm/xe
+
+Ideally, these should be squashed into the corresponding commits: let me
+know if you'd like me to re-send out the whole series with these fixes
+applied.
+
+Cheers,
+-- David
+
+---
+ drivers/gpu/drm/xe/tests/xe_pci.c      | 12 ++++++------
+ drivers/gpu/drm/xe/tests/xe_pci_test.h |  8 ++++----
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/gpu/drm/xe/tests/xe_pci.c b/drivers/gpu/drm/xe/tests/xe_pci.c
+index a65705814b9a..f707e0a54295 100644
+--- a/drivers/gpu/drm/xe/tests/xe_pci.c
++++ b/drivers/gpu/drm/xe/tests/xe_pci.c
+@@ -44,9 +44,9 @@ KUNIT_ARRAY_PARAM(pci_id, pciidlist, xe_pci_id_kunit_desc);
+  *
+  * Return: pointer to the next parameter or NULL if no more parameters
+  */
+-const void *xe_pci_graphics_ip_gen_param(const void *prev, char *desc)
++const void *xe_pci_graphics_ip_gen_param(struct kunit *test, const void *prev, char *desc)
+ {
+-	return graphics_ip_gen_params(prev, desc);
++	return graphics_ip_gen_params(test, prev, desc);
+ }
+ EXPORT_SYMBOL_IF_KUNIT(xe_pci_graphics_ip_gen_param);
  
- The driver behaves as follows:
-+
- * If the configured inactivity period is 1 second or more, the driver uses the
-   sensor's inactivity register. This allows the event to be linked with
-   activity detection, use auto-sleep, and be either AC- or DC-coupled.
+@@ -61,9 +61,9 @@ EXPORT_SYMBOL_IF_KUNIT(xe_pci_graphics_ip_gen_param);
+  *
+  * Return: pointer to the next parameter or NULL if no more parameters
+  */
+-const void *xe_pci_media_ip_gen_param(const void *prev, char *desc)
++const void *xe_pci_media_ip_gen_param(struct kunit *test, const void *prev, char *desc)
+ {
+-	return media_ip_gen_params(prev, desc);
++	return media_ip_gen_params(test, prev, desc);
+ }
+ EXPORT_SYMBOL_IF_KUNIT(xe_pci_media_ip_gen_param);
+ 
+@@ -78,9 +78,9 @@ EXPORT_SYMBOL_IF_KUNIT(xe_pci_media_ip_gen_param);
+  *
+  * Return: pointer to the next parameter or NULL if no more parameters
+  */
+-const void *xe_pci_id_gen_param(const void *prev, char *desc)
++const void *xe_pci_id_gen_param(struct kunit *test, const void *prev, char *desc)
+ {
+-	const struct pci_device_id *pci = pci_id_gen_params(prev, desc);
++	const struct pci_device_id *pci = pci_id_gen_params(test, prev, desc);
+ 
+ 	return pci->driver_data ? pci : NULL;
+ }
+diff --git a/drivers/gpu/drm/xe/tests/xe_pci_test.h b/drivers/gpu/drm/xe/tests/xe_pci_test.h
+index ce4d2b86b778..690b36e6500c 100644
+--- a/drivers/gpu/drm/xe/tests/xe_pci_test.h
++++ b/drivers/gpu/drm/xe/tests/xe_pci_test.h
+@@ -25,9 +25,9 @@ struct xe_pci_fake_data {
+ 
+ int xe_pci_fake_device_init(struct xe_device *xe);
+ 
+-const void *xe_pci_graphics_ip_gen_param(const void *prev, char *desc);
+-const void *xe_pci_media_ip_gen_param(const void *prev, char *desc);
+-const void *xe_pci_id_gen_param(const void *prev, char *desc);
+-const void *xe_pci_live_device_gen_param(const void *prev, char *desc);
++const void *xe_pci_graphics_ip_gen_param(struct kunit *test, const void *prev, char *desc);
++const void *xe_pci_media_ip_gen_param(struct kunit *test, const void *prev, char *desc);
++const void *xe_pci_id_gen_param(struct kunit *test, const void *prev, char *desc);
++const void *xe_pci_live_device_gen_param(struct kunit *test, const void *prev, char *desc);
+ 
+ #endif
 -- 
-2.50.1
+2.51.0.rc1.167.g924127e9c0-goog
 
 

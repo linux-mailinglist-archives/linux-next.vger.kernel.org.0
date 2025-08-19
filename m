@@ -1,167 +1,125 @@
-Return-Path: <linux-next+bounces-8009-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8010-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BCA4B2B980
-	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 08:35:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CA75B2B9F9
+	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 08:57:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA738682A9B
-	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 06:34:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4414E7B1327
+	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 06:55:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19FC825A34D;
-	Tue, 19 Aug 2025 06:34:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90AF212B28;
+	Tue, 19 Aug 2025 06:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LJMPff2T"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yo4T5DgQ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 889BF3FE7;
-	Tue, 19 Aug 2025 06:34:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1122765D4;
+	Tue, 19 Aug 2025 06:56:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755585244; cv=none; b=mrfcvssRbVeGG/fZ/+EJnOszyiHffMcepvW5eZNVSF68mdMBCQ09YRgN+fyJMlv+ibhsy1+ha5Ms6zRdeaozPceCmFcyQc9PXpysgBHBsYCZ1kLEpoH8049T4e98H4xgy3pN09nM9mIK0+b/J/6dWCImWuDblEgzo7WmyEMZUlE=
+	t=1755586603; cv=none; b=tOdPvQJfmztjQd/VuSk6+R2MwL5bP/8DFj8dcaZ4OOi4MszLwAsm5IWHByTQcRUt0PZkhtx9ZKj9FjTUR1C6gvnHohQGYkMvcWEnCHgDhZLEJPSWDJzdEJZD6ViLA+vIaha4Vcrg2hjjD4Fhqoehh3APgrBqDMwYA/RDjPL6Z+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755585244; c=relaxed/simple;
-	bh=M/3ie/2boyOvZGJGab5YslAVveCDGUHz8hKaCAWvKkI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PnR4ALV534QOxmsgmdzD08q0aoPpOYxe1FSaVL6oO3RhwZaIc0eVwBXBNqGnq6iynsuzRq4RVsViNDm6nKe0bunotS4s2xR1w2Ogp37TJj5hx476SfEtrOCRbN+0qhWIFilLfgaYYjibyBgwdfgmUa0bFZqUNsdO/GKjTNVgTLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LJMPff2T; arc=none smtp.client-ip=209.85.160.51
+	s=arc-20240116; t=1755586603; c=relaxed/simple;
+	bh=vNXgdxN+kluD/yWOhq924Fn3UPJmWPDAIuAfll0YTTA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=KlSHjzk4VeOwEs6plUmk6+LyPZYsnNdE0wRfcFBIYCHsZri9sbVR9TuZW8cO4ARY5VHfYQ1JfgnI6U4eJZ7KydOwCghvBAOp1fenK7QkLkzBqS8BB/U1c/ntNZfIQpYDbsyASYLJW1fXgpWMfR6Oo1CcfpuDQ77a63ArF6CieZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yo4T5DgQ; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-30ccec59b4bso4083139fac.3;
-        Mon, 18 Aug 2025 23:34:02 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-24457f581aeso37776145ad.0;
+        Mon, 18 Aug 2025 23:56:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1755585241; x=1756190041; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1755586601; x=1756191401; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u3VpbzxzEkcEzo1uHcgT71iyAEqp47/7STtYxmZ8los=;
-        b=LJMPff2TuXvguf1+7EByk409Rb7Z0x+hKku4ItfomvZdbjBtT9Bpamzvxu0MH+SZ+7
-         F5CRaTfA17rLUAwsU5fYLBrpzSA8IDY/TWziGIbAsKb3iGectMBeUPq3Lk3+mUAKuJ5q
-         YyP/2e8eYRSAO5recN2Lnc24k5YqASmFCnZPOfmFeIqvHWk1tz1soPvLCqtvtat0uV7+
-         4lynR8QEnK+dWl8BDZhALrHLAGOtF0FegzEgiCkVXF0dd6jQgJ6f5QryRS7DMLSZjLYC
-         c+XC4/vsMCtleDogFj4C/OxR5xXiNXwmfASSig9l9qGzk9MU9MRvQL5AkwLzzax1zGiT
-         JaXQ==
+        bh=PkWkn7qInL7a6O5o73NNNgB4L+lhSZNkbw93KfVeFnQ=;
+        b=Yo4T5DgQapwOtCz6DU9nIHWLJkWKKtfBsAQSCqMauCxtJabfWfICTcsStJ9Xf5HmiK
+         6gbyHB6UKHMbdEuPbeAA8p14twiydnxJDUD8YHL/qwiJ5NNhVVDVUzkjBC1rI0fsTRPC
+         kCbHZYtuMPk4TES6nyLqxX/6Mlhldcuevl7mRUUEjAY0d7CxL7tBSzty+VDAEh4VHFwj
+         Rn8nZj3VdspooxgSb3Jbp+9j3yglRo96COd1ffHPCKjyKGbXI8GA26mHkRBVF3feXaCj
+         jqTPbG01pBAIKMLEY1rhdETmvpSS2f7dMGs1gs4GexaCXykXMOtOSaMZHQfGoypWVdRr
+         ER/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755585241; x=1756190041;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1755586601; x=1756191401;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=u3VpbzxzEkcEzo1uHcgT71iyAEqp47/7STtYxmZ8los=;
-        b=RUhM0twQOGWfocBda7fewbfsxfBHJsbeB3C5uZTARphzbseH9nQ8bQGR/QbV9eURDj
-         yg2eSkv0Qnf1fUE/k/gwixQSLSj1++uYeZpQ/VyC4OKrtCL35YytIz2/APi4KhMPRUvl
-         642Mp0Jr2lM3EFyPsRU4XVh1RS/KVG4aAnCOtGl8/4ET7W2IxCXcSej9JQbHtDbkG+A3
-         xKOJS7ormBY2SR2UyaTzLaR/pd0megv+gLFPHNDMutaNOKgjBorzwuTCBZkuTP1M7e/Z
-         sjDhrXL7sPS+DMpsnaG9iglNCFq9+KMntQJT3IUmu2NHtDxLFgViuA2zpEYAbljJlbA9
-         IZZw==
-X-Forwarded-Encrypted: i=1; AJvYcCW0Lujbe1JN6lGflJc4Oe7Ro42YWq/2TpHYueqxgJd7umXlgQm+sSAVLe3Up4WUrdkGDXgAQrzBRB/3IOs=@vger.kernel.org, AJvYcCXyc24Lm6wrp87G3ZffIBD1YV5joUhZ9ucepuvHmLbjJoGUFHG2JsoI9OJeH4q0S/2E/aGdsb7P0C+/Gg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzB6ezWozOyLqTesNlvJtUsTo33y+c3xZL/jAOSRVPfFANhHZ6q
-	ljDhtTJLFa6KqC/AnA+DcWxaQItNVdrIDScK4+Cv6FfyGVT2ZS5nmv+86u4VR2KK/1Jg0kL3VMS
-	83wIG0E7QVnw42xWPC8jUX+LJPZ2mlfU=
-X-Gm-Gg: ASbGnctxyv2aPOvku9bMgNYH/v4vf/8zDyHckQJC8U67Nv15yc4+uDznD6kke4u/ysZ
-	yrhWBuT2JbexJUVmy87jzPSTkwZUfOxkDS/ZcGhJL/BU7pQ+gtU4s/0Ynv63zb25JF5CENbAajB
-	lIC7RxWGTLF2v3VcikcosqaDG3FH5MxK3rZ87pqxhsFabrsF3AZw5Kme+KPLrLqJef3JMNROUfP
-	ToO
-X-Google-Smtp-Source: AGHT+IFB2lsWvItMhN1kOS4y9iO+D1PQ1ACsQ4YmtNScKHE8KbS330nCGcFUX5FHzDqevNahYYQ0hwgH5GN9QPJy+ZM=
-X-Received: by 2002:a05:6870:5106:b0:30b:7a64:d67b with SMTP id
- 586e51a60fabf-3110c15084amr1155481fac.5.1755585241367; Mon, 18 Aug 2025
- 23:34:01 -0700 (PDT)
+        bh=PkWkn7qInL7a6O5o73NNNgB4L+lhSZNkbw93KfVeFnQ=;
+        b=MfjiRWQJ2KvuTUJBC0tBErraLf7ls1aGlvD9w7p7HwZ4h6pYgppZltQpZh7PiRSntP
+         +d21/h4+MlpjfIlRZjcNPpvhKF7BQG+Pn8KFTLNQp9IgdAYDq60j16vQMDSMmtr/yUji
+         IBsZmAdlzrh71onVMvq0DJym18OAHLe8u9QkjM6yqVNLK9p0KkVy9gNeFtY3I4sqJAaU
+         72DS/+6IMnWNfFT0oGjvvfzDbZVWXTUM2dgoGrtSB/7Zlvrm+v6avKNMqMljOaPKemGK
+         4mwMarFeF5rRY3aBMUPSL51t4knPwPQK7VJYRKweGzlmX6FnA2jjbZA28LKW6D995VWb
+         xgXg==
+X-Forwarded-Encrypted: i=1; AJvYcCU2JR/P3HHXStyMkWxSQTSIeyTo3e6LIc34UMClEQ6CxiCT/v/o1eY1QFgMKLq3qaW89KzgKjp+S7XB5w==@vger.kernel.org, AJvYcCXa2p7aMqADkr5JQEV7fBkZ6G7ixtsO5jaiF4KedOYlWew0o8czpXfhrlN1F+LcE3/+7iR0uHdcuZ38TrQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqEnIqSbxfRtXEf/2tqmbtuLitD65hXH1VmitC/qDzOzU+GTpf
+	FFUW6naZu8NcGE2qltVfmPdi4g5EDFrk9SXijOlOK7//rVnqOK1aPDxh
+X-Gm-Gg: ASbGncv9XSF3stD6ZmqqwW/YIq/inmdggwnVYeVBdvy7OlTJUvT4kEOUsl65laxb49D
+	x0nC4bTLCggIaq47FBBD9jrrnl5vKou72DculziKrWDj4akNoaHQuqJtdvg6HfGV8mi++Ndz/dA
+	KTPyxD1IFpJ0VaLHvhaTG5kvvXmiCkIQNQyKZ/vz7FfyqJcfLl71zZw2VEHOXTszYV8XE/1F8Fp
+	SSTu3ZMDkE4BLR+HxK6Id53emFJle2MQdGduwbu8PO2Ss7BxR6A7XN9ko/Hxl+Q1bM2lKYkO4X0
+	h2D/Beu10atEoaNTtism5FGMKmwNcKuE70o2ykN6p71gYKtOmP4YHa7w7IkwoVFaYUn3mhqQWK6
+	1kjNYA8ZW+zPVXarNh/GcJ1Bsx/YWckixF3d5Nuf2
+X-Google-Smtp-Source: AGHT+IEVq7SABUS+vJlZ0PnQScyaOjgU653Sbpd1EGdtwq4fQJrl7o+MKVKfmXyokFJqc3zVVWKRcQ==
+X-Received: by 2002:a17:903:4b47:b0:243:3fe:4294 with SMTP id d9443c01a7336-245e02d5107mr19354335ad.12.1755586601498;
+        Mon, 18 Aug 2025 23:56:41 -0700 (PDT)
+Received: from localhost ([192.19.38.250])
+        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-b472d5a6e01sm9765490a12.3.2025.08.18.23.56.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Aug 2025 23:56:40 -0700 (PDT)
+From: Xing Guo <higuoxing@gmail.com>
+To: sfr@canb.auug.org.au
+Cc: Jonathan.Cameron@Huawei.com,
+	l.rubusch@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-next@vger.kernel.org,
+	shuah@kernel.org,
+	Xing Guo <higuoxing@gmail.com>
+Subject: [PATCH] docs: iio: Fix unexpected indentation for adxl345.
+Date: Tue, 19 Aug 2025 14:56:34 +0800
+Message-ID: <20250819065634.1154322-1-higuoxing@gmail.com>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250818124124.5b978e64@canb.auug.org.au>
+References: <20250818124124.5b978e64@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CABFDxMFpzS9ynd7OsJWdKwZD-kW0-nu9=HhoFUmiOm5Jkz_QzQ@mail.gmail.com>
- <20250819053926.38696-1-sj@kernel.org>
-In-Reply-To: <20250819053926.38696-1-sj@kernel.org>
-From: Sang-Heon Jeon <ekffu200098@gmail.com>
-Date: Tue, 19 Aug 2025 15:33:50 +0900
-X-Gm-Features: Ac12FXy5FcKZqIIuPS-yCKN6CS4Zziv3Qm_H8RrDUZAquapCdZkP9ri20cqj2Fk
-Message-ID: <CABFDxMHuEgtYj-JXM9Jr4FyA2ETNbNDQ+1c1KQu8UHV=HegAtA@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the mm-unstable tree
-To: SeongJae Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 19, 2025 at 2:39=E2=80=AFPM SeongJae Park <sj@kernel.org> wrote=
-:
->
-> On Tue, 19 Aug 2025 10:55:13 +0900 Sang-Heon Jeon <ekffu200098@gmail.com>=
- wrote:
->
-> > On Tue, Aug 19, 2025 at 10:14=E2=80=AFAM Andrew Morton
-> > <akpm@linux-foundation.org> wrote:
-> > >
-> > > On Tue, 19 Aug 2025 09:59:20 +0900 Sang-Heon Jeon <ekffu200098@gmail.=
-com> wrote:
-> > >
-> > > > > has these problem(s):
-> > > > >
-> > > > >   - Target SHA1 does not exist
-> > > > >
-> > > > > Maybe you meant
-> > > > >
-> > > > > Fixes: a0b60d083fb6 ("selftests/damon: test no-op commit broke DA=
-MON status")
-> > > >
-> > > > You're right. I think it might be changed at the point rc1 -> rc2 o=
-n
-> > > > the mm tree.
-> > > > Is there anything I can do? Or maybe Andrew can help?
-> > > >
-> > > > I didn't mean to bother you guys.  Also, original patch is from her=
-e [1]
-> > > >
-> > > > [1] https://lore.kernel.org/all/20250816014033.190451-1-ekffu200098=
-@gmail.com/
-> > >
-> > > I deleted the Fixes: tag.  The quilt filename
-> > > selftests-damon-test-no-op-commit-broke-damon-status-fix.patch means
-> > > "this will be folded into
-> > > selftests-damon-test-no-op-commit-broke-damon-status.patch"
-> >
-> > Thank you, andrew
->
-> Thank you for Cc-ing me, Sang-Heon.  Thank you for fixing this, Andrew.
->
-> I actually suggested Sang-Heon to add the Fixes: tag, to help Andrew easi=
-ly
-> understand the context.  It didn't make noises before, but everything cha=
-nges.
-> Anyway I'm also responsible for this noise, sorry about that.
->
-> Another common way to send followup fixes for commits in mm tree is, send=
-ing
-> the fixup patches as a reply to the broken patch mail thread, with a brie=
-f
-> explanation of the context for Andrew, like my recent one[1].  I think us=
-ing
-> this way without Fixes: tag in the patch can still help Andrew easily
-> understand the context while not making noises.  Sang-Heon, please consid=
-er
-> using that way if you get similar cases in future.
+Resolved the following building error:
 
-Thanks for your advice. I'll use Fixes only if that commit is in the
-past version. If commit is in rc, I will consider sending a patch as a
-reply.
+ Documentation/iio/adxl345.rst:161: ERROR: Unexpected indentation. [docutils]
 
-> [1] https://lore.kernel.org/20250709182843.35812-1-sj@kernel.org/
->
->
-> Thanks,
-> SJ
->
-> [...]
+Fixes: fdcb9cb9178a ("docs: iio: add documentation for adxl345 driver")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Closes: https://lore.kernel.org/linux-next/20250818124124.5b978e64@canb.auug.org.au
+Signed-off-by: Xing Guo <higuoxing@gmail.com>
+---
+ Documentation/iio/adxl345.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thank you to everyone. Have a nice day :)
+diff --git a/Documentation/iio/adxl345.rst b/Documentation/iio/adxl345.rst
+index 4bd038cb4a37..afdb35f8b72e 100644
+--- a/Documentation/iio/adxl345.rst
++++ b/Documentation/iio/adxl345.rst
+@@ -157,6 +157,7 @@ sensor terms, free-fall is defined using an inactivity period ranging from 0.000
+ to 1.000 seconds.
+ 
+ The driver behaves as follows:
++
+ * If the configured inactivity period is 1 second or more, the driver uses the
+   sensor's inactivity register. This allows the event to be linked with
+   activity detection, use auto-sleep, and be either AC- or DC-coupled.
+-- 
+2.50.1
 
-Best Regards
-Sang-Heon Jeon
 

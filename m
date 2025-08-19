@@ -1,148 +1,116 @@
-Return-Path: <linux-next+bounces-7997-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8007-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E00B9B2B7DD
-	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 05:43:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BE85B2B8CC
+	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 07:39:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6416A5E448F
-	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 03:41:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E92C7A22DC
+	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 05:38:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5067824A043;
-	Tue, 19 Aug 2025 03:40:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C98D627B34B;
+	Tue, 19 Aug 2025 05:39:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="l3FpGNxK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H+G4qTqf"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423DF2D2494;
-	Tue, 19 Aug 2025 03:40:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B8B20B80D;
+	Tue, 19 Aug 2025 05:39:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755574846; cv=none; b=CP6PhgQPUoIxJQTK1AdHV4/4Cl/H2q75uON7zVzKduw2mXV/n8NybQNWWAWryM4yzfaDiFBU3umb/XMUjxmJNQyKoMxFfHncutsUZFiDlyKKrzS0fJxuzQ8yaea+gGJGU68NhcMSK6TOU7fTsBMDOdo86DdgR/nPVmv32ZlQZ8A=
+	t=1755581969; cv=none; b=aBuhsY7rqt2rfSMg9JbJAxfm1FgTtu0SnCHMDO2GG6WcX1UBLYKf+W1d8gwECUqavUf5UKl467BAb7uym+8XNxqd9RXQjQdmK+Dpy2r2qvNuNxRPMNJxx9ZM46a6JOjPVFAuNtRMXvTMLsQxGn3JSha+F7LoDuneRozMGQqg2m0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755574846; c=relaxed/simple;
-	bh=/gLIqa7RvVav7E4orltw/g/YK3cyltUguq+gCaCY7og=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IkSlJ/wIO5G/TRiH6e8+iaij/7J4/x5V8IG/TQgIP0zKCbZZeXrYJMsu4+BG/lcIZ87xgICE8HnH2LLHq2p2vAIWctb/T8SSAUzKLCQul/EanPwvOlpSuwlwJtqlJaiRmbOR/mZnzcOLDx7CwjXhimhHR1W07Q3wKHFTWH4VJ8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=l3FpGNxK; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1755574841;
-	bh=gBKBEI4890AQyW0w74VFtbTv31tLSEPsLn2ZHiznlZo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=l3FpGNxKS25oVqUk1Bpe+Ue2bVVn+DJgDqlwKpdD2ceMyDAU/nZY8dDoIFsJrnueV
-	 XnTkqOSfLfBvpv5r38FV8DtUHL5MuKHiWZM+LXM58irjRAHXcAZhELL9Ar/pCEz5Ks
-	 hvu15nplr0bvG6mL5iUy9yWmP3zY456G1J7QsNjEuMJ6bYYdkoR4yztljxaVYvhiU5
-	 x55kXAVfZLbJ6jBvHlKiv/Bo38tFS5r+LL4Y5ZMIB+uJsEHqSXH1KKap6JCJztc6Gy
-	 TECFd9XyOqwyJCS8tfBNsnlpHB7Q7A6pLrqU9XZRLQQdtyX2UiHCcfqFpGle3VsttR
-	 c+5PZLeiK957A==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c5b2c1pSRz4w2R;
-	Tue, 19 Aug 2025 13:40:40 +1000 (AEST)
-Date: Tue, 19 Aug 2025 13:40:39 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Srinivas Kandagatla <srini@kernel.org>
-Cc: Heiko Stuebner <heiko@sntech.de>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the nvmem tree
-Message-ID: <20250819134039.5742c60e@canb.auug.org.au>
+	s=arc-20240116; t=1755581969; c=relaxed/simple;
+	bh=xdWQ4b8rvo+MH2ay5pky1rY7PB7c2WduGalB2eQ6Y2U=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=c2aj1MfMAaYQ+C/7YWopeKHKTt4nhG5UTmna2yvarCfjEjivplEDNlA3FufBw3AHtEUihaqTxyeaJLsHuYKnqEMYWxYrBKldLuMuMVOr1jzYFJznEloXKeqBzbRbg0afj6fFdt0V2MO9mDZbRcAFfDHNF3txEZpNlhRObks34is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H+G4qTqf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E80E1C4CEF4;
+	Tue, 19 Aug 2025 05:39:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755581969;
+	bh=xdWQ4b8rvo+MH2ay5pky1rY7PB7c2WduGalB2eQ6Y2U=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=H+G4qTqfeQ9H46k+Cctc0tPZeDk5QD/X6+d2rtfJXwF17E+Eh+SvXYIbyBpeO6Aia
+	 kMKRlQPMKNToT98oetzGhNRC7ZJ/D8CgrFCq46Ddy2oYs87kPy1HkBW8d3e+ac4RqY
+	 9hVz/1QQo+QZFnmPIFaWzl6934pqFZyw/vm7XU7Zy2BheER3uE3atUYJvH1HYRE3GI
+	 x8K0MtNuJWupeKhLBitAmB39dwY9t0WbwSVn8/Qa4rOhDbn9Wyw53fjLJIfNQVUj0u
+	 +761MvQnJGwZX5ew/pW8IxiQzyBjT5+vjwt5tiZRMNQNibRtuT7k/ejc5C18tmke33
+	 M88qIrXs+yaWg==
+From: SeongJae Park <sj@kernel.org>
+To: Sang-Heon Jeon <ekffu200098@gmail.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the mm-unstable tree
+Date: Mon, 18 Aug 2025 22:39:26 -0700
+Message-Id: <20250819053926.38696-1-sj@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <CABFDxMFpzS9ynd7OsJWdKwZD-kW0-nu9=HhoFUmiOm5Jkz_QzQ@mail.gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/U7QQ5GIVTgyqJvP0yKHF9EI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---Sig_/U7QQ5GIVTgyqJvP0yKHF9EI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 19 Aug 2025 10:55:13 +0900 Sang-Heon Jeon <ekffu200098@gmail.com> wrote:
 
-Hi all,
+> On Tue, Aug 19, 2025 at 10:14 AM Andrew Morton
+> <akpm@linux-foundation.org> wrote:
+> >
+> > On Tue, 19 Aug 2025 09:59:20 +0900 Sang-Heon Jeon <ekffu200098@gmail.com> wrote:
+> >
+> > > > has these problem(s):
+> > > >
+> > > >   - Target SHA1 does not exist
+> > > >
+> > > > Maybe you meant
+> > > >
+> > > > Fixes: a0b60d083fb6 ("selftests/damon: test no-op commit broke DAMON status")
+> > >
+> > > You're right. I think it might be changed at the point rc1 -> rc2 on
+> > > the mm tree.
+> > > Is there anything I can do? Or maybe Andrew can help?
+> > >
+> > > I didn't mean to bother you guys.  Also, original patch is from here [1]
+> > >
+> > > [1] https://lore.kernel.org/all/20250816014033.190451-1-ekffu200098@gmail.com/
+> >
+> > I deleted the Fixes: tag.  The quilt filename
+> > selftests-damon-test-no-op-commit-broke-damon-status-fix.patch means
+> > "this will be folded into
+> > selftests-damon-test-no-op-commit-broke-damon-status.patch"
+> 
+> Thank you, andrew
 
-After merging the nvmem tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Thank you for Cc-ing me, Sang-Heon.  Thank you for fixing this, Andrew.
 
-In file included from drivers/nvmem/qnap-mcu-eeprom.c:12:
-include/linux/mfd/qnap-mcu.h:13:9: error: unknown type name 'u32'
-   13 |         u32 baud_rate;
-      |         ^~~
-include/linux/mfd/qnap-mcu.h:17:9: error: unknown type name 'bool'
-   17 |         bool usb_led;
-      |         ^~~~
-include/linux/mfd/qnap-mcu.h:1:1: note: 'bool' is defined in header '<stdbo=
-ol.h>'; this is probably fixable by adding '#include <stdbool.h>'
-  +++ |+#include <stdbool.h>
-    1 | /* SPDX-License-Identifier: GPL-2.0+ */
-include/linux/mfd/qnap-mcu.h:21:25: error: unknown type name 'u8'
-   21 |                   const u8 *cmd_data, size_t cmd_data_size,
-      |                         ^~
-include/linux/mfd/qnap-mcu.h:21:39: error: unknown type name 'size_t'
-   21 |                   const u8 *cmd_data, size_t cmd_data_size,
-      |                                       ^~~~~~
-include/linux/mfd/qnap-mcu.h:1:1: note: 'size_t' is defined in header '<std=
-def.h>'; this is probably fixable by adding '#include <stddef.h>'
-  +++ |+#include <stddef.h>
-    1 | /* SPDX-License-Identifier: GPL-2.0+ */
-include/linux/mfd/qnap-mcu.h:22:19: error: unknown type name 'u8'
-   22 |                   u8 *reply_data, size_t reply_data_size);
-      |                   ^~
-include/linux/mfd/qnap-mcu.h:22:35: error: unknown type name 'size_t'
-   22 |                   u8 *reply_data, size_t reply_data_size);
-      |                                   ^~~~~~
-include/linux/mfd/qnap-mcu.h:22:35: note: 'size_t' is defined in header '<s=
-tddef.h>'; this is probably fixable by adding '#include <stddef.h>'
-include/linux/mfd/qnap-mcu.h:24:34: error: unknown type name 'u8'
-   24 |                            const u8 *cmd_data, size_t cmd_data_size=
-);
-      |                                  ^~
-include/linux/mfd/qnap-mcu.h:24:48: error: unknown type name 'size_t'
-   24 |                            const u8 *cmd_data, size_t cmd_data_size=
-);
-      |                                                ^~~~~~
-include/linux/mfd/qnap-mcu.h:24:48: note: 'size_t' is defined in header '<s=
-tddef.h>'; this is probably fixable by adding '#include <stddef.h>'
-drivers/nvmem/qnap-mcu-eeprom.c: In function 'qnap_mcu_eeprom_read_block':
-drivers/nvmem/qnap-mcu-eeprom.c:32:15: error: implicit declaration of funct=
-ion 'qnap_mcu_exec' [-Wimplicit-function-declaration]
-   32 |         ret =3D qnap_mcu_exec(mcu, cmd, sizeof(cmd), reply, bytes +=
- sizeof(cmd));
-      |               ^~~~~~~~~~~~~
+I actually suggested Sang-Heon to add the Fixes: tag, to help Andrew easily
+understand the context.  It didn't make noises before, but everything changes.
+Anyway I'm also responsible for this noise, sorry about that.
 
-Caused by commit
+Another common way to send followup fixes for commits in mm tree is, sending
+the fixup patches as a reply to the broken patch mail thread, with a brief
+explanation of the context for Andrew, like my recent one[1].  I think using
+this way without Fixes: tag in the patch can still help Andrew easily
+understand the context while not making noises.  Sang-Heon, please consider
+using that way if you get similar cases in future.
 
-  117c3f3014a9 ("nvmem: add driver for the eeprom in qnap-mcu controllers")
+[1] https://lore.kernel.org/20250709182843.35812-1-sj@kernel.org/
 
-I have used the nvmem tree from next-20250818 for today.
 
---=20
-Cheers,
-Stephen Rothwell
+Thanks,
+SJ
 
---Sig_/U7QQ5GIVTgyqJvP0yKHF9EI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmij8jcACgkQAVBC80lX
-0Gwnkgf9E4u6lMD7ZTa7eLJ9UbnZcigFFD9XHwCT9yCi9V0J170/p4kLPhjGNdf2
-p+qnyyrqVaDEeyTuYqe0k8cJPrR63iQD8FY7H6D4Bw5TSajV0v+g4jFtgbwqORul
-3beI++/KfO0xi1LUKddqjZF/+MXps6XX/KIdVY/mpgIMTUmlNuwoKZELhQP9ySRv
-iwZuRXn0xLpxkehmEIZrweT7H4oBCtWwLpQzo9wC/Q/a+H691Sa0FqShjS4S/jsK
-Gu0bg5uz4cvZTH6JaFlAB5oHsROTLQnDE44nLIIWME6EdMXI9yh7G5ZMtZ+kzhtX
-ztXRrrO1GXWOM2QrE9Bh+PGDD+x/3g==
-=c8zr
------END PGP SIGNATURE-----
-
---Sig_/U7QQ5GIVTgyqJvP0yKHF9EI--
+[...]
 

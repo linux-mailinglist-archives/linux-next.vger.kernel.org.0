@@ -1,246 +1,148 @@
-Return-Path: <linux-next+bounces-8002-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-7997-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F317DB2B809
-	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 05:50:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E00B9B2B7DD
+	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 05:43:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 371B91887EEC
-	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 03:51:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6416A5E448F
+	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 03:41:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87AF32FE06A;
-	Tue, 19 Aug 2025 03:50:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5067824A043;
+	Tue, 19 Aug 2025 03:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="KnkHt8KQ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="t7A+CCoI";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="KnkHt8KQ";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="t7A+CCoI"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="l3FpGNxK"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5502A27AC54
-	for <linux-next@vger.kernel.org>; Tue, 19 Aug 2025 03:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423DF2D2494;
+	Tue, 19 Aug 2025 03:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755575441; cv=none; b=VjfKjV2XM1a4xfNek5yueZAbro37cI/FL4BRYWbn51cWa2Hl4Ukc4lM7+LclVtr+IzFRTW2VhJlnjXrUejUukqb9Ws0UcPhSR8yyORQlyIYUBx8u1rbgLndm4Jhgb+zAMSLAjxYTur1zsanahXJ5DD7YK+EpHZ+DzjAvkKc7uAA=
+	t=1755574846; cv=none; b=CP6PhgQPUoIxJQTK1AdHV4/4Cl/H2q75uON7zVzKduw2mXV/n8NybQNWWAWryM4yzfaDiFBU3umb/XMUjxmJNQyKoMxFfHncutsUZFiDlyKKrzS0fJxuzQ8yaea+gGJGU68NhcMSK6TOU7fTsBMDOdo86DdgR/nPVmv32ZlQZ8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755575441; c=relaxed/simple;
-	bh=RW4wYWIJhtqqYYBC2aKHqMhZLuAZjsN8UUSvPoQSz4k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D+JC4jUNI/C8sfhXjsWk5dlsGnha7YeXo9MowisA/uC+KEbeNamWpXLglcXRr3wgezQbE8/wDoK7TDPHiIPuYsZSqJbSnDHiBYDOMiPNeeuPNfj6iTrNDbY0ib9OeZvqon6zE7tqqeCaiFTCtQpIbL9/U3uwuacfFJEUKjHqcoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=KnkHt8KQ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=t7A+CCoI; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=KnkHt8KQ; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=t7A+CCoI; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	s=arc-20240116; t=1755574846; c=relaxed/simple;
+	bh=/gLIqa7RvVav7E4orltw/g/YK3cyltUguq+gCaCY7og=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IkSlJ/wIO5G/TRiH6e8+iaij/7J4/x5V8IG/TQgIP0zKCbZZeXrYJMsu4+BG/lcIZ87xgICE8HnH2LLHq2p2vAIWctb/T8SSAUzKLCQul/EanPwvOlpSuwlwJtqlJaiRmbOR/mZnzcOLDx7CwjXhimhHR1W07Q3wKHFTWH4VJ8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=l3FpGNxK; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1755574841;
+	bh=gBKBEI4890AQyW0w74VFtbTv31tLSEPsLn2ZHiznlZo=;
+	h=Date:From:To:Cc:Subject:From;
+	b=l3FpGNxKS25oVqUk1Bpe+Ue2bVVn+DJgDqlwKpdD2ceMyDAU/nZY8dDoIFsJrnueV
+	 XnTkqOSfLfBvpv5r38FV8DtUHL5MuKHiWZM+LXM58irjRAHXcAZhELL9Ar/pCEz5Ks
+	 hvu15nplr0bvG6mL5iUy9yWmP3zY456G1J7QsNjEuMJ6bYYdkoR4yztljxaVYvhiU5
+	 x55kXAVfZLbJ6jBvHlKiv/Bo38tFS5r+LL4Y5ZMIB+uJsEHqSXH1KKap6JCJztc6Gy
+	 TECFd9XyOqwyJCS8tfBNsnlpHB7Q7A6pLrqU9XZRLQQdtyX2UiHCcfqFpGle3VsttR
+	 c+5PZLeiK957A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id A51362125E;
-	Tue, 19 Aug 2025 03:50:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1755575418; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uph1rJ9889A4PIBKKjZ919Kq1UXJobYp7az5TPK9/tQ=;
-	b=KnkHt8KQlUCZfFoG6ZcTPRZ6a670UGyxtB0gniCgM4qD98po3RdR5dsRnJDA1Z8UPYF4Xs
-	VbwIevOMcotk8raJzjtBr35MMpr/38WkleWkba2zyqe03qEsV2O5XxrC+bWzbJSjZRroI5
-	HEPzg3znUbyBGzKXU8oFtE4bOjx3GVU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1755575418;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uph1rJ9889A4PIBKKjZ919Kq1UXJobYp7az5TPK9/tQ=;
-	b=t7A+CCoIua6h+10X01n5925lmUMreQBm7WG/Z8tpYnecUxFoggtBc9SS70ZZL1Zr5GSv23
-	E5xSbEXGKm5HUvBA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=KnkHt8KQ;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=t7A+CCoI
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1755575418; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uph1rJ9889A4PIBKKjZ919Kq1UXJobYp7az5TPK9/tQ=;
-	b=KnkHt8KQlUCZfFoG6ZcTPRZ6a670UGyxtB0gniCgM4qD98po3RdR5dsRnJDA1Z8UPYF4Xs
-	VbwIevOMcotk8raJzjtBr35MMpr/38WkleWkba2zyqe03qEsV2O5XxrC+bWzbJSjZRroI5
-	HEPzg3znUbyBGzKXU8oFtE4bOjx3GVU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1755575418;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uph1rJ9889A4PIBKKjZ919Kq1UXJobYp7az5TPK9/tQ=;
-	b=t7A+CCoIua6h+10X01n5925lmUMreQBm7WG/Z8tpYnecUxFoggtBc9SS70ZZL1Zr5GSv23
-	E5xSbEXGKm5HUvBA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 97EA813686;
-	Tue, 19 Aug 2025 03:50:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id yBHME3j0o2gJawAAD6G6ig
-	(envelope-from <ddiss@suse.de>); Tue, 19 Aug 2025 03:50:16 +0000
-From: David Disseldorp <ddiss@suse.de>
-To: linux-kbuild@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Cc: linux-next@vger.kernel.org,
-	ddiss@suse.de,
-	nsc@kernel.org
-Subject: [PATCH v3 8/8] initramfs_test: add filename padding test case
-Date: Tue, 19 Aug 2025 13:05:51 +1000
-Message-ID: <20250819032607.28727-9-ddiss@suse.de>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250819032607.28727-1-ddiss@suse.de>
-References: <20250819032607.28727-1-ddiss@suse.de>
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c5b2c1pSRz4w2R;
+	Tue, 19 Aug 2025 13:40:40 +1000 (AEST)
+Date: Tue, 19 Aug 2025 13:40:39 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Srinivas Kandagatla <srini@kernel.org>
+Cc: Heiko Stuebner <heiko@sntech.de>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the nvmem tree
+Message-ID: <20250819134039.5742c60e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: A51362125E
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_DN_NONE(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid,suse.de:email];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Spam-Score: -3.01
+Content-Type: multipart/signed; boundary="Sig_/U7QQ5GIVTgyqJvP0yKHF9EI";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Confirm that cpio filenames with multiple trailing zeros (accounted for
-in namesize) extract successfully.
+--Sig_/U7QQ5GIVTgyqJvP0yKHF9EI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: David Disseldorp <ddiss@suse.de>
----
- init/initramfs_test.c | 68 ++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 67 insertions(+), 1 deletion(-)
+Hi all,
 
-diff --git a/init/initramfs_test.c b/init/initramfs_test.c
-index 517e5e04e5ccf..da16b012322b9 100644
---- a/init/initramfs_test.c
-+++ b/init/initramfs_test.c
-@@ -45,8 +45,11 @@ static size_t fill_cpio(struct initramfs_test_cpio *cs, size_t csz, char *out)
- 			c->mtime, c->filesize, c->devmajor, c->devminor,
- 			c->rdevmajor, c->rdevminor, c->namesize, c->csum,
- 			c->fname) + 1;
-+
- 		pr_debug("packing (%zu): %.*s\n", thislen, (int)thislen, pos);
--		off += thislen;
-+		if (thislen != CPIO_HDRLEN + c->namesize)
-+			pr_debug("padded to: %u\n", CPIO_HDRLEN + c->namesize);
-+		off += CPIO_HDRLEN + c->namesize;
- 		while (off & 3)
- 			out[off++] = '\0';
- 
-@@ -383,6 +386,68 @@ static void __init initramfs_test_many(struct kunit *test)
- 	kfree(cpio_srcbuf);
- }
- 
-+/*
-+ * An initramfs filename is namesize in length, including the zero-terminator.
-+ * A filename can be zero-terminated prior to namesize, with the remainder used
-+ * as padding. This can be useful for e.g. alignment of file data segments with
-+ * a 4KB filesystem block, allowing for extent sharing (reflinks) between cpio
-+ * source and destination. This hack works with both GNU cpio and initramfs, as
-+ * long as PATH_MAX isn't exceeded.
-+ */
-+static void __init initramfs_test_fname_pad(struct kunit *test)
-+{
-+	char *err;
-+	size_t len;
-+	struct file *file;
-+	char fdata[] = "this file data is aligned at 4K in the archive";
-+	struct test_fname_pad {
-+		char padded_fname[4096 - CPIO_HDRLEN];
-+		char cpio_srcbuf[CPIO_HDRLEN + PATH_MAX + 3 + sizeof(fdata)];
-+	} *tbufs = kzalloc(sizeof(struct test_fname_pad), GFP_KERNEL);
-+	struct initramfs_test_cpio c[] = { {
-+		.magic = "070701",
-+		.ino = 1,
-+		.mode = S_IFREG | 0777,
-+		.uid = 0,
-+		.gid = 0,
-+		.nlink = 1,
-+		.mtime = 1,
-+		.filesize = 0,
-+		.devmajor = 0,
-+		.devminor = 1,
-+		.rdevmajor = 0,
-+		.rdevminor = 0,
-+		/* align file data at 4K archive offset via padded fname */
-+		.namesize = 4096 - CPIO_HDRLEN,
-+		.csum = 0,
-+		.fname = tbufs->padded_fname,
-+		.data = fdata,
-+		.filesize = sizeof(fdata),
-+	} };
-+
-+	memcpy(tbufs->padded_fname, "padded_fname", sizeof("padded_fname"));
-+	len = fill_cpio(c, ARRAY_SIZE(c), tbufs->cpio_srcbuf);
-+
-+	err = unpack_to_rootfs(tbufs->cpio_srcbuf, len);
-+	KUNIT_EXPECT_NULL(test, err);
-+
-+	file = filp_open(c[0].fname, O_RDONLY, 0);
-+	if (IS_ERR(file)) {
-+		KUNIT_FAIL(test, "open failed");
-+		goto out;
-+	}
-+
-+	/* read back file contents into @cpio_srcbuf and confirm match */
-+	len = kernel_read(file, tbufs->cpio_srcbuf, c[0].filesize, NULL);
-+	KUNIT_EXPECT_EQ(test, len, c[0].filesize);
-+	KUNIT_EXPECT_MEMEQ(test, tbufs->cpio_srcbuf, c[0].data, len);
-+
-+	fput(file);
-+	KUNIT_EXPECT_EQ(test, init_unlink(c[0].fname), 0);
-+out:
-+	kfree(tbufs);
-+}
-+
- /*
-  * The kunit_case/_suite struct cannot be marked as __initdata as this will be
-  * used in debugfs to retrieve results after test has run.
-@@ -394,6 +459,7 @@ static struct kunit_case __refdata initramfs_test_cases[] = {
- 	KUNIT_CASE(initramfs_test_csum),
- 	KUNIT_CASE(initramfs_test_hardlink),
- 	KUNIT_CASE(initramfs_test_many),
-+	KUNIT_CASE(initramfs_test_fname_pad),
- 	{},
- };
- 
--- 
-2.43.0
+After merging the nvmem tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
+In file included from drivers/nvmem/qnap-mcu-eeprom.c:12:
+include/linux/mfd/qnap-mcu.h:13:9: error: unknown type name 'u32'
+   13 |         u32 baud_rate;
+      |         ^~~
+include/linux/mfd/qnap-mcu.h:17:9: error: unknown type name 'bool'
+   17 |         bool usb_led;
+      |         ^~~~
+include/linux/mfd/qnap-mcu.h:1:1: note: 'bool' is defined in header '<stdbo=
+ol.h>'; this is probably fixable by adding '#include <stdbool.h>'
+  +++ |+#include <stdbool.h>
+    1 | /* SPDX-License-Identifier: GPL-2.0+ */
+include/linux/mfd/qnap-mcu.h:21:25: error: unknown type name 'u8'
+   21 |                   const u8 *cmd_data, size_t cmd_data_size,
+      |                         ^~
+include/linux/mfd/qnap-mcu.h:21:39: error: unknown type name 'size_t'
+   21 |                   const u8 *cmd_data, size_t cmd_data_size,
+      |                                       ^~~~~~
+include/linux/mfd/qnap-mcu.h:1:1: note: 'size_t' is defined in header '<std=
+def.h>'; this is probably fixable by adding '#include <stddef.h>'
+  +++ |+#include <stddef.h>
+    1 | /* SPDX-License-Identifier: GPL-2.0+ */
+include/linux/mfd/qnap-mcu.h:22:19: error: unknown type name 'u8'
+   22 |                   u8 *reply_data, size_t reply_data_size);
+      |                   ^~
+include/linux/mfd/qnap-mcu.h:22:35: error: unknown type name 'size_t'
+   22 |                   u8 *reply_data, size_t reply_data_size);
+      |                                   ^~~~~~
+include/linux/mfd/qnap-mcu.h:22:35: note: 'size_t' is defined in header '<s=
+tddef.h>'; this is probably fixable by adding '#include <stddef.h>'
+include/linux/mfd/qnap-mcu.h:24:34: error: unknown type name 'u8'
+   24 |                            const u8 *cmd_data, size_t cmd_data_size=
+);
+      |                                  ^~
+include/linux/mfd/qnap-mcu.h:24:48: error: unknown type name 'size_t'
+   24 |                            const u8 *cmd_data, size_t cmd_data_size=
+);
+      |                                                ^~~~~~
+include/linux/mfd/qnap-mcu.h:24:48: note: 'size_t' is defined in header '<s=
+tddef.h>'; this is probably fixable by adding '#include <stddef.h>'
+drivers/nvmem/qnap-mcu-eeprom.c: In function 'qnap_mcu_eeprom_read_block':
+drivers/nvmem/qnap-mcu-eeprom.c:32:15: error: implicit declaration of funct=
+ion 'qnap_mcu_exec' [-Wimplicit-function-declaration]
+   32 |         ret =3D qnap_mcu_exec(mcu, cmd, sizeof(cmd), reply, bytes +=
+ sizeof(cmd));
+      |               ^~~~~~~~~~~~~
+
+Caused by commit
+
+  117c3f3014a9 ("nvmem: add driver for the eeprom in qnap-mcu controllers")
+
+I have used the nvmem tree from next-20250818 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/U7QQ5GIVTgyqJvP0yKHF9EI
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmij8jcACgkQAVBC80lX
+0Gwnkgf9E4u6lMD7ZTa7eLJ9UbnZcigFFD9XHwCT9yCi9V0J170/p4kLPhjGNdf2
+p+qnyyrqVaDEeyTuYqe0k8cJPrR63iQD8FY7H6D4Bw5TSajV0v+g4jFtgbwqORul
+3beI++/KfO0xi1LUKddqjZF/+MXps6XX/KIdVY/mpgIMTUmlNuwoKZELhQP9ySRv
+iwZuRXn0xLpxkehmEIZrweT7H4oBCtWwLpQzo9wC/Q/a+H691Sa0FqShjS4S/jsK
+Gu0bg5uz4cvZTH6JaFlAB5oHsROTLQnDE44nLIIWME6EdMXI9yh7G5ZMtZ+kzhtX
+ztXRrrO1GXWOM2QrE9Bh+PGDD+x/3g==
+=c8zr
+-----END PGP SIGNATURE-----
+
+--Sig_/U7QQ5GIVTgyqJvP0yKHF9EI--
 

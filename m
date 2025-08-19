@@ -1,127 +1,180 @@
-Return-Path: <linux-next+bounces-8018-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8020-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA2DBB2C784
-	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 16:51:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46271B2CDB6
+	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 22:19:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F4FF17A20D
-	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 14:50:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F11B83AE5A8
+	for <lists+linux-next@lfdr.de>; Tue, 19 Aug 2025 20:19:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F8CE20299E;
-	Tue, 19 Aug 2025 14:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DC4F3112C9;
+	Tue, 19 Aug 2025 20:19:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="QD7tcl5g"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JqrZjmh3"
 X-Original-To: linux-next@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9C12765EA;
-	Tue, 19 Aug 2025 14:49:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2491E20B81B;
+	Tue, 19 Aug 2025 20:19:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755614999; cv=none; b=QkTuNZqShEH3v5hm9qU7wSwHDzxG8nPINM6tBOYOOs7q4ZKS2WlpqzxQNqF90zu+EWOVJQwLLYNxuIizVMdz9C2k0afleT1lq4ZDFgngjRwCnPpA/Xp/IHsI2CTcDTA3frCFKOKkkOzoTt8TvE94sz4aaYNk+KztrcPk2dD/bhk=
+	t=1755634776; cv=none; b=FSDTE/xK5ybC37+OhwjGtKdzxs62SUEHgG9g6LKdJeWBZXNzmpIkIxtlpUIa8x1UyxbGJ5qGihBwq/BALAGgeTquXRQ07mco0JNWXTwTThh7bFx/076bL98H83eY98gdP8W0e7Fcd0GRpUnOaWyt+24onD85BgnA3YmnN48nUhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755614999; c=relaxed/simple;
-	bh=tpqiMTM5UpUIFcGXnDC0RmaB5DPbw815TlZW+yJkuQs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Di4yh47fthth2IDRomYRa7+Z+nHJkSHbNg8MUqgXXhewzuuElMXrnZymgC8M3YjwYlQXQf2DfMvSU4qXAkJMgQDrrm2FivYWABLjRWMsQuIP6Z0iAOMl5BPVlotzwIZZA8unBxiqjhCI4LwwsQYFQ6dEpEXJ9aR7etIIpAWtYWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=QD7tcl5g; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=R83gvwHkvhtEf5FMXSyKQp25l/8zfAekoxVagLjzT18=; b=QD7tcl5gNiF7TA95P5DNco3ds+
-	A6BWit/p3PcIQyIAlTjY4NM4WiV9zy7OZTEQUI5kD894KqVOQBRttyC5SY1fiXzN5qAD+0gxddwo2
-	cWCY17wUrg0kXvLU0UUMP14Nd1mOy4QfbzzXuZ9L9pSDVVj0HK+rZwXZYUn5opOhTYcVwjAHs3Wr1
-	qJNlZ6JBsr3adQdL4AwNs+J7bQ4tCiT9r8tVAQiG4LrFKwtacbeXgwAwISKbv+uULEvAz+bavNkz6
-	WxT+C38TcbAop7MfM1z+sb7AqCFTsngbOXRorFBr2JKuFUW+aTFyD4waN2XKsob5UVcb+Exzm9Jd/
-	yAglE/+A==;
-Received: from i53875a31.versanet.de ([83.135.90.49] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1uoNes-0002aD-FU; Tue, 19 Aug 2025 16:49:54 +0200
-From: Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>
-To: Srinivas Kandagatla <srini@kernel.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>,
- Srinivas Kandagatla <srini@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Lee Jones <lee@kernel.org>
-Subject: Re: linux-next: build failure after merge of the nvmem tree
-Date: Tue, 19 Aug 2025 16:49:53 +0200
-Message-ID: <3593278.som1txNFv6@diego>
-In-Reply-To: <20be4ac4-42c0-422c-bcd4-8d49527f217f@kernel.org>
-References:
- <20250819134039.5742c60e@canb.auug.org.au> <10708013.qUNvkh4Gvn@diego>
- <20be4ac4-42c0-422c-bcd4-8d49527f217f@kernel.org>
+	s=arc-20240116; t=1755634776; c=relaxed/simple;
+	bh=lk8OxgimYrAlq8IpJR6TNtSAapP2lwMnm8oZxDFjXeA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AIl4gM4l+3NLmYqF9PF//5H37as1/XCLPNrgKeW0BxpgQWJ6nwWaT3Jp4OFwG9mOz78eWvU9PZR/qdWciE/BuooBzXLNYF94KksYbfP7ZkTHYJsgLJYMQIi4Ls0kivRSOnJ0+bgOPzSj6NfbTj3zoeCifCsVdsTc7PHBAQq9hwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JqrZjmh3; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755634774; x=1787170774;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lk8OxgimYrAlq8IpJR6TNtSAapP2lwMnm8oZxDFjXeA=;
+  b=JqrZjmh392sq5/HywBJHQaStIrnuIGDYXYNY+LMlam15spq+0C9sy7Vj
+   M2bopGInLHZyiSxIQRgOEG2vigmT2iqS9BjH/blN5a4klKQrquMGe1KMc
+   UtYnHlGdUz2zEeW+LSEI6aEfDGzN4xNVchiQhvt3qRCjDTjhGhGUGK8XJ
+   5XvbhXC8yTzxnvswgTfNnJv8EVkwoq117R/YbWHX53tgs9pCxNai4oNDz
+   +Mu836+BhP7Bq5HSp+I+owr+ewrdMw36P8jQu9gyrnSo0lpFAvK/KJFoc
+   emsi0a54AldR+CH1gqLL51me+TnsW9WXI6Axg4JgOnSnESEr38lx41jTi
+   Q==;
+X-CSE-ConnectionGUID: 7yrFEJRoRfiP1KqEv809gA==
+X-CSE-MsgGUID: 9UXq5iHXTI+66SClRHZ1QA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="69272484"
+X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
+   d="scan'208";a="69272484"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2025 13:19:33 -0700
+X-CSE-ConnectionGUID: GmxLShhgTGmsm1z6tueXOQ==
+X-CSE-MsgGUID: vTc0bphQQb6aDFc1SqHbYw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,302,1747724400"; 
+   d="scan'208";a="167854855"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 19 Aug 2025 13:19:32 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uoSmv-000HPv-1w;
+	Tue, 19 Aug 2025 20:18:52 +0000
+Date: Wed, 20 Aug 2025 04:16:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Disseldorp <ddiss@suse.de>, linux-kbuild@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-next@vger.kernel.org,
+	ddiss@suse.de, nsc@kernel.org
+Subject: Re: [PATCH v3 8/8] initramfs_test: add filename padding test case
+Message-ID: <202508200304.wF1u78il-lkp@intel.com>
+References: <20250819032607.28727-9-ddiss@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250819032607.28727-9-ddiss@suse.de>
 
-Am Dienstag, 19. August 2025, 15:58:32 Mitteleurop=C3=A4ische Sommerzeit sc=
-hrieb Srinivas Kandagatla:
->=20
-> On 8/19/25 2:54 PM, Heiko St=C3=BCbner wrote:
-> > Am Dienstag, 19. August 2025, 13:22:04 Mitteleurop=C3=A4ische Sommerzei=
-t schrieb Srinivas Kandagatla:
-> >> On 8/19/25 12:14 PM, Heiko St=C3=BCbner wrote:
-> >>> Hi,
-> >>>
-> >>> Am Dienstag, 19. August 2025, 05:40:39 Mitteleurop=C3=A4ische Sommerz=
-eit schrieb Stephen Rothwell:
-> >>>> After merging the nvmem tree, today's linux-next build (x86_64
-> >>>> allmodconfig) failed like this:
-> >>>>
-> >>>> In file included from drivers/nvmem/qnap-mcu-eeprom.c:12:
-> >>>> include/linux/mfd/qnap-mcu.h:13:9: error: unknown type name 'u32'
-> >>>>    13 |         u32 baud_rate;
-> >>>>       |         ^~~
-> >>>
-> >>> [...]
-> >>>
-> >>>>
-> >>>> Caused by commit
-> >>>>
-> >>>>   117c3f3014a9 ("nvmem: add driver for the eeprom in qnap-mcu contro=
-llers")
-> >>>>
-> >>>> I have used the nvmem tree from next-20250818 for today.
-> >>>
-> >>> bah, sorry about messing this up.
-> >>>
-> >>> While I encountered this, and fixed that with the pending
-> >>>   https://lore.kernel.org/all/20250804130726.3180806-2-heiko@sntech.d=
-e/
-> >>>
-> >>> I completely missed that the nvmem driver applied alone would break
-> >>> without that change :-( .
-> >>
-> >> I have now reverted this change, @Heiko Please let me know if you want
-> >> to take this to mfd tree or vice-versa.
-> >=20
-> > ok, no worries :-) .
-> >=20
-> > I guess for now, I'll just make sure the header patch gets somewhere.
-> > And I guess I'll re-try the nvmem driver once that has happened,
-> > probably for the next cycle.
->=20
-> I don't think we need to wait till next cycle, Lee can pick up this
-> patch via mfd tree if header change is going via mfd tree.
+Hi David,
 
-Okay ... if that is fine with you then great.
+kernel test robot noticed the following build warnings:
 
-I guess for less confusion, I'll re-submit the driver, reference the header
-patch it needs and you can Ack it to go via the mfd tree.
+[auto build test WARNING on brauner-vfs/vfs.all]
+[also build test WARNING on linus/master v6.17-rc2 next-20250819]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Disseldorp/gen_init_cpio-write-to-fd-instead-of-stdout-stream/20250819-115406
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
+patch link:    https://lore.kernel.org/r/20250819032607.28727-9-ddiss%40suse.de
+patch subject: [PATCH v3 8/8] initramfs_test: add filename padding test case
+config: sparc64-randconfig-r121-20250819 (https://download.01.org/0day-ci/archive/20250820/202508200304.wF1u78il-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 93d24b6b7b148c47a2fa228a4ef31524fa1d9f3f)
+reproduce: (https://download.01.org/0day-ci/archive/20250820/202508200304.wF1u78il-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508200304.wF1u78il-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> init/initramfs_test.c:415:18: sparse: sparse: Initializer entry defined twice
+   init/initramfs_test.c:425:18: sparse:   also defined here
+
+vim +415 init/initramfs_test.c
+
+   388	
+   389	/*
+   390	 * An initramfs filename is namesize in length, including the zero-terminator.
+   391	 * A filename can be zero-terminated prior to namesize, with the remainder used
+   392	 * as padding. This can be useful for e.g. alignment of file data segments with
+   393	 * a 4KB filesystem block, allowing for extent sharing (reflinks) between cpio
+   394	 * source and destination. This hack works with both GNU cpio and initramfs, as
+   395	 * long as PATH_MAX isn't exceeded.
+   396	 */
+   397	static void __init initramfs_test_fname_pad(struct kunit *test)
+   398	{
+   399		char *err;
+   400		size_t len;
+   401		struct file *file;
+   402		char fdata[] = "this file data is aligned at 4K in the archive";
+   403		struct test_fname_pad {
+   404			char padded_fname[4096 - CPIO_HDRLEN];
+   405			char cpio_srcbuf[CPIO_HDRLEN + PATH_MAX + 3 + sizeof(fdata)];
+   406		} *tbufs = kzalloc(sizeof(struct test_fname_pad), GFP_KERNEL);
+   407		struct initramfs_test_cpio c[] = { {
+   408			.magic = "070701",
+   409			.ino = 1,
+   410			.mode = S_IFREG | 0777,
+   411			.uid = 0,
+   412			.gid = 0,
+   413			.nlink = 1,
+   414			.mtime = 1,
+ > 415			.filesize = 0,
+   416			.devmajor = 0,
+   417			.devminor = 1,
+   418			.rdevmajor = 0,
+   419			.rdevminor = 0,
+   420			/* align file data at 4K archive offset via padded fname */
+   421			.namesize = 4096 - CPIO_HDRLEN,
+   422			.csum = 0,
+   423			.fname = tbufs->padded_fname,
+   424			.data = fdata,
+   425			.filesize = sizeof(fdata),
+   426		} };
+   427	
+   428		memcpy(tbufs->padded_fname, "padded_fname", sizeof("padded_fname"));
+   429		len = fill_cpio(c, ARRAY_SIZE(c), tbufs->cpio_srcbuf);
+   430	
+   431		err = unpack_to_rootfs(tbufs->cpio_srcbuf, len);
+   432		KUNIT_EXPECT_NULL(test, err);
+   433	
+   434		file = filp_open(c[0].fname, O_RDONLY, 0);
+   435		if (IS_ERR(file)) {
+   436			KUNIT_FAIL(test, "open failed");
+   437			goto out;
+   438		}
+   439	
+   440		/* read back file contents into @cpio_srcbuf and confirm match */
+   441		len = kernel_read(file, tbufs->cpio_srcbuf, c[0].filesize, NULL);
+   442		KUNIT_EXPECT_EQ(test, len, c[0].filesize);
+   443		KUNIT_EXPECT_MEMEQ(test, tbufs->cpio_srcbuf, c[0].data, len);
+   444	
+   445		fput(file);
+   446		KUNIT_EXPECT_EQ(test, init_unlink(c[0].fname), 0);
+   447	out:
+   448		kfree(tbufs);
+   449	}
+   450	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 

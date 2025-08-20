@@ -1,134 +1,144 @@
-Return-Path: <linux-next+bounces-8023-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8024-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 787FBB2D155
-	for <lists+linux-next@lfdr.de>; Wed, 20 Aug 2025 03:22:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D88D6B2D184
+	for <lists+linux-next@lfdr.de>; Wed, 20 Aug 2025 03:39:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B3B02A4B4E
-	for <lists+linux-next@lfdr.de>; Wed, 20 Aug 2025 01:21:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 802A03AD298
+	for <lists+linux-next@lfdr.de>; Wed, 20 Aug 2025 01:37:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B0B1ABED9;
-	Wed, 20 Aug 2025 01:21:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B409421019C;
+	Wed, 20 Aug 2025 01:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Yl7iJrHc"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Qy7gN1Rn"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EDB71AA7A6;
-	Wed, 20 Aug 2025 01:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5D5286A1;
+	Wed, 20 Aug 2025 01:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755652912; cv=none; b=Ak710wZ5DRXkHQGRBfqPP2N4yLqofa7WSHpp9e1Bq+lsZUaf2IuSm81QUK8nxBRrHeqwC+aev5zWP2SaaOBQLaUtoRtDzFOXbTaZsraxyA7hz84a4jjQS9JduYUrb7H+wnwi2taIyFyPlKZBfQW4DxoieSejx83H0mfmWHowaSI=
+	t=1755653845; cv=none; b=mbyf6vjIUs+Y5J6zTe4F1Jxm23+uB9lSnPEcZEZH1a5Rn8W2U6wePKvVH2X95YVXtcpMJoABfk5nlZj2aF355IUcZZ8y9RJpD2eNVUGypx1jVhGEF76J9ablxGoBHKNcIo+4mxdqutCkMJoQLFfCpWz5TWwtFxv5jP1XYjNkorw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755652912; c=relaxed/simple;
-	bh=YEUK+xkgcAHI26fmPUIN7lr4NhSAUCC76VgSwSocTrQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dXuMTbS1dAYiwS+288z9XrbSgbESdpGulPcwT1L7j93GRwQWYTr/CzXdur0Wp58alCvDIeW4E6BZAJDfi94JeGU9daLlgONbFLVzjXMQszEE2m2zZcXzwWbcMv2u14RHNdODZE6tMqik26FobryeleQjU9YSyAfO4qESlLoRPbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Yl7iJrHc; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1755653845; c=relaxed/simple;
+	bh=3l4AP6P6W7OPXFwMyEvTL+p2EFVDIgZx0+8ievLaaMI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=sPewquXNyLEPLD+Be/6Z/orGr6eAqV6cSHYJEWIowgaqy9VYH642ZUhe3rIFeSYRjk4SEspo8xD6hDyHNP0gAYfyN+pMTSM8QWkdGy+Hpqcdaid+kmkAXI5UQnJZkldwM4Uo6+Y+TMgJilxvtLK54VBIKMVx421gRaZaUe28xFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Qy7gN1Rn; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1755652906;
-	bh=Cax4wsit9vDfDJ2iuUp1ECYmVzYSecXd37uVDPRDpBQ=;
+	s=202503; t=1755653840;
+	bh=e3ZdJN5i39kNXj8YoePBj3K0UUTsdY/fW4tO1Z88j40=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Yl7iJrHcVMSN7pKJYQCxvuYTYI2uAh6cMvOq3cRTI2j90MpEN/ZfIW90FX+Ja7OuN
-	 HYtOUbmudABUn8xCqifqWQwAgV6XKR0rRjvRXgr2Kx8fnKU4fWKlwFbdxGKrlVNfbS
-	 wbSuv2LtgIToIEeSIFE4U4W6MUMwtvxmZI6wMmnXsE6vKIvu/xnR7t6a/vUW1uLNrg
-	 yysPfHDLoY5BMaiRu6fXRj1rlRpTcc8FXQrLe00fu4IuQXZybSw63Cy02RpPIRF/oD
-	 DiWUP81na6yb1T9/vuIl4rX8NBZ5AzYlOALmA4ftRwgj/VESHF0sAxlrSh6YB4h+QG
-	 EkhnLxrb+QzEg==
+	b=Qy7gN1RnV7srLB0MQrsfkcT/EGp+Yuugi/PeR1z7bjbSbyr/fShnxeQY8makxpCjY
+	 10hTVd9sC8gVVVr4XRqHOsO87nfau5dwfo+8M+NJElGc4ApXQUSZo/KfN+xi/9of58
+	 pVokcXCMfYoQPmcZN9U5FWtt6vZIQcaiKos7Sq0qNORZLfeAOB129rNz79YaPdbZfI
+	 /eeFm0fdtLiUE8Ek7/wzvHZ48OXVCX9j9ANLYjqBIMMlKlIieP5YSLgRg8xoQhvorj
+	 RPXKzzHjnGrJKj5rYsO4+du/vVWOGm5hvKN3ad3hDcRQ2+Ad31sJJb1p54QMmMfBrM
+	 GMdC81ZHp7mrQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c67vt1Ltyz4w2K;
-	Wed, 20 Aug 2025 11:21:46 +1000 (AEST)
-Date: Wed, 20 Aug 2025 11:21:44 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c68Fr4fSbz4w2K;
+	Wed, 20 Aug 2025 11:37:20 +1000 (AEST)
+Date: Wed, 20 Aug 2025 11:37:20 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Dave Airlie <airlied@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>
-Cc: Beata Michalska <beata.michalska@arm.com>, Danilo Krummrich
- <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, DRI
- <dri-devel@lists.freedesktop.org>, Intel Graphics
- <intel-gfx@lists.freedesktop.org>, Linux Kernel Mailing List
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the drm tree with the drm-misc-fixes
- tree
-Message-ID: <20250820112144.43714c90@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Liao Yuanhong <liaoyuanhong@vivo.com>, Miguel
+ Ojeda <miguel.ojeda.sandonis@gmail.com>
+Subject: linux-next: manual merge of the input tree with Linus' tree
+Message-ID: <20250820113720.25631f7f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/87Z0/l_jCzW6qIQhqxZCqCL";
+Content-Type: multipart/signed; boundary="Sig_/mDAmEmg6WSH.YxSEqrGq6tk";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/87Z0/l_jCzW6qIQhqxZCqCL
+--Sig_/mDAmEmg6WSH.YxSEqrGq6tk
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the drm tree got a conflict in:
+Today's linux-next merge of the input tree got a conflict in:
 
-  drivers/gpu/drm/nova/file.rs
+  include/linux/sprintf.h
 
 between commit:
 
-  db2e7bcee11c ("drm: nova-drm: fix 32-bit arm build")
+  0dec7201788b ("sprintf.h requires stdarg.h")
 
-from the drm-misc-fixes tree and commit:
+from Linus' tree (v6.16) and commit:
 
-  94febfb5bcfb ("rust: drm: Drop the use of Opaque for ioctl arguments")
+  be06b53d3af0 ("lib/vsprintf: include stdarg.h from sprintf.h to provide v=
+a_list")
 
-from the drm tree.
+from the input tree.
 
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+This only happens because the input tree is still based on v6.16-rc1.
+
+I fixed it up (I applied the following merge fix patch) and can carry the
+fix as necessary. This is now fixed as far as linux-next is concerned,
+but any non trivial conflicts should be mentioned to your upstream
+maintainer when your tree is submitted for merging.  You may also want
+to consider cooperating with the maintainer of the conflicting tree to
+minimise any particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 20 Aug 2025 11:31:19 +1000
+Subject: [PATCH] input: remove second addition of <linux/stdarg.h>
+
+Cc: Liao Yuanhong <liaoyuanhong@vivo.com>
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ include/linux/sprintf.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/include/linux/sprintf.h b/include/linux/sprintf.h
+index 8cb32b777d0b..e57a6d6fbd93 100644
+--- a/include/linux/sprintf.h
++++ b/include/linux/sprintf.h
+@@ -5,7 +5,6 @@
+ #include <linux/compiler_attributes.h>
+ #include <linux/stdarg.h>
+ #include <linux/types.h>
+-#include <linux/stdarg.h>
+=20
+ int num_to_str(char *buf, int size, unsigned long long num, unsigned int w=
+idth);
+=20
+--=20
+2.50.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/nova/file.rs
-index 4fe62cf98a23,7e7d4e2de2fb..000000000000
---- a/drivers/gpu/drm/nova/file.rs
-+++ b/drivers/gpu/drm/nova/file.rs
-@@@ -39,8 -36,7 +36,8 @@@ impl File=20
-              _ =3D> return Err(EINVAL),
-          };
- =20
- -        getparam.value =3D value;
- +        #[allow(clippy::useless_conversion)]
--         getparam.set_value(value.into());
-++        getparam.value =3D value.into();
- =20
-          Ok(0)
-      }
-
---Sig_/87Z0/l_jCzW6qIQhqxZCqCL
+--Sig_/mDAmEmg6WSH.YxSEqrGq6tk
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmilIygACgkQAVBC80lX
-0GwchQf+M0lvHfwjGjfP6fpmNDnpbu+t+DHfUtBGIANf3KbiJW+/D/aHMmMil/I8
-gATE4939NH5aVAe+LZ1BzF6KcPJN0FfjBvCg7SIIcyyzPgGLv6jVt2W8vCo4R0Ma
-/xD5jNVLCa/jnUxDFz53SaAvqU+C8meNWcuYNDSvFEoUf1FdPQ0JL0D1Xwo8bWuz
-OvxVbYnAl0f2SwefYCo5HRCDPnDedioDux0VPzwMIsW2WWbljs5lGSnt8tZpINxc
-FO8mOKO1YK/YzvS90YKOsp+vnoqG2LWKLIg5GtsgHuzAGnbVdN1KdwNkbBYS+ERc
-CQk0uWyqKHiSmj834aBzOOaEHGIxKg==
-=a+Tu
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmilJtAACgkQAVBC80lX
+0Gz9mwgAgThqKBwxHdNjKleF6d+Mz3+7htjrWjlXxnHkaWWowkiSERkixSximbPV
+1MYFjAEuCanguPQTTP+la6qKLIvT8npBP8JYtivND+3LKs7BFAKlAMBDASid5pVn
+itOUtC/45abf5+Thaif+OeRGJimS/J/N+3HP0HmxRk/w0tOyYPyVBohmjWI8R/gA
+guhouqJF3tMi2C3yXDAQn/PinIxe82MwleBJ/9HDgtPxz1Ya5+mMsDisLrxlruwO
+SSiDaVkAQBkQPN5Q1oJ0GBbpjqT9C7VpwTKZ9U6K5BYwe6cqsgoFDIeoQCmkCC2W
+0gLkJ3cVk4k4WLaqDVoHa4i8o4w9RQ==
+=GKKT
 -----END PGP SIGNATURE-----
 
---Sig_/87Z0/l_jCzW6qIQhqxZCqCL--
+--Sig_/mDAmEmg6WSH.YxSEqrGq6tk--
 

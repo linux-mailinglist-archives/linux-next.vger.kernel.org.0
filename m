@@ -1,154 +1,134 @@
-Return-Path: <linux-next+bounces-8022-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8023-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12DF4B2D13D
-	for <lists+linux-next@lfdr.de>; Wed, 20 Aug 2025 03:14:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 787FBB2D155
+	for <lists+linux-next@lfdr.de>; Wed, 20 Aug 2025 03:22:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6B66F7BBB89
-	for <lists+linux-next@lfdr.de>; Wed, 20 Aug 2025 01:12:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B3B02A4B4E
+	for <lists+linux-next@lfdr.de>; Wed, 20 Aug 2025 01:21:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57EB319F40B;
-	Wed, 20 Aug 2025 01:13:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B0B1ABED9;
+	Wed, 20 Aug 2025 01:21:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="sGggO+fp";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="+asoAwJ2";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="sGggO+fp";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="+asoAwJ2"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Yl7iJrHc"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBDA13A3F7
-	for <linux-next@vger.kernel.org>; Wed, 20 Aug 2025 01:13:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EDB71AA7A6;
+	Wed, 20 Aug 2025 01:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755652426; cv=none; b=TonukWzm2x0ulP0s0jWiSoSGJoyyqY7af+r+SqIl1kjXdMWRgPunKiT1V0mHOhsY1alJZra/tY6DBc7X9HqSm3ECwf7vOQfDvbQ6WP3TGnpZon9M/oF6zntRlQTMvnT52HwQ5PMr4qcJxzCzaXgvxC8o9K4i90IeGvf8idP3VuU=
+	t=1755652912; cv=none; b=Ak710wZ5DRXkHQGRBfqPP2N4yLqofa7WSHpp9e1Bq+lsZUaf2IuSm81QUK8nxBRrHeqwC+aev5zWP2SaaOBQLaUtoRtDzFOXbTaZsraxyA7hz84a4jjQS9JduYUrb7H+wnwi2taIyFyPlKZBfQW4DxoieSejx83H0mfmWHowaSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755652426; c=relaxed/simple;
-	bh=kxnX6ob31RX3s+OkNVF7X8IV7TZoAcVr2PrPqU8Vx4w=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YcgPM1v/VuuADHVQGH9m7S2TgfDjv2dw3yMzviVHWnN9oAHG/nQt+IGCrrNtf5FgdXk6BOz5D/UP8SFI+1nHF6N4Jbt0WV3UR+rVdBuctdO8I65/MSc1Ek7liEJDFtGt6wvYLDzr6LKm+LSdcnAb8xM/1hr0gPUENZUoAwlw8/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=sGggO+fp; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=+asoAwJ2; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=sGggO+fp; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=+asoAwJ2; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	s=arc-20240116; t=1755652912; c=relaxed/simple;
+	bh=YEUK+xkgcAHI26fmPUIN7lr4NhSAUCC76VgSwSocTrQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dXuMTbS1dAYiwS+288z9XrbSgbESdpGulPcwT1L7j93GRwQWYTr/CzXdur0Wp58alCvDIeW4E6BZAJDfi94JeGU9daLlgONbFLVzjXMQszEE2m2zZcXzwWbcMv2u14RHNdODZE6tMqik26FobryeleQjU9YSyAfO4qESlLoRPbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Yl7iJrHc; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1755652906;
+	bh=Cax4wsit9vDfDJ2iuUp1ECYmVzYSecXd37uVDPRDpBQ=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Yl7iJrHcVMSN7pKJYQCxvuYTYI2uAh6cMvOq3cRTI2j90MpEN/ZfIW90FX+Ja7OuN
+	 HYtOUbmudABUn8xCqifqWQwAgV6XKR0rRjvRXgr2Kx8fnKU4fWKlwFbdxGKrlVNfbS
+	 wbSuv2LtgIToIEeSIFE4U4W6MUMwtvxmZI6wMmnXsE6vKIvu/xnR7t6a/vUW1uLNrg
+	 yysPfHDLoY5BMaiRu6fXRj1rlRpTcc8FXQrLe00fu4IuQXZybSw63Cy02RpPIRF/oD
+	 DiWUP81na6yb1T9/vuIl4rX8NBZ5AzYlOALmA4ftRwgj/VESHF0sAxlrSh6YB4h+QG
+	 EkhnLxrb+QzEg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 01DAC1F785;
-	Wed, 20 Aug 2025 01:13:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1755652423; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KIfi0a7kuPd0Ua7J5EBu0gSrCmMoU1TlizTgsIHHqYU=;
-	b=sGggO+fpuZq7yDwp1IP6WIhDZj9s2ZYrw+p9WY0qYnAXw5uvvRw0XIh3MLJpfUimrYTpkO
-	OnsuHK5uhCTA9BCzldf1HA15+irlxFOd0YMeGYSiSCwfFZjSkV38+gZoc8uaVLOUXyjcJJ
-	d2Xs/fi/9z23PcKNxfj5U0zIzCvTmCo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1755652423;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KIfi0a7kuPd0Ua7J5EBu0gSrCmMoU1TlizTgsIHHqYU=;
-	b=+asoAwJ2Sjvw1fwYuGY0xV1mbeQz9YCgztaWtZmWB7ufmv5J8RIPOlBjZKIPufEI6751La
-	Xo/OZIjCPUeZVsBQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1755652423; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KIfi0a7kuPd0Ua7J5EBu0gSrCmMoU1TlizTgsIHHqYU=;
-	b=sGggO+fpuZq7yDwp1IP6WIhDZj9s2ZYrw+p9WY0qYnAXw5uvvRw0XIh3MLJpfUimrYTpkO
-	OnsuHK5uhCTA9BCzldf1HA15+irlxFOd0YMeGYSiSCwfFZjSkV38+gZoc8uaVLOUXyjcJJ
-	d2Xs/fi/9z23PcKNxfj5U0zIzCvTmCo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1755652423;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KIfi0a7kuPd0Ua7J5EBu0gSrCmMoU1TlizTgsIHHqYU=;
-	b=+asoAwJ2Sjvw1fwYuGY0xV1mbeQz9YCgztaWtZmWB7ufmv5J8RIPOlBjZKIPufEI6751La
-	Xo/OZIjCPUeZVsBQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9B8D113867;
-	Wed, 20 Aug 2025 01:13:40 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id gs/LFEQhpWjadQAAD6G6ig
-	(envelope-from <ddiss@suse.de>); Wed, 20 Aug 2025 01:13:40 +0000
-Date: Wed, 20 Aug 2025 11:13:34 +1000
-From: David Disseldorp <ddiss@suse.de>
-To: kernel test robot <lkp@intel.com>
-Cc: linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- oe-kbuild-all@lists.linux.dev, linux-next@vger.kernel.org, nsc@kernel.org
-Subject: Re: [PATCH v3 8/8] initramfs_test: add filename padding test case
-Message-ID: <20250820111334.51e91938.ddiss@suse.de>
-In-Reply-To: <202508200304.wF1u78il-lkp@intel.com>
-References: <20250819032607.28727-9-ddiss@suse.de>
-	<202508200304.wF1u78il-lkp@intel.com>
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c67vt1Ltyz4w2K;
+	Wed, 20 Aug 2025 11:21:46 +1000 (AEST)
+Date: Wed, 20 Aug 2025 11:21:44 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Dave Airlie <airlied@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>
+Cc: Beata Michalska <beata.michalska@arm.com>, Danilo Krummrich
+ <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, DRI
+ <dri-devel@lists.freedesktop.org>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the drm tree with the drm-misc-fixes
+ tree
+Message-ID: <20250820112144.43714c90@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/87Z0/l_jCzW6qIQhqxZCqCL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/87Z0/l_jCzW6qIQhqxZCqCL
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid]
-X-Spam-Flag: NO
-X-Spam-Score: -3.30
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 20 Aug 2025 04:16:48 +0800, kernel test robot wrote:
+Hi all,
 
-> sparse warnings: (new ones prefixed by >>)
-> >> init/initramfs_test.c:415:18: sparse: sparse: Initializer entry defined twice  
->    init/initramfs_test.c:425:18: sparse:   also defined here
-...
->    407		struct initramfs_test_cpio c[] = { {
->    408			.magic = "070701",
->    409			.ino = 1,
->    410			.mode = S_IFREG | 0777,
->    411			.uid = 0,
->    412			.gid = 0,
->    413			.nlink = 1,
->    414			.mtime = 1,
->  > 415			.filesize = 0,  
-...
->    425			.filesize = sizeof(fdata),
->    426		} };
+Today's linux-next merge of the drm tree got a conflict in:
 
-Thanks. I can send a v4 patchset to address this, or otherwise happy to
-have line 415 removed by a maintainer when merged.
+  drivers/gpu/drm/nova/file.rs
+
+between commit:
+
+  db2e7bcee11c ("drm: nova-drm: fix 32-bit arm build")
+
+from the drm-misc-fixes tree and commit:
+
+  94febfb5bcfb ("rust: drm: Drop the use of Opaque for ioctl arguments")
+
+from the drm tree.
+
+I fixed it up (I think - see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/nova/file.rs
+index 4fe62cf98a23,7e7d4e2de2fb..000000000000
+--- a/drivers/gpu/drm/nova/file.rs
++++ b/drivers/gpu/drm/nova/file.rs
+@@@ -39,8 -36,7 +36,8 @@@ impl File=20
+              _ =3D> return Err(EINVAL),
+          };
+ =20
+ -        getparam.value =3D value;
+ +        #[allow(clippy::useless_conversion)]
+-         getparam.set_value(value.into());
+++        getparam.value =3D value.into();
+ =20
+          Ok(0)
+      }
+
+--Sig_/87Z0/l_jCzW6qIQhqxZCqCL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmilIygACgkQAVBC80lX
+0GwchQf+M0lvHfwjGjfP6fpmNDnpbu+t+DHfUtBGIANf3KbiJW+/D/aHMmMil/I8
+gATE4939NH5aVAe+LZ1BzF6KcPJN0FfjBvCg7SIIcyyzPgGLv6jVt2W8vCo4R0Ma
+/xD5jNVLCa/jnUxDFz53SaAvqU+C8meNWcuYNDSvFEoUf1FdPQ0JL0D1Xwo8bWuz
+OvxVbYnAl0f2SwefYCo5HRCDPnDedioDux0VPzwMIsW2WWbljs5lGSnt8tZpINxc
+FO8mOKO1YK/YzvS90YKOsp+vnoqG2LWKLIg5GtsgHuzAGnbVdN1KdwNkbBYS+ERc
+CQk0uWyqKHiSmj834aBzOOaEHGIxKg==
+=a+Tu
+-----END PGP SIGNATURE-----
+
+--Sig_/87Z0/l_jCzW6qIQhqxZCqCL--
 

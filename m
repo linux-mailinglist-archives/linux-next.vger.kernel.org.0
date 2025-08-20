@@ -1,140 +1,143 @@
-Return-Path: <linux-next+bounces-8036-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8037-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93F01B2DA03
-	for <lists+linux-next@lfdr.de>; Wed, 20 Aug 2025 12:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C4FEB2E503
+	for <lists+linux-next@lfdr.de>; Wed, 20 Aug 2025 20:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55A676859F6
-	for <lists+linux-next@lfdr.de>; Wed, 20 Aug 2025 10:30:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8935A24513
+	for <lists+linux-next@lfdr.de>; Wed, 20 Aug 2025 18:31:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 576D12DA77F;
-	Wed, 20 Aug 2025 10:30:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1C1B274650;
+	Wed, 20 Aug 2025 18:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mek/xkFR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cBUFNct9"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1B81D5170;
-	Wed, 20 Aug 2025 10:30:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450DB259C93;
+	Wed, 20 Aug 2025 18:31:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755685819; cv=none; b=itmME0eOZECrHLsTEinIgNfPaqgLd1BibNA2Domxh/k7dTxh93utAClokTbANl3mJKuFOgUV8nf1TvrT+0TxNoMsImXyCf4s7EVeK67XQYA3lcUoNoJDo3e/5/4rzmspdoM6hdO/uZ3CUi1PlcigqDGHwcF7tsU9ttUasyDuhmE=
+	t=1755714696; cv=none; b=CXtaDbMIsZaqFWUSqb/b/TXTfHmarXrnalLhnIdJqXZr9DqD5GAfezfEPxnVWWokQQjgWnTB/tDznM1NRoUOylAZBrkSDXCTIUGKBXIAgus/EPqyfr0FPNfMAb/hKZpVyjoWH3CYwQrmwT115SKPW2dNcuHi+qOOqeD8S90ZN2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755685819; c=relaxed/simple;
-	bh=P/oQpoiWxChiJCM1oIYIzsoGt24WyUjDZ+cuYN5z6pQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=BqbrEAQogl/gGm6snemvRR7bUcqoF5KDVyApkSwLgCI53UJj2OsmuO8Zyee0iCjlpq8FOx/1EZCxMu6xhzZorPZPg3XPJ1hyrZj0GLrTZTmhIqdC8DMNxNy7twHHZbWjAWgF6QVk4xDZfnPcN2onbnMbA3HGjIQWpwrBQfgusmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mek/xkFR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F143EC4CEEB;
-	Wed, 20 Aug 2025 10:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755685817;
-	bh=P/oQpoiWxChiJCM1oIYIzsoGt24WyUjDZ+cuYN5z6pQ=;
-	h=Date:To:From:Subject:Cc:References:In-Reply-To:From;
-	b=mek/xkFRir8nUYuV8F1j/oqDG1hgTdyrxPmeVdti2LpLwZlLCLmps8ZfTGdeBJacW
-	 C11ZNiZGRh0uV4rvkOKwRgUwCVhNEr6M+jiqHhJ23E+4JqvpPGo0heqw0kovLgc9Wg
-	 FB81vfneu0FRe+UaDiuywgLJ1sqh7S7db58E1Uv6aXIoTMtFaDLJdTHc9xN+Go7w0o
-	 MRvrGPm/LqbmgzlIO0TVyugmmfEXUXo21xyy7aEb54oGvV5OsQgrC61JF8fN/+KYIb
-	 dsbJ1EUGNHIQFM5vQsbcIOM7TEXlaxMXZeiNT3urYcbmLFELs4CkYjQAY0QKFAeiVK
-	 DtuZeYy1aosKg==
+	s=arc-20240116; t=1755714696; c=relaxed/simple;
+	bh=odKuUwppF1tAKXek3OL0+/6yPLjV/i+MWkX+owgQf/A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WMbAGjqblL6MeAdyzevoCF2nFyghxbGiWXJO27SQ3hISf0D/1sITTNq4EgAtaRJ7xrUwUq/KR7Rhr+m4HGESHdKLM3l0P/guuKGTzIzkacMB87nun7mbOpOBte8+xsfyldBa4KV3S/uNyAOfuOUZHHaSvWYO3gvlHXBRqwvqfqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cBUFNct9; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755714695; x=1787250695;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=odKuUwppF1tAKXek3OL0+/6yPLjV/i+MWkX+owgQf/A=;
+  b=cBUFNct985PfJhhv3H5Q2PUlk8P3xPd6E4Wn+uUtSd9dBKUuwZC1UaJz
+   pWFqayT2ze4Pg2r9LLa1lWfL7YMI5VHp9qGIJarB2U/2hvwIoGWwcgbEI
+   UPG6Xg2lYLrG5Fp7qyDtBTEpw0V/jAV2i5LDC1FO4q/LK/Hf4k2Bnywga
+   LLlv5DuXrwCeFeCtTuD0x8ptG3VeaU2UG2cGBXPfWD481pA8N+IJoDDao
+   UZiglHk4Ex6JnQW5p8GN+0BWF1kwdd63ncGhizfPg8ctuaV2BGTOI/3fG
+   c40wSkN7UqCdPHvFPzFC83iSGBkRs+pOpH8rMbWp468rqdHDCsi53f4dh
+   A==;
+X-CSE-ConnectionGUID: lRm4LKnNQvKd7TZ5zBcdzA==
+X-CSE-MsgGUID: z1x7embQSbKK3T4+J4VIcg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="60620377"
+X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
+   d="scan'208";a="60620377"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 11:31:32 -0700
+X-CSE-ConnectionGUID: DWjqdWMDTSKUkQgSr9qtaw==
+X-CSE-MsgGUID: L0ZGg7U+QJiBRvH/Uax2HQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
+   d="scan'208";a="167406830"
+Received: from lkp-server02.sh.intel.com (HELO 4ea60e6ab079) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 20 Aug 2025 11:31:29 -0700
+Received: from kbuild by 4ea60e6ab079 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uonao-000Jb9-2t;
+	Wed, 20 Aug 2025 18:31:26 +0000
+Date: Thu, 21 Aug 2025 02:31:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Marie Zhussupova <marievic@google.com>, marievictoria875@gmail.com,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	David Gow <davidgow@google.com>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	intel-xe@lists.freedesktop.org, kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] drm/xe/tests: Fix some additional gen_params
+ signatures
+Message-ID: <202508210248.4CiPvWGD-lkp@intel.com>
+References: <20250819073434.1411114-1-davidgow@google.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 20 Aug 2025 12:30:14 +0200
-Message-Id: <DC76OGHHB0NH.2150TC0DHRN8A@kernel.org>
-To: "Stephen Rothwell" <sfr@canb.auug.org.au>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: linux-next: manual merge of the drm tree with the
- drm-misc-fixes tree
-Cc: "Dave Airlie" <airlied@redhat.com>, "Simona Vetter"
- <simona.vetter@ffwll.ch>, "Beata Michalska" <beata.michalska@arm.com>,
- "Miguel Ojeda" <ojeda@kernel.org>, "DRI" <dri-devel@lists.freedesktop.org>,
- "Intel Graphics" <intel-gfx@lists.freedesktop.org>, "Linux Kernel Mailing
- List" <linux-kernel@vger.kernel.org>, "Linux Next Mailing List"
- <linux-next@vger.kernel.org>
-References: <20250820112144.43714c90@canb.auug.org.au>
-In-Reply-To: <20250820112144.43714c90@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250819073434.1411114-1-davidgow@google.com>
 
-On Wed Aug 20, 2025 at 3:21 AM CEST, Stephen Rothwell wrote:
-> Hi all,
->
-> Today's linux-next merge of the drm tree got a conflict in:
->
->   drivers/gpu/drm/nova/file.rs
->
-> between commit:
->
->   db2e7bcee11c ("drm: nova-drm: fix 32-bit arm build")
->
-> from the drm-misc-fixes tree and commit:
->
->   94febfb5bcfb ("rust: drm: Drop the use of Opaque for ioctl arguments")
->
-> from the drm tree.
->
-> I fixed it up (I think - see below) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
->
-> --=20
-> Cheers,
-> Stephen Rothwell
->
-> diff --cc drivers/gpu/drm/nova/file.rs
-> index 4fe62cf98a23,7e7d4e2de2fb..000000000000
-> --- a/drivers/gpu/drm/nova/file.rs
-> +++ b/drivers/gpu/drm/nova/file.rs
-> @@@ -39,8 -36,7 +36,8 @@@ impl File=20
->               _ =3D> return Err(EINVAL),
->           };
->  =20
->  -        getparam.value =3D value;
->  +        #[allow(clippy::useless_conversion)]
-> -         getparam.set_value(value.into());
-> ++        getparam.value =3D value.into();
->  =20
->           Ok(0)
->       }
+Hi David,
 
-I think this resolution doesn't compile, since attributes on expressions ar=
-e
-behind an unstable feature flag.
+kernel test robot noticed the following build errors:
 
-I assume your config does not have CONFIG_DRM_NOVA=3D{y,m}.
+[auto build test ERROR on shuah-kselftest/kunit]
+[also build test ERROR on linus/master v6.17-rc2 next-20250820]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-The resolution in [1] is the one I came up with in the drm-tip tree.
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Gow/kunit-Only-output-a-test-plan-if-we-re-using-kunit_array_gen_params/20250819-154731
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
+patch link:    https://lore.kernel.org/r/20250819073434.1411114-1-davidgow%40google.com
+patch subject: [PATCH 1/2] drm/xe/tests: Fix some additional gen_params signatures
+config: x86_64-randconfig-071-20250820 (https://download.01.org/0day-ci/archive/20250821/202508210248.4CiPvWGD-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250821/202508210248.4CiPvWGD-lkp@intel.com/reproduce)
 
-I should probably have given you a head-up on this conflict, sorry for that=
-.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202508210248.4CiPvWGD-lkp@intel.com/
 
-[1]
+All errors (new ones prefixed by >>):
 
-diff --cc drivers/gpu/drm/nova/file.rs
-index 4fe62cf98a23,7e7d4e2de2fb..90b9d2d0ec4a
---- a/drivers/gpu/drm/nova/file.rs
-+++ b/drivers/gpu/drm/nova/file.rs
-@@@ -39,8 -36,7 +36,7 @@@ impl File
-              _ =3D> return Err(EINVAL),
-          };
+   In file included from <built-in>:4:
+>> drivers/gpu/drm/xe/tests/xe_pci_test.h:28:49: error: declaration of 'struct kunit' will not be visible outside of this function [-Werror,-Wvisibility]
+      28 | const void *xe_pci_graphics_ip_gen_param(struct kunit *test, const void *prev, char *desc);
+         |                                                 ^
+   drivers/gpu/drm/xe/tests/xe_pci_test.h:29:46: error: declaration of 'struct kunit' will not be visible outside of this function [-Werror,-Wvisibility]
+      29 | const void *xe_pci_media_ip_gen_param(struct kunit *test, const void *prev, char *desc);
+         |                                              ^
+   drivers/gpu/drm/xe/tests/xe_pci_test.h:30:40: error: declaration of 'struct kunit' will not be visible outside of this function [-Werror,-Wvisibility]
+      30 | const void *xe_pci_id_gen_param(struct kunit *test, const void *prev, char *desc);
+         |                                        ^
+   drivers/gpu/drm/xe/tests/xe_pci_test.h:31:49: error: declaration of 'struct kunit' will not be visible outside of this function [-Werror,-Wvisibility]
+      31 | const void *xe_pci_live_device_gen_param(struct kunit *test, const void *prev, char *desc);
+         |                                                 ^
+   4 errors generated.
 
--         #[allow(clippy::useless_conversion)]
--         getparam.set_value(value.into());
- -        getparam.value =3D value;
-++        getparam.value =3D Into::<u64>::into(value);
 
-          Ok(0)
-      }
+vim +28 drivers/gpu/drm/xe/tests/xe_pci_test.h
 
+    27	
+  > 28	const void *xe_pci_graphics_ip_gen_param(struct kunit *test, const void *prev, char *desc);
+    29	const void *xe_pci_media_ip_gen_param(struct kunit *test, const void *prev, char *desc);
+    30	const void *xe_pci_id_gen_param(struct kunit *test, const void *prev, char *desc);
+    31	const void *xe_pci_live_device_gen_param(struct kunit *test, const void *prev, char *desc);
+    32	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 

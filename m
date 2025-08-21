@@ -1,49 +1,83 @@
-Return-Path: <linux-next+bounces-8065-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8066-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EAC1B2FA61
-	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 15:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ACA6BB2FA79
+	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 15:32:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2E591C85E45
-	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 13:26:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EE22189C62B
+	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 13:30:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10B793375A8;
-	Thu, 21 Aug 2025 13:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ED8A335BDE;
+	Thu, 21 Aug 2025 13:29:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="D182FiHl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WjckZDPu"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D06A2335BC8;
-	Thu, 21 Aug 2025 13:26:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE8433D8
+	for <linux-next@vger.kernel.org>; Thu, 21 Aug 2025 13:29:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755782763; cv=none; b=HEDfPygh6WIGKGNnCT/ev+wvt33x5hxuw0+ps2xIILCgRhqLPKD9aeMivRh/V8bVYHYRCj8jwK6K+bpaLfFdHjIMa836yEXFuCHZb8FNyrZGBOq5WQnOuT5vUQyBhy9DBBbKqe7VbIlR/r5x+DC8r9v3QXHkj70J/DVN4r1t3Pk=
+	t=1755782978; cv=none; b=KPK4gMhdDRACixKgsHhevRxZWP7teLkO34F2MYjzlGAj2Xr0Ns4rAbiTVJZAH5RsKZZ6PrprcDiGUPrrLLSd55IyRdUmGMp4Qv3ZEhLIjSDZ4Abrtfc6wXHnhaq4PZc21FrfEJG+JfkBhRR6Be6kWluwZJ5tQlHrJejdfLQXwsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755782763; c=relaxed/simple;
-	bh=GO8pJQFJ0YUKLoac5wgIzPjbn80v89bo2xx3UBW9vbs=;
+	s=arc-20240116; t=1755782978; c=relaxed/simple;
+	bh=wc5v9uTTIL728+hB7UJTKaDvwgtQwqhmi3Vl/hFU5ak=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rc371Wh5VrK8khtpP0/O4GIuWRSHgdR2J+fmS7tt87aF+2oR7Bk+rNfwvRb/AZ8tXL8lC1gfMVxVsGcV1Hz/e8BhILP8Co24cxqAxkl2yqDBMH7q5QyrEo59G+U9pmzGGJt/e+RibHRcjor/qw5QoGbysb+OqftUPEjmocEPJJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=D182FiHl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1337BC4CEEB;
-	Thu, 21 Aug 2025 13:26:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755782762;
-	bh=GO8pJQFJ0YUKLoac5wgIzPjbn80v89bo2xx3UBW9vbs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D182FiHlRfiLy66V21/SOiXc+cGWMClHUTdfPi83FjxV1g5g6YRvJXcsGgcTvDBnz
-	 a/jiyYB7cajKTb/0+K+lOEEpbvYfXm7iktzUZAOHbRjnkYQtojosj/xIiQOFUONcwi
-	 nwpH8RJL3EW4WOFQNQ6q8hANBkFQaJ3K6yNzzaP8=
-Date: Thu, 21 Aug 2025 15:25:59 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=TdVgfhnTwVBDWtDkhZf3BkIqKR/x+9SrsGac2g4cFJUYemOij7+g9+Uc/xcm2yAJZb0bhcinhRb4Jy9ERMPHF2utIc8BnVIqQnCOHDkZ5ARAHDi2vah9uWRpMiilNs3EVguyGHontIZYIDeo5fYMjzdJom14lDBVFQXOTwqWEPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WjckZDPu; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-246013de800so135645ad.0
+        for <linux-next@vger.kernel.org>; Thu, 21 Aug 2025 06:29:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1755782975; x=1756387775; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=J13Esd7nTONrArlNpUKcH+9/JHXUHsKEy/Ib89aPaCQ=;
+        b=WjckZDPuo7y3Xh8jJTXxR+MBh9aWmoKvkLNd0tcrZtigIT2fPZ2vi94ZoJMZl9dgv/
+         VtoNsQPws+ioJBCOI9Y/Kmqbfd+YXVnue2vpoZH4Fv0XW5JqqdwEnoR0poRFBbLeEKn6
+         ljtT5o4Q05byKB714hFG2EoUVQEx04JRW+ESAGCTmkqY/DKcloSPi9bFlsy9fSkAPnTK
+         2ocCKCzcWsRXpBD5wjKi2vyO1VrVMclcC0nPaOw/p16X70FE9z3QlPhl/SjeyEDdaapJ
+         aFhzYxIVeJ/TWNgk4rwWMl06bF+RDyeMS3vOMCUXZzOLkoJD1BMxoQ4fV1jAE4QuTm/N
+         qm1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755782975; x=1756387775;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J13Esd7nTONrArlNpUKcH+9/JHXUHsKEy/Ib89aPaCQ=;
+        b=wj8HkkeTZVxvAjbRnFd6aUcNQA6reE1738NVFjrtk+7jL5fU+1YrnNs0y8yOPmpUEo
+         ehu+2R1s9DAZuEf6li3wZ2nh43e6UZV1LKKKJKK6/WgLgBrjAT/VP823wuof6KvqJAuP
+         ePjdYs1pFiDSGAvfUWOKLP4YejWKhNvzht+POiW6wZ+0T+F7HdzDeKvU0WRPY6xyIvcc
+         mhsrlB3+1YKGDelNJOQKaZBvAPJOaz8jfkGzFMKmAjEQdRR5HUxqrFzqxSKHe950pikV
+         VyMT8ZEgjQmn85UNw1Rdvk3hfEMimoSIYWcXq9ykG1oD6NCPvE/6+heKnxM72XcbP9Y3
+         RP8g==
+X-Forwarded-Encrypted: i=1; AJvYcCVbw50zxGj/8vlPBtUbjC3mFRM854qznH65FP3EEmLeAwCdkili0S7uZzEBRLXJW9T77L0qQw25Y06v@vger.kernel.org
+X-Gm-Message-State: AOJu0YynNt3xlcymovAgDGDJMqyDmHoTX2ESkfm3Zg+5Z2nNdUoH8Gmy
+	pS0KcUWlfa44zlFbMZdgLDAc2VeAiV3FkF9jwb1+g2SUtTpGeBXzqXJjjiL9OL/VIg==
+X-Gm-Gg: ASbGnctm3HPyWrqBq3Y4d9bcE0L5I7cvBAuHFYQFbLVYheaGZdfwVO1N0PKzG9civEk
+	o8D5TTBp9D1/4j9DKBpUMxyllNg/algC0GapmbsHqmYsFNI+cmBeE7UeI0i9bOISzNVCbxeqE0V
+	+uwAWq4h+2Fz4bRwOVuYTF7UphmU3WDdOmsa4thngFo8407L+MsIeFCuToVW66ic9gJHrocRgaS
+	X4LQa/Nhd3pC+uVP6RvKDRRzc0mC0FRtgcgm0BYk+9VF2SbFNnj2LNenquV0VQfe8f93qwMFN/Y
+	3HROf5SyIfVKDhHJW76Hm11ICY79kIlxa5il8yh134SdrYq2UPferoUGuHiBD9MmjLN1VCAFK57
+	SSI8VkYDrvyWW4SSgJ4gJ6RainfH1fRQ5KSFOKMQpE7pGnaNlm7C7TwUy5anEYw==
+X-Google-Smtp-Source: AGHT+IEJ89+AicE1lZQ3XnhpL5tHd/m1IsnyOgUW94AR1BOA58fjSEzDksF9jqNKQwq8P3RC6Erj0g==
+X-Received: by 2002:a17:903:166e:b0:234:b441:4d4c with SMTP id d9443c01a7336-24602317afcmr3273645ad.5.1755782975217;
+        Thu, 21 Aug 2025 06:29:35 -0700 (PDT)
+Received: from google.com (3.32.125.34.bc.googleusercontent.com. [34.125.32.3])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-76e7d4fd2f5sm8344077b3a.74.2025.08.21.06.29.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Aug 2025 06:29:34 -0700 (PDT)
+Date: Thu, 21 Aug 2025 13:29:29 +0000
+From: Carlos Llamas <cmllamas@google.com>
 To: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: Carlos Llamas <cmllamas@google.com>, Li Li <dualli@google.com>,
-	Tiffany Yang <ynaffit@google.com>, John Stultz <jstultz@google.com>,
-	Shai Barack <shayba@google.com>,
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Li Li <dualli@google.com>, Tiffany Yang <ynaffit@google.com>,
+	John Stultz <jstultz@google.com>, Shai Barack <shayba@google.com>,
 	=?iso-8859-1?Q?Thi=E9baud?= Weksteen <tweek@google.com>,
 	kernel-team@android.com, linux-kernel@vger.kernel.org,
 	"David S. Miller" <davem@davemloft.net>,
@@ -63,7 +97,7 @@ Cc: Carlos Llamas <cmllamas@google.com>, Li Li <dualli@google.com>,
 	Suren Baghdasaryan <surenb@google.com>,
 	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>
 Subject: Re: [PATCH v20 3/5] binder: introduce transaction reports via netlink
-Message-ID: <2025082120-phoney-husband-d028@gregkh>
+Message-ID: <aKcfOXcutUwoivDD@google.com>
 References: <20250727182932.2499194-1-cmllamas@google.com>
  <20250727182932.2499194-4-cmllamas@google.com>
  <e21744a4-0155-40ec-b8c1-d81b14107c9f@leemhuis.info>
@@ -143,10 +177,18 @@ On Thu, Aug 21, 2025 at 03:00:50PM +0200, Thorsten Leemhuis wrote:
 > > How exactly are you building this?
 > 
 > Just "cd tools/net/ynl; make".
+> 
+> Ciao, Thorsten
 
-Odd, this works for me in the driver-core-next branch, but in linux-next
-it blows up like this.  Is it a merge issue somewhere?  I don't know
-what this tool is doing to attempt to debug it myself, sorry.
+Judging by the regex in the error log it seems there is a new
+restriction to not using underscores in the yml files. This restriction
+probably raced with my patch in next. It should be very easy to fix. Can
+you please try replacing the underscores?
 
-greg k-h
+ $ sed -i 's/_/-/' Documentation/netlink/specs/binder.yaml
+
+I think that should fix your build. I'll try to reproduce.
+
+--
+Carlos Llamas
 

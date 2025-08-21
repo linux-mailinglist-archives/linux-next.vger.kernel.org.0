@@ -1,87 +1,87 @@
-Return-Path: <linux-next+bounces-8072-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8073-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BD43B305B0
-	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 22:35:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE79AB305D7
+	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 22:37:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9BE71BA4D81
-	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 20:30:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D318B0013B
+	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 20:32:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0C9834A306;
-	Thu, 21 Aug 2025 20:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C77A35AADF;
+	Thu, 21 Aug 2025 20:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zwCxR+eY"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wzQ8CBeC"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01636341671
-	for <linux-next@vger.kernel.org>; Thu, 21 Aug 2025 20:16:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304AB35AABE
+	for <linux-next@vger.kernel.org>; Thu, 21 Aug 2025 20:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755807392; cv=none; b=J6QkqWu8+JoGyUFVk4COS+K+9aE6bpoRR8FWy/+mZj+I1gasEaf45LnELKqZfaUGwQ5VVgEap7zovYI6gWQuqWg+36shhQi3uL4HCvul14mTEWIN3s9OoU1b8qtm0xHfFgbS+HfV95QVM6x95yHxIlHiagS3o2h5ZvFNJ1UPRyk=
+	t=1755807447; cv=none; b=s3NLn+OWBlY3natsT3GjEIxAGVqFIqBdGs5U0RwQ6VVAtWn5n9ehezc8I0n6qpvhbivf8FjHa87eXsHlKsXWVG7E1xIpV3NDcP2pbVW1LLa9QvoFaochY1agkNb0BVKHWVKntPaO1XAuhalQcOd0dL7lstsAgoPyvDgsa/cGyac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755807392; c=relaxed/simple;
-	bh=bJLZzoLIYiPj5H2lu0ukmAuOaE1Alfz+CpFLk/6cLok=;
+	s=arc-20240116; t=1755807447; c=relaxed/simple;
+	bh=5OohnYEC9QbqJRhQVUqG0Q78T57Jg0nuHmiPVOyQ/oU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QE8CiJJO7fE2t7/aHEUxm1ZfDPR++Twih+ercOtbkc9mRA3YkmFLSORfmbC2+bOfLZogoO3F3ofaaGr6VMqbWG0zisNJDZkqRMNNuRoWPGFFNGCQCiU7Vg3TGtO5tAxjzmjJhGMlo7LQYQUGgYaqcwC+iSiiejThElwmzSl91Hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zwCxR+eY; arc=none smtp.client-ip=209.85.219.52
+	 To:Cc:Content-Type; b=qVESN9m5vM7Mtji6fPRJ72ox+tpaSp85ynW6+sjW1+fFV6vDoMNLrm06pRxqngu2vz6l6sQZCR9R136A9MCYIA1so/deWkhQjiqXprRcn3X9fps0j77hSQYa6uE8D1DYEGajen+jmWhNixPipywjAlx1g1PDbtGHwzNHMXH7C4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wzQ8CBeC; arc=none smtp.client-ip=209.85.219.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-70ba7aa131fso17240486d6.2
-        for <linux-next@vger.kernel.org>; Thu, 21 Aug 2025 13:16:30 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-70d93f579fdso5360066d6.1
+        for <linux-next@vger.kernel.org>; Thu, 21 Aug 2025 13:17:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755807390; x=1756412190; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1755807445; x=1756412245; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VoMACWbm6WXIWD5RwEuc0Yk/NrCPIoJJa0nlqcxzHco=;
-        b=zwCxR+eYkP3+B8K6FVjJ+jNsAO7yHVn69qIodCm33Z+SWjKIMp2c1y6qyITdRk38EP
-         JDgk+0tA5LYQCUSKRN/SKlBLYtmv2y2EU2rygxMovp45QLyebRmg/YDCDhpdraLnAssI
-         if2JckYRMOZ9olQuhHnK7WmAnrZBwQns2U2NEyAUswSTLSIw8iaX/SbviVYP1GEk+1Fp
-         FaIbvtAvs/KLTKX9sLEOysCPi+kGh5oTLC0UcQBQVo0r4LoRV0RVlZf4fX8PkZcfFXDO
-         CkyZVZ9g+r1iwvR/MLRybJN4YuT3u2CN66tmtF+sqDte2lBW5z7newcVNuiCUH5Ca8/P
-         3GHg==
+        bh=3GKHhIYUvXm1eR7uJDOLbFAeZmD/aNr9e42yLSZS5GE=;
+        b=wzQ8CBeCb1XJrqdl+a6Z8Wo8wZJe++Xr9fBl8da3jh1X/32kRV7o8FNnCvPIYJSPsr
+         JDwAV67oRcCuZZId5SWlxmqi3Va14bMMws5jAetvUpZatb+WI38uDRx/dgRgGSkvCxwu
+         Fuaj8cyOTRMYPdPQJ7Xc5MhGjxnUgopVMGJBP4Gu2K1BNmD1LyxvReNsvP6A041XIhMy
+         bCCeL5sE9S33BFI07LWWAMHP5y0NSNRxbSjEySq7AplWumWbqkOl82+s8mORsQ63RG3H
+         b5auEw+5XMhvLmjf97xag6GhysTZ3rAIm2evUAbbS6nUlRgUdDPdfhQSZIYV6SjsY8Nj
+         L78w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755807390; x=1756412190;
+        d=1e100.net; s=20230601; t=1755807445; x=1756412245;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VoMACWbm6WXIWD5RwEuc0Yk/NrCPIoJJa0nlqcxzHco=;
-        b=uoiQgl42UeXzW70GXnGDKPj1rYH5ZQumMxHI+z1vPf2hIiBD49Ji0YkmCCt94sc2iI
-         aq/O7svoQu6cE6ttnYDzueT5ZlFQFHhkiuOYzlmBMDAD4/ITpG+S7HP1MtqAvz2FTxK9
-         y1CjTAoCPTRc9K966amGDHNhdjFFBRakt4y9h+n0h0Q67eRVOVQRXsyZ8pYQxh+s9H3j
-         9AofPl05l8WXlAeqVHaKzZabdcFdw2QwLr/mpQG6Hcy/KOnq4qPIZoCUP8NeV+ib2W/K
-         YAAdv+hLRtrgWbdWUHZzys0dGXE/1enzsl/wE3CSsDOJc6N2Md+bzuYLRlVUFZaSBxVR
-         gI+w==
-X-Forwarded-Encrypted: i=1; AJvYcCXKkv82tKuGDQR8Z9gUIPIrnLetb1hVI+x62DjVkOc84sjAUjqDC2yD0f09p/OKg3U5qNtQb8K+0roy@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIAD6JEVVZ7jGKdOrkKsbNC900z8fhcAeot7UsIUS66gAkVCpx
-	bHdQ6KLPShUgz0XgXeLDyS60kGAFS6AyScaKelXnpwFpZY8E8G1xJPTyBck3yXmMR+sYfVBsVZv
-	8g8c6KIqTmocz8lF0S1pnov1HkfhXMXrvzNaMegXH
-X-Gm-Gg: ASbGncsAQ1o3Drm50aE/0zFAiJpi0EJ2kcvfp0XrPhJXyDvubnHRHWyhWPAaGbFlRuF
-	pqzYplpK7bulpg0k4P0DvCLxGKSA7QWnTnlHKiRXAO0bA/TZV4jvREDUfWHKRkNFZCHtQzd5i5G
-	5W7ipZlEmy/FUlXtP6X1KMPtwQl9C2vXQuXNbSD/JEmtl5pFpgNnoepyBSJgNuEM6Jx9HnTsXao
-	Jf+9jaS1SI=
-X-Google-Smtp-Source: AGHT+IFPvW5VGS5Pdq/t1Dq8/2FXw+EPJboiflOqeuNZwXL76s53ZkPMkBshyZ8dQC8VObHNnRC8wee0tzHwxyfcQv4=
-X-Received: by 2002:a05:6214:29c9:b0:706:de4c:fddf with SMTP id
- 6a1803df08f44-70d970b2b8emr9982006d6.9.1755807389454; Thu, 21 Aug 2025
- 13:16:29 -0700 (PDT)
+        bh=3GKHhIYUvXm1eR7uJDOLbFAeZmD/aNr9e42yLSZS5GE=;
+        b=VD5j/U7ACd8My6DAJr4C4st/xeGOWfJpys7u5RoEoFsEbNWY3CnKkgRzgJ5U6BmTmY
+         x82HCmcKUu7VPzq9Q72CiSlk8aay8vfdRA2zqxneCtVt8G+OXBtv8E/+VJAcE3JxgbLq
+         6bacIdz2A1TDEnKbX0SF821lO+ave2iqCnQ1dI0niCfKy18JLy1Cjdue5K/bh2eorNrI
+         o84WD2YY4uvMDe6kx0fLHyu+IyuOF7ggt0mn9hNSCsY4oBEyRXVxWQ2z9kkwce/PgVc3
+         o81x3rNl/r37zNe6C+IYoCVHkdMEz/QFRK7jPlOee8K8WYYaMcEiBfx5sCfZkExDW7yF
+         Z8zg==
+X-Forwarded-Encrypted: i=1; AJvYcCU+2wUQXVPZka2J+BR1CPeNV9gYHGCrGDp+Fz/s/MhAafVJXB3+9DKkfpzW1wJ7sPy23ycKzKuwawdW@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+8TX+5iq5QcFu2tgnqw+IuYUfCFsWhdn8Jq6fWnDtm9L1n9Ik
+	PJQ/geISuni23RiEN4L1EzSLh/VOCp+UqcLmfoIPY3AvW3yL9SPbVdPs/2phYHo8JZCKbEj3mV0
+	7ntnXC6RIt6CUnTPLUukC3ScIlxSn9yn9hLcC8cEt
+X-Gm-Gg: ASbGncvqIio3kp5WkFAmgGEBUEuRzl9UAKJMPHQu5vFemNn91RKRDkmRa/VJIvhjEWm
+	m+jC7ZfRHxwYpj1mk/6ZRCVHVinFxJMlB/PSZOiVSO8IsK95AESQOPcrcYFfR5VJSPcvS27unlB
+	C9s1Xfugrk7CmPiWv9sA7d5cGfS7Qmo7km86+XveR207LZzlDvLANDqIzuTc68l+Qa2dbNueyDs
+	rseeGXWXwuNyBu/B/A5Kg==
+X-Google-Smtp-Source: AGHT+IGN0/BKeoJadYh8tmDP+tf3R8FRAkNUVR/N8DJ2awKLzORsivwfWeWkC8Id+Bb5jHCi6rQ5iDwDGbl3EhLh2sY=
+X-Received: by 2002:a05:6214:76b:b0:70a:3792:71b3 with SMTP id
+ 6a1803df08f44-70d971f6148mr10899826d6.8.1755807444690; Thu, 21 Aug 2025
+ 13:17:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250821135447.1618942-1-davidgow@google.com>
-In-Reply-To: <20250821135447.1618942-1-davidgow@google.com>
+References: <20250821135447.1618942-1-davidgow@google.com> <20250821135447.1618942-2-davidgow@google.com>
+In-Reply-To: <20250821135447.1618942-2-davidgow@google.com>
 From: Rae Moar <rmoar@google.com>
-Date: Thu, 21 Aug 2025 15:16:18 -0500
-X-Gm-Features: Ac12FXy1vcheJ7TDTrz-6MLLUWsqJPUTbd8XnGF9dgHRXhhIGEMrrGoiOssdCO8
-Message-ID: <CA+GJov6UarLu3pEULCVqDLg1aatduASBsdR6d=wApfqdHJ-bCw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] drm/xe/tests: Fix some additional gen_params signatures
+Date: Thu, 21 Aug 2025 15:17:13 -0500
+X-Gm-Features: Ac12FXypXIH5pWAL85l1vEigtMRAVThNuoz79IEYMnKkvcTSXQyQlGmdixyUb9I
+Message-ID: <CA+GJov7kyZLFccSyJ9VON_GpE2kvgF9jav8FP7d94amHQQkDmg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] kunit: Only output a test plan if we're using kunit_array_gen_params
 To: David Gow <davidgow@google.com>
 Cc: Marie Zhussupova <marievic@google.com>, marievictoria875@gmail.com, 
 	Rodrigo Vivi <rodrigo.vivi@intel.com>, Shuah Khan <skhan@linuxfoundation.org>, 
@@ -94,33 +94,30 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Aug 21, 2025 at 8:54=E2=80=AFAM David Gow <davidgow@google.com> wro=
 te:
 >
-> In 444be9072fca ("kunit: Pass parameterized test context to generate_para=
-ms()")
-> prototype used for gen_params functions was changed to add a struct
-> kunit parameter. However, a few of these used in xe were not updated.
+> In 6a2a027e254b ("kunit: Enable direct registration of parameter arrays t=
+o a KUnit test"),
+> we now output a test plan for parameterised tests which use parameter
+> arrays. This uses the size of the array (via the ARRAY_SIZE macro) to
+> determine the number of subtests, which otherwise was indeterminate.
 >
-> Update these so that the xe_pci tests build and run again.
+> However some tests (particularly xe_pci.check_platform_gt_count) use
+> their own gen_params function which further filters the array, resulting
+> in the test plan being inaccurate (and hence kunit.py failing).
 >
-> Fixes: 444be9072fca ("kunit: Pass parameterized test context to generate_=
-params()")
+> For now, only print the test plan line if the gen_params function is the
+> provided kunit_array_gen_params. Unfortunately, this catches a lot of
+> tests which would work, but at least makes sure we don't regress
+> anything until we can rework how some of these macros function.
+>
+> Fixes: 6a2a027e254b ("kunit: Enable direct registration of parameter arra=
+ys to a KUnit test")
 > Signed-off-by: David Gow <davidgow@google.com>
-> ---
->
-> Sorry, the last fix here caused a warning (thanks to the test robot for
-> finding it).
->
-> I'm still happy to sqash and re-send the whole original series if that's
-> preferred.
->
-> Changes since v1:
-> https://lore.kernel.org/linux-kselftest/20250819073434.1411114-1-davidgow=
-@google.com/
-> - Add the missing <kunit/test.h> include for struct kunit
->
+
 
 Hello!
 
-Thanks for this change! It looks good to me!
+This makes sense to me. Maybe we can work on this feature in the future. Th=
+anks!
 
 Reviewed-by: Rae Moar <rmoar@google.com>
 
@@ -128,88 +125,39 @@ Thanks!
 -Rae
 
 > ---
->  drivers/gpu/drm/xe/tests/xe_pci.c      | 12 ++++++------
->  drivers/gpu/drm/xe/tests/xe_pci_test.h |  9 +++++----
->  2 files changed, 11 insertions(+), 10 deletions(-)
 >
-> diff --git a/drivers/gpu/drm/xe/tests/xe_pci.c b/drivers/gpu/drm/xe/tests=
-/xe_pci.c
-> index a65705814b9a..f707e0a54295 100644
-> --- a/drivers/gpu/drm/xe/tests/xe_pci.c
-> +++ b/drivers/gpu/drm/xe/tests/xe_pci.c
-> @@ -44,9 +44,9 @@ KUNIT_ARRAY_PARAM(pci_id, pciidlist, xe_pci_id_kunit_de=
-sc);
->   *
->   * Return: pointer to the next parameter or NULL if no more parameters
->   */
-> -const void *xe_pci_graphics_ip_gen_param(const void *prev, char *desc)
-> +const void *xe_pci_graphics_ip_gen_param(struct kunit *test, const void =
-*prev, char *desc)
->  {
-> -       return graphics_ip_gen_params(prev, desc);
-> +       return graphics_ip_gen_params(test, prev, desc);
->  }
->  EXPORT_SYMBOL_IF_KUNIT(xe_pci_graphics_ip_gen_param);
+> No changes since v1:
+> https://lore.kernel.org/linux-kselftest/20250819073434.1411114-2-davidgow=
+@google.com/
 >
-> @@ -61,9 +61,9 @@ EXPORT_SYMBOL_IF_KUNIT(xe_pci_graphics_ip_gen_param);
->   *
->   * Return: pointer to the next parameter or NULL if no more parameters
->   */
-> -const void *xe_pci_media_ip_gen_param(const void *prev, char *desc)
-> +const void *xe_pci_media_ip_gen_param(struct kunit *test, const void *pr=
-ev, char *desc)
->  {
-> -       return media_ip_gen_params(prev, desc);
-> +       return media_ip_gen_params(test, prev, desc);
->  }
->  EXPORT_SYMBOL_IF_KUNIT(xe_pci_media_ip_gen_param);
+> (The change was in patch 1.)
 >
-> @@ -78,9 +78,9 @@ EXPORT_SYMBOL_IF_KUNIT(xe_pci_media_ip_gen_param);
->   *
->   * Return: pointer to the next parameter or NULL if no more parameters
->   */
-> -const void *xe_pci_id_gen_param(const void *prev, char *desc)
-> +const void *xe_pci_id_gen_param(struct kunit *test, const void *prev, ch=
-ar *desc)
->  {
-> -       const struct pci_device_id *pci =3D pci_id_gen_params(prev, desc)=
-;
-> +       const struct pci_device_id *pci =3D pci_id_gen_params(test, prev,=
- desc);
+> ---
+>  lib/kunit/test.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 >
->         return pci->driver_data ? pci : NULL;
->  }
-> diff --git a/drivers/gpu/drm/xe/tests/xe_pci_test.h b/drivers/gpu/drm/xe/=
-tests/xe_pci_test.h
-> index ce4d2b86b778..6d8bc56f7bde 100644
-> --- a/drivers/gpu/drm/xe/tests/xe_pci_test.h
-> +++ b/drivers/gpu/drm/xe/tests/xe_pci_test.h
-> @@ -7,6 +7,7 @@
->  #define _XE_PCI_TEST_H_
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index b661407ad0a3..bb66ea1a3eac 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -732,10 +732,12 @@ int kunit_run_tests(struct kunit_suite *suite)
+>                                   "KTAP version 1\n");
+>                         kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT =
+KUNIT_SUBTEST_INDENT
+>                                   "# Subtest: %s", test_case->name);
+> -                       if (test.params_array.params)
+> +                       if (test.params_array.params &&
+> +                           test_case->generate_params =3D=3D kunit_array=
+_gen_params) {
+>                                 kunit_log(KERN_INFO, &test, KUNIT_SUBTEST=
+_INDENT
+>                                           KUNIT_SUBTEST_INDENT "1..%zd\n"=
+,
+>                                           test.params_array.num_params);
+> +                       }
 >
->  #include <linux/types.h>
-> +#include <kunit/test.h>
->
->  #include "xe_platform_types.h"
->  #include "xe_sriov_types.h"
-> @@ -25,9 +26,9 @@ struct xe_pci_fake_data {
->
->  int xe_pci_fake_device_init(struct xe_device *xe);
->
-> -const void *xe_pci_graphics_ip_gen_param(const void *prev, char *desc);
-> -const void *xe_pci_media_ip_gen_param(const void *prev, char *desc);
-> -const void *xe_pci_id_gen_param(const void *prev, char *desc);
-> -const void *xe_pci_live_device_gen_param(const void *prev, char *desc);
-> +const void *xe_pci_graphics_ip_gen_param(struct kunit *test, const void =
-*prev, char *desc);
-> +const void *xe_pci_media_ip_gen_param(struct kunit *test, const void *pr=
-ev, char *desc);
-> +const void *xe_pci_id_gen_param(struct kunit *test, const void *prev, ch=
-ar *desc);
-> +const void *xe_pci_live_device_gen_param(struct kunit *test, const void =
-*prev, char *desc);
->
->  #endif
+>                         while (curr_param) {
+>                                 struct kunit param_test =3D {
 > --
 > 2.51.0.rc2.233.g662b1ed5c5-goog
 >

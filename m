@@ -1,198 +1,179 @@
-Return-Path: <linux-next+bounces-8067-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8068-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7134B2FAF2
-	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 15:46:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BA44B2FB9F
+	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 16:01:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 413F5B61998
-	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 13:44:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 715821BA0451
+	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 13:56:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E6A92DF705;
-	Thu, 21 Aug 2025 13:39:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DFC2EC576;
+	Thu, 21 Aug 2025 13:54:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="n5pFRIfr"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uidtkiEH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0262DF710
-	for <linux-next@vger.kernel.org>; Thu, 21 Aug 2025 13:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8EE2EC553
+	for <linux-next@vger.kernel.org>; Thu, 21 Aug 2025 13:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755783543; cv=none; b=gth4uqwAz016HPqE9sVhL3ns03u6Dnc/Y3nFDcDAtOPRLeqv1/oCPcu45qC8c+u6bqasbafTlEqX2jg19acfbLtIT5vF5u5Mym3q8KRjR6EsGgY78H5u8FIwzl1dWit826j+kJ1uHM28u3g4oKlBL0DP0mloYIij8eHm0C8t8ko=
+	t=1755784494; cv=none; b=B7tc46vEPh+qK/pO64lKKJgcMUI4uTs0fOxXjxXNwzCB6HiS8ol6cLUuUrvIkAsu+F90OG8P6DNqBAqjOwgERSuaL0Xy5CPR3ZKWEBdB6bUCRCdre1WhPtA3fBCj/FEg8XeEbTobUamtCNFF2Z2fb48e4YTH9uHpbhzCUG7ZAiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755783543; c=relaxed/simple;
-	bh=UBaomgbe5Pto6k9s8jcQN8o0bdH3iMYe1oFhKjAp01M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W5H6GhDWJe4auLUeNDpR18diL0Slw3jVmHukl6UrdisN1KLFxWVDsuCSyrXpHu1BI7NVkjZs0KiISny5Ih9ZSEZStT/mPvHh//6rQisCpIMabtMApVfh1v9wh5sKewcXhZM8cDDq8qy1baUXZwSMQBto2mcnI5z8EDdOoVRhZB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=n5pFRIfr; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1755784494; c=relaxed/simple;
+	bh=TKiEOR58JWBCnRVppYPQH0Vt1aBquwPcNvpC3at4LKs=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=khgcEA6j9kWCapx2/9owUzj2eiiRvGMQDwynqKMYuj/bZaAaJHf6+3D9bFICQ4/Ts1k7Jr/9cS0nJUelJ21mvJ08Ce2UuEW9rGqWlmCbZI57DZPQkbH746YZpuiBw53UJf/xSlal/GyntWv1c0KDSidm9AwlAqpSiU23wXfgFK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uidtkiEH; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-246013de800so137755ad.0
-        for <linux-next@vger.kernel.org>; Thu, 21 Aug 2025 06:39:01 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3234811cab3so1195494a91.3
+        for <linux-next@vger.kernel.org>; Thu, 21 Aug 2025 06:54:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755783541; x=1756388341; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7N9rAjjjlmmVnsb6lYyZUzYXQ/m0Q5K6qvsrUkhsgXc=;
-        b=n5pFRIfrtJN7JZMXIcg9FomDpqXm35VXUOT0hHV/Me6jKlY0VGZ6heo6dKmBQtWU7d
-         9bw5evGgGCIQmKNMxyqbBxGDt87FjTTovsleJabaYL0nDPksutu1SF8GB/F4RtzIkHry
-         GtjiW4h88UiidARPei+Tz2CwcX4eA6iIh+hJcZNorbPgyZt/R5rXN5dMbs8m+RF+vWpc
-         S/IVfFbU5QkJ0co8umVuGSWm1i2/p9/FmPX0rhniYXWJ16s/qPu5v+0xYZdxML6sF503
-         l/GDYJ81+nZHoZqFThJxolc3FLAZDlJsshBfAm+vO5jc42Hg3ofoS6L8+rlsx5C9pQH1
-         XLAw==
+        d=google.com; s=20230601; t=1755784492; x=1756389292; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6ti2fCOXYva8ZvL9CMugr5JTuNvLl5q2xqcam/kYJ5o=;
+        b=uidtkiEHAeDb5u6ovNeSbZoXst5efN6ZiNkueyuTnDvizR/Kl6uKnIeDWRN+K+dp+u
+         mGR+iZEe49OKLQS2CdkDZ9yspelpQd9rGuIK1TUfo4jElvVwXDebAINM/ckmQO/g5RJs
+         mEruJlRMSGaa+IRwhkpW2RSkpRmP6JgJLB1f1W5zHcBBgbuHU5qCJIdhusNFlosV7lSz
+         H+RUwebgZ6FtOLIWKcMD8YwgzB4X586y0XBbQ1vrYkhwH11fxJCTkp2ya/xXXRaj3KUe
+         30gMAhCFFq2pBtmJ4j0RGTlCNkBr9nGGGLtQGjEp+KCsfRt+gYskH1jajbxYMSJ9BBhq
+         4hGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755783541; x=1756388341;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7N9rAjjjlmmVnsb6lYyZUzYXQ/m0Q5K6qvsrUkhsgXc=;
-        b=UTL21KNTUWgY0zPXdc2TilwFRMMuBNW/NW904sh1jG8judrRF+Sx/PdwO0pSxj/G+d
-         o0GOCoICzSGXbGLhWkyo0w8FI7Uqt3D9iQda6OtmK4tXg0MrKVFyGwq3jjQ8tPzXA6en
-         fh9odvjgLKPDmIavDfNGdC2Ng5g06OO803Aqri/O1oTHEfVqmqG6kWRspQGXrQgO1NRc
-         RS5h1uQqoK60PqssM/yqrSXgARJf6i+lug/2CGgRdunmi2tRvxdFZU0PolRSWkEZmEzR
-         09jA1oKtP+iDWn/RjueCLREjW/zoWZT4Z0QKFNXKo2PE9ifzxctWXalXnE9z25bH3Mya
-         /Reg==
-X-Forwarded-Encrypted: i=1; AJvYcCWXaKhqjY9ods1DKmfgi9jIqRVcZpkfNU100WO7IOb164nbIXQgwchF1DIFc70kjY/qBR1DMM8YicLc@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQl10VvzIQ+jeN9SSC8KDncMox20/Ei4M88MPKnGRHLasLO6I4
-	V9LeRTJQKuRYAdClxWDupahkmncPfCRQBnH1tIXz3t4wkcFcWQDWgSEcKOe6KIuToQ==
-X-Gm-Gg: ASbGncuaiDWeCm0N1uop3WmAEc1yOiBdjPhsB34JR+KTwESyfmsw+dPUQ0hTk5WsZ1X
-	UnCUNrn2itZjh3VISa7PFTDaXH2iO4oiNT7fQcYArAOK0hdUpGr5BtKPsCHRosuySKWrHyD9JDl
-	T973OVNWvg+xmswT/D8tur9ekuAUGJtuNdGCojniHedgG6jsmSZyq/2cSDz9cy/6L+uyg5BhJEq
-	TaktV74ek17GK3IrKKMiun33cgIhD12kCY+TGJziIR1ii4nTV7uAOF41aN5aRINfsFWsmF/kxKA
-	TdKXmViyRqcu7XfNcOr8uFL5zD43hCBmEMqgKS8i9JG09YA7V6t4vwWNBfd4LuoZYz4lIO8JNR5
-	wOkYqrgrN16VPyn8n2qA4SLlT2vSWh21IMVf6DiUT4xvWjOFroi4zIYsZq1q2ig==
-X-Google-Smtp-Source: AGHT+IEC07DRM954ZauhrF271W70UI0dmUDeDFMbKiMegLnkkgTzAWcZdd3XdKKaCxDubRNrmCtS1g==
-X-Received: by 2002:a17:903:22d2:b0:240:a4b5:fe0d with SMTP id d9443c01a7336-245ffa5b6cbmr3398745ad.6.1755783540818;
-        Thu, 21 Aug 2025 06:39:00 -0700 (PDT)
-Received: from google.com (3.32.125.34.bc.googleusercontent.com. [34.125.32.3])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b4763fb85e7sm4806942a12.12.2025.08.21.06.38.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Aug 2025 06:38:59 -0700 (PDT)
-Date: Thu, 21 Aug 2025 13:38:54 +0000
-From: Carlos Llamas <cmllamas@google.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Thorsten Leemhuis <linux@leemhuis.info>, Li Li <dualli@google.com>,
-	Tiffany Yang <ynaffit@google.com>, John Stultz <jstultz@google.com>,
-	Shai Barack <shayba@google.com>,
-	=?iso-8859-1?Q?Thi=E9baud?= Weksteen <tweek@google.com>,
-	kernel-team@android.com, linux-kernel@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Todd Kjos <tkjos@android.com>,
-	Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	"open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-	Martijn Coenen <maco@android.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Linux kernel regressions list <regressions@lists.linux.dev>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>
-Subject: Re: [PATCH v20 3/5] binder: introduce transaction reports via netlink
-Message-ID: <aKchboXyR1oQDV_e@google.com>
-References: <20250727182932.2499194-1-cmllamas@google.com>
- <20250727182932.2499194-4-cmllamas@google.com>
- <e21744a4-0155-40ec-b8c1-d81b14107c9f@leemhuis.info>
- <2025082145-crabmeat-ounce-e71f@gregkh>
- <ddbf8e90-3fbb-4747-8e45-c931a0f02935@leemhuis.info>
- <2025082120-phoney-husband-d028@gregkh>
+        d=1e100.net; s=20230601; t=1755784492; x=1756389292;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6ti2fCOXYva8ZvL9CMugr5JTuNvLl5q2xqcam/kYJ5o=;
+        b=avvYGi5vB4k2o7y+K5JA7vnuxk5sfAeHL0OqCd+HXHQPbC9jYbVZnkY149QSlgOTmD
+         2+tmqBvJIDzDruObQZw5xF8Zn7h5JnXiOztruuLUNa8ZUDJ+52C4L0KAqkJgzfoOloJ9
+         3kZgP805RAosyTJqmt6xLvFCoNRpsgqolSLlcyreHPIvDUrSZp/49eBpzKBLcClkkze9
+         R67mds6ruySu/AsAoVngeiFJasIo1DPykLbDTjXhqqjQDJJ/CPNBjOVFKb2X7fXJPqGA
+         gkmCNmPHbcYyO0RqydfqvXmVn4nrp8TI2eDe+d8bp5fsMAIkF3Qpon52iUycj8aEDSxt
+         1vgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5VzCnlv51hNyz6LJAet60Hq1VOlTbag/wqwp0VIkyYm3zBvXY7wg6pl/GX6983KExLzgbnuy3VB7G@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYfp/lPVS37NalD2NtLhlbE1d+Vff8WRIdqQSiWtO2ilmiIv7n
+	UIaeJ4Ro7xSXv4yE0Vgll82hEWmu7cqi8gEJvWfsuIBzrB2zranBdlOGS84ZBbu3H4LpH8WfEYy
+	Kp1FE4NCzeLYmPQ==
+X-Google-Smtp-Source: AGHT+IHqGRrkU47M6IM1/x2E4P3NTyZSlzj29xTt46GT3PC8wiwMDfzgWqXUh2krGXSfc6vq3VH1gAt4thuMHQ==
+X-Received: from pjk4.prod.google.com ([2002:a17:90b:5584:b0:31c:2fe4:33ba])
+ (user=davidgow job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:3bc5:b0:324:e682:f313 with SMTP id 98e67ed59e1d1-324ed19569dmr3747107a91.18.1755784492548;
+ Thu, 21 Aug 2025 06:54:52 -0700 (PDT)
+Date: Thu, 21 Aug 2025 21:54:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025082120-phoney-husband-d028@gregkh>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.rc2.233.g662b1ed5c5-goog
+Message-ID: <20250821135447.1618942-1-davidgow@google.com>
+Subject: [PATCH v2 1/2] drm/xe/tests: Fix some additional gen_params signatures
+From: David Gow <davidgow@google.com>
+To: Rae Moar <rmoar@google.com>, Marie Zhussupova <marievic@google.com>, marievictoria875@gmail.com, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: David Gow <davidgow@google.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, intel-xe@lists.freedesktop.org, 
+	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Aug 21, 2025 at 03:25:59PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Aug 21, 2025 at 03:00:50PM +0200, Thorsten Leemhuis wrote:
-> > On 21.08.25 14:19, Greg Kroah-Hartman wrote:
-> > > On Thu, Aug 21, 2025 at 10:49:09AM +0200, Thorsten Leemhuis wrote:
-> > >> On 27.07.25 20:29, Carlos Llamas wrote:
-> > >>> From: Li Li <dualli@google.com>
-> > >>>
-> > >>> Introduce a generic netlink multicast event to report binder transaction
-> > >>> failures to userspace. This allows subscribers to monitor these events
-> > >>> and take appropriate actions, such as stopping a misbehaving application
-> > >>> that is spamming a service with huge amount of transactions.
-> > >>>
-> > >>> The multicast event contains full details of the failed transactions,
-> > >>> including the sender/target PIDs, payload size and specific error code.
-> > >>> This interface is defined using a YAML spec, from which the UAPI and
-> > >>> kernel headers and source are auto-generated.
-> > >>
-> > >> It seems to me like this patch (which showed up in -next today after
-> > >> Greg merged it) caused a build error for me in my daily -next builds
-> > >> for Fedora when building tools/net/ynl:
-> > >>
-> > >> """
-> > >> make[1]: Entering directory '/home/kbuilder/ark-vanilla/linux-knurd42/tools/net/ynl/lib'
-> > >> gcc -std=gnu11 -O2 -W -Wall -Wextra -Wno-unused-parameter -Wshadow   -c -MMD -c -o ynl.o ynl.c
-> > >>         AR ynl.a
-> > >> make[1]: Leaving directory '/home/kbuilder/ark-vanilla/linux-knurd42/tools/net/ynl/lib'
-> > >> make[1]: Entering directory '/home/kbuilder/ark-vanilla/linux-knurd42/tools/net/ynl/generated'
-> > >>         GEN binder-user.c
-> > >> Traceback (most recent call last):
-> > >>   File "/home/kbuilder/ark-vanilla/linux-knurd42/tools/net/ynl/generated/../pyynl/ynl_gen_c.py", line 3673, in <module>
-> > >>     main()
-> > >>     ~~~~^^
-> > >>   File "/home/kbuilder/ark-vanilla/linux-knurd42/tools/net/ynl/generated/../pyynl/ynl_gen_c.py", line 3382, in main
-> > >>     parsed = Family(args.spec, exclude_ops)
-> > >>   File "/home/kbuilder/ark-vanilla/linux-knurd42/tools/net/ynl/generated/../pyynl/ynl_gen_c.py", line 1205, in __init__
-> > >>     super().__init__(file_name, exclude_ops=exclude_ops)
-> > >>     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > >>   File "/home/kbuilder/ark-vanilla/linux-knurd42/tools/net/ynl/pyynl/lib/nlspec.py", line 462, in __init__
-> > >>     jsonschema.validate(self.yaml, schema)
-> > >>     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
-> > >>   File "/usr/lib/python3.13/site-packages/jsonschema/validators.py", line 1307, in validate
-> > >>     raise error
-> > >> jsonschema.exceptions.ValidationError: 'from_pid' does not match '^[0-9a-z-]+$'
-> > >>
-> > >> Failed validating 'pattern' in schema['properties']['attribute-sets']['items']['properties']['attributes']['items']['properties']['name']:
-> > >>     {'pattern': '^[0-9a-z-]+$', 'type': 'string'}
-> > >>
-> > >> On instance['attribute-sets'][0]['attributes'][2]['name']:
-> > >>     'from_pid'
-> > >> make[1]: *** [Makefile:48: binder-user.c] Error 1
-> > >> make[1]: Leaving directory '/home/kbuilder/ark-vanilla/linux-knurd42/tools/net/ynl/generated'
-> > >> make: *** [Makefile:25: generated] Error 2
-> > >> """
-> > > 
-> > > Odd, this works for me.
-> > 
-> > Hmmm, happened on various Fedora releases and archs in Fedora's coprs
-> > buildsys for me today. And with a local Fedora 41 x86_64 install, too;
-> > in the latter case (just verified) both when checking out next-20250821
-> > and 63740349eba78f ("binder: introduce transaction reports via netlink")
-> > from -next.
-> > 
-> > > How exactly are you building this?
-> > 
-> > Just "cd tools/net/ynl; make".
-> 
-> Odd, this works for me in the driver-core-next branch, but in linux-next
-> it blows up like this.  Is it a merge issue somewhere?  I don't know
-> what this tool is doing to attempt to debug it myself, sorry.
-> 
-> greg k-h
+In 444be9072fca ("kunit: Pass parameterized test context to generate_params()")
+prototype used for gen_params functions was changed to add a struct
+kunit parameter. However, a few of these used in xe were not updated.
 
-The commit enforcing the restriction on underscores is:
-  af852f1f1c95 ("netlink: specs: enforce strict naming of properties")
+Update these so that the xe_pci tests build and run again.
 
-I'm able to reproduce the issue locally now, and switching to dashes
-fixes it. Sorry, I was not aware of this restriction but I'll send a
-quick patch to fix this.
+Fixes: 444be9072fca ("kunit: Pass parameterized test context to generate_params()")
+Signed-off-by: David Gow <davidgow@google.com>
+---
 
---
-Carlos Llamas
+Sorry, the last fix here caused a warning (thanks to the test robot for
+finding it).
+
+I'm still happy to sqash and re-send the whole original series if that's
+preferred.
+
+Changes since v1:
+https://lore.kernel.org/linux-kselftest/20250819073434.1411114-1-davidgow@google.com/
+- Add the missing <kunit/test.h> include for struct kunit
+
+---
+ drivers/gpu/drm/xe/tests/xe_pci.c      | 12 ++++++------
+ drivers/gpu/drm/xe/tests/xe_pci_test.h |  9 +++++----
+ 2 files changed, 11 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/gpu/drm/xe/tests/xe_pci.c b/drivers/gpu/drm/xe/tests/xe_pci.c
+index a65705814b9a..f707e0a54295 100644
+--- a/drivers/gpu/drm/xe/tests/xe_pci.c
++++ b/drivers/gpu/drm/xe/tests/xe_pci.c
+@@ -44,9 +44,9 @@ KUNIT_ARRAY_PARAM(pci_id, pciidlist, xe_pci_id_kunit_desc);
+  *
+  * Return: pointer to the next parameter or NULL if no more parameters
+  */
+-const void *xe_pci_graphics_ip_gen_param(const void *prev, char *desc)
++const void *xe_pci_graphics_ip_gen_param(struct kunit *test, const void *prev, char *desc)
+ {
+-	return graphics_ip_gen_params(prev, desc);
++	return graphics_ip_gen_params(test, prev, desc);
+ }
+ EXPORT_SYMBOL_IF_KUNIT(xe_pci_graphics_ip_gen_param);
+ 
+@@ -61,9 +61,9 @@ EXPORT_SYMBOL_IF_KUNIT(xe_pci_graphics_ip_gen_param);
+  *
+  * Return: pointer to the next parameter or NULL if no more parameters
+  */
+-const void *xe_pci_media_ip_gen_param(const void *prev, char *desc)
++const void *xe_pci_media_ip_gen_param(struct kunit *test, const void *prev, char *desc)
+ {
+-	return media_ip_gen_params(prev, desc);
++	return media_ip_gen_params(test, prev, desc);
+ }
+ EXPORT_SYMBOL_IF_KUNIT(xe_pci_media_ip_gen_param);
+ 
+@@ -78,9 +78,9 @@ EXPORT_SYMBOL_IF_KUNIT(xe_pci_media_ip_gen_param);
+  *
+  * Return: pointer to the next parameter or NULL if no more parameters
+  */
+-const void *xe_pci_id_gen_param(const void *prev, char *desc)
++const void *xe_pci_id_gen_param(struct kunit *test, const void *prev, char *desc)
+ {
+-	const struct pci_device_id *pci = pci_id_gen_params(prev, desc);
++	const struct pci_device_id *pci = pci_id_gen_params(test, prev, desc);
+ 
+ 	return pci->driver_data ? pci : NULL;
+ }
+diff --git a/drivers/gpu/drm/xe/tests/xe_pci_test.h b/drivers/gpu/drm/xe/tests/xe_pci_test.h
+index ce4d2b86b778..6d8bc56f7bde 100644
+--- a/drivers/gpu/drm/xe/tests/xe_pci_test.h
++++ b/drivers/gpu/drm/xe/tests/xe_pci_test.h
+@@ -7,6 +7,7 @@
+ #define _XE_PCI_TEST_H_
+ 
+ #include <linux/types.h>
++#include <kunit/test.h>
+ 
+ #include "xe_platform_types.h"
+ #include "xe_sriov_types.h"
+@@ -25,9 +26,9 @@ struct xe_pci_fake_data {
+ 
+ int xe_pci_fake_device_init(struct xe_device *xe);
+ 
+-const void *xe_pci_graphics_ip_gen_param(const void *prev, char *desc);
+-const void *xe_pci_media_ip_gen_param(const void *prev, char *desc);
+-const void *xe_pci_id_gen_param(const void *prev, char *desc);
+-const void *xe_pci_live_device_gen_param(const void *prev, char *desc);
++const void *xe_pci_graphics_ip_gen_param(struct kunit *test, const void *prev, char *desc);
++const void *xe_pci_media_ip_gen_param(struct kunit *test, const void *prev, char *desc);
++const void *xe_pci_id_gen_param(struct kunit *test, const void *prev, char *desc);
++const void *xe_pci_live_device_gen_param(struct kunit *test, const void *prev, char *desc);
+ 
+ #endif
+-- 
+2.51.0.rc2.233.g662b1ed5c5-goog
+
 

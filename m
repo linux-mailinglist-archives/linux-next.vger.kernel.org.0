@@ -1,121 +1,105 @@
-Return-Path: <linux-next+bounces-8056-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8057-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24BD4B2EDA3
-	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 07:43:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9C5AB2EDE4
+	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 08:05:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 045C25C1676
-	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 05:43:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6518BA009F5
+	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 06:05:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FB2B2C08AD;
-	Thu, 21 Aug 2025 05:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B62E25A325;
+	Thu, 21 Aug 2025 06:05:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L5WXVH4E"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="YS8g+a4s"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A7D826A0A7;
-	Thu, 21 Aug 2025 05:43:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1974B20330;
+	Thu, 21 Aug 2025 06:05:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755755027; cv=none; b=E9SQDF2AoMXeTbaDDuegrmR/L7iOU71Q67NQnH+6CI35DBY0KmuzULQPOGHCTXViUz+7Zh4MbJkXqYPj5nXYSdCi2BEJBIKUPjhUipECW4bZvQCvORTGlQM9HN0UDOGMKrV65doijp8HccaYj/BznxhZHAPAsDZWm25dGxx403I=
+	t=1755756325; cv=none; b=GYE73v2aoT6QaW7pfyeacD2ejjW2VLlLg3/AKALqYKyPGEDjjMLvZSC0/yKd3e2Va2ShWXyfzzQqgQ4+DLUMMygZWmNWJZPwRvhtE4RNO7qWi+61y/MD/MAe0e9rII+07AqcJ8vamuSUjvCCkkF26ODxyItaWXBt4HzszY6pPvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755755027; c=relaxed/simple;
-	bh=Wp7I+WJEXQro1T1vaqb0a2EcFW3Ob8v7DjHO+Wlw9UQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OcH0boVH/mFLs2MYF0hEW+SsV6ITdtRqc/DR9uo9uGm7FP5Vak/nxhYo+gRLhaeqDACHoKCxXCbMypbno6sfXA6mwnsFOkImeV2d8BxanTLs7Nxe15L7TzH7gRYfJaCVGfkoDAtiQ3P+5XI1obIpzF/0jGrGJPmHxGImOm00gLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5WXVH4E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 039C2C4CEED;
-	Thu, 21 Aug 2025 05:43:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755755025;
-	bh=Wp7I+WJEXQro1T1vaqb0a2EcFW3Ob8v7DjHO+Wlw9UQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=L5WXVH4E4xGegsERez0gsqzU5rqIayhns1AWpNjI/Xnt4p2EBLk+Xur9KeQ1RumrS
-	 N7mGDEfOX/1aPNmz2weXWJJQKbAfIbZTC6kcDHs5Yfgv9+LtwF7U4Zv5Q98xocjRjU
-	 FupBzrI1Ob/51kGKvudssay5daZwbNdrD0ng73G8oApHG+Y3Ye1wPdgowAWCR0knKQ
-	 3HmT2FlocjoVyUyv5kVvbsXxN1heZDLm1SNUUt+dlgbZ18/8S7gsPEkQNwfKy6zzrL
-	 jgyIcLv+0ESP23BBo4Yu/nyH7UvoHf/x8UlEMSh3bw6EPQ4OHMEQd1XO1fb64UsFCx
-	 +NhctmiG9Q/TA==
-Date: Thu, 21 Aug 2025 07:40:36 +0200
-From: Nicolas Schier <nsc@kernel.org>
-To: David Disseldorp <ddiss@suse.de>
-Cc: Nathan Chancellor <nathan@kernel.org>, linux-kbuild@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, oe-kbuild-all@lists.linux.dev,
-	linux-next@vger.kernel.org
-Subject: Re: [PATCH v3 8/8] initramfs_test: add filename padding test case
-Message-ID: <aKaxVPGMRX7ywI5L@levanger>
-References: <20250819032607.28727-9-ddiss@suse.de>
- <202508200304.wF1u78il-lkp@intel.com>
- <20250820111334.51e91938.ddiss@suse.de>
- <aKY36YpNQTnd1d7Y@levanger>
- <20250821150426.40f14b7f.ddiss@suse.de>
+	s=arc-20240116; t=1755756325; c=relaxed/simple;
+	bh=L2XaWQf8Bv1sBxfwNLa4pVuwLQ02ytj967/mxyjWWl4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=rcxMlt1bX/OJmiGBbPL/XqdcqERqnaXsc9ru9HYgpEuORX2a1YOzRYnGmw5v9uwh5nNjFdb68RrksOj0rHCCGFskNs4GOWEl8OlArP0A/hpNPC8Hf09BeyLCfSrYZ9FcRseHDr5M11LVm0+jGMKvdQDU5nu+gw6eVqG9D4srsfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=YS8g+a4s; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1755756317;
+	bh=vqgDg4bCYW2gsBIgVXv2Kq5IO21o/xIVTLCrKpkTwtc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=YS8g+a4srL64Y4fomXQ7zjm/1GPXrtCurkm2n+reHz9OgTpybGr/cfMXjenVgIAOi
+	 dku4H3NFRk0G3XA+55SG277pPItvsGHAGoOO0b34XPfxklypFGzfVKIb8Zjrj//p2/
+	 9H/Yaa4No5BB32tfNZv2p0E8fD9qdGJUc++1+v3f8FhSLYxLt9GUXZeofXFF5Nbwu4
+	 m+ey9zvoK5+EXShCxwUmZ3pZwATJ9jvXnJ+5XqDYNNWC72TRODqLJLP/DaCF5abMGx
+	 FlwvQWcjTSgY8xSSmQ/rSFKQW0QIvB5uJvKaM8XZ+GVNBWwjJxkF/0cKfc+ipStl8u
+	 lCV7ib+8rMMUg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c6t8Y0C8gz4wbr;
+	Thu, 21 Aug 2025 16:05:16 +1000 (AEST)
+Date: Thu, 21 Aug 2025 16:05:15 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Harry Yoo <harry.yoo@oracle.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm-hotfixes tree
+Message-ID: <20250821160515.611d191e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Kv6GRpoejpiXQgac"
-Content-Disposition: inline
-In-Reply-To: <20250821150426.40f14b7f.ddiss@suse.de>
+Content-Type: multipart/signed; boundary="Sig_/3=oZanJ88xOlG5Opuq5I2+U";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-
---Kv6GRpoejpiXQgac
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--Sig_/3=oZanJ88xOlG5Opuq5I2+U
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 21, 2025 at 03:04:26PM +1000, David Disseldorp wrote:
-> On Wed, 20 Aug 2025 23:02:33 +0200, Nicolas Schier wrote:
->=20
-> > > >  > 415			.filesize =3D 0,   =20
-> > > ... =20
-> > > >    425			.filesize =3D sizeof(fdata),
-> > > >    426		} }; =20
-> > >=20
-> > > Thanks. I can send a v4 patchset to address this, or otherwise happy =
-to
-> > > have line 415 removed by a maintainer when merged. =20
-> >=20
-> > With that change:
-> >=20
-> > Acked-by: Nicolas Schier <nsc@kernel.org>
->=20
-> Thanks Nicolas!
-> Do you have any suggestions regarding how this patchset should proceed -
-> would git://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git
-> kbuild-next be suitable as a pre-merge-window staging area?
+Hi all,
 
-yes, Nathan agreed to pick it up for kbuild-next.
+After merging the mm-hotfixes tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-Kind regards,
-Nicolas
+ld: mm/kasan/init.o:(.toc+0x0): undefined reference to `kasan_early_shadow_=
+p4d'
 
---Kv6GRpoejpiXQgac
-Content-Type: application/pgp-signature; name="signature.asc"
+Caused by commit
+
+  4b99d7a3e69a ("mm: introduce and use {pgd,p4d}_populate_kernel()")
+
+I have reverted that commit (and the following 07cf1bc1f659) for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/3=oZanJ88xOlG5Opuq5I2+U
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmimsUkACgkQB1IKcBYm
-Emn/IQ/+P+a+p7M0Ns20jJUitDgWVvbYO4R8Q5fJwFtXczz4wJl2Fcp/J4WjRP2y
-GK3HZurpArA98cQIt8TcStCN+wHZUy7mZ2HsGhaOP/o1H6lifHV8vkm29p1Z2Va9
-CAOyLIwP29Gltzmg+RY7iI/FUaeni3+hA3zfMF2653tRLk7shdciwCBBs8xvLRhQ
-6SZTjXEblKMNSpKkLdw5tpm2o7o2+XduGubKWDLfNsLgFfcN/c2r2c7tKsRlpR9o
-MoAwt2wvFfyPMpdvfwHIgmwxjSa3QzntJ7D4gLB6Sa+bIevuikVmj0KtZmG8LCWm
-YvP/BilEaCfmIZK9eNwuLAto2w8sz1HDyD0+8gWaYv5uULnL6XnDQihM3KUWfVLP
-LDtWMGF7THd+Xjlax5cw/ulZOOhNWYFxu3GLVaLLCNa3YGBL6xMn4HoDZ2G0X6Oa
-aWagT4BOJSkeGjAV2W25b3A+AV2fdFyTeVZnBTURPwzfZDOJSt0W/Qqadk4DyeDE
-8YftgcGkOijuUN/yGCNSaF19DQ4cWsnLvIiCVFnUQG9S3P9fRnLiLJ9lmrmjRbqq
-3GiEnhPQtFHufN20kCrTjQoovEnvIunxeTTuEpfXk+aCXMAS8Ffcohba2HG8A197
-J9mxSiVlxUU1qt2kTMI0TPp7zOsFBycNyIIFe+skN6NLGR0L6b0=
-=8UJn
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmimtxsACgkQAVBC80lX
+0Gy8MQf/TAZzOu2C5XGYFr8elkw88XdexwbCaMZh3PC/mmw3scaC3bUER+cFV6nx
+M11qySWJ/+meGHmRdHkgLErWEp4hiOTCyBZ5SjJmuywXH0+TIBBmVDvG1MvzxTcC
+c+iHCAZGnSe91wk05RKxVQh++irT6/FG8nLciaGFBLy6GfHDKuwOE1qqcYcQ5gKX
+QLfQOin35ZbkCPwzGfVCqKaWBPs77VrJpOAqGhE9YUbizA7iIxGQrsB6VFcsJ1bL
+2WsMwt26JffLuh1HiZqGgUaWPRznkKxSnwAKBzjYMxga/hFdDk00nVRO72glryF5
+tjKglwSzed/4YMefrZu0Yf7nv3lb4A==
+=uFr+
 -----END PGP SIGNATURE-----
 
---Kv6GRpoejpiXQgac--
+--Sig_/3=oZanJ88xOlG5Opuq5I2+U--
 

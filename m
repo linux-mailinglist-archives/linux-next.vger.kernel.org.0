@@ -1,136 +1,101 @@
-Return-Path: <linux-next+bounces-8069-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8070-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3A2AB2FBB6
-	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 16:04:27 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C86D5B2FDC5
+	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 17:07:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CEF3AE44D7
-	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 13:56:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CF9B5871DB
+	for <lists+linux-next@lfdr.de>; Thu, 21 Aug 2025 14:57:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6BB2EC57C;
-	Thu, 21 Aug 2025 13:54:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 910922EDD41;
+	Thu, 21 Aug 2025 14:57:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LO31eZ33"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MwBekYe2"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC8EB2EC56F
-	for <linux-next@vger.kernel.org>; Thu, 21 Aug 2025 13:54:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB76D2C11CD;
+	Thu, 21 Aug 2025 14:57:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755784496; cv=none; b=YA9DvJe3fr3hd6KvO7lRDY2N0FdmUBXLDnN46GT7vdPOpBUZC73BkmxLAEokHhclZZad/rMDdMLNJLTxhljpvHey9lJTBScx0O3Ul6Yj2QGw/m7jC0GP4k6bDxtZ2OM3ZdxfbyWGBcHPkPpM//whq/t82iDM3iTQNJ4lgmXNZuM=
+	t=1755788237; cv=none; b=MVd4hgk74OqT8m5Oq8eKdeJk7zX4OclpFHq6hi3d/H/4JvrUAGYWO0qjgDlyqnN+tkKYfPMgx0w4+BuIZGrZ9LO7mziwmf6d6EP8LJTXY0BXdB4KHQ/KDK1wO3NzpPwI9DB83afq8uwTKLm/+Kcqv1vSoIZzBSxd+Iy4VzckuDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755784496; c=relaxed/simple;
-	bh=FRZ/dkTH5e7JEyicr5rKwYSZwT6g3H9r7TNIOOAYgss=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=U1+fXSZWhW1LhwsLdDZauy4U7tlj7A9x4R3xMh2aWLElVKYvAlEyLcrMgI4ATeC2bQm21je7adNvvEoanvOBXfOipViq4BeT6MXgBJWos0i+4WXAPU6ZRt/c3GymoPkifTNcXhjWG8yALMfco77dmJSnpKztcg2jID7z0aID56o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LO31eZ33; arc=none smtp.client-ip=209.85.215.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b47174b2582so1738517a12.2
-        for <linux-next@vger.kernel.org>; Thu, 21 Aug 2025 06:54:54 -0700 (PDT)
+	s=arc-20240116; t=1755788237; c=relaxed/simple;
+	bh=U8zBVgJT1MBW3uhX5im+ul+S/iSiCa3gtZJewr5z4Hs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ABs6llcY+eimRifKWaPleAAwWW80YU8UugY7Xbu94XheBDnI854b2YXqEiuai9gIimX8pHYhkeh2fhlopyRCayeZhdI/h9PKM//+WpaxoGP/4JkCw9fRdKJo33AFyYhT0wNPyabsMaBoeRLYXCL60hFwzkFL5t0FeAbM+6XJiKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MwBekYe2; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-244581eab34so2205565ad.2;
+        Thu, 21 Aug 2025 07:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755784494; x=1756389294; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XpTFpmF3LpyMWsoi7YRVPJftCPsO+iVXO+bA6kJHgfU=;
-        b=LO31eZ33Rx4MStqcRWDOLK/mE63EmxOKBKoNkGWRctXY1mzyW5mpdQKBsRUpNQEnMv
-         zM1PgD/II8xYkUJYKxCq9asq7NNHiimsbwsH9vkC8cCXrIdNNPeMObMA7E731OcuHMfj
-         fUp175K3AQzvGBAN0KcIbnbG+ls3NCfSOylHWyAQd8irgzCxCmyYYrHRErcHaSl9VPdQ
-         4VMjyhY6wEiHuGQFEKe7XptDCA6MisyI+Rl5pPa1nKs2MG+jCOsO2zdTuuCWhmLcDZch
-         Ps4sOYFESuQ09hGhbRL7raRMmYh+AXUncKQ6Uww/mFFiWvZ8V1g66nuxCtZZHKKdsibT
-         DvAg==
+        d=gmail.com; s=20230601; t=1755788235; x=1756393035; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U8zBVgJT1MBW3uhX5im+ul+S/iSiCa3gtZJewr5z4Hs=;
+        b=MwBekYe2sHSczdYc/QHeqPH+aumTueYA/6qr8zN6b039rrTfcUW+WInlLCeS7BLUMq
+         tUc4rKSvMOkq+6QLs+98s9wuqZyhWh2IqT2JzgoGV+1GlQkzGcLJb6cxx7eDSViyTTIc
+         oROwuure5pH36BY8q0H8pgXRl8DZM3WAIYSFVkjuNHcnwo6upIIAYsf7bT+c1tkqJReN
+         ukpJYqaDzO11aasjo9YsF8ul6j/xvCpWvWw5XoVAq34Ee/h3F15UJQ6IN7W4lYFtFKEA
+         u5kJQASDMzU6bxwk7VF3WlP7OMFgGdxN4REYcU+pGfmuw0QylKnLbUh6caRZlKiLkqmp
+         o2sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755784494; x=1756389294;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XpTFpmF3LpyMWsoi7YRVPJftCPsO+iVXO+bA6kJHgfU=;
-        b=bD7rx3VeosJqGDqVzYPY0Rcwga4pUZ+hf02Y0FpjYSRpFegvUKU7+SEOirjfWGmq6g
-         vsRNg3VCf1aV/LGZkfdZAKGijxpGxO/KzG4rZ2PFAIrIDT30Kuthd0wasqAMs4bh14Xh
-         zFRXd73ovMWzu1SX9/pX36c66lmUatSlE95rC5B7hOJdv9b0YMHKhOuOvxxLU9iy7r09
-         AAvgVQeJwUVQJ+eLcomTjSCBSUv9dZ+icG08SecBgpTFOfsdtA0Gv8SifmclYrHI9vsO
-         gVeLLuZFtxJvHQeW7jt4fevKRveF6sFAF288Ud5JpUcHsVY5FFxi41yLkKbHwbX3q9zI
-         UcYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUfhq/6uVJ12gYAQUSQ741BWhy8Z/PCuyzEQK6+/EZSccoqug9vgcFoLTHu5aycGOrJMMLdJowNavE8@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZxXVOCql/9Cj4jEWdCk3Zx0d9ZLZMazRhhm1PtzSTsHIOODNa
-	GNkIZJDWyyALUynKJqjdM7FNdaLNTv/l69z5zguTPKOsn9VatJ+6M7cG/VjhokXdAkMBCKkpiF+
-	B57ip+cSDFYFywQ==
-X-Google-Smtp-Source: AGHT+IGJEX7ZclUuZ2o8JPzaPgxqgSiOjHKYAc6KuCEwQ4l/jHJHNh6xVmvyFffzu/3E1KDZ2EtRfnXg3G6H5Q==
-X-Received: from pfbmd16.prod.google.com ([2002:a05:6a00:7710:b0:76b:c859:e832])
- (user=davidgow job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:5493:b0:23f:fd87:427c with SMTP id adf61e73a8af0-243307cb3b7mr3418114637.18.1755784494062;
- Thu, 21 Aug 2025 06:54:54 -0700 (PDT)
-Date: Thu, 21 Aug 2025 21:54:45 +0800
-In-Reply-To: <20250821135447.1618942-1-davidgow@google.com>
+        d=1e100.net; s=20230601; t=1755788235; x=1756393035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U8zBVgJT1MBW3uhX5im+ul+S/iSiCa3gtZJewr5z4Hs=;
+        b=sYlKBRbDKvp5QowP05V++T4T+6Nv21kw7D/ZBEgR+6AT325cP3BYgJBTA0I18Jcfzs
+         LIykLMiWCbddHpNbEZ+QcMDKtLJnthJPYFsbbC8aERpMuBtMGwuFWnmn2W2Mc9JlTyKU
+         sZOUaRDFshQuNhDdVz6YZHZZGwMC39gnXUpkcFsB/CJtL6L2/W6yI8UzMUuON/Kijr3K
+         S9A54C7VJkf6Sw5h+MDvJkp2NC49fEHbjSf95pc+wTPcuQeOvmaUch3kvPygomfrR4jI
+         gqFGO+YqQK5y9B1hH2k9sXjOBihZrbQMGDQaXgv5Y+3WW/VBdanzJS6twi+ifGwhtT3x
+         w7rw==
+X-Forwarded-Encrypted: i=1; AJvYcCUYaTsLO7l+bScseZYkSdSibzE5gTwR9LgQzVsJgHY/s8UCKFNVDAX7PxxfrzSjfZg7xkBF7NICv/hHKVY=@vger.kernel.org, AJvYcCVNDvmBbQ7wabJwGG+sJeFR0D6wojhJmbIAmWRtCxWD/FAx8l06x+FOiJoh9g/VL8rQHptGU34pzOWjVQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyxqv+3/ltEyDZzT4cl00h2kGA3PAWFl5sp0ohM43LKXU+NShn3
+	x7Y5a1zWqwMcW+UwM5UAFwLAHP1wfPLLmaGU+m+SWxm1C0XNaZcyInh10N5/OuIi2WRCN6Ypdh3
+	Vt5+gMKZ6Qnskn55yB+HTo5YtJ9Bjmgs=
+X-Gm-Gg: ASbGncsIwtLvf2T2Jc/YmP/hi1I4cYt7FwPXRccfoK+NXNUNUbbLYATPj3HPuh+o8T5
+	uvs/ElIavb8nCPCEty06EBBX1Xnv8NYAyK+u4F06+wZB5c5g90PqdMRxpEjFxUcnAQg1fsPNZac
+	7jQqc+GW/G+3VZ3oSvWKt3/KHjHW+l1gSH0oXWeVqKPLYVWNGQBx8HmyUxtQPh2xx4WfU9OCkl1
+	AcXQHJ7P4nYsB4gDcg=
+X-Google-Smtp-Source: AGHT+IHFTuHF/h6I4XoItrkELxafG29TELxPRz8Z2qqXKS7BMlwb5mmzLCZh2G7JQPEp/8XnUu21KIhTcH7eRCIuyxc=
+X-Received: by 2002:a17:902:f547:b0:240:9ab5:4cae with SMTP id
+ d9443c01a7336-245fed5a1ecmr23497815ad.1.1755788234965; Thu, 21 Aug 2025
+ 07:57:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250821135447.1618942-1-davidgow@google.com>
-X-Mailer: git-send-email 2.51.0.rc2.233.g662b1ed5c5-goog
-Message-ID: <20250821135447.1618942-2-davidgow@google.com>
-Subject: [PATCH v2 2/2] kunit: Only output a test plan if we're using kunit_array_gen_params
-From: David Gow <davidgow@google.com>
-To: Rae Moar <rmoar@google.com>, Marie Zhussupova <marievic@google.com>, marievictoria875@gmail.com, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Shuah Khan <skhan@linuxfoundation.org>
-Cc: David Gow <davidgow@google.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, intel-xe@lists.freedesktop.org, 
-	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+MIME-Version: 1.0
+References: <20250820113720.25631f7f@canb.auug.org.au>
+In-Reply-To: <20250820113720.25631f7f@canb.auug.org.au>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 21 Aug 2025 16:57:02 +0200
+X-Gm-Features: Ac12FXwypKnMx-2s_f_5w4LhU2sAdH7h-NK8CpDZKC0iHptS886h1LJcufTypcs
+Message-ID: <CANiq72niVeL0CXmQndsO4QWDn3LO5vo66DmmTC+=f+MzM=DRNw@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the input tree with Linus' tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Liao Yuanhong <liaoyuanhong@vivo.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In 6a2a027e254b ("kunit: Enable direct registration of parameter arrays to a KUnit test"),
-we now output a test plan for parameterised tests which use parameter
-arrays. This uses the size of the array (via the ARRAY_SIZE macro) to
-determine the number of subtests, which otherwise was indeterminate.
+On Wed, Aug 20, 2025 at 3:37=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> I fixed it up (I applied the following merge fix patch) and can carry the
 
-However some tests (particularly xe_pci.check_platform_gt_count) use
-their own gen_params function which further filters the array, resulting
-in the test plan being inaccurate (and hence kunit.py failing).
+Looks good in next-20250821, thanks!
 
-For now, only print the test plan line if the gen_params function is the
-provided kunit_array_gen_params. Unfortunately, this catches a lot of
-tests which would work, but at least makes sure we don't regress
-anything until we can rework how some of these macros function.
-
-Fixes: 6a2a027e254b ("kunit: Enable direct registration of parameter arrays to a KUnit test")
-Signed-off-by: David Gow <davidgow@google.com>
----
-
-No changes since v1:
-https://lore.kernel.org/linux-kselftest/20250819073434.1411114-2-davidgow@google.com/
-
-(The change was in patch 1.)
-
----
- lib/kunit/test.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index b661407ad0a3..bb66ea1a3eac 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -732,10 +732,12 @@ int kunit_run_tests(struct kunit_suite *suite)
- 				  "KTAP version 1\n");
- 			kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT KUNIT_SUBTEST_INDENT
- 				  "# Subtest: %s", test_case->name);
--			if (test.params_array.params)
-+			if (test.params_array.params &&
-+			    test_case->generate_params == kunit_array_gen_params) {
- 				kunit_log(KERN_INFO, &test, KUNIT_SUBTEST_INDENT
- 					  KUNIT_SUBTEST_INDENT "1..%zd\n",
- 					  test.params_array.num_params);
-+			}
- 
- 			while (curr_param) {
- 				struct kunit param_test = {
--- 
-2.51.0.rc2.233.g662b1ed5c5-goog
-
+Cheers,
+Miguel
 

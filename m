@@ -1,81 +1,101 @@
-Return-Path: <linux-next+bounces-8084-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8085-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4128AB3300B
-	for <lists+linux-next@lfdr.de>; Sun, 24 Aug 2025 15:17:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9E47B3310A
+	for <lists+linux-next@lfdr.de>; Sun, 24 Aug 2025 16:57:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0BE048176E
-	for <lists+linux-next@lfdr.de>; Sun, 24 Aug 2025 13:17:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBBA6204BAE
+	for <lists+linux-next@lfdr.de>; Sun, 24 Aug 2025 14:57:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FE45212576;
-	Sun, 24 Aug 2025 13:17:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 974E1189BB0;
+	Sun, 24 Aug 2025 14:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iLT90Ia7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HSKwTLyg"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBCEFA41;
-	Sun, 24 Aug 2025 13:17:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC002D543E;
+	Sun, 24 Aug 2025 14:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756041475; cv=none; b=oSE41vtwaqixpuTmuG8qtjXq2iLIWJxZlsxbjypHxnE9y0LG5xnR63gl1Q+sExOvcriWpRuCtNBXQ4h6jtKFk24UAh9NEpf0cX0CXr7e+iC5Pxe52VYZm4kcMvFlvztGPTS9R8t8C44qNvg4qUovUMBJxIsQHw3GqcYShGdmIzs=
+	t=1756047420; cv=none; b=o6f7liARKmbkd4dfMvMq2upTUIwlSvWOIkiUOKXh1I8OxlmQ4rGK+PLZIhPMUxvtCZPIarmSNOn0zlLGZcwPJd3n12OsLcKUhDukuPGgFgEpw6kIaa0/ToEpSo0t8S+tbXZrWi9HFtC7KaPM/LPqORnQ/QSlBPAvuDBsGXiBxz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756041475; c=relaxed/simple;
-	bh=t5I0db7OM2QTz9JZog2He9wyk0er5+OsKe6cipYUwdM=;
+	s=arc-20240116; t=1756047420; c=relaxed/simple;
+	bh=+1jOLriLozrGM7yB2Hzza4VqOJeh+3Z6/w0hTsdPRZs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RXf62YAgFh6Qf9r8HYC8hm/BbYZVyKIfaMgmRd7QyGGVg5FvldQommQ4tHzw8LynAKPSyquHe6yTdCeglInHl+bpeMPyIdlwjUODFsB4OuXeHrxNfYqIYSgxpWkM+A2DJc9mIuFIkVotQaO8NBX7Y43HQe/e8Hk5viEMH5gCUYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iLT90Ia7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E6F6C4CEEB;
-	Sun, 24 Aug 2025 13:17:54 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=X/TE6qq6k92kebloG7CkvKf366UNwZVfQafVy2WbdApzIMmaUpfD+ccOXL39r3hwFjKOtBjdRMrw6z85rKeoPzqFT9Lr8sE2O8e+BYhhG4xAdX1zKsSPvS18ItxpBtHtsZnlaCTOI0+4C+tm/1Wl+H9a9jdYDiCxqZZ+lTlmJzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HSKwTLyg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA42DC4CEEB;
+	Sun, 24 Aug 2025 14:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756041474;
-	bh=t5I0db7OM2QTz9JZog2He9wyk0er5+OsKe6cipYUwdM=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=iLT90Ia7f5mW+c/ppB2PGRrT82zrQW8VIw4bQSf4bNVMbFFRNOcKhWl12jO3Os8ug
-	 517zfOtmHCLLeUbWMdT+fFeA/oKhcsM6xWCGxuR/SZrjILL3XDMZWDtd7Pdg779kL9
-	 H7yftcBw4DHJWKVjxHU9Gzl6pWwT53tymdoWy8iJroEHesX9Ny1opm2mq7CNLlkEkL
-	 72VpsxeoO+XdyRtU90MLV3SxrDC4dcRGa18K9U5kEai79GzuwdrMdroqnCA04MwHVJ
-	 f83FmpdrZypvPGkacmkhTmX+GPOctMSj7AUeo8yRlMleXjy8MA3xnmG2lfbHovlAWu
-	 I5AfZ4VeZYOiA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 02E2CCE0ADA; Sun, 24 Aug 2025 06:17:54 -0700 (PDT)
-Date: Sun, 24 Aug 2025 06:17:53 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
+	s=k20201202; t=1756047419;
+	bh=+1jOLriLozrGM7yB2Hzza4VqOJeh+3Z6/w0hTsdPRZs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HSKwTLygEkqzxSulJaUucKa+QiFs8hhQLZvlVdRxt/S4SidV12pX1wbNX3fkNJxD7
+	 Z5AiK7CfOoMfVH+lLq2Ht6HObqpDcEzjN7XqeTWHVQ6NoIP/OmCxHuZgbBFySn3bJz
+	 aMG+Tmi2oYW9Fr5gUQdY/WbYpqVBSf4F/YY6dVJ93yqAy+LwZPv1pnPYZMoD9BmI4X
+	 zu8WGW2Y4poTUnc0upqfwhrPjp9/Zi1zNtxqP0v/3XN4livypYvgg2pQMHuoM11oin
+	 coSaXnwS4bt9aaGKUFyrhFTpytEmKMnczaWJenZgf6f8nQRM6yDMBnB2boLv7dMDLs
+	 ht9UWdW/eW8GQ==
+Date: Sun, 24 Aug 2025 07:56:58 -0700
+From: Drew Fustini <fustini@kernel.org>
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
+Cc: Drew Fustini <drew@pdp7.com>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the rcu tree
-Message-ID: <1f51dd68-1d9a-4f85-b9dd-4745a756e097@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20250824185045.43623e9f@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commit in the thead-dt tree
+Message-ID: <aKsoOmVUsdaW2s99@x1>
+References: <20250824184844.2994f896@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="k4JGVHJrnLmV5t8L"
+Content-Disposition: inline
+In-Reply-To: <20250824184844.2994f896@canb.auug.org.au>
+
+
+--k4JGVHJrnLmV5t8L
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250824185045.43623e9f@canb.auug.org.au>
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Aug 24, 2025 at 06:50:45PM +1000, Stephen Rothwell wrote:
+On Sun, Aug 24, 2025 at 06:48:44PM +1000, Stephen Rothwell wrote:
 > Hi all,
-> 
+>=20
 > Commit
-> 
->   e5ae44cfd65e ("rculist: move list_for_each_rcu() to where it belongs")
-> 
+>=20
+>   0f78e44fb857 ("riscv: dts: thead: th1520: Add IMG BXM-4-64 GPU node")
+>=20
 > is missing a Signed-off-by from its committer.
 
-Thank you, will fix on my next rebase.
+Sorry about that. I need to setup a hook so I don't do that again.
 
-							Thanx, Paul
+I've pushed an update with the SoB:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/commit/?h=
+=3Dthead-dt-for-next&id=3D5052d5cf1359e9057ec311788c12997406fdb2fc
+
+Thanks,
+Drew
+
+--k4JGVHJrnLmV5t8L
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSy8G7QpEpV9aCf6Lbb7CzD2SixDAUCaKsoOgAKCRDb7CzD2Six
+DFZvAP0QMw/09l37X7J+HaYfza0X+/C/fVTE/aBeJqJXbQIqNAD7BqMJz8i5qG5k
+JW369YAf4KI9yy2DgLQzBpbJFlFY7Aw=
+=Q3UM
+-----END PGP SIGNATURE-----
+
+--k4JGVHJrnLmV5t8L--
 

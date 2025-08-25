@@ -1,107 +1,216 @@
-Return-Path: <linux-next+bounces-8087-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8088-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E433FB335B5
-	for <lists+linux-next@lfdr.de>; Mon, 25 Aug 2025 07:03:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BDC9B33628
+	for <lists+linux-next@lfdr.de>; Mon, 25 Aug 2025 08:06:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E527F1B2229B
-	for <lists+linux-next@lfdr.de>; Mon, 25 Aug 2025 05:04:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18A91161084
+	for <lists+linux-next@lfdr.de>; Mon, 25 Aug 2025 06:06:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063A7213E89;
-	Mon, 25 Aug 2025 05:03:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A9C023D7E2;
+	Mon, 25 Aug 2025 06:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FLfauTyV"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="lHTJ4nPF"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB4921ADA7;
-	Mon, 25 Aug 2025 05:03:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 242EF23D7DA;
+	Mon, 25 Aug 2025 06:06:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756098216; cv=none; b=VSw3sws3gUtoGU0aXXOfpn8eq88zZKcVvw4JenM5WCumIuz8Hgxh3ZD7pd34qB6JZ9IZqA44YX/ixi4ckvdQPAsq7iIoGrakkF7rjqFCp3KtwNWB3i9+g7e6NQ913vsAu1+l4naivbfA9ddZhQHqMvLBfKYE+vcoU7nq14a64/U=
+	t=1756101970; cv=none; b=gRYxBe54aJh0nYw3hwBLdWnftDu+lPD6pKIilf6WOD4EfFqUVPuf1OTJeO2DLd2JcllCOoiQYzD/3TgB2IOF4cV7K5PEP3g/8hGZKGACX95kbdwwz+FfQh8aFP/6E8Fz3uLGzg+e+kcz+FK/oNUZCtqYUlEro4zEtsyW4ibiuuc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756098216; c=relaxed/simple;
-	bh=/wxRuPUnqwDUi3mX7f4z/dSu8GpTt8CnmlQ5Y4NdvE0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Eo7zyrhCDftHgAxdFsTFoQbhQT8puDf0dMgD45QT3tzqjx5d9wqmdYa/EtmGlfs2gfO+QWxyRbHrg1pFOKWhmNydMLHLXh2DJeFuMb1WADB1u2sv16jAUGv/J4ZCKaD3EtZiPl2l65oTiqPAaz4P7Z1CWaWUR1ebN+iN6+Wwrqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=FLfauTyV; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1756101970; c=relaxed/simple;
+	bh=yrD56le40eioGmzXzTsg1qQGCLMkeOGwVrY7cv15Fz0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IYzQH84LPkfsXDakfNXtQ2Fm5mKYfHyGhzFvLwc5WoL1+H0Y8Md2ljfGzW3xwpVze/SfK0RmQupibM3YQh1ka660tqvUROlyH02nTBo/jsG/wzXzlATxNjGDvfPKQwjf1Gd0vKl75nJKAEf5U+Xn/1X4d94y7o6zgi8N+Kz+cCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=lHTJ4nPF; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1756098208;
-	bh=uWmuAPB/MHIfGgs+o7z2EHbmhKfnHJ/S+dG8/xZW2os=;
-	h=Date:From:To:Cc:Subject:From;
-	b=FLfauTyVG7PI6obiWY3u/SMGmzRZ/6tcbKbOotSCvMbD+NcUfzqMRob8oM7d2VQX/
-	 PS8jc3W5iIvBLzPTTy2l/9xM3G7yO9OJM4Y2m4cqhZW9QJSTRs0RSIEPzLd62s5UVX
-	 VSe0Yz6sFpiYAXekcU2++xV9NLdI2ZAk66ovvekhIO4qkv83Zk9o3FOcmfNHCykK6U
-	 1w3DKK87W7cK+9n8rI+X3boOahp5M8h56y/2LwarisLbJwJJKrb62/0+j+uRHyII0e
-	 ql152XtQV3ugQMdKYym88anr00TR/F8DMiefl7bUl3wgU5FSjayNX61mxHWptTKk/O
-	 l69zxn/jEV72w==
+	s=202503; t=1756101958;
+	bh=Vijw8TeqguQFZ1R2OCtKzTGurHB8WiXSYY6DcAghyJE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=lHTJ4nPFTYQ7RLOYhKiag1aEKIjFpSYdtVcH+mKgZbhne/k4Itawg36mK+ltstcqs
+	 0rzugsZqHyAPPsc1b2qGsgVmUL34FZXgfRh9/4Sxm7368TPHc0/lL+G0tHp8st3uar
+	 gj+b1/Tp1E0NNDDnPtXS/G+NPyYK9/M64gWsHUlAofby/cWux4bMKzOVkg/s+m8Ifl
+	 CQiyjvY0jV8T/IWYAydIl8Aea1FVXWxGF1dox8hvRfs1+i6Q2S6Y+i7v6mWgyqINOd
+	 cb+fmFkjR+L6UzfAtQ8YsdTE+Z6q83anluvJ0/cSTgZUT+PCZMRBTDHxhutBWswNEX
+	 4l3blhs7OfYIg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c9JbM6SD5z4x3M;
-	Mon, 25 Aug 2025 15:03:27 +1000 (AEST)
-Date: Mon, 25 Aug 2025 15:03:26 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c9KzV224Nz4w2H;
+	Mon, 25 Aug 2025 16:05:58 +1000 (AEST)
+Date: Mon, 25 Aug 2025 16:05:57 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Tejun Heo <tj@kernel.org>
-Cc: Tiffany Yang <ynaffit@google.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: David Gow <davidgow@google.com>, Marie Zhussupova <marievic@google.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, KUnit Development
+ <kunit-dev@googlegroups.com>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the cgroup tree
-Message-ID: <20250825150326.696d7496@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the kunit-next tree
+Message-ID: <20250825160557.591ef4d7@canb.auug.org.au>
+In-Reply-To: <CABVgOSm2_FGfjQpUBttuUH5ZrMEqnaGkYVkN6N96wX7Qs8EE2Q@mail.gmail.com>
+References: <20250818120846.347d64b1@canb.auug.org.au>
+	<1befd7ab-f343-450f-9484-0cef21fe2da8@linuxfoundation.org>
+	<CABVgOSm2_FGfjQpUBttuUH5ZrMEqnaGkYVkN6N96wX7Qs8EE2Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/flJ5qIWza9tOFkNivEEMyh5";
+Content-Type: multipart/signed; boundary="Sig_/CSLmByyvfhI7Imp6=iqT0sp";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/flJ5qIWza9tOFkNivEEMyh5
+--Sig_/CSLmByyvfhI7Imp6=iqT0sp
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the cgroup tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+On Tue, 19 Aug 2025 15:44:52 +0800 David Gow <davidgow@google.com> wrote:
+>
+> On Tue, 19 Aug 2025 at 00:32, Shuah Khan <skhan@linuxfoundation.org> wrot=
+e:
+> >
+> > On 8/17/25 20:08, Stephen Rothwell wrote: =20
+> > >
+> > > After merging the kunit-next tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this: =20
+> >
+> > Thank you Stephen. I did a allmodconfig build on 6.17-rc1 base - didn't
+> > see the error.
+> >
+> > Marie, David, can you take a look this. Looks like conflict with drm
+> > in next?
+>=20
+> Thanks, Shuah. I've managed to reproduce this with:
+> ./tools/testing/kunit/kunit.py run --arch x86_64 --kunitconfig
+> drivers/gpu/drm/xe
+>=20
+> These patches fix it (and a corresponding drm/xe test failure):
+> https://lore.kernel.org/linux-next/20250819073434.1411114-1-davidgow@goog=
+le.com/T/#t
+>=20
+> Ideally, they'll be squashed into the corresponding patches, as
+> otherwise there'd be some temporary breakage during bisections. I can
+> squash these into the original series and re-send it out if that works
+> best for you.
+>=20
+> Cheers,
+> -- David
+>=20
+> > >
+> > > In file included from include/kunit/static_stub.h:18,
+> > >                   from drivers/gpu/drm/xe/xe_bo.c:20:
+> > > drivers/gpu/drm/xe/tests/xe_bo.c:610:48: error: initialization of 'co=
+nst void * (*)(struct kunit *, const void *, char *)' from incompatible poi=
+nter type 'const void * (*)(const void *, char *)' [-Wincompatible-pointer-=
+types]
+> > >    610 |         KUNIT_CASE_PARAM(xe_ccs_migrate_kunit, xe_pci_live_d=
+evice_gen_param),
+> > >        |                                                ^~~~~~~~~~~~~=
+~~~~~~~~~~~~~~~
+> > > include/kunit/test.h:210:38: note: in definition of macro 'KUNIT_CASE=
+_PARAM'
+> > >    210 |                   .generate_params =3D gen_params, .module_n=
+ame =3D KBUILD_MODNAME}
+> > >        |                                      ^~~~~~~~~~
+> > > drivers/gpu/drm/xe/tests/xe_bo.c:610:48: note: (near initialization f=
+or 'xe_bo_tests[0].generate_params')
+> > >    610 |         KUNIT_CASE_PARAM(xe_ccs_migrate_kunit, xe_pci_live_d=
+evice_gen_param),
+> > >        |                                                ^~~~~~~~~~~~~=
+~~~~~~~~~~~~~~~
+> > > include/kunit/test.h:210:38: note: in definition of macro 'KUNIT_CASE=
+_PARAM'
+> > >    210 |                   .generate_params =3D gen_params, .module_n=
+ame =3D KBUILD_MODNAME}
+> > >        |                                      ^~~~~~~~~~
+> > > drivers/gpu/drm/xe/tests/xe_bo.c:611:45: error: initialization of 'co=
+nst void * (*)(struct kunit *, const void *, char *)' from incompatible poi=
+nter type 'const void * (*)(const void *, char *)' [-Wincompatible-pointer-=
+types]
+> > >    611 |         KUNIT_CASE_PARAM(xe_bo_evict_kunit, xe_pci_live_devi=
+ce_gen_param),
+> > >        |                                             ^~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~
+> > > include/kunit/test.h:210:38: note: in definition of macro 'KUNIT_CASE=
+_PARAM'
+> > >    210 |                   .generate_params =3D gen_params, .module_n=
+ame =3D KBUILD_MODNAME}
+> > >        |                                      ^~~~~~~~~~
+> > > drivers/gpu/drm/xe/tests/xe_bo.c:611:45: note: (near initialization f=
+or 'xe_bo_tests[1].generate_params')
+> > >    611 |         KUNIT_CASE_PARAM(xe_bo_evict_kunit, xe_pci_live_devi=
+ce_gen_param),
+> > >        |                                             ^~~~~~~~~~~~~~~~=
+~~~~~~~~~~~~
+> > > include/kunit/test.h:210:38: note: in definition of macro 'KUNIT_CASE=
+_PARAM'
+> > >    210 |                   .generate_params =3D gen_params, .module_n=
+ame =3D KBUILD_MODNAME}
+> > >        |                                      ^~~~~~~~~~
+> > > drivers/gpu/drm/xe/tests/xe_bo.c:624:51: error: initialization of 'co=
+nst void * (*)(struct kunit *, const void *, char *)' from incompatible poi=
+nter type 'const void * (*)(const void *, char *)' [-Wincompatible-pointer-=
+types]
+> > >    624 |         KUNIT_CASE_PARAM_ATTR(xe_bo_shrink_kunit, xe_pci_liv=
+e_device_gen_param,
+> > >        |                                                   ^~~~~~~~~~=
+~~~~~~~~~~~~~~~~~~
+> > > include/kunit/test.h:223:38: note: in definition of macro 'KUNIT_CASE=
+_PARAM_ATTR'
+> > >    223 |                   .generate_params =3D gen_params,          =
+                      \
+> > >        |                                      ^~~~~~~~~~
+> > > drivers/gpu/drm/xe/tests/xe_bo.c:624:51: note: (near initialization f=
+or 'xe_bo_shrink_test[0].generate_params')
+> > >    624 |         KUNIT_CASE_PARAM_ATTR(xe_bo_shrink_kunit, xe_pci_liv=
+e_device_gen_param,
+> > >        |                                                   ^~~~~~~~~~=
+~~~~~~~~~~~~~~~~~~
+> > > include/kunit/test.h:223:38: note: in definition of macro 'KUNIT_CASE=
+_PARAM_ATTR'
+> > >    223 |                   .generate_params =3D gen_params,          =
+                      \
+> > >        |                                      ^~~~~~~~~~
+> > >
+> > > Caused by commit
+> > >
+> > >    444be9072fca ("kunit: Pass parameterized test context to generate_=
+params()")
+> > >
+> > > I have used the kunit-next tree from next-20250815 for today.
 
-arm-linux-gnueabi-ld: kernel/cgroup/cgroup.o: in function `cgroup_core_loca=
-l_stat_show':
-kernel/cgroup/cgroup.c:3804:(.text+0x1374): undefined reference to `__aeabi=
-_uldivmod'
-
-Caused by commit
-
-  afa3701c0e45 ("cgroup: cgroup.stat.local time accounting")
-
-I have used the cgroup tree from next-20250822 for today.
+I am still seeing this build failure.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/flJ5qIWza9tOFkNivEEMyh5
+--Sig_/CSLmByyvfhI7Imp6=iqT0sp
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmir7p4ACgkQAVBC80lX
-0Gw2Owf/S6OOf54Z1fRDeHERrSxBHF4cLf3wDYenCSZrj+Y4WMU7M7B5IdmDjG6+
-m7hThLGCObTfs8J6hVDyutXd1HclRnn/RyrcAg+JrvOoTqZGTrrlqYfi9Tlx4pzz
-H754iCNTbitEzR5NffX3TPzX3laVkw+miGWn1j7h2OhsooAEviw+rJTfS8aCs0Tg
-ZQZjrURjc2kM/LyBOVoNtOyTjgAWP7kGWX1Jy9lSdg2s84Z+RbdELbJzsLhTU1Yi
-ZtHaZIwiNkcoIXcfFvUfq0b4lxEIUph3pawmt2mBMmh3KqkMFocbgj7TynrK6zkX
-ZY35kRk6IDZLrWSYzuFYfHhwCgAmTg==
-=GX4F
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmir/UUACgkQAVBC80lX
+0Gz+uQf/eRUEmVp/4AG5GB6ZDeMogB2T+8OUA5RZIJi/X0QRm0uuaBpDQ0usgJDp
+Nl5XnxGfVZWLw3xoDE+vKq0e7l/NShSLjWJmM85rUzZY0u3s8J4H0Mt2OTZdTWlX
+hyjaRyYVg/dVxokddniND1FOjlsK9p4zXHqNISG4FZ8S6TqONjkGDQsrH0x5DzJK
+AYHbIsDiWl33liei/5RAV3hST3DOUNNVP4WRfL0Vx0lfr44sgCiEuMHrWc2qRlh2
+RgCIOhqaLXRWlX36grHG9QVitycqrccg6qaeii8CWf63oKech5GM+ux2owIL6dt7
+i2Jf5gBtZwd6357EqcnIltrLQoXmdA==
+=CTa5
 -----END PGP SIGNATURE-----
 
---Sig_/flJ5qIWza9tOFkNivEEMyh5--
+--Sig_/CSLmByyvfhI7Imp6=iqT0sp--
 

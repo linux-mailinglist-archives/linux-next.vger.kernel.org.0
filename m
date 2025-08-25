@@ -1,101 +1,122 @@
-Return-Path: <linux-next+bounces-8085-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8086-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9E47B3310A
-	for <lists+linux-next@lfdr.de>; Sun, 24 Aug 2025 16:57:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDB6FB33370
+	for <lists+linux-next@lfdr.de>; Mon, 25 Aug 2025 03:07:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBBA6204BAE
-	for <lists+linux-next@lfdr.de>; Sun, 24 Aug 2025 14:57:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD9CF17CD87
+	for <lists+linux-next@lfdr.de>; Mon, 25 Aug 2025 01:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 974E1189BB0;
-	Sun, 24 Aug 2025 14:57:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9D1E1E5B82;
+	Mon, 25 Aug 2025 01:07:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HSKwTLyg"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AmCleDmH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC002D543E;
-	Sun, 24 Aug 2025 14:57:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 279784A08;
+	Mon, 25 Aug 2025 01:06:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756047420; cv=none; b=o6f7liARKmbkd4dfMvMq2upTUIwlSvWOIkiUOKXh1I8OxlmQ4rGK+PLZIhPMUxvtCZPIarmSNOn0zlLGZcwPJd3n12OsLcKUhDukuPGgFgEpw6kIaa0/ToEpSo0t8S+tbXZrWi9HFtC7KaPM/LPqORnQ/QSlBPAvuDBsGXiBxz0=
+	t=1756084020; cv=none; b=Uwy0aPFnoLIHR7CMbE6tgQ1c37M4vDuUb9oX8GuckNF3Nx5ipnu4SfBmvsoFB25TeLZZt0clyt5utS8oHy4Xt0zAoQYAyz/wG+8NBJu5v/6VxogDU+J5SND2dJkHzx0PFjVEgMLwSfMu/P7yt9cpzz8uwzhNIE5E5vOkIRLoSYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756047420; c=relaxed/simple;
-	bh=+1jOLriLozrGM7yB2Hzza4VqOJeh+3Z6/w0hTsdPRZs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X/TE6qq6k92kebloG7CkvKf366UNwZVfQafVy2WbdApzIMmaUpfD+ccOXL39r3hwFjKOtBjdRMrw6z85rKeoPzqFT9Lr8sE2O8e+BYhhG4xAdX1zKsSPvS18ItxpBtHtsZnlaCTOI0+4C+tm/1Wl+H9a9jdYDiCxqZZ+lTlmJzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HSKwTLyg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA42DC4CEEB;
-	Sun, 24 Aug 2025 14:56:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756047419;
-	bh=+1jOLriLozrGM7yB2Hzza4VqOJeh+3Z6/w0hTsdPRZs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HSKwTLygEkqzxSulJaUucKa+QiFs8hhQLZvlVdRxt/S4SidV12pX1wbNX3fkNJxD7
-	 Z5AiK7CfOoMfVH+lLq2Ht6HObqpDcEzjN7XqeTWHVQ6NoIP/OmCxHuZgbBFySn3bJz
-	 aMG+Tmi2oYW9Fr5gUQdY/WbYpqVBSf4F/YY6dVJ93yqAy+LwZPv1pnPYZMoD9BmI4X
-	 zu8WGW2Y4poTUnc0upqfwhrPjp9/Zi1zNtxqP0v/3XN4livypYvgg2pQMHuoM11oin
-	 coSaXnwS4bt9aaGKUFyrhFTpytEmKMnczaWJenZgf6f8nQRM6yDMBnB2boLv7dMDLs
-	 ht9UWdW/eW8GQ==
-Date: Sun, 24 Aug 2025 07:56:58 -0700
-From: Drew Fustini <fustini@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Drew Fustini <drew@pdp7.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the thead-dt tree
-Message-ID: <aKsoOmVUsdaW2s99@x1>
-References: <20250824184844.2994f896@canb.auug.org.au>
+	s=arc-20240116; t=1756084020; c=relaxed/simple;
+	bh=Z9tqbrFBHvLYg+TCrKFdIRZPan4X5CDYpubKX72ftNE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=O8XsQLIZdm7+TwbeGmZB/Bqh0Qo/cfeSY12TcCjQhx2cMOAhMz97FUw7v3r+O12IjXIQ1ntL8hRyIbwmb5mpVguVzAOz4QiR4rL9YOFmHTfVJLkM98qVKt/Djfag22Vtfw7znx2NxW9JJk1VCJNKkq4WTlCeYTDnXNP8J9eucXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=AmCleDmH; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1756084014;
+	bh=DpOg1gFQbGBJAG8siwpcIoumG8fW44EdJ4m9NT1aNnM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=AmCleDmHJIVwc0IW29LsC8epqtetqkqKcw03hHjbMh6JMyZL49Pnb4jgOeItJksJM
+	 PlG5deOU9KNE2i9ac9G2Vp7q33DUHFZ78kO+jnu1g0OGWLrRbdhTj02Ne1CLpIjVLL
+	 R77UbT500MQmY2IoVOTYl2ZZVGp0jCsQq9ka2vsS+zudlm4LLBHfyMPIfoJVMk39Qi
+	 nNENI3ufrsgj4f4Aq3XVdypdz3WUqNW5NvueMD4VYCs1Bz1MEGadY5kQBlvqf1tKgc
+	 vpOtqna2KUEZ/FH42857/b58aBmKaW7DJEs/7FClFU7p+AZmz2/UsNCdem1qmP/1rI
+	 192DScIYSqTLg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c9CLQ2llYz4x3K;
+	Mon, 25 Aug 2025 11:06:54 +1000 (AEST)
+Date: Mon, 25 Aug 2025 11:06:53 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
+ <johan.hedberg@gmail.com>, David Miller <davem@davemloft.net>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the bluetooth tree
+Message-ID: <20250825110653.68826b22@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="k4JGVHJrnLmV5t8L"
-Content-Disposition: inline
-In-Reply-To: <20250824184844.2994f896@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/+WUInC6jaow1I2Acz91x+0H";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-
---k4JGVHJrnLmV5t8L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+--Sig_/+WUInC6jaow1I2Acz91x+0H
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Aug 24, 2025 at 06:48:44PM +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Commit
->=20
->   0f78e44fb857 ("riscv: dts: thead: th1520: Add IMG BXM-4-64 GPU node")
->=20
-> is missing a Signed-off-by from its committer.
+Hi all,
 
-Sorry about that. I need to setup a hook so I don't do that again.
+The following commits are also in the net tree as different commits
+(but the same patches):
 
-I've pushed an update with the SoB:
+  c49a788e88e4 ("Bluetooth: hci_sync: fix set_local_name race condition")
+  0dbbf48d4b4b ("Bluetooth: hci_event: Disconnect device when BIG sync is l=
+ost")
+  05be312ba55c ("Bluetooth: hci_event: Detect if HCI_EV_NUM_COMP_PKTS is un=
+balanced")
+  e090ee03a6ed ("Bluetooth: hci_event: Mark connection as closed during sus=
+pend disconnect")
+  f6305e06185a ("Bluetooth: hci_event: Treat UNKNOWN_CONN_ID on disconnect =
+as success")
 
-https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/commit/?h=
-=3Dthead-dt-for-next&id=3D5052d5cf1359e9057ec311788c12997406fdb2fc
+These are commits
 
-Thanks,
-Drew
+  6bbd0d3f0c23 ("Bluetooth: hci_sync: fix set_local_name race condition")
+  55b9551fcdf6 ("Bluetooth: hci_event: Disconnect device when BIG sync is l=
+ost")
+  15bf2c6391ba ("Bluetooth: hci_event: Detect if HCI_EV_NUM_COMP_PKTS is un=
+balanced")
+  b7fafbc499b5 ("Bluetooth: hci_event: Mark connection as closed during sus=
+pend disconnect")
+  2f050a5392b7 ("Bluetooth: hci_event: Treat UNKNOWN_CONN_ID on disconnect =
+as success")
 
---k4JGVHJrnLmV5t8L
-Content-Type: application/pgp-signature; name="signature.asc"
+in the net tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+WUInC6jaow1I2Acz91x+0H
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQSy8G7QpEpV9aCf6Lbb7CzD2SixDAUCaKsoOgAKCRDb7CzD2Six
-DFZvAP0QMw/09l37X7J+HaYfza0X+/C/fVTE/aBeJqJXbQIqNAD7BqMJz8i5qG5k
-JW369YAf4KI9yy2DgLQzBpbJFlFY7Aw=
-=Q3UM
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmirty0ACgkQAVBC80lX
+0GylhQf9Ek06lnyOtDJww9qUS5Fw/u7rzb56L/SPh+XciAq/SM1sPX6ArlUoj72p
+mcLEenNmeZNhdDcrJEI2oKYkUlt2me24kvV72sobXFu4V7YFEWA/rDcbtp8KgXdx
+ocyoaSEF1Rlq/ehLyfr3rtgUZPlsJIs6w35RPdONKchpej/4ZdT2S4iXsnxBXC1x
+4mVoE8AjnuqD79lFsM6Qg6bxA1SzTa9hSmyiuBYDKQH0c9xtCvWLegiG9iyFrJQV
+LQ81adYlT5ADpWi9sGff+8DZIqB5sNydQvVHkPpng7uoOL49082FEnhklPUfU+WB
+Woa+KHC0olRYYvE23aWVY1fQxtJ4Ng==
+=bq6o
 -----END PGP SIGNATURE-----
 
---k4JGVHJrnLmV5t8L--
+--Sig_/+WUInC6jaow1I2Acz91x+0H--
 

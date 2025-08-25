@@ -1,122 +1,107 @@
-Return-Path: <linux-next+bounces-8086-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8087-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDB6FB33370
-	for <lists+linux-next@lfdr.de>; Mon, 25 Aug 2025 03:07:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E433FB335B5
+	for <lists+linux-next@lfdr.de>; Mon, 25 Aug 2025 07:03:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD9CF17CD87
-	for <lists+linux-next@lfdr.de>; Mon, 25 Aug 2025 01:07:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E527F1B2229B
+	for <lists+linux-next@lfdr.de>; Mon, 25 Aug 2025 05:04:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9D1E1E5B82;
-	Mon, 25 Aug 2025 01:07:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 063A7213E89;
+	Mon, 25 Aug 2025 05:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AmCleDmH"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="FLfauTyV"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 279784A08;
-	Mon, 25 Aug 2025 01:06:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB4921ADA7;
+	Mon, 25 Aug 2025 05:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756084020; cv=none; b=Uwy0aPFnoLIHR7CMbE6tgQ1c37M4vDuUb9oX8GuckNF3Nx5ipnu4SfBmvsoFB25TeLZZt0clyt5utS8oHy4Xt0zAoQYAyz/wG+8NBJu5v/6VxogDU+J5SND2dJkHzx0PFjVEgMLwSfMu/P7yt9cpzz8uwzhNIE5E5vOkIRLoSYE=
+	t=1756098216; cv=none; b=VSw3sws3gUtoGU0aXXOfpn8eq88zZKcVvw4JenM5WCumIuz8Hgxh3ZD7pd34qB6JZ9IZqA44YX/ixi4ckvdQPAsq7iIoGrakkF7rjqFCp3KtwNWB3i9+g7e6NQ913vsAu1+l4naivbfA9ddZhQHqMvLBfKYE+vcoU7nq14a64/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756084020; c=relaxed/simple;
-	bh=Z9tqbrFBHvLYg+TCrKFdIRZPan4X5CDYpubKX72ftNE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=O8XsQLIZdm7+TwbeGmZB/Bqh0Qo/cfeSY12TcCjQhx2cMOAhMz97FUw7v3r+O12IjXIQ1ntL8hRyIbwmb5mpVguVzAOz4QiR4rL9YOFmHTfVJLkM98qVKt/Djfag22Vtfw7znx2NxW9JJk1VCJNKkq4WTlCeYTDnXNP8J9eucXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=AmCleDmH; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1756098216; c=relaxed/simple;
+	bh=/wxRuPUnqwDUi3mX7f4z/dSu8GpTt8CnmlQ5Y4NdvE0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Eo7zyrhCDftHgAxdFsTFoQbhQT8puDf0dMgD45QT3tzqjx5d9wqmdYa/EtmGlfs2gfO+QWxyRbHrg1pFOKWhmNydMLHLXh2DJeFuMb1WADB1u2sv16jAUGv/J4ZCKaD3EtZiPl2l65oTiqPAaz4P7Z1CWaWUR1ebN+iN6+Wwrqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=FLfauTyV; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1756084014;
-	bh=DpOg1gFQbGBJAG8siwpcIoumG8fW44EdJ4m9NT1aNnM=;
+	s=202503; t=1756098208;
+	bh=uWmuAPB/MHIfGgs+o7z2EHbmhKfnHJ/S+dG8/xZW2os=;
 	h=Date:From:To:Cc:Subject:From;
-	b=AmCleDmHJIVwc0IW29LsC8epqtetqkqKcw03hHjbMh6JMyZL49Pnb4jgOeItJksJM
-	 PlG5deOU9KNE2i9ac9G2Vp7q33DUHFZ78kO+jnu1g0OGWLrRbdhTj02Ne1CLpIjVLL
-	 R77UbT500MQmY2IoVOTYl2ZZVGp0jCsQq9ka2vsS+zudlm4LLBHfyMPIfoJVMk39Qi
-	 nNENI3ufrsgj4f4Aq3XVdypdz3WUqNW5NvueMD4VYCs1Bz1MEGadY5kQBlvqf1tKgc
-	 vpOtqna2KUEZ/FH42857/b58aBmKaW7DJEs/7FClFU7p+AZmz2/UsNCdem1qmP/1rI
-	 192DScIYSqTLg==
+	b=FLfauTyVG7PI6obiWY3u/SMGmzRZ/6tcbKbOotSCvMbD+NcUfzqMRob8oM7d2VQX/
+	 PS8jc3W5iIvBLzPTTy2l/9xM3G7yO9OJM4Y2m4cqhZW9QJSTRs0RSIEPzLd62s5UVX
+	 VSe0Yz6sFpiYAXekcU2++xV9NLdI2ZAk66ovvekhIO4qkv83Zk9o3FOcmfNHCykK6U
+	 1w3DKK87W7cK+9n8rI+X3boOahp5M8h56y/2LwarisLbJwJJKrb62/0+j+uRHyII0e
+	 ql152XtQV3ugQMdKYym88anr00TR/F8DMiefl7bUl3wgU5FSjayNX61mxHWptTKk/O
+	 l69zxn/jEV72w==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c9CLQ2llYz4x3K;
-	Mon, 25 Aug 2025 11:06:54 +1000 (AEST)
-Date: Mon, 25 Aug 2025 11:06:53 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c9JbM6SD5z4x3M;
+	Mon, 25 Aug 2025 15:03:27 +1000 (AEST)
+Date: Mon, 25 Aug 2025 15:03:26 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
- <johan.hedberg@gmail.com>, David Miller <davem@davemloft.net>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
-Cc: Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
+To: Tejun Heo <tj@kernel.org>
+Cc: Tiffany Yang <ynaffit@google.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the bluetooth tree
-Message-ID: <20250825110653.68826b22@canb.auug.org.au>
+Subject: linux-next: build failure after merge of the cgroup tree
+Message-ID: <20250825150326.696d7496@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+WUInC6jaow1I2Acz91x+0H";
+Content-Type: multipart/signed; boundary="Sig_/flJ5qIWza9tOFkNivEEMyh5";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/+WUInC6jaow1I2Acz91x+0H
+--Sig_/flJ5qIWza9tOFkNivEEMyh5
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commits are also in the net tree as different commits
-(but the same patches):
+After merging the cgroup tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-  c49a788e88e4 ("Bluetooth: hci_sync: fix set_local_name race condition")
-  0dbbf48d4b4b ("Bluetooth: hci_event: Disconnect device when BIG sync is l=
-ost")
-  05be312ba55c ("Bluetooth: hci_event: Detect if HCI_EV_NUM_COMP_PKTS is un=
-balanced")
-  e090ee03a6ed ("Bluetooth: hci_event: Mark connection as closed during sus=
-pend disconnect")
-  f6305e06185a ("Bluetooth: hci_event: Treat UNKNOWN_CONN_ID on disconnect =
-as success")
+arm-linux-gnueabi-ld: kernel/cgroup/cgroup.o: in function `cgroup_core_loca=
+l_stat_show':
+kernel/cgroup/cgroup.c:3804:(.text+0x1374): undefined reference to `__aeabi=
+_uldivmod'
 
-These are commits
+Caused by commit
 
-  6bbd0d3f0c23 ("Bluetooth: hci_sync: fix set_local_name race condition")
-  55b9551fcdf6 ("Bluetooth: hci_event: Disconnect device when BIG sync is l=
-ost")
-  15bf2c6391ba ("Bluetooth: hci_event: Detect if HCI_EV_NUM_COMP_PKTS is un=
-balanced")
-  b7fafbc499b5 ("Bluetooth: hci_event: Mark connection as closed during sus=
-pend disconnect")
-  2f050a5392b7 ("Bluetooth: hci_event: Treat UNKNOWN_CONN_ID on disconnect =
-as success")
+  afa3701c0e45 ("cgroup: cgroup.stat.local time accounting")
 
-in the net tree.
+I have used the cgroup tree from next-20250822 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+WUInC6jaow1I2Acz91x+0H
+--Sig_/flJ5qIWza9tOFkNivEEMyh5
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmirty0ACgkQAVBC80lX
-0GylhQf9Ek06lnyOtDJww9qUS5Fw/u7rzb56L/SPh+XciAq/SM1sPX6ArlUoj72p
-mcLEenNmeZNhdDcrJEI2oKYkUlt2me24kvV72sobXFu4V7YFEWA/rDcbtp8KgXdx
-ocyoaSEF1Rlq/ehLyfr3rtgUZPlsJIs6w35RPdONKchpej/4ZdT2S4iXsnxBXC1x
-4mVoE8AjnuqD79lFsM6Qg6bxA1SzTa9hSmyiuBYDKQH0c9xtCvWLegiG9iyFrJQV
-LQ81adYlT5ADpWi9sGff+8DZIqB5sNydQvVHkPpng7uoOL49082FEnhklPUfU+WB
-Woa+KHC0olRYYvE23aWVY1fQxtJ4Ng==
-=bq6o
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmir7p4ACgkQAVBC80lX
+0Gw2Owf/S6OOf54Z1fRDeHERrSxBHF4cLf3wDYenCSZrj+Y4WMU7M7B5IdmDjG6+
+m7hThLGCObTfs8J6hVDyutXd1HclRnn/RyrcAg+JrvOoTqZGTrrlqYfi9Tlx4pzz
+H754iCNTbitEzR5NffX3TPzX3laVkw+miGWn1j7h2OhsooAEviw+rJTfS8aCs0Tg
+ZQZjrURjc2kM/LyBOVoNtOyTjgAWP7kGWX1Jy9lSdg2s84Z+RbdELbJzsLhTU1Yi
+ZtHaZIwiNkcoIXcfFvUfq0b4lxEIUph3pawmt2mBMmh3KqkMFocbgj7TynrK6zkX
+ZY35kRk6IDZLrWSYzuFYfHhwCgAmTg==
+=GX4F
 -----END PGP SIGNATURE-----
 
---Sig_/+WUInC6jaow1I2Acz91x+0H--
+--Sig_/flJ5qIWza9tOFkNivEEMyh5--
 

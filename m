@@ -1,188 +1,125 @@
-Return-Path: <linux-next+bounces-8099-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8100-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F619B355F0
-	for <lists+linux-next@lfdr.de>; Tue, 26 Aug 2025 09:44:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52811B35765
+	for <lists+linux-next@lfdr.de>; Tue, 26 Aug 2025 10:41:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7F927A2C9F
-	for <lists+linux-next@lfdr.de>; Tue, 26 Aug 2025 07:42:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 135885E3923
+	for <lists+linux-next@lfdr.de>; Tue, 26 Aug 2025 08:41:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E8A71EBA07;
-	Tue, 26 Aug 2025 07:44:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E57027D77B;
+	Tue, 26 Aug 2025 08:41:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TBPN00xq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VWvT3P+z"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AD101F8AC5;
-	Tue, 26 Aug 2025 07:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E129460;
+	Tue, 26 Aug 2025 08:41:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756194247; cv=none; b=S9sEmU9R0lrpMePSWp+unNy9LluPrcDACcMXGVFOgfJzKzQ5E2HvVFzrupec5SiFe+fvtwttOnUC5TuRcWuMT/8rX6TbXyPWdCzRahyNEbWCdDy/gi+pCe1FYob0nGX51kmYLQ26yJsUla7xbqmJsnhGM+9RLM8ax4UIb5VrUCg=
+	t=1756197684; cv=none; b=WCklNkYvF2M52oduNVSqs4VjA11RD0i4Sw3lZvd4cRiDVZlVaha2tlG0D8hSR84cdI1XQ2DML9A4BRbv9JvIKbBiVQOArR7gV6iec0gXAeZ4Mogz03I7lHnMja11BkBtSdKLEzkfTWE2gBxbpAqAYLouFFaNIZwM6y1WpTnVPTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756194247; c=relaxed/simple;
-	bh=Xbuj/Jne+2+1agm5wbBpnWdlskflyBul0lPIRP9Yd6M=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Tr0amRcj2mUFF5/t5jwLaxElijB89gF7L5Vz71wqgn0QcBBD8yZqqsQmIJhJG+PKSp5nvp94XX72RZCKSm8qaz5UWkhYL8FhPPZmdZPTZqfQX7buYFswvOdhw8jR6XqBlfnyG2F7T3MaVeHN+YADBSm0ExRaAGQVWJt/LgckfsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=TBPN00xq; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1756194242;
-	bh=TJgOPP+dBX0nmIaXZy8DB8qcVP78wlRjmiQVIvlQqls=;
-	h=Date:From:To:Cc:Subject:From;
-	b=TBPN00xqeQYajk7uAxXiogDsgtkuaDq8gfz8cZ3cvnu1HHzvi37C3s0m2BE8FCBQK
-	 7d8qf3YgjaeFQYVy2v+Z7TLcf3F6j1991meuHZn/iN1euSGI93Bu+uq2w7/tCcpZW/
-	 o2Myh7Dazv4dMnM2rsURufl6lyBn3yWoKxldj0K9E1ljOth8aXAzFQL5A9HDHTPPc5
-	 DEH9N5+aebdN9OZ8VUmBy+QsDaGdf9wXIlai23V/QFexP/3h1S9rOAMeDYzqZRqXqA
-	 9yKWyXT0IK8XmkW/MzKTNHJFbie7ZII4nat1ze2fUnrAUXY0fjLcqah4Nc4Hf8wQtw
-	 y97a/Px7LrVrA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cB0696pzbz4x3N;
-	Tue, 26 Aug 2025 17:44:01 +1000 (AEST)
-Date: Tue, 26 Aug 2025 17:44:01 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kees Cook <kees@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily
- Gorbik <gor@linux.ibm.com>, Christian Borntraeger <borntraeger@de.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>, Juergen Christ
- <jchrist@linux.ibm.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the kspp tree with the s390 tree
-Message-ID: <20250826174401.37803a3a@canb.auug.org.au>
+	s=arc-20240116; t=1756197684; c=relaxed/simple;
+	bh=6lftHUf71DUA4T0bqA8FrTXfH0J6B4vPI5kQZlu3iak=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jShPbh4K15quDsKgP/F5aXnSnc8Z+mjqB4wiHldoRphsJUmc3posUr9MStpX2lwXSxKxCir/VmVkZCSRtRQ9MucQONXiTJKesBzXnQH0BAvTiw6thodbEE2RjxYfN3tjqEdDm+vYcXtZD9SkHaEThoAnvM+yQXDha5SnR6f+LBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VWvT3P+z; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-24617d3f077so7627285ad.0;
+        Tue, 26 Aug 2025 01:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756197679; x=1756802479; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WsM/gomFX2MDoPGDhRP46zbnJ36LRge+C6Uha0o94HA=;
+        b=VWvT3P+z0RmQ/4TRGDdKbO9jchZ7AAmuKvm8WN6Fi6Cx8JmtAOYQBNic8ffGcocF+1
+         cE1Qjmug4zqsBk30eQL/6J21qjj4lc+hejfIaJSF3melipRHbqZZS3dRsT4sqocM7LnI
+         Q2NmgidR4Fz8nIVCFW7Vys5AxkRzfPamG4le2/Infh2Iw64eQukSjjAENrjW/SzFZ7B/
+         uE9YyNBhBVU2lGoSPU6JaXIcvCNynzUCYzmrX4XOr7lRU5qrqjDnLvF7EuACKDxjPunE
+         KM0NAg+0XZCC/tjQv8RcP2EO9SYT76WLEV5lt/OjFXMKWljgvNA9q4uwG4CLkHNfHcLr
+         Sshw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756197679; x=1756802479;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WsM/gomFX2MDoPGDhRP46zbnJ36LRge+C6Uha0o94HA=;
+        b=BFghpudzdZKBgupH/LijNNXO4cfDWsyXWTXq6a2fvhpaJFM83v2WGj0L9VRuPyLSp5
+         5+jdghnr7MaY9ke1jbgRBt5OA529v5JybKySNey3COxUGoj4Y1pdVJPeALcLooiphRRS
+         YHYyH3amGaKmbDoQ7XcPdaqBznBljjY6h9NXqVnQt9cKDVonYzbeiBEi0oiKBEcbA7Hg
+         6ywD60oBCpwpNQK0JjPg4ZUM99VTJ8Zacn29z5g4mWOMjbb34LXeHRoHsC1L/sPfoNYv
+         TqKf0QnX5H/98dmfhq8CARB1JjHaDQj2JGzuRVo3m2DaZ4KZjehRIEtyGj0ITAXRkmOp
+         BqcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVBcVjcwsnSgz75YdTccoqqy93WWAU9gneBhyLI+ms/wLj92rg8IrKTs3OJrsFDHhgVPhDa4nAGCuBUt1M=@vger.kernel.org, AJvYcCW7+Ac4GX+8P+HFURWj0WG9HaqRwS6l6bkh0xvMFfST74ZDuzKp5jRY4He3TVGsP/r4xL6IFSWa3VZEFA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzU+TxSZ/KFYDkTYKXSyPry/psCeb1itnIfpd7XP2ndMU9Q1zeS
+	H5VKTDCNh+WXIBPnxNiIjRbpXxNITtDtE+hUrZ3Nemj7+C4mgybkbcgjRTiLCvilRb5oE3+K49G
+	s/FiC7I5zkgycgSvI5o9zduQXEtET8ag=
+X-Gm-Gg: ASbGncvSWarmaEqEfox+yahG/c91lczuZtVlPk3ZawiCuMAYnKjRFLNtRqgILqnS1pU
+	Hr6QoC5yQiz39DPMevzQ/2XD1D3zeOpqA5PXaVNdnkf1wQXW1FZHhr12rDupZHlLOnanvV9OFT5
+	HvXzwUe99p613xLgIlSe+9MA/1BVtZjwxQiDK3X5bUdj3Z5ym1L7VRtEzh/Cpx9sRRZL6kZ6VdN
+	Ka9FC4Wc+hWTdZhehqGMe/j/MmmOv74fm5nrdJnOjlKkZM0DRy7a8K8a2AaE52YAW00jcssoj/3
+	NvCsiqMI2lGjV5L3hc18BRyJmE6unMCUZVev
+X-Google-Smtp-Source: AGHT+IGgUd3cCw5hoPcSqxVJsTVEGdnQtn/6lCN3HNmE+fc6RAadH31yG60gx4CJqcHEUD1Lg9LJODBA+S34cf8KfmM=
+X-Received: by 2002:a17:902:c402:b0:246:7702:dfd9 with SMTP id
+ d9443c01a7336-2467702f08cmr76116925ad.6.1756197679484; Tue, 26 Aug 2025
+ 01:41:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EkUfQqqLzR1LhcrT72cNYVN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/EkUfQqqLzR1LhcrT72cNYVN
-Content-Type: text/plain; charset=US-ASCII
+References: <20250826173041.3140da7b@canb.auug.org.au>
+In-Reply-To: <20250826173041.3140da7b@canb.auug.org.au>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 26 Aug 2025 10:41:06 +0200
+X-Gm-Features: Ac12FXx7-KVTFlOMqBN0AFgfUOGYkYDCZFfOLj9hCpjCtkzCPViNyRbfTme0t1A
+Message-ID: <CANiq72mzK6BifSn+tWK090U1VO2FS2J5WQvX5O48D0MRDiSs2w@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust-alloc tree with the
+ mm-unstable tree and Linus' tree.
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Danilo Krummrich <dakr@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Vitaly Wool <vitaly.wool@konsulko.se>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Tue, Aug 26, 2025 at 9:30=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Today's linux-next merge of the rust-alloc tree got a conflict in:
+>
+>   rust/kernel/alloc/allocator_test.rs
+>
+> between commits:
+>
+>   501046225a67 ("rust: alloc: fix missing import needed for `rusttest`")
+>   c8a3b6ec0370 ("rust: add support for NUMA ids in allocations")
+>
+> from the mm-unstable tree and
+>
+>   0f580d5d3d9d ("rust: alloc: fix `rusttest` by providing `Cmalloc::align=
+ed_layout` too")
+>
+> from Linus' tree and commit:
+>
+>   fe927defbb4f ("rust: alloc: remove `allocator_test`")
+>
+> from the rust-alloc tree.
+>
+> I fixed it up (I removed the file) and can carry the fix as
+> necessary.
 
-Today's linux-next merge of the kspp tree got a conflict in:
+That's correct -- the file is going away. Thanks!
 
-  arch/s390/include/asm/bitops.h
-
-between commits:
-
-  de88e74889a3 ("s390/bitops: Slightly optimize ffs() and fls64()")
-  669bc57e7016 ("s390/bitops: Optimize inlining")
-
-from the s390 tree and commit:
-
-  5f8ee21b8fb2 ("s390: Add __attribute_const__ to ffs()-family implementati=
-ons")
-
-from the kspp tree.
-
-I fixed it up (Maybe - see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
 Cheers,
-
-diff --cc arch/s390/include/asm/bitops.h
-index 9dfb687ba620,fbcc3e1cc776..000000000000
---- a/arch/s390/include/asm/bitops.h
-+++ b/arch/s390/include/asm/bitops.h
-@@@ -179,7 -179,7 +179,7 @@@ static __always_inline unsigned char __
-   *
-   * Undefined if no bit exists, so code should check against 0 first.
-   */
-- static __always_inline __flatten unsigned long __ffs(unsigned long word)
- -static inline __attribute_const__ unsigned long __ffs(unsigned long word)
-++static __always_inline __flatten __attribute_const__ unsigned long __ffs(=
-unsigned long word)
-  {
-  	return __flogr(-word & word) ^ (BITS_PER_LONG - 1);
-  }
-@@@ -191,11 -191,12 +191,11 @@@
-   * This is defined the same way as the libc and
-   * compiler builtin ffs routines (man ffs).
-   */
-- static __always_inline __flatten int ffs(int word)
- -static inline __attribute_const__ int ffs(int word)
-++static __always_inline __flatten __attribute_const__ int ffs(int word)
-  {
- -	unsigned long mask =3D 2 * BITS_PER_LONG - 1;
-  	unsigned int val =3D (unsigned int)word;
- =20
- -	return (1 + (__flogr(-val & val) ^ (BITS_PER_LONG - 1))) & mask;
- +	return BITS_PER_LONG - __flogr(-val & val);
-  }
- =20
-  /**
-@@@ -204,7 -205,7 +204,7 @@@
-   *
-   * Undefined if no set bit exists, so code should check against 0 first.
-   */
-- static __always_inline __flatten unsigned long __fls(unsigned long word)
- -static inline __attribute_const__ unsigned long __fls(unsigned long word)
-++static __always_inline __flatten __attribute_const__ unsigned long __fls(=
-unsigned long word)
-  {
-  	return __flogr(word) ^ (BITS_PER_LONG - 1);
-  }
-@@@ -220,9 -221,11 +220,9 @@@
-   * set bit if value is nonzero. The last (most significant) bit is
-   * at position 64.
-   */
-- static __always_inline __flatten int fls64(unsigned long word)
- -static inline __attribute_const__ int fls64(unsigned long word)
-++static __always_inline __flatten __attribute_const__ int fls64(unsigned l=
-ong word)
-  {
- -	unsigned long mask =3D 2 * BITS_PER_LONG - 1;
- -
- -	return (1 + (__flogr(word) ^ (BITS_PER_LONG - 1))) & mask;
- +	return BITS_PER_LONG - __flogr(word);
-  }
- =20
-  /**
-@@@ -232,7 -235,7 +232,7 @@@
-   * This is defined the same way as ffs.
-   * Note fls(0) =3D 0, fls(1) =3D 1, fls(0x80000000) =3D 32.
-   */
-- static __always_inline __flatten int fls(unsigned int word)
- -static inline __attribute_const__ int fls(unsigned int word)
-++static __always_inline __flatten __attribute_const__ int fls(unsigned int=
- word)
-  {
-  	return fls64(word);
-  }
-Stephen Rothwell
-
---Sig_/EkUfQqqLzR1LhcrT72cNYVN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmitZcEACgkQAVBC80lX
-0GxcaAgAkmKpn+1IXulc0z2Oc130gH8jOu1KJECuoKnW6fGzgruXpNm5otGGiF7L
-ZTieOcjOnDcsbmrURC+IznHEZPvAgk/51CVNf3pEg6XV7B22BJ1220gZgE5RJCH5
-FKUTHydqMnpqpCSiAWEsb0EysWedSZL0Ge7OnNauoTV9lXY0agSah1s9xS4kEFoD
-x49uFmfM6E0bWZIlyXTDZ1MDwPGcpG4I3BZT+E8bUX3Oy3vhJv2hKWaHXBEh70na
-lvrVf+NyvryQCZSp2JUAPvBNKmMcnA/sXcr0ma7A1cIl/1VztBk9UT/vwfIoJUNX
-cM/gM01NwGF69JvR+KMp5QVPl/i+6w==
-=sfXS
------END PGP SIGNATURE-----
-
---Sig_/EkUfQqqLzR1LhcrT72cNYVN--
+Miguel
 

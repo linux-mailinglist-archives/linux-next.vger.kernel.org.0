@@ -1,118 +1,137 @@
-Return-Path: <linux-next+bounces-8095-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8096-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47463B35173
-	for <lists+linux-next@lfdr.de>; Tue, 26 Aug 2025 04:13:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FFE2B35175
+	for <lists+linux-next@lfdr.de>; Tue, 26 Aug 2025 04:15:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60C5B1B2835F
-	for <lists+linux-next@lfdr.de>; Tue, 26 Aug 2025 02:13:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C619201582
+	for <lists+linux-next@lfdr.de>; Tue, 26 Aug 2025 02:15:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DACF1F75A6;
-	Tue, 26 Aug 2025 02:13:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9498061FCE;
+	Tue, 26 Aug 2025 02:15:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="L5WSt5LD"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NNlhrMQB"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E692C9D;
-	Tue, 26 Aug 2025 02:13:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93DE2E413
+	for <linux-next@vger.kernel.org>; Tue, 26 Aug 2025 02:15:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756174409; cv=none; b=eO6+g8Y7XwxOGoROt0RRemfBu6J+mzMsWXHXGq0RpBla2GP169xioD81+/bP7IohMYvYCS7trTH9yK55vbSb/CsDvEB8ScNlLqP2htGYhM5H7ibkfcDUWh31v58PSHH1KRVl8QJqu4vTHBfj98vJUhNv1UA6R9jJdzHKtefGdu0=
+	t=1756174541; cv=none; b=SnQThmWj+wcWFkJkGflHtzjppLx4v4wjuoWGnsqB1sEJ0RQLtLrPwG629QJDIWe918OwCpGZOpuTJbUbu2qFiIb49j1oNBCZaB+Nibe/sgLvMX8HFvj09dm32uSci7MdDlyoVmzBLLsLoSdrn+/N4k0fLc69GlzaaJwKQSEMvsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756174409; c=relaxed/simple;
-	bh=egCMPQ+qHJ5nut2FDsKpa+WMH0WNi3aLL+6AAZy4+JM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Vq8v08PObdXQCoDsZaU5cGq2dujpK9B9Q1pNngQa0PBcYwiWVlUp5zhcLpV/p/scKa6QFPYVef2qhv6c3A8tSo+/Lfk6qPJdzXTZyFGmEwCHmH+x3IdYpp8aPh1yTa5bYjw6Dbf3l7QJJqvRoKbcs0QG9iwwK64sNCMccDJ6cqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=L5WSt5LD; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1756174401;
-	bh=6xVpkuMJ+D24KXzN4/hikh/iXPb4SPvcqA7zNwqGG4s=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=L5WSt5LDmhFBFNOMid9a5+lLayu/YUlxYBzyIT+RBPbwnwy6o+ONKFhtNCgORPnOT
-	 bqRHQPbR6yNpGlBzfzpJMYR61/krRMcPLDXn7z+6fVWo4S3FOATwLilZtkBtsFYsSD
-	 RKr0ThMrcK7y9m9LVcDu70Pllv1utrru9AtnXrKpuEzePIQwMyYfZQd69Tr3fx2iYM
-	 KAUWB1ZtlaVkzrRT0jzjRyfUKucLEUtaGPNGH3iZdmATBscNowo629AzaWlo4J6eXm
-	 glJ6DziLnyhmwsl7o84WcbzBRLcceS9JrmpUSpwluMBq0zsd8SHP+cz+AOV9jwlvoJ
-	 WDRrxwESv2uJg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4c9rmc6Wxdz4x3N;
-	Tue, 26 Aug 2025 12:13:20 +1000 (AEST)
-Date: Tue, 26 Aug 2025 12:13:20 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Inki Dae <daeinki@gmail.com>
-Cc: Inki Dae <inki.dae@samsung.com>, Kaustabh Chakraborty
- <kauschluss@disroot.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the drm-exynos tree
-Message-ID: <20250826121320.4931c6eb@canb.auug.org.au>
-In-Reply-To: <20250821112740.75a41814@canb.auug.org.au>
-References: <20250821112740.75a41814@canb.auug.org.au>
+	s=arc-20240116; t=1756174541; c=relaxed/simple;
+	bh=lNn91KbVZt1MO8O4XMP7lZJ2kB5e/przdBqRhbBK2+E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=he48qrTlDOVE7TXPBnFmNiFIwlCF6OAS8++SpomGmn1unzcMoOCcP/8rbS6YCdJui5WK0MWhjEyi3nbLu61Y/JtKCK2dR2tUuFLxfNoVDAYZLWuqJcan8/Fw51Clldsww1H2igY231tLY6JS/hRbNABHDBRX1Aix07v7QQkW1BM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NNlhrMQB; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-76e6cbb991aso4379729b3a.1
+        for <linux-next@vger.kernel.org>; Mon, 25 Aug 2025 19:15:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1756174539; x=1756779339; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iv07/KZb2f9dDjde78c38QxQX9Rd8L9eycmeggHBGOU=;
+        b=NNlhrMQB8JCAvjLKklda8N19vCFNFdK8gYcnGcAPb3B8Gl7iD3EzN8WhfDEwF0i3ai
+         HmaEmHj3nAZjmea0CVqujske6JHRF22enEVXNEI/pGjhkinAlrjmSqEd4lP2Trui2hLV
+         NBU5BYnklLHKPDlsSm5a1gPfx5yA4pVJbtQXo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756174539; x=1756779339;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iv07/KZb2f9dDjde78c38QxQX9Rd8L9eycmeggHBGOU=;
+        b=Q5UjcIYdi6CY6TjZ1Wg1jcBBwja+ozmA7NRG1VeqXDr8648BzynjtdRaRO8CG33LoJ
+         Jkn+yGTpr3cl4Q+yozuJSRbNe3XpdvQQS8ZF+5gxmQi5+uxGAQ1gTf+rvaX4Ltn86Zuv
+         1b3aqawx/N5P8wFBDUJ5091b0KcFkPTZUZxBcJo7kp32CFdWed9rnsqtn5l1yZyoQbtR
+         CZQ2XM5xE+IWL4r9ipGlkyKVd/PraZ1X55X+YRWuGChnnqH3ZDaUuwVFFy40mwpVqig8
+         D88f8oMt8Y0VmiWVy2RwQJySS2oVR8Fs0X/TRIpp13A63RuUNsGC4RX+DNdtNaWk2Z2D
+         ef3g==
+X-Forwarded-Encrypted: i=1; AJvYcCVv513zmpjkE29oFZzYb/lvEwOfrx7/Q6nDJsE3ndarXAqV7NApGtzv0iq5btfxOSBllXMSf/7IBLy3@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSyci1DnKPT8NUYx6iwBzAor5InhyBbfe7XObUgua8X3MuYMq3
+	Pocunxknb5b2uKHWcTxT0h1JZpAviID+jF7f21Cpq8HN/gkiXNfkR0n1nGDN1aFSprc=
+X-Gm-Gg: ASbGnctyXFvh36Skefz1gNtj066Uix5MA88anmY3Yz925HBb6rl5xPsc2nCfSqlfU8j
+	FGrLZ9/3blj4sKEdK68b8qtNE7jOF7jZguVIWStJstjcHCWoCnRdXF3VPjgPd3pkAVGh15+H4GO
+	7riwBFT1CjouX2GpzxsROr+UXs2QSDbpsXW76FABs8BavbKOU/QwDHKAsNUlFh4K2G2dJ1RoV/r
+	asvHf0oZPVuGZjXBYggPMGWp3gsDgz5Ryi7pSxTAGsXu9+FbsrFKKGlNjkv8XBVr5XC6CVZMGrn
+	4dQl4sftLjryIlCGtqHz/5Y3qKQUpTYYguNXNI6q8wRu7RFzd2rzz2gkDJy6WWaQL8e+IXsDy+o
+	pR1+xVA3IEOSl8G4wKWMepT6vXHke0Eemku22mQ==
+X-Google-Smtp-Source: AGHT+IEl90DE1zmnqNRIEzCk3KpFZ8tkAbZvjeW5FkOiMTSV0pQ6tPOU2Y1tolJnm2RBcLKGj9Herw==
+X-Received: by 2002:a17:902:c943:b0:246:7d53:d40a with SMTP id d9443c01a7336-2467d53d82emr141657515ad.12.1756174539032;
+        Mon, 25 Aug 2025 19:15:39 -0700 (PDT)
+Received: from [192.168.100.106] ([103.80.12.207])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-246687a5fc5sm80869965ad.52.2025.08.25.19.15.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Aug 2025 19:15:38 -0700 (PDT)
+Message-ID: <4d5bad8a-6afa-4284-8f78-b52e2cfedbf0@linuxfoundation.org>
+Date: Mon, 25 Aug 2025 20:15:05 -0600
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/82HYJ/7/QUOw_drQmrEUpQk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build failure after merge of the kunit-next tree
+To: David Gow <davidgow@google.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Marie Zhussupova <marievic@google.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ KUnit Development <kunit-dev@googlegroups.com>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250818120846.347d64b1@canb.auug.org.au>
+ <1befd7ab-f343-450f-9484-0cef21fe2da8@linuxfoundation.org>
+ <CABVgOSm2_FGfjQpUBttuUH5ZrMEqnaGkYVkN6N96wX7Qs8EE2Q@mail.gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <CABVgOSm2_FGfjQpUBttuUH5ZrMEqnaGkYVkN6N96wX7Qs8EE2Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
---Sig_/82HYJ/7/QUOw_drQmrEUpQk
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 8/19/25 01:44, David Gow wrote:
+> On Tue, 19 Aug 2025 at 00:32, Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>> On 8/17/25 20:08, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> After merging the kunit-next tree, today's linux-next build (x86_64
+>>> allmodconfig) failed like this:
+>>
+>> Thank you Stephen. I did a allmodconfig build on 6.17-rc1 base - didn't
+>> see the error.
+>>
+>> Marie, David, can you take a look this. Looks like conflict with drm
+>> in next?
+>>
+> 
+> Thanks, Shuah. I've managed to reproduce this with:
+> ./tools/testing/kunit/kunit.py run --arch x86_64 --kunitconfig
+> drivers/gpu/drm/xe
+> 
+> These patches fix it (and a corresponding drm/xe test failure):
+> https://lore.kernel.org/linux-next/20250819073434.1411114-1-davidgow@google.com/T/#t
+> 
+> Ideally, they'll be squashed into the corresponding patches, as
+> otherwise there'd be some temporary breakage during bisections. I can
+> squash these into the original series and re-send it out if that works
+> best for you.
+> 
 
-Hi all,
+David,
 
-On Thu, 21 Aug 2025 11:27:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the drm-exynos tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->=20
-> drivers/gpu/drm/exynos/exynos_drm_dsi.c:158:20: error: 'DSIM_TYPE_EXYNOS7=
-870' undeclared here (not in a function); did you mean 'DSIM_TYPE_EXYNOS541=
-0'?
->   158 |         .hw_type =3D DSIM_TYPE_EXYNOS7870,
->       |                    ^~~~~~~~~~~~~~~~~~~~
->       |                    DSIM_TYPE_EXYNOS5410
->=20
-> Caused by commit
->=20
->   d07e4c00696f ("drm/exynos: dsi: add support for exynos7870")
->=20
-> I have used the drm-exynos tree from next-20250820 for today.
+Please squash them and resend - also I see a kernel test robot
+error in patch 1/2.
 
-I am still seeing this failure.
+I was going to squash them, but I saw the kernel test robot error patch.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/82HYJ/7/QUOw_drQmrEUpQk
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmitGEAACgkQAVBC80lX
-0Gzj6Af/UzgSr3h9un6rGLlhj07ajABW24qv8shfD1H+3TTpzA8qbWhqfEa/Czke
-DzksZ3u0xopZK9I2bKXGRwUHnvPeaAak8gk/hYoK6IKhjGsIMJZ/ohzWaKrR2ubE
-CZEFtUxNJMixWFrGVEHxpvq/nbEEt6hTuXjhtFt3pzH/OpnRffOEh5Bhi4DsvQD3
-1xGIl5qIhKdX7f8G0HE71HmEQ38ulJMcozFqeNfs6VXtNJ4P6Ismg+GCmOxIWh/l
-CWAVoGvP2By0VHQnwiiE0fyBeu1SP7tVUVqsRcZN3Q6tHAA6APBKGUvNuW5IyWzt
-M4qhdGWYwCVc4rEZlJ3T2ebJwVy2fQ==
-=Yt29
------END PGP SIGNATURE-----
-
---Sig_/82HYJ/7/QUOw_drQmrEUpQk--
+thanks,
+-- Shuah
 

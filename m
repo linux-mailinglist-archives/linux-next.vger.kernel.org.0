@@ -1,101 +1,93 @@
-Return-Path: <linux-next+bounces-8118-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8119-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAF01B37F29
-	for <lists+linux-next@lfdr.de>; Wed, 27 Aug 2025 11:47:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68536B37FD1
+	for <lists+linux-next@lfdr.de>; Wed, 27 Aug 2025 12:24:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFBA71BA3E5C
-	for <lists+linux-next@lfdr.de>; Wed, 27 Aug 2025 09:47:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E7AC1BA5331
+	for <lists+linux-next@lfdr.de>; Wed, 27 Aug 2025 10:24:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAE1A27F015;
-	Wed, 27 Aug 2025 09:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D51D34A338;
+	Wed, 27 Aug 2025 10:24:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eIbdNKKV"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N6dPKSCE"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5129214E2F2;
-	Wed, 27 Aug 2025 09:46:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B3E341ABD
+	for <linux-next@vger.kernel.org>; Wed, 27 Aug 2025 10:24:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756288018; cv=none; b=oVK8dFE9FKb87kObl+w836m8fDfLpoJZzCa4sZpZDIiICWHYGQbqqRYHI2LcJCljW4zUV3zOiHmhAPcvgQaFy7rhQmi07ZaFbxbHrjFeNzckLSsMtwGYmpAbXDsjNQ73esYlV6hQUWiGVYRz0WOUaklgshXqMVE+wSr3qxahjQI=
+	t=1756290243; cv=none; b=A1ca9rhsAoD8VLQH6xztQ5XayUdJGdW7kYpKsV3WCm4Dcduw8dEq9XBUysKRHIHWD927LX0ikGST+ut+xYiukKpZWefgxvZX4AO0ioLC9Sf+NFPrW83VQX97+zVM/HfypdcBGanvhPpMUj09N4UbptcYh+GXA+vL29c/upiHR3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756288018; c=relaxed/simple;
-	bh=5aI+ZYSsvVHdVPxVjk6qUnENbFixEsJ8O+5Z840nd7Y=;
+	s=arc-20240116; t=1756290243; c=relaxed/simple;
+	bh=fhHeQECtsMPogCHlxKASHLbxYpLR81Rjlh4nHtxZrIQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=imEEwl6deQ2cyDPFIEyUhac8E0fETkACd94IhoYzRa9Kkhef54OeUL46i6KmURAZ5ukVm1m1cmAizCs7sHRErwrquq7BSF5eZ8mZn+vAobVz4TC0bjZOoBavIDOrqvoZFd7aioBdumoUuaZK3wb+B/Giv/ibOwbHeVsgx4RXPzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eIbdNKKV; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-77053017462so2813688b3a.1;
-        Wed, 27 Aug 2025 02:46:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756288016; x=1756892816; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o7p7UvIT2kbM0WGZWywrLeb5TTjPgS/NtsEDB+2LTAY=;
-        b=eIbdNKKVFYPmrSwI8XaWqjcC8oVfNa9duoNnKRCK+TM/rK/imACCxxMMSTfxe6Pqij
-         rVuos8cwDvZGc5lxKAVbTrzEuFMYF91RlU1K9aW3dzGZgqL08ysC6kgRgH0qIZEygO0Q
-         CyWh3N5V9bznCv2GwRxdFWtMd3VBaF70QnIYOdDu1o50EVdhifBpy1W7YJvvHgwD2Ecl
-         KXS7gKy1+sI8c5iOYGlThBJ7AhXXPGOEorjFsgKczsy++tIQzVGmscAXL/IYoMXb8QBs
-         MML0y7ASz6nRHLATOlJ0pEnErTZO1vH97Wz/SBVIDugGX1eDUtyC6lGVVAiyrqKo547P
-         tEEg==
+	 Content-Type:Content-Disposition:In-Reply-To; b=W1hfT/BeWyKwLnnDdN/uaCxVgrT5Ve1JEWIbWT15bZEY4NSCY8DRcCPPpqSkm7K5mS0eIA3W2hRMSJU2s50LC0AJB4BV3iTP7VeH/mEUpVF83EwK7ViE/utPhmdNOftWzSM4YzvBTXvSrixkt6qWOitx0alUKptVQuRuUB7D4sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N6dPKSCE; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756290239;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5mmeUW6MPoGpFuDnaAdEqf7QqySNZXWiteR+71+RR74=;
+	b=N6dPKSCE93f3zv6TMkh9gnBbAl2EkHvoax/aeB1S71WJ3F76WqBVCHl3kw+CtCvq+Rqo5M
+	fZOnx+GH+6gafym6+LENT/1kzxJvXPc2J6XzFzQqhxAb+YMGaUciP8jqV4pANr6FVXsj4M
+	qZ0QFSuENd7M4ubSZk5DgaCHamRPhzg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-318-LVAJwCvcMba588x8nF5jEg-1; Wed, 27 Aug 2025 06:23:57 -0400
+X-MC-Unique: LVAJwCvcMba588x8nF5jEg-1
+X-Mimecast-MFC-AGG-ID: LVAJwCvcMba588x8nF5jEg_1756290236
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-45a1b0b2b5cso47742505e9.2
+        for <linux-next@vger.kernel.org>; Wed, 27 Aug 2025 03:23:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756288016; x=1756892816;
+        d=1e100.net; s=20230601; t=1756290236; x=1756895036;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=o7p7UvIT2kbM0WGZWywrLeb5TTjPgS/NtsEDB+2LTAY=;
-        b=gyecgJT+ZSwAQcQ/2Fpn+7NIXkJDTzmwi/60lQl1n+BrIuKElEORQQVdezA9P7Edg5
-         zHSi2iPNznVcxssiiJ0yrTycr1llthpUg56LAEytc8G90sqjuc2c3BKJpXT5J8yzUD7B
-         z/amZyfu8nEWnn7DwAleF8tv2IJZ2eWM0Yprvnch3i23Gec8MhoqZCjzNbN0GhcQufNJ
-         Gy9ozYCw3XWSM9BOr1sKh2/AVCCWuyCjNoVVqd3HtoNPNQrIGUYesIpZjOgrgnNXpOPC
-         ewzj7G+TuwI/SYTQLdHE0wKPdiCWQ9zv+2IVInih07LrlDeRFt6S5kT6+PKAglvmvCdZ
-         Tlhg==
-X-Forwarded-Encrypted: i=1; AJvYcCVJVM+Q6IV9rJJo9gnliqQMCPjzxvxL10Q38k0lUK3yEHia2qKVs44h8w3z8GuK9pzpK5U308jW2J28uwQ=@vger.kernel.org, AJvYcCXb5Jo/m6Ou78snLLBQTy5lSVRAe3akBcwET0eVMv0D8AZJFAnmcTEEt9yuBDxzYMkW5zGO+4keluVy@vger.kernel.org, AJvYcCXrZkdAx5cMIiUr0BnnrUDMqXFsifEFKdPEtBrcQiXaODTHpv2m6tq0TGVdSEBhikA3z/7O8ps6MKad6Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyK00fjGz8YVZ6tmTT7kgscVd7SrkRJ6tjcLze4aXNd6BO4ikJF
-	chLJ9bfnF0sBJTx8piCT+t7YCDoQ3LPHAMXVj3BCNmUyvO64Eo7ZoMLB
-X-Gm-Gg: ASbGncscuNbp1z6/Sev30Kbcspb8oEYZqINaMKZBviGMEGs+ArQ7UNaZYCCllz+DS8D
-	P0BFH9kx1M7dDGYxJyAaSiYPgQ0swT2BwX36NhS0CzNx43qvdhq0hyRZrjCGDPqh1vErZPHJpfO
-	my3UnQ6EzlLXX+4V6xcvZcBhzh6DuUSGdWnjMt/9+ZXYVJTFMAN8uJCVWD0t6K+hDm1GHndOVRQ
-	wwA+VG/lebasCwaTUpY5tUjL2kubqjwH7qKBT15kU0mhemvzS4Bilim2wp8kqQ3LVGaqq9Fmi8F
-	bMVBlf460zcOFax1AdisVMZnHWNs6RB11gu30Ybijb3Ug4q2R3xK5fnWh2icSuv+vjoVgqi5uit
-	0qKLIHkw0YV1DKCO/3KlDCw==
-X-Google-Smtp-Source: AGHT+IH6p+lVA5i3KfX5nEoaE5M6ccLfYaUU2KaTPzY7Y4H0Kd4S8ErOqIIwrh3SiJTeHpTk/ERWjQ==
-X-Received: by 2002:a17:902:e783:b0:246:d98e:630 with SMTP id d9443c01a7336-246d98e09c1mr117662375ad.44.1756288016411;
-        Wed, 27 Aug 2025 02:46:56 -0700 (PDT)
-Received: from localhost ([2001:19f0:ac00:4eb8:5400:5ff:fe30:7df3])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-246687b0b04sm117749355ad.44.2025.08.27.02.46.55
+        bh=5mmeUW6MPoGpFuDnaAdEqf7QqySNZXWiteR+71+RR74=;
+        b=U15RyUgwRYStRZYgE03cm2KVNTmFeRtZLRrvaA42BPg9qLoPyg39uxAQut2w3pSS2w
+         0ytf7yk+Zez6IOQHpFiDjcXbBiUuzAH1Pfj816WrofXefTjU9DbaGIG9TKonyh41To0b
+         /cGbPJBuu6CMCvG3AOTmxlIyOxt9JVjP1seA4dd+Je+Z4YmP0f7BiYGVV7H/QPOmoqsY
+         GMveCUGT3lzo4ibwU/whK1/HgmoilrBxJbB3PV5Tttkt77PG96SC4LpP5u8GpncUdfyD
+         DHWL2PZHzNmBkN6FhDn43g6yghSR4ChHrJRFLSANx4PWEuRsU0TcLWsaCWuE2z21ldMZ
+         Cd9A==
+X-Forwarded-Encrypted: i=1; AJvYcCXYJ6XhfonZeEFmR2aXVZedJBHkN4Z7AyH23vwHZe4JgoK/mBb+ytbZymrGilfd5Ynzdzugk+3+HtvI@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvC6kBwZ+M4pbIdkFG3LanpRKfjbBNIF55T6/LJ6m0Co7zqM2f
+	bdHzMw1CmlSpHt6f/Z3pyI7t2YZa5PDQdcHi/bSrSgPsPyzvKmnRMg1OZqMOopBCkzNZ1ZU5Vj3
+	kIPncw6Q/LwKcqh5nkBhl3WHJ11AucEA2vqeEtQuiIFd3ZSpV997baaJEW/Szrts=
+X-Gm-Gg: ASbGncvMSnj/0ZWM62Rdb6zR0a3hTEyJwAvQevWeHxFnNXVU28MPj3FSeMy4dskRTV4
+	0OjHeUPiwD2HKz3DoyFCpmH+KUC33W0+IClh9bP30ewjF8SJOqL6rnqh1cnqWPjRK7ZdtUW+i2F
+	JgTd6arQ0v5V86jjhfCdk8MhYt7+GWf88M2ptqvkvzShQ7UeR/k7EyiHWCQtq+uasrK3ZYu9uyy
+	ZY4XHSPoYspiO9eZwL68ZCbbOl0HNU0P5LpUoOiU/GCRQyb+xOj3YkBTGerMQfi8d7kMq8oIcHE
+	RkBqMoQfxVjvkQbqFjs81B/tcaqXIuc=
+X-Received: by 2002:a05:6000:430b:b0:3c6:df53:6971 with SMTP id ffacd0b85a97d-3c6df536ad8mr15063652f8f.35.1756290235902;
+        Wed, 27 Aug 2025 03:23:55 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH4Nf+4Mo9HTabLnQaq/cSzHPY5dDuVqIH0WRyNbqohTKTkgiA74asOOu5SZuhO41pKebR7Kw==
+X-Received: by 2002:a05:6000:430b:b0:3c6:df53:6971 with SMTP id ffacd0b85a97d-3c6df536ad8mr15063633f8f.35.1756290235529;
+        Wed, 27 Aug 2025 03:23:55 -0700 (PDT)
+Received: from redhat.com ([185.137.39.233])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c711211bd7sm20480046f8f.38.2025.08.27.03.23.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 02:46:56 -0700 (PDT)
-Date: Wed, 27 Aug 2025 17:45:50 +0800
-From: Inochi Amaoto <inochiama@gmail.com>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>, 
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Inochi Amaoto <inochiama@gmail.com>, 
-	Anders Roxell <anders.roxell@linaro.org>, regressions@lists.linux.dev, linux-next@vger.kernel.org, 
-	Thomas Gleixner <tglx@linutronix.de>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Marc Zyngier <maz@kernel.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Shradha Gupta <shradhagupta@linux.microsoft.com>, Haiyang Zhang <haiyangz@microsoft.com>, 
-	Jonathan Cameron <Jonathan.Cameron@huwei.com>, Juergen Gross <jgross@suse.com>, 
-	Nicolin Chen <nicolinc@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Chen Wang <unicorn_wang@outlook.com>, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
-	Yixun Lan <dlan@gentoo.org>, Longbin Li <looong.bin@gmail.com>, arnd@arndb.de, 
-	dan.carpenter@linaro.org, benjamin.copeland@linaro.org
-Subject: Re: [PATCH v2 2/4] PCI/MSI: Add startup/shutdown for per device
- domains
-Message-ID: <laatjr7p5zyp6ubzei2ogytgtfpbnlcmxjccbrqilfttrld3c7@csfx4wgqovg4>
-References: <20250813232835.43458-1-inochiama@gmail.com>
- <20250813232835.43458-3-inochiama@gmail.com>
- <aK4O7Hl8NCVEMznB@monster>
- <db2pkcmc7tmaozjjihca6qtixkeiy7hlrg325g3pqkuurkvr6u@oyz62hcymvhi>
- <qe23hkpdr6ui4mgjke2wp2pl3jmgcauzgrdxqq4olgrkbfy25d@avy6c6mg334s>
- <20250827004719.GA2519033@ax162>
- <CA+G9fYsAxq-RmU7fVSDQ8_B2Hm5NY7Q7=DUnqcpnt8BOtd0dUA@mail.gmail.com>
+        Wed, 27 Aug 2025 03:23:55 -0700 (PDT)
+Date: Wed, 27 Aug 2025 06:23:52 -0400
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the vhost tree
+Message-ID: <20250827062218-mutt-send-email-mst@kernel.org>
+References: <20250827124654.78881028@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -104,34 +96,35 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYsAxq-RmU7fVSDQ8_B2Hm5NY7Q7=DUnqcpnt8BOtd0dUA@mail.gmail.com>
+In-Reply-To: <20250827124654.78881028@canb.auug.org.au>
 
-On Wed, Aug 27, 2025 at 01:47:14PM +0530, Naresh Kamboju wrote:
-> On Wed, 27 Aug 2025 at 06:17, Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Wed, Aug 27, 2025 at 07:28:46AM +0800, Inochi Amaoto wrote:
-> > > OK, I guess I know why: I have missed one condition for startup.
-> > >
-> > > Could you test the following patch? If worked, I will send it as
-> > > a fix.
-> >
-> > Yes, that appears to resolve the issue on one system. I cannot test the
-> > other at the moment since it is under load.
+On Wed, Aug 27, 2025 at 12:46:54PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> I have built on top of Linux next-20250826 tag and the qemu-arm64 boot test
-> pass and LTP smoke test also pass.
+> The following commit is also in the perf-current tree as a different
+> commit (but the same patch):
 > 
-> >
-> > Tested-by: Nathan Chancellor <nathan@kernel.org>
+>   c67e16d30dca ("tools headers: Sync uapi/linux/vhost.h with the kernel source"
+> )
 > 
-> Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> This is commit
 > 
+>   f79a62f4b3c7 ("tools headers: Sync uapi/linux/vhost.h with the kernel source")
+> 
+> in the perf-current tree.
 
-Thanks for your tag, can you resend you tag to the following url?
-I have sent a fix patch here. Thanks.
 
-https://lore.kernel.org/all/20250827062911.203106-1-inochiama@gmail.com/
+Hmm.  I could drop mine I guess, but it only really makes sense after:
 
-Regards,
-Inochi
+    vhost: Fix ioctl # for VHOST_[GS]ET_FORK_FROM_OWNER
+    
+
+which is not in the perf tree.
+
+
+> -- 
+> Cheers,
+> Stephen Rothwell
+
+
 

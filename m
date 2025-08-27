@@ -1,130 +1,123 @@
-Return-Path: <linux-next+bounces-8119-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8120-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68536B37FD1
-	for <lists+linux-next@lfdr.de>; Wed, 27 Aug 2025 12:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6896FB37FF0
+	for <lists+linux-next@lfdr.de>; Wed, 27 Aug 2025 12:33:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E7AC1BA5331
-	for <lists+linux-next@lfdr.de>; Wed, 27 Aug 2025 10:24:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94F921BA546B
+	for <lists+linux-next@lfdr.de>; Wed, 27 Aug 2025 10:34:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D51D34A338;
-	Wed, 27 Aug 2025 10:24:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2703D223301;
+	Wed, 27 Aug 2025 10:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N6dPKSCE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bOnMdSV3"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B3E341ABD
-	for <linux-next@vger.kernel.org>; Wed, 27 Aug 2025 10:24:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB90F72610;
+	Wed, 27 Aug 2025 10:33:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756290243; cv=none; b=A1ca9rhsAoD8VLQH6xztQ5XayUdJGdW7kYpKsV3WCm4Dcduw8dEq9XBUysKRHIHWD927LX0ikGST+ut+xYiukKpZWefgxvZX4AO0ioLC9Sf+NFPrW83VQX97+zVM/HfypdcBGanvhPpMUj09N4UbptcYh+GXA+vL29c/upiHR3c=
+	t=1756290817; cv=none; b=BLv3Mf8q8QEJfm2ghtuhRMIK5iQRnegFoHuFBzFElw2vHQ9/uNmski4YDAoiEuh5mEGj/Sl0U5nDZlHLYmrki7m3Gnzbr6v1fKvGRN8jlFrjSmj6EfFx2Z4L1iVC7pE9FWXSxm45YJG+ZgT4BOwb1bPCb2ZMwwqzDt4f51DcMIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756290243; c=relaxed/simple;
-	bh=fhHeQECtsMPogCHlxKASHLbxYpLR81Rjlh4nHtxZrIQ=;
+	s=arc-20240116; t=1756290817; c=relaxed/simple;
+	bh=9QsnH71YbkSyX/7fRAS+Fy/72P1UW6IJD9KrB9U0euc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W1hfT/BeWyKwLnnDdN/uaCxVgrT5Ve1JEWIbWT15bZEY4NSCY8DRcCPPpqSkm7K5mS0eIA3W2hRMSJU2s50LC0AJB4BV3iTP7VeH/mEUpVF83EwK7ViE/utPhmdNOftWzSM4YzvBTXvSrixkt6qWOitx0alUKptVQuRuUB7D4sk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N6dPKSCE; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756290239;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5mmeUW6MPoGpFuDnaAdEqf7QqySNZXWiteR+71+RR74=;
-	b=N6dPKSCE93f3zv6TMkh9gnBbAl2EkHvoax/aeB1S71WJ3F76WqBVCHl3kw+CtCvq+Rqo5M
-	fZOnx+GH+6gafym6+LENT/1kzxJvXPc2J6XzFzQqhxAb+YMGaUciP8jqV4pANr6FVXsj4M
-	qZ0QFSuENd7M4ubSZk5DgaCHamRPhzg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-318-LVAJwCvcMba588x8nF5jEg-1; Wed, 27 Aug 2025 06:23:57 -0400
-X-MC-Unique: LVAJwCvcMba588x8nF5jEg-1
-X-Mimecast-MFC-AGG-ID: LVAJwCvcMba588x8nF5jEg_1756290236
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-45a1b0b2b5cso47742505e9.2
-        for <linux-next@vger.kernel.org>; Wed, 27 Aug 2025 03:23:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756290236; x=1756895036;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5mmeUW6MPoGpFuDnaAdEqf7QqySNZXWiteR+71+RR74=;
-        b=U15RyUgwRYStRZYgE03cm2KVNTmFeRtZLRrvaA42BPg9qLoPyg39uxAQut2w3pSS2w
-         0ytf7yk+Zez6IOQHpFiDjcXbBiUuzAH1Pfj816WrofXefTjU9DbaGIG9TKonyh41To0b
-         /cGbPJBuu6CMCvG3AOTmxlIyOxt9JVjP1seA4dd+Je+Z4YmP0f7BiYGVV7H/QPOmoqsY
-         GMveCUGT3lzo4ibwU/whK1/HgmoilrBxJbB3PV5Tttkt77PG96SC4LpP5u8GpncUdfyD
-         DHWL2PZHzNmBkN6FhDn43g6yghSR4ChHrJRFLSANx4PWEuRsU0TcLWsaCWuE2z21ldMZ
-         Cd9A==
-X-Forwarded-Encrypted: i=1; AJvYcCXYJ6XhfonZeEFmR2aXVZedJBHkN4Z7AyH23vwHZe4JgoK/mBb+ytbZymrGilfd5Ynzdzugk+3+HtvI@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvC6kBwZ+M4pbIdkFG3LanpRKfjbBNIF55T6/LJ6m0Co7zqM2f
-	bdHzMw1CmlSpHt6f/Z3pyI7t2YZa5PDQdcHi/bSrSgPsPyzvKmnRMg1OZqMOopBCkzNZ1ZU5Vj3
-	kIPncw6Q/LwKcqh5nkBhl3WHJ11AucEA2vqeEtQuiIFd3ZSpV997baaJEW/Szrts=
-X-Gm-Gg: ASbGncvMSnj/0ZWM62Rdb6zR0a3hTEyJwAvQevWeHxFnNXVU28MPj3FSeMy4dskRTV4
-	0OjHeUPiwD2HKz3DoyFCpmH+KUC33W0+IClh9bP30ewjF8SJOqL6rnqh1cnqWPjRK7ZdtUW+i2F
-	JgTd6arQ0v5V86jjhfCdk8MhYt7+GWf88M2ptqvkvzShQ7UeR/k7EyiHWCQtq+uasrK3ZYu9uyy
-	ZY4XHSPoYspiO9eZwL68ZCbbOl0HNU0P5LpUoOiU/GCRQyb+xOj3YkBTGerMQfi8d7kMq8oIcHE
-	RkBqMoQfxVjvkQbqFjs81B/tcaqXIuc=
-X-Received: by 2002:a05:6000:430b:b0:3c6:df53:6971 with SMTP id ffacd0b85a97d-3c6df536ad8mr15063652f8f.35.1756290235902;
-        Wed, 27 Aug 2025 03:23:55 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IH4Nf+4Mo9HTabLnQaq/cSzHPY5dDuVqIH0WRyNbqohTKTkgiA74asOOu5SZuhO41pKebR7Kw==
-X-Received: by 2002:a05:6000:430b:b0:3c6:df53:6971 with SMTP id ffacd0b85a97d-3c6df536ad8mr15063633f8f.35.1756290235529;
-        Wed, 27 Aug 2025 03:23:55 -0700 (PDT)
-Received: from redhat.com ([185.137.39.233])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3c711211bd7sm20480046f8f.38.2025.08.27.03.23.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Aug 2025 03:23:55 -0700 (PDT)
-Date: Wed, 27 Aug 2025 06:23:52 -0400
-From: "Michael S. Tsirkin" <mst@redhat.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the vhost tree
-Message-ID: <20250827062218-mutt-send-email-mst@kernel.org>
-References: <20250827124654.78881028@canb.auug.org.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=W+zBHTI9ua3bYZMuMpKcxOURlf+JTsK8ybxBngEdoO4rs1P2H0ueWO+XWs9Tqmp+4EDzIzwoYWbaO0a08SkMG7IZKPBZFCati2kAjV70OPBToxdpc6EQNFdkTRKEOw1NIaz2vQHNi+twz7WBX2zV/t3FYFtR16YPaGV39IKxNOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bOnMdSV3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BD46C4CEEB;
+	Wed, 27 Aug 2025 10:33:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756290816;
+	bh=9QsnH71YbkSyX/7fRAS+Fy/72P1UW6IJD9KrB9U0euc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bOnMdSV3araDsoInT7APCgqwtFtYPjVxUS2hKgZDZGdHyWpqpXLV76YSCGzK6kEZ0
+	 FjDmGzfiIkOelOs/qHpOJeytAxYVP+ddMm29P1nQVNwV+CAODnwR5Q8z1cHDPVhEss
+	 Wozpklupd8uTwA2VB9wX3QzHlpyzfUEJed0dA3RmC2MevNGOAknS9s31L+MOFmnZi6
+	 xBwEeodGCPPXYGHJiu1gl6BIXpcrEmJUpjM79xdS+tlg9QG+qkEqzZB8NMGZLUKi9k
+	 5wDeAi6VSdo15cqHrRqpg45+1uylaLt6PifnEGQHyyJlsqLbpWv9fd7j+vX6PSJtT6
+	 yyRb0l98iiKbw==
+Date: Wed, 27 Aug 2025 11:33:29 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Anders Roxell <anders.roxell@linaro.org>,
+	Inochi Amaoto <inochiama@gmail.com>, regressions@lists.linux.dev,
+	linux-next@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+	Bjorn Helgaas <bhelgaas@google.com>, Marc Zyngier <maz@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Shradha Gupta <shradhagupta@linux.microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Jonathan Cameron <Jonathan.Cameron@huwei.com>,
+	Juergen Gross <jgross@suse.com>, Nicolin Chen <nicolinc@nvidia.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Chen Wang <unicorn_wang@outlook.com>, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, Yixun Lan <dlan@gentoo.org>,
+	Longbin Li <looong.bin@gmail.com>, arnd@arndb.de,
+	dan.carpenter@linaro.org, naresh.kamboju@linaro.org,
+	benjamin.copeland@linaro.org
+Subject: Re: [PATCH v2 2/4] PCI/MSI: Add startup/shutdown for per device
+ domains
+Message-ID: <91a9db15-8e3c-4b49-a34f-61e043040de9@sirena.org.uk>
+References: <20250813232835.43458-1-inochiama@gmail.com>
+ <20250813232835.43458-3-inochiama@gmail.com>
+ <aK4O7Hl8NCVEMznB@monster>
+ <20250826220959.GA4119563@ax162>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="X6vJ3MJZfuQb9wf/"
+Content-Disposition: inline
+In-Reply-To: <20250826220959.GA4119563@ax162>
+X-Cookie: Keep out of the sunlight.
+
+
+--X6vJ3MJZfuQb9wf/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250827124654.78881028@canb.auug.org.au>
 
-On Wed, Aug 27, 2025 at 12:46:54PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The following commit is also in the perf-current tree as a different
-> commit (but the same patch):
-> 
->   c67e16d30dca ("tools headers: Sync uapi/linux/vhost.h with the kernel source"
-> )
-> 
-> This is commit
-> 
->   f79a62f4b3c7 ("tools headers: Sync uapi/linux/vhost.h with the kernel source")
-> 
-> in the perf-current tree.
+On Tue, Aug 26, 2025 at 03:09:59PM -0700, Nathan Chancellor wrote:
+> On Tue, Aug 26, 2025 at 09:45:48PM +0200, Anders Roxell wrote:
 
+> > <5>[    1.527859] virtio_blk virtio0: [vda] 5397504 512-byte logical
+> > blocks (2.76 GB/2.57 GiB)
+> > <4>[   29.761219] sched: DL replenish lagged too much
+> > [here it hangs]
 
-Hmm.  I could drop mine I guess, but it only really makes sense after:
+> FWIW, I am also seeing this on real arm64 hardware (an LX2160A board and
+> an Ampere Altra one) but with my NVMe drives failing to be recognized.
+> In somewhat ironic fashion, I am seeing the message from cover letter
+> repeating.
 
-    vhost: Fix ioctl # for VHOST_[GS]ET_FORK_FROM_OWNER
-    
+>   nvme nvme0: I/O tag 8 (1008) QID 0 timeout, completion polled
+>   [  125.810062] dracut-initqueue[640]: Timed out while waiting for udev queue to empty.
+>   nvme nvme0: I/O tag 9 (1009) QID 0 timeout, completion polled
 
-which is not in the perf tree.
+> I am happy to test patches or provide information.
 
+Same here, it's breaking at least Orion O6.
 
-> -- 
-> Cheers,
-> Stephen Rothwell
+--X6vJ3MJZfuQb9wf/
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiu3vgACgkQJNaLcl1U
+h9CdeAf402KdhbaIwGLMVW/ZufuvG6tLwjEE10wBQg5laZZvUvnIyvGFbVKu7435
+ZNGuRRz+vrtWUELyalj8weCiMypGRn/0cwcQMNwqRojfxNP0H7bX4sbnbJ2p+XlL
+URDc8VRdIm5T7i4OuF+hd3vb3Bz4DCmLf2mnGS0FXKmq1LKywbufDgNqFLAO5QT3
+X5aa8E2n5SvTMUI600g6dAc/t2qBEiwaHoj/qsME/i2LpqddFZnziad+OKQlroOa
+3Ib4vOfVAKoX19X8FhiEubukWrpA14cQgM3QHz/53sM67fl+nizB+Va4+MopqxXc
+KfuEuADsssk2u1Hu2+lDnBvZBKV2
+=FiXm
+-----END PGP SIGNATURE-----
+
+--X6vJ3MJZfuQb9wf/--
 

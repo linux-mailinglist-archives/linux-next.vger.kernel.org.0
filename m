@@ -1,114 +1,133 @@
-Return-Path: <linux-next+bounces-8108-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8109-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0947B37638
-	for <lists+linux-next@lfdr.de>; Wed, 27 Aug 2025 02:47:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD5A3B37767
+	for <lists+linux-next@lfdr.de>; Wed, 27 Aug 2025 03:49:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 357417B33BF
-	for <lists+linux-next@lfdr.de>; Wed, 27 Aug 2025 00:45:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F0642A86C4
+	for <lists+linux-next@lfdr.de>; Wed, 27 Aug 2025 01:49:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 966041C5D77;
-	Wed, 27 Aug 2025 00:47:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4B8F18C011;
+	Wed, 27 Aug 2025 01:48:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z04zFHY9"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Jro9YX6s"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E0C1A8F6D;
-	Wed, 27 Aug 2025 00:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC5030CD95;
+	Wed, 27 Aug 2025 01:48:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756255647; cv=none; b=cerIwzOO7tPX0eN1fLMTIp5SIZxRfwp9z4jJJZ6t6XAJFJaxtklLFrtWl3oEH/sis+uc7QgAa3bT8KeOG2wF63x1jg6WOc6S5cnsuhDBhPAJdrD6tbuQMjjB6OxSDljPg4GgVaZs3molCNkKWB+lCVRpjuDkhfRLIeGnuIGScVw=
+	t=1756259336; cv=none; b=bMAn084TDSSulqdXLnypOIzmTTuAy//E2YP7KX2uKS+Dd0FEIMMV5JRqqd592W2cHIXBjAanIaxP2TupXWI4sye0EjTh7hpYrNXVZSoUGbBYdSVd49nV+WyaP37V5jVowJFlV1Y+gGC3pqSevFbE0JQlJwwTdum8wrQWbhl2v/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756255647; c=relaxed/simple;
-	bh=fJibzDU7/2s4PGf/xnGmOVoava/WtPPgeSBLdxdvRAw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B7HhWnuQUy0dRsorVJZC3/Asusn6jxeIjWIgFsq0XFVrXxW6/Pm31rmEbjOA/X5PeOaruOeNTOK+KdfWqygA+uBM33aD9z718en2XhnOv9Gvd2HXgUtTZ+epSuj+DkmtaWtqL/bUS+p/d23rhYecG6GlfXZw7MtFbo820O3KGTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z04zFHY9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63DF1C4CEF1;
-	Wed, 27 Aug 2025 00:47:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756255647;
-	bh=fJibzDU7/2s4PGf/xnGmOVoava/WtPPgeSBLdxdvRAw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z04zFHY9UxRveACRgyHDlt+oZzzLREXskSz486JKDN7StLFjGNYWkTLlfLffuMX7J
-	 PVmJrFf5SYQdzPvhJBMX7KCamml864BWNvojqKD9A1cv7Smzp1/dz9o+M6sHphOKEA
-	 OLmHH8hdRORf4OAsm3PZyL4Oe3OmziXypIZ2mYYUgArb1XQ+gdr6VJ+T2jIF3nI+jN
-	 daIMt9c3fSrO9K7ZSCfirX6SAI1hu5+gODhasY3pFpEqQrMzuS261KDoaoBBbIDF/L
-	 vIF40OvKjBGdSloMfYq8CT0ZHGkAifI6qf/L5Svsgi0urrHQgCYq/rT+bTES+zolkg
-	 x4LOvp8jC3wSQ==
-Date: Tue, 26 Aug 2025 17:47:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Inochi Amaoto <inochiama@gmail.com>
-Cc: Anders Roxell <anders.roxell@linaro.org>, regressions@lists.linux.dev,
-	linux-next@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-	Bjorn Helgaas <bhelgaas@google.com>, Marc Zyngier <maz@kernel.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Shradha Gupta <shradhagupta@linux.microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Jonathan Cameron <Jonathan.Cameron@huwei.com>,
-	Juergen Gross <jgross@suse.com>, Nicolin Chen <nicolinc@nvidia.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Chen Wang <unicorn_wang@outlook.com>, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, Yixun Lan <dlan@gentoo.org>,
-	Longbin Li <looong.bin@gmail.com>, arnd@arndb.de,
-	dan.carpenter@linaro.org, naresh.kamboju@linaro.org,
-	benjamin.copeland@linaro.org
-Subject: Re: [PATCH v2 2/4] PCI/MSI: Add startup/shutdown for per device
- domains
-Message-ID: <20250827004719.GA2519033@ax162>
-References: <20250813232835.43458-1-inochiama@gmail.com>
- <20250813232835.43458-3-inochiama@gmail.com>
- <aK4O7Hl8NCVEMznB@monster>
- <db2pkcmc7tmaozjjihca6qtixkeiy7hlrg325g3pqkuurkvr6u@oyz62hcymvhi>
- <qe23hkpdr6ui4mgjke2wp2pl3jmgcauzgrdxqq4olgrkbfy25d@avy6c6mg334s>
+	s=arc-20240116; t=1756259336; c=relaxed/simple;
+	bh=qnlKKaamUeoRoz2OJgjJs5utkiKXfgmyhDoMoZ2YugY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=rWol4zXgCcpAmDSbu/u/DmKO75xi9WJdlY42S+GUTEbmFGlMWz1ys4l/n2a3nBHXpeeVofGVYof/E/pXHvPucBbNT1eufQxqAoe1Dl04biv+4x7EVcPz7Yd4Emq4Ml5ip+t1YEPkyUX0un18a8P36bmxyCOSzSA981C1mglfhFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Jro9YX6s; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1756259322;
+	bh=61fL/d39tArqt/pcNRPKv8V7lTpgbfr0rRa2oFylJaI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Jro9YX6sXR402bt4RY63F76Ybsj4lcaH3KlRRl6ejHPC6c3hlBV0ZaG1XsnCZ9PUP
+	 khAS1VPaXihDSxf1V3nkkJIuDEheyH3QPzFEM+qMDKFOUe1IFwZZC1sh+5kabS4tTh
+	 O7eVD5qnR+Cog+n9SAoW1Wxzaa5d9nukW9upY5U8yYX6kXHpy1RS6mqbz8Zihacmi8
+	 AcC9wB8X44AojTJgKYtT4z1vuqwODXv9wIoR6/47WFBnewt4ym2WmBa9FPEY1AwoAq
+	 dC56sauZmoDfGS33SalnkUkMbXeR08yamV9WMIEip/PMFoEnowWQiW26ngAIEI0hTg
+	 lxymYA6T9d9Rw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cBS9k0VVjz4wfs;
+	Wed, 27 Aug 2025 11:48:42 +1000 (AEST)
+Date: Wed, 27 Aug 2025 11:48:41 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Rob Herring <robh@kernel.org>, Mark Brown <broonie@kernel.org>, Liam
+ Girdwood <lgirdwood@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Nick Li <nick.li@foursemi.com>
+Subject: linux-next: manual merge of the devicetree tree with the sound-asoc
+ tree
+Message-ID: <20250827114841.6df8a5f4@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <qe23hkpdr6ui4mgjke2wp2pl3jmgcauzgrdxqq4olgrkbfy25d@avy6c6mg334s>
+Content-Type: multipart/signed; boundary="Sig_/iCUj11r7wOksOO6i7EM/8f/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Wed, Aug 27, 2025 at 07:28:46AM +0800, Inochi Amaoto wrote:
-> OK, I guess I know why: I have missed one condition for startup.
-> 
-> Could you test the following patch? If worked, I will send it as
-> a fix.
+--Sig_/iCUj11r7wOksOO6i7EM/8f/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes, that appears to resolve the issue on one system. I cannot test the
-other at the moment since it is under load.
+Hi all,
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+Today's linux-next merge of the devicetree tree got a conflict in:
 
-> ---
-> diff --git a/drivers/pci/msi/irqdomain.c b/drivers/pci/msi/irqdomain.c
-> index e0a800f918e8..b11b7f63f0d6 100644
-> --- a/drivers/pci/msi/irqdomain.c
-> +++ b/drivers/pci/msi/irqdomain.c
-> @@ -154,6 +154,8 @@ static void cond_shutdown_parent(struct irq_data *data)
->  
->  	if (unlikely(info->flags & MSI_FLAG_PCI_MSI_STARTUP_PARENT))
->  		irq_chip_shutdown_parent(data);
-> +	else if (unlikely(info->flags & MSI_FLAG_PCI_MSI_MASK_PARENT))
-> +		irq_chip_mask_parent(data);
->  }
->  
->  static unsigned int cond_startup_parent(struct irq_data *data)
-> @@ -162,6 +164,9 @@ static unsigned int cond_startup_parent(struct irq_data *data)
->  
->  	if (unlikely(info->flags & MSI_FLAG_PCI_MSI_STARTUP_PARENT))
->  		return irq_chip_startup_parent(data);
-> +	else if (unlikely(info->flags & MSI_FLAG_PCI_MSI_MASK_PARENT))
-> +		irq_chip_unmask_parent(data);
-> +
->  	return 0;
->  }
->  
+  Documentation/devicetree/bindings/vendor-prefixes.yaml
+
+between commit:
+
+  243167e96939 ("dt-bindings: vendor-prefixes: Add Shanghai FourSemi Semico=
+nductor Co.,Ltd")
+
+from the sound-asoc tree and commit:
+
+  77a03a290243 ("dt-bindings: vendor-prefixes: Add undocumented vendor pref=
+ixes")
+
+from the devicetree tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 58f3b07f4254,0f5273123650..000000000000
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@@ -556,8 -568,8 +572,10 @@@ patternProperties
+      description: FocalTech Systems Co.,Ltd
+    "^forlinx,.*":
+      description: Baoding Forlinx Embedded Technology Co., Ltd.
+ +  "^foursemi,.*":
+ +    description: Shanghai FourSemi Semiconductor Co.,Ltd.
++   "^foxlink,.*":
++     description: Foxlink Group
+    "^freebox,.*":
+      description: Freebox SAS
+    "^freecom,.*":
+
+--Sig_/iCUj11r7wOksOO6i7EM/8f/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmiuY/kACgkQAVBC80lX
+0GwiRQf4i2zCY81xyswPmM55gliUYrEHwyEAqQHlrIgyqcBgH2Qm5cJ6QD72Jg3X
+qZ0Es4oHqgCA6DlQxZeJDLLXmdJqATmR6gxT+vhYMSG8yletJd7JUE1Li9P5zVBL
+DiA8Aj+YASxjQNqJhVAZ9fVcFWuTQB7JvgepD8EDUc/Zj3f+7HnB2xM5OuAVTvl/
+c3WdKA1muN0wa825S/8i+QiFacP9VNNFNIn1nAP5hPZwKrBltO++NJXD/DL/MF+A
+MTG4pn0gZ2s+XIpJ++slmUZo4xvJUxZmZVpClDhS9IMvwDr64U1Z2yA5bUV5MzeK
+R/1iV67IrgXwmPWFXSS3ybS+kXQC
+=1xpm
+-----END PGP SIGNATURE-----
+
+--Sig_/iCUj11r7wOksOO6i7EM/8f/--
 

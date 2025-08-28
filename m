@@ -1,96 +1,95 @@
-Return-Path: <linux-next+bounces-8134-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8135-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CABCAB397C7
-	for <lists+linux-next@lfdr.de>; Thu, 28 Aug 2025 11:03:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CB34B3A37B
+	for <lists+linux-next@lfdr.de>; Thu, 28 Aug 2025 17:06:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8541A3AA4B5
-	for <lists+linux-next@lfdr.de>; Thu, 28 Aug 2025 09:03:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A156320785F
+	for <lists+linux-next@lfdr.de>; Thu, 28 Aug 2025 15:01:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26A59191F6A;
-	Thu, 28 Aug 2025 09:03:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8763C313E27;
+	Thu, 28 Aug 2025 15:00:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="2f+XuTTo";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="XhNZ0LfP";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="vMwW8MFu";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="1QSW4NzJ"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="3dLQzOV5";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="sXq5Ef3r";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="3dLQzOV5";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="sXq5Ef3r"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8481A1C01
-	for <linux-next@vger.kernel.org>; Thu, 28 Aug 2025 09:03:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6712B264630
+	for <linux-next@vger.kernel.org>; Thu, 28 Aug 2025 15:00:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756371808; cv=none; b=mt+c4hQO5KelToD5BJ/H+URzEgQ4SsJeH/zTDS1Tt7+IynQ3yyHGIHI1qdHY0aV/J29/O/uoAJuUyqMs48jHJX2ahCS50eZBLYUFmBRsr5MZ5G5xlU3h8adMmKqy+uZsdiK1oho94oQGHtfLkWsEsneTCs7Q6xxNyvWiv/uo04I=
+	t=1756393214; cv=none; b=OI5EVVSH9BxaT6fGFMNuFmAyb2ljosL67mB5Wk3Bi8JcmmTVBJgQ8oS5FYaHj7MsrPqrbNpRvFH3TiHIkWh3iT1z1fPBh7hmwN+2rCejd3pWn5UrZ0LJ54JZuDtiXVOk/Mc4Hfm6NPRWR8HNnp4pGQWGKxhW1TiXtwj5DVEtL14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756371808; c=relaxed/simple;
-	bh=gdeDlrv+xzIj16pGb7RD0wcRzTcuQi/jYp5rqbYF1gY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pzQ6ihWxRurklYlKUVTwAIpztXl06zbn6pcihZYSX0jDjLKn9sI0ZQJnw8HLDDGCuQUMiLsXqipvCDt09EXbKenRoxPg6PwxMLAS5JOMIgrbOtdCJzQk0UlR70umSV1mP0jPOP0rYHy99/WMgi6+omW1LzvA6NbODKc8rSGYCsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=2f+XuTTo; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=XhNZ0LfP; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=vMwW8MFu; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=1QSW4NzJ; arc=none smtp.client-ip=195.135.223.131
+	s=arc-20240116; t=1756393214; c=relaxed/simple;
+	bh=zA0cDuItVocYyxoIesjuMV1OW2nMWmCT4Z1pPjFCdlo=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=t/bfE7OYHL9+8OS8Bwi5/Y5zpHODEAmjKuPKdmAVQwa57YrwwP/tAjN+wRagtYwlneeAxouRJz04M1FVADaNvCcdHXpd/G6Zyn2aCqPXDYNa9tYu3GstLPDHJnfNv2b7hmyl4Kh2SknS29pGbLq9ed/uWo9dr0VT4hY/hqbFdNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=3dLQzOV5; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=sXq5Ef3r; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=3dLQzOV5; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=sXq5Ef3r; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 528E01F45A;
-	Thu, 28 Aug 2025 09:03:21 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 6572920C9C;
+	Thu, 28 Aug 2025 15:00:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1756371802; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1756393210; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=LnWnXs0CP780edLigY1ylIrEEjBBKs5wL6WsgJXXSl4=;
-	b=2f+XuTTo/Q2Vq5YdTEYIm0BOPLvUaIam+4Auv+w10RpXRV9vJnD7EdRs9u3eTsL6gllUzL
-	KtK1Prc/dbAohnFHHQhE1wIUcxX/tUgq8d7AgRH7eufzN9DeIxB1lJGWMtjxPt3MtVgbXo
-	dpzbp7MCGITs1kkmiGHJ+g7xZqUN8yo=
+	bh=uehZBsnaehY6HkqRyNwn4pp7E8jo40zKq9Usa7eHFPA=;
+	b=3dLQzOV5Io6C5tPZOdOG3wR15ww76bjkjbM/0Up/TSrbuHvOUCjbRB9AnP4lJMIjtPH+bU
+	+mftrfiJUCIdzNEfFkFaPuy2+2/1rBlaP6mov1HdDo2QxAzYufJtxUVaBgswmuf9vPaChL
+	+ENxHdQCKQP91fKHKifx9gV8nTLIx1Q=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1756371802;
+	s=susede2_ed25519; t=1756393210;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=LnWnXs0CP780edLigY1ylIrEEjBBKs5wL6WsgJXXSl4=;
-	b=XhNZ0LfPmwZwzEW+1STFcfMcv74GO1GROTAkNI+YU3/pUfNPyjLa45UTOJxm68NjCHM9e5
-	3ksv5BMeefa48XCg==
+	bh=uehZBsnaehY6HkqRyNwn4pp7E8jo40zKq9Usa7eHFPA=;
+	b=sXq5Ef3rTT3VN6DIqFdFbm/VTT0r+H3U2M28wHwQDsmI8+Kb86rcVNl9zJSVroJlmch5nC
+	tDtrERN/ih8nMbBQ==
 Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=vMwW8MFu;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=1QSW4NzJ
+	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1756371801; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1756393210; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=LnWnXs0CP780edLigY1ylIrEEjBBKs5wL6WsgJXXSl4=;
-	b=vMwW8MFuIyTkeIclx4zAp2CO9EGH8uavven0DthvVSOLmBl8wXL6CULlgc2imORQej9HcH
-	McbZLiohLZFnrJvuXY1aTT++YiGty2/pu64BaS/vNhziAv0HNOXmnyCZ2J59JjVx5smzgd
-	wKnHIChm97guBTxQiX/nqOmtIgxdVWE=
+	bh=uehZBsnaehY6HkqRyNwn4pp7E8jo40zKq9Usa7eHFPA=;
+	b=3dLQzOV5Io6C5tPZOdOG3wR15ww76bjkjbM/0Up/TSrbuHvOUCjbRB9AnP4lJMIjtPH+bU
+	+mftrfiJUCIdzNEfFkFaPuy2+2/1rBlaP6mov1HdDo2QxAzYufJtxUVaBgswmuf9vPaChL
+	+ENxHdQCKQP91fKHKifx9gV8nTLIx1Q=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1756371801;
+	s=susede2_ed25519; t=1756393210;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=LnWnXs0CP780edLigY1ylIrEEjBBKs5wL6WsgJXXSl4=;
-	b=1QSW4NzJcSRXbjIl+kt1QfdTqg+AWLhk28rSJwePQhuGvxI9CntrgBQqfSUY3VqT7+jei8
-	lbI1CtjUBF3jnpCA==
+	bh=uehZBsnaehY6HkqRyNwn4pp7E8jo40zKq9Usa7eHFPA=;
+	b=sXq5Ef3rTT3VN6DIqFdFbm/VTT0r+H3U2M28wHwQDsmI8+Kb86rcVNl9zJSVroJlmch5nC
+	tDtrERN/ih8nMbBQ==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 183851368B;
-	Thu, 28 Aug 2025 09:03:21 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 307FC13326;
+	Thu, 28 Aug 2025 15:00:10 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id VE0EBFkbsGh1NwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 28 Aug 2025 09:03:21 +0000
-Message-ID: <d883b845-28ce-4804-b2bb-0ccea0100fa2@suse.cz>
-Date: Thu, 28 Aug 2025 11:03:20 +0200
+	id A0FdC/pusGjVLAAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 28 Aug 2025 15:00:10 +0000
+Message-ID: <9705a0d1-0108-4f63-9a5c-9ca6c20eeb32@suse.cz>
+Date: Thu, 28 Aug 2025 17:00:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -100,6 +99,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v6 02/10] slab: add opt-in caching layer of percpu sheaves
 Content-Language: en-US
+From: Vlastimil Babka <vbabka@suse.cz>
 To: Thorsten Leemhuis <linux@leemhuis.info>,
  Suren Baghdasaryan <surenb@google.com>,
  "Liam R. Howlett" <Liam.Howlett@oracle.com>,
@@ -111,13 +111,12 @@ Cc: Roman Gushchin <roman.gushchin@linux.dev>,
  Linux Next Mailing List <linux-next@vger.kernel.org>,
  Stephen Rothwell <sfr@canb.auug.org.au>,
  Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Bert Karwatzki <spasswolf@web.de>
 References: <20250827-slub-percpu-caches-v6-0-f0f775a3f73f@suse.cz>
  <20250827-slub-percpu-caches-v6-2-f0f775a3f73f@suse.cz>
  <9f61c814-0d39-46f2-a540-cc9c0e716cf6@leemhuis.info>
  <e58c8482-bd11-4111-b912-daf8b43ebb15@suse.cz>
- <4585de6e-a7ec-45a3-8421-dc9e1490cdf7@leemhuis.info>
-From: Vlastimil Babka <vbabka@suse.cz>
 Autocrypt: addr=vbabka@suse.cz; keydata=
  xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
  KxRWDHX0R2tgpFDXHnzZcQywawu8eSq0LxzxFNYMvtB7sV1pxYwej2qx9B75qW2plBs+7+YB
@@ -157,109 +156,87 @@ Autocrypt: addr=vbabka@suse.cz; keydata=
  rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
  dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
  m6M14QORSWTLRg==
-In-Reply-To: <4585de6e-a7ec-45a3-8421-dc9e1490cdf7@leemhuis.info>
+In-Reply-To: <e58c8482-bd11-4111-b912-daf8b43ebb15@suse.cz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Level: 
-X-Spam-Flag: NO
-X-Rspamd-Queue-Id: 528E01F45A
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spamd-Result: default: False [-3.01 / 50.00];
+X-Spamd-Result: default: False [-2.80 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
 	SUSPICIOUS_RECIPS(1.50)[];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
 	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
+	TAGGED_RCPT(0.00)[];
 	FUZZY_RATELIMITED(0.00)[rspamd.com];
 	MIME_TRACE(0.00)[0:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[linux.dev,oracle.com,gmail.com,kvack.org,vger.kernel.org,lists.infradead.org,canb.auug.org.au,linutronix.de];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received,2a07:de40:b281:104:10:150:64:97:from];
-	TAGGED_RCPT(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_TRACE(0.00)[suse.cz:+];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	ARC_NA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.cz:dkim,suse.cz:mid]
-X-Spam-Score: -3.01
+	RCVD_TLS_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com,web.de];
+	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[linux.dev,oracle.com,gmail.com,kvack.org,vger.kernel.org,lists.infradead.org,canb.auug.org.au,linutronix.de,web.de];
+	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,imap1.dmz-prg2.suse.org:helo]
+X-Spam-Flag: NO
+X-Spam-Score: -2.80
 
-On 8/28/25 10:53, Thorsten Leemhuis wrote:
-> On 28.08.25 10:01, Vlastimil Babka wrote:
->> On 8/28/25 09:43, Thorsten Leemhuis wrote:
->>> On 27.08.25 10:26, Vlastimil Babka wrote:
->>>> Specifying a non-zero value for a new struct kmem_cache_args field
->>>> sheaf_capacity will setup a caching layer of percpu arrays called
->>>> sheaves of given capacity for the created cache.
->>>>
->>>> Allocations from the cache will allocate via the percpu sheaves (main or
->>>> spare) as long as they have no NUMA node preference. Frees will also
->>>> put the object back into one of the sheaves.
->>>> [...]
->>>
->>> This patch showed up in linux-next today and from a *quick* glance at
->>> things I suspect it might be the reason why my daily next rpm builds for
->>> Fedora failed today like this:
->> 
->> Hi, thanks for the report.
->>> ""
->>> In file included from ./include/linux/spinlock.h:63,
->>>                  from ./include/linux/mmzone.h:8,
->>>                  from ./include/linux/gfp.h:7,
->>>                  from ./include/linux/mm.h:7,
->>>                  from mm/slub.c:13:
->>> mm/slub.c: In function ‘__pcs_replace_empty_main’:
->>> mm/slub.c:4727:64: error: ‘local_trylock_t’ {aka ‘__seg_gs struct spinlock’} has no member named ‘llock’; did you mean ‘lock’?
->>>  4727 |         lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock.llock));
->>>       |                                                                ^~~~~
->>> ./include/linux/lockdep.h:392:61: note: in definition of macro ‘lockdep_assert_held’
->>>   392 | #define lockdep_assert_held(l)                  do { (void)(l); } while (0)
->>>       |                                                             ^
+On 8/28/25 10:01, Vlastimil Babka wrote:
+> On 8/28/25 09:43, Thorsten Leemhuis wrote:
+>> On 27.08.25 10:26, Vlastimil Babka wrote:
+>>> Specifying a non-zero value for a new struct kmem_cache_args field
+>>> sheaf_capacity will setup a caching layer of percpu arrays called
+>>> sheaves of given capacity for the created cache.
+>>> 
+>>> Allocations from the cache will allocate via the percpu sheaves (main or
+>>> spare) as long as they have no NUMA node preference. Frees will also
+>>> put the object back into one of the sheaves.
 >>> [...]
->>> mm/slub.c:5653:29: note: in expansion of macro ‘this_cpu_ptr’
->>>  5653 |         lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock.llock));
->>>       |                             ^~~~~~~~~~~~
->>> make[3]: *** [scripts/Makefile.build:287: mm/slub.o] Error 1
->>> make[2]: *** [scripts/Makefile.build:556: mm] Error 2
->>> make[2]: *** Waiting for unfinished jobs....
->>> make[1]: *** [/builddir/build/BUILD/kernel-6.17.0-build/kernel-next-20250828/linux-6.17.0-0.0.next.20250828.432.vanilla.fc44.x86_64/Makefile:2017: .] Error 2
->>> make: *** [Makefile:256: __sub-make] Error 2
->>> ""
->>>
->>> Full log: https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/fedora-rawhide-x86_64/09498568-next-next-all/builder-live.log.gz
 >> 
->> Oh so I assume the .config here has both LOCKDEP and PREEMPT_RT?
+>> This patch showed up in linux-next today and from a *quick* glance at
+>> things I suspect it might be the reason why my daily next rpm builds for
+>> Fedora failed today like this:
 > 
-> PREEMPT_RT yes, LOCKDEP no.
-
-Ah right the compiler evaluates that assert param even if not enabled.
-> The config the failed build actually used is generated on the buildsys,
-> but it should be identical to the one I attached here when you process
-> it with olddefconfig.
-> 
->> I tried to make lockdep_assert_held() with trylock but forgot about the RT
->> difference. The solution is Alexei's patch
+> Hi, thanks for the report.
+>> ""
+>> In file included from ./include/linux/spinlock.h:63,
+>>                  from ./include/linux/mmzone.h:8,
+>>                  from ./include/linux/gfp.h:7,
+>>                  from ./include/linux/mm.h:7,
+>>                  from mm/slub.c:13:
+>> mm/slub.c: In function ‘__pcs_replace_empty_main’:
+>> mm/slub.c:4727:64: error: ‘local_trylock_t’ {aka ‘__seg_gs struct spinlock’} has no member named ‘llock’; did you mean ‘lock’?
+>>  4727 |         lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock.llock));
+>>       |                                                                ^~~~~
+>> ./include/linux/lockdep.h:392:61: note: in definition of macro ‘lockdep_assert_held’
+>>   392 | #define lockdep_assert_held(l)                  do { (void)(l); } while (0)
+>>       |                                                             ^
+>> [...]
+>> mm/slub.c:5653:29: note: in expansion of macro ‘this_cpu_ptr’
+>>  5653 |         lockdep_assert_held(this_cpu_ptr(&s->cpu_sheaves->lock.llock));
+>>       |                             ^~~~~~~~~~~~
+>> make[3]: *** [scripts/Makefile.build:287: mm/slub.o] Error 1
+>> make[2]: *** [scripts/Makefile.build:556: mm] Error 2
+>> make[2]: *** Waiting for unfinished jobs....
+>> make[1]: *** [/builddir/build/BUILD/kernel-6.17.0-build/kernel-next-20250828/linux-6.17.0-0.0.next.20250828.432.vanilla.fc44.x86_64/Makefile:2017: .] Error 2
+>> make: *** [Makefile:256: __sub-make] Error 2
+>> ""
 >> 
->> https://lore.kernel.org/all/20250718021646.73353-2-
->> alexei.starovoitov@gmail.com/
+>> Full log: https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/fedora-rawhide-x86_64/09498568-next-next-all/builder-live.log.gz
 > 
-> Hmmm, that one didn't do the trick for me.
+> Oh so I assume the .config here has both LOCKDEP and PREEMPT_RT?
+> I tried to make lockdep_assert_held() with trylock but forgot about the RT
+> difference. The solution is Alexei's patch
+> 
+> https://lore.kernel.org/all/20250718021646.73353-2-
+> alexei.starovoitov@gmail.com/
+> 
+> Wonder if I can just fast-track it to here from that series?
 
-Yeah it won't help alone, the lockdep_assert_held() calls in this patch will
-also need to remove the ".llock" part. But if we did that without Alexei's
-patch, it would fix RT but break !RT.
-
-
+Did that for tomorrow's -next
 

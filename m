@@ -1,133 +1,105 @@
-Return-Path: <linux-next+bounces-8128-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8129-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1586BB39144
-	for <lists+linux-next@lfdr.de>; Thu, 28 Aug 2025 03:52:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23555B391A9
+	for <lists+linux-next@lfdr.de>; Thu, 28 Aug 2025 04:30:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0A3F9801E3
-	for <lists+linux-next@lfdr.de>; Thu, 28 Aug 2025 01:52:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 521C31B2160A
+	for <lists+linux-next@lfdr.de>; Thu, 28 Aug 2025 02:31:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C7B227BA4;
-	Thu, 28 Aug 2025 01:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B36C27453;
+	Thu, 28 Aug 2025 02:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cOpgT0vg"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HESuvyEY"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CEB318A921;
-	Thu, 28 Aug 2025 01:52:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B55B8635C;
+	Thu, 28 Aug 2025 02:30:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756345932; cv=none; b=aQxa2pazz3+CnQgPg8LxRJxz3ALsRCJXcLBgLoxBJKZmCNEutgBpF5aZiW9kzcxzVRX79iC16FvNudH3+YX3pHLNU1feM9jQePFZcY+vP8mdfSioIdRLtTDgw8y3i2Jinqw1b7Qt+GM2YhDuAxOiU27y5cwHyhnyvfWHpKxA/eg=
+	t=1756348242; cv=none; b=gF+DTnNFhzlFjaaiLKnkK7LVCmuQRU4HCrLZ/s8YwopvCoSOtL/fdt2WymILdWefl95JhoHJt7YPNCmreZzv6XQudUA5LaFKKpJGpuS7HPVvgHFv41FrfnNaqYZpQEzn/Ua6yw/+qKsrEfTXIki3m3f0HYbgL41X8kfgCCEjckE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756345932; c=relaxed/simple;
-	bh=dxVMbtukpZtuIX4YUMRUUfAnD5vwgNh9C9/uAXuDN1U=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OTikYsSe2cEjREjomWgLKkF7IpRkhVn/OrFu2HfWmXNEnbkxRpkj7rRtCdDJS6HaepxbcK1kp/IS2Su53TDn6ZcpsUAfjKfskDWpnFazJlJxLQdcP4gJgyU4NPLpdzogyJD9K/fQKzY435k0RK521F/ROI8UWo3/1ZUG3vq+z/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cOpgT0vg; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1756348242; c=relaxed/simple;
+	bh=iKNiXFRzX1nEeZUk6fZim2JKXbuHPyUWpHKkX4rwvRI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=AnrAhdXPTLF4R9Kzo7U8MQ2lfPsXXDRS4erJyjY6/tgpNxK5isLyNjkTSCNx0/pf8yHP/HbNpxuIbTjsWz6yb/DSgVDhOsoORt473P3Ylzs+JflQ2xhv7aJqu13YQcN/DkfPnUTSRCdNpw8g/hBRBFX34pUC7EnhKMeEQl05D40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HESuvyEY; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1756345919;
-	bh=F39yMcjHEFpvtjRjRBSI4QvZlsA6G7xVDxZcBNCF4Us=;
+	s=202503; t=1756348236;
+	bh=kZC1KDfdhq0gkEdYPzIAvbx/+4yF1859Np7tSb3eZ6w=;
 	h=Date:From:To:Cc:Subject:From;
-	b=cOpgT0vg/n1fZM5GL3zn9+JUVr//q7HX2sVcmRU4s09b8ksKMiJMhZ47JX3vcDDOu
-	 b+pu1ksHUYYWpFrs6rRCqHLP9GdNTmXDC1/0gQfjhGNDKLn0CNtLRC1P7GfdenLCNR
-	 8+E6adz5wljxsDTm1PCiiVS6W9d9lLCGYQaPnBUkt6h3DXnK3WFQlfaaBcG8s9I6In
-	 lQzxpXahE60y5cJ06xTF353X8+KSYcK0++IIdXpoyCKCQohY4KkI7DZYD1LZZAvojw
-	 niH67FXsYViNRr157Axt+Z7dd01a+hL4f4EdDBP8REirtzonWXRli1uHQXYH/d3Vl2
-	 FO3gQqnb2yF+A==
+	b=HESuvyEYbvKS3i9X3+144iJiERTNwp1GT2sHZULzo6UbY3wQvK9EI2bfLSsHLnrl2
+	 EtyFq5dXaTmOvg5JqSDFa9eM+CJZP48w80rzRLKS+dXNptCmImIAVQqro3dIIqZQ8q
+	 HgsJGv6mzCDe7ZlOWkoPZet/+K9jM0U+k3Fxh5QEJ+q5hImoNzVHccscolTjPqAk/r
+	 mk6FOtOXKHqHSWbBcSfs0pTpiq9+fGTXwAtfZ7ZIAAbglrB53aWdE6hstovEZIg33U
+	 mDHd5wX3oWgHHP5/qLJohD6yWDcFkUtP//YCndirg/9s87m7RpIzuwlllAQNZMd9di
+	 aZw/pJu3RQN1Q==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cC4C26h4Kz4wfs;
-	Thu, 28 Aug 2025 11:51:58 +1000 (AEST)
-Date: Thu, 28 Aug 2025 11:51:58 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cC53c0z8lz4wfs;
+	Thu, 28 Aug 2025 12:30:36 +1000 (AEST)
+Date: Thu, 28 Aug 2025 12:30:35 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>, Thomas
- Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, "H. Peter
- Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Sean Christopherson
- <seanjc@google.com>
-Subject: linux-next: manual merge of the kvm tree with the tip tree
-Message-ID: <20250828115158.46901da7@canb.auug.org.au>
+To: Alex Williamson <alex.williamson@redhat.com>
+Cc: Alex Mastro <amastro@fb.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the vfio tree
+Message-ID: <20250828123035.2f0c74e7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PR/896pPmtBOudSc/Yy5nsz";
+Content-Type: multipart/signed; boundary="Sig_/DnB81n2LIGA20nMA5qLEz6u";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/PR/896pPmtBOudSc/Yy5nsz
+--Sig_/DnB81n2LIGA20nMA5qLEz6u
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm tree got a conflict in:
+After merging the vfio tree, today's linux-next build (htmldocs) produced
+this warning:
 
-  arch/x86/kvm/Kconfig
+Documentation/filesystems/proc.rst:2171: WARNING: Title underline too short.
 
-between commit:
+VFIO Device files
+~~~~~~~~~~~~~~~~ [docutils]
 
-  28d11e4548b7 ("x86/fred: KVM: VMX: Always use FRED for IRQs when CONFIG_X=
-86_FRED=3Dy")
+Introduced by commit
 
-from the tip tree and commit:
-
-  924121eebddc ("KVM: x86: Select TDX's KVM_GENERIC_xxx dependencies iff CO=
-NFIG_KVM_INTEL_TDX=3Dy")
-
-from the kvm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  1e736f148956 ("vfio/pci: print vfio-device syspath to fdinfo")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/x86/kvm/Kconfig
-index b92ef117f355,4e43923656d0..000000000000
---- a/arch/x86/kvm/Kconfig
-+++ b/arch/x86/kvm/Kconfig
-@@@ -95,9 -96,6 +96,7 @@@ config KVM_SW_PROTECTED_V
-  config KVM_INTEL
-  	tristate "KVM for Intel (and compatible) processors support"
-  	depends on KVM && IA32_FEAT_CTL
-- 	select KVM_GENERIC_PRIVATE_MEM if INTEL_TDX_HOST
-- 	select KVM_GENERIC_MEMORY_ATTRIBUTES if INTEL_TDX_HOST
- +	select X86_FRED if X86_64
-  	help
-  	  Provides support for KVM on processors equipped with Intel's VT
-  	  extensions, a.k.a. Virtual Machine Extensions (VMX).
-
---Sig_/PR/896pPmtBOudSc/Yy5nsz
+--Sig_/DnB81n2LIGA20nMA5qLEz6u
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmivtj4ACgkQAVBC80lX
-0Gzrmwf+PvlSMd7ecWwcYuqP/SEPp+06QOPy6t0n2KMJdSTsRbjG1FqA4v070MyW
-4eDTwGn/7Tnb2Fsq418TuqhxocT/CxJ13dC+NQh34qWsvD6TLeBsVSph3j78CY37
-ko3WGVe5bdM9sUfKPJTTN9+hsaxvoZ7tkUvukFwbSo8c79y+pPWQVnHFiqzYt34i
-Qnixouv3NwSt9u6eUbBP8WrzSdDn014JTmcKJ7J9BRzOXc8KN8j5QH/rHGc+1nA4
-lib1t+29s/ugTJ9Qdhy+8KOF+00h7ZVYMHNmyfFRVl5af47veM5oIlzbBvyLKjFc
-r9RcsBcpDj3Eo3C10imRgc22IzaXYQ==
-=1oY5
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmivv0sACgkQAVBC80lX
+0Gwz1wf/YQskcQxuYsHbqSRkVQNybz56+8KcY7bvb3k9YLT6SfyxKp7/gOKEwBw5
+v7phb7Fgjtv2xIU7IZRrPsYUjk+BXv/LGYQLxWJuGX9RGylRGJqeaD7iJlfCrvXJ
+iV82LRPILTqilrJCNLnoQJAI2SJROuyPPvCWhtThjZGAEVZVwxjwGpJzLmXdQHd1
+3DqthAQOarY3QtSNr7RLNokn8kBkT1qT5x9uV6uBF4+5NxnLOdYpJvyNvjs5Me7m
+Q3CDlm4HbVMJteEBtw6lp4PQA5m2aJANIz+yrlIo03ZcaUZlVZEdl7A7cN6Afb33
++Mtx9CiiSrGupUG+BXRDMbXvC9BcCQ==
+=8kMY
 -----END PGP SIGNATURE-----
 
---Sig_/PR/896pPmtBOudSc/Yy5nsz--
+--Sig_/DnB81n2LIGA20nMA5qLEz6u--
 

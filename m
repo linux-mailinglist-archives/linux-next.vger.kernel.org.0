@@ -1,104 +1,133 @@
-Return-Path: <linux-next+bounces-8127-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8128-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D8B9B38F93
-	for <lists+linux-next@lfdr.de>; Thu, 28 Aug 2025 02:05:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1586BB39144
+	for <lists+linux-next@lfdr.de>; Thu, 28 Aug 2025 03:52:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06677208A89
-	for <lists+linux-next@lfdr.de>; Thu, 28 Aug 2025 00:05:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A0A3F9801E3
+	for <lists+linux-next@lfdr.de>; Thu, 28 Aug 2025 01:52:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD65849C;
-	Thu, 28 Aug 2025 00:05:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C7B227BA4;
+	Thu, 28 Aug 2025 01:52:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Z68l9Ywl"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cOpgT0vg"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09CB779EA;
-	Thu, 28 Aug 2025 00:05:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CEB318A921;
+	Thu, 28 Aug 2025 01:52:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756339552; cv=none; b=bKXVRziVNHM1utwf+mkFt/SyaY2qyTw+ZnVb/vW89jmw5Iik0Jot9aRwBNceJvIvyXJb/GvTW5V7HdnQA+jFcaPnMcC12NWRZEh47HCbMIAOMiLqE6ojHzXySehgKQzrekz/5tMbk0Rjkfxdc9DpxOZN82DpAJK0kgHlTYyfWs4=
+	t=1756345932; cv=none; b=aQxa2pazz3+CnQgPg8LxRJxz3ALsRCJXcLBgLoxBJKZmCNEutgBpF5aZiW9kzcxzVRX79iC16FvNudH3+YX3pHLNU1feM9jQePFZcY+vP8mdfSioIdRLtTDgw8y3i2Jinqw1b7Qt+GM2YhDuAxOiU27y5cwHyhnyvfWHpKxA/eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756339552; c=relaxed/simple;
-	bh=A0T5vpnrwrWTYySqpv1+OzkO5CfDmPgTEx+Q88BI6nc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ieV7WfpvUWEb2YNvHRQeccbxxAXKRWaPy2PCMGNHIwSuI0QjFhBn7mpTp9fbSRpEVFLvlY+nUQUWdh5ocmFUkNmXcnrwIOnI0LxYTEByGPwAMdTWDwzd11l241isUCHPF4RAOy0SvhwGsml7cv4HV7Nqb2HLbSobb9Bm0kidx5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Z68l9Ywl; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1756345932; c=relaxed/simple;
+	bh=dxVMbtukpZtuIX4YUMRUUfAnD5vwgNh9C9/uAXuDN1U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OTikYsSe2cEjREjomWgLKkF7IpRkhVn/OrFu2HfWmXNEnbkxRpkj7rRtCdDJS6HaepxbcK1kp/IS2Su53TDn6ZcpsUAfjKfskDWpnFazJlJxLQdcP4gJgyU4NPLpdzogyJD9K/fQKzY435k0RK521F/ROI8UWo3/1ZUG3vq+z/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cOpgT0vg; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1756339546;
-	bh=V2lp1/i+ZKEtDnIvhKkup1+LvX0vtA9UstFI8fDeX+8=;
+	s=202503; t=1756345919;
+	bh=F39yMcjHEFpvtjRjRBSI4QvZlsA6G7xVDxZcBNCF4Us=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Z68l9Ywl7+qSARHDh3u+t9yVaiO0L16/uqpaMqNebpM/UMvsLuk4UZn+SWvgYExx0
-	 DgSmkFPc8z+IKrGyNxKb6V2K4fZLPmhvpE47yUMkJRR4e7yMVm5NCAedLQ8lOWgG6M
-	 Vz5Y++9G4Jb712kFQzIOQjhxN1rUzf8hqWZomgA6gs00UQlYBv6anJt21R0xLV0jPo
-	 9LRxYz/e787ajpSi32Hv9jv+mcdTnNGF0h2oGfn5SuNlySMUvztLJMZIZD8RQ8rsdU
-	 8K4ynYQbvCh+mr7LVNXcoORLshvCitbxjbUHi/Dp4QACJ99VlhvmAlxsZCvacIxVws
-	 jp32WqTK26NEg==
+	b=cOpgT0vg/n1fZM5GL3zn9+JUVr//q7HX2sVcmRU4s09b8ksKMiJMhZ47JX3vcDDOu
+	 b+pu1ksHUYYWpFrs6rRCqHLP9GdNTmXDC1/0gQfjhGNDKLn0CNtLRC1P7GfdenLCNR
+	 8+E6adz5wljxsDTm1PCiiVS6W9d9lLCGYQaPnBUkt6h3DXnK3WFQlfaaBcG8s9I6In
+	 lQzxpXahE60y5cJ06xTF353X8+KSYcK0++IIdXpoyCKCQohY4KkI7DZYD1LZZAvojw
+	 niH67FXsYViNRr157Axt+Z7dd01a+hL4f4EdDBP8REirtzonWXRli1uHQXYH/d3Vl2
+	 FO3gQqnb2yF+A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cC1rV5QPjz4w2P;
-	Thu, 28 Aug 2025 10:05:46 +1000 (AEST)
-Date: Thu, 28 Aug 2025 10:05:46 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cC4C26h4Kz4wfs;
+	Thu, 28 Aug 2025 11:51:58 +1000 (AEST)
+Date: Thu, 28 Aug 2025 11:51:58 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport
- <rppt@kernel.org>
+To: Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>, Thomas
+ Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, "H. Peter
+ Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the mm-unstable tree
-Message-ID: <20250828100546.296ab364@canb.auug.org.au>
+ Mailing List <linux-next@vger.kernel.org>, Sean Christopherson
+ <seanjc@google.com>
+Subject: linux-next: manual merge of the kvm tree with the tip tree
+Message-ID: <20250828115158.46901da7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XI_Gty7jjXYP9mApMpOFD/7";
+Content-Type: multipart/signed; boundary="Sig_/PR/896pPmtBOudSc/Yy5nsz";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/XI_Gty7jjXYP9mApMpOFD/7
+--Sig_/PR/896pPmtBOudSc/Yy5nsz
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The following commit is also in the memblock-fixes tree as a different
-commit (but the same patch):
+Today's linux-next merge of the kvm tree got a conflict in:
 
-  9457e50100f9 ("memblock: fix kernel-doc for MEMBLOCK_RSRV_NOINIT")
+  arch/x86/kvm/Kconfig
 
-This is commit
+between commit:
 
-  b3dcc9d1d806 ("memblock: fix kernel-doc for MEMBLOCK_RSRV_NOINIT")
+  28d11e4548b7 ("x86/fred: KVM: VMX: Always use FRED for IRQs when CONFIG_X=
+86_FRED=3Dy")
 
-in the memblock-fixes tree.
+from the tip tree and commit:
+
+  924121eebddc ("KVM: x86: Select TDX's KVM_GENERIC_xxx dependencies iff CO=
+NFIG_KVM_INTEL_TDX=3Dy")
+
+from the kvm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/XI_Gty7jjXYP9mApMpOFD/7
+diff --cc arch/x86/kvm/Kconfig
+index b92ef117f355,4e43923656d0..000000000000
+--- a/arch/x86/kvm/Kconfig
++++ b/arch/x86/kvm/Kconfig
+@@@ -95,9 -96,6 +96,7 @@@ config KVM_SW_PROTECTED_V
+  config KVM_INTEL
+  	tristate "KVM for Intel (and compatible) processors support"
+  	depends on KVM && IA32_FEAT_CTL
+- 	select KVM_GENERIC_PRIVATE_MEM if INTEL_TDX_HOST
+- 	select KVM_GENERIC_MEMORY_ATTRIBUTES if INTEL_TDX_HOST
+ +	select X86_FRED if X86_64
+  	help
+  	  Provides support for KVM on processors equipped with Intel's VT
+  	  extensions, a.k.a. Virtual Machine Extensions (VMX).
+
+--Sig_/PR/896pPmtBOudSc/Yy5nsz
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmivnVoACgkQAVBC80lX
-0GyMAQf/VtrJdkxPOj4+Xrw3aA2+6EuZZh7T3eJsX9pnRZ4cISI5/ok+m4w+rtY1
-UcGoKbe7wd/KfPN5NZD9l0a0WOhx3sj2UeZrrmTm4rUndurbzxECs+CmRoa0b9DS
-HQ5mpaby3n6SlIX2VfMrWFkUwwAWvn51lxHy7NnLSD7AfrgWfxyh7wYJpsaDHaEi
-lgdZVil6rphESbAewKwZedUWvoH6mXaYVUWpgHLc554F2nRoYrvo2wHeye+68Tc9
-AZzWBoRyjD55AcbaJibSKMrIkgnMplxjoUP0kIhWzxaYya5mQf/muOVg/IbIUj5T
-cIEbHJR0kKDrOWNMeaZfheVi783h2g==
-=6Kyf
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmivtj4ACgkQAVBC80lX
+0Gzrmwf+PvlSMd7ecWwcYuqP/SEPp+06QOPy6t0n2KMJdSTsRbjG1FqA4v070MyW
+4eDTwGn/7Tnb2Fsq418TuqhxocT/CxJ13dC+NQh34qWsvD6TLeBsVSph3j78CY37
+ko3WGVe5bdM9sUfKPJTTN9+hsaxvoZ7tkUvukFwbSo8c79y+pPWQVnHFiqzYt34i
+Qnixouv3NwSt9u6eUbBP8WrzSdDn014JTmcKJ7J9BRzOXc8KN8j5QH/rHGc+1nA4
+lib1t+29s/ugTJ9Qdhy+8KOF+00h7ZVYMHNmyfFRVl5af47veM5oIlzbBvyLKjFc
+r9RcsBcpDj3Eo3C10imRgc22IzaXYQ==
+=1oY5
 -----END PGP SIGNATURE-----
 
---Sig_/XI_Gty7jjXYP9mApMpOFD/7--
+--Sig_/PR/896pPmtBOudSc/Yy5nsz--
 

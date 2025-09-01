@@ -1,110 +1,116 @@
-Return-Path: <linux-next+bounces-8155-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8156-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDB73B3E5DE
-	for <lists+linux-next@lfdr.de>; Mon,  1 Sep 2025 15:45:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22F39B3F10E
+	for <lists+linux-next@lfdr.de>; Tue,  2 Sep 2025 00:40:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EC83168645
-	for <lists+linux-next@lfdr.de>; Mon,  1 Sep 2025 13:45:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97CEC1B2091C
+	for <lists+linux-next@lfdr.de>; Mon,  1 Sep 2025 22:40:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A1722264BB;
-	Mon,  1 Sep 2025 13:45:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBFE1283680;
+	Mon,  1 Sep 2025 22:40:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="fSMGru78"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tE6CG7mp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F9B18C031;
-	Mon,  1 Sep 2025 13:45:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D7A1E260D;
+	Mon,  1 Sep 2025 22:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756734333; cv=none; b=lAF3pCaCFbJALFF29ZEccVAXslxe789C0LSUtHDLC5c1sceJ7VwbHXRnsR39zBWfBpciK1lS9s5IURBFOD2/7YeZilTDRcjKnSTLY9k9ip4wDyOc0xJnZSx3eSb+B0erlP5MuFjrkBoioecsCZUxHLfzMd6x2JgmDgaOfkP3bkI=
+	t=1756766432; cv=none; b=Am3gwsAfRBZrGagehtdL6m1C/ShOCOgjJwXASHV3cXfirBUfKVSCUM1u7Q+VqoBh+WMXx654DMIVq0lX57qGZaYzTZId5ZtLkq+tkZhbk42456rtUU0VpPbN21p4/Pc8BWV2NAPPlRFZGOFEKUbuITzVEsqGONzbmMNECeRGNq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756734333; c=relaxed/simple;
-	bh=puWX9n0DjwaPFG2uC2QdXCWrl8q3UKV3n4bTHIFgaFA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=jnPax453CpxEO/TcUDGG7IgUZS64tWBZlNFIc2B6ctN4Rvys4hiBl2pHf8F2Ui9EA3aPl6+jXXdKJp5dNB99TIxpbO5zJBJGMujj7JwNcMerjrsGxDtCyJr0esU5c53l28M/sF+4xMUa3+MnOfOrqO//XbMWBrHWscTHZbiZlpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=fSMGru78; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 95F3740B01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1756733881; bh=7Sb+3G+1iZahVE9c4/KBcvPNCWMGur9xHaVJsOgxLLM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=fSMGru78/QFpc95Ei6rnFyK4TeC/s4vs7XX3tnVK0zgJqqCBD16BUTm5K45yEKmTE
-	 l1dlMy0NiMFcRpTW9D1aaeUiCNlZs3HFxPuDgY94Y+eh0BDG7d6fk5kNMnUZ7xXao6
-	 U45fTFKm3xi4SqRgWeH2tYEM1jxJJhoahMf4gYj4a/JuCcIGbqSobthF4bWaMw51Bh
-	 dGVzTL128v3Yw//XthqMJqoWtIKLjO4QbeznRZlQRVkIwnVp6FQIdjgoOFwd5/5aij
-	 ff9orHdowWqhIRY/79ECDi9mksZ+iNHUgL6uGzSLVhzyEcOWLtfEjstn7AN5cA1/dr
-	 Guyr2jqpcahQQ==
-Received: from localhost (unknown [IPv6:2601:280:4600:2da9::1fe])
+	s=arc-20240116; t=1756766432; c=relaxed/simple;
+	bh=G+NujqWAKyxxmDKb4xiDsuTkscq16vrg8jDv30YHhwU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=TXJRdCilJF4KcCmBf/y9G1b2CsptPD5suatrBYDHlG8ChIcw7AXe7an6xtgtW3ZZnoXnqv1AhZDKX/RZJeXFwtnHc82ug6AfxR2yK4IwphOeK8XtgeHJS2+FHMukH1WcLaXIfuH7DAqogOabd+Xwy1LCd3XasdSuf8K4HQZZoqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tE6CG7mp; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1756766424;
+	bh=nEyyFUEyei5OhFTgMGnpcdT/J4oi+kAJf23mmoBldB8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=tE6CG7mpBX8MJg4TduAialDj5mnOrp3/xNXFHguUtQRjD/zRoluz9JJFtRP/eTRsY
+	 dopCtekaEaR3rENCz/Zvl58f69q/4T1wDjEkEo6WSTeSsNEwB3LE7G7Q9Avd7V4Jza
+	 Gcgxq7ta8EDzxZitf5lj2vbYuLq+kLaI7FXgC5LV4zQbQGXnActFb7rZQo8zIRlH8G
+	 79VsqbvdaxJapL+pkhxTToRY62WSLWng8i9eTq3HKkl1Tp43qQm8MyuDX8VQsCJo+z
+	 HN3aOz/wy1hlOb4ypn+YeONLPlwfUxEx8K+nQqygEDjgjdwAymd/Z0pi6hBMmPPbjI
+	 nKHVhr/lX8ksQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 95F3740B01;
-	Mon,  1 Sep 2025 13:38:01 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, Stephen Rothwell
- <sfr@canb.auug.org.au>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the jc_docs tree
-In-Reply-To: <20250901152330.0b64e07a@foz.lan>
-References: <20250901142639.4de35a11@canb.auug.org.au>
- <20250901152330.0b64e07a@foz.lan>
-Date: Mon, 01 Sep 2025 07:38:00 -0600
-Message-ID: <87v7m2z41z.fsf@trenco.lwn.net>
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cG3jh2qZmz4w9d;
+	Tue,  2 Sep 2025 08:40:24 +1000 (AEST)
+Date: Tue, 2 Sep 2025 08:40:23 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Li Zhijian <lizhijian@fujitsu.com>, Ruan Shiyang
+ <ruansy.fnst@fujitsu.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the mm-unstable tree
+Message-ID: <20250902084023.5fec857f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/l1N/sg9QeErXaGlYJoR/.t/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
+--Sig_/l1N/sg9QeErXaGlYJoR/.t/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Em Mon, 1 Sep 2025 14:26:39 +1000
-> Stephen Rothwell <sfr@canb.auug.org.au> escreveu:
->
->> Hi all,
->> 
->> After merging the jc_docs tree, today's linux-next build (htmldocs)
->> failed like this:
->> 
->> $ make O="$HOME/htmldocs/htmldocs" htmldocs
->> make[1]: Entering directory '/home/sfr/htmldocs/htmldocs'
->> Python version: 3.13.7
->> Docutils version: 0.21.2
->> Using alabaster theme
->> Using Python kernel-doc
->> 
->> Sphinx parallel build error:
->> FileNotFoundError: [Errno 2] No such file or directory: '/home/sfr/htmldocs/htmldocs/include/uapi/linux/videodev2.h'
->> make[3]: *** [/home/sfr/kernels/next/next/Documentation/Makefile:109: htmldocs] Error 2
->> 
->> Presumably caused by commit
->> 
->>   8a298579cdfc ("scripts: sphinx-build-wrapper: get rid of uapi/media Makefile")
->> 
->> I have reverted commits
->> 
->>   aebcc3009ed5 ("docs: sphinx: drop parse-headers.pl")
->>   8a298579cdfc ("scripts: sphinx-build-wrapper: get rid of uapi/media Makefile")
->> 
->> for today.
->
-> Thanks for reporting it!
->
-> Just sent a fix:
->
-> https://lore.kernel.org/all/da91980ce42f31730dc982920167b2757b9d2769.1756732363.git.mchehab+huawei@kernel.org/
+Hi all,
 
-Just applied it, thanks.
+In commit
 
-jon
+  447ad437698a ("mm: memory-tiering: fix PGPROMOTE_CANDIDATE counting")
+
+Fixes tag
+
+  Fixes: c6833e10008f ("memory tiering: adjust hot threshold automatically")
+
+has these problem(s):
+
+  - Subject does not match target commit subject
+    Just use
+        git log -1 --format=3D'Fixes: %h ("%s")'
+
+Maybe you meant
+
+Fixes: c6833e10008f ("memory tiering: rate limit NUMA migration throughput")
+
+or
+
+Fixes: c959924b0dc5 ("memory tiering: adjust hot threshold automatically")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/l1N/sg9QeErXaGlYJoR/.t/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmi2INcACgkQAVBC80lX
+0Gy0gQf9FVIojA1Cjz0HLlNWqQJBH0czkj6iPrEc1OcvSg48Dd9iB5xpihzoZhkb
+WtAtagdDqS6uA938ABvZKCP4BYngvk+uncBOORmepXrN3QAD6AUCVIe578rPPvs+
+QHMr1EpEqQ/U3i+YOrRN59bY3VVue31M9/v3FPEtXHGYSA2ZeLzwsJneeaQ3tloe
+ruFvgt8MiNrlHDMGF21sS/ZoMKvxOs/VHmN7vuSob78Ip3KFvAscU8sb/VnQ1XE9
+CAaETDEq80f34e8ocvV25CDSDc3jEqnzzuxKCu2bEYB0lJlsuEVvTeOrwQMp7oIl
+Z+LDB3ssg2lLrFlJPvYLTWFUf2egtQ==
+=5oBA
+-----END PGP SIGNATURE-----
+
+--Sig_/l1N/sg9QeErXaGlYJoR/.t/--
 

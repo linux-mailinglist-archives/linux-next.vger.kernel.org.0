@@ -1,111 +1,141 @@
-Return-Path: <linux-next+bounces-8171-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8172-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51CCAB410BB
-	for <lists+linux-next@lfdr.de>; Wed,  3 Sep 2025 01:23:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA909B41228
+	for <lists+linux-next@lfdr.de>; Wed,  3 Sep 2025 04:10:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0985C166DAF
-	for <lists+linux-next@lfdr.de>; Tue,  2 Sep 2025 23:23:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CD884803BE
+	for <lists+linux-next@lfdr.de>; Wed,  3 Sep 2025 02:10:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4E3C2777FC;
-	Tue,  2 Sep 2025 23:23:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AE8B1E3DDB;
+	Wed,  3 Sep 2025 02:10:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DXMIX2OJ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IIzfkBcW"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71C13D987;
-	Tue,  2 Sep 2025 23:23:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF61B1B960;
+	Wed,  3 Sep 2025 02:10:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756855431; cv=none; b=bzt6Zw3Y7oiaUsqNm1rhNZD6ISaW2zlMCXL+HT7kCzKlcLOSMxnaGLIjJQU0a67s0ETQtIJuc5Um+hlhW8TiJbkRfWPdpvRmZRjXJ1oaLWHSM/XPYqXMzwfPdiFeuJSBoS9y8t7iUCxfe61nidwLxPaQeXRR1jF93lWBrSOlkRE=
+	t=1756865447; cv=none; b=J1C0+vJ5+hgHAYwh8d9CZ/p/c6eoei9Hv0K6HWGAKEDEXqMB5vhz149g3iRCM6Cl6IRvdGK3xr1kStMsJef+o3ZY1p/0lZcohA66EcfFuSnSeXv5rEY9SE5frlupzcObL5ExP2T0DJSGy94GwhpbiPN6G5A3OjTxXphKZDabtdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756855431; c=relaxed/simple;
-	bh=GSkVN/wo1shKiwymn2DhIIsvFtemJ9XsP+OixJlaP7o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=mqkcYPjqwLY+syekKDJuR/OxIOG70Kj61fR0m6BRFQv36w9CtjE+EQKe++bp5DVHlX6WUlgDDUdWQf/jUFKvQuQHNp0oP8E5aejGja9LgFAV68KPBVTS3Vwayx9HcAApAmejSs04GktaiRTpB3lEs32AB3YIZx4Ft8a7Ch5vC7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=DXMIX2OJ; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1756865447; c=relaxed/simple;
+	bh=VEcbFWC3TyEIhUAmbZq5KBdR84MR1IxxcrSuk6txlko=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=XXdov6jG68AuwvdfXflV0j6OPDuGIc6CYKNsBxzuAtTbRRPL1yqgJrN1+TL+ZVujgo/L9N0WApibVQ0dPsmjj5U0zotLaY2nOwpTuYF5UreUpIgPnUtA67FWnaaffrkEM06rV8lXFO9XBCBJ5SABWHfm8u55fRsziMJQoZgYxgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IIzfkBcW; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1756855427;
-	bh=fBaSbLdBvSiZ8i52ohMqxj6fEamVwQYcdHnLz8Gl0OQ=;
+	s=202503; t=1756865433;
+	bh=DbR+fyOSivo7XBB7vYIdmMiqychmiY+4HsP6Bu2B39s=;
 	h=Date:From:To:Cc:Subject:From;
-	b=DXMIX2OJB7jssdK3Fw/4raqiGlKbN5tmQSv7ZE7RN69eCopLutj8xF/tPch5v2U4y
-	 aAEb31RLcAaxZ2JXLCaq+V9bARzmLFyAVAokj2iGwjhwtrMQ1h2Ej3+sxkWvryUvKX
-	 yhR3KzhK7S1dGaJ+eqlKiJIYNwH4wDzYF5GoBXnHC+NVCxqF5q/+NP2jiNQuA6/ub0
-	 oJHtQj29zZilAPb2ZTi3TgAgjr6wFoAyk7Ak3+U7tDSkRVjzW8mwH5ROIAO5oCKdqJ
-	 iU8zKTqAFnRA7F123uipWL93T4AXeJG9pyP6nC793cNmPyFqMiHA0NvgLJHULUPlEM
-	 gnJqryoOH9mFQ==
+	b=IIzfkBcWkcXu/X+koAskhmznDSdOVEtTE+yFklufTsTvBGsknlLEBp3fiCD0PsfjS
+	 2tJb7QtyEA9pfDxlIOk6+uGGvNwpyfHehN4lf+1nj9K1eMs7RkdsJBB0FP1xevNMwp
+	 gzt7zfUpVRxmLbkb4hnf9ZGaq4/t4ze/EJxmHbBkwvN829S1fbQO31UWIr7W05eBcb
+	 4WLtNcIqrRcj53Wiek+c1a2TbEBQRhurtDAT9AvaePUi6kAtMrM6KUYlmEhxyYQxUE
+	 Dpsnij9bMjmB0YZSEkyNIVgLJFmtSU0iFRxuHd7zXb2wn2/uasO6aWgLm4rilVS9mx
+	 hTXflnth8PaAg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cGhdG6HwCz4w1j;
-	Wed,  3 Sep 2025 09:23:46 +1000 (AEST)
-Date: Wed, 3 Sep 2025 09:23:46 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cGmKh5CqCz4w9S;
+	Wed,  3 Sep 2025 12:10:32 +1000 (AEST)
+Date: Wed, 3 Sep 2025 12:10:32 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
- <johan.hedberg@gmail.com>
-Cc: Calvin Owens <calvin@wbinvd.org>, Linux Kernel Mailing List
+To: Miriam Rachel Korenblit <miriam.rachel.korenblit@intel.com>, Johannes
+ Berg <johannes@sipsolutions.net>, David Miller <davem@davemloft.net>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Johannes Berg <johannes.berg@intel.com>, Networking
+ <netdev@vger.kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the bluetooth tree
-Message-ID: <20250903092346.0cb5db2a@canb.auug.org.au>
+Subject: linux-next: manual merge of the iwlwifi-next tree with the net tree
+Message-ID: <20250903121032.744f5a30@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/C2SICSKdqHU5plIz8FupHrQ";
+Content-Type: multipart/signed; boundary="Sig_/vFA.+KUkmTY1Y.hYLt71GnT";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/C2SICSKdqHU5plIz8FupHrQ
+--Sig_/vFA.+KUkmTY1Y.hYLt71GnT
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Today's linux-next merge of the iwlwifi-next tree got a conflict in:
 
-  16ebf6c26de5 ("Bluetooth: Fix build after header cleanup")
+  drivers/net/wireless/intel/iwlwifi/fw/uefi.c
 
-Fixes tag
+between commit:
 
-  Fixes: 74bcec450eea ("Bluetooth: remove duplicate h4_recv_buf() in header=
-")
+  1d33694462fa ("wifi: iwlwifi: uefi: check DSM item validity")
 
-has these problem(s):
+from the net tree and commit:
 
-  - Target SHA1 does not exist
+  f53f2bd8fc5f ("wifi: iwlwifi: uefi: remove runtime check of constant valu=
+es")
 
-Maybe you meant
+from the iwlwifi-next tree.
 
-Fixes: 0e272fc7e17d ("Bluetooth: remove duplicate h4_recv_buf() in header")
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/C2SICSKdqHU5plIz8FupHrQ
+diff --cc drivers/net/wireless/intel/iwlwifi/fw/uefi.c
+index 99a17b9323e9,44c7c565d1c6..000000000000
+--- a/drivers/net/wireless/intel/iwlwifi/fw/uefi.c
++++ b/drivers/net/wireless/intel/iwlwifi/fw/uefi.c
+@@@ -742,17 -744,6 +744,12 @@@ int iwl_uefi_get_dsm(struct iwl_fw_runt
+  		goto out;
+  	}
+ =20
+- 	if (ARRAY_SIZE(data->functions) !=3D UEFI_MAX_DSM_FUNCS) {
+- 		IWL_DEBUG_RADIO(fwrt, "Invalid size of DSM functions array\n");
+- 		goto out;
+- 	}
+-=20
+ +	if (!(data->functions[DSM_FUNC_QUERY] & BIT(func))) {
+ +		IWL_DEBUG_RADIO(fwrt, "DSM func %d not in 0x%x\n",
+ +				func, data->functions[DSM_FUNC_QUERY]);
+ +		goto out;
+ +	}
+ +
+  	*value =3D data->functions[func];
+ =20
+  	IWL_DEBUG_RADIO(fwrt,
+
+--Sig_/vFA.+KUkmTY1Y.hYLt71GnT
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmi3fIIACgkQAVBC80lX
-0GxM5gf+IRxA+v+sR5FYnlvGEOlVdkmakZ7vhzwQ2N+/gQlfssiNkRVPzCrh2kRA
-U2x7jx8u+Ky8N6o3mFXEV6pSE9KjCQq8ZwvZ1AlPuwLX4Q8b89as3e/BaAPCGXSZ
-2BXQo+qsR5Il8Tfrz59KrHnmTIW1+Lgw3ubFSr1yYPcbCi719diwT+hCE+WZQBPv
-KQPTGwbzYAqUZfR3WcQZTlCoTnvOsobjeUWokaSQXQDao/HpANy2eS2Z7KJ6AX1e
-7eGaWSuRNYBDqm3dT2c0f+4cYAtlEV5NcmZrEMg8yggFeAelUPIKBo4hn6/uJSeW
-lWmPQAa6Gt7YcZrdfamf/vk4UpqjgA==
-=tf05
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmi3o5gACgkQAVBC80lX
+0Gzy9gf/SyE2EGxHKdHy25k2cH215YWFWPLaTY+u6fafMOJM2Fu4lLMJD9cjrFCb
+mVXA/yWF4rNRCVUn3iMu3fqVKysUycGocYXEdSI7BBpcyd9jiIJqxTrD7kwsM/x/
+m8pWcS4IdeIMsyxq0CTA6a2YmhElo9FERRFjXHtkJhOuuZdqWQWpRumKykpRJNOa
+IFNzh6HYh8YVqMKOwM43Gav5aGXYm9tBkuuqE6OfG/hBpLChk1lv5ynVBiW6PNI5
+KPJ2lNPI9+33bBm8PXhNcqu1dMDzSkQkmFL1rGu6tdpTIPjP0S9DQxR+Syt7B0YE
+BM/7HLT6HpiCRZFP3rWq/09l1E+5jA==
+=mhim
 -----END PGP SIGNATURE-----
 
---Sig_/C2SICSKdqHU5plIz8FupHrQ--
+--Sig_/vFA.+KUkmTY1Y.hYLt71GnT--
 

@@ -1,124 +1,132 @@
-Return-Path: <linux-next+bounces-8176-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8177-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE0CAB422B9
-	for <lists+linux-next@lfdr.de>; Wed,  3 Sep 2025 15:59:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4C3DB425F1
+	for <lists+linux-next@lfdr.de>; Wed,  3 Sep 2025 17:51:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BB457C60A9
-	for <lists+linux-next@lfdr.de>; Wed,  3 Sep 2025 13:58:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E23495E5BCA
+	for <lists+linux-next@lfdr.de>; Wed,  3 Sep 2025 15:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 263BC2F4A14;
-	Wed,  3 Sep 2025 13:58:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9527A289E17;
+	Wed,  3 Sep 2025 15:51:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b="WfyDh85o"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="I9T5mzee"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4826B30E838
-	for <linux-next@vger.kernel.org>; Wed,  3 Sep 2025 13:58:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C9861B5EB5;
+	Wed,  3 Sep 2025 15:51:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756907915; cv=none; b=s49XvWE7Fgl2O8aMLrT+H2DindmvVeidACb95I/IsOPWRG+denW+CJRwOJ96JQFuAnylmOL21PTL9SmiEsLf7wt6YARxMZ9UQ4ARKgbM/vtg+crKAR2ZT6ro8C9Pparo1UswSLC7EnZ5T3S3m21ezVUV+EwEhe8HcTyVPcNxxug=
+	t=1756914670; cv=none; b=bqT1OTH0VRdQpj9pCWh89S1Z3tpIR6nC9eSB33y8KbWWAEMJwgYdRgGtgDAd/GbbmAkdegcI1g9SXHeHy+lSzg0m5wykz9rr3p4t47q2D48ihNZnGMgljxPYvZrVHt2Dsp8lFuky62Ps+1H/5XWxYcCBrGLeoITq0N1nOQmZEWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756907915; c=relaxed/simple;
-	bh=xl0glEP6JrlzQ+3dkuOOf3iQY3odHY+N8qCak9u7MI4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bbM94TzOEcO0qNd+XG9BkWmBvCfU19w9ceVqzKbXX3LHRf+KLesBb5SAd9TKO+RBsysMtv5wpedBspHxYbMfN0EwNwCx+9RPnLkLk0YLKPWqRyzLMMeJwATxcmeQlWf1SqzqFnmATgiM7UpPmJ4v38bfzBvwZKU/BNaymSWqsgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org; spf=pass smtp.mailfrom=wbinvd.org; dkim=pass (2048-bit key) header.d=wbinvd.org header.i=@wbinvd.org header.b=WfyDh85o; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wbinvd.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wbinvd.org
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-76e4f2e4c40so5469068b3a.2
-        for <linux-next@vger.kernel.org>; Wed, 03 Sep 2025 06:58:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wbinvd.org; s=wbinvd; t=1756907912; x=1757512712; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IYhqP3Hm9EuAg8xEarsmwy9i7Vc2989OjAjHKpyrOK0=;
-        b=WfyDh85oCSRDDg7Umcllnzs+PeyHHCkL6iZyEVF4z33/fRtdieOzunM2lxIQOeGNso
-         Uknm9YdeXDfaiD7HV3aoKQp65RCxKLhP23paC5lgJyQNRv+/gEZTc74/l/U3FHbmlHMF
-         HxsTaVCz440CgpHHW9qfDkMihq60hDI/P1Ff7xRnh6GkLq0ZvsjvK3eqiPQzpUBUs9Ma
-         X/OUQmnoKdvzUVwH036g0wrHeOF1zd+UsgDLFPFKXvU5d2AUmm+qKjj5xMjXX7l8Viwc
-         jXsL8f9wlhEfbQQPXfHch06nvpOFsXqlW8MgHc5C1sgvKi0TUmPM6UMxd1PP7IhqrGJH
-         vmmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756907912; x=1757512712;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IYhqP3Hm9EuAg8xEarsmwy9i7Vc2989OjAjHKpyrOK0=;
-        b=hgNmm0j3EVdPbh0aK6tBSp98ZNNAqo+yQHwJjH8kCIwAETc8HaPlA68pauG0xiaIFm
-         WaZ0OWhmX6MykfnaVoCQZha+kTpR8FcJuZZxtsDveszvA/haapESrC6/r/fg7Wr7H1Is
-         dSgVP6+MPRpiviRpWJFAGesIdU/FTqP4siqX9jx9OVAywtgINC7hMgZand9JVAmr4R5S
-         VO5lAc+BUytq2hPdvNe6+dYQDvS8+zJijBP9Ndyn6C6kWu5nazpY/luWZOwvXJNY3D72
-         BMDooo5JUnKkCujiUW6G7DpKSvniGXD3kosQ6JqLMFIdYUsHu8MEF6PY28CZjmvtIv8i
-         V1Xg==
-X-Forwarded-Encrypted: i=1; AJvYcCX+FuXAXbNld4D0IXo6r1H74wRjiEXapJRRDatMo2galk7Zi4FIbq2QNGRBQlr+wE2cudkz4SeS5vDa@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQQXxVoFeisYI75RVKS3lOWEZ1DBRdg7UnsOIx6LGk9/OtXUSm
-	Z5NMknmG/RQUCHi4ipBQKB6V6etyZ6oOk6KP1Bmdfmd4ykFjtViMFdTnSNuf7kCKX/M=
-X-Gm-Gg: ASbGnctrcKG3zaFRt70ohnQu1wBO+Qoj6TbWWPSddVI3dn6a7Ue02PhYAiPC7fz0Xys
-	290a2s8zlkT28LWNB1eY4z/rWIozt7HdERe7G/RRMA2qTa1CWniR+cte4ateNCY8t2DuNdpyfMX
-	irRtxI5TxxbFCyDra0pS079Zwms6ofoWO+t5mI4a/kc464kd9y22OgHMnmdvgBxgEFup3mbK/LV
-	UWOGAhmITreaQbu2p91/S9bkERm7+8O16ULgUragXlHhm81SvWWw7bsxdDMdtGJbeNlzTsCzogM
-	g2/7uOwRxgBiZ2YPK7A070qg4/V3JoqY6WZ2g/YxtUfuQA326thuEPXkWE+5ihDKyj+zh3DHvRU
-	EVIWum21gf9IMVQ4xSd5k1Grd9hlWaPvw/xM=
-X-Google-Smtp-Source: AGHT+IGHwfhhequr4wD9BiiMXOCBiCA4MDXMEmUM07tc/6fdlQYpI6gjpWkgn4DyVBMW93fvWaS0vg==
-X-Received: by 2002:a05:6a00:2e06:b0:772:78e6:f61a with SMTP id d2e1a72fcca58-77278e6feeemr5450945b3a.13.1756907912317;
-        Wed, 03 Sep 2025 06:58:32 -0700 (PDT)
-Received: from mozart.vkv.me ([192.184.167.117])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7725ad1e086sm9163073b3a.20.2025.09.03.06.58.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Sep 2025 06:58:31 -0700 (PDT)
-Date: Wed, 3 Sep 2025 06:58:32 -0700
-From: Calvin Owens <calvin@wbinvd.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Marcel Holtmann <marcel@holtmann.org>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the bluetooth tree
-Message-ID: <aLhJiA5hh08RZ9Fm@mozart.vkv.me>
-References: <20250903092346.0cb5db2a@canb.auug.org.au>
+	s=arc-20240116; t=1756914670; c=relaxed/simple;
+	bh=1f0F6PtJuoEuyJyHHkBr1BSyx6JzviX2TSn720qBm+8=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=HJ14efPjVYqTEbQKED+Wwo33smTO93DxqPYao8mppqFGf1oX4kk37XK91OMZd+U7S/VRaEsn+XDMUQuRrdZHIihr9me+brHeItHsNtudx0qP4bhhlUYrEi80T33ixJdHpTEGZCsGFjuLHe2X2O8fnacW4xty5DZqyqnYcSHOxDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=I9T5mzee; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 4B16E25D4D;
+	Wed,  3 Sep 2025 17:51:05 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rXn3TEdJtINv; Wed,  3 Sep 2025 17:51:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1756914663; bh=1f0F6PtJuoEuyJyHHkBr1BSyx6JzviX2TSn720qBm+8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=I9T5mzee7pqgMbTCrBgVvdFhYDFyhqkiwm+l5pzZOUoLgYLld2tmQla6y9ML2ZF5y
+	 xXxTfAY0Spe3WSnaSpyX97SKULTdoPOTkkzvc3gxO7BJjkRrKfXW7Oq8Ik32e5Jlyj
+	 dCmp/mt4cxunfDM7+LiZzjlVe/7WFjxloGRlxWhrB4H6UkjDftjAgHZsg9pOvaMLXf
+	 pUCQ4JW32dFGWM7NwZjJLyBSOxpdngtFq5pmlPOJmCCpHJLcqG5DRpT/EI0OQeQo4J
+	 0buouFggPM15y7Ib7mohlK4V2kQE4DvWtN8M6FfuD4ZswgaOe9tnP9op0wrosy9lPe
+	 xzPBBqOLOiKBA==
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250903092346.0cb5db2a@canb.auug.org.au>
+Date: Wed, 03 Sep 2025 15:51:03 +0000
+From: Kaustabh Chakraborty <kauschluss@disroot.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Inki Dae <daeinki@gmail.com>, Inki Dae <inki.dae@samsung.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Dave Airlie <airlied@redhat.com>, DRI
+ <dri-devel@lists.freedesktop.org>
+Subject: Re: linux-next: build failure after merge of the drm-exynos tree
+In-Reply-To: <20250902130304.1f80f4c6@canb.auug.org.au>
+References: <20250821112740.75a41814@canb.auug.org.au>
+ <20250826121320.4931c6eb@canb.auug.org.au>
+ <20250901122226.20a39858@canb.auug.org.au>
+ <20250902130304.1f80f4c6@canb.auug.org.au>
+Message-ID: <54f68544fa192779e15b46257dd0bfb4@disroot.org>
+X-Sender: kauschluss@disroot.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wednesday 09/03 at 09:23 +1000, Stephen Rothwell wrote:
+On 2025-09-02 03:03, Stephen Rothwell wrote:
 > Hi all,
 > 
-> In commit
+> On Mon, 1 Sep 2025 12:22:26 +1000 Stephen Rothwell 
+> <sfr@canb.auug.org.au> wrote:
+>> 
+>> On Tue, 26 Aug 2025 12:13:20 +1000 Stephen Rothwell 
+>> <sfr@canb.auug.org.au> wrote:
+>> >
+>> > On Thu, 21 Aug 2025 11:27:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>> > >
+>> > > After merging the drm-exynos tree, today's linux-next build (arm
+>> > > multi_v7_defconfig) failed like this:
+>> > >
+>> > > drivers/gpu/drm/exynos/exynos_drm_dsi.c:158:20: error: 'DSIM_TYPE_EXYNOS7870' undeclared here (not in a function); did you mean 'DSIM_TYPE_EXYNOS5410'?
+>> > >   158 |         .hw_type = DSIM_TYPE_EXYNOS7870,
+>> > >       |                    ^~~~~~~~~~~~~~~~~~~~
+>> > >       |                    DSIM_TYPE_EXYNOS5410
+>> > >
+>> > > Caused by commit
+>> > >
+>> > >   d07e4c00696f ("drm/exynos: dsi: add support for exynos7870")
+>> > >
+>> > > I have used the drm-exynos tree from next-20250820 for today.
+>> >
+>> > I am still seeing this failure.
+>> 
+>> I am still seeing this failure.
 > 
->   16ebf6c26de5 ("Bluetooth: Fix build after header cleanup")
-> 
-> Fixes tag
-> 
->   Fixes: 74bcec450eea ("Bluetooth: remove duplicate h4_recv_buf() in header")
-> 
-> has these problem(s):
-> 
->   - Target SHA1 does not exist
-> 
-> Maybe you meant
-> 
-> Fixes: 0e272fc7e17d ("Bluetooth: remove duplicate h4_recv_buf() in header")
+> Today, I have just reverted that commit instead of the whole branch,
 
-Yes that's it, my fault, I'll follow up and get it fixed.
+Hi, sorry for the late reply.
 
-Thanks,
-Calvin
+This commit is from commit [1] of branch [2]. However, the macro is
+defined in commit [3] of branch [4]. I had sent those patches in a 
+single
+patchset, though.
 
-> -- 
+I guess the merge strategy would be exynos-drm-misc-next, followed by 
+exynos-drm-next.
+
+Let me know if you need to know anything else. Thanks!
+
+[1] 
+https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git/commit/?h=exynos-drm-next&id=d07e4c00696f53510ec8a23dcba0c4ac87840874
+[2] 
+https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git/log/?h=exynos-drm-next
+
+[3] 
+https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git/commit/?h=exynos-drm-misc-next&id=bcd0d93e902e54e6b404b574b3a6b23315bcea8d
+[4] 
+https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git/log/?h=exynos-drm-misc-next
+
+> 
+> --
 > Cheers,
 > Stephen Rothwell
-
-
 

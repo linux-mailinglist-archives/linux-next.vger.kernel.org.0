@@ -1,132 +1,98 @@
-Return-Path: <linux-next+bounces-8177-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8178-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4C3DB425F1
-	for <lists+linux-next@lfdr.de>; Wed,  3 Sep 2025 17:51:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CC9BB42C47
+	for <lists+linux-next@lfdr.de>; Wed,  3 Sep 2025 23:56:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E23495E5BCA
-	for <lists+linux-next@lfdr.de>; Wed,  3 Sep 2025 15:51:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64223A00F13
+	for <lists+linux-next@lfdr.de>; Wed,  3 Sep 2025 21:55:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9527A289E17;
-	Wed,  3 Sep 2025 15:51:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 356A62ECD16;
+	Wed,  3 Sep 2025 21:55:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="I9T5mzee"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="sNoOsf8a"
 X-Original-To: linux-next@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C9861B5EB5;
-	Wed,  3 Sep 2025 15:51:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D28C2EA72B;
+	Wed,  3 Sep 2025 21:55:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756914670; cv=none; b=bqT1OTH0VRdQpj9pCWh89S1Z3tpIR6nC9eSB33y8KbWWAEMJwgYdRgGtgDAd/GbbmAkdegcI1g9SXHeHy+lSzg0m5wykz9rr3p4t47q2D48ihNZnGMgljxPYvZrVHt2Dsp8lFuky62Ps+1H/5XWxYcCBrGLeoITq0N1nOQmZEWM=
+	t=1756936533; cv=none; b=RCwe+X49USP5YQD2sKjEfogLshqCYmPQJr/wNxR2LSwd7rrXfiCjIcUwfzKLXKvEOic4SWC1H59esyxA7SJKxdTZXpdtBqj+cA+r8eBm0GXp//25VNZWi9wROxrIFd4mtK5xh+qMq36W0vj6wK++5yfOz25ang2Dgx4NIEJDg0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756914670; c=relaxed/simple;
-	bh=1f0F6PtJuoEuyJyHHkBr1BSyx6JzviX2TSn720qBm+8=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=HJ14efPjVYqTEbQKED+Wwo33smTO93DxqPYao8mppqFGf1oX4kk37XK91OMZd+U7S/VRaEsn+XDMUQuRrdZHIihr9me+brHeItHsNtudx0qP4bhhlUYrEi80T33ixJdHpTEGZCsGFjuLHe2X2O8fnacW4xty5DZqyqnYcSHOxDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=I9T5mzee; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 4B16E25D4D;
-	Wed,  3 Sep 2025 17:51:05 +0200 (CEST)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rXn3TEdJtINv; Wed,  3 Sep 2025 17:51:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1756914663; bh=1f0F6PtJuoEuyJyHHkBr1BSyx6JzviX2TSn720qBm+8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=I9T5mzee7pqgMbTCrBgVvdFhYDFyhqkiwm+l5pzZOUoLgYLld2tmQla6y9ML2ZF5y
-	 xXxTfAY0Spe3WSnaSpyX97SKULTdoPOTkkzvc3gxO7BJjkRrKfXW7Oq8Ik32e5Jlyj
-	 dCmp/mt4cxunfDM7+LiZzjlVe/7WFjxloGRlxWhrB4H6UkjDftjAgHZsg9pOvaMLXf
-	 pUCQ4JW32dFGWM7NwZjJLyBSOxpdngtFq5pmlPOJmCCpHJLcqG5DRpT/EI0OQeQo4J
-	 0buouFggPM15y7Ib7mohlK4V2kQE4DvWtN8M6FfuD4ZswgaOe9tnP9op0wrosy9lPe
-	 xzPBBqOLOiKBA==
+	s=arc-20240116; t=1756936533; c=relaxed/simple;
+	bh=qbgXaziuWpUIVTa4ZARCVmzQaaQ8YAeH29DbGRn3Eoo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=emxVCnudN4GHjhg47fBxN7AoyhFM2d8Df5X1FNTjlLBxQoXkMJqZXUZhoj4nG4GW316l9tPHdcdxRHM4HfxdDP0ydqOpkZ6ZbG/z4JlWmkO7cAfwxS85+itTW0WDRJ3OcMkLrfPhf6ujIibiLFTnwJGKFaIp81Y4XRbqV4n3IoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=sNoOsf8a; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1756936521;
+	bh=U3GruG7NnNtODc61tr37LH/WCiD5v/QxymIz1hjqRWA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=sNoOsf8adjPZchsH+ltugWMgrOfwt72es35nHSS/2Xmzx3rfihdAnj5PDgCTxfYDe
+	 t8g+QsDCeJuotgC5Jl3/E8a6HgcOCH+ro/0qfbUx3S8RmRkB0GUR75bAuyNtgLewV5
+	 e5L3p8fsa9hxcm/MzpnLMrsFBZHTJrKw72Qczo1ijmTZFYMpUDL1COKgsoj8cPcZc+
+	 3Z3/S6sQhkwZ9friW4FVS7/J2KWr85TTmetLkD1uPAXC0n5U0DUOAOYAw1xqEJlxmx
+	 4bawejjiup65jLeeZNyGwZVjJ1/B4rg9uvbUDRb6MUHLG9EBP5O2buSAYXYYTdLXL2
+	 HZ3Z52XheiFHA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cHGcn02dJz4w9x;
+	Thu,  4 Sep 2025 07:55:20 +1000 (AEST)
+Date: Thu, 4 Sep 2025 07:55:20 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the broadcom tree
+Message-ID: <20250904075520.41151515@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 03 Sep 2025 15:51:03 +0000
-From: Kaustabh Chakraborty <kauschluss@disroot.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Inki Dae <daeinki@gmail.com>, Inki Dae <inki.dae@samsung.com>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Dave Airlie <airlied@redhat.com>, DRI
- <dri-devel@lists.freedesktop.org>
-Subject: Re: linux-next: build failure after merge of the drm-exynos tree
-In-Reply-To: <20250902130304.1f80f4c6@canb.auug.org.au>
-References: <20250821112740.75a41814@canb.auug.org.au>
- <20250826121320.4931c6eb@canb.auug.org.au>
- <20250901122226.20a39858@canb.auug.org.au>
- <20250902130304.1f80f4c6@canb.auug.org.au>
-Message-ID: <54f68544fa192779e15b46257dd0bfb4@disroot.org>
-X-Sender: kauschluss@disroot.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/b_IxqdZehLV5Eciwv+SCRMU";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On 2025-09-02 03:03, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Mon, 1 Sep 2025 12:22:26 +1000 Stephen Rothwell 
-> <sfr@canb.auug.org.au> wrote:
->> 
->> On Tue, 26 Aug 2025 12:13:20 +1000 Stephen Rothwell 
->> <sfr@canb.auug.org.au> wrote:
->> >
->> > On Thu, 21 Aug 2025 11:27:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->> > >
->> > > After merging the drm-exynos tree, today's linux-next build (arm
->> > > multi_v7_defconfig) failed like this:
->> > >
->> > > drivers/gpu/drm/exynos/exynos_drm_dsi.c:158:20: error: 'DSIM_TYPE_EXYNOS7870' undeclared here (not in a function); did you mean 'DSIM_TYPE_EXYNOS5410'?
->> > >   158 |         .hw_type = DSIM_TYPE_EXYNOS7870,
->> > >       |                    ^~~~~~~~~~~~~~~~~~~~
->> > >       |                    DSIM_TYPE_EXYNOS5410
->> > >
->> > > Caused by commit
->> > >
->> > >   d07e4c00696f ("drm/exynos: dsi: add support for exynos7870")
->> > >
->> > > I have used the drm-exynos tree from next-20250820 for today.
->> >
->> > I am still seeing this failure.
->> 
->> I am still seeing this failure.
-> 
-> Today, I have just reverted that commit instead of the whole branch,
+--Sig_/b_IxqdZehLV5Eciwv+SCRMU
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi, sorry for the late reply.
+Hi all,
 
-This commit is from commit [1] of branch [2]. However, the macro is
-defined in commit [3] of branch [4]. I had sent those patches in a 
-single
-patchset, though.
+Commit
 
-I guess the merge strategy would be exynos-drm-misc-next, followed by 
-exynos-drm-next.
+  2f8428700036 ("clk: rp1: convert from round_rate() to determine_rate()")
 
-Let me know if you need to know anything else. Thanks!
+is missing a Signed-off-by from its committer.
 
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git/commit/?h=exynos-drm-next&id=d07e4c00696f53510ec8a23dcba0c4ac87840874
-[2] 
-https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git/log/?h=exynos-drm-next
+--=20
+Cheers,
+Stephen Rothwell
 
-[3] 
-https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git/commit/?h=exynos-drm-misc-next&id=bcd0d93e902e54e6b404b574b3a6b23315bcea8d
-[4] 
-https://git.kernel.org/pub/scm/linux/kernel/git/daeinki/drm-exynos.git/log/?h=exynos-drm-misc-next
+--Sig_/b_IxqdZehLV5Eciwv+SCRMU
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-> 
-> --
-> Cheers,
-> Stephen Rothwell
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmi4uUgACgkQAVBC80lX
+0GzX3QgAhAB5RfJGMcG+IAVy5CvuO7Zvh6ik73GorU5zDQ/jqsTcmaBPPFUmpIk5
+VGAZO+EB8D/nbUNtkNPlO0WeoLUZIFpSVe2JAOfeZSP+JRbu7/DeuCeYLoOwwv3k
+Tv2u7bnsLTScMklPmR/I22HiDmsXThRSBUv5MWtsDex7EKFPukMia4t+utze7U3t
+VWcl1iAzpdvsEmNM5Kn/t4fxM2/VvhHjpVefuxdAy+DhoP3lKChVnXCRzzSw4Gmp
+K112+lho16+QsrbEz3cxM0kRT2qkxONKaC19jIcgvItYYEmBzuqLC+MqXRr80bwo
+xHmq1wVstR2rBSrn3jt8Wh9F5f9bUA==
+=T7nO
+-----END PGP SIGNATURE-----
+
+--Sig_/b_IxqdZehLV5Eciwv+SCRMU--
 

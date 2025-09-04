@@ -1,153 +1,115 @@
-Return-Path: <linux-next+bounces-8184-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8185-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0978DB431AB
-	for <lists+linux-next@lfdr.de>; Thu,  4 Sep 2025 07:41:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A64AB43234
+	for <lists+linux-next@lfdr.de>; Thu,  4 Sep 2025 08:20:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C13215E4D7E
-	for <lists+linux-next@lfdr.de>; Thu,  4 Sep 2025 05:41:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E91F5188C69B
+	for <lists+linux-next@lfdr.de>; Thu,  4 Sep 2025 06:21:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F09823D7DA;
-	Thu,  4 Sep 2025 05:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC0825A65B;
+	Thu,  4 Sep 2025 06:20:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="rBCC/44z"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="OLDNakxz"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3427A23B627;
-	Thu,  4 Sep 2025 05:41:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E6225A357;
+	Thu,  4 Sep 2025 06:20:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756964491; cv=none; b=lHs069aYMtDDwRbeEdP9jc7+A1RE0ugzyijcCFq4RgCcGZr0TqDCEBnybvQXhG143+DjiuYVlc0SNGqGLoLVghxXinsyPiA5Qf2Rjr6mkVAovVgSq0DHLV6xNMHSXOJHQRthhwa/y6jdqe6c9juC1S0zhQZKnVxxiEbTC3pBLSI=
+	t=1756966837; cv=none; b=KvYT+5o8FzinT9apLh0FkueaX3SV8dLdFomiCDNlU9RfpXDWoG2WayQmw2noRTBp7cAaJ8oQhjAg7vmhHI23yLfljKCAkdP7vsadVpQMGSFjd5jO3tD0irHsyVT/Ctf0L1ZBYijbX9479wYqPcxVPVKafI1V+6d4+63WEDJrclw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756964491; c=relaxed/simple;
-	bh=ab1+htS246fNPvKV7uYbqTLFv5pnXMl0E8jYkwvJ0UU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Xip/Z4qy7OWX5z22LUJimodVTR7cnMNtn2Sy24of1EgJQDpMUQykaXGVvcVd1MmeoWBwaYtdLItUEwfeTeUqM90ydS+78nt7o/ooK+KXtRRsYlzvX63mllT8Fezlul/ZheV56PZ2uCmLYQGCt7lYftSbWQgydus1SLFC74UXD1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=rBCC/44z; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1756966837; c=relaxed/simple;
+	bh=TFskCd2sCXMGZZwuIdraNXnkFiaiP3yZCeJYWmNwYUY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dl3e5vlpZXVXq7RRqP94+1Fo+Ry5FZkzeyQEFNWo8ApDMjwccbO2EvV+1zPbaxk0y0f/g/8+tN6Nl/Ku9d43l845+rA4wx824yhwPMDYoh9Bxx23wrsURP2iI2+GttqDaTI0BuaRFAUNod1BFjnlW7u1c3x+vy1laIqhsLEe46w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=OLDNakxz; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1756964483;
-	bh=W/2Lx+ewYmSpVtR7BoVus41qTqBqnJc9b0WypcYBhW8=;
+	s=202503; t=1756966832;
+	bh=ugJVMXeCsbqwSBnMaj8Nev6JALpfUFQHK+Yq+ydVikQ=;
 	h=Date:From:To:Cc:Subject:From;
-	b=rBCC/44z//IanTTjyG/mLBcjQFom0Mo7D4u3tTaAXm+qfUQnXDC1Zsb/56E4BQGmI
-	 NXs2MQSnQSz9/cQd5kYu9pLiJJpcYTxeM6+fuiVye5GUUkYDJ2vXSye9ZQzbY428EA
-	 sOUWGfLB4KFpa63weKBkrk3uyjH6oOnuJAxGkaViLSV5svYUkitb7prT2yJxhaBwGb
-	 Srt3asoMncShmWFaewe6ZklW9jNsbZSXJAMD1z5xnGZ/cW5X2d5MX7OOEkWFxJNRvL
-	 Y0pZ6G4S78Gtjn8uHDp0HysJEYSnGOv3Q3yUNB7n/IT/5GcdhK85ffXLEJ7isGvgl6
-	 88ozpnZ7o/+HA==
+	b=OLDNakxzuGtmSFGQ+GmpGNDFMv9zxK8xi/cPWI5t5ugAqvIe+J/qbL7HOJplFQNvr
+	 YGYPK0rOC9Y7zP3NAtZYPa33z7nZocqYO+L8NrlNtMj/NVP6SApn6glY8leB8Kh27K
+	 ls/Tx4zfh27m4XyndPw/F6TPTW3cGwH7/Ifj0gjBcUhP5/JvpwOqtMjov52cSRWamC
+	 Gp3gu7UowmBzISE6Tr05wxtPpYLHNaWW7ICR7de+TzLsPXJy8ItlriIntcr/lT3Cjz
+	 XSzKa5JoQAvAB+TleMDx03dEffXeY4FJo2F3cA66W+IQ1e5IrRe2naHo6Ko8QTx4g1
+	 /9ahWdjxxWgQQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cHSyW0my3z4wB1;
-	Thu,  4 Sep 2025 15:41:23 +1000 (AEST)
-Date: Thu, 4 Sep 2025 15:41:22 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cHTqg6MtMz4wB1;
+	Thu,  4 Sep 2025 16:20:31 +1000 (AEST)
+Date: Thu, 4 Sep 2025 16:20:30 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Lee Jones <lee@kernel.org>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Bartosz Golaszewski
- <bartosz.golaszewski@linaro.org>
-Subject: linux-next: build failure after merge of the mfd tree
-Message-ID: <20250904154122.63acc45c@canb.auug.org.au>
+To: Vlastimil Babka <vbabka@suse.cz>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Qianfeng Rong <rongqianfeng@vivo.com>
+Subject: linux-next: manual merge of the slab tree with the mm-unstable tree
+Message-ID: <20250904162030.4b0b9d68@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3pqXrvQvRYhjC/MFJnqMc78";
+Content-Type: multipart/signed; boundary="Sig_/Ruyox2s.K8ZFEqvWR35pLAj";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/3pqXrvQvRYhjC/MFJnqMc78
+--Sig_/Ruyox2s.K8ZFEqvWR35pLAj
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mfd tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Today's linux-next merge of the slab tree got a conflict in:
 
-x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_get':
-gpio-stmpe.c:(.text+0x21a7c29): undefined reference to `stmpe_reg_read'
-x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_get_direction':
-gpio-stmpe.c:(.text+0x21a7db2): undefined reference to `stmpe_reg_read'
-x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_irq_sync_unlock':
-gpio-stmpe.c:(.text+0x21a8166): undefined reference to `stmpe_reg_write'
-x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a82ef): undefined reference to=
- `stmpe_reg_read'
-x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a8372): undefined reference to=
- `stmpe_reg_read'
-x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_irq':
-gpio-stmpe.c:(.text+0x21a8c27): undefined reference to `stmpe_block_read'
-x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a8f05): undefined reference to=
- `stmpe_reg_write'
-x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a8f89): undefined reference to=
- `stmpe_reg_write'
-x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_disable':
-gpio-stmpe.c:(.text+0x21a91dc): undefined reference to `stmpe_disable'
-x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_set':
-gpio-stmpe.c:(.text+0x21a93a4): undefined reference to `stmpe_reg_write'
-x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a941e): undefined reference to=
- `stmpe_set_bits'
-x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_direction_output':
-gpio-stmpe.c:(.text+0x21a95a4): undefined reference to `stmpe_set_bits'
-x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_direction_input':
-gpio-stmpe.c:(.text+0x21a9705): undefined reference to `stmpe_set_bits'
-x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_request':
-gpio-stmpe.c:(.text+0x21a983e): undefined reference to `stmpe_set_altfunc'
-x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_dbg_show_one':
-gpio-stmpe.c:(.text+0x21a99c0): undefined reference to `stmpe_reg_read'
-x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a9b8c): undefined reference to=
- `stmpe_reg_read'
-x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a9bb1): undefined reference to=
- `stmpe_reg_read'
-x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a9c61): undefined reference to=
- `stmpe_reg_read'
-x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a9e6c): undefined reference to=
- `stmpe_reg_read'
-x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_probe':
-gpio-stmpe.c:(.text+0x21aa5b2): undefined reference to `stmpe_enable'
-x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21aa83e): undefined reference to=
- `stmpe_disable'
+  lib/maple_tree.c
 
-Presumably caused by commit
+between commit:
 
-  e160dd0ac8c3 ("mfd: stmpe: Allow building as module")
+  65d011b2bc05 ("maple_tree: remove redundant __GFP_NOWARN")
 
-I have used the mfd tree from next-20250903 for today.
+from the mm-unstable tree and commit:
 
-Note that commit
+  1094ea77b180 ("maple_tree: Prefilled sheaf conversion and testing")
 
- 03db20aaa3ba ("gpio: stmpe: Allow to compile as a module")
+from the slab tree.
 
-is in the gpio-brgl tree which has not been merged into linux-next at
-this point.
+I fixed it up (I used the latter version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/3pqXrvQvRYhjC/MFJnqMc78
+--Sig_/Ruyox2s.K8ZFEqvWR35pLAj
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmi5JoIACgkQAVBC80lX
-0GwnrAgAkvzQHj7qPTM0ODrv9Cnc8RfMR/X6OMoQvv+SqtKBxJwE+cbWyROEZwcl
-juElqjoSZvAhHuDcwXYJR73OPiCWwd1SFwrdNzVLKQXiNlAnqHG8zaHoDwmz8sY4
-qtK0aTYDEKKBCK2uhkKY/epCVyv1zVcwSLE4cfG4oEOET8m6w0BbY6pefX4iSdEd
-2GpijKAPDSugQ5So04WpmjeG0crmoxUY9ZFwI2VQgc4JEQ7JX59mF6SynX6jeX46
-9si+gUF/yFvGEn48xPPj6aEOwkyYBNu5O0I6+HuVauT9+SRJd8Bdn3DUWMs+BGdE
-Zac/8789UdaSLqn0xXiwR6ofl0V2Jw==
-=3Wo5
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmi5L64ACgkQAVBC80lX
+0GwmaAgApROpFaPs1Ac35KQprOWJAdUSsmhQD+i+lkHIzk4FtEq7Z1YCO+zNJA2j
+6/cX5YFSqMqWxJhZsIHaRGI8m3PgmtXkhECegGAkqY8uTPUHxEVmrzs+wO7gP0Y2
+VbKMPdA/5jxqJZRqJr+Tfj1+WxdIlMdSTFN/heMNWOTPc2mCdBFzc0/Q1neYyWzO
+XtW0yJs3R3XaWudC3kKk/QBW8xcfpSZlA8AXla7PtyB3ff6YDxncvhEpAW6TLBPy
+0g9z/sF1Ahs29zhz+WCv297LK2to1V22jRLsTZWYz2Q9O5W0MxOah8lEqKIMMjTV
+vPh8M5hU9K4MZOOWlYp6kU+AJu2W5Q==
+=tmeA
 -----END PGP SIGNATURE-----
 
---Sig_/3pqXrvQvRYhjC/MFJnqMc78--
+--Sig_/Ruyox2s.K8ZFEqvWR35pLAj--
 

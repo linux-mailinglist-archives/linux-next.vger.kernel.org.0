@@ -1,87 +1,89 @@
-Return-Path: <linux-next+bounces-8202-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8203-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61BB2B44BF6
-	for <lists+linux-next@lfdr.de>; Fri,  5 Sep 2025 04:57:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28607B44CDE
+	for <lists+linux-next@lfdr.de>; Fri,  5 Sep 2025 06:46:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDBB4A038F9
-	for <lists+linux-next@lfdr.de>; Fri,  5 Sep 2025 02:57:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F578A00068
+	for <lists+linux-next@lfdr.de>; Fri,  5 Sep 2025 04:45:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5F3623BF96;
-	Fri,  5 Sep 2025 02:56:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79E0527054C;
+	Fri,  5 Sep 2025 04:44:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ak3s5Rv0"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kUtoOk8k"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE303230BEC;
-	Fri,  5 Sep 2025 02:56:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 688D9261B91;
+	Fri,  5 Sep 2025 04:44:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757041018; cv=none; b=nDbnwuVPtnMSTclOx4ZoYDOWnEamg5hJEUKnE6JV28ZZqTTaSa06AfS6OA6x4Fa1SvlTcuK9ne7CHSAZ9iOe1BjwGqpVUY3ueH089gdEWrDU8+KNQGOkmIyCmO3bytgXlCy6L1CryWQ9pwBf97n0DqynUD1yZnF89eLIydDGBPM=
+	t=1757047499; cv=none; b=CzAkM9EvK04D0iALwyr/yvRMFO06K2BliyuD6eQAJ4Q0io28AX/gvxD3w3Qro20g0V4o1FByZ3Og1NhzNAWngr7JuMantvkBIbh0X0twEMcQqZYUCz/oLluAAy67bcSUbzy/tED74AHNiy3pPwN3XrETfaoc6vcHvSdPafSK0vM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757041018; c=relaxed/simple;
-	bh=59C8ioKoXyvkYBltlVln0DQNNJB6Qs+nvuvLu6vvarg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=oP0N5OxgxB3i5NB6RLlTRp9k+Kh2qQ7ei6llrod5FCNSMcVV78Dh59MzzUiSjKCmdMq9oEpbniP6rtKrWtl/faFVV8sZ04PkpenFhYFsYnt4a4ZkQSOXpOUUjD2YlB5aujTGivMA+zBqXdpYqxITXjffAdgQ3SG/IXbKMbC0FZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ak3s5Rv0; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1757047499; c=relaxed/simple;
+	bh=TEUvt1N8kdMtlYp9fz5VZJ6SjoRpeW1M9D6zK3ueHho=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Yu5/bUmWUKUu3c0+2rGvzBhIN0GxF0QrH9FNZE5SxQYfod2S01rzvkfr+qjc0v73T+9Obh23QGBS9BknVfAvUcRjpIiLn6h5GIBiTUZAiv9a/UsCf8vHw38e+7ujAel4jGsiwf6duRQUamIi87UtAhwE89wYzDiPap1pU789rHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=kUtoOk8k; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1757041014;
-	bh=ZG3QBvYIhuWmp00+bEl/UPV09HMJA2/iWeCyXeNUCOo=;
+	s=202503; t=1757047490;
+	bh=sK9rWy1870udB58vmw/UtxTecbXxMop4pLdYnxaT9Kc=;
 	h=Date:From:To:Cc:Subject:From;
-	b=ak3s5Rv0C7bvZbolyazP6T1tVeZ8MN6iihQdYtcOjZixTmd7JPKCpWtkGUSGrZfsM
-	 Gp1TJnKTWvTZChwxGDmPhPRZG3OIybHC/XOAgqyG71MelNFpkugyNVpZMKbHna2zt1
-	 3f0gl8zxzH/RSIPTj6PDhrenERBSWo7OuR+bXokn7JRgAGZbKY72vUdPt6bsceM4Ap
-	 nCZrjt5aLBaWvrfgVZ0N7vQ2eCIPCH/Z5+cgc6A02YXAoyKpvOR/PZgdL9pXlwRF6n
-	 dDM8djZwAat/lFoFUFXhWCkTi5VvE0gszvsGMNxZ5QBI5s+SPSnw0Gn34MWYD3FpEo
-	 A5YbEHqAsIlPQ==
+	b=kUtoOk8koodLcl2hiX2ISPgQ52jwB/PtYu3UzA3X3bW0RK3pkI2ue5hd4Ro3129q0
+	 E1yHT0uUhUexoyV8Sg3PzuOvHSN7TpB1ZFvOUHjvC2mftVb97xOU92Hho85EGCM4L+
+	 UveXBipnC2juiW3nYeZggSLKQqd8XFgEbVC59mtephPwUADslJWjVhvXf7sW3+hROR
+	 oZsYD5mNJ5XKYdTTu120/Du3grGdw4z9rnj4ZZQ43Lf+ljePEq9hf6eOpHGRagFgGN
+	 KqyuPDZ5PM8aYDCVNmckYG+G1/dyz1YWnK0rIi/ox5nxzYJZNlZSHEI9QHxLYiXUWY
+	 K6vMGYWRIwcGQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cJ1GG400zz4w91;
-	Fri,  5 Sep 2025 12:56:54 +1000 (AEST)
-Date: Fri, 5 Sep 2025 12:56:53 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cJ3fp5drCz4w91;
+	Fri,  5 Sep 2025 14:44:50 +1000 (AEST)
+Date: Fri, 5 Sep 2025 14:44:49 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alice Ryhl <aliceryhl@google.com>, Danilo Krummrich <dakr@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Miguel Ojeda <ojeda@kernel.org>
-Subject: linux-next: manual merge of the drm-rust tree with Linus' tree
-Message-ID: <20250905125653.0ebc7580@canb.auug.org.au>
+To: Danilo Krummrich <dakr@kernel.org>, Alice Ryhl <aliceryhl@google.com>
+Cc: Abdiel Janulgue <abdiel.janulgue@gmail.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Shankari Anand <shankari.ak0208@gmail.com>
+Subject: linux-next: manual merge of the rust-alloc tree with the drm-rust
+ tree
+Message-ID: <20250905144449.437ef3cf@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/HlC4+STjxV7X2vUs9gGm79I";
+Content-Type: multipart/signed; boundary="Sig_/LkIasNxuFqykYJj/u0uoBRM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/HlC4+STjxV7X2vUs9gGm79I
+--Sig_/LkIasNxuFqykYJj/u0uoBRM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the drm-rust tree got a conflict in:
+Today's linux-next merge of the rust-alloc tree got a conflict in:
 
-  rust/kernel/alloc/allocator_test.rs
+  samples/rust/rust_dma.rs
 
 between commit:
 
-  0f580d5d3d9d ("rust: alloc: fix `rusttest` by providing `Cmalloc::aligned=
-_layout` too")
+  5444799d701c ("samples: rust: dma: add sample code for SGTable")
 
-from Linus' tree and commit:
+from the drm-rust tree and commit:
 
-  7937dca77039 ("rust: alloc: implement VmallocPageIter")
+  7e25d84f460c ("rust: dma: Update ARef and AlwaysRefCounted imports from s=
+ync::aref")
 
-from the drm-rust tree.
+from the rust-alloc tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -94,91 +96,47 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc rust/kernel/alloc/allocator_test.rs
-index 2e61cdbd2303,f46b4b671389..000000000000
---- a/rust/kernel/alloc/allocator_test.rs
-+++ b/rust/kernel/alloc/allocator_test.rs
-@@@ -9,11 -9,13 +9,13 @@@
+diff --cc samples/rust/rust_dma.rs
+index f55c6a37ccd9,997a9c4cf2b3..000000000000
+--- a/samples/rust/rust_dma.rs
++++ b/samples/rust/rust_dma.rs
+@@@ -5,15 -5,14 +5,15 @@@
+  //! To make this driver probe, QEMU must be run with `-device pci-testdev=
+`.
  =20
-  #![allow(missing_docs)]
+  use kernel::{
+ -    bindings,
+      device::Core,
+ -    dma::{CoherentAllocation, Device, DmaMask},
+ -    pci,
+ +    dma::{CoherentAllocation, DataDirection, Device, DmaMask},
+ +    page, pci,
+      prelude::*,
+ +    scatterlist::{Owned, SGTable},
+-     types::ARef,
++     sync::aref::ARef,
+  };
  =20
- -use super::{flags::*, AllocError, Allocator, Flags};
- +use super::{flags::*, AllocError, Allocator, Flags, NumaNode};
-  use core::alloc::Layout;
-  use core::cmp;
-+ use core::marker::PhantomData;
-  use core::ptr;
-  use core::ptr::NonNull;
-+ use kernel::page;
- =20
-  /// The userspace allocator based on libc.
-  pub struct Cmalloc;
-@@@ -22,17 -24,33 +24,44 @@@ pub type Kmalloc =3D Cmalloc
-  pub type Vmalloc =3D Kmalloc;
-  pub type KVmalloc =3D Kmalloc;
- =20
- +impl Cmalloc {
- +    /// Returns a [`Layout`] that makes [`Kmalloc`] fulfill the requested=
- size and alignment of
- +    /// `layout`.
- +    pub fn aligned_layout(layout: Layout) -> Layout {
- +        // Note that `layout.size()` (after padding) is guaranteed to be =
-a multiple of
- +        // `layout.align()` which together with the slab guarantees means=
- that `Kmalloc` will return
- +        // a properly aligned object (see comments in `kmalloc()` for mor=
-e information).
- +        layout.pad_to_align()
- +    }
- +}
- +
-+ pub struct VmallocPageIter<'a> {
-+     _p: PhantomData<page::BorrowedPage<'a>>,
-+ }
-+=20
-+ impl<'a> Iterator for VmallocPageIter<'a> {
-+     type Item =3D page::BorrowedPage<'a>;
-+=20
-+     fn next(&mut self) -> Option<Self::Item> {
-+         None
-+     }
-+ }
-+=20
-+ impl<'a> VmallocPageIter<'a> {
-+     #[allow(clippy::missing_safety_doc)]
-+     pub unsafe fn new(_buf: NonNull<u8>, _size: usize) -> Self {
-+         Self { _p: PhantomData }
-+     }
-+=20
-+     pub fn size(&self) -> usize {
-+         0
-+     }
-+=20
-+     pub fn page_count(&self) -> usize {
-+         0
-+     }
-+ }
-+=20
-  extern "C" {
-      #[link_name =3D "aligned_alloc"]
-      fn libc_aligned_alloc(align: usize, size: usize) -> *mut crate::ffi::=
-c_void;
+ +#[pin_data(PinnedDrop)]
+  struct DmaSampleDriver {
+      pdev: ARef<pci::Device>,
+      ca: CoherentAllocation<MyStruct>,
 
---Sig_/HlC4+STjxV7X2vUs9gGm79I
+--Sig_/LkIasNxuFqykYJj/u0uoBRM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmi6UXUACgkQAVBC80lX
-0GykEwf+LFKaX5vo4hXFPM52RBInS8EpFtXvJwnyBg0yQij7bHtvOxGu3fSype2D
-J/itzTEa6kbGo9obbLhq6WYZGrDVeowajmx2Cyp+CaSD6WvQH3QEcEjYp6BKbiZQ
-EWc0Mz3D9H3+9AALX33/bJb0PqapHI1V/a4mNiF8LLxE3azRc//nOjdT/WRfDBk9
-QC6668n8do9tzR5odygA19IpNzVf20rZgOoXKFmfKlnBvXRT7GPMDPUe74xad9Wt
-ptfEZMD+g9Q5WwkNY/NwbYf+8UWS1c3WdodvQyq0AgZro7pUFwsBMGE+4oFMR2gG
-ISuvwfmCpQsO/o5YWQ1N/E9rfRw9bg==
-=CKQJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmi6asEACgkQAVBC80lX
+0GwdyAf+L8yIssAO1IOtWP5DoBmm/+oIcUIKeQkdWll/4z/rGdNYYNSfINH7VWcr
+FWGaFOyekkktCPP2sZpajgcRjrQ/I1ryWQ3tM0WbsfS1XOU0tzJJShfKicCvCn8a
+iah3t62dZB7XqZGV1i1iYyDjBh/59VTTCV+VjkugXX5dyqMos6yRWPKzZycdM3L4
+XwPIZBab8WbWOIrYPw4F3l7QQYUQpKwt0ikyfOgy4xuG3uyFPYaVG5FjR0YdTKJc
+IwNPVIwx0yPa/RlH9MM2ftOGqpdrt0Sdyxf5IpUwBsgWxhfZA9fhxI04CQSEcOGi
+8RcPokyGbEc8l3DtPPxYbzPjm/E5VQ==
+=A11J
 -----END PGP SIGNATURE-----
 
---Sig_/HlC4+STjxV7X2vUs9gGm79I--
+--Sig_/LkIasNxuFqykYJj/u0uoBRM--
 

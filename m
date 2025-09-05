@@ -1,109 +1,132 @@
-Return-Path: <linux-next+bounces-8199-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8200-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12F11B44B89
-	for <lists+linux-next@lfdr.de>; Fri,  5 Sep 2025 04:16:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47978B44BB8
+	for <lists+linux-next@lfdr.de>; Fri,  5 Sep 2025 04:46:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD1511895AA0
-	for <lists+linux-next@lfdr.de>; Fri,  5 Sep 2025 02:16:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0955D585192
+	for <lists+linux-next@lfdr.de>; Fri,  5 Sep 2025 02:46:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F801FA178;
-	Fri,  5 Sep 2025 02:16:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2BCE1A254E;
+	Fri,  5 Sep 2025 02:46:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b="Aiy9I0PN"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="SUJnLkyD"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC47B1F4CA9
-	for <linux-next@vger.kernel.org>; Fri,  5 Sep 2025 02:16:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9AF3DF71;
+	Fri,  5 Sep 2025 02:46:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757038572; cv=none; b=nwkUmWjAYh3nr1JHYhgYLf3JIaAfmMLEBByTRPdBF55AD2sHEGpwFQuErg3xCGaVkEkC0tMwQV7SqXzmRWde0LOi6fvf15yvcUiJzwEplAe4m5icnX9H/MQvfIA4x4N85/pR3Cb9uhWeaciBPvRF9FE7I/DS7sOGGM5RUw7SAmg=
+	t=1757040406; cv=none; b=WVH7nmkSVwpH3m3Kiyqd67G9q4rZK+UZta3xIVSLBED/sgXMF6pQXFD4adHkW1siZgYH5ORML64NTL8o6Hj+rVmF07o8v81dDbFYn6sweXdnyoAtT7e7CgDMEfDx4FtSNjAHWf7oe+b9nHVbsdhp9ov/xN6vUEyZw4H1eNz0eaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757038572; c=relaxed/simple;
-	bh=5LPWQJS65wQQOfPyUMsSCDaTTl/Tihz2JdQnSY9Is40=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bsBm/XcN3bumRZGmg6fjAXR2ZwXo7aCnnsPEtQCBkDBdASzOYqM6EnNYeCuulkHfAoZYsPCCKRt53lV1DFxnsy0eyJyaa+4MdLtPQ+tE2/vWsLS+WYi7NljoLqAxWKvarT7N+xOL4asb+qK3w0lIiL0kSjLlV1CLUugkKOzHDZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b=Aiy9I0PN; arc=none smtp.client-ip=80.241.56.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=listout.xyz
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+	s=arc-20240116; t=1757040406; c=relaxed/simple;
+	bh=2XLHxKiuXhW1CpOB+irALYx4Wbur16P08WjRQOWDls0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=nmBNOkXxtcUdfYOvkRbvWwtu/Ksbre9OC6iytlwnL7Lwiq3wpHD+YbdgRFFB2VZuIiI3KklTZOl2cW/byLoUBj9l2HqN2Eyt+cH5eeREf2RdXWYDJV1zIsLO2U62dYyhLJHqpAADgVYilq4/2YGW+qG7iT4GhPaZWidCWtGW85Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=SUJnLkyD; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1757040396;
+	bh=0OwQBUle5snYIWACyVhsW42bYN6nLUiN5PF0KXaOC1M=;
+	h=Date:From:To:Cc:Subject:From;
+	b=SUJnLkyDGAlgmYe7Qz1EDxiHbdXIMyiOQ34rAYeHbpcrPeDzxtVq277RM3v0YaQXV
+	 m17uyD52cfI3wnZxKbkD435inxs6PH7NnsiZvM7H+cJU31R5njX5uix5cRu3tWyAPc
+	 pfjhNpWug0nOalf/TwKQJMXCslABUBsvItV9VgIbBJbXrAHvWxiqj/Jyf9vdreKkqF
+	 L+ljiTMP7FDYb6gLcG4ym9kOrVjbHcAN42uSFmI9slvgaAY/BefSKzpZ86U+WhMvWt
+	 2ZI3ZMnpM1nRDGP9DWyHhNV6Gtk2c8AQXE4s24F/lt06IvoJE1d0TuCV/12V7j3Ckh
+	 +SgCIkUWS0HDw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4cJ0M95dSYz9tZg;
-	Fri,  5 Sep 2025 04:16:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=listout.xyz; s=MBO0001;
-	t=1757038565;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ocm0FbiUYOoHqiFBpqSwEbKs77Xt05F79aFj0gzRZBQ=;
-	b=Aiy9I0PN/1XS59GuZkAItvXefIDBCZuAjOWqqwSQCifbGDR8ImisvoEi12WFFWBMOh2rgS
-	PrIb0CgU0N5DEi9jhG/Hxr/CM1Ptzm0q5Hv8xS1Sj+Q9G0I3oJcQtZ7y5EIx0I45G8fKm8
-	pIWyDYdP3fxKuFHDW2lpeF73XGtRjz5/ddXlyMvgAvbWi+tUK1aEKmRthDez5/XuJcvZe6
-	dlGsIYdqBiinwRYGipAE6ozwlo9c7Eogpk0DriVsvmR6eFanJTVpDknRFj8bHD1IsIdtV+
-	//uZHy0ramkxYuwH2sCMjJ4GzG4mvf283ooKy6XNz7gl5jiPgenSjXNUzet7RQ==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=none;
-	spf=pass (outgoing_mbo_mout: domain of listout@listout.xyz designates 2001:67c:2050:b231:465::202 as permitted sender) smtp.mailfrom=listout@listout.xyz
-From: Brahmajit Das <listout@listout.xyz>
-To: amd-gfx@lists.freedesktop.org,
-	linux-next@vger.kernel.org
-Cc: alexander.deucher@amd.com,
-	christian.koenig@amd.com,
-	boyuan.zhang@amd.com,
-	leo.liu@amd.com,
-	davidwu2@amd.com,
-	listout@listout.xyz
-Subject: [RFC PATCH] drm/amdgpu: Fix variable internal_reg_offset set but not used
-Date: Fri,  5 Sep 2025 07:45:50 +0530
-Message-ID: <20250905021550.47459-1-listout@listout.xyz>
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cJ12M3FFPz4w2J;
+	Fri,  5 Sep 2025 12:46:35 +1000 (AEST)
+Date: Fri, 5 Sep 2025 12:46:34 +1000
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Alice Ryhl <aliceryhl@google.com>, Danilo Krummrich <dakr@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Vitaly Wool
+ <vitaly.wool@konsulko.se>
+Subject: linux-next: manual merge of the drm-rust tree with the mm-unstable
+ tree
+Message-ID: <20250905124634.68da9a1e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4cJ0M95dSYz9tZg
+Content-Type: multipart/signed; boundary="Sig_/eymLTy3fiZy=ugK9BFtdPy/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-This patch fixes build error with GCC 16, setting internal_reg_offset in
-the marco fixes the build errors. Related to Statement-Exprs in GCC[0].
+--Sig_/eymLTy3fiZy=ugK9BFtdPy/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-[0]: https://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html
+Hi all,
 
-Refer: https://lore.kernel.org/amd-gfx/x4ga2sfkszmylljox3p46ryog2owghv6hffo3rjj4o6xfjy7pd@jllj3us4heso/
-Suggested-by: Wu, David <davidwu2@amd.com>
-Signed-off-by: Brahmajit Das <listout@listout.xyz>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.h | 2 ++
- 1 file changed, 2 insertions(+)
+Today's linux-next merge of the drm-rust tree got a conflict in:
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.h
-index 6d9acd36041d..6630e5f95b7b 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vcn.h
-@@ -129,6 +129,7 @@
- 			internal_reg_offset = (0xFFFFF & addr);					\
- 												\
- 		internal_reg_offset >>= 2;							\
-+		internal_reg_offset;								\
- 	})
- 
- #define RREG32_SOC15_DPG_MODE(inst_idx, offset, mask_en) 					\
-@@ -190,6 +191,7 @@
- 			internal_reg_offset = (0xFFFFF & addr);					\
- 												\
- 		internal_reg_offset >>= 2;							\
-+		internal_reg_offset;								\
- 	})
- 
- #define WREG32_SOC24_DPG_MODE(inst_idx, offset, value, mask_en, indirect)		\
--- 
-2.51.0
+  rust/kernel/alloc/kbox.rs
 
+between commit:
+
+  5efe8a1dcf3b ("rust: add support for NUMA ids in allocations")
+
+from the mm-unstable tree and commit:
+
+  671618432f46 ("rust: alloc: kbox: implement AsPageIter for VBox")
+
+from the drm-rust tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc rust/kernel/alloc/kbox.rs
+index 1fef9beb57c8,b69ff4a1d748..000000000000
+--- a/rust/kernel/alloc/kbox.rs
++++ b/rust/kernel/alloc/kbox.rs
+@@@ -3,8 -3,8 +3,8 @@@
+  //! Implementation of [`Box`].
+ =20
+  #[allow(unused_imports)] // Used in doc comments.
+- use super::allocator::{KVmalloc, Kmalloc, Vmalloc};
++ use super::allocator::{KVmalloc, Kmalloc, Vmalloc, VmallocPageIter};
+ -use super::{AllocError, Allocator, Flags};
+ +use super::{AllocError, Allocator, Flags, NumaNode};
+  use core::alloc::Layout;
+  use core::borrow::{Borrow, BorrowMut};
+  use core::fmt;
+
+--Sig_/eymLTy3fiZy=ugK9BFtdPy/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmi6TwoACgkQAVBC80lX
+0Gy2EQf/co7q9O7IGGGQ1KQdDK+A366VEobzeL94dACQ1DWhbjsBJ+QWxRsH4B08
+Lkh4+3SgioQ7AcMV9iCroLVSnub/LEaHBzRzbdDLUsNy1WRodDwsrGFCNT3IVZGc
+eFI9pTB5JLW4ebx3FIEC4VpraqDdcTx+MDIs/EXq6eIRw1EftkCrC6nVX4Rzmvba
+elmiwXywRuppbHtllA51z0GVhJFE2e0MGGUXkn8YVkFXNb0eEtUoh4wWjjL2eLV1
+xNkxnw6EXxQlV8ymJM3fIa+LsQG+ZiHeIt2yQO6Xi/PEr6uWkiJuaOaRLSwwGziK
+hPLCNE0XdZQPD4aZy/8ePKR//ogr7Q==
+=UGea
+-----END PGP SIGNATURE-----
+
+--Sig_/eymLTy3fiZy=ugK9BFtdPy/--
 

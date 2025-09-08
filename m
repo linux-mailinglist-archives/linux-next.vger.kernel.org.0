@@ -1,105 +1,142 @@
-Return-Path: <linux-next+bounces-8228-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8229-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BFE5B48668
-	for <lists+linux-next@lfdr.de>; Mon,  8 Sep 2025 10:08:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1515B4867C
+	for <lists+linux-next@lfdr.de>; Mon,  8 Sep 2025 10:20:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CD9C3BA5AA
-	for <lists+linux-next@lfdr.de>; Mon,  8 Sep 2025 08:08:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BB3B7A571A
+	for <lists+linux-next@lfdr.de>; Mon,  8 Sep 2025 08:18:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4D762E7BB5;
-	Mon,  8 Sep 2025 08:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9BBD2E62A4;
+	Mon,  8 Sep 2025 08:19:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DCno8bJ2"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TlJewlmK"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E045C2E7F22;
-	Mon,  8 Sep 2025 08:08:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39B2E72602;
+	Mon,  8 Sep 2025 08:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757318884; cv=none; b=sqd6J0g/RvreV3QoYrQHbpfpUGIQ+I8pLpUqI3Vzalfwp7PSr8+W0Do3GF36g3yHRU4VBqPBqMEsVOOL3bDcS95HI5fYcF1MunHYs/ThkXMkIE321Om7reexClwMK8Jjee/WvTQe1yVoWxuYEZqFfOA3//qFSXo4h7ht+5FFeIY=
+	t=1757319594; cv=none; b=Tv90V/wzkdag7iUSmoJkhBajy96K36c4iMKT1PWc0NYQWOQIcvKgWc/pbqVXx9sSNCae+TLd6Dm4NEVzl0d23msRkkAFAgEp+/j8yu1t9USd5DF4kQhzk/YYoWXOB5jlNUqrOCzkcf2v2NoV3e4CdbjrR5LY5qmIvyjO8PCX1cQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757318884; c=relaxed/simple;
-	bh=rdE1nQws9HsRgT6VvYs7TCQifPpxeWt+Lqas+E2f3QY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dWc8/MZwE9kjf8+6eQeir7JqZEXUChxVAJcFgtrGjtNzZawXJNlQVS84qCniwIw/Rqc9mj7SY/7CwP/MzGVkR9+u44mYekF91HaIfCcwugEK7l5U5BfumCJyV2DDkTC1mMBeMh8xyIDgIW8UBELaE6IWjx1Mitu+aMcntNqY1fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=DCno8bJ2; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1757319594; c=relaxed/simple;
+	bh=Bg7hpjqVmHqdsaJUWMHHH6a8dl3LEhEbwpfonC8IYhc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZkZ6R3Mlg8Z5jrsWghOdmOQkKUuT+GlbXryZxSa16hJJu1HVrZKhnWaXyudug2v/BezWqcWvkAN4QHnLjhVIZH/XKDfjGX8RqBcqwbQrICxkKPBbFCn8YbLEbUWHFJo7xMneWJwzw6hx0GWTa99bA83N7YtC5gyK+lJGxedNX9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=TlJewlmK; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1757318880;
-	bh=WqyneKxOozJoorNMR4vR002uWwP0Kd6vyi3ojX2RdGI=;
-	h=Date:From:To:Cc:Subject:From;
-	b=DCno8bJ2VOuImXe6/BVIIgdsO4oC9l4thRJYvDtU/a6BDp4FwcZwYY1Hf9NesH94e
-	 kKZR2zhvC+nsG7vGJArxgFaZmIJSPySBJ0OSWN9vXtZJeie/JV+C0zmJSCAhueXpOC
-	 Zh5DLK7ckfiSd2qKPVXhDN5+G1xTVH38MJvsJMiVCm67/owsEBA/EJ1JE16fRPZ1KF
-	 DB6A+y7a0GkEDP1pbm4Qxfeu4osPlf0yAYbtuzEb8Dhp30nw4u/W2TrG1ByjPQ8xFt
-	 sKeAeZ/VCJODbcQpqKpTZFkfZTvzB7AtFHK79RFZDR7zTFTOgD0xHjU759ppNSneeh
-	 jMeUs1N2D7+EA==
+	s=202503; t=1757319589;
+	bh=k68hfVlZ1X8QVpHaZybtf7fq/v7xPmggjK6r5nWQhs0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TlJewlmKVPkiWkWIMymDoWV0FQB7n0B00xtp4iVT2mWGI+vN79ho2sG5Dvkm/ug72
+	 6Q8eaIIvfj3ZkKJR+c1ups5VrqL4fGx3gDVImF/+zYFwN73Fon3LjDp8YyTRfpfKgT
+	 ZW8IsrTwANG0OJaIjBpA/aZEFn2lVNkMmiQvLxO/Xy3KfqYIZEhj7Ywdlejy0KbFpR
+	 fm5MzNjVDn6AjPbNcHue3+DDG9xiWAcilxahFye8uUkVMaf0vTzAo1YCTtch7VZhtV
+	 TE6xmDSMuxSHIjj6nXtvybzEv8Tyip/JUTNxIZFum9vmx1qzls+rQ+bn0fLNA9wCLZ
+	 KgsRCJsDvsLig==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cL01q5R4vz4w9Q;
-	Mon,  8 Sep 2025 18:07:59 +1000 (AEST)
-Date: Mon, 8 Sep 2025 18:07:59 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cL0HT057tz4wBM;
+	Mon,  8 Sep 2025 18:19:48 +1000 (AEST)
+Date: Mon, 8 Sep 2025 18:19:48 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Wensheng Wang <wenswang@yeah.net>, Linux Kernel Mailing List
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Chanwoo Choi <cw00.choi@samsung.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the hwmon-staging tree
-Message-ID: <20250908180759.5e30d1fc@canb.auug.org.au>
+Subject: Re: linux-next: Fixes tag needs some work in the extcon tree
+Message-ID: <20250908181948.283dfbd8@canb.auug.org.au>
+In-Reply-To: <ddf0bd24-4e03-4346-84b7-c5caad8d885f@infradead.org>
+References: <20250908160311.2184ebbb@canb.auug.org.au>
+	<ddf0bd24-4e03-4346-84b7-c5caad8d885f@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Jh4.9IAQkwrWFXBcpHNGCwJ";
+Content-Type: multipart/signed; boundary="Sig_/yi2Q8Fv3HNqD.MWnDNe2b/0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Jh4.9IAQkwrWFXBcpHNGCwJ
+--Sig_/yi2Q8Fv3HNqD.MWnDNe2b/0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Randy,
 
-After merging the hwmon-staging tree, today's linux-next build (htmldocs)
-produced this warning:
+On Sun, 7 Sep 2025 23:15:48 -0700 Randy Dunlap <rdunlap@infradead.org> wrot=
+e:
+>
+> On 9/7/25 11:03 PM, Stephen Rothwell wrote:
+> >=20
+> > In commit
+> >=20
+> >   9f65e74d9185 ("extcon: max14526: avoid defined but not used warning")
+> >=20
+> > Fixes tag
+> >=20
+> >   Fixes: 45af3ddd1cd ("extcon: Add basic support for Maxim MAX14526 MUI=
+C")
+> >=20
+> > has these problem(s):
+> >=20
+> >   - Target SHA1 does not exist
+> >=20
+> > Maybe you meant
+> >=20
+> > Fixes: 145af3ddd1cd ("extcon: Add basic support for Maxim MAX14526 MUIC=
+") =20
+>=20
+>=20
+> Is that a real commit ID? I don't find it.
+>=20
+> My email said this:
+>=20
+> Fixes: c2aeb8647e53 ("extcon: Add basic support for Maxim MAX14526 MUIC")
+>=20
+> (see https://lore.kernel.org/lkml/20250513210252.1139749-1-rdunlap@infrad=
+ead.org/)
+>=20
+> Maybe some commit IDs are not stable?
 
-Documentation/hwmon/mp29502.rst:4: WARNING: Title underline too short.
+I have:
 
-Kernel driver mp29502
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [docutils]
+$ git branch -l -r --contains 145af3ddd1cd
+  extcon/extcon-next
+$ git branch -l -r --contains c2aeb8647e53
+<nothing>
 
-Introduced by commit
-
-  c8ffcc694fa4 ("hwmon: add MP29502 driver")
+So I guess the extcon branch was rebased and 145af3ddd1cd will be in
+today's liux-next.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Jh4.9IAQkwrWFXBcpHNGCwJ
+--Sig_/yi2Q8Fv3HNqD.MWnDNe2b/0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmi+jt8ACgkQAVBC80lX
-0Gwy8Af/V6fqk8b6UTDaUv8BlaXpmbXrP7t8ctLnE8q9vImiK7AECEdsYCeQ7W1V
-IHrz0/pLRZYSgfGLw4n9GrHeRQ2Ehjx2PU9pNNUkZ5bVys+8ozPqQ78nTySyn28e
-Tw7f65QXeHQGZ0j5RMlep+v6YEjkaTclto1Kavc6j1AyzwdMe11wXeRtnr5wsPZJ
-e4qI/5dWS099+bWMQ1IdrcVMPMmEUr8gFEIktCU8qOIcyo1zScR0UwvEtvWl5GJy
-OER5wc+IOlCafLKty4vidcqGpPTjlEHi5gmzMCvcSTpUu6rVa4FJALSS4ellns5g
-yWIl/Ae7/c06r5I3B/g/+n360Gq+OQ==
-=/7Hu
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmi+kaQACgkQAVBC80lX
+0Gxslwf/SWFz85ht6G7cCyi1xtFamywAMMc+WXrChAYsKIaO5t7AgWqjI2Qd3GKg
+laCWjLVTaUi6pqgRVdEsFx1rFkJiY7WJmX/b667HF9I3rvh008FXP332IfN1jjcC
+2NqqmWOvtAbfKp25Pgl+9u6ubao1VHjZlH42vTIcOyMkAKq3JJB6wr949xf5Ra4j
+pFIO+7gGuES54rcYclycHc5JPaP2S2/X1phuKkwS5darkvAdnhNHbybAfOcI3X1A
+Ec46y2bikbLd32+XTxfhOtgCP3icUS2E9OPhpaOFJWfzrSIUa1rwb5uPQWCn2thL
+yJjYNdjvIF3RTyN5m8Z6MdPX36s36w==
+=+LKI
 -----END PGP SIGNATURE-----
 
---Sig_/Jh4.9IAQkwrWFXBcpHNGCwJ--
+--Sig_/yi2Q8Fv3HNqD.MWnDNe2b/0--
 

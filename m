@@ -1,105 +1,114 @@
-Return-Path: <linux-next+bounces-8232-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8233-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F30FCB48A25
-	for <lists+linux-next@lfdr.de>; Mon,  8 Sep 2025 12:27:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0D74B48C14
+	for <lists+linux-next@lfdr.de>; Mon,  8 Sep 2025 13:26:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14429188C7CC
-	for <lists+linux-next@lfdr.de>; Mon,  8 Sep 2025 10:27:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86D6E3B1553
+	for <lists+linux-next@lfdr.de>; Mon,  8 Sep 2025 11:26:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC4D62F3617;
-	Mon,  8 Sep 2025 10:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7E8E22836C;
+	Mon,  8 Sep 2025 11:26:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="grJ80zKJ"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="BHl7nfJ2"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5F5F510;
-	Mon,  8 Sep 2025 10:26:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757327217; cv=none; b=V82jh/F7PV2GX/YvqMxk6JDlroFO9jgRlrpi92QoTetzv/878F9Hx17wBQoYk8A2iGOYr3fmyVEXWBQqXlybFU+sC6JhmGiNEMv9Yn3auy4wyROneKD79YQF5g3C+IHYLnRFP1zpuYDeUllHDjCcgQsm4D3NO6c8C1eW0OSW+XI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757327217; c=relaxed/simple;
-	bh=lpf52fJMJR1pzyvgTZREWw0t06tV178tuatUPfGkt6s=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=mG5v/7QuIweQA32BIl4qNwfCtah+1zqgtoYroFdfNA5BPVodjioEXVigjWfSc9DHXlViTigjCp5CukAje+7F0bPHGEeF4tdm1qeSHZwVFXaTOB+chkeE0xvGiumFE2P4V5xpovHT16741FVnWtj2k+79/rEeE9AufyWfIAwCegQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=grJ80zKJ; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1757327209;
-	bh=V3fexJ1e2oYGtpvMW45bBpUdU+IxcGU9k71QSdZsUCI=;
-	h=Date:From:To:Cc:Subject:From;
-	b=grJ80zKJE+79U2Jc3GoYH0KXIoSHO+iPa/rF3iWc7OlHk4tu0UMH2yqKiLLYardzr
-	 ZQio7MzyM1/E7mcYBFrZjyWtDa+EDdXvJvCqZGOYOarmKW+L1ZILcYexjUsatl8huU
-	 VJfu25ghjH5YFeKnLfex5QkNQZf5Q1HZcZqFj5OAORWI5YZGR0MLLzW7hr8Eh/Aw9G
-	 6OQzKBNS3eXgtzXNTSyfftCnG+43mr2F4PZ4LwD1Y/GaQFdEpsMSaNILFgGL02MUlg
-	 Uznp0jZIMmtXD9/O/sBB26QsbHrf0c7/oheBlZdiNlE6zdPatLgbzblvJoHGsHqqKT
-	 /2V+56pTBrIUA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cL3615tBfz4w93;
-	Mon,  8 Sep 2025 20:26:49 +1000 (AEST)
-Date: Mon, 8 Sep 2025 20:26:48 +1000
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the v4l-dvb tree
-Message-ID: <20250908202648.32e2a6b0@canb.auug.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CCA219A79;
+	Mon,  8 Sep 2025 11:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757330792; cv=pass; b=UDmTcB7FZFhha7uOiqCwX2RxuEnMBlXKor/WCqogva5wOJoTP1FyOZVnGePyLFkRvgeg+E+aT6DtgK+zgsYf1+0qTEclC8ddqFKHiWUpn89FCI1B1EZuFmW7o6P51hsHU6sBMjXWqKx4lpLHEbIM4oEVpUyMcS39rK2S7mM8Qqk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757330792; c=relaxed/simple;
+	bh=eVbCFAA3x9bibq1+I1Mxq/CvQ5L+I6BZnkIAmHs91lM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oLRt7i4V+LBsHr6J6p3XMlrPe6F6BizqNW+6UuLrQ7yo9Qussr8Qwbkegl/awJG4qelPKla1Ltig6gKk98qQAVZNflNci41N6+QR3h/i4bWUttRxkSnYeKKBAfsRrVRuDwbOPYNLAlKRV7PelShlWFxo9+3BYzsJw4XaclBcAwk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=BHl7nfJ2; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1757330782; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=F1rq2h03KpgOj+V7/RWl/A02tG7qtK9GYkcnLnt6npumcC9kQwGaKgkw8ZhacGyBFAPknzYtQnCO1QqEqq7afE5s5KA1T67dROBAIwbqfzVjcLEk2JY7vStpyNfvusjJVTg7QhSRZkfRUmd5crXMZvziNyhMfkflMo6n5jVlkTw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1757330782; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=UPVKRFnnfsp9Ohqw9fZz0rFjX14hrxM8s5ZBYf7ggUU=; 
+	b=DW/z/0mDvfQrCu419ND4MTf9BI3YmgWvkBzV0VF6JuKKE7U7yzASZy0YEcVLFLRN3ZRPygqG1Ab9kZrKLtKCBUjOtXarVWjZA3WFFD5OBGkPNvZqKRPTaNG7xs/D1qEd5w7bI2xBqVLM0rAQznVOIdeOboa48quEocY834WRLCY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1757330782;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=UPVKRFnnfsp9Ohqw9fZz0rFjX14hrxM8s5ZBYf7ggUU=;
+	b=BHl7nfJ2xLrm89YCrl1JIbHlL4xoCX+ewdREZs9WS03XKHiQ+FFrP9kw2swuPqH/
+	29WdAPNJwfYCAVarYvVlsM3iiGBIZF/e8qCbcdIHn7aWr1bSGu61AFx9b4OmH1WaAT3
+	v9M7vSIY0s55K3qNPQPPzqIJ6ouZgWaeZRXbP2M4=
+Received: by mx.zohomail.com with SMTPS id 1757330781655602.410704399152;
+	Mon, 8 Sep 2025 04:26:21 -0700 (PDT)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Yury Norov <yury.norov@gmail.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+ Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the bitmap tree with the devfreq tree
+Date: Mon, 08 Sep 2025 13:26:18 +0200
+Message-ID: <5937399.DvuYhMxLoT@workhorse>
+In-Reply-To: <20250908175135.4215c780@canb.auug.org.au>
+References: <20250908175135.4215c780@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WV8IIB.QRRekxFi4AffFiNq";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
---Sig_/WV8IIB.QRRekxFi4AffFiNq
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Monday, 8 September 2025 09:51:35 Central European Summer Time Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the bitmap tree got a conflict in:
+> 
+>   drivers/devfreq/event/rockchip-dfi.c
+> 
+> between commit:
+> 
+>   7d9e29ed3f8e ("PM / devfreq: rockchip-dfi: add support for LPDDR5")
+> 
+> from the devfreq tree and commit:
+> 
+>   414054a0bc1f ("PM / devfreq: rockchip-dfi: switch to FIELD_PREP_WM16 macro")
+> 
+> from the bitmap tree.
 
-Hi all,
+Yeah, basically both of these were by me and landed at the same time
+through different trees; they were developed at different times and
+the reviews just happened to conclude at the same moment. The reason
+why they go through different trees is that the bitmap changes are
+part of a large refactor across several drivers to make them use a
+shared macro instead of reinventing their own, whereas the devfreq
+side of the changes is functional changes to add LPDDR5 support and
+also fix the cycle count on RK3588.
 
-Commits
+> 
+> I have no idea how to fix this up, so I dropped the changes from the
+> bitmap tree for today.  Someone should supply me with the appropriate
+> resolution.
+> 
 
-  aae65812f5c3 ("gpu: drm: display: drm_dp_cec: update Hans' email address")
-  8bebc6523f68 ("media: update Hans Verkuil's email address")
-  454bcf2523aa ("media: include: update Hans Verkuil's email address")
-  e1c7015d6093 ("Documentation: update Hans Verkuil's email address")
-  740e74c74188 ("media: update Hans Verkuil's email address")
-  6bc4f2381c03 ("media: v4l2-core: update Hans Verkuil's email address")
-  afabad4d7621 ("Documentation: media: update Hans Verkuil's email address")
-  2bf39bdda0b7 ("MAINTAINERS: update Hans Verkuil's email addresses")
+Dropping the bitmap tree changes of this driver is fine by me. I can
+send a rebased patch of that for the next merge window to do the move
+from the driver's own macro to the shared macro. The functional
+change in the devfreq tree is more important to get in.
 
-are missing a Signed-off-by from their committer.
+Kind regards,
+Nicolas Frattaroli
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/WV8IIB.QRRekxFi4AffFiNq
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmi+r2gACgkQAVBC80lX
-0GwtTgf+I5ohUTk/5BywAYSWobmEWlJgJW70oZUVR28Rb8RnH3HQGlAv+1xhQ0Q0
-AZ9QLHEseJkwED/QocaybpOm9B6MURrJOsE3u5uhtGjnyRaA7A15klSOBLqvt+RD
-VWEcdKgzv3sdYPeZOgqj0/wI/u33byvBnf0f06joUgdj4PvC+y518VqW7RteBfTL
-9iboVmIPz2MgJDVX8BPy1mUR5HFSIfw5VHyLLRaY7Vs8v9TgHmMb0hbYXN5cG/Aj
-qcdTMV3bNIwhqc0ThLRqK7x5f6OVwNHc45kIhqEtl71Y8dcqdWEJESuPxXKLaXyI
-fDkmN9zq5mLCBLAyXvYqlp2Go4OAfQ==
-=PmeM
------END PGP SIGNATURE-----
-
---Sig_/WV8IIB.QRRekxFi4AffFiNq--
 

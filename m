@@ -1,176 +1,125 @@
-Return-Path: <linux-next+bounces-8242-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8243-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 690CAB4A3FF
-	for <lists+linux-next@lfdr.de>; Tue,  9 Sep 2025 09:41:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02FA9B50308
+	for <lists+linux-next@lfdr.de>; Tue,  9 Sep 2025 18:46:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 920244409EA
-	for <lists+linux-next@lfdr.de>; Tue,  9 Sep 2025 07:41:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E0D116F638
+	for <lists+linux-next@lfdr.de>; Tue,  9 Sep 2025 16:46:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CFC5242D7B;
-	Tue,  9 Sep 2025 07:39:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E3E19DF5F;
+	Tue,  9 Sep 2025 16:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sRv7I9MT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hIuIqpod"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D57330C367
-	for <linux-next@vger.kernel.org>; Tue,  9 Sep 2025 07:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0CE18488;
+	Tue,  9 Sep 2025 16:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757403552; cv=none; b=mMT5eMc6aM5NKdMDEd9QUxqIPgBwab/Q7LLkZCgLo6FuXWAamWaEdDsH3UAfaH3YHdZRf7FQvOaf48dIzLpu5Mc7VtJxEm0EC+sToZvxD0a7mh0PzMFhqRfKHeB8v3lFjuy7wq8Spb/U3XnRz6DTkTmJ88phlkrC4B3+AyalDrs=
+	t=1757436392; cv=none; b=NNOHNH4BLnmycH/kvu7LUKx6sZVaA2RhU0Lm033lygG+gKgucAoNvYYBjgkoPjU7FfgRQ9QLXU5zZm6fVea73YQ2jF2DoOwfDE+WrQp32mvZ3OKNcB7s6iGmn+QrcOuxUzKW3Fkp4wTlI/wMs+BqFfJGm/gHPMvAkNcbQEBk3PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757403552; c=relaxed/simple;
-	bh=K0aPggGEOTRmUyRZFo/DV0xphP60f1axIKEtguCKkhE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eakBgZMgfZbQ+K+3zOZTAc2qNCyJznU2ZQ+7TXZ1ZuJmBwix1p24l3AsuOfOvA5VswrcpuotSZ/XNg9oqIAp4ymZ79plaTSZT1pGwdWpjAwU1TtquiNhFNVdWvqM7xAAtacWot54MYV49nxisdEufHT1Fk5LzlqUl2j5Uov/RbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sRv7I9MT; arc=none smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b04abcc1356so454517566b.0
-        for <linux-next@vger.kernel.org>; Tue, 09 Sep 2025 00:39:10 -0700 (PDT)
+	s=arc-20240116; t=1757436392; c=relaxed/simple;
+	bh=McOLY1YDwRT2PrZTb+rvS77yVOqOnEBtd456LAor8NI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HFWfdwq8PuvfLLZjZTampOiczO7S6GwVVFfAd3mO9swnmw/vU7Co5f5SuGiOsT1j+Pi9xXe1RwsVIZdvxUsPXx9uyvb/cU0SqJqdb+egSPMlVtNkKrp2/DE+/LsAQdpGYPx/o/jh/LrbBbfIGIjko1DAlFeMxMSb47iM2YIypo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hIuIqpod; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-25669596921so22324595ad.1;
+        Tue, 09 Sep 2025 09:46:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1757403549; x=1758008349; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NNA+enFp9mFHaApkAPMar5j9pjUFiMUPT5abXuL1ISs=;
-        b=sRv7I9MT+WK+EOLrajvacAAB4DYPHlVffVS6fUxdAH7wj5RB7F7KJaSFpj8fCfZ46Q
-         4wVoEHPmFqBr9Dbq3KlrZTXNa/thr8tooCwOSgjeXLE4qTksvLhEQtIBtlVqhwCOODMh
-         XF47FcldXToR5XtvwzuGGrSRe0ntROCQEVCAQ6xIw0xNBuSNpJDqzz2tBGUiRMoF5qZN
-         q/suvnw8ygzJqoTtyOcdsZkor1nGkGkAR8wlPFbVhk0AOpWdpNPKVDexbgFTs5Nj8MAc
-         KvoRNZ7oJk9sIaLpktn5ImTvKep0pZ9sCpQbbhmwmI0CAXkAhlnQC/hkX8idFmb/INka
-         P5sA==
+        d=gmail.com; s=20230601; t=1757436390; x=1758041190; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8cMr9cA7d7nelqSgn8CROSXHRI4z/nGrk04sahtQcdg=;
+        b=hIuIqpodVYoi12Qso3oNpa/PLXnPPfrympjjDvj/zXaH6tngJLZaC+s5hXwKtmu0Hj
+         /Wlnz47AmyKf5u80SDfGXkVt/Rvjn9lPGrGmyDz1QKRhJJcBg1qTfUHegPrsQb+MdRdc
+         Jk9zreDbCyu4fiY+htCqiHxnFHtGdfrtWJ0YPCA7APQmZ0LbkC7PXdnf2o8fPMDX4vwf
+         82RER9nw2z+SGOfaiDPYEBR2C8TOPPpWhYlfdXkPgq9MomrfgUheXrG96NMkDijz10LO
+         xHWfHvqLzvRZ4uMOauFifh19Qih+I5UlqzYCJuOJ3iP7D+IZLi6lrB0ua8qpaRwKWRRj
+         tVmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757403549; x=1758008349;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NNA+enFp9mFHaApkAPMar5j9pjUFiMUPT5abXuL1ISs=;
-        b=cUqUU1kCW74VpPztfW7O/m+qfUPTENHEHRh/eKwRsUojrAX/C/U5ml7fTx7FOPxrCm
-         WbEm1IHAloJR48KB2EFi8zEnuTeYWxfcoigUW8UCVVpxOo4KyMt5/h2BaqiY/vP/A+sS
-         skB8KxxlqAGhQs/BZs4TD9JEdKLLMQEkQ+A4HVj7EzzinnjMeXsWOuSXmm3f95AzwtAB
-         nsHdE97cydQyyZsP1lZ0Kdw6DKC9qqsXfF7vEC8ifXX4Tmavqs28bgQmtO72mC6jrLsI
-         us57jZcPS4GDp00+ypvngKZfUB8wBQYyF+EITuUC9EgqAL1sq+pWw9b3N9C/U49g7PWH
-         QVlg==
-X-Forwarded-Encrypted: i=1; AJvYcCUwihn023FINJVqBR0zl43JJuNLabT6vF0O19l6r8HQHlc11H+odlPoKQ9GdhdjfY3Lmf2+MugLTmEI@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+uHKBWgtn0bufJaDISzI60VxxdycHyAgyo10cj9jBXZnBzkvh
-	DDYNsmmTuUfBv+CXr4EmLvYdvb4Rtki9KJ7QE2HFL80tKj0nkN9v/9gQm6mdWTbr7F1cts9AxDd
-	6jIgAkebPO6MM+rko5W/Yi+RtNC0Rf7Y0uMMOLoRYOhyPVS2rreMGzYVCqA==
-X-Gm-Gg: ASbGncvhuTu8sVS7KCBXRaK5t+xTvU1mgp3rSZbKXsXcxu34jl77m04a3ZyZyZZaax8
-	RaHFA0MdqXYjUaI1Vw0jU/nXTUuBjuLIGuRlHne2ChxVyXRm+UD2tbPTERV3VmP8FXG74gAPZST
-	+b0M9k9p9b1T2CqRnHgDtAn+6GTzrMlR49SXZDU2ckWGvgefdjjS7ndH25ig6U9WNhext0BAFAi
-	c9Xg/qKU6vqnmRrKntZmLz2glQu+3dvsQ1g43FoCGbwPVkymA==
-X-Google-Smtp-Source: AGHT+IE5J401+ZOXeNcir7uiDmpw6NJzRHPL83/eS3uh60fnMH+ktE6gyIx3UCx9dsQc+ULaURKa09rPlurVaTZAQkI=
-X-Received: by 2002:a17:907:3f1c:b0:add:fe17:e970 with SMTP id
- a640c23a62f3a-b04b14b3857mr1034768966b.14.1757403548642; Tue, 09 Sep 2025
- 00:39:08 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1757436390; x=1758041190;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8cMr9cA7d7nelqSgn8CROSXHRI4z/nGrk04sahtQcdg=;
+        b=qmzs/2QUpP/R2da9U3sFcYlppfIDaI6/VMZIIbZyzdRk2ZYkzWRx1VsptjvO97v7lM
+         YQdVLDzQ0UpxaRT94X/l/hLfpoy9FlOroQrywtxvK9cm9coCRWokwA2txMLWco0oryXZ
+         KU2BsDc35Q335wJUbLnXPoOUd5XPJI5RiBjcwWziZact5U2SS90mO89URrzxWQ0h/TAo
+         dibV926eFoALZybqvIMzlRg6zUjVp5CPQhhihcK7DtqQVUxi2ksDkjuWdGVef00QhYJB
+         KxTOXY1bsfGCTH9AIstT0+SUpilUEuO0fs/6KCRdC7TjoakNCTQq74eYC49rljFhthO5
+         NDgA==
+X-Forwarded-Encrypted: i=1; AJvYcCU9cplfHzsAOtInnmIIu4BnNQX/hxby4xRy5ppG4Z8pNx3BPP4HTQ/Wm86TWwVHcpK0wx+bmZpP9ABwCQk=@vger.kernel.org, AJvYcCV2ZBhb+FWNkVklddkocedGp2L2XSXWQRS/YXL81PAiqO4xTWfYI5vBBB5KPBiKFoanfiVdmoDgqR0+vw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeyOzZY5KSfs5OeO7//PJHGBb+OKwEmKuZek1QjRlNHBDs/dxW
+	wUXiaDGbjriKIljoJB+SHi1pSnHx9CmfgpLVFY3OS4utdXo8nf49RgZC
+X-Gm-Gg: ASbGncsTWuJGB2KL2A/Zsjs5bEcv4aIdF3205IRj/frKQ6Fg/cp9YBWGt/sSsjQ3H+4
+	xon9WNZHpc/NloT1BQxuRnggVN0oTZY3oUtNJK3drI/IbHc/Se/VpvBTyRs1mMbV1GL/LoaLR0B
+	50dIduhK1aHlzckaOdVjWF9oirRNPsO6DY+Lv9UfW8m/XOBasRdoZRr2UqrYRDLEG/v7OAGmxmz
+	o1S0RXRfN/CPP4gQEl5afBXl6vr6qItuJz+uXDwFO6WX7X8hkNgdk2dPnaqn40H4zmafQo6rdUH
+	C66SlG0h+jm9juYopPzZjP+LiuHocn4Pu27l/50yi0Egw0NC1+Rn1f7NDJs2jeF8xHGHr5NTq8g
+	VmiQwWpMGagfyAZYOm445oJ5npgNJm8C0
+X-Google-Smtp-Source: AGHT+IGBgt2D+0I96SKJ0UkQvVRCobQF2FARNV5EWL/h66zP+2elkes67OKKODD6mqS0ttOCyLWG+g==
+X-Received: by 2002:a17:903:240b:b0:250:a6ae:f4aa with SMTP id d9443c01a7336-2516f24000cmr160321735ad.25.1757436389900;
+        Tue, 09 Sep 2025 09:46:29 -0700 (PDT)
+Received: from localhost ([216.228.125.130])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-25a2aeee2f0sm2314565ad.132.2025.09.09.09.46.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Sep 2025 09:46:29 -0700 (PDT)
+Date: Tue, 9 Sep 2025 12:46:27 -0400
+From: Yury Norov <yury.norov@gmail.com>
+To: Chanwoo Choi <chanwoo@kernel.org>
+Cc: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the bitmap tree with the devfreq tree
+Message-ID: <aMBZ4zTyMZLdQWJx@yury>
+References: <20250908175135.4215c780@canb.auug.org.au>
+ <5937399.DvuYhMxLoT@workhorse>
+ <CAGTfZH3JyMGvjWni1Ge+a1=4nRPL30a84DCamj1AtXRLRMgzeQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250904154122.63acc45c@canb.auug.org.au> <20250904063043.GE2764654@google.com>
- <CACMJSev63kfCBTzQnija6Q+PNm8KgD-LWVKeqRJ2kLBtT7Zh6A@mail.gmail.com>
- <20250904092319.GG2764654@google.com> <20250909122227.4dbbeb6f@canb.auug.org.au>
-In-Reply-To: <20250909122227.4dbbeb6f@canb.auug.org.au>
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date: Tue, 9 Sep 2025 09:38:57 +0200
-X-Gm-Features: Ac12FXwS0BgE2iFe-65_HqqVX12oIt2DaDQqjBo7c-ElCXSWRrEKU6JLLE6rcBU
-Message-ID: <CACMJSeu8Zv7i+_2bH5Lp5fuE0aBUNRfuq5ne0rPCxXCij4orDA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the mfd tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Lee Jones <lee@kernel.org>, Alexander Stein <alexander.stein@ew.tq-group.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGTfZH3JyMGvjWni1Ge+a1=4nRPL30a84DCamj1AtXRLRMgzeQ@mail.gmail.com>
 
-On Tue, 9 Sept 2025 at 04:22, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> On Thu, 4 Sep 2025 10:23:19 +0100 Lee Jones <lee@kernel.org> wrote:
-> >
-> > On Thu, 04 Sep 2025, Bartosz Golaszewski wrote:
-> >
-> > > On Thu, 4 Sept 2025 at 08:30, Lee Jones <lee@kernel.org> wrote:
-> > > >
-> > > > On Thu, 04 Sep 2025, Stephen Rothwell wrote:
-> > > >
-> > > > > After merging the mfd tree, today's linux-next build (x86_64 allmodconfig)
-> > > > > failed like this:
-> > > > >
-> > > > > x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_get':
-> > > > > gpio-stmpe.c:(.text+0x21a7c29): undefined reference to `stmpe_reg_read'
-> > > > > x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_get_direction':
-> > > > > gpio-stmpe.c:(.text+0x21a7db2): undefined reference to `stmpe_reg_read'
-> > > > > x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_irq_sync_unlock':
-> > > > > gpio-stmpe.c:(.text+0x21a8166): undefined reference to `stmpe_reg_write'
-> > > > > x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a82ef): undefined reference to `stmpe_reg_read'
-> > > > > x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a8372): undefined reference to `stmpe_reg_read'
-> > > > > x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_irq':
-> > > > > gpio-stmpe.c:(.text+0x21a8c27): undefined reference to `stmpe_block_read'
-> > > > > x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a8f05): undefined reference to `stmpe_reg_write'
-> > > > > x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a8f89): undefined reference to `stmpe_reg_write'
-> > > > > x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_disable':
-> > > > > gpio-stmpe.c:(.text+0x21a91dc): undefined reference to `stmpe_disable'
-> > > > > x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_set':
-> > > > > gpio-stmpe.c:(.text+0x21a93a4): undefined reference to `stmpe_reg_write'
-> > > > > x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a941e): undefined reference to `stmpe_set_bits'
-> > > > > x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_direction_output':
-> > > > > gpio-stmpe.c:(.text+0x21a95a4): undefined reference to `stmpe_set_bits'
-> > > > > x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_direction_input':
-> > > > > gpio-stmpe.c:(.text+0x21a9705): undefined reference to `stmpe_set_bits'
-> > > > > x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_request':
-> > > > > gpio-stmpe.c:(.text+0x21a983e): undefined reference to `stmpe_set_altfunc'
-> > > > > x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_dbg_show_one':
-> > > > > gpio-stmpe.c:(.text+0x21a99c0): undefined reference to `stmpe_reg_read'
-> > > > > x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a9b8c): undefined reference to `stmpe_reg_read'
-> > > > > x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a9bb1): undefined reference to `stmpe_reg_read'
-> > > > > x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a9c61): undefined reference to `stmpe_reg_read'
-> > > > > x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21a9e6c): undefined reference to `stmpe_reg_read'
-> > > > > x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_probe':
-> > > > > gpio-stmpe.c:(.text+0x21aa5b2): undefined reference to `stmpe_enable'
-> > > > > x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x21aa83e): undefined reference to `stmpe_disable'
-> > > > >
-> > > > > Presumably caused by commit
-> > > > >
-> > > > >   e160dd0ac8c3 ("mfd: stmpe: Allow building as module")
-> > > >
-> > > > Okay, I have removed this patch until it can be better tested.
-> > > >
-> > > > > I have used the mfd tree from next-20250903 for today.
-> > > > >
-> > > > > Note that commit
-> > > > >
-> > > > >  03db20aaa3ba ("gpio: stmpe: Allow to compile as a module")
-> > > > >
-> > > > > is in the gpio-brgl tree which has not been merged into linux-next at
-> > > > > this point.
-> > > >
-> > > > Okay, perhaps these need to go in together then.
-> > > >
-> > > > Thanks Stephen.
-> > > >
-> > >
-> > > I can take it through the GPIO tree if you will and set up an
-> > > immutable branch for you. Or not if the potential conflict is minimal.
-> >
-> > An IB would be good.  Thank you.
->
-> I am still seeing this failure.
->
+> > Dropping the bitmap tree changes of this driver is fine by me. I can
+> > send a rebased patch of that for the next merge window to do the move
+> > from the driver's own macro to the shared macro. The functional
+> > change in the devfreq tree is more important to get in.
+> 
+> I think that you need to ask to drop your patch[1] on bitmap tree.
+> [1] 414054a0bc1f ("PM / devfreq: rockchip-dfi: switch to FIELD_PREP_WM16 macro")
 
-The offending commit is still in Lee's tree[1]. FYI: It's also now in
-the GPIO tree as commit df6a44003953 ("mfd: stmpe: Allow building as
-module") and was made available in an immutable branch[2].
+So I did.
 
-Bartosz
+Nicolas, please make sure resending the dropped patch
+rebased shortly after merge window closing. I'd like to schedule it
+for -rc2. 
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/commit/?h=for-mfd-next&id=e160dd0ac8c35747a8ef74aa62c6346c2d76e644
-[2] https://lore.kernel.org/all/20250904130516.72266-1-brgl@bgdev.pl/
+Thanks,
+Yury
+
+> Before fixing this merge conflict, I'll drop the patches related to patch[2].
+> [2] 7d9e29ed3f8e ("PM / devfreq: rockchip-dfi: add support for LPDDR5")
+> 
+> After resolving the merge conflict, I'll apply them again.
+> 
+> -- 
+> Best Regards,
+> Chanwoo Choi
+> Samsung Electronics
+> 
 

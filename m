@@ -1,90 +1,94 @@
-Return-Path: <linux-next+bounces-8254-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8255-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 270D2B5266A
-	for <lists+linux-next@lfdr.de>; Thu, 11 Sep 2025 04:23:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69E8AB5266D
+	for <lists+linux-next@lfdr.de>; Thu, 11 Sep 2025 04:26:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D09CF3ACA64
-	for <lists+linux-next@lfdr.de>; Thu, 11 Sep 2025 02:23:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 787DC7AD1FC
+	for <lists+linux-next@lfdr.de>; Thu, 11 Sep 2025 02:25:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA4F420D4FF;
-	Thu, 11 Sep 2025 02:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5884A20F08C;
+	Thu, 11 Sep 2025 02:26:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dqv5VpjH"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="hSq6lLVQ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16B90433B3;
-	Thu, 11 Sep 2025 02:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FDB8433B3;
+	Thu, 11 Sep 2025 02:26:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757557418; cv=none; b=DhUba3NdJ8G2YITLcxujw+VSDA7D7IsTX/LERUgznOF33iqN1qvmriMwyP8uq3AYwgDSxq1kW29Ut25KI5FXqDIfTheVAFUGEEcRAY1l78FLPxL/sjqcZ3UC4a0qxicfDtibAiE26hZFtfiNGC5gsDLPWIFGxyeqYLhW2wSknN0=
+	t=1757557610; cv=none; b=RalspUi6xTPtEI6U0OIV9Szea3CN0NlfMOI86HO+dBOsNhWy7L7yyBsqNU2sOu1i0XnjHRvQbiSw0FPJ93vyLZlJzDAYFsLm2+20I1tt7wwUxDXSPnpTqHMZhnmfslrKauck1/2SsxsmdJMKJbZF6uRyEGODSaNplbAzeW4qbXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757557418; c=relaxed/simple;
-	bh=HOGn4pRBijwP1+EUuPWEUSAenlG8WGY8fhHuJ1kIXmU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Hap0utQ41ComH9WgPRpLTFIOLu2T5W7rx0WppCz/CbQa9wHtpNv30npHet8QUz/7bn9sKJ75j+YkONrZCl3si4wXO92BbEi7E4EuiDj5aDEm2O+ETPhCg68aMlNq2c/ecDg+/kJbeicBoa2Hw0xaeVdZe/1/rZUcknlVvhOR7p4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dqv5VpjH; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1757557610; c=relaxed/simple;
+	bh=e55PCbyJhrqtW0NBVs1hfcsdUXUvirzdArJTiCyvhWk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SPNt2Ri57uPqt6fzKV29aacDdt/HGealS35XTlAxK03sjSm1Lwh887iYB35/QWNDSBg8hDrIbDzfjZklJXeiHVoMdc8muRhz8i+jkp906nlQhA+C0C4YwA1uNbQGHB/ACF8AKDoGeTI8qzevqNSn90NTAwGm0gXB0Rv8GzAC3lM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=hSq6lLVQ; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1757557411;
-	bh=B+q+Kb/PY3sgk18nTy5v9ge5Kyf7To7nJ3sV7yd1UDg=;
+	s=202503; t=1757557605;
+	bh=0A6URhdlqs4pP9qVP7HRkSbprGrlPkR5AfXD+T7ESEQ=;
 	h=Date:From:To:Cc:Subject:From;
-	b=dqv5VpjHt6GOLmV0MpFGqoGs557QmiYpmMEe4ov8HS8Cx145I/jXsWjsz4RJNGpCT
-	 G2gPLkts5kLua0Jymgm732dKuaNEAfvHp7nmRcmK082b63GnCj1RpGxefVmuEqWrKR
-	 TecpRUsigrRwqjdkR8QUfHoMnByhc8Hva4CSzVRFiUmsFCNVmnghFO6/uxd6SPyxAN
-	 t2N/6MHtAS1rYdQ4v63CGlCepsJoIkHwLY06KzFpoXofjEK1gzS9PhsaWRnImLvGII
-	 N80XCFyDlTbizi8QbagORkvTRfWOpmEwjOSv22mBwaqApKCFhD/rCBhOwXdonLP7lb
-	 5TlDHBj16OFaw==
+	b=hSq6lLVQ7AR5vUSQlTfoHaCuSfRB58mZ9V4WWSZQmfjE1uJVZwT/kcD+CJunSRxlM
+	 S9FAx3nyuLqpfVadw55aEImr4Ov9WUSnDaZswm9xBI0J/Se+oNtUHsS5+C8hUV52I5
+	 dULI420vHg2XDTC/tvFTPyU7B4scH+GA+oXkZ4gla6J5d1KgmhB+To7i1hwJM9EalV
+	 S3x+Poj4mNo8uAVz0qO5dA2+ipIEDWjol8nS+2e8VrApz5YxMTcIvmLaINVQ/oXTvP
+	 FnNz3OdSVEiW0SwMXOd6Km9TNgutaISL/6TtyeE6uB73BTfvoHm1eJdFztDN0hljul
+	 QnZ/WZSjzGGRQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cMhDz24rcz4w2S;
-	Thu, 11 Sep 2025 12:23:31 +1000 (AEST)
-Date: Thu, 11 Sep 2025 12:23:30 +1000
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cMhJj3dFGz4wB0;
+	Thu, 11 Sep 2025 12:26:44 +1000 (AEST)
+Date: Thu, 11 Sep 2025 12:26:44 +1000
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jason Gunthorpe <jgg@nvidia.com>, Leon Romanovsky <leonro@nvidia.com>
-Cc: Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, Leon Romanovsky
- <leon@kernel.org>, Linux Kernel Mailing List
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jason Gunthorpe <jgg@nvidia.com>, Leon
+ Romanovsky <leonro@nvidia.com>
+Cc: Abhijit Gangurde <abhijit.gangurde@amd.com>, Allen Hubbe
+ <allen.hubbe@amd.com>, Lei Wei <quic_leiwei@quicinc.com>, Leon Romanovsky
+ <leon@kernel.org>, Luo Jie <quic_luoj@quicinc.com>, Networking
+ <netdev@vger.kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Saravanan Vajravel
- <saravanan.vajravel@broadcom.com>
-Subject: linux-next: manual merge of the rdma tree with Linus' tree
-Message-ID: <20250911122330.14834c0a@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the net-next tree with the rdma tree
+Message-ID: <20250911122644.40124ffe@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tnrLgQ_DcG/fNiqKUFg5a9E";
+Content-Type: multipart/signed; boundary="Sig_/no9PiYLtEvLL6LWjSC5zsG9";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/tnrLgQ_DcG/fNiqKUFg5a9E
+--Sig_/no9PiYLtEvLL6LWjSC5zsG9
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the rdma tree got a conflict in:
+Today's linux-next merge of the net-next tree got a conflict in:
 
-  drivers/infiniband/hw/bnxt_re/main.c
+  Documentation/networking/device_drivers/ethernet/index.rst
 
 between commit:
 
-  ba60a1e8cbbd ("RDMA/bnxt_re: Fix a possible memory leak in the driver")
+  ff8862c9c609 ("RDMA/ionic: Add Makefile/Kconfig to kernel build environme=
+nt")
 
-from Linus' tree and commits:
+from the rdma tree and commit:
 
-  bebe1a1bb1cf ("RDMA/bnxt_re: Refactor stats context memory allocation")
-  b8f4e7f1a275 ("RDMA/bnxt_re: Add support for unique GID")
+  6b9f301985a3 ("docs: networking: Add PPE driver documentation for Qualcom=
+m IPQ9574 SoC")
 
-from the rdma tree.
+from the net-next tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -97,133 +101,35 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/infiniband/hw/bnxt_re/main.c
-index df7cf8d68e27,d8d3999d329e..000000000000
---- a/drivers/infiniband/hw/bnxt_re/main.c
-+++ b/drivers/infiniband/hw/bnxt_re/main.c
-@@@ -2017,28 -2046,72 +2046,94 @@@ static void bnxt_re_free_nqr_mem(struc
-  	rdev->nqr =3D NULL;
-  }
- =20
- +/* When DEL_GID fails, driver is not freeing GID ctx memory.
- + * To avoid the memory leak, free the memory during unload
- + */
- +static void bnxt_re_free_gid_ctx(struct bnxt_re_dev *rdev)
- +{
- +	struct bnxt_qplib_sgid_tbl *sgid_tbl =3D &rdev->qplib_res.sgid_tbl;
- +	struct bnxt_re_gid_ctx *ctx, **ctx_tbl;
- +	int i;
- +
- +	if (!sgid_tbl->active)
- +		return;
- +
- +	ctx_tbl =3D sgid_tbl->ctx;
- +	for (i =3D 0; i < sgid_tbl->max; i++) {
- +		if (sgid_tbl->hw_id[i] =3D=3D 0xFFFF)
- +			continue;
- +
- +		ctx =3D ctx_tbl[i];
- +		kfree(ctx);
- +	}
- +}
- +
-+ static int bnxt_re_get_stats_ctx(struct bnxt_re_dev *rdev)
-+ {
-+ 	struct bnxt_qplib_ctx *hctx =3D &rdev->qplib_ctx;
-+ 	struct bnxt_qplib_res *res =3D &rdev->qplib_res;
-+ 	int rc;
-+=20
-+ 	rc =3D bnxt_qplib_alloc_stats_ctx(res->pdev, res->cctx, &hctx->stats);
-+ 	if (rc)
-+ 		return rc;
-+=20
-+ 	rc =3D bnxt_re_net_stats_ctx_alloc(rdev, &hctx->stats);
-+ 	if (rc)
-+ 		goto free_stat_mem;
-+=20
-+ 	return 0;
-+ free_stat_mem:
-+ 	bnxt_qplib_free_stats_ctx(res->pdev, &hctx->stats);
-+=20
-+ 	return rc;
-+ }
-+=20
-+ static int bnxt_re_get_stats3_ctx(struct bnxt_re_dev *rdev)
-+ {
-+ 	struct bnxt_qplib_ctx *hctx =3D &rdev->qplib_ctx;
-+ 	struct bnxt_qplib_res *res =3D &rdev->qplib_res;
-+ 	int rc;
-+=20
-+ 	if (!rdev->rcfw.roce_mirror)
-+ 		return 0;
-+=20
-+ 	rc =3D bnxt_qplib_alloc_stats_ctx(res->pdev, res->cctx, &hctx->stats3);
-+ 	if (rc)
-+ 		return rc;
-+=20
-+ 	rc =3D bnxt_re_net_stats_ctx_alloc(rdev, &hctx->stats3);
-+ 	if (rc)
-+ 		goto free_stat_mem;
-+=20
-+ 	return 0;
-+ free_stat_mem:
-+ 	bnxt_qplib_free_stats_ctx(res->pdev, &hctx->stats3);
-+=20
-+ 	return rc;
-+ }
-+=20
-+ static void bnxt_re_put_stats3_ctx(struct bnxt_re_dev *rdev)
-+ {
-+ 	struct bnxt_qplib_ctx *hctx =3D &rdev->qplib_ctx;
-+ 	struct bnxt_qplib_res *res =3D &rdev->qplib_res;
-+=20
-+ 	if (!rdev->rcfw.roce_mirror)
-+ 		return;
-+=20
-+ 	bnxt_re_net_stats_ctx_free(rdev, hctx->stats3.fw_id);
-+ 	bnxt_qplib_free_stats_ctx(res->pdev, &hctx->stats3);
-+ }
-+=20
-+ static void bnxt_re_put_stats_ctx(struct bnxt_re_dev *rdev)
-+ {
-+ 	struct bnxt_qplib_ctx *hctx =3D &rdev->qplib_ctx;
-+ 	struct bnxt_qplib_res *res =3D &rdev->qplib_res;
-+=20
-+ 	bnxt_re_net_stats_ctx_free(rdev, hctx->stats.fw_id);
-+ 	bnxt_qplib_free_stats_ctx(res->pdev, &hctx->stats);
-+ }
-+=20
-  static void bnxt_re_dev_uninit(struct bnxt_re_dev *rdev, u8 op_type)
-  {
-  	u8 type;
-@@@ -2049,10 -2122,8 +2144,9 @@@
-  	bnxt_re_net_unregister_async_event(rdev);
-  	bnxt_re_uninit_dcb_wq(rdev);
- =20
-- 	if (test_and_clear_bit(BNXT_RE_FLAG_QOS_WORK_REG, &rdev->flags))
-- 		cancel_delayed_work_sync(&rdev->worker);
-+ 	bnxt_re_put_stats3_ctx(rdev);
- =20
- +	bnxt_re_free_gid_ctx(rdev);
-  	if (test_and_clear_bit(BNXT_RE_FLAG_RESOURCES_INITIALIZED,
-  			       &rdev->flags))
-  		bnxt_re_cleanup_res(rdev);
+diff --cc Documentation/networking/device_drivers/ethernet/index.rst
+index 1fabfe02eb12,0b0a3eef6aae..000000000000
+--- a/Documentation/networking/device_drivers/ethernet/index.rst
++++ b/Documentation/networking/device_drivers/ethernet/index.rst
+@@@ -50,7 -50,7 +50,8 @@@ Contents
+     neterion/s2io
+     netronome/nfp
+     pensando/ionic
+ +   pensando/ionic_rdma
++    qualcomm/ppe/ppe
+     smsc/smc9
+     stmicro/stmmac
+     ti/cpsw
 
---Sig_/tnrLgQ_DcG/fNiqKUFg5a9E
+--Sig_/no9PiYLtEvLL6LWjSC5zsG9
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmjCMqIACgkQAVBC80lX
-0Gw88gf/eoM2R9MDE1+0Zc6Orgo1nDr0RI8LkZoZ1+3xQOGqrcCk6/9J/upsoCME
-8CHlWg3iIGy7zg4dQxY1YNkgfwBpqKhLI6xcKIKyjN45iSvYS9rltZl276znwVep
-mlhwrYpf6naF+uPs/87BN1hkJErj5egNGcynQR9oRRPQAsgfWVXyLtOcZciIIEyx
-gB14L/H+KFxJc2tAhzXCwOE9tU0FPBSCLvO0BZ1NCG7WUrufl6fo4omTYkVpPp+F
-7ZfxeD5o+1RFsF3alAI+lFyPU7y0IzFw/5kNJHZDphGrlg/vVlORHXwtSmfMHIpP
-FzqYHQW5JMyFK89PjKexdW+2FnzkKQ==
-=CQfh
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmjCM2QACgkQAVBC80lX
+0Gyj8ggAnL3ThRIvQx9UDbN5NRYmqztyz41D8eOfNOOTlFNBaZvOFnQz70aO0A6X
+KYDxNUHsvIb13hX4Q1DHGQkw8kJBjWGUbYi30BYSWT+GPEwncfDFz3fsgKJRKoSS
+SeOVO/IHFEcmh4wJWoGHdaqZ2o/tG3oVghABDV92rCeUIxOHvHjCUwYV3wxaYFar
+B5BXsQz2ApMkxRfBSLbzwcoDqBdTGCU1qE8NN0RnjBS18izNTkqQzrRcFU2o72YA
+zdUBEriE4+X2bdNIiJoa9IGCnMAWuDUGha1d4cGTfL6c0rtcVROEjjJnoIokmpAe
+Vy5CAggwDX6t3LVkkkFvCVvbgWMlpw==
+=Wwlu
 -----END PGP SIGNATURE-----
 
---Sig_/tnrLgQ_DcG/fNiqKUFg5a9E--
+--Sig_/no9PiYLtEvLL6LWjSC5zsG9--
 

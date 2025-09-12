@@ -1,316 +1,265 @@
-Return-Path: <linux-next+bounces-8288-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8289-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADEA6B54F13
-	for <lists+linux-next@lfdr.de>; Fri, 12 Sep 2025 15:17:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEE69B54F91
+	for <lists+linux-next@lfdr.de>; Fri, 12 Sep 2025 15:31:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 545045A28FB
-	for <lists+linux-next@lfdr.de>; Fri, 12 Sep 2025 13:17:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC8A01CC79F3
+	for <lists+linux-next@lfdr.de>; Fri, 12 Sep 2025 13:31:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF77B30DEBC;
-	Fri, 12 Sep 2025 13:16:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5639130E0E4;
+	Fri, 12 Sep 2025 13:30:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="NuffpF8a"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Iho47s4G"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE1B30C602
-	for <linux-next@vger.kernel.org>; Fri, 12 Sep 2025 13:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757682982; cv=none; b=GobRW8FUkNu5/ntp8uf8+zS/6hCKpIPqlxU2eddGLJE6FckacSkvC3ifRmfY4wvNib0bwqsHwjC5om1FFaIVM0DLuy3PKAWjALUnv3KjE/PtvygDpgiO/o5JK2sdncXQNX+QK2XZeUqHVfNar/NbCacuBMtO023+1+FZnSmL8+s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757682982; c=relaxed/simple;
-	bh=9zL1d/Eo8LPWIuZSVErzfe9xt5SmhQ7+18/W9NoHyvM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Rhwh336rmo090YTO2OmQqMVGchOs4VYlWiN8T2fKQGQ4w0j0NN8CEysIW9qi17gjFvtj7S69s5kEJzswqfMrC7CY3a+R7xHR+sdHLb44LLmcO/b9RyhZ02oTb8w0oYOkQbekmNsNjdDQX0c5ey/zg2hwYwYBip0fcRa6wJTWAuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=NuffpF8a; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-ea3dbcc5525so512955276.2
-        for <linux-next@vger.kernel.org>; Fri, 12 Sep 2025 06:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1757682979; x=1758287779; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WacX0Y225mfF5Mr+dq8TTghuE82OqAke+XlwrZchO4o=;
-        b=NuffpF8avu1rUQlK93HcgBEIW8Bn5cqsdpwGXuWpKfIEcnr7PbtiAXcrICiLp94p3s
-         tPM0ehosF0pW8pqtUN+bp5bJUpkKUGfoaH6x4ofI2TvToqnyUT4LOCDIkZz5Z3S21xHn
-         xgnRsKCzdW6u9ro6T6VuPu0eqeGpZBCZKYjChZvJ2GrntnxRT4wCw/kctshKyvUfeXKd
-         zT7ZMVjmnGSA4KoosnYLunPmLVIMMloqJt2G8JMcMd/z4qFPeURy0rIpdg3b9MCChSKR
-         mm2VfmuTT3Z+RKNK+dRr4j1og9U+trkHW3n89EmgewPsnyzD4lsAaF8GGZKRQsE+dbey
-         eVhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757682979; x=1758287779;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WacX0Y225mfF5Mr+dq8TTghuE82OqAke+XlwrZchO4o=;
-        b=VD5Lo2qoHZN4NXBJK+L6bLl+2/9fyrtK89rI1dnpynFmYYQ4+A6ulfr/w8kg0jUtSJ
-         8gR+MJJ4qObtpmILQD4yWXQhIbeKvybm8w78XdH2HshbZYkCrUoPmdSK6vyHYp/n/ETI
-         9soVfVhndZJw4GNZR9cAGMlYov2I759gWd8b3LljvZCY90aZV1eQeuCoKF4ecJ0y5CQG
-         qEfECqxa6pkYsq3+Mj6K0O4uTRIXyg+6vB8NZ7N0vHrC1FlTbmPXfgD28HBoaLsiI2Zu
-         hGLkHeffDBhEbJYOT2fqnZSl1Om441gYOJQKmKrsN2DiIdKgsVgrNz9fgfEY2UR1Jqil
-         duAA==
-X-Forwarded-Encrypted: i=1; AJvYcCWEDzKBBc6FtINme7okMHMwJaSjM6/Wj7gHmC1cnzvnX4HeZRrvo5KHTnFXJIfOFdKOgttIYh1JUv6J@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5b8+Bo/+WkLe+nPcWTPycdjE7LAch6+uLY/owVMUrQ9l6SWlj
-	nBltCSvUQCMzKPq3kOA3bg6NrHPZcHI3uJyRrT8a6P1MhZVwK+6XqUfpN6dQLIkGAs3y1yMOMkt
-	k8zj7qdfoprD7PzJSh10XfyzYjuCeYYjzlUQdv0Wdew==
-X-Gm-Gg: ASbGncvMPKRAD42+y1MSN+9mFah1VGdEIWZTQsuI+ey9VHjSH0QTq+0z45Cf1pQaDNh
-	u0vEAGanTcHEX8jRTNgtKmvR7BSedtkCbYsOQ9a0qpIUPTIivcxUQVVmDGNvv8jpkbTHk/8G0Qu
-	Ugt1c2uIeMAakrW34B08CzJy7jxNAUAWiPdqf4RII1G3hZuX175dZjx/ftMhB8At9J/VXj6uoMk
-	2MtZMYNp+a7g14=
-X-Google-Smtp-Source: AGHT+IGYP/z3abyUgCJL16DnEpbMeZjMz4kBCICiy0J25UHYR5eBa2TN11vPJBGTBUTyY1a8ErBJ1zUjhD2KUm8MoWo=
-X-Received: by 2002:a05:690c:c90:b0:723:b3d4:1cfd with SMTP id
- 00721157ae682-73065dac45bmr29462097b3.54.1757682978514; Fri, 12 Sep 2025
- 06:16:18 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD67C30DD2F;
+	Fri, 12 Sep 2025 13:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757683850; cv=fail; b=u8NU6P5Vnv+Ge5+2qq2q5NuI90UTi30IBd8Q7NuDXH36FomqjtoAl3T8hmXwRbuPYzvTIWdOr887vwziyZyZKz8ijPnnwVR5wTszmmMjTsshM1FAG5TNdladYYDap2goJcAPtBRtCFyILkmQJi+3lzuKGFKKlTyRrSkMJTvtvlU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757683850; c=relaxed/simple;
+	bh=zRRPfs4RhNBw5EWFbk57WvvY6w5RB6p95eaXmoU88R4=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=sv5aRUrynxEKDfjM11zmXu6jbBcMSudDpTUuIVwd4y4YjbBrA5P0I82vibxrSvcgwPPTI9WMXVtM+WoXEgdgxp0pSn3Y0kZaHg4WRT4CdZmFlpyKIEsFqEt1YFFYAUHSg91ISyOxBo29apa7Sn3X4VZsHCiw9wJE9u64bU9ncWo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Iho47s4G; arc=fail smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757683849; x=1789219849;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=zRRPfs4RhNBw5EWFbk57WvvY6w5RB6p95eaXmoU88R4=;
+  b=Iho47s4GbEZ+UNzVcqn8AHGomrbJPZqWCFMsd3NymaZeMCe3V+BVyzKt
+   WLN8VQ3SQM7rlvHFbC1NbQkdzinFciP9ypF/2JF4I8I85RGq7rnCsbzlG
+   Jt+kG3a9MqMkE7ErAD05VjyrE5azQt9soRkJAaaK9ccvOjdTJMn+Am8Ka
+   uKrxw9TIS1GEkkr6zvWWz4hVE0KpehELEj00I5u/vmkZVVd4HON9JRVwM
+   wdtBJFgcfNkcYeJphCGKWAIYvQUlNEPNbqEcaLmkn4FEDSecTZVXWBR/2
+   7D8LWM8uRDd4/D1Zg7mXl+E+G3cVL+uuKoRCxd12HaXCWR8xiljfvfHoA
+   A==;
+X-CSE-ConnectionGUID: 5J76YEfGTgCzxhAQ6Xle8w==
+X-CSE-MsgGUID: c0m5yp9pSImFAc7d8A62Xg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11551"; a="77640167"
+X-IronPort-AV: E=Sophos;i="6.18,259,1751266800"; 
+   d="scan'208";a="77640167"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2025 06:30:48 -0700
+X-CSE-ConnectionGUID: 1NKim3dtTP2YkmLwVtKobw==
+X-CSE-MsgGUID: ticLcat0TtOeTP/ymWjA5g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,259,1751266800"; 
+   d="scan'208";a="173881739"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2025 06:30:46 -0700
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Fri, 12 Sep 2025 06:30:45 -0700
+Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17 via Frontend Transport; Fri, 12 Sep 2025 06:30:45 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (40.107.220.40)
+ by edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Fri, 12 Sep 2025 06:30:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=R6nI3bW08aNWyfsml68xzO82xPyEOzdMVVUIDNWeLUcqeTurqdreV+b/xH/FBvej9n7pT22NmtI3okHK7OTvHqu7r4cz7YlOlq+glmYwI5CeU1Fo6RMTqX+dAxpcn9x44/svJaCL4xdTm3UdJL2o5fLF+V9WbkAHuO92IdxrPELnEkYYo5B1Z9KU/2l3WBz1860vm+YM6Zfb4koTSliSRVX0pUXROGcXZqGeIayayY7wPcqhbVXB/idUGFJQ6/9PTltnhnZkkryeHi9XKkvEOuMDFhhBoRVE0eONuJGhiJA03BwpL7N73IslGbFSMB10uObq6IwDN7JK2lK3a6kVLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZwPdAjTLJxyLByva+c5TZ24W4fB8EmyoWH4Vgtq1h7U=;
+ b=FZQMj8hMOf1UcTVEXMaCUdaHp0F5Yp2oTzQGwPm/pu6F0YyzKVoyjtAMI4EfP1Oc/3QvM9sh60kYjmsWTEnSOrjU05m8DVofjHN+1GDgkto0elRcIZnjcZOwLGRgMs1+qwMvsAL0/Z4h7fqQreXcQEuVpS5l0f5F9YLDLiiYKSrLnr+kLMZoUYj23CfI/Z24TEo0wHm2/qO+hJj8b3NzGLZoapsY6MdkZp6tE3T8czUdOTvSwj/AQqH/BIZLlXKL6WacmIeqTFjPcZzP0dCfJDr5csi4SZ2ahZgv1FOt8o5UHV3ywQ7z0kg7gwiYqaJfS69K/507FikCNP1wcyM2zQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
+ by CY8PR11MB7241.namprd11.prod.outlook.com (2603:10b6:930:94::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Fri, 12 Sep
+ 2025 13:30:43 +0000
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::4b3b:9dbe:f68c:d808]) by DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::4b3b:9dbe:f68c:d808%4]) with mapi id 15.20.9094.021; Fri, 12 Sep 2025
+ 13:30:43 +0000
+Message-ID: <440ef1ad-6690-48e9-be02-1ccd69f6623e@intel.com>
+Date: Fri, 12 Sep 2025 15:30:08 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [linux-next20250912] Build warnings at
+ drivers/net/ethernet/intel/idpf/xdp.c:6
+To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+CC: Stephen Rothwell <sfr@canb.auug.org.au>, Madhavan Srinivasan
+	<maddy@linux.ibm.com>, <michal.kubiak@intel.com>, <ramu.r@intel.com>,
+	<anthony.l.nguyen@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, Linux Next Mailing List
+	<linux-next@vger.kernel.org>
+References: <22ac36cb-1ba5-429b-85e0-4e3f2da1f87f@linux.ibm.com>
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+Content-Language: en-US
+In-Reply-To: <22ac36cb-1ba5-429b-85e0-4e3f2da1f87f@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: DUZPR01CA0023.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:46b::17) To DS0PR11MB8718.namprd11.prod.outlook.com
+ (2603:10b6:8:1b9::20)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <8957c526-d05c-4c0d-bfed-0eb6e6d2476c@linux.ibm.com> <BAEAC2F7-7D7F-49E4-AB21-10FC0E4BF5F3@linux.ibm.com>
-In-Reply-To: <BAEAC2F7-7D7F-49E4-AB21-10FC0E4BF5F3@linux.ibm.com>
-From: Julian Sun <sunjunchao@bytedance.com>
-Date: Fri, 12 Sep 2025 21:16:07 +0800
-X-Gm-Features: Ac12FXxgWzP6HGChGViD5jg5oUeivsG-aZaYxectxJJdHUjuwBlW_e-BOMpk6RE
-Message-ID: <CAHSKhteONXP5n9m0=Xia0jTFvLWnfpSKHYWyzRVigT0VwmGcgQ@mail.gmail.com>
-Subject: Re: [External] Re: [linux-next20250911]Kernel OOPs while running
- generic/256 on Pmem device
-To: Venkat <venkat88@linux.ibm.com>
-Cc: tj@kernel.org, akpm@linux-foundation.org, stable@vger.kernel.org, 
-	songmuchun@bytedance.com, shakeelb@google.com, hannes@cmpxchg.org, 
-	roman.gushchin@linux.dev, mhocko@suse.com, 
-	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, riteshh@linux.ibm.com, 
-	ojaswin@linux.ibm.com, linux-fsdevel@vger.kernel.org, 
-	linux-xfs@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Linux Next Mailing List <linux-next@vger.kernel.org>, 
-	cgroups@vger.kernel.org, linux-mm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|CY8PR11MB7241:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7d401f6e-b47c-4654-7ce6-08ddf20092b5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7053199007;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?S095aDBYaEhIVGcrZWZNc01McFdoYzBqbGZvSXJaRUl4R2VjUlVUZDlWa2ln?=
+ =?utf-8?B?Uk9kUUVESFdHSE56RGRiY0RYYkNDa3kzNXEwanlQalVuWncvWjFLNzRTWlo5?=
+ =?utf-8?B?SUFUVXFObzBLOUVCZ1FFcUpsK0c0TDVqV2xtakt0WDJhYkYxVDk5Z0c1eUJV?=
+ =?utf-8?B?SWN2WTFzMUEzRVgyYmxQTzdQOEpMdGNxRkZGWklQZzA2cEt5Tmllb3AyRUZV?=
+ =?utf-8?B?WDNnS1pHc2Z2VUozSStzR3ZSc0h0RHVoMXI2bDkreWIxaWpvT2tSNU4wOThE?=
+ =?utf-8?B?MTFwYzE3RGJoNWtReUtUK1JZWVFUS0U0TmkxM0xkUk1BbjRsRkgreUM3aXNN?=
+ =?utf-8?B?bFBhb1pXNDNvUGlWdjl5bHg0Z0RaSXpNS08rS2pZR1hiZkxnL2QzMTZ2ZHpV?=
+ =?utf-8?B?QWxyQXQwalowMHNQY2YxV3FGVm1MeGVVVVc0Y2h3K2RqODJIUnJmczFwWkVy?=
+ =?utf-8?B?WThNL0tnZ1FNV1E2bHFsUEJ1NnJoL1ZFaUN4TzBhaVc5aDFZNzE4THR0dGwv?=
+ =?utf-8?B?Mi9OUnJQWnhZenhSNnhicnl2YU9JMHR4NWdNZUJOd01zWVM0VWdxaENtT2xk?=
+ =?utf-8?B?V1hhYzlGamJYN3ZTRFZiYVhQNXVNdkpzeGI5cUdUdmF3SWJsQlhnUTl2dU5W?=
+ =?utf-8?B?ZktHME95TEp6SkRCQU5uZnJJOWRjWGRjZ0tPTGkvM3h5UGU1dXN0bXFxV0d0?=
+ =?utf-8?B?QzFhbUlycVBzWjlYSUxNbjdRYnIrYnNxTHJmY0lKZGlCYnp6RXl1QVZ6cFAx?=
+ =?utf-8?B?ZFV0aWx0ZW9uZ3UxMHE1QWU2aUltTjB2dFBGU25ObS93VXpUN1NQd29lRFBs?=
+ =?utf-8?B?VnFReXJua0Yzc0JNcFhZMkJEYjVRYU9JRWtQQ25JTVRtajBXVmEyMVNraVk1?=
+ =?utf-8?B?dTcwZGNmK0tZVmZrd0x5dkZ4TFl3TDA4M21ORDFZdjZvRElTZWx2VXA0MWpz?=
+ =?utf-8?B?YzAweUhveXFFYUh2ODNWYjhzOVF3b3dUNmxMY2ZweUxjZ2dRY2dmMUR2VER1?=
+ =?utf-8?B?Znl6S1N2eC9tR3pXdmJ3bUNQa05Nc2pGdTlDQVc0cVljUHJuODlFc0xpaUNO?=
+ =?utf-8?B?TmsvTzFQclVxQ2RoS1M3dmNTcTZSd0Qxbk15UGZqV3A3ZjJ0ZzBMT2YwVUVG?=
+ =?utf-8?B?aytQZkh4TGtzSjl2U0w2Zmd4ODFudkNVYnNjancwMVpwRHROTE55WGtGWVVC?=
+ =?utf-8?B?Nll4NHJWZ2ZVdmtjTi9tTDJyM2l0dDFscUZtcVVEMkdhelZOR01BeWZ6WWN4?=
+ =?utf-8?B?V2NXWGtNdW9FSWFQU3pkVWxQTVpRU3RJTG1UV3FuUjJJYlFxNjhZVGYrUlNF?=
+ =?utf-8?B?L0tPKzBIZE9aNGNJVUhRZDhUN3RwaXc3dDNSSTdZTitBSjdtcjRqUW9ZSmpK?=
+ =?utf-8?B?OXMxMkVNZ3dtZnJ1U3JmMVlaekhPRUhVTWcvMkpkQUhadUZMUjJ6VkFPUnkr?=
+ =?utf-8?B?NndSbkZxQUF3UWY3QXJlS3NkTGJPSW9yTmFMQnE2WnRkcm9HTlNQdHJLd2o2?=
+ =?utf-8?B?eWM3Q2lpUWgwaHJSeUZJQUNINjlzcEM2NXFvVEMxLzlEUForbFBCbmVOL0tw?=
+ =?utf-8?B?cGNYTXltTU10SUMrQVBoelVPMFoySm1qdGE4d2x5Y3JOVno3SHZDVVBVV2RQ?=
+ =?utf-8?B?UGdDS0l6RTBlakFEdWlIUDhnT3o5VVZtZ2xQUElaNHNYcWxNaDlPU0RQL1B5?=
+ =?utf-8?B?RXR0YVFSc3lGNWJoeEJZRUs3UytJMUR0NEJad2FvSDlNdkdFOGR1cTIvVTVM?=
+ =?utf-8?B?MUZTZndpdEJsb2t0TnU2VElUaUtSQjdyamlPQW50MjFWWnRpMkN0VnlTc1JP?=
+ =?utf-8?B?bHVmbnRCUGw5TE5jZFVmODNzMUEwS0p3SHBubWFwQVJHeURaQktBeFNNdnNH?=
+ =?utf-8?B?SndDaTRya3FiMEdQd3BIN3U0bGRtV3dCcGx1Umh4ZzViSGc9PQ==?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Qmg1SjZnb2I3YzNQdjNiOWxwSG5EM0kydkEwd3RHMEZVSlJ3bFhVeVF2UGRr?=
+ =?utf-8?B?QUdZV1BGRFB2dFdGcVhSaTJPak1lM25ZRDJBUXQyRVZTNWJRbFd4TFltUTE4?=
+ =?utf-8?B?WGl0QjNIRUFLa0ZpQjc2cmZ3OGhHQ0NvVkpOZlBnU2ZQNWVYUWMzdSs4b0Ry?=
+ =?utf-8?B?NzFUQXpJMmQyUEdib3JhOERwQTJJcEhuM1lWT1p5dlJjcEdFUWYzM3cxdE5R?=
+ =?utf-8?B?WXl4QUtkQndRcWJZRlJNT3gycDhCR09yL1ZaM2UzRzVtUkhHd1pvbjlTVW9v?=
+ =?utf-8?B?b0pSQzJVL0ZjMW9jTUp1QmZwUXJKSHJIWC92aFhyQXJmV2lBWFV2MjNmd0pF?=
+ =?utf-8?B?Nlcxa01GbGxLQjQ2alh5ZE1HYUFxdVBVbDVIaER5bDNXZU1YRGJLeTcwdGhX?=
+ =?utf-8?B?Z1ZWK0U4UWlHUHJCQ2tLdGdNazA3MkZvelVQZjZKWEZzWWlZQlZuNllpeGRt?=
+ =?utf-8?B?ZTZzMkpNd25PdnpuUlVWQlVrNTRZcXhURklSNm4zS2J6akxEQm9pSFZkdGlB?=
+ =?utf-8?B?WERCUWltUHVoNzZoOG55UmFuRHpWTTQyMUNQRFdYRVprTFhxZ2ZGcTRVaDNB?=
+ =?utf-8?B?eWJjOTMwS3lGT2l2UWU5blp3V0R3a1BHRTZKY1REY0tnK3kwSlpMQWpWTXRu?=
+ =?utf-8?B?OWY2dEMrYlFJSGw4TzlnTUdtVGVycXZBekRxS0FKMVc5QzVrb0l3dGdzV3FT?=
+ =?utf-8?B?dDZuUlk5TVlDUVkrSUNhM01uVVZBTWdYUW9TTmtZWnZWVU1kRDJZb3hrMkth?=
+ =?utf-8?B?Q3hQbVRXNHhob2ZoZlBSelhleFloRFZtejU2Mmg0ekFFc3U0Lyt2cGNJNDgv?=
+ =?utf-8?B?R0N4Qkhpbi9lYzlGYjlaRjR0MmlLTDNBcTUxZStCSW1PRC9WekUyMzhJQVFN?=
+ =?utf-8?B?NmVCMmYvZkJqTlNVM1c4ZUliL2gwejRlMjAxRkFqb2pvWnVDU3Q4WDAzbW8r?=
+ =?utf-8?B?U2ljMVRKOVY1ZStzc0RZTVNabVNrMkRRbXhaeVJpbnFTeWdHa1dobzlXVkZE?=
+ =?utf-8?B?bFBIeFdHWFVzSFpCbHRrbm4xNjhENWlCRy90czNpd0RiNUdKajR0MGZIeS90?=
+ =?utf-8?B?cmtkLzRMTmo0UkNib3RCQVMvZGY2bGhxYU5YdHkrWFcwOEJHcnN1cmlucWNk?=
+ =?utf-8?B?NGxVZTIwcnhlcktjdngrWWM0Ym5jWXVwZGtLVmJPbGtRQlJmbG8yRTRBYlla?=
+ =?utf-8?B?WEVxRklVUk0zZHdZODlJYWxXaGUxa2dPMVgzcVpQeFA1dFNwdDdRaUtaU3kw?=
+ =?utf-8?B?OVovTkpmY3JBWWVBL21UeS9oV1N6OVdWbzJtdWpaMEFyNGNJd3g5OXdlNGFJ?=
+ =?utf-8?B?Q1B4OHA0cUloaVIxenZuMFZxajgvbkh0Q1FoUk43eGdMdUx5enlYQXEyNDFq?=
+ =?utf-8?B?RGVaL28xM2tTQWlPZ01iS0M5b082U2pzMzE5ZnVtUUIrdE16eDRTanlwQVNK?=
+ =?utf-8?B?YWR2a1F6c3hWMEJTTm9tSmpyb0JwM3dwTndXRENnbzI2dWkxZmNsdlVNVGE1?=
+ =?utf-8?B?N05HSTdqSVpGKzdGSFd4S3VaenpoTi9QNVVaeEkzbHI2eUczWmRocGZtMENv?=
+ =?utf-8?B?MytZbXNvNmxHajZEWERHTzBHY3hPL2pzYU0ySjhxajhhNDVRNGhEQjVjNW9N?=
+ =?utf-8?B?YW1VSlViWmQ4NjI5NUVIdlppUEdvTG5BU1h0TlRJTDdGZHMrdGlnVjRyY0tw?=
+ =?utf-8?B?UnFsakZxK01ubU4wK25rUDI2UHhTZnM4ZmxOc2pHOWIwdlkrZ2F4UkV4cHM5?=
+ =?utf-8?B?SmtxUTdlSGN4VEdtRHVqTFJTNWhEUUI1U1phUTZqYVBiNWJ1S0YybStJQmll?=
+ =?utf-8?B?cXd3REhFMlBXWVVXOWpLVHh5cmZGcE4rSGgrc1M4T0cySG1WLzBKcVd2dW9M?=
+ =?utf-8?B?QlFEeUVjWnhJc1FBeVVkWDRTQ1RORWRHeHY3MU5aS3hwMnI5bEs1VXNoU3NU?=
+ =?utf-8?B?S2o3bkVrN2NyQWRWVU9JVWYyN28zQjZTbEF1YlpmY2I1MHRQWkVMSE84NTJh?=
+ =?utf-8?B?cjArNnJjbjhjcVpRSWhyc21NVVZlRmpDNDI4eGtMbHlMd1JiV2JHMFhVN3lr?=
+ =?utf-8?B?RWZPaWJXYU5LYjhHNy9LNnVXUGUyOU1JcFZKVjNaalBOOEQrS3FPb2ptRTB0?=
+ =?utf-8?B?SHNFM1EyUVFiTTVpeTNzSGRtb2NVN0tzaGhuR0xNTHVCSkdxYnB2QTF4UjYy?=
+ =?utf-8?B?R1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d401f6e-b47c-4654-7ce6-08ddf20092b5
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2025 13:30:43.4846
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LirIY5EtJeXYsjFajff1lyNQ7yiD0VfTdoYKq2a/Tt+KmxAOmQq+VaZmwU+/mwSKrYaEma7+Ufz5TbfBHopO/e+g4CNr+2OUBrY/hV92FrU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7241
+X-OriginatorOrg: intel.com
 
-Thanks for the report. I will take a look at this issue.
+From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Date: Fri, 12 Sep 2025 18:39:33 +0530
 
-On Fri, Sep 12, 2025 at 8:33=E2=80=AFPM Venkat <venkat88@linux.ibm.com> wro=
-te:
->
->
->
-> > On 12 Sep 2025, at 10:51=E2=80=AFAM, Venkat Rao Bagalkote <venkat88@lin=
-ux.ibm.com> wrote:
-> >
-> > Greetings!!!
-> >
-> >
-> > IBM CI has reported a kernel crash, while running generic/256 test case=
- on pmem device from xfstests suite on linux-next20250911 kernel.
-> >
-> >
-> > xfstests: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
-> >
-> > local.config:
-> >
-> > [xfs_dax]
-> > export RECREATE_TEST_DEV=3Dtrue
-> > export TEST_DEV=3D/dev/pmem0
-> > export TEST_DIR=3D/mnt/test_pmem
-> > export SCRATCH_DEV=3D/dev/pmem0.1
-> > export SCRATCH_MNT=3D/mnt/scratch_pmem
-> > export MKFS_OPTIONS=3D"-m reflink=3D0 -b size=3D65536 -s size=3D512"
-> > export FSTYP=3Dxfs
-> > export MOUNT_OPTIONS=3D"-o dax"
-> >
-> >
-> > Test case: generic/256
-> >
-> >
-> > Traces:
-> >
-> >
-> > [  163.371929] ------------[ cut here ]------------
-> > [  163.371936] kernel BUG at lib/list_debug.c:29!
-> > [  163.371946] Oops: Exception in kernel mode, sig: 5 [#1]
-> > [  163.371954] LE PAGE_SIZE=3D64K MMU=3DRadix  SMP NR_CPUS=3D8192 NUMA =
-pSeries
-> > [  163.371965] Modules linked in: xfs nft_fib_inet nft_fib_ipv4 nft_fib=
-_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_=
-ct nft_chain_nat nf_nat nf_conntrack bonding tls nf_defrag_ipv6 nf_defrag_i=
-pv4 rfkill ip_set nf_tables nfnetlink sunrpc pseries_rng vmx_crypto dax_pme=
-m fuse ext4 crc16 mbcache jbd2 nd_pmem papr_scm sd_mod libnvdimm sg ibmvscs=
-i ibmveth scsi_transport_srp pseries_wdt
-> > [  163.372127] CPU: 22 UID: 0 PID: 130 Comm: kworker/22:0 Kdump: loaded=
- Not tainted 6.17.0-rc5-next-20250911 #1 VOLUNTARY
-> > [  163.372142] Hardware name: IBM,9080-HEX Power11 (architected) 0x8202=
-00 0xf000007 of:IBM,FW1110.01 (NH1110_069) hv:phyp pSeries
-> > [  163.372155] Workqueue: cgroup_free css_free_rwork_fn
-> > [  163.372169] NIP:  c000000000d051d4 LR: c000000000d051d0 CTR: 0000000=
-000000000
-> > [  163.372176] REGS: c00000000ba079b0 TRAP: 0700   Not tainted (6.17.0-=
-rc5-next-20250911)
-> > [  163.372183] MSR:  800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>=
-  CR: 28000000  XER: 00000006
-> > [  163.372214] CFAR: c0000000002bae9c IRQMASK: 0
-> > [  163.372214] GPR00: c000000000d051d0 c00000000ba07c50 c00000000230a60=
-0 0000000000000075
-> > [  163.372214] GPR04: 0000000000000004 0000000000000001 c000000000507e2=
-c 0000000000000001
-> > [  163.372214] GPR08: c000000d0cb87d13 0000000000000000 000000000000000=
-0 a80e000000000000
-> > [  163.372214] GPR12: c00e0001a1970fa2 c000000d0ddec700 c000000000208e5=
-8 c000000107b5e190
-> > [  163.372214] GPR16: c00000000d3e5d08 c00000000b71cf78 c00000000d3e5d0=
-5 c00000000b71cf30
-> > [  163.372214] GPR20: c00000000b71cf08 c00000000b71cf10 c000000019f5858=
-8 c000000004704bc8
-> > [  163.372214] GPR24: c000000107b5e100 c000000004704bd0 000000000000000=
-3 c000000004704bd0
-> > [  163.372214] GPR28: c000000004704bc8 c000000019f585a8 c000000019f53da=
-8 c000000004704bc8
-> > [  163.372315] NIP [c000000000d051d4] __list_add_valid_or_report+0x124/=
-0x188
-> > [  163.372326] LR [c000000000d051d0] __list_add_valid_or_report+0x120/0=
-x188
-> > [  163.372335] Call Trace:
-> > [  163.372339] [c00000000ba07c50] [c000000000d051d0] __list_add_valid_o=
-r_report+0x120/0x188 (unreliable)
-> > [  163.372352] [c00000000ba07ce0] [c000000000834280] mem_cgroup_css_fre=
-e+0xa0/0x27c
-> > [  163.372363] [c00000000ba07d50] [c0000000003ba198] css_free_rwork_fn+=
-0xd0/0x59c
-> > [  163.372374] [c00000000ba07da0] [c0000000001f5d60] process_one_work+0=
-x41c/0x89c
-> > [  163.372385] [c00000000ba07eb0] [c0000000001f76c0] worker_thread+0x55=
-8/0x848
-> > [  163.372394] [c00000000ba07f80] [c000000000209038] kthread+0x1e8/0x23=
-0
-> > [  163.372406] [c00000000ba07fe0] [c00000000000ded8] start_kernel_threa=
-d+0x14/0x18
-> > [  163.372416] Code: 4b9b1099 60000000 7f63db78 4bae8245 60000000 e8bf0=
-008 3c62ff88 7fe6fb78 7fc4f378 38637d40 4b5b5c89 60000000 <0fe00000> 600000=
-00 60000000 7f83e378
-> > [  163.372453] ---[ end trace 0000000000000000 ]---
-> > [  163.380581] pstore: backend (nvram) writing error (-1)
-> > [  163.380593]
-> >
-> >
-> > If you happen to fix this issue, please add below tag.
-> >
-> >
-> > Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-> >
-> >
-> >
-> > Regards,
-> >
-> > Venkat.
-> >
-> >
->
-> After reverting the below commit, issue is not seen.
->
-> commit 61bbf51e75df1a94cf6736e311cb96aeb79826a8
-> Author: Julian Sun <sunjunchao@bytedance.com>
-> Date:   Thu Aug 28 04:45:57 2025 +0800
->
->     memcg: don't wait writeback completion when release memcg
->          Recently, we encountered the following hung task:
->          INFO: task kworker/4:1:1334558 blocked for more than 1720 second=
-s.
->     [Wed Jul 30 17:47:45 2025] Workqueue: cgroup_destroy css_free_rwork_f=
-n
->     [Wed Jul 30 17:47:45 2025] Call Trace:
->     [Wed Jul 30 17:47:45 2025]  __schedule+0x934/0xe10
->     [Wed Jul 30 17:47:45 2025]  ? complete+0x3b/0x50
->     [Wed Jul 30 17:47:45 2025]  ? _cond_resched+0x15/0x30
->     [Wed Jul 30 17:47:45 2025]  schedule+0x40/0xb0
->     [Wed Jul 30 17:47:45 2025]  wb_wait_for_completion+0x52/0x80
->     [Wed Jul 30 17:47:45 2025]  ? finish_wait+0x80/0x80
->     [Wed Jul 30 17:47:45 2025]  mem_cgroup_css_free+0x22/0x1b0
->     [Wed Jul 30 17:47:45 2025]  css_free_rwork_fn+0x42/0x380
->     [Wed Jul 30 17:47:45 2025]  process_one_work+0x1a2/0x360
->     [Wed Jul 30 17:47:45 2025]  worker_thread+0x30/0x390
->     [Wed Jul 30 17:47:45 2025]  ? create_worker+0x1a0/0x1a0
->     [Wed Jul 30 17:47:45 2025]  kthread+0x110/0x130
->     [Wed Jul 30 17:47:45 2025]  ? __kthread_cancel_work+0x40/0x40
->     [Wed Jul 30 17:47:45 2025]  ret_from_fork+0x1f/0x30
->          The direct cause is that memcg spends a long time waiting for di=
-rty page
->     writeback of foreign memcgs during release.
->          The root causes are:
->         a. The wb may have multiple writeback tasks, containing millions
->            of dirty pages, as shown below:
->          >>> for work in list_for_each_entry("struct wb_writeback_work", =
-\
->                                         wb.work_list.address_of_(), "list=
-"):
->     ...     print(work.nr_pages, work.reason, hex(work))
->     ...
->     900628  WB_REASON_FOREIGN_FLUSH 0xffff969e8d956b40
->     1116521 WB_REASON_FOREIGN_FLUSH 0xffff9698332a9540
->     1275228 WB_REASON_FOREIGN_FLUSH 0xffff969d9b444bc0
->     1099673 WB_REASON_FOREIGN_FLUSH 0xffff969f0954d6c0
->     1351522 WB_REASON_FOREIGN_FLUSH 0xffff969e76713340
->     2567437 WB_REASON_FOREIGN_FLUSH 0xffff9694ae208400
->     2954033 WB_REASON_FOREIGN_FLUSH 0xffff96a22d62cbc0
->     3008860 WB_REASON_FOREIGN_FLUSH 0xffff969eee8ce3c0
->     3337932 WB_REASON_FOREIGN_FLUSH 0xffff9695b45156c0
->     3348916 WB_REASON_FOREIGN_FLUSH 0xffff96a22c7a4f40
->     3345363 WB_REASON_FOREIGN_FLUSH 0xffff969e5d872800
->     3333581 WB_REASON_FOREIGN_FLUSH 0xffff969efd0f4600
->     3382225 WB_REASON_FOREIGN_FLUSH 0xffff969e770edcc0
->     3418770 WB_REASON_FOREIGN_FLUSH 0xffff96a252ceea40
->     3387648 WB_REASON_FOREIGN_FLUSH 0xffff96a3bda86340
->     3385420 WB_REASON_FOREIGN_FLUSH 0xffff969efc6eb280
->     3418730 WB_REASON_FOREIGN_FLUSH 0xffff96a348ab1040
->     3426155 WB_REASON_FOREIGN_FLUSH 0xffff969d90beac00
->     3397995 WB_REASON_FOREIGN_FLUSH 0xffff96a2d7288800
->     3293095 WB_REASON_FOREIGN_FLUSH 0xffff969dab423240
->     3293595 WB_REASON_FOREIGN_FLUSH 0xffff969c765ff400
->     3199511 WB_REASON_FOREIGN_FLUSH 0xffff969a72d5e680
->     3085016 WB_REASON_FOREIGN_FLUSH 0xffff969f0455e000
->     3035712 WB_REASON_FOREIGN_FLUSH 0xffff969d9bbf4b00
->              b. The writeback might severely throttled by wbt, with a spe=
-ed
->            possibly less than 100kb/s, leading to a very long writeback t=
-ime.
->          >>> wb.write_bandwidth
->     (unsigned long)24
->     >>> wb.write_bandwidth
->     (unsigned long)13
->          The wb_wait_for_completion() here is probably only used to preve=
-nt
->     use-after-free.  Therefore, we manage 'done' separately and automatic=
-ally
->     free it.
->          This allows us to remove wb_wait_for_completion() while preventi=
-ng the
->     use-after-free issue.
->      com
->     Fixes: 97b27821b485 ("writeback, memcg: Implement foreign dirty flush=
-ing")
->     Signed-off-by: Julian Sun <sunjunchao@bytedance.com>
->     Acked-by: Tejun Heo <tj@kernel.org>
->     Cc: Michal Hocko <mhocko@suse.com>
->     Cc: Roman Gushchin <roman.gushchin@linux.dev>
->     Cc: Johannes Weiner <hannes@cmpxchg.org>
->     Cc: Shakeel Butt <shakeelb@google.com>
->     Cc: Muchun Song <songmuchun@bytedance.com>
->     Cc: <stable@vger.kernel.org>
->     Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
->
-> Regards,
-> Venkat.
->
-> >
->
+> Greetings!!!
+> 
+> 
+> IBM CI has reported a build warning on IBM Power Server, on linux-
+> next20250912 kernel.
+> 
+> 
+> gcc version 11.5.0 20240719 (Red Hat 11.5.0-2) (GCC)
+> 
+> GNU ld version 2.35.2-54.el9
+> 
+> 
+> Attached is the .config file.
+> 
+> 
+> Warnings:
+> 
+> In file included from drivers/net/ethernet/intel/idpf/xdp.c:6:
+> drivers/net/ethernet/intel/idpf/xdp.h: In function ‘idpf_xdp_tx_xmit’:
+> drivers/net/ethernet/intel/idpf/xdp.h:28:20: note: the ABI of passing
+> aggregates with 16-byte alignment has changed in GCC 5
+>    28 | static inline void idpf_xdp_tx_xmit(struct libeth_xdp_tx_desc
+> desc, u32 i,
+>       |                    ^~~~~~~~~~~~~~~~
+
+Yes, I do pass 16-byte variables/structures directly.
+
+I would say this warning makes no sense, due to the following reasons:
+
+1. IIRC the minimum required GCC version for building the latest kernel
+   is way above 5.
+2. This warning should appear only with `-Wabi`, which the upstream
+   kernel never sets.
+3. Kernel is a self-contained project, this function is not uAPI, so we
+   shouldn't care in general about backward ABI compatibility for purely
+   in-kernel stuff.
+
+We have plenty of functions, mostly generic, which either passes or
+returns >= 16-byte objects, but I see this warning for the first time.
+Despite that my repo is attached to the open Intel CI bots infra which
+does daily builds on a good bunch of different architectures and
+toolchains (inc. GCC 8+).
+
+> 
+> 
+> Git bisect is pointing below commit as the first bad commit.
+> 
+> 
+> first bad commit: [cba102cd719029a10bda1d0ca00ed646796f1f21] idpf: add
+> support for XDP on Rx
 
 Thanks,
---=20
-Julian Sun <sunjunchao@bytedance.com>
+Olek
 

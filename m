@@ -1,276 +1,342 @@
-Return-Path: <linux-next+bounces-8291-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8292-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C62B5B557E0
-	for <lists+linux-next@lfdr.de>; Fri, 12 Sep 2025 22:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A4F42B55DE0
+	for <lists+linux-next@lfdr.de>; Sat, 13 Sep 2025 04:48:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0C68FAC4B40
-	for <lists+linux-next@lfdr.de>; Fri, 12 Sep 2025 20:48:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBE67AC4BDF
+	for <lists+linux-next@lfdr.de>; Sat, 13 Sep 2025 02:48:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B58C93064BF;
-	Fri, 12 Sep 2025 20:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4151DD0C7;
+	Sat, 13 Sep 2025 02:48:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ay5gNk+T"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="K+QLVMqx"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA0EE2DECCD
-	for <linux-next@vger.kernel.org>; Fri, 12 Sep 2025 20:47:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730C61D432D
+	for <linux-next@vger.kernel.org>; Sat, 13 Sep 2025 02:48:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757710079; cv=none; b=imfLGgWlDTBiscGkYZDstgwog84oligZwFlTlgZf1S4yRTh3yWfDmzYn1wZPDV56687FXZkTjydsn1kOyhaHn3lg3cwHVcxwS1M9sna6n/xUEpWM6SHWcFaaFnv/I84ebyM4kvfeopvwYNgppcnvf2y1oilcUd5LcP1MpphFRtc=
+	t=1757731707; cv=none; b=jbR2vdreuhvIwYZWHF+3Uj9QPHc+zGtV+hGTU07f4dxceixO7v647/TDPu6oqHsssV14FKZwNwSngXYFSbIvoZCXOywDeNI1WhnlvwabTNvMBdomPuiFRPWpDja1rnAONEdYb02IF9X+k+S6+u4P+1hrfQSAMCoZQ45G5Al69RI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757710079; c=relaxed/simple;
-	bh=a5r1D82Y2WoGNE88dbhuZrqCxTlrKYnBKNCQdv+sI1Q=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VV6AU1TXbwfpa0bqrPzIDNoTsqt1kWq4TM5vRqo7E4N8+PzzWmURs4+Wu0xIkO9RMSZRDMApq6Xa7RKYBDZ4Q7kOq4d2FOPYF1rwwZR5l0e4DLna4yWr9aRcR2ecMh/ypZ325d+KuBTZcbBYvIcraFJZ2o6vWU94akbEZk/rvVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ay5gNk+T; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-45dd7b15a64so21302415e9.0
-        for <linux-next@vger.kernel.org>; Fri, 12 Sep 2025 13:47:57 -0700 (PDT)
+	s=arc-20240116; t=1757731707; c=relaxed/simple;
+	bh=ZgDzLUPuZXuQEWnXyNiXs6bEELAKGlfOKneMLqyun5Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BkkJfLw2fmusuGt5gMt5nOSy07UidYysDXge7ObrGSjUba5GXVic2wJ7AvHKRPxoLpWspT3u6J5tz7/VxaJGC6vbZ/05QcnZ0HtbcONWuQ6zV8UoJBrLAZYQBsygCZMNnb4LqQ7gKjsZtrdlnNwalM2QlOvuOqB2rpGOZVmU6cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=K+QLVMqx; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e96c48e7101so2089885276.2
+        for <linux-next@vger.kernel.org>; Fri, 12 Sep 2025 19:48:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757710076; x=1758314876; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ztodRZzqZ7LwwLlFxMHp4gp6whyJBQuaH7JG6HpRU/w=;
-        b=Ay5gNk+TlZZC5WsVXpdZzb0LGcNZHY3+FScsegHImpTMGiFKyenG22jTe+TXZDMkk8
-         Q33ce0pdgxb/aiQ0kUn7L4u8EW50kep/tsGZz6RdWEswLmQmgv5qTwYufUJCxZm2uK1M
-         jT2ra4GmL8qA3mLQcTCuT8A4euoOpuUR4xJwIa3Ukn/dMGj3bbCHFhMk+UM80JanO/qg
-         7MLIUG60PjLXpaIX69kqKJpmN7+VT7Y+NycF/+VV9EIxGEJCKHpXcmZ0HmiZ8Zh4xIfm
-         71hQh3QXNmzcR4mxxoyia7NEOO+2kWzS/mlprYmm8/DNsCbFSnOJrOtzctBzGkv1SyOu
-         qoJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757710076; x=1758314876;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+        d=bytedance.com; s=google; t=1757731703; x=1758336503; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ztodRZzqZ7LwwLlFxMHp4gp6whyJBQuaH7JG6HpRU/w=;
-        b=YD+1aY0ew0Q4OHc5zbVlb1YoWwsMaBWjtMADkBYj6bst04Gwf19sPCziNO4npJYXTx
-         Ilrkl64njJYz7di6mBH1ynyTsectH6ymsDjFePACnkzZX2taLHZlgrwXGg6dWeHkRSLH
-         Gut+7HxzVyNZTv3YNeTGT4lLREMHCcBXJSL8y+kjuPZLy4Dr3awRO6T/dd3CLTzc9YEm
-         3sZk7ndC+EtJacgds7dxcfUfZozw6mwZVXibc4gGDbEfpYSOyCEsbKOh3IkSe98BlzBq
-         PH4FbD+JaLQzH83MzwYgzgOQmUuW0vSowGfc2Ta9gyYRB42KaQpaT+ISrRc3FI5O5FL1
-         DfXg==
-X-Forwarded-Encrypted: i=1; AJvYcCW9ZX30Sqo05EHfc4w4AiAsag8fOnbFEjMZnQmCSrr8deLCym8BBUz4ekKcuu1RJ2cDkv/9Oj0XcJOc@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhdVhq+11itzePkfzRavAD2XdUiS6fds1Zg9fUOQ1tWUWryza0
-	GDjOeB6rvJAdmoAPQmedIyXB3rro3YUcPbmcUzZ2NOZ0jaUKu6s6nml/
-X-Gm-Gg: ASbGnctuSZjTVcormdqbOD5GNMySGt2iXyhNkpf8uIMbKP77jf3Iv490Q3q4xpraQRa
-	p+2je+4D6IUBBFjXBAd67gVQKAIx9cfntEuPux1RiO4OeMKytO7C8jT9k4jMajXjspFz6yrPjno
-	dUQh3uTR+MRk3t+YPksdjrMHJpsJo7ZIqoMNjIXY//Qhg/VHJAZcLZuVNEg4L17pve1CeT2kEwF
-	0qKZ66z39pOD7dH8exDogZ2rnHtu+nTdDyPMFi7Tzsd3zrH9+GG94tCFNPbdUadnhtRlk7h9bhw
-	HcenyIhs28/B414u9mhCQOTAIGNUXgk/M3r1x0SvGOYI42tE9U5EHVAsZ+Fk78yIJ1cjjytPq+t
-	m3Ulqaf8l0/lUw8GconFLdJn4/A+Hqxw007vwiJByD3ZjbfO/eQ==
-X-Google-Smtp-Source: AGHT+IFIvkjy8Vwo+tcss+tuzUrJigzqjS7F4UVyfQ+Mr6yldJrMZviznywA0j6s22x0kQNAy0i8hQ==
-X-Received: by 2002:a05:600c:3b93:b0:45b:8ac2:9761 with SMTP id 5b1f17b1804b1-45f2698a026mr4412855e9.13.1757710075861;
-        Fri, 12 Sep 2025 13:47:55 -0700 (PDT)
-Received: from krava (89-40-234-69.wdsl.neomedia.it. [89.40.234.69])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45e015ad780sm38311015e9.10.2025.09.12.13.47.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Sep 2025 13:47:55 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 12 Sep 2025 22:47:52 +0200
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Jiawei Zhao <phoenix500526@163.com>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the tip tree with the bpf-next tree
-Message-ID: <aMSG-N9MiySZX6UQ@krava>
-References: <20250912124059.0428127b@canb.auug.org.au>
+        bh=dkY2yS7RSwh45nVEv3otHU3VH9SAKoF62TZrQgSQhHE=;
+        b=K+QLVMqxoe/VPwG14fizIyXZJhHeo7E909SiTRkxy9MdedQ555Co7frMx1W0bGNdHu
+         J9Z6k586KkpF1nTkU24dj438IUr7kXq8Fg1+SS2FPURLAsj2BD6dEtW0cGwrFlXvQFu8
+         x9kTdCxCxgjWni+ioxLM8cJChC0i7YV98xZqOGJpj8A/Ojo1eKB7H5X5VKKT+FWlMhSh
+         KmsQMaBcaOA3fHj7nwSFh0svbYDgVVAPMLUeZYI9+MAOZu6PtR55qG9KFZggk0v0G08F
+         fA1QIp0gIyjhpFQ7Uu/pjl55pqhyGWguUNDMYbFwYnpj5B7kf9/JmkGMMikznMBPKgB5
+         lgzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757731703; x=1758336503;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dkY2yS7RSwh45nVEv3otHU3VH9SAKoF62TZrQgSQhHE=;
+        b=DEYY4QWj2/qD+buE5dB5MtDsB1KGCKduR3tj257ihZs5UjOz+Ux8Z419D13WEci4qH
+         m9WOJUChoeCnh/Gj4sml7OEmaWt0s36TreVBneuaq1jdK1ugWJu+PZKR7F3chKRiqYOl
+         s65lcZXpplHeKji2U5eemjukZX5ZDsEF2lSpVj70WQG2gZ7i+HZNKKlPg8AL2wacdHA/
+         BeLnMhgB6u1db45Qxfizvah62BlIJcbXzO/c9SfRufA/KdQ4ew4AyzTOalRYNKf73ziq
+         jaTMk/sWFP0TLNj8ARxSOksnvOO5xE3ZzECrKTf/MGHqukpz99hMr+FnO35Vm0ryemww
+         gtaw==
+X-Forwarded-Encrypted: i=1; AJvYcCXh1PnSh1WiEaqpdMhNWQjq9OoDxHNyCXJzsZh802uMy8dKLMztUbea+5601CIkgtHRr+4i3NY9dyIH@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8ClSkJO2cjTdlho3sTpJUBOYmp5oeZ4K6Ymqx7dAx7EX7S69B
+	GZEsfd4Fqs5U4Qhao90xUxfULapxQdlOo4hu+9b30lns1TIFt4H7oOh3wLOc/Molw/T2PYJR0Cc
+	948UoRENSFDzRZW6KsBQiEtH7CshLwxf9Arod7Wki6g==
+X-Gm-Gg: ASbGncveE4UubYiTGx/q+xltrBFIO9EdGs2xKHHn8T9EhU/0399OaQfm3G4Ygo8R485
+	GAVbN1JcvCcxB/AI+p2FnpCLgY1SY5f9xMX6YWzqFDGOCyVDUj6MJvZCMUDdovBZrKoyOZBlCiJ
+	EMwTHzhtHGx8v0fnQsH7MuHyhJaIj5M1yg1NJlBarcqxJsBbgcYSq1BQ+1bR7cVMoZWCA7wYgRK
+	78zutlBSleFujg=
+X-Google-Smtp-Source: AGHT+IGiKD+4jzf4TGq8bTBu8gsWjwWmWFiXXnkLbYhS2Yr6yBghdtRZuNxqqC+KU1Yu03Hdf+Hg2fEWLC9p8tq8dhA=
+X-Received: by 2002:a53:e712:0:b0:5fe:91c3:f0fb with SMTP id
+ 956f58d0204a3-627234f4904mr3827458d50.32.1757731703206; Fri, 12 Sep 2025
+ 19:48:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250912124059.0428127b@canb.auug.org.au>
+References: <8957c526-d05c-4c0d-bfed-0eb6e6d2476c@linux.ibm.com> <BAEAC2F7-7D7F-49E4-AB21-10FC0E4BF5F3@linux.ibm.com>
+In-Reply-To: <BAEAC2F7-7D7F-49E4-AB21-10FC0E4BF5F3@linux.ibm.com>
+From: Julian Sun <sunjunchao@bytedance.com>
+Date: Sat, 13 Sep 2025 10:48:12 +0800
+X-Gm-Features: Ac12FXxyQ3rupesgBRE_rBBovmGPVj00T36Qe6boIv2jYp-KBN6pOz85tL_EOvs
+Message-ID: <CAHSKhteHC26yXVFtjgdanfM7+vsOVZ+HHWnBYD01A4eiRHibVQ@mail.gmail.com>
+Subject: Re: [External] Re: [linux-next20250911]Kernel OOPs while running
+ generic/256 on Pmem device
+To: Venkat <venkat88@linux.ibm.com>
+Cc: tj@kernel.org, akpm@linux-foundation.org, stable@vger.kernel.org, 
+	songmuchun@bytedance.com, shakeelb@google.com, hannes@cmpxchg.org, 
+	roman.gushchin@linux.dev, mhocko@suse.com, 
+	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, riteshh@linux.ibm.com, 
+	ojaswin@linux.ibm.com, linux-fsdevel@vger.kernel.org, 
+	linux-xfs@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Linux Next Mailing List <linux-next@vger.kernel.org>, 
+	cgroups@vger.kernel.org, linux-mm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 12, 2025 at 12:40:59PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the tip tree got a conflict in:
-> 
->   tools/testing/selftests/bpf/prog_tests/usdt.c
-> 
-> between commit:
-> 
->   69424097ee10 ("selftests/bpf: Enrich subtest_basic_usdt case in selftests to cover SIB handling logic")
-> 
-> from the bpf-next tree and commit:
-> 
->   875e1705ad99 ("selftests/bpf: Add optimized usdt variant for basic usdt test")
-> 
-> from the tip tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Hi,
 
-hi,
-fwiw the conflict was mentioned in here:
-  https://lore.kernel.org/bpf/aMAiMrLlfmG9FbQ3@krava/
+Does this fix make sense to you?
 
-the fix looks good, thanks
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index d0dfaa0ccaba..ed24dcece56a 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -3945,9 +3945,10 @@ static void mem_cgroup_css_free(struct
+cgroup_subsys_state *css)
+                 * Not necessary to wait for wb completion which might
+cause task hung,
+                 * only used to free resources. See
+memcg_cgwb_waitq_callback_fn().
+                 */
+-               __add_wait_queue_entry_tail(wait->done.waitq, &wait->wq_ent=
+ry);
+                if (atomic_dec_and_test(&wait->done.cnt))
+-                       wake_up_all(wait->done.waitq);
++                       kfree(wait);
++               else
++                       __add_wait_queue_entry_tail(wait->done.waitq,
+&wait->wq_entry);;
+        }
+ #endif
+        if (cgroup_subsys_on_dfl(memory_cgrp_subsys) && !cgroup_memory_noso=
+cket)
 
-jirka
+On Fri, Sep 12, 2025 at 8:33=E2=80=AFPM Venkat <venkat88@linux.ibm.com> wro=
+te:
+>
+>
+>
+> > On 12 Sep 2025, at 10:51=E2=80=AFAM, Venkat Rao Bagalkote <venkat88@lin=
+ux.ibm.com> wrote:
+> >
+> > Greetings!!!
+> >
+> >
+> > IBM CI has reported a kernel crash, while running generic/256 test case=
+ on pmem device from xfstests suite on linux-next20250911 kernel.
+> >
+> >
+> > xfstests: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
+> >
+> > local.config:
+> >
+> > [xfs_dax]
+> > export RECREATE_TEST_DEV=3Dtrue
+> > export TEST_DEV=3D/dev/pmem0
+> > export TEST_DIR=3D/mnt/test_pmem
+> > export SCRATCH_DEV=3D/dev/pmem0.1
+> > export SCRATCH_MNT=3D/mnt/scratch_pmem
+> > export MKFS_OPTIONS=3D"-m reflink=3D0 -b size=3D65536 -s size=3D512"
+> > export FSTYP=3Dxfs
+> > export MOUNT_OPTIONS=3D"-o dax"
+> >
+> >
+> > Test case: generic/256
+> >
+> >
+> > Traces:
+> >
+> >
+> > [  163.371929] ------------[ cut here ]------------
+> > [  163.371936] kernel BUG at lib/list_debug.c:29!
+> > [  163.371946] Oops: Exception in kernel mode, sig: 5 [#1]
+> > [  163.371954] LE PAGE_SIZE=3D64K MMU=3DRadix  SMP NR_CPUS=3D8192 NUMA =
+pSeries
+> > [  163.371965] Modules linked in: xfs nft_fib_inet nft_fib_ipv4 nft_fib=
+_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nft_=
+ct nft_chain_nat nf_nat nf_conntrack bonding tls nf_defrag_ipv6 nf_defrag_i=
+pv4 rfkill ip_set nf_tables nfnetlink sunrpc pseries_rng vmx_crypto dax_pme=
+m fuse ext4 crc16 mbcache jbd2 nd_pmem papr_scm sd_mod libnvdimm sg ibmvscs=
+i ibmveth scsi_transport_srp pseries_wdt
+> > [  163.372127] CPU: 22 UID: 0 PID: 130 Comm: kworker/22:0 Kdump: loaded=
+ Not tainted 6.17.0-rc5-next-20250911 #1 VOLUNTARY
+> > [  163.372142] Hardware name: IBM,9080-HEX Power11 (architected) 0x8202=
+00 0xf000007 of:IBM,FW1110.01 (NH1110_069) hv:phyp pSeries
+> > [  163.372155] Workqueue: cgroup_free css_free_rwork_fn
+> > [  163.372169] NIP:  c000000000d051d4 LR: c000000000d051d0 CTR: 0000000=
+000000000
+> > [  163.372176] REGS: c00000000ba079b0 TRAP: 0700   Not tainted (6.17.0-=
+rc5-next-20250911)
+> > [  163.372183] MSR:  800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>=
+  CR: 28000000  XER: 00000006
+> > [  163.372214] CFAR: c0000000002bae9c IRQMASK: 0
+> > [  163.372214] GPR00: c000000000d051d0 c00000000ba07c50 c00000000230a60=
+0 0000000000000075
+> > [  163.372214] GPR04: 0000000000000004 0000000000000001 c000000000507e2=
+c 0000000000000001
+> > [  163.372214] GPR08: c000000d0cb87d13 0000000000000000 000000000000000=
+0 a80e000000000000
+> > [  163.372214] GPR12: c00e0001a1970fa2 c000000d0ddec700 c000000000208e5=
+8 c000000107b5e190
+> > [  163.372214] GPR16: c00000000d3e5d08 c00000000b71cf78 c00000000d3e5d0=
+5 c00000000b71cf30
+> > [  163.372214] GPR20: c00000000b71cf08 c00000000b71cf10 c000000019f5858=
+8 c000000004704bc8
+> > [  163.372214] GPR24: c000000107b5e100 c000000004704bd0 000000000000000=
+3 c000000004704bd0
+> > [  163.372214] GPR28: c000000004704bc8 c000000019f585a8 c000000019f53da=
+8 c000000004704bc8
+> > [  163.372315] NIP [c000000000d051d4] __list_add_valid_or_report+0x124/=
+0x188
+> > [  163.372326] LR [c000000000d051d0] __list_add_valid_or_report+0x120/0=
+x188
+> > [  163.372335] Call Trace:
+> > [  163.372339] [c00000000ba07c50] [c000000000d051d0] __list_add_valid_o=
+r_report+0x120/0x188 (unreliable)
+> > [  163.372352] [c00000000ba07ce0] [c000000000834280] mem_cgroup_css_fre=
+e+0xa0/0x27c
+> > [  163.372363] [c00000000ba07d50] [c0000000003ba198] css_free_rwork_fn+=
+0xd0/0x59c
+> > [  163.372374] [c00000000ba07da0] [c0000000001f5d60] process_one_work+0=
+x41c/0x89c
+> > [  163.372385] [c00000000ba07eb0] [c0000000001f76c0] worker_thread+0x55=
+8/0x848
+> > [  163.372394] [c00000000ba07f80] [c000000000209038] kthread+0x1e8/0x23=
+0
+> > [  163.372406] [c00000000ba07fe0] [c00000000000ded8] start_kernel_threa=
+d+0x14/0x18
+> > [  163.372416] Code: 4b9b1099 60000000 7f63db78 4bae8245 60000000 e8bf0=
+008 3c62ff88 7fe6fb78 7fc4f378 38637d40 4b5b5c89 60000000 <0fe00000> 600000=
+00 60000000 7f83e378
+> > [  163.372453] ---[ end trace 0000000000000000 ]---
+> > [  163.380581] pstore: backend (nvram) writing error (-1)
+> > [  163.380593]
+> >
+> >
+> > If you happen to fix this issue, please add below tag.
+> >
+> >
+> > Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+> >
+> >
+> >
+> > Regards,
+> >
+> > Venkat.
+> >
+> >
+>
+> After reverting the below commit, issue is not seen.
+>
+> commit 61bbf51e75df1a94cf6736e311cb96aeb79826a8
+> Author: Julian Sun <sunjunchao@bytedance.com>
+> Date:   Thu Aug 28 04:45:57 2025 +0800
+>
+>     memcg: don't wait writeback completion when release memcg
+>          Recently, we encountered the following hung task:
+>          INFO: task kworker/4:1:1334558 blocked for more than 1720 second=
+s.
+>     [Wed Jul 30 17:47:45 2025] Workqueue: cgroup_destroy css_free_rwork_f=
+n
+>     [Wed Jul 30 17:47:45 2025] Call Trace:
+>     [Wed Jul 30 17:47:45 2025]  __schedule+0x934/0xe10
+>     [Wed Jul 30 17:47:45 2025]  ? complete+0x3b/0x50
+>     [Wed Jul 30 17:47:45 2025]  ? _cond_resched+0x15/0x30
+>     [Wed Jul 30 17:47:45 2025]  schedule+0x40/0xb0
+>     [Wed Jul 30 17:47:45 2025]  wb_wait_for_completion+0x52/0x80
+>     [Wed Jul 30 17:47:45 2025]  ? finish_wait+0x80/0x80
+>     [Wed Jul 30 17:47:45 2025]  mem_cgroup_css_free+0x22/0x1b0
+>     [Wed Jul 30 17:47:45 2025]  css_free_rwork_fn+0x42/0x380
+>     [Wed Jul 30 17:47:45 2025]  process_one_work+0x1a2/0x360
+>     [Wed Jul 30 17:47:45 2025]  worker_thread+0x30/0x390
+>     [Wed Jul 30 17:47:45 2025]  ? create_worker+0x1a0/0x1a0
+>     [Wed Jul 30 17:47:45 2025]  kthread+0x110/0x130
+>     [Wed Jul 30 17:47:45 2025]  ? __kthread_cancel_work+0x40/0x40
+>     [Wed Jul 30 17:47:45 2025]  ret_from_fork+0x1f/0x30
+>          The direct cause is that memcg spends a long time waiting for di=
+rty page
+>     writeback of foreign memcgs during release.
+>          The root causes are:
+>         a. The wb may have multiple writeback tasks, containing millions
+>            of dirty pages, as shown below:
+>          >>> for work in list_for_each_entry("struct wb_writeback_work", =
+\
+>                                         wb.work_list.address_of_(), "list=
+"):
+>     ...     print(work.nr_pages, work.reason, hex(work))
+>     ...
+>     900628  WB_REASON_FOREIGN_FLUSH 0xffff969e8d956b40
+>     1116521 WB_REASON_FOREIGN_FLUSH 0xffff9698332a9540
+>     1275228 WB_REASON_FOREIGN_FLUSH 0xffff969d9b444bc0
+>     1099673 WB_REASON_FOREIGN_FLUSH 0xffff969f0954d6c0
+>     1351522 WB_REASON_FOREIGN_FLUSH 0xffff969e76713340
+>     2567437 WB_REASON_FOREIGN_FLUSH 0xffff9694ae208400
+>     2954033 WB_REASON_FOREIGN_FLUSH 0xffff96a22d62cbc0
+>     3008860 WB_REASON_FOREIGN_FLUSH 0xffff969eee8ce3c0
+>     3337932 WB_REASON_FOREIGN_FLUSH 0xffff9695b45156c0
+>     3348916 WB_REASON_FOREIGN_FLUSH 0xffff96a22c7a4f40
+>     3345363 WB_REASON_FOREIGN_FLUSH 0xffff969e5d872800
+>     3333581 WB_REASON_FOREIGN_FLUSH 0xffff969efd0f4600
+>     3382225 WB_REASON_FOREIGN_FLUSH 0xffff969e770edcc0
+>     3418770 WB_REASON_FOREIGN_FLUSH 0xffff96a252ceea40
+>     3387648 WB_REASON_FOREIGN_FLUSH 0xffff96a3bda86340
+>     3385420 WB_REASON_FOREIGN_FLUSH 0xffff969efc6eb280
+>     3418730 WB_REASON_FOREIGN_FLUSH 0xffff96a348ab1040
+>     3426155 WB_REASON_FOREIGN_FLUSH 0xffff969d90beac00
+>     3397995 WB_REASON_FOREIGN_FLUSH 0xffff96a2d7288800
+>     3293095 WB_REASON_FOREIGN_FLUSH 0xffff969dab423240
+>     3293595 WB_REASON_FOREIGN_FLUSH 0xffff969c765ff400
+>     3199511 WB_REASON_FOREIGN_FLUSH 0xffff969a72d5e680
+>     3085016 WB_REASON_FOREIGN_FLUSH 0xffff969f0455e000
+>     3035712 WB_REASON_FOREIGN_FLUSH 0xffff969d9bbf4b00
+>              b. The writeback might severely throttled by wbt, with a spe=
+ed
+>            possibly less than 100kb/s, leading to a very long writeback t=
+ime.
+>          >>> wb.write_bandwidth
+>     (unsigned long)24
+>     >>> wb.write_bandwidth
+>     (unsigned long)13
+>          The wb_wait_for_completion() here is probably only used to preve=
+nt
+>     use-after-free.  Therefore, we manage 'done' separately and automatic=
+ally
+>     free it.
+>          This allows us to remove wb_wait_for_completion() while preventi=
+ng the
+>     use-after-free issue.
+>      com
+>     Fixes: 97b27821b485 ("writeback, memcg: Implement foreign dirty flush=
+ing")
+>     Signed-off-by: Julian Sun <sunjunchao@bytedance.com>
+>     Acked-by: Tejun Heo <tj@kernel.org>
+>     Cc: Michal Hocko <mhocko@suse.com>
+>     Cc: Roman Gushchin <roman.gushchin@linux.dev>
+>     Cc: Johannes Weiner <hannes@cmpxchg.org>
+>     Cc: Shakeel Butt <shakeelb@google.com>
+>     Cc: Muchun Song <songmuchun@bytedance.com>
+>     Cc: <stable@vger.kernel.org>
+>     Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+>
+> Regards,
+> Venkat.
+>
+> >
+>
 
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc tools/testing/selftests/bpf/prog_tests/usdt.c
-> index 615e9c3e93bf,833eb87483a1..000000000000
-> --- a/tools/testing/selftests/bpf/prog_tests/usdt.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
-> @@@ -40,73 -40,20 +40,80 @@@ static void __always_inline trigger_fun
->   	}
->   }
->   
->  +#if defined(__x86_64__) || defined(__i386__)
->  +/*
->  + * SIB (Scale-Index-Base) addressing format: "size@(base_reg, index_reg, scale)"
->  + * - 'size' is the size in bytes of the array element, and its sign indicates
->  + *   whether the type is signed (negative) or unsigned (positive).
->  + * - 'base_reg' is the register holding the base address, normally rdx or edx
->  + * - 'index_reg' is the register holding the index, normally rax or eax
->  + * - 'scale' is the scaling factor (typically 1, 2, 4, or 8), which matches the
->  + *    size of the element type.
->  + *
->  + * For example, for an array of 'short' (signed 2-byte elements), the SIB spec would be:
->  + * - size: -2 (negative because 'short' is signed)
->  + * - scale: 2 (since sizeof(short) == 2)
->  + *
->  + * The resulting SIB format: "-2@(%%rdx,%%rax,2)" for x86_64, "-2@(%%edx,%%eax,2)" for i386
->  + */
->  +static volatile short array[] = {-1, -2, -3, -4};
->  +
->  +#if defined(__x86_64__)
->  +#define USDT_SIB_ARG_SPEC -2@(%%rdx,%%rax,2)
->  +#else
->  +#define USDT_SIB_ARG_SPEC -2@(%%edx,%%eax,2)
->  +#endif
->  +
->  +unsigned short test_usdt_sib_semaphore SEC(".probes");
->  +
->  +static void trigger_sib_spec(void)
->  +{
->  +	/*
->  +	 * Force SIB addressing with inline assembly.
->  +	 *
->  +	 * You must compile with -std=gnu99 or -std=c99 to use the
->  +	 * STAP_PROBE_ASM macro.
->  +	 *
->  +	 * The STAP_PROBE_ASM macro generates a quoted string that gets
->  +	 * inserted between the surrounding assembly instructions. In this
->  +	 * case, USDT_SIB_ARG_SPEC is embedded directly into the instruction
->  +	 * stream, creating a probe point between the asm statement boundaries.
->  +	 * It works fine with gcc/clang.
->  +	 *
->  +	 * Register constraints:
->  +	 * - "d"(array): Binds the 'array' variable to %rdx or %edx register
->  +	 * - "a"(0): Binds the constant 0 to %rax or %eax register
->  +	 * These ensure that when USDT_SIB_ARG_SPEC references %%rdx(%edx) and
->  +	 * %%rax(%eax), they contain the expected values for SIB addressing.
->  +	 *
->  +	 * The "memory" clobber prevents the compiler from reordering memory
->  +	 * accesses around the probe point, ensuring that the probe behavior
->  +	 * is predictable and consistent.
->  +	 */
->  +	asm volatile(
->  +		STAP_PROBE_ASM(test, usdt_sib, USDT_SIB_ARG_SPEC)
->  +		:
->  +		: "d"(array), "a"(0)
->  +		: "memory"
->  +	);
->  +}
->  +#endif
->  +
-> - static void subtest_basic_usdt(void)
-> + static void subtest_basic_usdt(bool optimized)
->   {
->   	LIBBPF_OPTS(bpf_usdt_opts, opts);
->   	struct test_usdt *skel;
->   	struct test_usdt__bss *bss;
-> - 	int err, i;
-> + 	int err, i, called;
->  +	const __u64 expected_cookie = 0xcafedeadbeeffeed;
->   
-> + #define TRIGGER(x) ({			\
-> + 	trigger_func(x);		\
-> + 	if (optimized)			\
-> + 		trigger_func(x);	\
-> + 	optimized ? 2 : 1;		\
-> + 	})
-> + 
->   	skel = test_usdt__open_and_load();
->   	if (!ASSERT_OK_PTR(skel, "skel_open"))
->   		return;
-> @@@ -126,22 -73,13 +133,22 @@@
->   	if (!ASSERT_OK_PTR(skel->links.usdt0, "usdt0_link"))
->   		goto cleanup;
->   
->  +#if defined(__x86_64__) || defined(__i386__)
->  +	opts.usdt_cookie = expected_cookie;
->  +	skel->links.usdt_sib = bpf_program__attach_usdt(skel->progs.usdt_sib,
->  +							 0 /*self*/, "/proc/self/exe",
->  +							 "test", "usdt_sib", &opts);
->  +	if (!ASSERT_OK_PTR(skel->links.usdt_sib, "usdt_sib_link"))
->  +		goto cleanup;
->  +#endif
->  +
-> - 	trigger_func(1);
-> + 	called = TRIGGER(1);
->   
-> - 	ASSERT_EQ(bss->usdt0_called, 1, "usdt0_called");
-> - 	ASSERT_EQ(bss->usdt3_called, 1, "usdt3_called");
-> - 	ASSERT_EQ(bss->usdt12_called, 1, "usdt12_called");
-> + 	ASSERT_EQ(bss->usdt0_called, called, "usdt0_called");
-> + 	ASSERT_EQ(bss->usdt3_called, called, "usdt3_called");
-> + 	ASSERT_EQ(bss->usdt12_called, called, "usdt12_called");
->   
->  -	ASSERT_EQ(bss->usdt0_cookie, 0xcafedeadbeeffeed, "usdt0_cookie");
->  +	ASSERT_EQ(bss->usdt0_cookie, expected_cookie, "usdt0_cookie");
->   	ASSERT_EQ(bss->usdt0_arg_cnt, 0, "usdt0_arg_cnt");
->   	ASSERT_EQ(bss->usdt0_arg_ret, -ENOENT, "usdt0_arg_ret");
->   	ASSERT_EQ(bss->usdt0_arg_size, -ENOENT, "usdt0_arg_size");
-> @@@ -225,18 -163,9 +232,19 @@@
->   	ASSERT_EQ(bss->usdt3_args[1], 42, "usdt3_arg2");
->   	ASSERT_EQ(bss->usdt3_args[2], (uintptr_t)&bla, "usdt3_arg3");
->   
->  +#if defined(__x86_64__) || defined(__i386__)
->  +	trigger_sib_spec();
->  +	ASSERT_EQ(bss->usdt_sib_called, 1, "usdt_sib_called");
->  +	ASSERT_EQ(bss->usdt_sib_cookie, expected_cookie, "usdt_sib_cookie");
->  +	ASSERT_EQ(bss->usdt_sib_arg_cnt, 1, "usdt_sib_arg_cnt");
->  +	ASSERT_EQ(bss->usdt_sib_arg, nums[0], "usdt_sib_arg");
->  +	ASSERT_EQ(bss->usdt_sib_arg_ret, 0, "usdt_sib_arg_ret");
->  +	ASSERT_EQ(bss->usdt_sib_arg_size, sizeof(nums[0]), "usdt_sib_arg_size");
->  +#endif
->  +
->   cleanup:
->   	test_usdt__destroy(skel);
-> + #undef TRIGGER
->   }
->   
->   unsigned short test_usdt_100_semaphore SEC(".probes");
 
-
+--=20
+Julian Sun <sunjunchao@bytedance.com>
 

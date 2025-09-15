@@ -1,219 +1,412 @@
-Return-Path: <linux-next+bounces-8306-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8307-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90D9BB58415
-	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 19:55:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFCB0B5845B
+	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 20:17:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 005E41AA70AD
-	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 17:56:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44CBA1A22F8A
+	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 18:17:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EACD29C343;
-	Mon, 15 Sep 2025 17:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFCBB28B4F0;
+	Mon, 15 Sep 2025 18:17:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="dNq3/k7u"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="au1HK6qg"
 X-Original-To: linux-next@vger.kernel.org
-Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010015.outbound.protection.outlook.com [52.101.46.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD144275852;
-	Mon, 15 Sep 2025 17:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757958946; cv=fail; b=awxPXP/HqQo0fyZ3kPcBXSwbmYTcxKN5cCh4dbRCC2EWn0crzNBwDfbhE3rG1fI9UoxpSJZfIARwTuHjqY2e82KfI5hGjJl6PcpnPTxr8O5QkFu6OHuk9pEGlK5Jfvg5XvW89+OhdxIH4Z9WxiWCZwNK+L12y2RSMyFMsY2oCdQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757958946; c=relaxed/simple;
-	bh=zPiL1sunyckDwg4zc9eGYB4lHlEb90HxkYhTHPwz0zk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=EYOEkKbTK8d4WFlmuwl5QtFHMe82qyPXnLipb5OIEUaxVF8gJzoUVhBYocgM6QI8F3tM4RmxDP7/ohQawfyP3uLnig8WRDkEGZUqkrP4I7Cb2ojcJ/zIgdeKb0zrpWUyy2QCqBAWkO4iXTRjn49zUE4WCSUSBZk6sBiNIkkzRh8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=dNq3/k7u; arc=fail smtp.client-ip=52.101.46.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HdR1pgn/ZRlCECC/AdHqpzgXpzNUQICT/SPHsYP/VZxQxuK2jXxB7VqkbLWFGU6XKBBSm2uLUYT0DQ8Get/Y25ZZk3h1+pUu+0ugRUkUtSwghZH+NnzeS3FTQ19e/F6eiqScxXa46cuPDHpsul51y8QRQl66ScKwR79PkjffZcXTSDHUz5/qlTBtpgSL6ZeO9iQR4eUVL86jY7WrxUzq/JR4mKs86jBa3rg/1+isTVrotVKe50HEVKsKgT3UQKUG8vMDHB61cIkp5VHClCtLj99rZnyWdeA7nrn/nCJ6cXEk7qX3tufYhRyOzUcR5Y3rk31rxKOO3msL79D+WtWdIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RxnNWAAP903ihrIgAq47j8V6djI8J4wjOmtZT9UpSk8=;
- b=PujuKOK5FqeyjqT204K/n9CgRfHZ6FmCiaN0UQ1FbQr7yXamvjXtsiFlRgralQArjuMce4h2n65sBzqzpT1ZT9DGwh9TD/nsdCZsfOZCnqDa/fQq33FId8td5pN/RZTbSDL8jJ18aGySgT2Ngj4NVLGza3CSpPYns7CFb0XmB4N1FjMXTMRepNebqS96LZkpT7hH4Uz149bsjxLn8k6+NNeq8okh95MWelHqBs579njM36gv5bvvnbY/XwWj3xJbSU3tubiUYi3JYYEqFS19++Be2gqiPrXKRYqyF0aWg8pqNURgcOpctrCvH0yLC3BbkVJMW+88JwmYFIyhpZYEMA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RxnNWAAP903ihrIgAq47j8V6djI8J4wjOmtZT9UpSk8=;
- b=dNq3/k7u28s6Qhl4iyz0nd1n6Viq+ltg2vbIhdEstmnMqVEA4B7X/tqMUHZVQSkLgN/hQ9N9u+AwhghQSNImk/mH/vrYeGnOWiqqd/chtFrByDeWN21ffo+HQERrSHE+j3iN4PEUXEl8Wnck7kBBfQ/zUhuCQfKLx0PZkCWxTHw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com (2603:10b6:8:a4::7) by
- DS7PR12MB6190.namprd12.prod.outlook.com (2603:10b6:8:99::22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9115.21; Mon, 15 Sep 2025 17:55:41 +0000
-Received: from DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::12f7:eff:380b:589f]) by DM4PR12MB6373.namprd12.prod.outlook.com
- ([fe80::12f7:eff:380b:589f%4]) with mapi id 15.20.9115.018; Mon, 15 Sep 2025
- 17:55:39 +0000
-Date: Mon, 15 Sep 2025 13:55:31 -0400
-From: Yazen Ghannam <yazen.ghannam@amd.com>
-To: Bert Karwatzki <spasswolf@web.de>
-Cc: Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>,
-	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-	linux-edac@vger.kernel.org, linux-acpi@vger.kernel.org,
-	x86@kernel.org, rafael@kernel.org, qiuxu.zhuo@intel.com,
-	nik.borisov@suse.com, Smita.KoralahalliChannabasappa@amd.com
-Subject: Re: spurious mce Hardware Error messages in next-20250912
-Message-ID: <20250915175531.GB869676@yaz-khff2.amd.com>
-References: <20250915010010.3547-1-spasswolf@web.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250915010010.3547-1-spasswolf@web.de>
-X-ClientProxiedBy: BN9PR03CA0886.namprd03.prod.outlook.com
- (2603:10b6:408:13c::21) To DM4PR12MB6373.namprd12.prod.outlook.com
- (2603:10b6:8:a4::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78EE5277CB6
+	for <linux-next@vger.kernel.org>; Mon, 15 Sep 2025 18:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757960238; cv=none; b=ee2Cw8LLVOyBwvK/dJOocrMYSeuhTq5U2Aq0MFGiSYumZrV47q1rxiUSLogPrc44Sbes4BQ/6Iwy/eZgRDx7MWfjaalcou0aijswixBk1ymo1YsPcUqJ+8DRwuNIeldkSyB02gFwm7DHsEbr6lFxc3wQoy9uAbJ+CWH/QOJo2c0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757960238; c=relaxed/simple;
+	bh=HTDY3TQRkNt0tUNuWRwlqALG0ixSsbcm5hH1H6O7CRg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UjsGirqMaeYCZIOxQ5Vk6fLuG9P9V9RdHt3wT9p1aE8jKpVeFM0ixQWkfIPR/lrA6PtiReMy3kN9BUseiDJUxFHV3vkyej381OTArmUX7JDjpc3GdVWRDAA3WyRXK9wyR3svMcl2FbDfnu4qTwIWeC0FV8O50paXzDntvJuPV4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=au1HK6qg; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-71d5fb5e34cso48257997b3.0
+        for <linux-next@vger.kernel.org>; Mon, 15 Sep 2025 11:17:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1757960235; x=1758565035; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HKlJwLV4pOJ4puXUorbm745sN+ixIvqNcAK/DngGboE=;
+        b=au1HK6qgdthbkzr74nW+zdvxgbavcHzHAoXeEMG4sYUVEP4stLK1tQwctsT4IuH6fe
+         8s2JVXxVdaQ8MtpVpqh4MK6TFS4HPdzespdtaXidD0eR9VuIrQrsXqmOKbKCMMeNWnDO
+         LQVcldFHRJc43flkkhw0b7F/NxLij/AYBov0p89EfTsOwiD49L0XUp5WsfusVtpft3LO
+         8jJrm4mvWpuH3ISJKJk14ojlSqPAHrv2d44VjWbGNaBUAFnMo/edXIaTJmDdU1mRein6
+         6pbZHSFZCfwOIZmCvlkw85Rd3Re6XMkyDTcbJOOZF8+eYIxaT/RNfzLaiPwcnHb6UzmE
+         gvgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757960235; x=1758565035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HKlJwLV4pOJ4puXUorbm745sN+ixIvqNcAK/DngGboE=;
+        b=Hru+UI24XL6Pgtw2p0qxUaT25Kq46NurY+ETJM4i0JMM4WaqtXXHgCSkfmqAVaQ4M7
+         waBsac9QCovhNSmOcN0cYNoVUSneascyQEf+dwsh1f2V6h4KkFF36fccP7JBeq9gMEud
+         4eXN/UldCpQUls2VixDrtp3Uz1wgg4e4biS22XHKvPshrQRpZylTiEjPPTt0LIYjUWp3
+         R7LldLrVcHfGLyG8Isd7USGfaFx3MP4cDDrlNCcMpHNl5KCjzUQ6/7MTYYiaVV7mLWnq
+         bwd2HloTuWzP6jixjguMRuozgWzfDRH0UJc5wWouE/KXzOJ6e/3qa5OKDv9tuHEMSZyC
+         u69Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVb9JaqMkRHIagrtrtaefUD0wU9ZtGguhwSFg9LIl7vLB1WkGHGQvFqD0eUit0alcb2xrnC9MqsNgX4@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy49Hx2foMuo7Onpv52POpd5gdR2hk14SpPaDRMgg5QDtqrW5r8
+	Sn98oWvX4Lg380UPbU26ceL1EKIzyE70vv7T3SCDuFtTnJk9XJTwiHvTAtycZM11W3QOBI/5eyg
+	FV5rQmLvyMrQ5uZ5AOAMR7BZTYSKsnuajLWIhF32VlA==
+X-Gm-Gg: ASbGnct+8nunf1rqa9J4KxMtxEp/hc2t+UAPH3Vm5IFxe7MhlIh5KOqYlmzdj1GoPYH
+	6aPRkBarw0PD5vCoLRDQyArvQ1Jiv/kRQAVwZo9CV2WDDL7I7kJlZRuPO101jrXhSPi7NFVX/WG
+	hzneyreNplHR5rHzqyMcRtJdSwcGcUbSLz0WaWio6h6U1xehVOHMnWhKDkGOmdvLVvR3FgvmuqW
+	h4nl2hBMwmd2oc=
+X-Google-Smtp-Source: AGHT+IH2QrZCMVWhvvri3m8MxFDEcR0HmA+y/PUfUv7fmACFArS88p8HCYr635Yfqj73ooPhrYiGLmLkR7TW9H/RB9o=
+X-Received: by 2002:a05:690c:11:b0:736:9b6b:b60 with SMTP id
+ 00721157ae682-7369b6b0be4mr4506137b3.1.1757960235244; Mon, 15 Sep 2025
+ 11:17:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6373:EE_|DS7PR12MB6190:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5f45c11a-dc5c-4c00-8f68-08ddf48114be
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7416014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?zTYDDTkI6YPJoJe9qsTsFXk25snxzOUyUjncJz7df1VRfMYMdnR0J2y5B3cc?=
- =?us-ascii?Q?oj53yNr3Gnk+X3CXl051C8feo96zDI+ArXmGe/vdx7K7rdOt5RaWaOqsDZOf?=
- =?us-ascii?Q?po+Cldhen5EIk+/FsVkcLyhPByJAwOy+KpcjKdXCJFPNBoLZQGJCWVm77sVR?=
- =?us-ascii?Q?B8drfHOHj0MxYrMifaWdKEBDxvFlU9ThXZz7XhAw9IZVebeTIFKbVRBMyG95?=
- =?us-ascii?Q?U6OQ4iKvDqxSbFjsaPbH1MxeD33zavvdP7y8uL3xkaWI8/Cb1rnKEyeJw/Hc?=
- =?us-ascii?Q?RwKgnXjsoOYEqLiIlwJOROXEJkbfY4mQpvwgqqjXD1HOlAmA9q7jZkdjae2q?=
- =?us-ascii?Q?1T57//s6m1frkjN7Pf2yAjlbhwJftMMOroO1EP6DauERXLlKO4Gsg8ZxKPJw?=
- =?us-ascii?Q?nz3+3zLlOsUU47lmcSVciMWXei6FzXxrQoiWsqDO8JKudwzy6ktafz82w/Dv?=
- =?us-ascii?Q?gMCN6/FZIMo+EyZ7HFNvK8lCKrjsM0oaYlpwQPMKg0XkgUeei1+x0v50028w?=
- =?us-ascii?Q?nFX23tXm/VtBP1U2zCK9bAXKyXxyz0o2ZrKkoL3BS4cEOolBBdLmsJ5Z4LmH?=
- =?us-ascii?Q?YqwPjkT+4UaRIZ+klzeY2a6an1ttdh/V7iCLMFI93wMXN/hCJYGdzS4IjBVd?=
- =?us-ascii?Q?02fe67qoJ3X47uS8bTCPU1jhUt3HphLx/dYafnwFgWurqKt/V4c223r3Qrpu?=
- =?us-ascii?Q?lcanOM14HvvPt5NU5CkMGXLvjDIpaoPDDo0/X0aG4tbt4h5ccuesJD9SrFCG?=
- =?us-ascii?Q?WoJ6hgM/bGksv4Olr/TPzQ8k5DxqxLbtpFasB74F8/U3UjooJjJSKs1ySxtT?=
- =?us-ascii?Q?rZO9Doyom7FfitIvg8/cUwjESwkuxxsciXpOgo23JeZk5TvC8JXctXUw5Qtg?=
- =?us-ascii?Q?N1Xi73jGwLBGY9sM0GaIhBlbuPW63qmcSvkklUiPp0nDWUbpNHgRAlOe99Xw?=
- =?us-ascii?Q?BA1mw1FZn49PH8cIbWVVUSvhhiex7vAJhTx08gv90qaZFw89eJmml/0n5E3r?=
- =?us-ascii?Q?UC30t/WP9+GKll5iqFy3LamgGpc3A2hTcGrk5teXqDLUNDlCkBrn/8HSqLOf?=
- =?us-ascii?Q?JzUlxdnkH3RoLedjBdBhG5ryEZfh6JtarRhzcOf/xqj2PbFV1OHYqZ73Q1Ap?=
- =?us-ascii?Q?+O2XUnMj6wTrIErC7DqjTLOCF2k6loahy72svZNR7W8QLetcGPXh2mj8R+qA?=
- =?us-ascii?Q?lRNUFqEISQ/pN/+ALnyLPnSZshJEKnNnFvoxaeMVaut9lW28PO80n8DZR1F3?=
- =?us-ascii?Q?QpbXrau0EocZTd/1/TeI9ukF9ItKi3FTWrJpEnbUCAbw6oMf3hgAB2ToenWL?=
- =?us-ascii?Q?tqtXmV+72OPYkOCl/XFsBehC43i6gvG61Z6SckrQQ2q9VnRPble+7QKPseAg?=
- =?us-ascii?Q?KD+N1aEQ9wKQRwceDWXY8yiZ2CgWhi7h2BboDgPYmAK8DXG2q82suLN6iHP2?=
- =?us-ascii?Q?kYWn+C+drWY=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?AN0mHVC5sPx8HmYC/j+32KW5W9aksdJibXzO032PbhGUg+2EIu6nG03qfWjB?=
- =?us-ascii?Q?GLQ7CUkExflY9pgH42tRpOdzi/iVgse8/KfQZcLugVB5ocpj1wlFBS5gIsCa?=
- =?us-ascii?Q?osemZzkzMJmMHXG6FE2Hs7XBCDGb6xwzWRCyhpuDwri/uX0cM+9082lbtCrS?=
- =?us-ascii?Q?9/MCa6Qt3KHpQlIEBdM8nLnKLbrnUTMDmKMg9mvTBQ49O1sG93SXcr6MJT+1?=
- =?us-ascii?Q?9bHbBQV9fsRsChuz19u/3AZPNu8XBpqhHgVdiYO2XSY8FeiWjHZyt1ze/6KK?=
- =?us-ascii?Q?sIPCA6ka1W/DKlyKrZUTT/6zN0SmjT1QEBYf4ig5yNbfA0ThXOqqoTe5GMhp?=
- =?us-ascii?Q?YWd++MAIU8qAtpLaSJnBBcGdDlhh+GwnEDV3OunDwl+Ch02o9b4Xk4ESYImh?=
- =?us-ascii?Q?ycZBjUgg06q6w0D65rEwzSV7hKETI3z7B7h6yN6eNfgzu3LFJj9SCSPmdUKH?=
- =?us-ascii?Q?cR9BLU57o8CyxqyGA8ykLCJur33NtGgdHq5XHY+ducwoUngzbwxmwpL0Sf5W?=
- =?us-ascii?Q?x4vlLxp7ek5bpD8qFpOdIMJBZHfQvvd97U9t2gB46bUK4WSymr0JwodHj34f?=
- =?us-ascii?Q?acTJpCrLmE8qn+5hGutBkJMZ6XCmD13Hydo40ErmYItQuqzlCYjTueEoQO11?=
- =?us-ascii?Q?UTSduddGq7hTsV3RXxTt45Uh05EHRdIylbdh0VMYCn+1GD481fXjih0hHBG0?=
- =?us-ascii?Q?E2G8nQ3rLpytnhzW2f4sovswJ+TzU1NmfqbJJK1x8O4VCtWNpy6Up4efujH9?=
- =?us-ascii?Q?nwFtqS0DcpzhJC0jsNP++7WX/5QHo2UrrOBQbEsRt9rCYyG16hupgvq2O4qm?=
- =?us-ascii?Q?LvGUbAvs7Ca23GQe2SIoTmRbHcQLYz4Mqa7jPGHWPcVNpL8uAAhu8OgkyYZG?=
- =?us-ascii?Q?omsPR8YzeaKoXOZlX9Fhra1W+D50v6xRhJ+rJGvvYt9F6J3FqCd8hOaTwJC3?=
- =?us-ascii?Q?/nY5hywewbjnHMuo2zWxvHAa+EHCLAD0KYqtEflFx4jser00xBG/IEMBi2BO?=
- =?us-ascii?Q?fcAtb2RXAQyfKEKOre4vYr+6hqymjdVIixXo/CxlpKy3ouOG95BayAHw+OIU?=
- =?us-ascii?Q?4sb4buBTbFQx22Rlg9nMP/V1B4USsw296g6uoRpGZLZIp2a+8nJhPWuwImr8?=
- =?us-ascii?Q?sCb5YHr2BDRY/TP063I1Hm/YM1bKj/7JVWS5vcHj3mcitInKP+L60Pt8fQX/?=
- =?us-ascii?Q?JgPqAmX0AOEh4BaeaNCCFoprxnlT0WjeMhZVcDHSpP+V/XrttNA6htMdh7Ax?=
- =?us-ascii?Q?QbsSNsJVVcUpMANThI9hhRt2aIezmx64j8GKJMwQA7diBuA7/kwALXSaarEd?=
- =?us-ascii?Q?SksSEwA8BFeavG+48eU1Mbr2IjXfqpT11X5o8e9xBPix9mgPVcGKfo1F9Fj0?=
- =?us-ascii?Q?UN4iSS76Avl2hxLLhemtyFlC5J0FPmSJhJXpDTlFEvhzq62KfUj3a9e0IA7/?=
- =?us-ascii?Q?/LeZcucaxMhfLVMspVBGfTBw27zAZN3M9OcJVT33YmsmBTtUAsFUOazMy1fw?=
- =?us-ascii?Q?asHDQj/QrqMEv1nNi+YrRPQnz1MOEDW1d/Ylux6L4rQnU7WGaT6A6Y7hfgSo?=
- =?us-ascii?Q?bHlQD24V/H63+/Y4Mq7d1iNIPHJ29RJLHoq05fsM?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f45c11a-dc5c-4c00-8f68-08ddf48114be
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6373.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2025 17:55:39.5048
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5cTzQPD/UMP7FXZHiZJ7AKmJV9mZcpZfgM7Aa01WUUnNAZfQOmz1NbTYbLXbBvBb3N5du5ez6oCDP162dgA0dQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6190
+References: <8957c526-d05c-4c0d-bfed-0eb6e6d2476c@linux.ibm.com>
+ <BAEAC2F7-7D7F-49E4-AB21-10FC0E4BF5F3@linux.ibm.com> <CAHSKhteHC26yXVFtjgdanfM7+vsOVZ+HHWnBYD01A4eiRHibVQ@mail.gmail.com>
+ <240A7968-D530-4135-856A-CE90D269D5E6@linux.ibm.com>
+In-Reply-To: <240A7968-D530-4135-856A-CE90D269D5E6@linux.ibm.com>
+From: Julian Sun <sunjunchao@bytedance.com>
+Date: Tue, 16 Sep 2025 02:17:04 +0800
+X-Gm-Features: Ac12FXxKsCIM3iC7qE18J4UiGkC_uav_J5eUCDy79Yskt9qkAhILOdX4JZ7_6xI
+Message-ID: <CAHSKhteezz0pjUYibp6drOysBzxUV6LzSi6oyA8LgHCtL_CysA@mail.gmail.com>
+Subject: Re: [External] Re: [linux-next20250911]Kernel OOPs while running
+ generic/256 on Pmem device
+To: Venkat <venkat88@linux.ibm.com>
+Cc: tj@kernel.org, akpm@linux-foundation.org, stable@vger.kernel.org, 
+	songmuchun@bytedance.com, shakeelb@google.com, hannes@cmpxchg.org, 
+	roman.gushchin@linux.dev, mhocko@suse.com, 
+	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, riteshh@linux.ibm.com, 
+	ojaswin@linux.ibm.com, linux-fsdevel@vger.kernel.org, 
+	linux-xfs@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Linux Next Mailing List <linux-next@vger.kernel.org>, 
+	cgroups@vger.kernel.org, linux-mm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 15, 2025 at 03:00:09AM +0200, Bert Karwatzki wrote:
-> On my MSI Alpha 15 (amd64) laptop running debian stable(trixie) and  
-> kernel next-20250912 I noticed the following mce error message in demsg:
-> 
-> [   T10] mce: [Hardware Error]: Machine check events logged
-> [   T10] [Hardware Error]: Corrected error, no action required.
-> [   T10] [Hardware Error]: CPU:0 (19:50:0) MC11_STATUS[-|CE|-|AddrV|-|-|-|UECC|-|Poison|-]: 0x8400aa4800a90139
-> [   T10] [Hardware Error]: Error Addr: 0x006637a200000020
-> [   T10] [Hardware Error]: IPID: 0x000700b040000000
-> [   T10] [Hardware Error]: L3 Cache Ext. Error Code: 41
-> [   T10] [Hardware Error]: cache level: L1, tx: GEN, mem-tx: DRD
-> [   T10] mce: [Hardware Error]: Machine check events logged
-> [   T10] [Hardware Error]: Corrected error, no action required.
-> [   T10] [Hardware Error]: CPU:0 (19:50:0) MC14_STATUS[-|CE|-|AddrV|PCC|-|SyndV|UECC|-|Poison|-]: 0x8724ac0800000000
-> [   T10] [Hardware Error]: Error Addr: 0x002bf52e00000020
-> [   T10] [Hardware Error]: IPID: 0x000700b040000000, Syndrome: 0x0000000000000042
-> [   T10] 
-> [   T10] [Hardware Error]: L3 Cache Ext. Error Code: 0
-> [   T10] [Hardware Error]: cache level: RESV, tx: INSN
+Hi,
 
-The error messages are very odd. The MCA_STATUS bits are inconsistent.
-They show "corrected" errors with "uncorrected" bits like "PCC" and
-"Poison".
+On Mon, Sep 15, 2025 at 10:20=E2=80=AFPM Venkat <venkat88@linux.ibm.com> wr=
+ote:
+>
+>
+>
+> > On 13 Sep 2025, at 8:18=E2=80=AFAM, Julian Sun <sunjunchao@bytedance.co=
+m> wrote:
+> >
+> > Hi,
+> >
+> > Does this fix make sense to you?
+> >
+> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> > index d0dfaa0ccaba..ed24dcece56a 100644
+> > --- a/mm/memcontrol.c
+> > +++ b/mm/memcontrol.c
+> > @@ -3945,9 +3945,10 @@ static void mem_cgroup_css_free(struct
+> > cgroup_subsys_state *css)
+> >                 * Not necessary to wait for wb completion which might
+> > cause task hung,
+> >                 * only used to free resources. See
+> > memcg_cgwb_waitq_callback_fn().
+> >                 */
+> > -               __add_wait_queue_entry_tail(wait->done.waitq, &wait->wq=
+_entry);
+> >                if (atomic_dec_and_test(&wait->done.cnt))
+> > -                       wake_up_all(wait->done.waitq);
+> > +                       kfree(wait);
+> > +               else
+> > +                       __add_wait_queue_entry_tail(wait->done.waitq,
+> > &wait->wq_entry);;
+> >        }
+> > #endif
+> >        if (cgroup_subsys_on_dfl(memory_cgrp_subsys) && !cgroup_memory_n=
+osocket)
+>
+> Hello,
+>
+> Thanks for the fix. This is fixing the reported issue.
 
-> 
-> The messages start about 333.34s after boot and usually appear 327.68s appart
-> (Yes, these timings are reproducible!):
+Thanks for your testing and feedback.
+>
+> While sending out the patch please add below tag as well.
+>
+> Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 
-This is likely because the errors are found during MCA polling. The
-default polling interval is 300 seconds. There may be some drift if
-other tasks are scheduled at the same time.
+Sure. That's how it should be.
 
-You can change this interval by writing to this file:
-/sys/devices/system/machinecheck/machinecheck0/check_interval
+Could you please try again with the following patch? The previous one
+might have caused a memory leak and had race conditions. I can=E2=80=99t
+reproduce it locally...
 
-Do the messages follow that setting? IOW, if you set it to '10', do you
-see error messages every 10 seconds?
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 80257dba30f8..35da16928599 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -3940,6 +3940,7 @@ static void mem_cgroup_css_free(struct
+cgroup_subsys_state *css)
+        int __maybe_unused i;
 
-> 
-> As these messages do not appear in v6.17-rc5 I bisected the issue 
-> (from v6.17-rc5 to next-20250912) and found this as the first bad commit:
-> 
-> cf6f155e848b ("x86/mce: Unify AMD DFR handler with MCA Polling")
+ #ifdef CONFIG_CGROUP_WRITEBACK
++       spin_lock(&memcg_cgwb_frn_waitq.lock);
+        for (i =3D 0; i < MEMCG_CGWB_FRN_CNT; i++) {
+                struct cgwb_frn_wait *wait =3D memcg->cgwb_frn[i].wait;
 
-Could you try another recent linux-next build without the MCA updates?
+@@ -3948,9 +3949,12 @@ static void mem_cgroup_css_free(struct
+cgroup_subsys_state *css)
+                 * only used to free resources. See
+memcg_cgwb_waitq_callback_fn().
+                 */
+                __add_wait_queue_entry_tail(wait->done.waitq, &wait->wq_ent=
+ry);
+-               if (atomic_dec_and_test(&wait->done.cnt))
+-                       wake_up_all(wait->done.waitq);
++               if (atomic_dec_and_test(&wait->done.cnt)) {
++                       list_del(&wait->wq_entry.entry);
++                       kfree(wait);
++               }
+        }
++       spin_unlock(&memcg_cgwb_frn_waitq.lock);
+ #endif
+        if (cgroup_subsys_on_dfl(memory_cgrp_subsys) && !cgroup_memory_noso=
+cket)
+                static_branch_dec(&memcg_sockets_enabled_key);
 
-It looks like 'next-20250911' doesn't include the commit above.
+>
+> Regards,
+> Venkat.
+> >
+> > On Fri, Sep 12, 2025 at 8:33=E2=80=AFPM Venkat <venkat88@linux.ibm.com>=
+ wrote:
+> >>
+> >>
+> >>
+> >>> On 12 Sep 2025, at 10:51=E2=80=AFAM, Venkat Rao Bagalkote <venkat88@l=
+inux.ibm.com> wrote:
+> >>>
+> >>> Greetings!!!
+> >>>
+> >>>
+> >>> IBM CI has reported a kernel crash, while running generic/256 test ca=
+se on pmem device from xfstests suite on linux-next20250911 kernel.
+> >>>
+> >>>
+> >>> xfstests: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
+> >>>
+> >>> local.config:
+> >>>
+> >>> [xfs_dax]
+> >>> export RECREATE_TEST_DEV=3Dtrue
+> >>> export TEST_DEV=3D/dev/pmem0
+> >>> export TEST_DIR=3D/mnt/test_pmem
+> >>> export SCRATCH_DEV=3D/dev/pmem0.1
+> >>> export SCRATCH_MNT=3D/mnt/scratch_pmem
+> >>> export MKFS_OPTIONS=3D"-m reflink=3D0 -b size=3D65536 -s size=3D512"
+> >>> export FSTYP=3Dxfs
+> >>> export MOUNT_OPTIONS=3D"-o dax"
+> >>>
+> >>>
+> >>> Test case: generic/256
+> >>>
+> >>>
+> >>> Traces:
+> >>>
+> >>>
+> >>> [  163.371929] ------------[ cut here ]------------
+> >>> [  163.371936] kernel BUG at lib/list_debug.c:29!
+> >>> [  163.371946] Oops: Exception in kernel mode, sig: 5 [#1]
+> >>> [  163.371954] LE PAGE_SIZE=3D64K MMU=3DRadix  SMP NR_CPUS=3D8192 NUM=
+A pSeries
+> >>> [  163.371965] Modules linked in: xfs nft_fib_inet nft_fib_ipv4 nft_f=
+ib_ipv6 nft_fib nft_reject_inet nf_reject_ipv4 nf_reject_ipv6 nft_reject nf=
+t_ct nft_chain_nat nf_nat nf_conntrack bonding tls nf_defrag_ipv6 nf_defrag=
+_ipv4 rfkill ip_set nf_tables nfnetlink sunrpc pseries_rng vmx_crypto dax_p=
+mem fuse ext4 crc16 mbcache jbd2 nd_pmem papr_scm sd_mod libnvdimm sg ibmvs=
+csi ibmveth scsi_transport_srp pseries_wdt
+> >>> [  163.372127] CPU: 22 UID: 0 PID: 130 Comm: kworker/22:0 Kdump: load=
+ed Not tainted 6.17.0-rc5-next-20250911 #1 VOLUNTARY
+> >>> [  163.372142] Hardware name: IBM,9080-HEX Power11 (architected) 0x82=
+0200 0xf000007 of:IBM,FW1110.01 (NH1110_069) hv:phyp pSeries
+> >>> [  163.372155] Workqueue: cgroup_free css_free_rwork_fn
+> >>> [  163.372169] NIP:  c000000000d051d4 LR: c000000000d051d0 CTR: 00000=
+00000000000
+> >>> [  163.372176] REGS: c00000000ba079b0 TRAP: 0700   Not tainted (6.17.=
+0-rc5-next-20250911)
+> >>> [  163.372183] MSR:  800000000282b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,L=
+E>  CR: 28000000  XER: 00000006
+> >>> [  163.372214] CFAR: c0000000002bae9c IRQMASK: 0
+> >>> [  163.372214] GPR00: c000000000d051d0 c00000000ba07c50 c00000000230a=
+600 0000000000000075
+> >>> [  163.372214] GPR04: 0000000000000004 0000000000000001 c000000000507=
+e2c 0000000000000001
+> >>> [  163.372214] GPR08: c000000d0cb87d13 0000000000000000 0000000000000=
+000 a80e000000000000
+> >>> [  163.372214] GPR12: c00e0001a1970fa2 c000000d0ddec700 c000000000208=
+e58 c000000107b5e190
+> >>> [  163.372214] GPR16: c00000000d3e5d08 c00000000b71cf78 c00000000d3e5=
+d05 c00000000b71cf30
+> >>> [  163.372214] GPR20: c00000000b71cf08 c00000000b71cf10 c000000019f58=
+588 c000000004704bc8
+> >>> [  163.372214] GPR24: c000000107b5e100 c000000004704bd0 0000000000000=
+003 c000000004704bd0
+> >>> [  163.372214] GPR28: c000000004704bc8 c000000019f585a8 c000000019f53=
+da8 c000000004704bc8
+> >>> [  163.372315] NIP [c000000000d051d4] __list_add_valid_or_report+0x12=
+4/0x188
+> >>> [  163.372326] LR [c000000000d051d0] __list_add_valid_or_report+0x120=
+/0x188
+> >>> [  163.372335] Call Trace:
+> >>> [  163.372339] [c00000000ba07c50] [c000000000d051d0] __list_add_valid=
+_or_report+0x120/0x188 (unreliable)
+> >>> [  163.372352] [c00000000ba07ce0] [c000000000834280] mem_cgroup_css_f=
+ree+0xa0/0x27c
+> >>> [  163.372363] [c00000000ba07d50] [c0000000003ba198] css_free_rwork_f=
+n+0xd0/0x59c
+> >>> [  163.372374] [c00000000ba07da0] [c0000000001f5d60] process_one_work=
++0x41c/0x89c
+> >>> [  163.372385] [c00000000ba07eb0] [c0000000001f76c0] worker_thread+0x=
+558/0x848
+> >>> [  163.372394] [c00000000ba07f80] [c000000000209038] kthread+0x1e8/0x=
+230
+> >>> [  163.372406] [c00000000ba07fe0] [c00000000000ded8] start_kernel_thr=
+ead+0x14/0x18
+> >>> [  163.372416] Code: 4b9b1099 60000000 7f63db78 4bae8245 60000000 e8b=
+f0008 3c62ff88 7fe6fb78 7fc4f378 38637d40 4b5b5c89 60000000 <0fe00000> 6000=
+0000 60000000 7f83e378
+> >>> [  163.372453] ---[ end trace 0000000000000000 ]---
+> >>> [  163.380581] pstore: backend (nvram) writing error (-1)
+> >>> [  163.380593]
+> >>>
+> >>>
+> >>> If you happen to fix this issue, please add below tag.
+> >>>
+> >>>
+> >>> Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+> >>>
+> >>>
+> >>>
+> >>> Regards,
+> >>>
+> >>> Venkat.
+> >>>
+> >>>
+> >>
+> >> After reverting the below commit, issue is not seen.
+> >>
+> >> commit 61bbf51e75df1a94cf6736e311cb96aeb79826a8
+> >> Author: Julian Sun <sunjunchao@bytedance.com>
+> >> Date:   Thu Aug 28 04:45:57 2025 +0800
+> >>
+> >>    memcg: don't wait writeback completion when release memcg
+> >>         Recently, we encountered the following hung task:
+> >>         INFO: task kworker/4:1:1334558 blocked for more than 1720 seco=
+nds.
+> >>    [Wed Jul 30 17:47:45 2025] Workqueue: cgroup_destroy css_free_rwork=
+_fn
+> >>    [Wed Jul 30 17:47:45 2025] Call Trace:
+> >>    [Wed Jul 30 17:47:45 2025]  __schedule+0x934/0xe10
+> >>    [Wed Jul 30 17:47:45 2025]  ? complete+0x3b/0x50
+> >>    [Wed Jul 30 17:47:45 2025]  ? _cond_resched+0x15/0x30
+> >>    [Wed Jul 30 17:47:45 2025]  schedule+0x40/0xb0
+> >>    [Wed Jul 30 17:47:45 2025]  wb_wait_for_completion+0x52/0x80
+> >>    [Wed Jul 30 17:47:45 2025]  ? finish_wait+0x80/0x80
+> >>    [Wed Jul 30 17:47:45 2025]  mem_cgroup_css_free+0x22/0x1b0
+> >>    [Wed Jul 30 17:47:45 2025]  css_free_rwork_fn+0x42/0x380
+> >>    [Wed Jul 30 17:47:45 2025]  process_one_work+0x1a2/0x360
+> >>    [Wed Jul 30 17:47:45 2025]  worker_thread+0x30/0x390
+> >>    [Wed Jul 30 17:47:45 2025]  ? create_worker+0x1a0/0x1a0
+> >>    [Wed Jul 30 17:47:45 2025]  kthread+0x110/0x130
+> >>    [Wed Jul 30 17:47:45 2025]  ? __kthread_cancel_work+0x40/0x40
+> >>    [Wed Jul 30 17:47:45 2025]  ret_from_fork+0x1f/0x30
+> >>         The direct cause is that memcg spends a long time waiting for =
+dirty page
+> >>    writeback of foreign memcgs during release.
+> >>         The root causes are:
+> >>        a. The wb may have multiple writeback tasks, containing million=
+s
+> >>           of dirty pages, as shown below:
+> >>>>> for work in list_for_each_entry("struct wb_writeback_work", \
+> >>                                        wb.work_list.address_of_(), "li=
+st"):
+> >>    ...     print(work.nr_pages, work.reason, hex(work))
+> >>    ...
+> >>    900628  WB_REASON_FOREIGN_FLUSH 0xffff969e8d956b40
+> >>    1116521 WB_REASON_FOREIGN_FLUSH 0xffff9698332a9540
+> >>    1275228 WB_REASON_FOREIGN_FLUSH 0xffff969d9b444bc0
+> >>    1099673 WB_REASON_FOREIGN_FLUSH 0xffff969f0954d6c0
+> >>    1351522 WB_REASON_FOREIGN_FLUSH 0xffff969e76713340
+> >>    2567437 WB_REASON_FOREIGN_FLUSH 0xffff9694ae208400
+> >>    2954033 WB_REASON_FOREIGN_FLUSH 0xffff96a22d62cbc0
+> >>    3008860 WB_REASON_FOREIGN_FLUSH 0xffff969eee8ce3c0
+> >>    3337932 WB_REASON_FOREIGN_FLUSH 0xffff9695b45156c0
+> >>    3348916 WB_REASON_FOREIGN_FLUSH 0xffff96a22c7a4f40
+> >>    3345363 WB_REASON_FOREIGN_FLUSH 0xffff969e5d872800
+> >>    3333581 WB_REASON_FOREIGN_FLUSH 0xffff969efd0f4600
+> >>    3382225 WB_REASON_FOREIGN_FLUSH 0xffff969e770edcc0
+> >>    3418770 WB_REASON_FOREIGN_FLUSH 0xffff96a252ceea40
+> >>    3387648 WB_REASON_FOREIGN_FLUSH 0xffff96a3bda86340
+> >>    3385420 WB_REASON_FOREIGN_FLUSH 0xffff969efc6eb280
+> >>    3418730 WB_REASON_FOREIGN_FLUSH 0xffff96a348ab1040
+> >>    3426155 WB_REASON_FOREIGN_FLUSH 0xffff969d90beac00
+> >>    3397995 WB_REASON_FOREIGN_FLUSH 0xffff96a2d7288800
+> >>    3293095 WB_REASON_FOREIGN_FLUSH 0xffff969dab423240
+> >>    3293595 WB_REASON_FOREIGN_FLUSH 0xffff969c765ff400
+> >>    3199511 WB_REASON_FOREIGN_FLUSH 0xffff969a72d5e680
+> >>    3085016 WB_REASON_FOREIGN_FLUSH 0xffff969f0455e000
+> >>    3035712 WB_REASON_FOREIGN_FLUSH 0xffff969d9bbf4b00
+> >>             b. The writeback might severely throttled by wbt, with a s=
+peed
+> >>           possibly less than 100kb/s, leading to a very long writeback=
+ time.
+> >>>>> wb.write_bandwidth
+> >>    (unsigned long)24
+> >>>>> wb.write_bandwidth
+> >>    (unsigned long)13
+> >>         The wb_wait_for_completion() here is probably only used to pre=
+vent
+> >>    use-after-free.  Therefore, we manage 'done' separately and automat=
+ically
+> >>    free it.
+> >>         This allows us to remove wb_wait_for_completion() while preven=
+ting the
+> >>    use-after-free issue.
+> >>     com
+> >>    Fixes: 97b27821b485 ("writeback, memcg: Implement foreign dirty flu=
+shing")
+> >>    Signed-off-by: Julian Sun <sunjunchao@bytedance.com>
+> >>    Acked-by: Tejun Heo <tj@kernel.org>
+> >>    Cc: Michal Hocko <mhocko@suse.com>
+> >>    Cc: Roman Gushchin <roman.gushchin@linux.dev>
+> >>    Cc: Johannes Weiner <hannes@cmpxchg.org>
+> >>    Cc: Shakeel Butt <shakeelb@google.com>
+> >>    Cc: Muchun Song <songmuchun@bytedance.com>
+> >>    Cc: <stable@vger.kernel.org>
+> >>    Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+> >>
+> >> Regards,
+> >> Venkat.
+> >>
+> >>>
+> >>
+> >
+> >
+> > --
+> > Julian Sun <sunjunchao@bytedance.com>
+>
 
-> 
-> Are these error messages a new error that was not reported previously or
-> are these error messages a sign that the new code erroneously reports errors?
-> 
-
-It could be that the recent code updates broke something. Or there may
-be other kernel changes causing new, spurious errors.
-
-We could also be picking up errors from the hardware that were
-previously ignored. I'll ask our hardware folks if this is a case we
-should address.
-
-Thanks for reporting this!
-
--Yazen
+Thanks,
+--=20
+Julian Sun <sunjunchao@bytedance.com>
 

@@ -1,55 +1,54 @@
-Return-Path: <linux-next+bounces-8299-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8300-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 594E6B5820A
-	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 18:29:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25263B5824C
+	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 18:38:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1AA51B208ED
-	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 16:29:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A3CB7A17EB
+	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 16:36:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E25EB284889;
-	Mon, 15 Sep 2025 16:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9CFD3B1AB;
+	Mon, 15 Sep 2025 16:38:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qI0Hr66S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qicALOeC"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6A0D27E05A;
-	Mon, 15 Sep 2025 16:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8207227934B;
+	Mon, 15 Sep 2025 16:38:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757953703; cv=none; b=lZA5ckIWESAfLdeio+QmnLQwt07hJysq6osIdmmnxjLsaDfgEVLcJ9j+l5p06Z3EPj9NPAFEq4J8sOEDU0bSRIfn0Tzb5Y6G+4lCtrFuwwSF+ElnV0qeC80s8c6mhSI5B2Oirj5KNwpvIe4zIkPJPmFEVtnOEJd/YGWD0U5qNoA=
+	t=1757954311; cv=none; b=IjkNVP9Emtavw51/k2WgbMv8Zbi3179BTuPCYEkjqTF4bqtMpFzkBABBXbWI2tdinGLscO1zfDKOzEFqnbhKYDmBMFpuHayBipnDT4l4OKjqhB7bmTtxz4JXgCdKMiFTSXTGHJcScCdYcMsw7YBLzn/xWr5D1KLn908Bzoy1DGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757953703; c=relaxed/simple;
-	bh=wIrItACSO6xpqEsoeRFwFKh9DWmDR0g6UY9Xw3JMGRE=;
+	s=arc-20240116; t=1757954311; c=relaxed/simple;
+	bh=rPux3kZ+R4cKlhfcbqH6Q3wPadbmps9lgWzK5w84qUY=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pwP9Xog38ibeNIfWuRZg4UmSBl7MeNKi/ddJIa4LRZOdqL92UkgFG8H5j/JMcUL4AUdXNG/fa0VbDSY6kjgju3aXNmpPHC2Ez4iPhwKZ1Luw7dObc37klHV0l1iIvnpuNArgnMiK8TegDAhhFmWHn4u9+xkDngCthUUH6TwjZ+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qI0Hr66S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 149F0C4CEF1;
-	Mon, 15 Sep 2025 16:28:21 +0000 (UTC)
+	 Content-Disposition; b=EqqKPDgQRdDNvwlvYZYWoPDOP/arkNOX6W+pLAiL9c2zVetqHgwv2XXQFToKyJkUhfsC8PNGdnwmcqwvhh4S84T/WfBafXnwRq1FftCdO7edA4PAyMSUm5Muuotf/1AzVuJGzbwkvw6rYEhUjlkyfMn9aQ9LHeY2oivMQl33cxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qicALOeC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25F37C4CEF1;
+	Mon, 15 Sep 2025 16:38:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1757953703;
-	bh=wIrItACSO6xpqEsoeRFwFKh9DWmDR0g6UY9Xw3JMGRE=;
+	s=k20201202; t=1757954311;
+	bh=rPux3kZ+R4cKlhfcbqH6Q3wPadbmps9lgWzK5w84qUY=;
 	h=Date:From:To:Cc:Subject:From;
-	b=qI0Hr66SOioC4CuFeml2EWgsCft9xE6mTt3CSJhPKyKyrg316haKVvf9PbRWnsN1a
-	 virXl3k1Ji+2dV0ptXKGlD3iHDV+sQJLa77xJMPBkFZhrscOuDERPQqz0n/CpyWlGr
-	 30DufI6nNSsewQKdp/oYwMIvHOJ9+/jRdFTrvsMdBc2cLuO+6LHYUS8YKA0+PgkQBS
-	 mUvKIGHcDCVwfYHLUPROB7MuUuDXW+z7WlWMqq/lMbfV+GRs1uVFR0EQyITGLmtyv2
-	 h1Rvl6W10WAR/fStlY5bimWSvFN6aQPKiwdI6HWu5lKtmMBIq6HQsNh++Cqf41esx2
-	 J0e1n3MblVgMQ==
-Date: Mon, 15 Sep 2025 17:28:19 +0100
+	b=qicALOeCy/B6hol6Ze0031B5J4oMt5saZygVSnd0z+oBlBDinX7+wt11d9FAQGv9h
+	 VocGaZ7P/sltKlMQotnahk8aXH9stVjKZeAG4RnxDFOeTW3it+WWrIPg5uv3ziclYl
+	 3MGjafqH4fPcPu6B9AQ1gjEFqUKcC+IKy62yOr1cAvO8R5ZdSV9Foywg7xFSxvB7Hi
+	 JFDsMmrnrPj9fO4g/cgQHdsekzNWClwNKcGmy66ACiqukkH9DcBtW4Y9EEHcWpgzOe
+	 sCtkhkakJfsc/LOHT6TJhaWLmEIqM28rKevU2hvcIAfpT44Iqg2jqIJ0uQy5LVuW3Y
+	 rHzUZWkmneGRA==
+Date: Mon, 15 Sep 2025 17:38:27 +0100
 From: Mark Brown <broonie@kernel.org>
 To: Al Viro <viro@zeniv.linux.org.uk>
 Cc: Christian Brauner <brauner@kernel.org>,
-	David Howells <dhowells@redhat.com>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: linux-next: manual merge of the vfs tree with the fs-next tree
-Message-ID: <aMg-o7KPAkDmqQN8@sirena.org.uk>
+Message-ID: <aMhBAxSlU-vhVqxQ@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -57,11 +56,11 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yPaLQWwmGrOURL3O"
+	protocol="application/pgp-signature"; boundary="kCTZdpj4RhxVWrrE"
 Content-Disposition: inline
 
 
---yPaLQWwmGrOURL3O
+--kCTZdpj4RhxVWrrE
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -70,16 +69,16 @@ Hi all,
 
 Today's linux-next merge of the vfs tree got a conflict in:
 
-  fs/afs/internal.h
+  fs/namespace.c
 
 between commit:
 
-  09c69289a2730 ("afs: Add support for RENAME_NOREPLACE and RENAME_EXCHANGE=
-")
+  96ff702edaec8 ("mnt: support ns lookup")
 
 =66rom the fs-next tree and commit:
 
-  09c2e9069e0fb ("afs_edit_dir_{add,remove}(): constify qstr argument")
+  91e682db2fbe1 ("mnt_ns_tree_remove(): DTRT if mnt_ns had never been added=
+ to mnt_ns_list")
 
 =66rom the vfs tree.
 
@@ -90,47 +89,56 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc fs/afs/internal.h
-index 444a3ea4fdf65,1ce5deaf60193..0000000000000
---- a/fs/afs/internal.h
-+++ b/fs/afs/internal.h
-@@@ -1099,11 -1097,11 +1099,11 @@@ int afs_single_writepages(struct addres
-  /*
-   * dir_edit.c
-   */
-- extern void afs_edit_dir_add(struct afs_vnode *, struct qstr *, struct af=
-s_fid *,
-+ extern void afs_edit_dir_add(struct afs_vnode *, const struct qstr *, str=
-uct afs_fid *,
-  			     enum afs_edit_dir_reason);
-- extern void afs_edit_dir_remove(struct afs_vnode *, struct qstr *, enum a=
-fs_edit_dir_reason);
-+ extern void afs_edit_dir_remove(struct afs_vnode *, const struct qstr *, =
-enum afs_edit_dir_reason);
- -void afs_edit_dir_update_dotdot(struct afs_vnode *vnode, struct afs_vnode=
- *new_dvnode,
- -				enum afs_edit_dir_reason why);
- +void afs_edit_dir_update(struct afs_vnode *vnode, const struct qstr *name,
- +			 struct afs_vnode *new_dvnode, enum afs_edit_dir_reason why);
-  void afs_mkdir_init_dir(struct afs_vnode *dvnode, struct afs_vnode *paren=
-t_vnode);
+diff --cc fs/namespace.c
+index e3ac6e06be70d,aeeb33bf3e7b3..0000000000000
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@@ -153,10 -195,26 +161,10 @@@ static void mnt_ns_release_rcu(struct r
+  static void mnt_ns_tree_remove(struct mnt_namespace *ns)
+  {
+  	/* remove from global mount namespace list */
+- 	if (!is_anon_ns(ns))
+ -	if (!list_empty(&ns->mnt_ns_list)) {
+ -		mnt_ns_tree_write_lock();
+ -		rb_erase(&ns->mnt_ns_tree_node, &mnt_ns_tree);
+ -		list_bidir_del_rcu(&ns->mnt_ns_list);
+ -		mnt_ns_tree_write_unlock();
+ -	}
+++	if (!list_empty(&ns->mnt_ns_list))
+ +		ns_tree_remove(ns);
+ =20
+ -	call_rcu(&ns->mnt_ns_rcu, mnt_ns_release_rcu);
+ -}
+ -
+ -static int mnt_ns_find(const void *key, const struct rb_node *node)
+ -{
+ -	const u64 mnt_ns_id =3D *(u64 *)key;
+ -	const struct mnt_namespace *ns =3D node_to_mnt_ns(node);
+ -
+ -	if (mnt_ns_id < ns->seq)
+ -		return -1;
+ -	if (mnt_ns_id > ns->seq)
+ -		return 1;
+ -	return 0;
+ +	call_rcu(&ns->ns.ns_rcu, mnt_ns_release_rcu);
+  }
  =20
   /*
 
---yPaLQWwmGrOURL3O
+--kCTZdpj4RhxVWrrE
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjIPqIACgkQJNaLcl1U
-h9C/Wwf+OYy/4uf6MBZTi3RMH16np/z4n+1eUp0aBFe/mpTrDHIxes3YgFMLlt3v
-M5X2FnA7JFP2BSoJZwgcs5+tZnZN/Fd8uDT9HzSX6sCZ6HrBym74zeijkA5irUV3
-+jQZs8LelgxkNEy9ccU8KntA/GjxFwJgFFtCJ3FZi0l+ClOuc3YWVBqFSgl/x+Wv
-/t9G8VsmRE/F1bjuUX/TMD6U5I2rN8zup1nW5nIOv0cCIBlh3ajE8tL7WM8mGXPI
-lPr/JHWTWlRWePNPDD4eDf/wCuRwae+0yDwEraKMRtfTAvHEbfhaUThby/V21FOO
-EBmz8MphXDfxyvsX8WRCiaqPhhM8lA==
-=otWZ
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjIQQIACgkQJNaLcl1U
+h9DnwAf/dcLBqnRwO5sx78mBtOb8drd6mySRt2aQOlowkw62+4mZh3As+vOW1osW
+rHKD9iEH/I5hFpNWTClFsDL2AFHmAg+f9RFwlNuT2vdApoRNVkiDd28DGP/3cQpI
+BVZrAc5jRpAxJ2on3EQ+gt/rbHwy+KrRceLYl0BtHj6Fkr8NcZTxap2/wDYn333M
+uR+4QFErsNvpkAzdMyfNLRoG+DChwx3nsE2r3MKm3xUAq1vsW5kTkcaIiByB5Ypk
+1Dlb6IdgvKn9qLAeoWMLRgaFOA9sQSRndwabbRfN/yFqWeuYTYPor1O/X/FoVRjl
+3V+wqGz3p2l+5VFL2BxwemudA8EOmg==
+=uH/+
 -----END PGP SIGNATURE-----
 
---yPaLQWwmGrOURL3O--
+--kCTZdpj4RhxVWrrE--
 

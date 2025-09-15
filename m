@@ -1,72 +1,112 @@
-Return-Path: <linux-next+bounces-8302-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8303-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0043B5830A
-	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 19:12:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04FC1B5837D
+	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 19:24:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4113E169C0C
-	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 17:12:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97F521AA03EA
+	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 17:23:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D382E11D6;
-	Mon, 15 Sep 2025 17:10:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24EC12E1745;
+	Mon, 15 Sep 2025 17:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j/gtIuKE"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.hallyn.com (mail.hallyn.com [178.63.66.53])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 777EC2DAFB7;
-	Mon, 15 Sep 2025 17:10:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.63.66.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE4692C0323;
+	Mon, 15 Sep 2025 17:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757956247; cv=none; b=JNJvhE9P5O1l/1HULwM/KbkD5vsydkJ+zD1zioYHPZzZ81AmlYZZn8pLcIcnIMfh6WfQ6ZTMCM6NgEbXCzd/ZRpbbCdyCBpb0yX4HN/56UDB0U7+tfUsn426ISlFUx3KZX9APTZGurEXtFrvwJDEglvY2Pirm+D/6JVYrxKeTpw=
+	t=1757956898; cv=none; b=Kjq0Q9GcNgArxuqqAORcSPpx9Zh52t18xg6NWHn2s372P0iaPgeMQAJCCdoO3EuMPR8LRble5U6YWBlll/q34mFZBz857+ij85IeMkteOd3fgB6A34fdeVvL6HFVDAh/Eeu1GYnvyuXOkGKCl6uyNyyc4izwzCvUmrsctVZYVC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757956247; c=relaxed/simple;
-	bh=tg5wQZt8IFHDWa57QcPEzPebm4t7CT0MwKDbjZ3TyXc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O09sO/XyWifPUDYEwarKC9/82tNKLYJu2hpY9Z26BbOIGTg8oGJbwU8zQ45sxfk61UcDwjs2quAH4I56XIdb+y8EeXL08c3C2kdvfvm3aD9vi+s9Dg/ZI8xSUuaFL6hXgLGjMvN7COilNwk6/LaXJFH72sTiCbgK7RN+okoxOGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com; spf=pass smtp.mailfrom=mail.hallyn.com; arc=none smtp.client-ip=178.63.66.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hallyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.hallyn.com
-Received: by mail.hallyn.com (Postfix, from userid 1001)
-	id 44CCF6CC; Mon, 15 Sep 2025 12:10:42 -0500 (CDT)
-Date: Mon, 15 Sep 2025 12:10:42 -0500
-From: "Serge E. Hallyn" <serge@hallyn.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
-	Serge Hallyn <sergeh@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Paul Moore <paul@paul-moore.com>, linux-next@vger.kernel.org,
-	linux-kernel@vger.kernel.org, selinux@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: Missing signoff in the capabilities-next tree
-Message-ID: <aMhIkinrQtnFz1/c@mail.hallyn.com>
-References: <bb5c5c5f-fa31-4339-aa53-d06596351f86@sirena.org.uk>
+	s=arc-20240116; t=1757956898; c=relaxed/simple;
+	bh=OqqT4okXFmBULfhECZUIPVXBSE5Upo1Q+LGtZwyNmCU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=vGMQOSbFXbfFBlH7dBVaiTD/orqh2JNDkkm0ltl9QdhriuaIql85/HBtCMdHMU6lFHDJ9M31d/iLmrRc1u+JAmT9zSykS8WT136YyLyx5/E69Xm6TkQxGwagyEWYXaI7DV5wCBRV8kUDYQjQephj4M7/TQvxbWMgcJjUwG57GgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j/gtIuKE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53F1BC4CEF1;
+	Mon, 15 Sep 2025 17:21:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757956897;
+	bh=OqqT4okXFmBULfhECZUIPVXBSE5Upo1Q+LGtZwyNmCU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=j/gtIuKELjFUPN5FK/7zPMsUGaTIiExeYWNKYJJJrzo7MbmNLUXsi0ed9pfQTTaWG
+	 wfU4Xvuu03AY376SPNFtnrisDJCJ/IqiC8FR/AUf29mX5dvrrxIwXuGVBWD7KDcmxi
+	 o+KijjxJRHKbhx52si1cGhEZh1kTthghS3JELohtwpqdhWrtMvaNAxtEfEZDQMImKb
+	 JHp3tJU+QTaA29gn8AjQRQiBw6M39RImlOVEs52jbeaNsPiuEKuSoswEUGaXmcv286
+	 Kq7QXas0G4+cbOCVh0e22qjk3nk/z/D+LY6vMEYXFvTATCMFBmKy8xilEBH7zjvDg4
+	 DoYtE96s70E8g==
+Date: Mon, 15 Sep 2025 18:21:33 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Heiko Stuebner <heiko@sntech.de>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the rockchip tree with the arm-soc tree
+Message-ID: <aMhLHaSlc0O59qRi@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="3l0LF7sbDuTv96lr"
+Content-Disposition: inline
+
+
+--3l0LF7sbDuTv96lr
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bb5c5c5f-fa31-4339-aa53-d06596351f86@sirena.org.uk>
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 15, 2025 at 05:04:40PM +0100, Mark Brown wrote:
-> Commit
-> 
->   d87d3c530e0ce ("pid: use ns_capable_noaudit() when determining net sysctl permissions")
-> 
-> in the capabilites-next tree is missing a Signed-off-by from its
-> committer.
+Hi all,
 
-Hm, I had expected b4 shazam to do that for me, but I see that
-that requires -s.
+Today's linux-next merge of the rockchip tree got a conflict in:
 
-In any case, I think I will be dropping it from this tree, and
-Christian will take it through his.
+  arch/arm64/boot/dts/rockchip/rk3588-rock-5t.dts
 
-thanks,
--serge
+between commit:
+
+  090be83a07923 ("Merge branch 'soc/dt' into for-next")
+
+=66rom the arm-soc tree and commit:
+
+  3f20580e1daba ("Merge branch 'v6.18-armsoc/dts64' into for-next")
+
+=66rom the rockchip tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc arch/arm64/boot/dts/rockchip/rk3588-rock-5t.dts
+index c1763835f53d4,e907e279bc98a..0000000000000
+--- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5t.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5t.dts
+
+--3l0LF7sbDuTv96lr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjISxwACgkQJNaLcl1U
+h9C+wgf/Q4wCtfiH2PY+fkT/AAUcZVozNSvC7uTimpw5YX8fsIvyVGV1pWCqpLTQ
+qcgOn6dLITDfE1XdRXWZ9RgH/pT/iVwZS6ml0oJaRYSeAQjDWkD3riKrIhOgBXF2
+UkvN4IYCJMlh/c12ZsSean2pLl7NEoVKvhZniLDmsaEKas06aSgjB1VNufok+qFI
+HfwyBhilQTL4ZOjnC/djRe5f8lEP2/ungUqeQPFt5F6KnAM+B9o7QhW0sH3OOhhs
+zwwMRdkdDtLpUhV/hPWbWK/WgrwT6AXjRp+waZMuRf0Zwd9siMylDCEWwRklY+bQ
+ZyY59wxkxzPCJ0Tm9xfemVHICMzjVQ==
+=BSC+
+-----END PGP SIGNATURE-----
+
+--3l0LF7sbDuTv96lr--
 

@@ -1,129 +1,140 @@
-Return-Path: <linux-next+bounces-8308-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8309-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B0EEB58477
-	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 20:21:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 795C7B585C2
+	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 22:14:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C4891AA7664
-	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 18:21:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34FDB4C165A
+	for <lists+linux-next@lfdr.de>; Mon, 15 Sep 2025 20:14:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DE542DE6E8;
-	Mon, 15 Sep 2025 18:21:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A771A2877E9;
+	Mon, 15 Sep 2025 20:14:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="VyAopmCP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t8Btn4AG"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF4026AD9
-	for <linux-next@vger.kernel.org>; Mon, 15 Sep 2025 18:21:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAC02747B;
+	Mon, 15 Sep 2025 20:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757960472; cv=none; b=sDUyB4+nr39FF44R74SSVDQ2K6uQ9XxTt0I+2LEZ2l3use2xgExuWSneoVFXUK+XCNCUHZb5DCuAhOX5zoz8YE/fazIyCEFu7gdHcY/sbD4oS5E/oAx2cExX6wKYuIdSjyC7mc8FosjFfnecjInUtJlptNqlabIRJNOEvCIXxuY=
+	t=1757967247; cv=none; b=FhoD795vgwTbiWoA2W8gyYtCSZMHpUG0tNRXY1KkSC+9zK+CG2vc26Tk3PfAWZIyWmX/v9hWhHMxale2x96q6/0CEtKFGXUEii0gHybukAv992P8yTAyUqrF6oBx8fslH2Y0hrJCJXh75k7Fksp2/IgOKbgj2BFTBthLhXzVKdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757960472; c=relaxed/simple;
-	bh=0aDdECbcFnvzK6gvTk++iDWF1gYYmeS5TIpHZBB7Yb4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ggglS+K0GpzEvACM3ZIk8v8Vf54gycqFQyVvFkEYPFnWOWzqLWwDbA7J+Tak8Zts5e8NpXNjlhiuIGttWj9CjMv4jWT/0jipRlP/DZvAivOGgE4n9nC9Y6MVvWmG0xBkhTboAvdcRawnpONYCCfNEsBFyW3qaHEcmrOTOWjryeY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=VyAopmCP; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-72e565bf2feso31443027b3.3
-        for <linux-next@vger.kernel.org>; Mon, 15 Sep 2025 11:21:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1757960469; x=1758565269; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D+GliT1Pd8d53HWEdMQBU1YHyq1rnSI3P+2j/fil2q0=;
-        b=VyAopmCPFu7azUOHo0iM0H7C1iay8VW3m34YkV5/b7mkIrzNgdYj5gIB3MfbOgXNdw
-         An1WLWvxpwHETRBOl6tExv14asHr/pcrwj+azTUyrRbWDdskINTs5rsmOapntNqNXL95
-         t81vuvAhPUOVXnTPbrGYMDEg5e3GgK/d72EbDKkpXRHbEahmQtKj5f/MPk/JGqiHY7Pq
-         En+4QRjrwFfGtSEBIVtYCHLnbd1yI+elNGt3Lf9l0fJMxlbjMhQIfYtIIsyzRsBAdvNH
-         TG6/v5FypG6rdlO1ex/QEMEoZhYXH47Yn/9WI67xG2S1GDFt4p3nCwKGtO8N1hyud4OA
-         XhBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757960469; x=1758565269;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D+GliT1Pd8d53HWEdMQBU1YHyq1rnSI3P+2j/fil2q0=;
-        b=L1RrX1QEeslxujya0WUIqGGxXMMtAq2buuD4Ppu9xeStuTZ8HYG5IjIL9PnVL5kK0b
-         6xsW94/iSVUJnDGwmV8JTQLUzxoktGfiduhNlAVenFO8SBU35gfpRzArBg1BGMouN43D
-         IAOsc2btWMEuSi6A+77dHc6hTBDTg5My6iGQvjoZefhO+DsD5SzpoiWLiP5wecwGrozP
-         iRgv533rn3CcU63stypokMdXxwM8czDOBV3MGJqa0/lTo7h80Y6gSiKwB22sw0vntk0I
-         JY4+hN57qEoPDUJxbxpTi5W2XphJNOzj4+pqL3ckSfheflVuJJWpFrkiFB0wreTGaGLY
-         28wg==
-X-Forwarded-Encrypted: i=1; AJvYcCVTdisHySgI0wAne3QbAliQsRjVHlKfO4kDBZtqE9FmwrcBDai5BjjraRziTOHHEkr56dil6gtEzwgx@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2x2Z/LfdrREHXcVwOnsiP3gDnSw/zba+mFNYfGoAPQHlHCE2t
-	YexEvvNbr71WLSX4pBs8orNwOvv+y4o4u/3LTH2uVQxU5JbsU9ND83ENbPinvfnzNX5vbBh396m
-	014vcHDFZTQbI6BIFmjHMtPMDaIC2I5jyJYXAFuUedQ==
-X-Gm-Gg: ASbGncvZZgsLwbQPFl29UvLPfzzOX3AsTNWklYkmdk/G6NIDbi0kWgAF+QI1i+APOxd
-	WKZ2sCsZ+VWeuYF/xNfqVeWDjsNXZVbnHvB/nEKH3LXsu+FqJAaY0bK6NzvJWvfi1owfqS8CDgz
-	gHeYtbeKmBxzSyRFHZSvbtd+pjj+nfOc/EsJDO89r5q2Ecoq9bzAALaTYR5J3y0+IX3L8RVSuw7
-	RWCdcQ/H62XEwQ=
-X-Google-Smtp-Source: AGHT+IEDp5ZYxkbjon4yCrRZanz3ywO+1Dqvmg43vzDGc4l+oL6FL33NrpAa1korZr0/WJwLYzGBFv1kfMtD4v4LVjo=
-X-Received: by 2002:a05:690c:9c0c:b0:71c:1a46:48d5 with SMTP id
- 00721157ae682-73063480b69mr133022797b3.21.1757960468639; Mon, 15 Sep 2025
- 11:21:08 -0700 (PDT)
+	s=arc-20240116; t=1757967247; c=relaxed/simple;
+	bh=ilJWNxayMThwb1eakcWmL389I9ycMd+B4CpHlsqDUns=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=N39nO4ZcT3IvVWeI4MP1doo6egk8iMGlBgpVA7cqCqbXjHEig3gpSMkNhz6y0cTSOv+gt+8ZbSO4WciBkNC6BBMuELOXjsBlthRS5NexeLKsI3ViSk2y5Bdalb+TzRzVrbdxBaKCnKMGEcniN4s7ls1sXxB+VDIsOr1QXwpB9hI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t8Btn4AG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19046C4CEF1;
+	Mon, 15 Sep 2025 20:14:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757967247;
+	bh=ilJWNxayMThwb1eakcWmL389I9ycMd+B4CpHlsqDUns=;
+	h=Date:From:To:Cc:Subject:From;
+	b=t8Btn4AGX624oRNqXDwTHnU3jPEwCss5S9TQ3VYUW/Wcrx4HRy4AjiVmUBQ0CJI7P
+	 smuviIyBwbe7BJf7pw7vhn29glDqakqvWIqy/X1MwqBff+X1/dLw656zwtne3TSr/O
+	 dZD9wlra5C8wCwdgDDtVR5UKve2SabnvVvOPXqWXUVg/FiCA2PoP9M5hENgwdjPu2Q
+	 X4e5VWfQL9H88rfqga8q4vpemOWWxBGP9CTGsDnRDKsbGNVD6+Eq1zRDSYx5PDbuAT
+	 wb5jFkQgQGG6LbYB5XAo72DrJoy/L4Ny1JFnrXAyVr04vuSXJlfTrQ+Pdv9fnEHIR4
+	 AvHuBJglIeZaw==
+Date: Mon, 15 Sep 2025 21:14:03 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Al Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>
+Cc: Amir Goldstein <amir73il@gmail.com>,
+	buildfailureaftermergeofthevfstree@sirena.org.uk,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure in the vfs tree
+Message-ID: <aMhzi0WpakpN7oH5@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <8957c526-d05c-4c0d-bfed-0eb6e6d2476c@linux.ibm.com>
- <BAEAC2F7-7D7F-49E4-AB21-10FC0E4BF5F3@linux.ibm.com> <CAHSKhteHC26yXVFtjgdanfM7+vsOVZ+HHWnBYD01A4eiRHibVQ@mail.gmail.com>
- <240A7968-D530-4135-856A-CE90D269D5E6@linux.ibm.com> <20250915142612.1412769A80-agordeev@linux.ibm.com>
-In-Reply-To: <20250915142612.1412769A80-agordeev@linux.ibm.com>
-From: Julian Sun <sunjunchao@bytedance.com>
-Date: Tue, 16 Sep 2025 02:20:55 +0800
-X-Gm-Features: Ac12FXz4gtGN6Jqt9p3sI4NDKpM8RKfj3WgCz5dLwYdzbiuc_wRBtKzbSNJCafg
-Message-ID: <CAHSKhtc-514tQoyCSukK1sLbDbc+Ne_TnwEks-h+gQWv8ZKHOA@mail.gmail.com>
-Subject: Re: [External] Re: [linux-next20250911]Kernel OOPs while running
- generic/256 on Pmem device
-To: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Venkat <venkat88@linux.ibm.com>, tj@kernel.org, akpm@linux-foundation.org, 
-	stable@vger.kernel.org, songmuchun@bytedance.com, shakeelb@google.com, 
-	hannes@cmpxchg.org, roman.gushchin@linux.dev, mhocko@suse.com, 
-	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, riteshh@linux.ibm.com, 
-	ojaswin@linux.ibm.com, linux-fsdevel@vger.kernel.org, 
-	linux-xfs@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Linux Next Mailing List <linux-next@vger.kernel.org>, 
-	cgroups@vger.kernel.org, linux-mm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="g22mec4zZxJjSZ1x"
+Content-Disposition: inline
+
+
+--g22mec4zZxJjSZ1x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi all,
 
-On Mon, Sep 15, 2025 at 10:26=E2=80=AFPM Alexander Gordeev
-<agordeev@linux.ibm.com> wrote:
->
-> On Mon, Sep 15, 2025 at 07:49:26PM +0530, Venkat wrote:
-> > Hello,
-> >
-> > Thanks for the fix. This is fixing the reported issue.
-> >
-> > While sending out the patch please add below tag as well.
-> >
-> > Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
->
-> And Reported-by as well, if I may add ;)
->
+After merging the vfs tree, today's linux-next build (arm64 defconfig)
+failed like this:
 
-I'd like to but I will resend the whole patch which is used to address
-another issue.  Thanks a lot for reporting anyway =E2=80=94 it=E2=80=99s ve=
-ry helpful!
-> > Regards,
-> > Venkat.
->
-> Thanks!
+/tmp/next/build/fs/nsfs.c:582:27: error: initialization of 'struct file * (=
+*)(const struct path *, unsigned int)' from incompatible pointer type 'stru=
+ct file * (*)(struct path *, unsigned int)' [-Wincompatible-pointer-types]
+  582 |         .open           =3D nsfs_export_open,
+      |                           ^~~~~~~~~~~~~~~~
+/tmp/next/build/fs/nsfs.c:582:27: note: (near initialization for 'nsfs_expo=
+rt_operations.open')
 
+Caused by an interaction with commit
 
-Thanks,
+  06c4ff965e95b ("nsfs: support file handles")
+
+=66rom the vfs-brauner tree and
+
+  efa6ab3688a54 ("export_operations->open(): constify path argument")
+
+I've fixed it up as below and can carry as required.
+
+=46rom 56e625f1566ee6e3940c625a393b3b4e75806b3f Mon Sep 17 00:00:00 2001
+=46rom: Mark Brown <broonie@kernel.org>
+Date: Mon, 15 Sep 2025 21:03:13 +0100
+Subject: [PATCH] nsfs: Fix up merge
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ fs/nsfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/fs/nsfs.c b/fs/nsfs.c
+index 8484bc4dd3deb..32cb8c835a2ba 100644
+--- a/fs/nsfs.c
++++ b/fs/nsfs.c
+@@ -571,7 +571,7 @@ static int nsfs_export_permission(struct handle_to_path=
+_ctx *ctx,
+ 	return 0;
+ }
+=20
+-static struct file *nsfs_export_open(struct path *path, unsigned int oflag=
+s)
++static struct file *nsfs_export_open(const struct path *path, unsigned int=
+ oflags)
+ {
+ 	return file_open_root(path, "", oflags, 0);
+ }
 --=20
-Julian Sun <sunjunchao@bytedance.com>
+2.47.2
+
+=2E
+
+--g22mec4zZxJjSZ1x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjIc4oACgkQJNaLcl1U
+h9CyAwf/VLSSwom0yUiU0ih6pUDDmQsXUANoiHBgFLtBv1EPp6uIm9/vjX/u1WW1
+C75Tf8jV9uT+DvRqbVstxEauaZcW+Sohz675XvWHpikrRZe6ONqZW0IPwqY/U0VV
+ehiD23h/GYtT/js21M8+uzNu23I73pWVFQwENN7rwxnD0szbIvvqal53Ng6M+aRh
+5xWWroFo69mg2Mi+P4IxGLzI8OyeW/E/eU42Gig1nNPEAFqIMUw5756CvMNHYvVT
+ECE+VTlFVbG67nquOgMj1NQcOsm9snkgPOweTrSI0/LeEV2q9hHNfHrDDthZ20xt
+p19yy4sHRoYTcUBa3lP5bayJrkI1MQ==
+=gb/M
+-----END PGP SIGNATURE-----
+
+--g22mec4zZxJjSZ1x--
 

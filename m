@@ -1,55 +1,55 @@
-Return-Path: <linux-next+bounces-8333-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8334-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE4C3B59718
-	for <lists+linux-next@lfdr.de>; Tue, 16 Sep 2025 15:12:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34535B5972F
+	for <lists+linux-next@lfdr.de>; Tue, 16 Sep 2025 15:14:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 581017B4D05
-	for <lists+linux-next@lfdr.de>; Tue, 16 Sep 2025 13:09:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8047325026
+	for <lists+linux-next@lfdr.de>; Tue, 16 Sep 2025 13:14:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E86FF306B16;
-	Tue, 16 Sep 2025 13:10:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C96E2DAFB5;
+	Tue, 16 Sep 2025 13:13:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t8QXL0U4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AgQpEl3Q"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16D53019BE;
-	Tue, 16 Sep 2025 13:10:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB38288C35;
+	Tue, 16 Sep 2025 13:13:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758028200; cv=none; b=MQybbOVkQm5+JaGbLGj55dG24yoKPs25Qx9WwwYmrTLUGyKj5RaBgJRCnjMiiAiC1vlYQxW9cJedYCrWOHJgcwfy0yQBwzYLDU4oDogwUvG3AiUDTmXmoxLbxbfCWe2udP5F2OBevFmXWV86juWu8Wx6n48z/o9WoGVtsGcEX34=
+	t=1758028421; cv=none; b=tuu//nt+weBDOJmCPbZtMpcmQ0rPfLI3o4s8RI3IwrLR/oj1EXT+6Oh3Pi3MS+MuGVSHe/wgErVsn6PIYjGGwnVBYee2mJDC1Rq1ehRscSJgZHQstQ8S7SLL3RXwK35MZ9To6z7d1n/VpTJd173y1yijtAfF7FsXlXdXAecsrQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758028200; c=relaxed/simple;
-	bh=JfnbUyOXxXuZP7KeNYZ4F9btUQDCypXExEHwkTv5H30=;
+	s=arc-20240116; t=1758028421; c=relaxed/simple;
+	bh=s+wCAG5BNTvG7Yd5wNh0mmRPRi1ojyXV1AR78FC5RO0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bWRtq7Yjx5cQOQp5NouMU9HW/Ng2K/V/jYw5Wc2OUGSy/rNWmkg2ZNk7jMnbOGL6/WQR7rXhNuBGRRbZP7IDg0Z/9CpdoCbZbmA07LWDI5uipEsfI98UAN/d87z6DzA1KmrNUn1u2nNs27Tvkg0SgPNqiPcy1XMooURSyY1A9H8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t8QXL0U4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EC81C4CEEB;
-	Tue, 16 Sep 2025 13:09:59 +0000 (UTC)
+	 Content-Disposition; b=VFCwN6aih/GfGdeHdgzaa9RDYNanqoPrO/dQQznJkfi5qJymi+HiUbGkms0Q1zPxRh8EBjEaPuo44OlC/k12FUBqXXVaGy91zLij/05QHmK/hQnlmxVO0e+RbY19IQUK5lbf6c7brMb+Qakaq9qbC5Fs7ZH4x4qmVXtt0/oKanM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AgQpEl3Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5A3C4CEEB;
+	Tue, 16 Sep 2025 13:13:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758028200;
-	bh=JfnbUyOXxXuZP7KeNYZ4F9btUQDCypXExEHwkTv5H30=;
+	s=k20201202; t=1758028420;
+	bh=s+wCAG5BNTvG7Yd5wNh0mmRPRi1ojyXV1AR78FC5RO0=;
 	h=Date:From:To:Cc:Subject:From;
-	b=t8QXL0U4/Yqzinre9DcXmIpFRMm9ShhN8jeIgx3tLGdARqtD4o9/YhAulSpT1L2xi
-	 TvfSmILtanPYJramBrjfM1lOaFxJsBn1rJUjc1zsjh7GblPto1bUZTmL0I+ySrS799
-	 E0w1wH9mkYfymMgGqN8ba+l4Rp2ph+A6ye7hEFGmZw4jql9KaReVXrB12Wz3+q2Ptk
-	 w38p9s8wMEP0+VW7lMVBSj0gLDn2+tIf798A6e1l5T5zIq2z0Va3deSAjp6HFlht4k
-	 I+TyyyWl2jlLz92Wxi13njJO4Oi2iEffaHszqalDUc5Xd3F+avD/tpT8Ez6zz0g9cf
-	 8uH6q88ScJB4g==
-Date: Tue, 16 Sep 2025 14:09:56 +0100
+	b=AgQpEl3Q52zUpszRFAoxC+8pyr/6q0JdELiyMFTksmN04QIWKP0E8KJOKTUXXG8Sq
+	 LPOxmYuFDctywrLGAA/6oQdOtSr2bupP3etdTx6rIPrLgpsdP7JImZZAmok5sIYsIk
+	 Oboc7Y25lorP6mYSo4ETGPq4CA+O0AiQh987vCOolYUqKHrosJJSJK+ACR7FC0CWjC
+	 rCqBeP7s6PsAaeTK1dE+4ttd3nDlx8IRBMxVgrwoyf5loSzM+OTl0DD33OnT2s59l2
+	 oKupjaa60mE7AMDTO2sjjX/nJWsq20zEzei5mBK6rsN1oXcJ+DRZvgwgvDkicDHuga
+	 FR3EItv1mGB+g==
+Date: Tue, 16 Sep 2025 14:13:36 +0100
 From: Mark Brown <broonie@kernel.org>
 To: Miguel Ojeda <ojeda@kernel.org>
-Cc: Danilo Krummrich <dakr@kernel.org>,
+Cc: Andreas Hindborg <a.hindborg@kernel.org>, Jens Axboe <axboe@kernel.dk>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>,
 	Tamir Duberstein <tamird@gmail.com>
-Subject: linux-next: manual merge of the rust tree with the drm-rust tree
-Message-ID: <aMlhpIhjbrDR4C8L@sirena.org.uk>
+Subject: linux-next: manual merge of the rust tree with the block tree
+Message-ID: <aMligBYh0Z4V5Biv@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -57,11 +57,11 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bjxim9GexlkTfTNm"
+	protocol="application/pgp-signature"; boundary="REc+PVnkN8J2xx4H"
 Content-Disposition: inline
 
 
---bjxim9GexlkTfTNm
+--REc+PVnkN8J2xx4H
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -70,15 +70,15 @@ Hi all,
 
 Today's linux-next merge of the rust tree got a conflict in:
 
-  rust/kernel/alloc/kvec.rs
+  rust/kernel/block/mq.rs
 
 between commit:
 
-  779db37373a38 ("rust: alloc: kvec: implement AsPageIter for VVec")
+  90d952fac8ac1 ("rust: block: add `GenDisk` private data support")
 
-=66rom the drm-rust tree and commit:
+=66rom the block tree and commit:
 
-  1f96115f502ab ("rust: alloc: use `kernel::{fmt,prelude::fmt!}`")
+  e0be3d34f1089 ("rust: block: use `kernel::{fmt,prelude::fmt!}`")
 
 =66rom the rust tree.
 
@@ -89,43 +89,35 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc rust/kernel/alloc/kvec.rs
-index 38ed271b1d045,dfc101e03f358..0000000000000
---- a/rust/kernel/alloc/kvec.rs
-+++ b/rust/kernel/alloc/kvec.rs
-@@@ -3,14 -3,13 +3,14 @@@
-  //! Implementation of [`Vec`].
- =20
-  use super::{
- -    allocator::{KVmalloc, Kmalloc, Vmalloc},
- +    allocator::{KVmalloc, Kmalloc, Vmalloc, VmallocPageIter},
-      layout::ArrayLayout,
- -    AllocError, Allocator, Box, Flags,
- +    AllocError, Allocator, Box, Flags, NumaNode,
-  };
- +use crate::page::AsPageIter;
-+ use crate::fmt;
-  use core::{
-      borrow::{Borrow, BorrowMut},
--     fmt,
-      marker::PhantomData,
-      mem::{ManuallyDrop, MaybeUninit},
-      ops::Deref,
+diff --cc rust/kernel/block/mq.rs
+index c0ec06b843555,61ea35bba7d50..0000000000000
+--- a/rust/kernel/block/mq.rs
++++ b/rust/kernel/block/mq.rs
+@@@ -89,7 -82,7 +89,7 @@@
+  //!     Arc::pin_init(TagSet::new(1, 256, 1), flags::GFP_KERNEL)?;
+  //! let mut disk =3D gen_disk::GenDiskBuilder::new()
+  //!     .capacity_sectors(4096)
+- //!     .build(format_args!("myblk"), tagset, ())?;
+ -//!     .build(fmt!("myblk"), tagset)?;
+++//!     .build(fmt!("myblk"), tagset, ())?;
+  //!
+  //! # Ok::<(), kernel::error::Error>(())
+  //! ```
 
---bjxim9GexlkTfTNm
+--REc+PVnkN8J2xx4H
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjJYaMACgkQJNaLcl1U
-h9B3lQf9FABvWloM/fSwnVkkxDiXEPfqF6FwQoA2CWc8EMQOonfD6+ZzhRZcPruJ
-CIbLm8jrRyISSTLs3b6AwvKvQlY9ng+fyVr0wRAVevdpkz4n65TjT8aqYyyIGFTf
-0merjI82xsVm37OiMG19F6p5QrrRq6WicK17w3AxuFE+61Asi7uxa2TlOOPAp+nl
-zasSdf7etU4A+Ftquso0GxZT4V7D7se4bpEa1ah+I1u8iiggcpwejX6XHoJiuCiB
-iK4JuGESvrBnQ5vojOVpDCU+2/ox7Uari0bREjVuZluINLGA+yOeO7tE8rkS9/99
-YGIVRqJ3RR60O/QsjSfVOJeZnvPoaw==
-=EYEA
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjJYoAACgkQJNaLcl1U
+h9DiFQf/X03OPDWfKRkNoKXRh2BIkpalCJB3sMsFY7OOixUo5Xe40ZpxcJsz3tZL
+b7JcA0CzROO4XaA3mi1MxRyyhk0gZyXfRg5AuIktLxyylP63N6F8ffUt9S6YrTc6
+A3M8kgnw9OfeX/2IiPXJYoR1DlDKKOKykSdxMmc0YNVBrltpKsC5xJ5Qi4lVpgBE
+2iagfSynN1KOPJQ4zlQcO5TFdLvmgsWREmVmRx0W/8+//5k+I/pHugl7vb2YGYRX
+0wLmkAbDfpEa95FF144Uk0ViVxEWgmjh6rTP1s+Rji9hX9UNubA1ByuWdwkMnDg4
+E0dBzaS8PeYNzoLrute9JPds/yQ9+g==
+=U1E0
 -----END PGP SIGNATURE-----
 
---bjxim9GexlkTfTNm--
+--REc+PVnkN8J2xx4H--
 

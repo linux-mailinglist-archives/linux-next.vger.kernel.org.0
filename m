@@ -1,61 +1,57 @@
-Return-Path: <linux-next+bounces-8327-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8328-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76867B5950D
-	for <lists+linux-next@lfdr.de>; Tue, 16 Sep 2025 13:23:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AEF9B59588
+	for <lists+linux-next@lfdr.de>; Tue, 16 Sep 2025 13:52:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38D2B1BC7CDB
-	for <lists+linux-next@lfdr.de>; Tue, 16 Sep 2025 11:24:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA0813B525E
+	for <lists+linux-next@lfdr.de>; Tue, 16 Sep 2025 11:52:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 727E92D781E;
-	Tue, 16 Sep 2025 11:23:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EE38307492;
+	Tue, 16 Sep 2025 11:52:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RKqMrsf2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tEqBsvqP"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B21B2D7809;
-	Tue, 16 Sep 2025 11:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4787F2877CF;
+	Tue, 16 Sep 2025 11:52:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758021809; cv=none; b=AzEWxpoAc/siq4Cz+HRB1TnhnuTc2AHkTJSIG+mzQ0EICktk2lkaowILfRxoQL6utnf7y6/Gjcwgjs4hscaOlUq4bOxJTIOTNO/+ysWCJZt4LLptze/lKuq1sBpb7Rn/zasPXvLx/sdljpIAI/QO8jKM5jz/Cg6gRLkTc0UW6Dw=
+	t=1758023530; cv=none; b=Qt4oKidPrMxGTvMpiwkeSa7G0MhD1h20WCf8HVX5SyLR4ReLKX7/LsAV1AUy64JMx0csuMJPJVJus3zYiPjgmLBj7o2Zf7NCnZYk+/YV2kRQha+Kl6Ceoeo1Zbiij7lyfPz/Rgpq6O5thfZJpsHB2h3vweirlUH+IfgbdSHmGfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758021809; c=relaxed/simple;
-	bh=6tDrpdhPLTEfuY+tV0i58JvkH2Dlan4wPPgWzmqyBvU=;
+	s=arc-20240116; t=1758023530; c=relaxed/simple;
+	bh=uJbIiJv24vaUhiW5Rf3jsrKdADpkLVXM9KALYs09blc=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Ds86F6YJyOCM3FMPPwRa/h4sU+dtUsXCFLWQfW8dLs9wWtFdRUE3dUA9ABLaclsbHPxuphAJ9pspJZUo7wlWaU/3j3XxJ2f5hkaUBLup+XjNwtFWrf/xdrj9zIC83bF0fiIE7xK3ZLba4IyriMAVL3PU03UvYtr3hzGX5dxdrwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RKqMrsf2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DFE0C4CEEB;
-	Tue, 16 Sep 2025 11:23:27 +0000 (UTC)
+	 Content-Disposition; b=V8mLjveYMnjail3ZoN6553knHndHE4PX448Ach7arh1v5lq6c/HUiiEGHeccrcS9zvVfDQqPgBfLSxD7BkLM4xdht/S/QxY4cAJJRvYAARgPZKDoLxKIwLGNp+Xok4i2PMgJslEcc97xvqV4ReIxLJbFZSDla2PfFQy1/fwXqiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tEqBsvqP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20E81C4CEEB;
+	Tue, 16 Sep 2025 11:52:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758021808;
-	bh=6tDrpdhPLTEfuY+tV0i58JvkH2Dlan4wPPgWzmqyBvU=;
+	s=k20201202; t=1758023529;
+	bh=uJbIiJv24vaUhiW5Rf3jsrKdADpkLVXM9KALYs09blc=;
 	h=Date:From:To:Cc:Subject:From;
-	b=RKqMrsf2UHNrYUJa3kUsw13jc5n3l0wOhHOirYn6aHGO0INzIoHYZFN3WIA6+zaZT
-	 hU3Opd2paY8RkS8aKnH4pcTMCBuwQrjJUe32wi8kfhD66r2CaXkvBIvIhyFelTtXgo
-	 huuCsdtNvjY+eUxaEQc1yZbZgnM4P3Ea6WYaB0TKW/Ko4EZl27qXSI3Lmc686qL+7F
-	 hIWkbwb8wW58CxAA2zP/z7EBQ0MNirsV3W7eUbsBC/KCaAfzCkqCBRpKZ1py32UDq4
-	 sJMfieQxK1bfvR8MLH948NVyZtyRqOTRCB2ccYYhgcjcRXXifk8rRJqWIno2XH+Wt7
-	 Vz+YijDzI4ZYw==
-Date: Tue, 16 Sep 2025 12:23:24 +0100
+	b=tEqBsvqP+0XFFUiJaDHBDRqlOUHQfvJhmrLmq+ONXPNM77t9YpceYPD1CVO4kFyh9
+	 D64YaTeOUs1IWAQzuWvZjEjMEdT7yC8buvEIdHBIthZILoFPplvgyf+WKYl36jXjPl
+	 mInJ/AbSPN8gJAVKyewZwV+RgdI1nupdKBkhH6tOH65IMgt7gp5UFDn3bRbgCEaXPB
+	 K5u3wSvpoj/8ugvoEsXVof7kLsCbQbUU2IM5LsgDhz0qWktHSxsyjzdWyNRvJff73j
+	 1mgDF5RYsyXXARAFxzQUT2PmMLybOllhqM/lLKOhsPv05mVlU06csNDwyun74vQDQr
+	 0Jz6hXPbp5VQQ==
+Date: Tue, 16 Sep 2025 12:52:05 +0100
 From: Mark Brown <broonie@kernel.org>
-To: Miriam Rachel Korenblit <miriam.rachel.korenblit@intel.com>,
-	Johannes Berg <johannes@sipsolutions.net>
-Cc: Johannes Berg <johannes.berg@intel.com>,
+To: Sean Christopherson <seanjc@google.com>
+Cc: Babu Moger <babu.moger@amd.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the iwlwifi-next tree with the origin
- tree
-Message-ID: <aMlIrHaHOu0a8WGG@sirena.org.uk>
-Mail-Followup-To: Miriam Rachel Korenblit <miriam.rachel.korenblit@intel.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Johannes Berg <johannes.berg@intel.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	Xin Li <xin@zytor.com>
+Subject: linux-next: manual merge of the kvm-x86 tree with the tip-fixes tree
+Message-ID: <aMlPZcYlk7hRlMkE@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -63,30 +59,33 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="u1cxLif8y03RwBjd"
+	protocol="application/pgp-signature"; boundary="o++B5AeyijXALTFS"
 Content-Disposition: inline
 
 
---u1cxLif8y03RwBjd
+--o++B5AeyijXALTFS
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the iwlwifi-next tree got a conflict in:
+Today's linux-next merge of the kvm-x86 tree got a conflict in:
 
-  drivers/net/wireless/intel/iwlwifi/fw/runtime.h
+  arch/x86/include/asm/cpufeatures.h
 
-between commit:
+between commits:
 
-  7bf2dfccc2dd7 ("wifi: iwlwifi: acpi: check DSM func validity")
+  2f8f173413f1c ("x86/vmscape: Add conditional IBPB mitigation")
+  e19c06219985f ("x86/cpufeatures: Add support for Assignable Bandwidth Mon=
+itoring Counters (ABMC)")
 
-=66rom the origin tree and commit:
+=66rom the tip-fixes tree and commit:
 
-  db29d6fd9cac3 ("wifi: iwlwifi: fix remaining kernel-doc warnings")
+  3c7cb84145336 ("x86/cpufeatures: Add a CPU feature bit for MSR immediate =
+form instructions")
 
-=66rom the iwlwifi-next tree.
+=66rom the kvm-x86 tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -95,53 +94,43 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc drivers/net/wireless/intel/iwlwifi/fw/runtime.h
-index 806f9bcdf4f50,8e858e6b3ce38..0000000000000
---- a/drivers/net/wireless/intel/iwlwifi/fw/runtime.h
-+++ b/drivers/net/wireless/intel/iwlwifi/fw/runtime.h
-@@@ -113,10 -116,23 +116,27 @@@ struct iwl_txf_iter_data=20
-   * @phy_filters: specific phy filters as read from WPFC BIOS table
-   * @ppag_bios_rev: PPAG BIOS revision
-   * @ppag_bios_source: see &enum bios_source
- + * @acpi_dsm_funcs_valid: bitmap indicating which DSM values are valid,
- + *	zero (default initialization) means it hasn't been read yet,
- + *	and BIT(0) is set when it has since function 0 also has this
- + *	bitmap and is always supported
-+  * @geo_enabled: WGDS table is present
-+  * @geo_num_profiles: number of geo profiles
-+  * @geo_rev: geo profiles table revision
-+  * @ppag_chains: PPAG table data
-+  * @ppag_flags: PPAG flags
-+  * @reduced_power_flags: reduced power flags
-+  * @sanitize_ctx: context for dump sanitizer
-+  * @sanitize_ops: dump sanitizer ops
-+  * @sar_chain_a_profile: SAR chain A profile
-+  * @sar_chain_b_profile: SAR chain B profile
-+  * @sgom_enabled: SGOM enabled
-+  * @sgom_table: SGOM table
-+  * @timestamp: timestamp marker data
-+  * @timestamp.wk: timestamp marking worker
-+  * @timestamp.seq: timestamp marking sequence
-+  * @timestamp.delay: timestamp marking worker delay
-+  * @tpc_enabled: TPC enabled
-   */
-  struct iwl_fw_runtime {
-  	struct iwl_trans *trans;
+diff --cc arch/x86/include/asm/cpufeatures.h
+index b2a562217d3ff,8738bd783de22..0000000000000
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@@ -495,8 -496,7 +496,9 @@@
+  #define X86_FEATURE_TSA_SQ_NO		(21*32+11) /* AMD CPU not vulnerable to TS=
+A-SQ */
+  #define X86_FEATURE_TSA_L1_NO		(21*32+12) /* AMD CPU not vulnerable to TS=
+A-L1 */
+  #define X86_FEATURE_CLEAR_CPU_BUF_VM	(21*32+13) /* Clear CPU buffers usin=
+g VERW before VMRUN */
+ -#define X86_FEATURE_MSR_IMM		(21*32+14) /* MSR immediate form instruction=
+s */
+ +#define X86_FEATURE_IBPB_EXIT_TO_USER	(21*32+14) /* Use IBPB on exit-to-u=
+serspace, see VMSCAPE bug */
+ +#define X86_FEATURE_ABMC		(21*32+15) /* Assignable Bandwidth Monitoring C=
+ounters */
+++#define X86_FEATURE_MSR_IMM		(21*32+16) /* MSR immediate form instruction=
+s */
+ =20
+  /*
+   * BUG word(s)
 
---u1cxLif8y03RwBjd
+--o++B5AeyijXALTFS
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjJSKwACgkQJNaLcl1U
-h9Aqdwf/fkqvy0MGEnRLjOw5oad2gk8H8TATmA+At6PlMbCgyylhMvMlAopzm3S/
-Y9wGyeQszNsp8e4HGmUGPfKW3oIuTr8NbDpmo9XrX/EGrnFvS/l7gystMnc/EHIn
-TbmpaF/wCBbjWjLSnmSetjZN4L+eHOxatMLcSOFyyBsB1Vq2dFJYejOaTbqHFl0d
-3UJG/yMn1XHw7zggzGZjYE9ZCuuNifosxctkdCt2pSw0GFK6mOrzdOFVUeSiO26q
-IFaY4C8wEv5xNTH+fYXDOete3sjb2t0F0kvbPiUpucKHiKDQuOpoEGVuIOO3Zzvq
-ER3wotbMxZa+Z17gn+dPsYelwv3DgA==
-=L47/
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjJT2QACgkQJNaLcl1U
+h9Abywf8Cx3bVmLRE6DmhIYhL3zv0Kx2o7krQsdmmt2Zb29EDLufknvHmgVw6cTx
+1EwvDqxx0OaynKFyVs7VswIfEZw416laH6Q0+4/j+AvAUBHApi3Quocd6hMo7WpY
+Zg21cGBS7wkiNdAbQqb8mIp/56WCC72J2Scm16hml7XKBSSTJOcMYqCwV8MI/WUw
+IMweaQL19hL3uKDHUPD2WWEtwIseJ64XoF97cOSys19IDcrFgww7qgHkmOXuGY4S
+NkyuGg4sZtS+7tzQylSf6Vkzydm9EN9mzLQGpRieZ/r6OlUUckcnjFLibIJ3em0M
+xSPQJ0n0ZVrydUjgD/CbNbZp+APpXQ==
+=Or9m
 -----END PGP SIGNATURE-----
 
---u1cxLif8y03RwBjd--
+--o++B5AeyijXALTFS--
 

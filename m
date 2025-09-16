@@ -1,132 +1,112 @@
-Return-Path: <linux-next+bounces-8324-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8325-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0B68B59149
-	for <lists+linux-next@lfdr.de>; Tue, 16 Sep 2025 10:49:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71694B591CC
+	for <lists+linux-next@lfdr.de>; Tue, 16 Sep 2025 11:11:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A779B166FD0
-	for <lists+linux-next@lfdr.de>; Tue, 16 Sep 2025 08:49:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC5FB162C0F
+	for <lists+linux-next@lfdr.de>; Tue, 16 Sep 2025 09:11:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2045328313A;
-	Tue, 16 Sep 2025 08:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36A64287271;
+	Tue, 16 Sep 2025 09:11:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AZHgWa1E"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="iz/MheB0"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67753275B1F;
-	Tue, 16 Sep 2025 08:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9346E42A96;
+	Tue, 16 Sep 2025 09:11:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758012582; cv=none; b=X+hvGa0nZ40vnTGg0GMOlaKqhBRU33npH43z8dBw89HNuPM7UDQFR7LmuhKayrrHzD6R5rgS5i9GI4N8ObHFff1KehkAFZTqhT1+GYfzwbcmGtfq7prSQrI7gykmzvTisYad3qhdSDMHtHG0VK4JIrxzM/ClLbBmvVN3b8MODYk=
+	t=1758013884; cv=none; b=YWsVw0wQ7VZSJPC25LyVdOQBZRgzJ3VIdQcfWb6u7q7sfGt8YL4l3GY4zQSJnoU+xVZowX2Dszsq/M4YNTWeeDEpztTI1KTAwlbENFNVE9KJejIkH1FF4mSVvshTBJ1meCQFcFCt0S7XHN8HIGT8qMY0tZFxxCBw1hSQObH0MzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758012582; c=relaxed/simple;
-	bh=XACujb/waoNFbdX5lO9KBlT7ea7U5VOdh7HZFWCOvL4=;
+	s=arc-20240116; t=1758013884; c=relaxed/simple;
+	bh=KkPyIIbyd5SJjuqod3wdkU2p2Zh9ZN9dF3Jz2Jnh14w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OlgB9V3bqbgpeNqMBsrblTyjhu4scC4AQp0ieK3pNXywZI1nnYIzA48C4UW3/pe+hK4/ZsDdKkIhd5+IPl8SFYsYxIJL3koV05ITmPlukzOeiq7Uh0bmgs27GnjZJGQWlF7byKaCSyfi8frsitrupYbSgM61+TkdZjcWNjoKfF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AZHgWa1E; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1758012580; x=1789548580;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XACujb/waoNFbdX5lO9KBlT7ea7U5VOdh7HZFWCOvL4=;
-  b=AZHgWa1EXq4i6Nf9aiHqx5JyBPlJv5b7bYEorUlzlQAik5EOnRZnKaY2
-   znA9NSO2r8Eejxx5WZXbdYan7753rXOYI821fgg7WqjN6uLa85EzZ4KkW
-   wNhvjqrpk69mcFFeWTPfsOAKVC7a0aoVZuNlbXc+FcVsMSkVCHPSqvTEj
-   SJTwdXYO1pRbve0aLe4UFvX9dYXDS2zo504xfdlUHMspcLNtTnNKLMX3n
-   /yR0aZDJnLK75cCB4Xrk8U1LXZq7RvG/XS9YMbP+AUWxlxWLgUDy052rH
-   d3F0Su/10r7xVKlG/2hgJGULL1mspb9QWnmL9Cukpj5cHGC7E/pT1Vuud
-   A==;
-X-CSE-ConnectionGUID: FFRJOw+zTkyd61KcLrTcBw==
-X-CSE-MsgGUID: 7DGdWtKbQw6c6j0tP+a4kw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="64091780"
-X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
-   d="scan'208";a="64091780"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2025 01:49:39 -0700
-X-CSE-ConnectionGUID: iMcBTyxSTY+AF/kGEVSfKQ==
-X-CSE-MsgGUID: wtHeKtfCR6+LKmTF7+B/RQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,268,1751266800"; 
-   d="scan'208";a="180131267"
-Received: from lkp-server01.sh.intel.com (HELO 84a20bd60769) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 16 Sep 2025 01:49:37 -0700
-Received: from kbuild by 84a20bd60769 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uyRNW-00007R-2l;
-	Tue, 16 Sep 2025 08:49:34 +0000
-Date: Tue, 16 Sep 2025 16:48:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Amir Goldstein <amir73il@gmail.com>,
-	buildfailureaftermergeofthevfstree@sirena.org.uk,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure in the vfs tree
-Message-ID: <202509161649.GzVNYeqs-lkp@intel.com>
-References: <aMhzi0WpakpN7oH5@sirena.org.uk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=u8DHlipMiDFscAi/24gnf8YCdcw+Yxl9upZ5uEvIqwMy6WzwHYwKIubcTiSKG4ZQnx1RQEAHGX9Rf/6oVwENXs0idvyBszbzXiiKQWQ2XEhwAO+TGfH0xrKXtrqL+kB48GdsujsbVmGwTGB3cr9cc+8ODBlWpq3Y+SPu4A37zmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=iz/MheB0; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0C2B140E01A2;
+	Tue, 16 Sep 2025 09:11:19 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id zIaqC3HLNQ9L; Tue, 16 Sep 2025 09:11:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1758013875; bh=QWJBpCxYGdhhSeLXQ8ldzOPuqWrT3lCtih2UBg+SiEk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iz/MheB0csedEfyBEa+OtYeLXTZ7jC4FHJuGUmtU2JErkakOF7ixRTLPrEoJS+p/n
+	 xTlQ8aKSJq7KILBNxkqFBq8NJji1w1/bFT3QxymiSf0elE/d66qF8lIygWpkqGlGvo
+	 OXlmKiWVSJCT6l0hJ8UwOumlj5sJswW4bR02xwc7fs8vyrEJ1ioKP/UskPkkHvAYM9
+	 wW1iKwLy/SlpKT3iOxOEqfha92efzeXPlv4NnX/ynB0ch71JmNtwckRNtdmxwungLY
+	 jmIVmFxGjjHaDf6At9Gtjpc45liuNSGHi5o75oceefknuZ592q0OMyT1kj9R8usDBz
+	 8UPs36thYuH+e8CP9rrfalwM16vO8keyJEOEpX5B6k98qVPyTdqBgOJw2H9tIT5WW5
+	 9rOZ7By/GZGzjSTQkzH8ld8rpM0OMBjaqpnLEV7OBy19C2hZODmVegHAtu90uTy7Ad
+	 Q+YT0r8ro74zafqKQO0DS5hN29j8NFBorZK3wM3RLbJlqItYa0ttNTohhlF3lkMPG2
+	 kgO1ipRIuo3Q3eLxrHANpYo+1dDPtMMgu63DLTNwNFuxKa7NljXqKYpK/wr7SMtfOk
+	 Fil5HoP1/jLI+FH/gfJatDlhp1aib5eSb/++iP649C7fDzcq98fj0ke2Y5iFA7YLLn
+	 F5aP2LL/SJTR+erhbN7NZom8=
+Received: from zn.tnic (p5de8ed27.dip0.t-ipconnect.de [93.232.237.39])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 5589940E01AC;
+	Tue, 16 Sep 2025 09:11:03 +0000 (UTC)
+Date: Tue, 16 Sep 2025 11:10:55 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Bert Karwatzki <spasswolf@web.de>,
+	Yazen Ghannam <yazen.ghannam@amd.com>
+Cc: Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org,
+	linux-next@vger.kernel.org, linux-edac@vger.kernel.org,
+	linux-acpi@vger.kernel.org, x86@kernel.org, rafael@kernel.org,
+	qiuxu.zhuo@intel.com, nik.borisov@suse.com,
+	Smita.KoralahalliChannabasappa@amd.com
+Subject: Re: spurious mce Hardware Error messages in next-20250912
+Message-ID: <20250916091055.GAaMkpn72GrFnsueCF@fat_crate.local>
+References: <20250915010010.3547-1-spasswolf@web.de>
+ <20250915175531.GB869676@yaz-khff2.amd.com>
+ <45d4081d93bbd50e1a23a112e3caca86ce979217.camel@web.de>
+ <426097525d5f9e88a3f7e96ce93f24ca27459f90.camel@web.de>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aMhzi0WpakpN7oH5@sirena.org.uk>
+In-Reply-To: <426097525d5f9e88a3f7e96ce93f24ca27459f90.camel@web.de>
 
-Hi Mark,
+On Mon, Sep 15, 2025 at 11:43:26PM +0200, Bert Karwatzki wrote:
+> After re-cloning linux-next I tested next-20250911 and I get no mce error messages
+> even if I set the check_interval to 10.
 
-kernel test robot noticed the following build errors:
+Yazen, I've zapped everything from the handler unification onwards:
 
-[auto build test ERROR on brauner-vfs/vfs.all]
-[cannot apply to linus/master v6.17-rc6 next-20250915]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+28e82d6f03b0 x86/mce: Save and use APEI corrected threshold limit
+c8f4cea38959 x86/mce: Handle AMD threshold interrupt storms
+5a92e88ffc49 x86/mce/amd: Define threshold restart function for banks
+922300abd79d x86/mce/amd: Remove redundant reset_block()
+9b92e18973ce x86/mce/amd: Support SMCA corrected error interrupt
+fe02d3d00b06 x86/mce/amd: Enable interrupt vectors once per-CPU on SMCA systems
+cf6f155e848b x86/mce: Unify AMD DFR handler with MCA Polling
+53b3be0e79ef x86/mce: Unify AMD THR handler with MCA Polling
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Brown/linux-next-build-failure-in-the-vfs-tree/20250916-041652
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git vfs.all
-patch link:    https://lore.kernel.org/r/aMhzi0WpakpN7oH5%40sirena.org.uk
-patch subject: linux-next: build failure in the vfs tree
-config: hexagon-randconfig-002-20250916 (https://download.01.org/0day-ci/archive/20250916/202509161649.GzVNYeqs-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 65ad21d730d25789454d18e811f8ff5db79cb5d4)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250916/202509161649.GzVNYeqs-lkp@intel.com/reproduce)
+until this is properly sorted out, now this close to the merge window.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202509161649.GzVNYeqs-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/nsfs.c:582:11: error: incompatible function pointer types initializing 'struct file *(*)(struct path *, unsigned int)' with an expression of type 'struct file *(const struct path *, unsigned int)' [-Wincompatible-function-pointer-types]
-     582 |         .open           = nsfs_export_open,
-         |                           ^~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +582 fs/nsfs.c
-
-06c4ff965e95b0b Christian Brauner 2025-09-12  578  
-06c4ff965e95b0b Christian Brauner 2025-09-12  579  static const struct export_operations nsfs_export_operations = {
-06c4ff965e95b0b Christian Brauner 2025-09-12  580  	.encode_fh	= nsfs_encode_fh,
-06c4ff965e95b0b Christian Brauner 2025-09-12  581  	.fh_to_dentry	= nsfs_fh_to_dentry,
-06c4ff965e95b0b Christian Brauner 2025-09-12 @582  	.open		= nsfs_export_open,
-06c4ff965e95b0b Christian Brauner 2025-09-12  583  	.permission	= nsfs_export_permission,
-06c4ff965e95b0b Christian Brauner 2025-09-12  584  };
-06c4ff965e95b0b Christian Brauner 2025-09-12  585  
+Thanks, Bert, for reporting!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 

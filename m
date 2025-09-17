@@ -1,124 +1,91 @@
-Return-Path: <linux-next+bounces-8349-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8351-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 471D2B7E6E8
-	for <lists+linux-next@lfdr.de>; Wed, 17 Sep 2025 14:48:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 242B1B7EB71
+	for <lists+linux-next@lfdr.de>; Wed, 17 Sep 2025 14:58:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 642D7169070
-	for <lists+linux-next@lfdr.de>; Wed, 17 Sep 2025 07:46:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B0401C025EF
+	for <lists+linux-next@lfdr.de>; Wed, 17 Sep 2025 10:27:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 194AB290DBB;
-	Wed, 17 Sep 2025 07:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A12B2EFDAF;
+	Wed, 17 Sep 2025 10:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OsAQKhmy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LBLt2+9R"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E492C2773F0;
-	Wed, 17 Sep 2025 07:46:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C3C2EA721;
+	Wed, 17 Sep 2025 10:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758095192; cv=none; b=KY6LIglalcRiVEZyU+zx5K0tOTyJTe4oVrtb0xYbYkL+d4/BgN1bFAiJM3YpWI3KVU6z5Lpu3QLwmB9YEz44ho4eLb+1lsK3JoFsqqHu/RPzZqlb1wxSIP6NNOKJNC9EKSWP8zlUVsrbTcAHlbvuVEvMNfclXY2iv+mxJ7DR1hY=
+	t=1758104794; cv=none; b=Wz3hyaZXcqfTEHLrFCi/I0KWrutF1hCTVtOsoOE986WI9ZDSumxdeOOeM/SDuBVjmq8mCVrsmi7IGYuAoOoasVQIh7SYHpzgcWO8Gu3hkf/LoTYnvcCRAdqpCfuo1LSnxrUWR0aPvyfle5z5uV3L58FHdfIU28CTmoaNTAIzTqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758095192; c=relaxed/simple;
-	bh=qulyf2x3ovCrkpojNcqaI9BFWYLuH6KOYPY/FS9U6yw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=KFHhJpb0HEF89A2Men0alI7//nEJRYGGLj7zVRnRMy1KYrJEMiLvsihwGJi0dzyozrJ+1Yb3F/RzQ1GkGjZQGRr/r1t/q1izbfh7xCf/72WHin1nAC7Yt1fYG0rDpz7KOLsQA9rGnQCU/ncWB22yYPXEHvewGbuQolggths+fmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OsAQKhmy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B05DCC4CEF0;
-	Wed, 17 Sep 2025 07:46:26 +0000 (UTC)
+	s=arc-20240116; t=1758104794; c=relaxed/simple;
+	bh=T3ISxIPvcZvhmhbtWB1fP3pff0PITh55eSJO6Jdh7AI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dwi1jZBq23baXk0QnlarQnTNl1sl72w5q9JSVajr85Hl8tNbM5SovZTzXDk28HRVLuN+Ak6NLnKdJdYygxTPBgDnozgTnCZ/Q3D0JBLvRHPxMt+Ys1YrAlfNGxijtogjmlg+TRzQjWfKZ56JDuEXVo+QmoxPwIxMIyIN0fO+dmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LBLt2+9R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50FE9C4CEF0;
+	Wed, 17 Sep 2025 10:26:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758095191;
-	bh=qulyf2x3ovCrkpojNcqaI9BFWYLuH6KOYPY/FS9U6yw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=OsAQKhmyIKAJfluHy6bw8MkIehm5IEb/9ZDvupSKiRahviiMrX8drdB/x1qh06R3X
-	 L34E7v4n2D3JbhBz/J5ux+3vOM9McCHqwqpf/qMhw1oaCFvxXM1/k+hhsG5lFiLXsq
-	 hnmrPpZabulipxRgCtC0DU3z1X+xncIHsc8k6ocgy8PGgyp9MB01m2OZDye5WunExo
-	 LBQ3iH/AmUQqYWmVfGIUt8qa1klPDqm3OZXteejfZVk+3FAHZoclHM6eTCCY0Wk49I
-	 KGtl6O4ZjCVbfXS3HtN7rpKB+Bpc8CBDABs06mnRdLJefuU+jAyq7fs2TW9VAUHWxQ
-	 ofiGuCcM/RS7g==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: Mark Brown <broonie@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Peter
- Zijlstra <peterz@infradead.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, Jens
- Axboe <axboe@kernel.dk>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the tip tree with the block tree
-In-Reply-To: <aMiScHEWoOABPgt9@sirena.org.uk>
-References: <1Vn5Pr0rEN5VNr1V-oUtQYs_wVms3VZ7jsttDqMtVv3XxoMEIBc7Yf3FJhEanCMsvJe9z8HjzX7cEMedSJX68A==@protonmail.internalid>
- <aMiScHEWoOABPgt9@sirena.org.uk>
-Date: Wed, 17 Sep 2025 09:46:09 +0200
-Message-ID: <87tt11wmgu.fsf@t14s.mail-host-address-is-not-set>
+	s=k20201202; t=1758104793;
+	bh=T3ISxIPvcZvhmhbtWB1fP3pff0PITh55eSJO6Jdh7AI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=LBLt2+9R5ViUWWr6NoMg5QzzzaTg+h7deFeMsyejRjy0HEFvBSh0xe2ujbShleWoj
+	 NKVkjQWlZt1JhZs77BLsRGveU2MyoLfV22Rf8icd0HghaH6Q78ZS5pIF31jkWBDkwS
+	 rFlSvfdimzAEtFPRP3O/06M5R4A5R3ZuiWQ0DQyKNMQAD8JFnxXuSAXbOQc/pr1c85
+	 Pq/W+3ZFZzAI93AnBaBbQHCcqr0nfb41HbGWXhscn+Tni72zxhnweSnMlo9NTqWrk6
+	 RsYdeoWvJdeEmBktqQfqe6nYE5j7+DZp1z7gHJvvaBDmv6STpyIAPNu3bwY00DR2Jh
+	 SMhIbUNTuiWvA==
+Date: Wed, 17 Sep 2025 11:26:28 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Missing signoffs in the slab tree
+Message-ID: <6cc0566d-ba5b-4676-9b90-bf3d1fea4c7e@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-
-"Mark Brown" <broonie@kernel.org> writes:
-
-> Hi all,
->
-> Today's linux-next merge of the tip tree got a conflict in:
->
->   rust/kernel/block/mq/operations.rs
->
-> between commit:
->
->   90d952fac8ac1 ("rust: block: add `GenDisk` private data support")
->
-> from the block tree and commit:
->
->   b6dd7b75496c5 ("rust: block: convert `block::mq` to use `Refcount`")
->
-> from the tip tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> diff --cc rust/kernel/block/mq/operations.rs
-> index d098a8a3e4340,c0f95a9419c4e..0000000000000
-> --- a/rust/kernel/block/mq/operations.rs
-> +++ b/rust/kernel/block/mq/operations.rs
-> @@@ -6,15 -6,15 +6,16 @@@
->   
->   use crate::{
->       bindings,
->  -    block::mq::request::RequestDataWrapper,
->  -    block::mq::Request,
->  +    block::mq::{request::RequestDataWrapper, Request},
->       error::{from_result, Result},
->       prelude::*,
-> +     sync::Refcount,
->  -    types::ARef,
->  +    types::{ARef, ForeignOwnable},
->   };
-> - use core::{marker::PhantomData, sync::atomic::AtomicU64, sync::atomic::Ordering};
-> + use core::marker::PhantomData;
->   
->  +type ForeignBorrowed<'a, T> = <T as ForeignOwnable>::Borrowed<'a>;
->  +
->   /// Implement this trait to interface blk-mq as block devices.
->   ///
->   /// To implement a block device driver, implement this trait as described in the
-
-Looks good to me, thanks!
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="OQN2g4LYmcg72YgM"
+Content-Disposition: inline
+X-Cookie: Limited delivery area.
 
 
-Best regards,
-Andreas Hindborg
+--OQN2g4LYmcg72YgM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Commits
+
+  cbcc3da4e7bfc ("slab: Disallow kprobes in ___slab_alloc()")
+  dfc415682b11d ("slab: Clarify comments regarding pfmemalloc and NUMA preferences")
+
+are missing a Signed-off-by from their committers.
 
 
+--OQN2g4LYmcg72YgM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjKjNMACgkQJNaLcl1U
+h9AL5wf/cY4oAMRm0Hgklab3zCrDkwSOD7gJ6mgTuhs7J9knLFt6wYUUmxBtY5Rn
+mhjUAIdnicH7hqqOsLRsNi4fdcHoYRkPH/aG5c+S1T8/N/8iXJkJ16YYbezR6Rve
+7UV8USLM1tigK+YdcmzEJ8bSnSJVW3O8hk/kb+jzJrPVrLdBX/JlVaiU4h1RkA1a
+h1LHf3Vm2Yoy85qi15HA8fiCRRj5aOssFa+VXVR0NdJ0QghCZX5b3xpGu9XEc2ZN
+NJzeqyR8/9DPFsAqPUgE8YxOwlCDH56d26BZWg6oJFoomNFC7J0YIlhqmUr5ED8g
+Y/RxvlOl5bxMT51e5/YF7EuAQWHfcA==
+=uYmg
+-----END PGP SIGNATURE-----
+
+--OQN2g4LYmcg72YgM--
 

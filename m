@@ -1,109 +1,150 @@
-Return-Path: <linux-next+bounces-8358-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8359-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11031B7F087
-	for <lists+linux-next@lfdr.de>; Wed, 17 Sep 2025 15:12:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D67A7B7F1C8
+	for <lists+linux-next@lfdr.de>; Wed, 17 Sep 2025 15:16:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0337188D5E7
-	for <lists+linux-next@lfdr.de>; Wed, 17 Sep 2025 13:06:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 586554A4715
+	for <lists+linux-next@lfdr.de>; Wed, 17 Sep 2025 13:09:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB293333AAD;
-	Wed, 17 Sep 2025 12:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E02CB316190;
+	Wed, 17 Sep 2025 13:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AU/8gpi7"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5462D333A8B;
-	Wed, 17 Sep 2025 12:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B67316189;
+	Wed, 17 Sep 2025 13:02:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758113997; cv=none; b=U+8Zbpz67S/rpUT1+LOu3DHQoL4uulwUQ3Q8SrpMN2h4h1bF/EBoCrRNL4N4cw5/vpoZOga1sBHKg0jIsvQhv8/Xx6T7BgfNO3a+QabSe9Kv59igVIucX0+TbTnpwazpOMkqjLTZjKqCjItnIPmLEAR5ktD5oy/aCj0MsyoBAZM=
+	t=1758114143; cv=none; b=SUxRdGBCKY1yztMhEx1rsScC+7w8FEJ5ZPbUUeWxddanvr9aZmOjQJ++LwfRjZaLFX9ebKGtC3qAiusQCiHs24RjTabDVhReXb53iFWbNCs5BfIw2dTWPFOPAH6Wj1zzPby4WeYV4m5m4Tu4nmOvQgsr1MiUUvTwAgjVtm8BmRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758113997; c=relaxed/simple;
-	bh=O/3KyCZXB9bUpKW0JLg6l7WwA0FWJdFKRYxf/Jz8kLQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BQabs1pHwhWQqcU/S0JOp1yHm1VXMpq5LaZr7zXjFLaF6lXJQCSlPiIVedo98lI6Hr54GeopbgM0kVjcvQkjy6wxT0Cpq4PFshoj286bhvy6/BuZdsojFI3b+kXXtmTO8KfRhmRo2BMyJy+BYoa3IlnuKVOX/TzoO/nXDF7DDCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from localhost (unknown [180.158.240.90])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dlan)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id 3B17B340E2A;
-	Wed, 17 Sep 2025 12:59:54 +0000 (UTC)
-Date: Wed, 17 Sep 2025 20:59:47 +0800
-From: Yixun Lan <dlan@gentoo.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Vivian Wang <wangruikang@iscas.ac.cn>,
-	David Miller <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alex Elder <elder@riscstar.com>,
-	Networking <netdev@vger.kernel.org>,
-	Guodong Xu <guodong@riscstar.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	s=arc-20240116; t=1758114143; c=relaxed/simple;
+	bh=dPiFt84MgSZMJL8F7rVZ3drtPWc+6MIvEOdIXuJLADM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=juGaHgakmsDLjPA+qJzTTeOGX6XQeiFMH2CGoyyymQQBc8J8ZgS67beWs8JGHu3/bbF/UC6guID1KkpUkspon7SYUm8qLPp5CN9JUHQ89oInAoDO7RYPTPpyDIbgIIsf11iux6x+IsGJZibRAx0YjkoE/W0bQbAU5l0S+zPpe4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AU/8gpi7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25802C4CEF7;
+	Wed, 17 Sep 2025 13:02:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1758114141;
+	bh=dPiFt84MgSZMJL8F7rVZ3drtPWc+6MIvEOdIXuJLADM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=AU/8gpi7sNmUx/Nf9wIA2FehS4sn47LhGNOVC3O40Xxy5OAutbAunP9dP+7cYaWab
+	 HGg5kSNfJGQxLCAuepnRxIMCQBx55x3LFGEd214iJYd7fGVTX0wFhg66ZjvUuO4vHA
+	 thIKXio6Nlu/H/MHSU4H49Grf4/Nb2VR/XQs2D031jZ+vfOMIh2jOpM9CmqZ2AIq1V
+	 DGtS+Nxnys1ABCiGVyfEbOYcIDyuyRThH/oY+Zkkmz7zBZe4Q9eb/9UflEA5+sf+oJ
+	 Ry+/jWzPBvk/EgPjLNVHtbuqhE+mWJ7Je5HQJg1gfPAXzRRo7xPeqyZ/Hz1YTD8iuk
+	 SqV0M+8ifZniQ==
+Date: Wed, 17 Sep 2025 14:02:16 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Lee Jones <lee@kernel.org>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the net-next tree with the spacemit
- tree
-Message-ID: <20250917125947-GYA1266976@gentoo.org>
-References: <aMqby4Cz8hn6lZgv@sirena.org.uk>
- <597466da-643d-4a75-b2e8-00cf7cf3fcd0@iscas.ac.cn>
- <76970eed-cb88-4a42-864a-8c2290624b72@sirena.org.uk>
- <20250917123045-GYA1265885@gentoo.org>
+Subject: linux-next: build failure after merge of the mfd tree
+Message-ID: <aMqxWGx0asGTWZ2V@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="w8pjyQ3tH91vQJag"
+Content-Disposition: inline
+
+
+--w8pjyQ3tH91vQJag
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250917123045-GYA1265885@gentoo.org>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Mark,
+Hi all,
 
-On 20:30 Wed 17 Sep     , Yixun Lan wrote:
-> Hi Mark,
-> 
-> On 13:03 Wed 17 Sep     , Mark Brown wrote:
-> > On Wed, Sep 17, 2025 at 07:48:34PM +0800, Vivian Wang wrote:
-> > 
-> > > Just FYI, Yixun has proposed for net-next to back out of the DTS changes
-> > > and taking them up through the spacemit tree instead [1], resolving the
-> > > conflicts in the spacemit tree. This would certainly mean less headaches
-> > > while managing pull requests, as well as allowing Yixun to take care of
-> > > code style concerns like node order. However, I do not know what the
-> > > norms here are.
-> > 
-> > Thanks.  They're pretty trivial conflicts so I'm not sure it's critical,
-> > though like you say node order might easily end up the wrong way round
-> > depending on how the conflict resolution gets done.
-> 
-> Thanks for the help and fixing this, but ..
-> 
-> If it's possible to revert the DT patch 3-5, then I'd be happy to take,
-> but if this is too much job, e.g. the net-next's main branch is imuutable
-> and reverting it will cause too much trouble, then I'm fine with current
-> solution - carry the fix via net-next tree..
-> 
-> But please use commit: 0f084b221e2c5ba16eca85b3d2497f9486bd0329 of
-> https://github.com/spacemit-com/linux/tree/k1/dt-for-next as the merge
-> parent, which I'm about to send to Arnd (the SoC tree)
-> 
-No matter which way choose to go, I've created an immutable tag here,
+After merging the mfd tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-https://github.com/spacemit-com/linux/ spacemit-dt-for-6.18-1
+x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_get':
+gpio-stmpe.c:(.text+0x213ed29): undefined reference to `stmpe_reg_read'
+x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_get_direction':
+gpio-stmpe.c:(.text+0x213eeb2): undefined reference to `stmpe_reg_read'
+x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_irq_sync_unlock':
+gpio-stmpe.c:(.text+0x213f266): undefined reference to `stmpe_reg_write'
+x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x213f3ef): undefined reference to=
+ `stmpe_reg_read'
+x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x213f472): undefined reference to=
+ `stmpe_reg_read'
+x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_irq':
+gpio-stmpe.c:(.text+0x213fd27): undefined reference to `stmpe_block_read'
+x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x2140005): undefined reference to=
+ `stmpe_reg_write'
+x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x2140089): undefined reference to=
+ `stmpe_reg_write'
+x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_disable':
+gpio-stmpe.c:(.text+0x21402dc): undefined reference to `stmpe_disable'
+x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_set':
+gpio-stmpe.c:(.text+0x21404a4): undefined reference to `stmpe_reg_write'
+x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x214051e): undefined reference to=
+ `stmpe_set_bits'
+x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_direction_output':
+gpio-stmpe.c:(.text+0x21406a4): undefined reference to `stmpe_set_bits'
+x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_direction_input':
+gpio-stmpe.c:(.text+0x2140805): undefined reference to `stmpe_set_bits'
+x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_request':
+gpio-stmpe.c:(.text+0x214093e): undefined reference to `stmpe_set_altfunc'
+x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_dbg_show_one':
+gpio-stmpe.c:(.text+0x2140ac0): undefined reference to `stmpe_reg_read'
+x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x2140c8c): undefined reference to=
+ `stmpe_reg_read'
+x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x2140cb1): undefined reference to=
+ `stmpe_reg_read'
+x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x2140d61): undefined reference to=
+ `stmpe_reg_read'
+x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x2140f6c): undefined reference to=
+ `stmpe_reg_read'
+x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_probe':
+gpio-stmpe.c:(.text+0x21416b2): undefined reference to `stmpe_enable'
+x86_64-linux-gnu-ld: gpio-stmpe.c:(.text+0x214193e): undefined reference to=
+ `stmpe_disable'
+make[3]: *** [/tmp/next/build/scripts/Makefile.vmlinux:91: vmlinux.unstripp=
+ed] Error 1
+make[2]: *** [/tmp/next/build/Makefile:1242: vmlinux] Error 2
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [/tmp/next/build/Makefile:248: __sub-make] Error 2
+make: *** [Makefile:248: __sub-make] Error 2
+Command exited with non-zero status 2
 
-> BTW, The 'for-next' branch is a merged branch contains clock and DT patches
-> for SpacemiT SoC tree's which isn't immutable..
-> 
-> Let me know what I should proceed, thank you
-> 
+Caused by commit
 
--- 
-Yixun Lan (dlan)
+   df6a44003953f ("mfd: stmpe: Allow building as module")
+
+which needs commit
+
+   03db20aaa3ba3 ("gpio: stmpe: Allow to compile as a module")
+
+=66rom the gpio tree.  I have used the version from yesterday instead.
+
+--w8pjyQ3tH91vQJag
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjKsVgACgkQJNaLcl1U
+h9CnHQf/aajt810ODmcanLS2KXawWloDaNsWz3Kqgu4ECFsEqKm5p0R/wjpYRYU9
+CpKZdwUoiA0PNKsR3q9lBMWSEPvbrpepb4L3v9wQSyhlQWmPNWniaZeysDWPISQI
+UKH7AUEfGBgiNFC6y5yUvIfjepg2SlxAdJnCqaLRowEyJB9fd6/sAEtLTROmjbsK
+YBhh7rPDbv4kiiaD6zDkEfGrzGaQwbtq4XKwdi59UN0+SkiYxLKAly34x9KA/2hp
+mo3w/M5pGQunl/lY8LlYTTvzQ3/IO3VQYFCwGXov0kvgk2nRPmIeuPg5mu2cqFzF
+ccVBGaYT1pQPZqZfipF6/bySxwESJQ==
+=duvI
+-----END PGP SIGNATURE-----
+
+--w8pjyQ3tH91vQJag--
 

@@ -1,57 +1,56 @@
-Return-Path: <linux-next+bounces-8352-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8353-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66F69B7C9F0
-	for <lists+linux-next@lfdr.de>; Wed, 17 Sep 2025 14:06:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4473BB7CCA2
+	for <lists+linux-next@lfdr.de>; Wed, 17 Sep 2025 14:10:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 261A317B912
-	for <lists+linux-next@lfdr.de>; Wed, 17 Sep 2025 11:30:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA9B1527A09
+	for <lists+linux-next@lfdr.de>; Wed, 17 Sep 2025 11:34:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60AD52EBDE9;
-	Wed, 17 Sep 2025 11:30:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47074281371;
+	Wed, 17 Sep 2025 11:34:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RegRqv4k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lyv+EuqV"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3014F2D374F;
-	Wed, 17 Sep 2025 11:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F50DBA45;
+	Wed, 17 Sep 2025 11:34:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758108625; cv=none; b=b8axIcK/ewvEDC9sYnTbyEe4uuO4yU0AwElTn2WhyFDT1itSVY4D+cGM2ZJXdQdNbriKSdgdH6e2IyV7LFuMUgERCe+oFfhocesPD7C7t/orpsCVbgNPhvFe8tCDXkAmwODt1mUOy59y3Ygnln5nrgY6rEjPLcPv9HwKhoWSYeo=
+	t=1758108850; cv=none; b=UrMYhwTQSefSspuQMmyZlK9WzpZdb2NeLto6FIJlfENUQDOG/4FBIQoW4RuY/kqpGk+ke1kaaWYtsEwVGn3qLEcXR6oh/ewrwPBk8nED/C5edQ6t94YNAsPHquYI5/8xV818+Y2tnJ6d9eVHzKkXTMZEtoz+0WENpIo667YCeRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758108625; c=relaxed/simple;
-	bh=U73ZuhTRH7kkSTXDd6H/RUNbP8bfQiEWAv8P2TwQl/U=;
+	s=arc-20240116; t=1758108850; c=relaxed/simple;
+	bh=Pym4Hl/uD7n31XzfGlFJ4FP0sMyge/+RVU8nqvrtyiY=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=O/x7IYGKXsndxlTOMokNMLWucoqHGdhyIckzNG90HIr5R9vMWZtGI29oMBMJxyXOcdFRwID8IHScg/lQw5yYZspN11TLFDatjb8A9ij6V88dlkQJ7DHwO2txmCri0li/u/0keYxUZvHmEHyRfD8o4iMDbUI/ujPUmVLyahOR6wU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RegRqv4k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E03C4CEF0;
-	Wed, 17 Sep 2025 11:30:22 +0000 (UTC)
+	 Content-Disposition; b=KWfIN71x6qa/jHEk9K1LQ6NqBoxiSMo5xVaBzBF0e5ey894Z4tliEOcmuIEgQYir8P9yi4OUwn8mb9D/G2pyLG79ydX06ITCOUswIxS6YHM+QAD/u5cYLxiU8zgClCKfLva/319p7A80fK8tFDGeE0i2pdWtaGDfv3meTFQ0OJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyv+EuqV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FA19C4CEF0;
+	Wed, 17 Sep 2025 11:34:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758108624;
-	bh=U73ZuhTRH7kkSTXDd6H/RUNbP8bfQiEWAv8P2TwQl/U=;
+	s=k20201202; t=1758108849;
+	bh=Pym4Hl/uD7n31XzfGlFJ4FP0sMyge/+RVU8nqvrtyiY=;
 	h=Date:From:To:Cc:Subject:From;
-	b=RegRqv4kHX9J6153fQkbYp0Lv9WTVe0FvPFXQayEn7wsBLe+isCWFFJEH8wPgfbjn
-	 bOaqzT2WRG4QMJ07YwPpULtbT+Uhf1hZl9tIetDNV/FtHqDFlHGaEf6Mh47b38ybAg
-	 SIh39Dob3SHcp/N0wnFrSOpAo46ecDDMu1uIImvesAOE97JmHsWPUOTBnLH/ECP1yn
-	 rzo6vkttNa/9Bz7gdz7aFWj3OFZ0F0fMjQrvsyHgb+a+awOUh41MHkK4TNLGiQLCAQ
-	 5JmXv8rW8z1yh+BeponZf14+E9K2EGCfcS3nsLe3BlAiGNIiaYkmtbzULMhRUBfYiD
-	 PcEpWnPyf9bsg==
-Date: Wed, 17 Sep 2025 12:30:19 +0100
+	b=lyv+EuqV07hL0GuHD7TeWVXWWaG+xc5kVHkJUUZDsv2+KHsWh53DFp3wLwU7kms37
+	 uRnuyla+zzv4hxBL0+rYbuFwy443Y6odqVNbO9gNiIYCYQYQPr7WSB+bTXJRzC567h
+	 Q92nfT+ljIG+bnpOCNy6GySuMK9HFCE2okGVDnYfOJz5rdyF/NhB3oiZ+JiKLXFaX4
+	 5DvVigR6mtrTeGQSkUKOrxIIyzDFpL13hsugVM5/ieHEhRC0zCUsS9sxcXCSJXka+8
+	 foL5aE/q6yQnJ6HtoPS196jhaqr0x1E17zoFkx09DQoZnKzLbLWCy5a+C44KwgoNK1
+	 TgDwnVl3b5wTA==
+Date: Wed, 17 Sep 2025 12:34:05 +0100
 From: Mark Brown <broonie@kernel.org>
-To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Networking <netdev@vger.kernel.org>
-Cc: Guodong Xu <guodong@riscstar.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To: Marcel Holtmann <marcel@holtmann.org>,
+	Johan Hedberg <johan.hedberg@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Vivian Wang <wangruikang@iscas.ac.cn>, Yixun Lan <dlan@gentoo.org>
-Subject: linux-next: manual merge of the net-next tree with the spacemit tree
-Message-ID: <aMqby4Cz8hn6lZgv@sirena.org.uk>
+	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+	Pavel Shpakovskiy <pashpakovskii@salutedevices.com>
+Subject: linux-next: manual merge of the bluetooth tree with the origin tree
+Message-ID: <aMqcrced3cFk9SCl@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -59,33 +58,30 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="WVZ/VwcYHLiZec4U"
+	protocol="application/pgp-signature"; boundary="hhaGiQv3TnEaUrV3"
 Content-Disposition: inline
 
 
---WVZ/VwcYHLiZec4U
+--hhaGiQv3TnEaUrV3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got conflicts in:
+Today's linux-next merge of the bluetooth tree got a conflict in:
 
-  arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-  arch/riscv/boot/dts/spacemit/k1-milkv-jupiter.dts
+  net/bluetooth/mgmt.c
 
 between commit:
 
-  0e28eab0ca512 ("riscv: dts: spacemit: Enable PDMA on Banana Pi F3 and Mil=
-kv Jupiter")
+  6bbd0d3f0c23f ("Bluetooth: hci_sync: fix set_local_name race condition")
 
-=66rom the spacemit tree and commits:
+=66rom the origin tree and commit:
 
-  3c247a6366d58 ("riscv: dts: spacemit: Add Ethernet support for BPI-F3")
-  e32dc7a936b11 ("riscv: dts: spacemit: Add Ethernet support for Jupiter")
+  c49a788e88e48 ("Bluetooth: hci_sync: fix set_local_name race condition")
 
-=66rom the net-next tree.
+=66rom the bluetooth tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -94,143 +90,25 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-index 6013be2585428,33e223cefd4bd..0000000000000
---- a/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-+++ b/arch/riscv/boot/dts/spacemit/k1-bananapi-f3.dts
-@@@ -40,10 -42,52 +42,56 @@@
-  	status =3D "okay";
-  };
- =20
-+ &eth0 {
-+ 	phy-handle =3D <&rgmii0>;
-+ 	phy-mode =3D "rgmii-id";
-+ 	pinctrl-names =3D "default";
-+ 	pinctrl-0 =3D <&gmac0_cfg>;
-+ 	rx-internal-delay-ps =3D <0>;
-+ 	tx-internal-delay-ps =3D <0>;
-+ 	status =3D "okay";
-+=20
-+ 	mdio-bus {
-+ 		#address-cells =3D <0x1>;
-+ 		#size-cells =3D <0x0>;
-+=20
-+ 		reset-gpios =3D <&gpio K1_GPIO(110) GPIO_ACTIVE_LOW>;
-+ 		reset-delay-us =3D <10000>;
-+ 		reset-post-delay-us =3D <100000>;
-+=20
-+ 		rgmii0: phy@1 {
-+ 			reg =3D <0x1>;
-+ 		};
-+ 	};
-+ };
-+=20
-+ &eth1 {
-+ 	phy-handle =3D <&rgmii1>;
-+ 	phy-mode =3D "rgmii-id";
-+ 	pinctrl-names =3D "default";
-+ 	pinctrl-0 =3D <&gmac1_cfg>;
-+ 	rx-internal-delay-ps =3D <0>;
-+ 	tx-internal-delay-ps =3D <250>;
-+ 	status =3D "okay";
-+=20
-+ 	mdio-bus {
-+ 		#address-cells =3D <0x1>;
-+ 		#size-cells =3D <0x0>;
-+=20
-+ 		reset-gpios =3D <&gpio K1_GPIO(115) GPIO_ACTIVE_LOW>;
-+ 		reset-delay-us =3D <10000>;
-+ 		reset-post-delay-us =3D <100000>;
-+=20
-+ 		rgmii1: phy@1 {
-+ 			reg =3D <0x1>;
-+ 		};
-+ 	};
-+ };
-+=20
- +&pdma {
- +	status =3D "okay";
- +};
- +
-  &uart0 {
-  	pinctrl-names =3D "default";
-  	pinctrl-0 =3D <&uart0_2_cfg>;
-diff --cc arch/riscv/boot/dts/spacemit/k1-milkv-jupiter.dts
-index c615fcadbd333,89f4132778931..0000000000000
---- a/arch/riscv/boot/dts/spacemit/k1-milkv-jupiter.dts
-+++ b/arch/riscv/boot/dts/spacemit/k1-milkv-jupiter.dts
-@@@ -20,10 -22,52 +22,56 @@@
-  	};
-  };
- =20
-+ &eth0 {
-+ 	phy-handle =3D <&rgmii0>;
-+ 	phy-mode =3D "rgmii-id";
-+ 	pinctrl-names =3D "default";
-+ 	pinctrl-0 =3D <&gmac0_cfg>;
-+ 	rx-internal-delay-ps =3D <0>;
-+ 	tx-internal-delay-ps =3D <0>;
-+ 	status =3D "okay";
-+=20
-+ 	mdio-bus {
-+ 		#address-cells =3D <0x1>;
-+ 		#size-cells =3D <0x0>;
-+=20
-+ 		reset-gpios =3D <&gpio K1_GPIO(110) GPIO_ACTIVE_LOW>;
-+ 		reset-delay-us =3D <10000>;
-+ 		reset-post-delay-us =3D <100000>;
-+=20
-+ 		rgmii0: phy@1 {
-+ 			reg =3D <0x1>;
-+ 		};
-+ 	};
-+ };
-+=20
-+ &eth1 {
-+ 	phy-handle =3D <&rgmii1>;
-+ 	phy-mode =3D "rgmii-id";
-+ 	pinctrl-names =3D "default";
-+ 	pinctrl-0 =3D <&gmac1_cfg>;
-+ 	rx-internal-delay-ps =3D <0>;
-+ 	tx-internal-delay-ps =3D <250>;
-+ 	status =3D "okay";
-+=20
-+ 	mdio-bus {
-+ 		#address-cells =3D <0x1>;
-+ 		#size-cells =3D <0x0>;
-+=20
-+ 		reset-gpios =3D <&gpio K1_GPIO(115) GPIO_ACTIVE_LOW>;
-+ 		reset-delay-us =3D <10000>;
-+ 		reset-post-delay-us =3D <100000>;
-+=20
-+ 		rgmii1: phy@1 {
-+ 			reg =3D <0x1>;
-+ 		};
-+ 	};
-+ };
-+=20
- +&pdma {
- +	status =3D "okay";
- +};
- +
-  &uart0 {
-  	pinctrl-names =3D "default";
-  	pinctrl-0 =3D <&uart0_2_cfg>;
+diff --cc net/bluetooth/mgmt.c
+index 50634ef5c8b70,b9c53810bf06b..0000000000000
+--- a/net/bluetooth/mgmt.c
++++ b/net/bluetooth/mgmt.c
 
---WVZ/VwcYHLiZec4U
+--hhaGiQv3TnEaUrV3
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjKm8sACgkQJNaLcl1U
-h9BItAf+MRlBszKhHGJfpPQK+0k+axpOJ26WKU3BirdKtFleT7QA0GHTejucy3KG
-e2JodVAPsXKAintJOgHKh8Jy0vHnHwn72WBENaLjWs9f8jPS5RuEtcxwaNm9DnpX
-6EormV8ApXBFM+ma/KjiTle90GSUdb85U8afyT7zfuLN3S0i1DeRfHmx407BUsBc
-ERmOBZEBuGYFpkYLGEUyauS3lLDDyvIaMuge243sV8yTsOEdvKStQPFJJ/mdgSK5
-sKAINXBlb8Rn93vgixNDPKrD1g/4uhfiEYLJBI1NFZPS6y5dcVff7p+WyVFifbBD
-7GyLytqSTt9US+yfl6VJV9htQWzsmg==
-=BooE
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjKnK0ACgkQJNaLcl1U
+h9Cu9Qf+Kz+BnB5CGxNKW3jKFrg74sRPQfOl2F0Cu8IggZF303B8EaIqje3wBCeH
+29SyFW3pTKk8oom5CTiC+XiA+6i1zdi4K4jQJ5EkLscDkvYflW0458cL3wMwlYHv
+D3XV2ovmFQlR9SHIkNZSyvd9qX/NEsNJIVCHvt2F3PrM0KXZIZ1zUluaj2or5qAi
+PtQ8iD1l3jW4fACeQHmW1Gqsf5K/47OtdUvdDqOzL3LKqWVaDs1U2jk0yIaaFOdF
+SmnHY+qp6YedS7M0NbqKCmgIauIV4T76EI/hW65xLbuvmSYoHkIqIqkgD6SkEf5a
+vxoF/aHxIQGA28EVg0wrIb8bGM7cqA==
+=D2VM
 -----END PGP SIGNATURE-----
 
---WVZ/VwcYHLiZec4U--
+--hhaGiQv3TnEaUrV3--
 

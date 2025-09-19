@@ -1,128 +1,118 @@
-Return-Path: <linux-next+bounces-8392-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8393-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F162B8A2C3
-	for <lists+linux-next@lfdr.de>; Fri, 19 Sep 2025 17:06:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E46DB8B33F
+	for <lists+linux-next@lfdr.de>; Fri, 19 Sep 2025 22:44:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C369D189CDBE
-	for <lists+linux-next@lfdr.de>; Fri, 19 Sep 2025 15:06:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64E615A39BF
+	for <lists+linux-next@lfdr.de>; Fri, 19 Sep 2025 20:44:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEF71257855;
-	Fri, 19 Sep 2025 15:06:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC236262FF3;
+	Fri, 19 Sep 2025 20:44:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GxR/G3l2"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="d6bAacwE"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84AF41E3775;
-	Fri, 19 Sep 2025 15:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1CE5225D6;
+	Fri, 19 Sep 2025 20:44:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758294363; cv=none; b=J/zX8esLtF19tuHxXWM8wQgdei7ApP0hsLJkI0bsXO8rHHJsi3VgAIhLIP4cZwDpH8Vdraads1qnVpiVSFjutSwpu956P1mX7+db3G/JaT8KRiCLekviTdEu21Q2+3Csy+9akT+HL1kdGh6hWyb+P7hnOCv+H2a6S8fNLp0KfGo=
+	t=1758314667; cv=none; b=EdrlfDoIi/VsFPGYvcc/CKX8uAwwRR/a2jqV/YHEPx/5al9AJce0i/Vmln7AQQQRg1X4TWYA2fqDhqXzbEnVsVxSubIgjVqqCWcJj8FgWA394vxnHKaSDCSYXLTtgAI1vqUoAGL//vIa6L5VKL8gU70pSpI3RIYDCzLEjljiDlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758294363; c=relaxed/simple;
-	bh=NmJ4k0eAEPY+WFI4QRGF3v1SZjk2WzeguFFKBWe/ro0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ijeddC6KnjOSPfr94St5ka4Rft2EnfL4t6LSTrKrA/8lY30edsTTcdanlh32li/S9F+SZm/QP7g4NHx97ofyKtNJQk8w3+2nUo4Jn5DjuH+AiTlNiOT+yvsPheain1lipMnMH9fJ2EGvQN3hV6jc5NJUXgRyoopFUM6vk3u5cps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GxR/G3l2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55F4DC4CEF0;
-	Fri, 19 Sep 2025 15:06:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758294361;
-	bh=NmJ4k0eAEPY+WFI4QRGF3v1SZjk2WzeguFFKBWe/ro0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=GxR/G3l2kFbUu7RIA2GcWBLlzcU3yePp60z0uG3m8oteYiPaXCUGHnsvjKFT6jL9K
-	 uwwz8rg81KQPUmXNyIHpkqd8B/1SQtwxt+0bUMcM2EKYqTt7ch1BlW6k3LerZO59uF
-	 oGkEvUKxm4nYgmLsi590pwJvuNlRNDNHZ09KOJeoOzYqPdhOGh8ewA/fCT6gidVvIb
-	 tP9yZ9zA6HDoRF+B00ztfmMrFBrSHZS80+rUEKYwysO5pthok4RYXyZVI7jky4YMIG
-	 5dJ2K7o1yNJbwq8MoZqiblYlXUlPofKrg4G8EBL2FseSBh3co070RKzKO1neFVsVil
-	 8+V4HzDPaIE+Q==
-Date: Fri, 19 Sep 2025 16:05:57 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Sep 19
-Message-ID: <aM1xVa_SX3_QFU_q@sirena.org.uk>
+	s=arc-20240116; t=1758314667; c=relaxed/simple;
+	bh=XSsHouukci34LDKNJRaLQcWAJVMiiijA5K6/oNjb/0w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mnISSplnQmGYYryIvC2FG5GCudveKSvODJ0iS7OB6fIXltUznOz882CyclztXB/3ar2ypavBE5avcNNgNQU9GufFEknzGS4gbq6w3RpQ5ThiqsKXXkBOgmuq7BeSkR+kFLhKLhqILdcePVbf8b3k+nBpyxptIGddpbQukhc+77A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=d6bAacwE; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8070340E01AC;
+	Fri, 19 Sep 2025 20:44:22 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 2uXJAggRLCsu; Fri, 19 Sep 2025 20:44:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1758314652; bh=ogLSSDPgWHiSXjhfA6iLzlBNOW9gCGPBOfCNPe2G088=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=d6bAacwEbRmcZc9dXYAzIC58xdAOB3KgH5nQI5Zih9sGO3LdwKpofPsKRbcFv1GKX
+	 maGCsGTtAH1k9uvEaykmNFAA/0PlSL5QdXp3NEUihXgp6QHsvSNZkZB/dRVUfxni5q
+	 L2mSWlcaBVj/OFJ35LxRV/ByS0JKqehLXTs10j4N+GFccE17hVCAeGhJ0j356xFNSC
+	 uJVANmzB8fJTtMIcZm8WBrbl9e9RIIbde4zKD8ULpjZFmcsDiEKNFDUfEFa3lRzCnE
+	 yNZuvqNqZ2KoGfFq1U8cTChiByxl0OY+sIlQdk1LDjRziaNIuBiBkxTVWbaoXsuMR3
+	 xpvuyBcQeofgAhV06dtRL8tGmNkNuFBzDJKzIBXTXYJlyn2fyUr8xtYynLXU8hFOcy
+	 hlQ6PCzpKWrQWbdv9T8H+aNge1mZzZWKELmwKtfVwRHzpxowPHTIkaetWXRtXEmH07
+	 giTXT3NlmtVNIJtIG2kUGNrTr8kc4j679qX8FxeY/vK49cThW+1Z8031x4ghckeOMV
+	 tNq6rXXP0n4h4tIacItZ7xcHrqMNwKj0WN+Mq1GbCQXd2B+iXpRkqAsA/m5LJiV1dl
+	 /rajUJZRhVbuYaH13joMdWbMb7DNsQj/pAk5quFX7HeRwmecyhn9qm7eOu+ZeUciFo
+	 PgAgbat7iYNJdEhyoJizNv+M=
+Received: from zn.tnic (p5de8ed27.dip0.t-ipconnect.de [93.232.237.39])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 1F96D40E01A3;
+	Fri, 19 Sep 2025 20:44:03 +0000 (UTC)
+Date: Fri, 19 Sep 2025 22:43:55 +0200
+From: Borislav Petkov <bp@alien8.de>
+To: Mark Brown <broonie@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ashish Kalra <ashish.kalra@amd.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the tip tree with the crypto tree
+Message-ID: <20250919204355.GHaM3AiwTM25LiOKAb@fat_crate.local>
+References: <aM1bJqhtojdLhp3c@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jN90vCacN3r3sgFZ"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <aM1bJqhtojdLhp3c@sirena.org.uk>
 
+On Fri, Sep 19, 2025 at 02:31:18PM +0100, Mark Brown wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the tip tree got a conflict in:
+> 
+>   drivers/crypto/ccp/sev-dev.c
+> 
+> between commits:
+> 
+>   45d59bd4a3e0f ("crypto: ccp - Introduce new API interface to indicate SEV-SNP Ciphertext hiding feature")
+>   33cfb80d1910b ("crypto: ccp - Add support for SNP_FEATURE_INFO command")
+> 
+> from the crypto tree and commit:
+> 
+>   e09701dcdd9ca ("crypto: ccp - Add new HV-Fixed page allocation/free API")
 
---jN90vCacN3r3sgFZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Pff, in hindsight those should probably all go through the crypto tree so that
+there's no unnecessary conflicts.
 
-Hi all,
+Herbert, lemme know if I should undo them here and you take all three:
 
-There will likely be some missing -next releases Monday to Wednesday
-next week, normal operation will resume on Thursday.
+648dbccc03a0 crypto: ccp - Add AMD Seamless Firmware Servicing (SFS) driver
+e09701dcdd9c crypto: ccp - Add new HV-Fixed page allocation/free API
+e4c00c4ce2aa x86/sev: Add new dump_rmp parameter to snp_leak_pages() API
 
-Changes since 20250918:
+Thx.
 
-The net-next tree gained a conflict with the rdma tree.
+-- 
+Regards/Gruss,
+    Boris.
 
-The drm-xe tree gained multiple conflicts with the drm-fixes tree.
-
-The tip tree gained a conflict with the risc-v tree.
-
-The tip tree gained a conflict with the crypto tree.
-
-The kvm-x86 tree gained a conflict with the tip tree.
-
-Non-merge commits (relative to Linus' tree): 9904
- 10133 files changed, 469989 insertions(+), 191252 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with an arm64
-defconfig, an allmodconfig for x86_64, a multi_v7_defconfig for arm and
-a native build of tools/perf.
-
-Below is a summary of the state of the merge.
-
-I am currently merging 407 trees (counting Linus' and 406 trees of bug
-fix patches pending for the current release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
-
---jN90vCacN3r3sgFZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjNcVQACgkQJNaLcl1U
-h9CnNQf/amCLIN/OkR+zIyiiu/bWmt7miLIluFeBbKJFVPtUUs1ymMmN70fU0ZmY
-aQ3wbH7bSskSX3Uqjv1cRhX4m5GbAcInKaqc+oe5p45NiMiM1QBlvej4EPK/pEmZ
-7/bitaEO/h4IHOqBXOJ3kO8MF6JsYnXbkes1MqcvjsdJwWl7mdgcqBkrZDFH2I9p
-/7Qs3RFARJNCKb548GqOIzdECFcwcA2nn+ObB2K1WnQvA/hccK3C/y0VVrJ5rGD9
-IPRC5+jVGS0r67qVGyMOYwGzH8OESGTSLX8k8FL3X/M5k8eiwP01PJfnt+wb9j2Q
-KA9vcqTCOHU2aoHvVzgUBlfSBRbBWw==
-=fCkY
------END PGP SIGNATURE-----
-
---jN90vCacN3r3sgFZ--
+https://people.kernel.org/tglx/notes-about-netiquette
 

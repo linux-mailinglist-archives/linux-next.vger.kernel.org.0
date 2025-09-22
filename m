@@ -1,129 +1,180 @@
-Return-Path: <linux-next+bounces-8434-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8435-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67F4FB9192A
-	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 16:05:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A39B6B91D40
+	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 16:59:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65BE31889E71
-	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 14:05:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D45C3B083F
+	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 14:59:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E94151547E7;
-	Mon, 22 Sep 2025 14:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA51D2D7386;
+	Mon, 22 Sep 2025 14:59:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="g4XktSv8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cVpiq3fk"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720C2134CF
-	for <linux-next@vger.kernel.org>; Mon, 22 Sep 2025 14:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54BADDF76
+	for <linux-next@vger.kernel.org>; Mon, 22 Sep 2025 14:59:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758549896; cv=none; b=UBGhiH8mSuaClC611sM15rGAL4NRE3ozUzmZDuZZC3FtGkwPEsLZOKmzV8m8Ch8fKnrIWU6Wbq3cyCaeGs0lAxnbqJai1e1LtmehAGpe01PuxEliGhKGOpzcmCPtz6BLqFwSv8qRsUevRmgy5TQqoIzxV3Qf9Uvv67RupZtM9KQ=
+	t=1758553163; cv=none; b=NK2DffYMREcnZdF4bvv1z2P505fs/CANsRIZJ8ZmJ9rfkE9LaBYRn4DbFv6Ym98Jbuu8zb8N5LIpDDxl6cxm/TiQ34jzBXgiQcS5n/tDNGE1EGZc+05CpG9s4TY9yf13R03JEd/qJDEL436XryxDVUb09u2cjcrur6rGy7N9EWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758549896; c=relaxed/simple;
-	bh=/sjcY9Fa5XFylluVuxusVCNMtRrfJbTjfjaQE20VI70=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=CuKq43/NXOt/l8bgbv4NHN0wnlffiPm9Qo136VYhFZswSRa9B0LLAx31g3HwfOop38QM2sXfmkcWeBCM9UmEm7J47m3K0hNonqmRxN390zF4NajII3pTB7e8HbKzZK4JJM6auRWjnME3W7Spec4FS8pEQOB2eF3jmXyD/vouX7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=g4XktSv8; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-329c76f70cbso3805804a91.0
-        for <linux-next@vger.kernel.org>; Mon, 22 Sep 2025 07:04:55 -0700 (PDT)
+	s=arc-20240116; t=1758553163; c=relaxed/simple;
+	bh=1PWtNxvRKbxFPDWc9oK0CqU7hLHwacSNSy72ep3P5sQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aiDB/Qj/b85/3Un7CJQMrRAlo7qw55qGBaTnUYaw2g/bTHiWsLW8Ugs8kZeLWPmfzJd0bw5O1r1WP6JTAeRzD9g2I+NcqaJvXTwA0zp24wlbnt1AA71S5J3LWj0mmFZcEUTRsNSvg9NecqZG83QJ66m6EBYKhFOlfyOGBba0TkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cVpiq3fk; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4b38d4de6d9so28385561cf.1
+        for <linux-next@vger.kernel.org>; Mon, 22 Sep 2025 07:59:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1758549895; x=1759154695; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2heiCNaQg0i2C5CkgyQt/hQuQrr2a5K2z0DwRmV5M/o=;
-        b=g4XktSv8kxMDE1maJ22CApN4ApUn/klU4pwm5YBmC0PCF09D7aCqp6QRQ3hlol5aM9
-         JfgG0YLGlPBa7vliZnYWRQ+RSeR1rz4wxGaXUBv9axkIVoeoWY2sMJFRAE5MhUmub+e6
-         D0ilXxPW08Cw9DnLv72tK9oRaA4wFaH8VG3wUx0NdvO0nRt2Ht0GIYedi1d/l+NDAM43
-         Gjdtv8YlC1PxwPc/J86LLk2HqTg7m2yDOLiMHpxFzP837OZwUebzZO5UXczQuZvR/uwn
-         wDVXiNttZTGwOV5HaO9SANtlcm5uZVDS9Hwg3kfj3FFc9HTnVuDlk3Alem8oNIVA1Obt
-         RopA==
+        d=gmail.com; s=20230601; t=1758553161; x=1759157961; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iv0y47723YQXj23skGg2jVTBDdISRK9/QZECA8mOZh8=;
+        b=cVpiq3fk2EyvXZXXgHDDak17DkvDlCfBEKfR/qrn0vfDcnJrOOHSvU7mw0Di+wB3t2
+         02yE7EzdK/btaVxBBkMLKSI4JpTmteVY0T7EiPBLu+0XoIzJOlec1PnOo6VxRv235WRB
+         jd7QD1yZlr66h2eZUt5sgTEAYd0zTJO6kkii8F0wJQVv6YVix1y3SlEoyk6xzb6wnLhj
+         HS8Aen2nEqIP5NDUNCMVugp6SS13DlI6zJ1Al95cALM0CvkObuCJc/4bK4i956duCDEf
+         WbFLrZW9mejXs5DI/xrvChC6NoED+4XEddViM51T7/LISXGeY2X6Jma/cJQYHv6QueUt
+         RCyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758549895; x=1759154695;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2heiCNaQg0i2C5CkgyQt/hQuQrr2a5K2z0DwRmV5M/o=;
-        b=P2amlfVYnOlzudhKdpw3C3jKEYuMgmgg8UXbZ7dCTuyCRK3M8QPi3+WIFNYEjWGqa0
-         CZRBUM7gSpTGQsLaf6SQNCbCpVvUTwouf2kOcOCNBtorF72ZbnZsUHM+ccXMq1Q2ifmw
-         xsI7DMaZLAG2MEvlztaQCx4eg6AhnZAoDF0hVjY/qqpD3AdRZU09lvOS2AmtTNZHW3rE
-         AFxB9fMA7PiiNGPiqjy7Ps22fZ1o5HYBBebsnRIT8iOSHe21GX7YXE/wqtEybJDzTH/y
-         sgM6EXGrwY++3IROP9qp7hk7PkjCaFhgqM1hgwRN2Y6VeF/DDI5QJA7stAOFS6QE/ctk
-         9p0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU68yvUdutKNEFJwOsDtnPxGh01Eyx7HBJAIkwCBLdc+uPGq28NWDg6RMD476XOQQ9+BxPww5nzeizE@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVnZ54Xa8X7/vndkfXgIQ/TOMQer3U9FjJcYJVcUQA0d5cmMrb
-	COLeWyGlUA8u6aHoeGMa2jx9GtqxqljGwabEVAzuuBgkuwMveC9UPTj4pfE+xOH3Lp2th3rytK6
-	lMqyN9g==
-X-Google-Smtp-Source: AGHT+IGL72q1bTs3P0fdVgVC7YK+Ah9k+m4H28Nhfd8zENqra69s7jdTZUpaIiWplJKUQYNz1olJAXEyid0=
-X-Received: from pjbmf16.prod.google.com ([2002:a17:90b:1850:b0:32b:95bb:dbc])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1a91:b0:32e:3f93:69dc
- with SMTP id 98e67ed59e1d1-3309836d35bmr15727800a91.25.1758549894748; Mon, 22
- Sep 2025 07:04:54 -0700 (PDT)
-Date: Mon, 22 Sep 2025 07:04:50 -0700
-In-Reply-To: <aNE1s02dSgcJ4Uxq@finisterre.sirena.org.uk>
+        d=1e100.net; s=20230601; t=1758553161; x=1759157961;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iv0y47723YQXj23skGg2jVTBDdISRK9/QZECA8mOZh8=;
+        b=YJpk61s9RFmMeSuhB9B3JVmgIN66OrdS5QPXedfNrcIDWvke49iQnbd3XnJ2yYXJkl
+         eckqOKlmQG4O8/RFLvmAOLYsrcWMl4tHVez2iodQRPXajJv0s+16ntVdmLUThuyCdZ67
+         h6ciyGmnXW4MxiJnD9FjxTVzRWfKeLklCcRGNp6Zy443WITR9oleHV8KLcP55gav51dw
+         /MKE2LvNA5kofTfs63DCoTLyhp1Qu/f8Mcgtpr8YdU8ZBnNC4lRm0X6MFdwdoWPlxN9k
+         CYZKshn7C6WIFccbiIO86cPMWtqwMD2GFUgHzsoBxqFqgKEsFSDwDNecrvzy1Q78djWp
+         MzZw==
+X-Forwarded-Encrypted: i=1; AJvYcCUXbHRRcBUswnGbQEFiZDktzPX3JJRTTDIMnjdl7t+QcwUtVhdmdp/WivX5lY8yfIH5tlCO3MwADyCI@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLLPPFbKPmRLsx1wyBbSv2VYJfvleokBjHdQ9cgHKBLwUhIQfr
+	NCHkS6ljsyFQW8qHndZ4uGlM0RkTo+tR5rzPq8B4fgBdB6pk3gK4yZ58
+X-Gm-Gg: ASbGncsGAeq6Ti+phl7MylXbnbL18wvhZyrNjPrEq7ETjhdHcYDQp3V178FOFvtJkze
+	sa3BrL3iDrvWBusx00r5098H+TzjR2o1Rwz/YOLk7zk7F+0ffNYRRngEGYPcjc0I4LggMe51zs9
+	F+6UvLzgMqtcjzcyB7IYcXobOMzAcDsxWbwLzdMadj63NvdNm76NYaiITphr4XKojwWCaw+bujx
+	Ewu4YsO+l1eabQOgfyJCPB4Z+Z7B7+FqgfPCzi5VPfWeov1vVG3VT2b0SvLORLYInLUY9c5cWUE
+	eJCQs9YJWeofks3nHbuXgRddBRjZ+mbo8k/0SVpXxcfmzNExIJKVKWlFih4k9tLBFFdQ3W7V4kt
+	UoQVNwXl5Tc1FdKSqdISOcJU1jwt3DUoCpSOyEpCyfCkXlExPW7cO3TsV/A2r8oCa0EkzE8Tmza
+	54uhIrHxPlLC6G
+X-Google-Smtp-Source: AGHT+IEppR8/BUusJrUkpOVDQuWIM8gn11kIQwj9+wklEJaFajMHL4d80hJEztBz/owxkkx25oVhlQ==
+X-Received: by 2002:a05:622a:420b:b0:4b5:4874:4f95 with SMTP id d75a77b69052e-4c073106965mr117448841cf.51.1758553161139;
+        Mon, 22 Sep 2025 07:59:21 -0700 (PDT)
+Received: from fauth-a2-smtp.messagingengine.com (fauth-a2-smtp.messagingengine.com. [103.168.172.201])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-84bc62df395sm150933285a.40.2025.09.22.07.59.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Sep 2025 07:59:20 -0700 (PDT)
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 2D5EAF40066;
+	Mon, 22 Sep 2025 10:59:20 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-02.internal (MEProxy); Mon, 22 Sep 2025 10:59:20 -0400
+X-ME-Sender: <xms:SGTRaB39ZnwwFUwtXDrVYjLkR44bspUDiU_09_CBFJJFjp-9Q6vmIQ>
+    <xme:SGTRaGVZdl50aACB_AczD57iQlPfvkeSYKCpuQ3wqWS3p-7wstnn3nSc-xxckXWyV
+    PU4tDG35-_LLdP7sQhjQtXPPxOGl-JdlG7xDSIe9I6ik6cAO9Zi>
+X-ME-Received: <xmr:SGTRaLMRH4NGoh4YkDwwt5_W9RVqY-JEA-6CLucqsxocBByhGUTQuNC6Knc8JVORlbbBWiJuClPSKRG4EbYZqxbG5Z7C2_Rj>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdehkeduhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhnucfh
+    vghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrthhtvg
+    hrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveeiudffiedv
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsghoqh
+    hunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieegqddu
+    jeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigihmvg
+    drnhgrmhgvpdhnsggprhgtphhtthhopeduuddpmhhouggvpehsmhhtphhouhhtpdhrtghp
+    thhtohepsghrohhonhhivgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghhrvghgse
+    hkrhhorghhrdgtohhmpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphht
+    thhopegrlhhitggvrhihhhhlsehgohhoghhlvgdrtghomhdprhgtphhtthhopehgrhgvgh
+    hkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhig
+    qdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuh
+    igqdhnvgigthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghtthhg
+    ihhlsghrihguvgesghhoohhglhgvrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinh
+    hfrhgruggvrggurdhorhhg
+X-ME-Proxy: <xmx:SGTRaB0uCkD8iEUclYwFl55jOeKpFFrtknOapQZpR8qfsliiu-7xIw>
+    <xmx:SGTRaHTLSuJKHHPFMveyRR2OZy2wqKZOoqHME3P0hJBvx3Kryl1dIw>
+    <xmx:SGTRaElDxHC6nmY00Qmh8kqR1Q1MUKi4zFc8Ykc5Blloe5_q_zK12A>
+    <xmx:SGTRaIN1oXV4Q6e1iWSpH5CtTyVM7P52NGjbKlC3TlH40jScLVjUPw>
+    <xmx:SGTRaAj4xEaEKV-IXTWGQxd69_X0x6TQl019eVvSKEuvCC6dh2K8HSUR>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 22 Sep 2025 10:59:19 -0400 (EDT)
+Date: Mon, 22 Sep 2025 07:59:18 -0700
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Matt Gilbride <mattgilbride@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>
+Subject: Re: linux-next: manual merge of the char-misc tree with the tip tree
+Message-ID: <aNFkRs5_BK4JSQz2@tardis.local>
+References: <aNEdWOS8s6U0c5pz@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <aNEb7o3xrTDQ6JP4@finisterre.sirena.org.uk> <409d5703-ca0b-4b4b-a221-4e38ea92ae9a@amd.com>
- <aNE1s02dSgcJ4Uxq@finisterre.sirena.org.uk>
-Message-ID: <aNFXgq3SkvemIlv1@google.com>
-Subject: Re: linux-next: manual merge of the kvm-x86 tree with the tip tree
-From: Sean Christopherson <seanjc@google.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Srikanth Aithal <sraithal@amd.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aNEdWOS8s6U0c5pz@finisterre.sirena.org.uk>
 
-On Mon, Sep 22, 2025, Mark Brown wrote:
-> On Mon, Sep 22, 2025 at 04:57:39PM +0530, Aithal, Srikanth wrote:
-> > Hello,
-> >=20
-> > Todays linux-next build fails with below error on AMD x86:
-> >=20
-> > arch/x86/kvm/emulate.c:4091:9: error: implicit declaration of function =
-=E2=80=98F=E2=80=99
-> > [-Werror=3Dimplicit-function-declaration]
-> >  4091 |         F(DstMem | SrcNone | Lock,              em_inc),
-> >       |         ^
->=20
-> That'll be me doing a mismerge I expect and should've taken the other
-> side of the merge for these, I'm quite surprised that the x86
-> allmodconfig builds didn't trip this up :(=20
+On Mon, Sep 22, 2025 at 10:56:40AM +0100, Mark Brown wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the char-misc tree got a conflict in:
+> 
+>   rust/helpers/helpers.c
+> 
+> between commit:
+> 
+>   d9ea5a41cef80 ("rust: sync: Add memory barriers")
+> 
+> from the tip tree and commit:
+> 
+>   eafedbc7c050c ("rust_binder: add Rust Binder driver")
+> 
+> from the char-misc tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> diff --cc rust/helpers/helpers.c
+> index 1c6096f53a6fe,8e8277bdddcae..0000000000000
+> --- a/rust/helpers/helpers.c
+> +++ b/rust/helpers/helpers.c
+> @@@ -7,9 -7,8 +7,10 @@@
+>    * Sorted alphabetically.
+>    */
+>   
+>  +#include "atomic.c"
+>   #include "auxiliary.c"
+>  +#include "barrier.c"
+> + #include "binder.c"
+>   #include "blk.c"
+>   #include "bug.c"
+>   #include "build_assert.c"
 
-Yeah, essentially just s/F/I for the em{inc,dec} entries.
+LGTM, thanks!
 
----
- arch/x86/kvm/emulate.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index beda7030e40a..7d520da8dafc 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -4088,8 +4088,8 @@ static const struct opcode group4[] =3D {
- };
-=20
- static const struct opcode group5[] =3D {
--	F(DstMem | SrcNone | Lock,		em_inc),
--	F(DstMem | SrcNone | Lock,		em_dec),
-+	I(DstMem | SrcNone | Lock,		em_inc),
-+	I(DstMem | SrcNone | Lock,		em_dec),
- 	I(SrcMem | NearBranch | IsBranch | ShadowStack, em_call_near_abs),
- 	I(SrcMemFAddr | ImplicitOps | IsBranch | ShadowStack, em_call_far),
- 	I(SrcMem | NearBranch | IsBranch,       em_jmp_abs),
-
-base-commit: bf2602a3cb2381fb1a04bf1c39a290518d2538d1
---
+Regards,
+Boqun
 

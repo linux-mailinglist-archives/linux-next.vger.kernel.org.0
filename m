@@ -1,227 +1,223 @@
-Return-Path: <linux-next+bounces-8428-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8429-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73A1AB91068
-	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 13:59:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FB59B9107F
+	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 14:03:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 299E0423CDC
-	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 11:59:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F34027A84AC
+	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 12:01:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA52306485;
-	Mon, 22 Sep 2025 11:59:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A310418EFD1;
+	Mon, 22 Sep 2025 12:03:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="JVKZdskF"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="YciYDy3H"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011068.outbound.protection.outlook.com [52.101.62.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24BE30648D
-	for <linux-next@vger.kernel.org>; Mon, 22 Sep 2025 11:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758542352; cv=none; b=PaS+41I8kAksS+qaW0OttAPAhfva3IBwrEo/tus+jHAwSBRa/X7mqj6a0wOjwHss3Ud/0FyIXATACdR2BxBzVvk8N1qVbsGqD1biSDQAUSjJayA6Yzm0CSuJdNkFTLSPCrWhB0flQfy4mtGL+j8RZbRCS8MYuAVNUqwPQxSrD74=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758542352; c=relaxed/simple;
-	bh=kNHccVyhVKFN1OQ3GbJtvkWS9i6VeWKckXRnMPsrSv4=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=tDutcNTrxLcZwhb8wFsuiR6RD8Zm2Lh5jpuefgoQEqHp2sfreZYRURtwyy9XLYVYX5tW2QKtdEbipooPCdznK8RE1faR22xS2npbfCWyV2ESx6Ig47IIj72MBGlH4dShW2eBbkvkMdA3en6PRlP3a45HKDFkr8grLFZF+b8LRbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=JVKZdskF; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2445806e03cso54326185ad.1
-        for <linux-next@vger.kernel.org>; Mon, 22 Sep 2025 04:59:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1758542350; x=1759147150; darn=vger.kernel.org;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jc/ZaEN5reK8P6OfyJuXUb0G94xSPoKCeSzYTJwvaOU=;
-        b=JVKZdskFbyMs6tnmxN4cLMpj3VLWrS8+4JJF1tfoH3HLk8BcJY7dlhdHjrlkq42LCO
-         42QVgVz7dVK3/eLx36SPGb1u454wjms8+iQEoRMeqBVRHvlr9t+b+4sZlz3ewzPR0XbQ
-         fe7nSwt+Gln2UTznPJqb0WRfDCwQ7oF54zj2VZCoD8bozASMMQu9gsHTB0BloGqz/cYB
-         RHppC17gTsDndfUHmCNKRi5YvF1EKg8k4YDY+pFGwTKKI9Zo66treFt35LRlF9XwGjbv
-         idVRAjT0zcD+idABRnuaomIXAReGQ2C11eCdsoVmIMoYnr3V6riItBIYHm5W7Lgy/OmG
-         aLpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758542350; x=1759147150;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Jc/ZaEN5reK8P6OfyJuXUb0G94xSPoKCeSzYTJwvaOU=;
-        b=n+3X8n7wi5EV10OApt0clUmEeCfAjd1vd1YniDBt9e1KStVR49kLy1rATOz4KhAOHq
-         J52QE5tvrV+LmSKYUg9mUqIEHoPOdH9FhA1r2LQvQiIiainEFoWpZzb+NuU6zxj9Ykfr
-         tT/HgA9Y1+zPbY1ydBzq03JFc3zhKKogswa/B7/j4K6cjoIWYP4WyY+pqO3VxtxPiG/A
-         KAa9B3upKKZV7Exju2f5+DV1InCqthQP0rcD6DZL8vkotdTnzxhZhIEmukg7jXBdCI/k
-         sgCX+fkWeI2Ssey5Y+oJOlwN+4Zvtz5a9cxS9fu3LyrXKBu91lP/AqLMLCewXV7WAAGo
-         Iasw==
-X-Forwarded-Encrypted: i=1; AJvYcCW2dDxlX3+inJoKHB9PfRV36yR3HngX3ZKEBewur2p/22jmHFZGOqwWJFyNfhMvp24coJXdSsi0PbYj@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNDpTPBvUNiqg8L6fWVvYa3TzCaP0ILSr5+9hFLgYCoTGSUw4o
-	2xfX5xU2BxNCfABfks1pD9UeEv8X3zzJtrwpHxnfosyJipN7txhmYc85fHaUzD4LXPc=
-X-Gm-Gg: ASbGncstqcgV96WmDPB2q3nUWnbRtIXWDXiCOZI74HQuefwiOb50EI+UdOtK3+cxSU9
-	RIvlO4melZna1aGK/9ctErNzFb4UCtuKDOtzxgrAP692qhS8Y7cFe9yYTA/oA/+aVOObo9vDVuU
-	f6r3nXQeUwDz9J/77K9lmr1L0uahcuArxLd/KluBwqarZpdJDpc6k9olZNZ5vyCV1fvq3TNzcet
-	3tBJs8ucIBDsBqZzEKUqGirBisqyFBGz7TF289bFE2MXLSadj96aBakQFepCu74srBgWBF22VCI
-	waXmfBwXnq48wwUgzdRLcx3gVkfme7K/xn6ZF7RMJervnrgoaoH59zkJMsuJUmwE1rCXUjj7T2d
-	I/rLjonieRmSUZjH+
-X-Google-Smtp-Source: AGHT+IHxWR26+hZsTnhMi81OB66VpMIebZyUX89KVSEEBfQ9MSMsxB6Ng+SwCJAKHMr62MsJr33gZw==
-X-Received: by 2002:a17:902:c40d:b0:24c:da3b:7379 with SMTP id d9443c01a7336-269ba43eed1mr193329255ad.16.1758542350080;
-        Mon, 22 Sep 2025 04:59:10 -0700 (PDT)
-Received: from 166871acc15a ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-330607eaee3sm13100258a91.22.2025.09.22.04.59.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Sep 2025 04:59:09 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2603208;
+	Mon, 22 Sep 2025 12:03:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758542599; cv=fail; b=B3zd3RJbjKoa6RnTUwgqP61t4/IE1d4VNKJuTbfvsaeqgHgTs2eSLNBm2HkNvzjo3kcxIbFJm8wDOQsdysDpLKa9t6+CNrzxUqi1v+FPLdC8Dm/jAdIWEMOKdg21JaKGgAjl2mJFGC7206YwloqRH3v4km7p0yp7xAWyLaFDXM4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758542599; c=relaxed/simple;
+	bh=yP+HtVklrsF/QMp4GJAumAU7oGfykv+pURefLjrE5W0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=HQHjHR3d+cIoZtVTV7Z4MLNh497z7XhUZqMphpCKPnm0RTaSnQBkbfG57mbxTUMC7urmleW4XAdHomkLA+bjgtQGS/i/cINkjEK5eYS5i5rGlWl+8clQCAMbZ1IHYL1aMPjU3mAhNeNEU2nfOuS82I1pxHM0HkPIKGISBW6ba+I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=YciYDy3H; arc=fail smtp.client-ip=52.101.62.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TFU4AcfKz7xA24UsFaOSE0RXMJ4srkDwwRKwGaPLeMOJf8+3pUYzQt+8jzei2TBal2Y19wDI6mEDh2DglawkzfQUsTJijUobEdGhmhnrcIvzg2JKIG63AhE5MZ/FhthCyOhXuKiyXKLh75H1Va9WwWivXzshsxs4xGiM5WZolSWxeUKoBqFJ01BjLXtRNQ2dCScGxCNdQmjn5U/D8I5/3MdzSjJtwcqRHFjEJCvlc10VjZAUjAs8deDPmg1hm7y94U1qS/HYsMROyh6F9l5GrGtgvcLVqXgnBIegjFJZcU+QodZWLm4oHG2ZLAJuvW1Lc4Yzam8/UYCm1UmNHFQPLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yP+HtVklrsF/QMp4GJAumAU7oGfykv+pURefLjrE5W0=;
+ b=FOehTYp5GRcMNt68tFj7rXYm/jEsZsARmt7hB4Yo7A+nWgurtZ4RZU1tf3Jn+CFcVbbffiYxAKNkbolNVSvchcCxqItzLdEGGnQE9lnvsizV5vNiRhzLR5+jTkdWEU5DlLfPJxWrp6t5DNYcGebcSeAVC7Kc1KHIE3gqSHnUh9ySYSQl0FWOAcOMZUyL6dIyU5Ys58CqkAsRdKxgiZ6NDxqTKGzGqb/4rDQt060yNur5I/FG+g3QEu32hWvd2nBV9JkzsUdbRjed4vBxByU6EjUAoa2PSIwg0HT0mD3ZXHJLzfbTDJMbFo+RgzF8ntrPhJAfFowL1e8Xs74A3zMXXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yP+HtVklrsF/QMp4GJAumAU7oGfykv+pURefLjrE5W0=;
+ b=YciYDy3H0//IBml6QGbU7l1/GlMDH+eltc+e2Um146GIPXqV2qe/WKkQdcl1RTipEt+kcR9mjpc7v59KiB6gsoWObh9HN4n1RHmr6/8Gg4bJ69BPyiPzRjr8p9Gqr8RCCB4KP4LH5KWBXdVmg2M5wUcoSD4F7DLUPgo7zbOQk6QEOdjcJf5B27svcrgp7egrln+1EtiJATL9ZxvLKSnddqZvs2y2gzt5txVMM7UkK2q6Qs8EWUd5q0yts4ggafn6hzRjijkDxp+Bil62YeOtaUvuJlm73Isx2HixvQ1dZkkZMKKNcIawq9C63H0yCuoqpx7qzjKVtENtggP/KexOBg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS0PR12MB8317.namprd12.prod.outlook.com (2603:10b6:8:f4::10) by
+ SJ5PPFA5F0E981D.namprd12.prod.outlook.com (2603:10b6:a0f:fc02::99d) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.14; Mon, 22 Sep
+ 2025 12:03:14 +0000
+Received: from DS0PR12MB8317.namprd12.prod.outlook.com
+ ([fe80::8ca4:5dd7:f617:f15c]) by DS0PR12MB8317.namprd12.prod.outlook.com
+ ([fe80::8ca4:5dd7:f617:f15c%6]) with mapi id 15.20.9137.018; Mon, 22 Sep 2025
+ 12:03:14 +0000
+Date: Mon, 22 Sep 2025 14:03:08 +0200
+From: Thierry Reding <treding@nvidia.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Mark Brown <broonie@kernel.org>, Wolfram Sang <wsa@kernel.org>, 
+	Akhil R <akhilrajeev@nvidia.com>, Kartik Rajput <kkartik@nvidia.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the i2c tree with the arm-soc tree
+Message-ID: <ainub5g3brbi2xma2d2mz67edjfgrsgmzyrhbb4ot55p6ilko2@gr7gpjcj6rkh>
+X-NVConfidentiality: public
+References: <aMhR9TJm5V5EqaoC@sirena.org.uk>
+ <aMh_eKWqkuLODo2r@shikoro>
+ <e70f4454-d0f5-4b3e-9751-730781f056f9@sirena.org.uk>
+ <ofp27qiwsw7jj5ne3y7kp2lpycwg37bvhswidwe6jfazs2czzp@76gzsofmliyc>
+ <aMskxYrDxyzXPsBy@shikoro>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="t766vxyjf5hf2g7k"
+Content-Disposition: inline
+In-Reply-To: <aMskxYrDxyzXPsBy@shikoro>
+X-ClientProxiedBy: FR0P281CA0141.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:96::12) To DS0PR12MB8317.namprd12.prod.outlook.com
+ (2603:10b6:8:f4::10)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: 
- =?utf-8?q?=5BREGRESSION=5D_next/master=3A_=28build=29_in_expansion_of_macro_?=
- =?utf-8?q?=E2=80=98do=5Fdiv=E2=80=99_in_fs/nfs/flexfilelayout/flexfilela=2E?=
- =?utf-8?q?=2E=2E?=
-From: KernelCI bot <bot@kernelci.org>
-To: kernelci-results@groups.io
-Cc: regressions@lists.linux.dev, gus@collabora.com, linux-next@vger.kernel.org
-Reply-To: kernelci@lists.linux.dev
-Date: Mon, 22 Sep 2025 11:59:08 -0000
-Message-ID: <175854234825.725.2649537149392155937@166871acc15a>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR12MB8317:EE_|SJ5PPFA5F0E981D:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6bd0e949-8693-462c-16bb-08ddf9d00212
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|10070799003|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?HJMKSV36YQwhU7VdgHicQ3SzoDLXRwKN8b3VB3Q29ZXeLj5IpCJfKbtUUPub?=
+ =?us-ascii?Q?lYNZ0ozDLmgxr8fpLHlRIj0JNrWKa6JYU6lCw+OYhblTYWikIP+73m6Qi6rA?=
+ =?us-ascii?Q?foDGluK+7YtJZfkgLnA9c3dSIJ3uRT4JrBup5gNvtEuTn47HPvDmTxC8CgTy?=
+ =?us-ascii?Q?jAtW9/MlE1tQMO2Yqpsg9tbyBiO/cVJrfiqiwgKhe539SZ2quaKlChUnvHLG?=
+ =?us-ascii?Q?qunL/cL0pQ1oQkuX8f1aaTgNGcLI/RIiLtmWCa02dawW2wEISMyu3AZfXzvD?=
+ =?us-ascii?Q?fRZX5T+PdFt9vQR8ehKmQfgM548EuBUQwiJTyc+PDf2bcdvgY2ArsH86PWu3?=
+ =?us-ascii?Q?HJHuopv94o3/9Qz6SS9Zx4l0RBcaT0BpolvbzpLQSDGl8vc+F6tq39DdV1bq?=
+ =?us-ascii?Q?U0DdhRUAmfYgLRyclitPUj/VDfz8Ucs2Zqk5GqttHLoWYLRHw5sw61vonqwB?=
+ =?us-ascii?Q?VU7oW7k20hg3r+oXiHu3gb4H9Y/jR5UzD88V+1KPJaIsyxobwhxuHAe6WisH?=
+ =?us-ascii?Q?wJ5hLDhMz8zNAffj8UYp/WARLjLY4F6pHDA5UEI5FBSdAO45SwkVrXTX7kOC?=
+ =?us-ascii?Q?ynn7wWsH55JLARfMgaEVIsF5XQGGDGMCPQj98KzdhGC+czS4OiJv8Iz1oAXg?=
+ =?us-ascii?Q?tNQfQ3fiaV5BFSlwuWmYMHUmJMtA2xGdL/RxKUxwIBNwT7/U2v+Q49RO7aWA?=
+ =?us-ascii?Q?XUkUT81dqB7d1EbseCpZ7bmUy7n5cYWOYXXPNBLaZs8jUwJ/FPmHCE5i0Sqt?=
+ =?us-ascii?Q?/hwbQFR9UyLwfG8UeL5Gyo6sHIkcZS+EJk62zcg1C0xd3LryTlhVOWc2l+PE?=
+ =?us-ascii?Q?KR1OjUkzOOraCHbbpsHWmGdPWS4STwvRgRnXVDXjuz1HtuJpNGPSjtx8WEtX?=
+ =?us-ascii?Q?XpbGhAtOKP7X4xopyn/YhwziOHW2mF5PbqMWIOpr12Rr0aHbni0pI/UlRlXP?=
+ =?us-ascii?Q?Q5I8Gr52mr9NG1CDUoaXOXRPc/0HGCwHWnAJ7ZCQUus57OaybDKT4+ODyikW?=
+ =?us-ascii?Q?/+16pocnLgEC/Hb3FrO03K/IYy3Zr1UupunVKddGXZjdW/V7eYP9HerYpZvG?=
+ =?us-ascii?Q?CWtFkASqsRuPnC1Y8GLA1RnzPaUOKLLPV7pzSHEXEWubISwIksswKsN53brH?=
+ =?us-ascii?Q?Xk93E1caL6Ik7d4yzd6t8AWPoKyCXlkg+bd+bO0aIW1cNgLs8mGh4XFLQ2+P?=
+ =?us-ascii?Q?gk/j8zjEdjR3Fk+vqpsDg1evfTPrgNxAvMEaHa9JOzMYBJfu+2hBQQbaaSZ4?=
+ =?us-ascii?Q?2BICFNGnLMbulINpTI5re2rDh6RB2c4WlcQNZkkQdvuSGLGpwpCEmTmI4aPR?=
+ =?us-ascii?Q?mSWgC+HTDQZcBCP7yzUNZNEO/odn6UKhXDa0S84YxiSf6CuXWtEmBCj2gUQH?=
+ =?us-ascii?Q?nxjZr2Hm1EjCeMSi1CKU7TIZlmaVYGcCedp0t1DSBeGSc306BmZdVJA+jKad?=
+ =?us-ascii?Q?sFbovmwJA+o=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB8317.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?fghYhjxLkrDHSmikn1V5naeT4KWW39iwgpzL3/yArh1c0thGsuo4hxckNHbb?=
+ =?us-ascii?Q?Z8Jgqv5lluU3oBl7gxS4l6gTQUzx2sp059/TkMVcbqEQ6DSnSMhmle0OE/9D?=
+ =?us-ascii?Q?kx618ooybZEskbJHh9A9qVPv0x0LC+Fw5ovzj7ZgzA9ElO3OS3SXhf5dPawG?=
+ =?us-ascii?Q?A+vka4C8a78y07fpcwhrI4Los453fQTzKVgwG0IRkiykfOt6qhtZO/H2qNSt?=
+ =?us-ascii?Q?uzyqWqfVS/iqxmebB8+d6GcxJzv5O4dtc0FjXrRst2TYTNsyuCcpk0SFuGEd?=
+ =?us-ascii?Q?W24LHiutRPO+DPoquG49BtInaBEiqt72NuZX+kJ79BNIwrCODox4YxYQfO6I?=
+ =?us-ascii?Q?1qYPgo8MkEF20/OrBSABykMtBDjA1CB2m77Wr0W/Qt30GQIONWwuIRgeY6ss?=
+ =?us-ascii?Q?pCCAd7fuJu6yQSqhGhIri9BRB8f8tDOlsVq9IviYyrPrevwL0mf0nnJG/sJW?=
+ =?us-ascii?Q?9U7mwY821xEFqH/Ke7bevGywUr64kZQbZKBSNa7VYCJZJQe/bWSBTxEPvjhr?=
+ =?us-ascii?Q?b9KGXEgjGoDdzgH+UEqFWSHk3nBQCgEaUG5kbe4yY9t3YdaV1LS3NitIXjH9?=
+ =?us-ascii?Q?+U2P7Ej1U8/of71GZS6AAqOdzZntspmBPP/AIq3wMHCneaScwm8AmhkBsiC1?=
+ =?us-ascii?Q?WUD8pIRpD/izVLRXimqyG5UaHXdss8SENI1doLL5HjuZ9RX5wyfNxeaupH+7?=
+ =?us-ascii?Q?2olPh8Q5Jxd0TEamIjWTyTXWOlouQLq1LGido8IkmSFknqCCjbQ/x0a63pAi?=
+ =?us-ascii?Q?Q6vw1BmpfhgIWmo7RWEuKzBRGQo9QuXsJSvS80+x2tWw7ZNYzUTIgH1w29X8?=
+ =?us-ascii?Q?5OEXUbslW/APTV5H1I9HVAfnmwaptVKvxWONslNHDF0VY7IN15ypeBK1VRot?=
+ =?us-ascii?Q?TfUiJHpIFIogwcOZLyxpe0sWOBVvJRHejC0UGdSAdsmQLMABPiNy05T2xPha?=
+ =?us-ascii?Q?pkCgMpMBeoq49TUsklpO5wQBzqaCiX7y8DSFkazO4naEtzZ9hINTa+E/Dskn?=
+ =?us-ascii?Q?74bPopUbx3/a/3Y3hw1UogLzYEUexQN7/8PwKaxWmdUfQHVuSnwxXanukIae?=
+ =?us-ascii?Q?WfUY+JgqkgdukmrC2RNdxO8dY3qSpaU/4LdlGCPUTltQj/7CZEYD4jpRU0Pl?=
+ =?us-ascii?Q?reAqNCv626mKRjoq2GEXmcpH6r3hX09hxrn9ON7zg3bC1GUnGwAHw2GENL2B?=
+ =?us-ascii?Q?o2foXE43HxVmcl4J+W0smpR2Paz9+fJMH59jhGgwLZXaaHlUUiVDoeTIuxLT?=
+ =?us-ascii?Q?8yXWNoMKq5QkGNSZU3X7Kj+s0Eo1jKZjWDzee4fXiIMJYWB42ZjvOy6j8YKc?=
+ =?us-ascii?Q?DRSjIbt59RFTM0euwJqbBYC96pfGQ0/JrlcA46ZD1bTzKGyYHHgyOg5KLU3a?=
+ =?us-ascii?Q?U2PgDFG7oJxr2IiIb0SoVkEAEnzOvUlVxuADiSN8EP3UelkISbxh3NxsTkqz?=
+ =?us-ascii?Q?qDS9YvPaxtW2DIQ7bmk/JT1oUCtUinPJzSa7ArOrjFbXXiU95RiU9F8vkU0u?=
+ =?us-ascii?Q?Ypby5f3qHXqTTScEKM994gopS62fK7ElCfbVS1JzWbUZ+sEh3d4BabsW4cE2?=
+ =?us-ascii?Q?UF3pyYrCiILR538WyuG2XoTN5QZ0cI967SoRXL1RLpe8nekHA/Cnx2R5ymqP?=
+ =?us-ascii?Q?+nS4lUKQsDLQs3hTV5lXu1yEzYMnGhPowGBYrcGJIjrE?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6bd0e949-8693-462c-16bb-08ddf9d00212
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB8317.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Sep 2025 12:03:14.2063
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wlWmXya8r1hFMawPjRIpxp+AFj2ZJpmo84Z7E+TvZToiDT/SUu1VAOxs5QY8J270VKMrB5iWEYpDUREmn8U17Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPFA5F0E981D
 
+--t766vxyjf5hf2g7k
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: linux-next: manual merge of the i2c tree with the arm-soc tree
+MIME-Version: 1.0
 
+On Wed, Sep 17, 2025 at 11:14:45PM +0200, Wolfram Sang wrote:
+> Hi Thierry,
+>=20
+> > Note also that I only applied the DT bindings patch from the v6 series
+> > because it was already acked by device tree maintainers and there have
+> > not been any objections to the DT bits, nor are they relevant to the
+> > driver changes still being reviewed.
+>=20
+> May I suggest then to send the DT bindings patch seperately next time?
+> We can apply it earlier then, so you can continue your work. I prefer to
+> take binding patches via the I2C tree so I can chime in if necessary and
+> also to keep the merge conflicts low.
 
+Yes, maybe sending DT patches separately is a better approach. I'm sure
+somebody else will find that objectionable, but... oh well.
 
+checkpatch also tends to warn about patches using compatible strings
+that it cannot find any trace of, which has always been a good argument
+in favour of sending series with all of the pieces.
 
-Hello,
+So if you were to pick up the DT bindings patch, then I still cannot
+apply patches to the Tegra tree that use compatible strings introduced
+in that DT bindings patch because it'll cause checkpatch to warn about
+it. I can of course ignore that warning, but the warning causes things
+like b4 to fail, which then makes all of these tools almost pointless
+to use.
 
-New build issue found on next/master:
+Honestly, I don't know what the right solution is here. Seems to me like
+no matter how you do it there's some downside.
 
----
- in expansion of macro ‘do_div’ in fs/nfs/flexfilelayout/flexfilelayout.o (fs/nfs/flexfilelayout/flexfilelayout.c) [logspec:kbuild,kbuild.compiler.note]
----
+Thierry
 
-- dashboard: https://d.kernelci.org/i/maestro:2e882f7ffaba317e489e0a937b7ab5ce4ccd25b3
-- giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-- commit HEAD:  bf2602a3cb2381fb1a04bf1c39a290518d2538d1
-- tags: next-20250922
+--t766vxyjf5hf2g7k
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-Log excerpt:
-=====================================================
-fs/nfs/flexfilelayout/flexfilelayout.c:685:9: note: in expansion of macro ‘do_div’
-  685 |         do_div(mirror_idx, flseg->mirror_array[0]->dss_count);
-      |         ^~~~~~
-In file included from ./include/linux/array_size.h:5,
-                 from ./include/linux/kernel.h:16:
-./include/asm-generic/div64.h:195:32: warning: right shift count >= width of type [-Wshift-count-overflow]
-  195 |         } else if (likely(((n) >> 32) == 0)) {          \
-      |                                ^~
-./include/linux/compiler.h:76:45: note: in definition of macro ‘likely’
-   76 | # define likely(x)      __builtin_expect(!!(x), 1)
-      |                                             ^
-fs/nfs/flexfilelayout/flexfilelayout.c:685:9: note: in expansion of macro ‘do_div’
-  685 |         do_div(mirror_idx, flseg->mirror_array[0]->dss_count);
-      |         ^~~~~~
-./include/asm-generic/div64.h:199:36: error: passing argument 1 of ‘__div64_32’ from incompatible pointer type [-Werror=incompatible-pointer-types]
-  199 |                 __rem = __div64_32(&(n), __base);       \
-      |                                    ^~~~
-      |                                    |
-      |                                    u32 * {aka unsigned int *}
-fs/nfs/flexfilelayout/flexfilelayout.c:685:9: note: in expansion of macro ‘do_div’
-  685 |         do_div(mirror_idx, flseg->mirror_array[0]->dss_count);
-      |         ^~~~~~
-./arch/arm/include/asm/div64.h:24:45: note: expected ‘uint64_t *’ {aka ‘long long unsigned int *’} but argument is of type ‘u32 *’ {aka ‘unsigned int *’}
-   24 | static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
-      |                                   ~~~~~~~~~~^
-fs/nfs/flexfilelayout/flexfilelayout.c: In function ‘calc_dss_id_from_commit’:
-./include/asm-generic/div64.h:183:35: warning: comparison of distinct pointer types lacks a cast
-  183 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
-      |                                   ^~
-fs/nfs/flexfilelayout/flexfilelayout.c:696:16: note: in expansion of macro ‘do_div’
-  696 |         return do_div(mirror_idx, flseg->mirror_array[0]->dss_count);
-      |                ^~~~~~
-./include/asm-generic/div64.h:195:32: warning: right shift count >= width of type [-Wshift-count-overflow]
-  195 |         } else if (likely(((n) >> 32) == 0)) {          \
-      |                                ^~
-./include/linux/compiler.h:76:45: note: in definition of macro ‘likely’
-   76 | # define likely(x)      __builtin_expect(!!(x), 1)
-      |                                             ^
-fs/nfs/flexfilelayout/flexfilelayout.c:696:16: note: in expansion of macro ‘do_div’
-  696 |         return do_div(mirror_idx, flseg->mirror_array[0]->dss_count);
-      |                ^~~~~~
-./include/asm-generic/div64.h:199:36: error: passing argument 1 of ‘__div64_32’ from incompatible pointer type [-Werror=incompatible-pointer-types]
-  199 |                 __rem = __div64_32(&(n), __base);       \
-      |                                    ^~~~
-      |                                    |
-      |                                    u32 * {aka unsigned int *}
-fs/nfs/flexfilelayout/flexfilelayout.c:696:16: note: in expansion of macro ‘do_div’
-  696 |         return do_div(mirror_idx, flseg->mirror_array[0]->dss_count);
-      |                ^~~~~~
-./arch/arm/include/asm/div64.h:24:45: note: expected ‘uint64_t *’ {aka ‘long long unsigned int *’} but argument is of type ‘u32 *’ {aka ‘unsigned int *’}
-   24 | static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
-      |                                   ~~~~~~~~~~^
-  CC      lib/zstd/decompress/zstd_decompress.o
-  CC      fs/lockd/clntxdr.o
-  AR      drivers/pci/msi/built-in.a
-  CC      net/ipv6/ip6_input.o
-  CC      net/ethtool/pause.o
-  AR      drivers/video/console/built-in.a
-  CC      drivers/video/backlight/as3711_bl.o
-  CC      net/xfrm/xfrm_sysctl.o
-  CC      drivers/pci/pcie/aspm.o
-  AR      drivers/pinctrl/sunplus/built-in.a
-  CC      drivers/pinctrl/sunxi/pinctrl-sunxi.o
-  CC      fs/fat/misc.o
-  CC      drivers/video/backlight/backlight.o
-  CC      lib/zstd/decompress/zstd_decompress_block.o
-  CC      fs/lockd/host.o
-cc1: some warnings being treated as errors
-  CC      net/ethtool/eee.o
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmjROvwACgkQ3SOs138+
+s6G5ShAAlVr4rMgZamL7kPXkUfA0cErcKM1A3pduZycyifKAWeCxsqC9LSXXHMBk
++hwO7CPG5KBESFFzuK34f8hrXHt95K/mhwWpKgNaU+1vOtjSlL0v12glFFjUcURQ
+Lv4v70WkDjkDuF4HgpoEDi2iPp9lKK6ohG0j4DwTah4ku9afotkAXAqyDQadzz6n
+7pHG9+oo2NOyVEdfiita3nWk3ljWE/NtFVERBC+/PZ5tEeI9CO57rvFMJFrG+XjS
+Om+f6nIFFAwUfr56vtInVyNFQAABLHR1xwFKfptzSJBtafg5T1tdnNyw4aRWhn6u
+OReD8f/z6GgMnpysHeSleygqpQMzkQyRRVDLYpA8Ro6wVzGrKfTCtswNr8BZ8xgQ
+ZV+QjwCTexjL2/agOS5hUM7IuKZ8O74eRNqF4kMM1MCikp4DymZVLETqD+lg8JFZ
+59RsitYuKqDZAHL7AXIffA9fvlHfnawrlgipgKxrtR9EcOoT32ecAcEax+d7g8Ou
+XnUQJNv2Q+9vLFlHPIp6lIR6DwdJYU+LpR0r7h+ubMxNutj/hbciiAB2bh3p+dFk
+aBWtov9+V+Rf42fuHG93yVr2lHRDxdr9+gitjiQ9IVQRY5++xDEoyLG7NAvaNeyl
+CSUJXqJSE2+RYM9m2giMNUeD7Y49YzIHTkkR86LUiUYYR2V/Y4E=
+=rPgt
+-----END PGP SIGNATURE-----
 
-=====================================================
-
-
-# Builds where the incident occurred:
-
-## multi_v7_defconfig on (arm):
-- compiler: gcc-12
-- dashboard: https://d.kernelci.org/build/maestro:68d1305075b320799d36f18b
-
-## multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=y on (arm):
-- compiler: gcc-12
-- dashboard: https://d.kernelci.org/build/maestro:68d1304375b320799d36f17f
-
-## multi_v7_defconfig+CONFIG_EFI=y+CONFIG_ARM_LPAE=y on (arm):
-- compiler: gcc-12
-- dashboard: https://d.kernelci.org/build/maestro:68d1304a75b320799d36f185
-
-## multi_v7_defconfig+CONFIG_SMP=n on (arm):
-- compiler: gcc-12
-- dashboard: https://d.kernelci.org/build/maestro:68d1304675b320799d36f182
-
-## multi_v7_defconfig+CONFIG_THUMB2_KERNEL=y on (arm):
-- compiler: gcc-12
-- dashboard: https://d.kernelci.org/build/maestro:68d1304d75b320799d36f188
-
-## multi_v7_defconfig+kselftest on (arm):
-- compiler: gcc-12
-- dashboard: https://d.kernelci.org/build/maestro:68d1305375b320799d36f18e
-
-## multi_v7_defconfig+preempt_rt on (arm):
-- compiler: gcc-12
-- dashboard: https://d.kernelci.org/build/maestro:68d1305775b320799d36f191
-
-
-#kernelci issue maestro:2e882f7ffaba317e489e0a937b7ab5ce4ccd25b3
-
-Reported-by: kernelci.org bot <bot@kernelci.org>
-
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
+--t766vxyjf5hf2g7k--
 

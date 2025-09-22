@@ -1,52 +1,56 @@
-Return-Path: <linux-next+bounces-8409-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8410-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A01BB8F695
-	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 10:09:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30F36B8F92B
+	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 10:37:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B9E218980C2
-	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 08:10:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5E693A4195
+	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 08:37:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B36A2FD1CE;
-	Mon, 22 Sep 2025 08:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50D36126F0A;
+	Mon, 22 Sep 2025 08:37:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y8f9stek"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iCxNDdfe"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223B82FD1B6
-	for <linux-next@vger.kernel.org>; Mon, 22 Sep 2025 08:09:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B4C9463;
+	Mon, 22 Sep 2025 08:37:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758528582; cv=none; b=P6L6KZt/Fk5HT6/YdrgORLQ5+QdVURyfVMFU/Dux80xrrVxL2lBQtdyYkFCQrPrtWda65Vl3Ow9dkti4DNhhw4laaI/GJXtrj7gejrDbTUEN5zxYEX2PeOHRagk2LmzCjwLn/8vOQzxdL4yCSI/06+UQ/q3/8ixrbQ9AC+jF2MY=
+	t=1758530261; cv=none; b=nALafZWdrAFBTETYEYse5agLKFB69vn3EmQBmsd6aPI03XycdjozhQfyc6UPjJVQJVfU4LBtGfvBf4f5tGb9c46the7icaaNkBy9//qvYMYFqCPMAno8CTr8nHYmoeqMh6nSjQCBvo7X7R/7eh89Qe+Zg+fVonI7vsEYsyCAwLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758528582; c=relaxed/simple;
-	bh=JfTOrXi41G88GiTMFEWzTNipZ4wOLsnitQ1hLiqxRlE=;
+	s=arc-20240116; t=1758530261; c=relaxed/simple;
+	bh=1XJPEbEK99ng2tj2CWAYmRrIXNRNQO41Y4BR4AURxe4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=iM06uqc3xfLbtJ3d8xmw95Cgf0b9PiuGJLzbSPD0H8SgdzpnVPYJnaP4+mRrfhsYWMZfRLwwWuTBKdXbjOM5cct71z3C8HiwG9D4I3IhFAzCQbDEVpyppwlNorf+rX+WcsYfl0LRYQR60/dfQW73NrLZnbRRGvo/ckADC0tA8U8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y8f9stek; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04BBFC4CEF0;
-	Mon, 22 Sep 2025 08:09:40 +0000 (UTC)
+	 Content-Disposition; b=ezVQiozwhfbAID9UpF4n1lBoNilyk+eaOcOl2B78xl276HVmFv3NfGoBHav1PaeTlWKkW9yoG3MzMQM4aSW8J9AkHHn0LgQ4bltQ0bO82Ok95ZTBTrxMLBRvOMG/PboSlldjlqko0Wkx4oEhrtyzkU8UqQvaYEEA5CKSGAay8JU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iCxNDdfe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BB54C4CEF0;
+	Mon, 22 Sep 2025 08:37:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758528581;
-	bh=JfTOrXi41G88GiTMFEWzTNipZ4wOLsnitQ1hLiqxRlE=;
+	s=k20201202; t=1758530260;
+	bh=1XJPEbEK99ng2tj2CWAYmRrIXNRNQO41Y4BR4AURxe4=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Y8f9stekpReo4rshJmaVcmbCEXk733X04PxG104ZvPllz38KhA2T88/7OsrWl4GTc
-	 5JTxAvBWt2x0J96k8CzwmK/VN2MY4yoGfimZByYAn2s7dFzfF1iY8YscKCozYHBAbs
-	 kkWZN7mZWj0HoiMxCbmfA2hjwgxLm9fmRNSH4V4A28d6mqSOzeWktfYeZs0Y+jjItD
-	 ZzTAVgLWMPm/tSI56ncOAWZlKuNvOaOteeflSDjawD8ujOGYGxoQoewjpkzKijoHOz
-	 BKgH6u+iHCVAw98lXDJs4pdWRrmpiuxm5Wf4yXAObXh16+nDqZfPATBguqPBVBkNnl
-	 iCEuN7lO7sJMw==
-Date: Mon, 22 Sep 2025 09:09:35 +0100
+	b=iCxNDdfeVNPP28KBkvYwS1l1zxaksxZ84+CTOtRQfNHz7863diYKL3C8MAP47zFYl
+	 MGXWs09WNEhICokN2t0pOxO1tIVMO2FP+gz7IeHs6MH/XSS8JK9vQWYV4jDmG/TTUe
+	 TaKjAjOoelxjVLDw8yomRKuMLx/C4UlDWk8dq5xD8hxe5+Pnl9rkeCW9pLEUtwLlwu
+	 WilwO5nADW+wQceHJLsVRx296nfhKV11cAxO907nxpWUObHQLngTmPBZ47/KYfPevJ
+	 P1J51bovYFV1za/4QMGypY/VVXPGma3ZDVTV3D+bSTEQ3H4jtXr7jyaB2CY0w+0PeI
+	 iebBV5xboGL3A==
+Date: Mon, 22 Sep 2025 09:37:34 +0100
 From: Mark Brown <broonie@kernel.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: linux-next@vger.kernel.org, linux@vger.kernel.org
-Subject: Fixes issue in the kvm-x86 tree
-Message-ID: <aNEEPyEdykM0QoSX@finisterre.sirena.org.uk>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jan Kara <jack@suse.cz>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Shashank A P <shashank.ap@samsung.com>
+Subject: linux-next: manual merge of the vfs-brauner tree with the ext3 tree
+Message-ID: <aNEKzrMMxLAVHGIn@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -54,41 +58,60 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kv3y3oVpFS5C3q75"
+	protocol="application/pgp-signature"; boundary="ec+thO8EBfriwWYK"
 Content-Disposition: inline
-X-Cookie: Filmed before a live audience.
 
 
---kv3y3oVpFS5C3q75
+--ec+thO8EBfriwWYK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In commit
+Hi all,
 
-  eab8d9779f5f7 ("KVM: x86: Move kvm_intr_is_single_vcpu() to lapic.c")
+Today's linux-next merge of the vfs-brauner tree got a conflict in:
 
-Fixes tag
+  fs/quota/dquot.c
 
-  Fixes: 2f5fb6b965b3 ("KVM: x86: Dedup AVIC vs. PI code for identifying target vCPU")
+between commit:
 
-has these problem(s):
+  72b7ceca857f3 ("fs: quota: create dedicated workqueue for quota_release_w=
+ork")
 
-  - Target SHA1 does not exist
+=66rom the ext3 tree and commit:
 
---kv3y3oVpFS5C3q75
+  08621f25a2687 ("fs: replace use of system_unbound_wq with system_dfl_wq")
+
+=66rom the vfs-brauner tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc fs/quota/dquot.c
+index 6c4a6ee1fa2b6,afa15a2145382..0000000000000
+--- a/fs/quota/dquot.c
++++ b/fs/quota/dquot.c
+
+(ext3 version)
+
+--ec+thO8EBfriwWYK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjRBD4ACgkQJNaLcl1U
-h9CpuAf+NX4bpuf/xM3tF7hE2zimRU0seqIs+X6Eux6QNoBbiSeFAsKQqlBZ0tn7
-GX2zQD02pP6RQ7M+ODp3GhvJ4LLxnHB52weQJiGrH/mR+1DSPd3ls2Xei61uLai4
-XjQo5rJEy5y0JCyyxGP0ESLLQOEd+1XtIFzgZdpVuYJlI5CKy+puscGkan/+nPix
-EV6Dq2rYTHdq4/zzf7zIho3T5lMMAVoyO5kFXYG0SUyIAStJSmiTMezjRsgzrkl/
-fTS/GZ8xxDfBDcV0M+yEwNI2Om1sFxEQS4X3yux7h+oxhIGbP+4w7ww9Ns1k7ps8
-MHL1JatZczBofkaD9hEL2zctZXFlcA==
-=zgGV
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjRCs0ACgkQJNaLcl1U
+h9BQiwf/WWwySO+Y/qSWTwPI+12nFaFXTXLsjzdKgYuSp1VPsyabNcKTFLFTSdG7
+UKwvDCVn7r1VPUrCxaTjlFFPDTSmEKrA9OKh+yf1Fcms5HKSRyolqDUMH1jOSm/y
+G0hNiT53UppKrfy/Uhhoo1ws1jY5Cc/tnLKkgqEjpkwCicZ0d22eUMrVOx4XizH/
+Gpbn1IY/1rp08TJxQCR0dUTZWoxuhzzyfReZl7dd/3rL0f9CoKNRioPsk+NGSSNf
+k9qDjC4hzRcrs1aF0KjDvq4TYMIb5F5AaogfLLpWz0B9ztydkFeKR3Hv/DJsdon5
+ryt0caM7ymleRPrEbHvMQg7QOedCoA==
+=7HlN
 -----END PGP SIGNATURE-----
 
---kv3y3oVpFS5C3q75--
+--ec+thO8EBfriwWYK--
 

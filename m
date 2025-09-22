@@ -1,77 +1,77 @@
-Return-Path: <linux-next+bounces-8424-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8425-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0199CB9105C
-	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 13:59:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BACB3B91062
+	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 13:59:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B745E423D81
-	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 11:59:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E4417A1706
+	for <lists+linux-next@lfdr.de>; Mon, 22 Sep 2025 11:57:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0F43305E2F;
-	Mon, 22 Sep 2025 11:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75EAC2BE7BB;
+	Mon, 22 Sep 2025 11:59:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="givVbHgc"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="nol55mTk"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3D0279DC6
-	for <linux-next@vger.kernel.org>; Mon, 22 Sep 2025 11:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D394C2FB97A
+	for <linux-next@vger.kernel.org>; Mon, 22 Sep 2025 11:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758542348; cv=none; b=g+Bss3D0wtis1QrqbdEUqvqPs1YHNm3Ec/8WiVc5Iqs1Sw7LmUsnRTx+rl+cEb9OoWOtEVQhmOBddqwya/sry+6V4y8gRIxljufzhiJ2jg9nxr+o26FBF/Nc97hC4nBPdweE1Uj6m3puMj65ZK8jgiXpSw49TGiZYiM7qBNrhQA=
+	t=1758542349; cv=none; b=CT8JBavoINf27uKGo+AiIpidT/tLu3dZTS1dBzog/a9kQ2ZDwiCF2puy5oU4V8aeE7vvInrUwiXMBjjcRtUihu9pz3I6FE2tj/qEu404rY5AQa85le+c0+zAV810crJSqcVXLZ7ufBPhCwxfmq7myn1JBwKUHdEFpspNrK+lVVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758542348; c=relaxed/simple;
-	bh=rEwZQCl2kLqparyM2Vvi6pKeJ586h+Hlnko9n4oM7Mc=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=IDB97E6qamysGvWvkFpgC3tX4nU5UeY7kupkjHs6PGMnKiWgI04/K9c/CLyXD1lAwIq57lcqGMpfA9j+03N4ZVPXsIGDFmNjRe+It2wpyhEoEa+FlUODpAaW8yAmoXVNXp7Fe3Gqk5cMTeolaE6t4ARbRjBaZw8VNwjjFc9bOXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=givVbHgc; arc=none smtp.client-ip=209.85.215.180
+	s=arc-20240116; t=1758542349; c=relaxed/simple;
+	bh=8iOAb7k9M3R892MfyDBFeeAalq8574Z6x4gz4w92fzI=;
+	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=PHRi1yQloKYK6RtJH5BBxtNXwMN9SeENu73Ji3k7lM7l03QKPfoAFRurWln5P24ZhSHM591x3n2s8YKhYwVzE1kxnvEfidEi4SKLFDs5N23nPj/I40A9aFgfmqVNE70NGwmNg245NdXcUZh36mKl6zJRFAVY9iEpIgtFAXTEeUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=nol55mTk; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-b4f7053cc38so3171428a12.2
-        for <linux-next@vger.kernel.org>; Mon, 22 Sep 2025 04:59:06 -0700 (PDT)
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-77db1bcf4d3so2934436b3a.1
+        for <linux-next@vger.kernel.org>; Mon, 22 Sep 2025 04:59:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1758542346; x=1759147146; darn=vger.kernel.org;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1758542347; x=1759147147; darn=vger.kernel.org;
         h=message-id:date:reply-to:cc:to:from:subject
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oQH7pPh1Sjb9Crvn0LF0FKaZmkeW4LiN21oBQrxkEcQ=;
-        b=givVbHgcKj/0enHurta9qzIMFCfx/jNh/4DsICJbnpOuWZWnh/cTseT6B046nMhzyF
-         CFA0m+h/QdlW6WX8/+On7CktKzAr43RXfsBDw1z58+QisZTIXp+r+iyIRnSewCSsb9zJ
-         csPAM3hKqwnKmXbHbuLaanA7C1UvsmAP/s7/KrWUiZMO7iUJOhb3aLblZDH4+Kj4ik5q
-         LtkqHj56a8LnjE0q2DkZKR3YoSlZNzMGBzOqTaylW09I5Aroh6/o+VicUf5oxLRNN+sT
-         zp5rmWktNMBEOSYKF6OvFy413bCFXSrGDrcf+xmRKfulozFJqO/7ZB5Q7FgafGvWt1w5
-         s7bg==
+        bh=3szr+kJTUuNS+iVcKOU+a7GHZg5bpUVvZtqIRdh2MYc=;
+        b=nol55mTkHdtc7thCvvZMN0uAvzXe6aiwBYJBd0amqOwlFTAdiAOixd3a+/XPkmE3l0
+         Rf97XHoC0n24Ol0Op7EKwlgbpQ6Pfz08TAX1c50HX4BCJGkspxRY8RS5b6zJfeXtOhav
+         5+BeQSGxRSrudobCCQPtvWcAMGeUR4vJoFe4efbaUjAU2r1fKFHX4OqkAgGNjvUX1R99
+         AoeBIqz2u038SIRDwvglrWPEEkEUesoGkDG9QvbQKkQSW/4sq72MHJM8dQTUqJ3mZsvo
+         d906gU/aBN2puc2ror7bJsBTwfomuu+tN4CtevnAexOrt+3CZz9UhKW1hF97vRbDUywh
+         QC4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758542346; x=1759147146;
+        d=1e100.net; s=20230601; t=1758542347; x=1759147147;
         h=message-id:date:reply-to:cc:to:from:subject
          :content-transfer-encoding:mime-version:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=oQH7pPh1Sjb9Crvn0LF0FKaZmkeW4LiN21oBQrxkEcQ=;
-        b=VhpNt8j+FmKcdTsO8hyxzF83RFuJVZ0DtpFD1GMqGEXFKS/nCNYD5vBFBx8H0zdo3X
-         OfHG2VGeMasBSdrPf3uU4ooOXZrNvRUCR1lW0n/RFSz35g4+DUUS8PfedbYxgyPQ0a9v
-         pNAgH7OfLg82a88OS1T+DtnIddsvPNVfifOfm2vazE/IPsEF59ibPUUCVJwumHunTbE6
-         3/XHO+shKmNNe2Vd2YnoB+zD9TV0r7EOpwYbmyJLRMG0wqNGeVoCar8scghgbDa0h2zH
-         32oOj1t4utWXbzn5oMvBmQawyNn/zEig5xkj0IcHbE6PrYf70SFisvljUQVBSYnbBQKx
-         PhqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVe5rEFs3qXuzuoNE6UxTFOhwgDZs3MPflTkHvdJ4xFVoVvjugvsWgw/g7G8jU2/ZiUvBcV3vbvAsMw@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWCk7HZka+N8EyQ9ZCFVsAanyGMTDf9E3BHs/YoL3o9BRRoEb/
-	+X8LldUuwcOmFPJ318f6mYrAqtcLwXsAvgKKR1l5qXoZGQDFVWLV0yqJH89/c0xGgHc=
-X-Gm-Gg: ASbGncv+YXjDwlTKK7sL3CvPoZa24Q8aKnVYKd4PrrOleiX/dqsV0hBfpkFdB01b5tM
-	F9gKvU0Wwg7xCH3dtQhi/F2v1Fiig2nmbK1RiLGpH44A3tbMP/lJRo7EDJvXYyJAYh1LDS22prt
-	ursCNbh2oLVaWmqJcLeFGeu215POycO0WxncCR8CUABnGTOFJqO1KjCGYXKQfiMWJ/TnaqNno3e
-	Y68EfvS1IajClZgVmyzJ6nT1Q1wEpSqBCOKNjKovfl5KkJvnlF+EYY0pUiOh6V82mvxU+Sv9tG8
-	riQEEojEN3Dj1MIwFOmKxFDL+3axsYYDnh2guDvsfXf5j631LSg5Tam1BjEu1/Ezegr2L4Gm1h3
-	4+2dT9T49XbfHwX2J
-X-Google-Smtp-Source: AGHT+IGcree0ZMf3YB3uRs9Rg0qxg1gCxlMaY6C6+lUh2ItTw4KZ8WnTFp5oIpU9E0oyVPDlvmn+MQ==
-X-Received: by 2002:a17:902:f686:b0:25c:b1d6:c41a with SMTP id d9443c01a7336-269ba434d24mr154065215ad.11.1758542346081;
-        Mon, 22 Sep 2025 04:59:06 -0700 (PDT)
-Received: from 166871acc15a ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-26980303456sm131919635ad.96.2025.09.22.04.59.04
+        bh=3szr+kJTUuNS+iVcKOU+a7GHZg5bpUVvZtqIRdh2MYc=;
+        b=kAcBVSsTHfbz5N1UQDfEAHsNaWqnqgea/AV1i4KUDM0e4rCHYMjj/npDPC23Uygn/z
+         RCfQJdzICezQkLkgL84HwvV7RS0B815Vh3E2Y9Vxk6k5gH525JtSpxmnFf/KcRI/enmX
+         s83hGrk7xhrrRlQpdTpylBDkp4k1DyruihNYtCws5hNWJgkt+zy62eU7s6RuStYE3zMD
+         Lndp47i/ttAiaodXsrIwBzBECfrBp5P8gtEpGZTtMTrlYkH8UyQlQw3Cb0/lDAWsdten
+         4l9hLv0EOHf7XqYd3mtiWvPZXk1tJTH25/lX7rSaneNmNbpchfPfnz5X4BGyTsqUN5Rk
+         s0zg==
+X-Forwarded-Encrypted: i=1; AJvYcCUs2UiBM1WVpBUYxnv6H5TQH+5l0DM50o8cAot+piw9tyuD95Zy7jX7A+GvIj0MRpY7qAuBfzIUP++f@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyh4s2wG/X6dCbP8okMQQ/NvShrv5bfe3padKQWs2u30hYgUBPY
+	VapW1m8EOT0i8otfQt5c8s08MwwF0biQuHayarzyjLYxGhuutpy+VSfFY8ORflIAMyg=
+X-Gm-Gg: ASbGncuvJSZwCdZXmhBzJt8xDFw3Uqlv6zFzq2MTVw7m8io7yAhD0FA1fMkyEaRqEv8
+	uZW3O4lUQeEHPmeoQ4NBwARXdhzy0Px3jYxDoASDnQXfI/ZK9Jx0n5FzI6fKRPD10TkUyHaoC7U
+	3fkNWbJ4+iHRKHi3xCkEr74i8ij9RHpqznrVrti1u+zLTAXfWqgDJjx2vWZwfUB1G/G3Wz+MiK+
+	0CL5Vx7KiIfysCQcjszv1YZX+sB59L7vImPrJbBK40xNOuVW/VcWw6w+8uA0ecJ+BGw8zmQ29um
+	rYKhWomAxRS4Q9vs0cEXYvLqAWB4iTc3wrmtyfcZ1BQFgtxsfomEzg9CdY6a99c+h/bUQzU76Co
+	T3YSD9BWaGwDIOS2Qm2KxqQrHi38=
+X-Google-Smtp-Source: AGHT+IHo0J6DmO9uvDERQYmbyjGnFsDOfDJfTmhDv2LK6SDL8fW1Y2citMkFq8VMqbDlBoQE2gOJfQ==
+X-Received: by 2002:a05:6a00:2d21:b0:76e:885a:c332 with SMTP id d2e1a72fcca58-77e4f29df94mr16875675b3a.32.1758542347169;
+        Mon, 22 Sep 2025 04:59:07 -0700 (PDT)
+Received: from 1dfac204f25d ([20.38.40.137])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-77e0bb98790sm10380518b3a.9.2025.09.22.04.59.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Sep 2025 04:59:05 -0700 (PDT)
+        Mon, 22 Sep 2025 04:59:06 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
@@ -79,17 +79,16 @@ List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: 
- =?utf-8?q?=5BREGRESSION=5D_next/master=3A_=28build=29_implicit_declaration_o?=
- =?utf-8?q?f_function_=E2=80=98F=E2=80=99_=5B-Werror=3Dimplicit-function-de?=
- =?utf-8?q?=2E=2E=2E?=
+Content-Transfer-Encoding: 7bit
+Subject: [REGRESSION] next/master: (build) comparison of distinct pointer
+ types
+ ('typeof ((mirror_idx)) *' (a...
 From: KernelCI bot <bot@kernelci.org>
 To: kernelci-results@groups.io
 Cc: regressions@lists.linux.dev, gus@collabora.com, linux-next@vger.kernel.org
 Reply-To: kernelci@lists.linux.dev
-Date: Mon, 22 Sep 2025 11:59:04 -0000
-Message-ID: <175854234379.725.11726275319419663408@166871acc15a>
+Date: Mon, 22 Sep 2025 11:59:05 -0000
+Message-ID: <175854234556.873.4742782914953194439@1dfac204f25d>
 
 
 
@@ -100,10 +99,10 @@ Hello,
 New build issue found on next/master:
 
 ---
- implicit declaration of function ‘F’ [-Werror=implicit-function-declaration] in arch/x86/kvm/emulate.o (arch/x86/kvm/emulate.c) [logspec:kbuild,kbuild.compiler.error]
+ comparison of distinct pointer types ('typeof ((mirror_idx)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types] in fs/nfs/flexfilelayout/flexfilelayout.o (fs/nfs/flexfilelayout/flexfilelayout.c) [logspec:kbuild,kbuild.compiler.warning]
 ---
 
-- dashboard: https://d.kernelci.org/i/maestro:ec1d28aaff2a1b8f5b95187d16e2791bddbb5367
+- dashboard: https://d.kernelci.org/i/maestro:76d27462ca9e8dd64519bf79c841aca15d98a0e5
 - giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 - commit HEAD:  bf2602a3cb2381fb1a04bf1c39a290518d2538d1
 - tags: next-20250922
@@ -111,194 +110,69 @@ New build issue found on next/master:
 
 Log excerpt:
 =====================================================
-arch/x86/kvm/emulate.c:4091:9: error: implicit declaration of function ‘F’ [-Werror=implicit-function-declaration]
- 4091 |         F(DstMem | SrcNone | Lock,              em_inc),
-      |         ^
-arch/x86/kvm/emulate.c:4091:9: error: initializer element is not constant
-arch/x86/kvm/emulate.c:4091:9: note: (near initialization for ‘group5[0].flags’)
-arch/x86/kvm/emulate.c:4092:9: error: initializer element is not constant
- 4092 |         F(DstMem | SrcNone | Lock,              em_dec),
-      |         ^
-arch/x86/kvm/emulate.c:4092:9: note: (near initialization for ‘group5[0].intercept’)
-arch/x86/kvm/emulate.c:3993:21: error: field name not in record or union initializer
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                     ^
-arch/x86/kvm/emulate.c:4093:9: note: in expansion of macro ‘I’
- 4093 |         I(SrcMem | NearBranch | IsBranch | ShadowStack, em_call_near_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:21: note: (near initialization for ‘group5[0].pad’)
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                     ^
-arch/x86/kvm/emulate.c:4093:9: note: in expansion of macro ‘I’
- 4093 |         I(SrcMem | NearBranch | IsBranch | ShadowStack, em_call_near_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:30: error: conversion from ‘long long unsigned int’ to ‘unsigned char’ changes value from ‘220676381741154496’ to ‘192’ [-Werror=overflow]
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                              ^
-arch/x86/kvm/emulate.c:4093:9: note: in expansion of macro ‘I’
- 4093 |         I(SrcMem | NearBranch | IsBranch | ShadowStack, em_call_near_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:36: error: field name not in record or union initializer
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                                    ^
-arch/x86/kvm/emulate.c:4093:9: note: in expansion of macro ‘I’
- 4093 |         I(SrcMem | NearBranch | IsBranch | ShadowStack, em_call_near_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:36: note: (near initialization for ‘group5[0].pad’)
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                                    ^
-arch/x86/kvm/emulate.c:4093:9: note: in expansion of macro ‘I’
- 4093 |         I(SrcMem | NearBranch | IsBranch | ShadowStack, em_call_near_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:49: error: initialization of ‘unsigned char’ from ‘int (*)(struct x86_emulate_ctxt *)’ makes integer from pointer without a cast [-Werror=int-conversion]
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                                                 ^
-arch/x86/kvm/emulate.c:4093:9: note: in expansion of macro ‘I’
- 4093 |         I(SrcMem | NearBranch | IsBranch | ShadowStack, em_call_near_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:49: note: (near initialization for ‘group5[0].pad[1]’)
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                                                 ^
-arch/x86/kvm/emulate.c:4093:9: note: in expansion of macro ‘I’
- 4093 |         I(SrcMem | NearBranch | IsBranch | ShadowStack, em_call_near_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:49: error: initializer element is not computable at load time
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                                                 ^
-arch/x86/kvm/emulate.c:4093:9: note: in expansion of macro ‘I’
- 4093 |         I(SrcMem | NearBranch | IsBranch | ShadowStack, em_call_near_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:49: note: (near initialization for ‘group5[0].pad[1]’)
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                                                 ^
-arch/x86/kvm/emulate.c:4093:9: note: in expansion of macro ‘I’
- 4093 |         I(SrcMem | NearBranch | IsBranch | ShadowStack, em_call_near_abs),
-      |         ^
-arch/x86/kvm/emulate.c:4090:39: error: missing braces around initializer [-Werror=missing-braces]
- 4090 | static const struct opcode group5[] = {
-      |                                       ^
- 4091 |         F(DstMem | SrcNone | Lock,              em_inc),
-      |         {
-arch/x86/kvm/emulate.c:3993:22: error: ‘union <anonymous>’ has no member named ‘flags’
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                      ^~~~~
-arch/x86/kvm/emulate.c:4094:9: note: in expansion of macro ‘I’
- 4094 |         I(SrcMemFAddr | ImplicitOps | IsBranch | ShadowStack, em_call_far),
-      |         ^
-arch/x86/kvm/emulate.c:3993:30: error: initialization of ‘int (*)(struct x86_emulate_ctxt *)’ from ‘long long unsigned int’ makes pointer from integer without a cast [-Werror=int-conversion]
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                              ^
-arch/x86/kvm/emulate.c:4094:9: note: in expansion of macro ‘I’
- 4094 |         I(SrcMemFAddr | ImplicitOps | IsBranch | ShadowStack, em_call_far),
-      |         ^
-  CC      mm/highmem.o
-arch/x86/kvm/emulate.c:3993:30: note: (near initialization for ‘group5[0].u.execute’)
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                              ^
-arch/x86/kvm/emulate.c:4094:9: note: in expansion of macro ‘I’
- 4094 |         I(SrcMemFAddr | ImplicitOps | IsBranch | ShadowStack, em_call_far),
-      |         ^
-arch/x86/kvm/emulate.c:3993:37: error: ‘union <anonymous>’ has no member named ‘u’
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                                     ^
-arch/x86/kvm/emulate.c:4094:9: note: in expansion of macro ‘I’
- 4094 |         I(SrcMemFAddr | ImplicitOps | IsBranch | ShadowStack, em_call_far),
-      |         ^
-arch/x86/kvm/emulate.c:3993:49: error: excess elements in union initializer [-Werror]
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                                                 ^
-arch/x86/kvm/emulate.c:4094:9: note: in expansion of macro ‘I’
- 4094 |         I(SrcMemFAddr | ImplicitOps | IsBranch | ShadowStack, em_call_far),
-      |         ^
-arch/x86/kvm/emulate.c:3993:49: note: (near initialization for ‘group5[0].u’)
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                                                 ^
-arch/x86/kvm/emulate.c:4094:9: note: in expansion of macro ‘I’
- 4094 |         I(SrcMemFAddr | ImplicitOps | IsBranch | ShadowStack, em_call_far),
-      |         ^
-arch/x86/kvm/emulate.c:4090:39: error: missing braces around initializer [-Werror=missing-braces]
- 4090 | static const struct opcode group5[] = {
-      |                                       ^
- 4091 |         F(DstMem | SrcNone | Lock,              em_inc),
-      |         {
-arch/x86/kvm/emulate.c:4095:9: error: braces around scalar initializer [-Werror]
- 4095 |         I(SrcMem | NearBranch | IsBranch,       em_jmp_abs),
-      |         ^
-arch/x86/kvm/emulate.c:4095:9: note: (near initialization for ‘group5[0].check_perm’)
-arch/x86/kvm/emulate.c:3993:21: error: field name not in record or union initializer
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                     ^
-arch/x86/kvm/emulate.c:4095:9: note: in expansion of macro ‘I’
- 4095 |         I(SrcMem | NearBranch | IsBranch,       em_jmp_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:21: note: (near initialization for ‘group5[0].check_perm’)
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                     ^
-arch/x86/kvm/emulate.c:4095:9: note: in expansion of macro ‘I’
- 4095 |         I(SrcMem | NearBranch | IsBranch,       em_jmp_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:30: error: initialization of ‘int (*)(struct x86_emulate_ctxt *)’ from ‘long long unsigned int’ makes pointer from integer without a cast [-Werror=int-conversion]
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                              ^
-arch/x86/kvm/emulate.c:4095:9: note: in expansion of macro ‘I’
- 4095 |         I(SrcMem | NearBranch | IsBranch,       em_jmp_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:30: note: (near initialization for ‘group5[0].check_perm’)
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                              ^
-arch/x86/kvm/emulate.c:4095:9: note: in expansion of macro ‘I’
- 4095 |         I(SrcMem | NearBranch | IsBranch,       em_jmp_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:36: error: field name not in record or union initializer
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                                    ^
-arch/x86/kvm/emulate.c:4095:9: note: in expansion of macro ‘I’
- 4095 |         I(SrcMem | NearBranch | IsBranch,       em_jmp_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:36: note: (near initialization for ‘group5[0].check_perm’)
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                                    ^
-arch/x86/kvm/emulate.c:4095:9: note: in expansion of macro ‘I’
- 4095 |         I(SrcMem | NearBranch | IsBranch,       em_jmp_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:49: error: excess elements in scalar initializer [-Werror]
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                                                 ^
-arch/x86/kvm/emulate.c:4095:9: note: in expansion of macro ‘I’
- 4095 |         I(SrcMem | NearBranch | IsBranch,       em_jmp_abs),
-      |         ^
-arch/x86/kvm/emulate.c:3993:49: note: (near initialization for ‘group5[0].check_perm’)
- 3993 | #define I(_f, _e) { .flags = (_f), .u.execute = (_e) }
-      |                                                 ^
-arch/x86/kvm/emulate.c:4095:9: note: in expansion of macro ‘I’
- 4095 |         I(SrcMem | NearBranch | IsBranch,       em_jmp_abs),
-      |         ^
-arch/x86/kvm/emulate.c:4090:39: error: missing braces around initializer [-Werror=missing-braces]
- 4090 | static const struct opcode group5[] = {
-      |                                       ^
- 4091 |         F(DstMem | SrcNone | Lock,              em_inc),
-      |         {
-arch/x86/kvm/emulate.c:4090:39: error: missing braces around initializer [-Werror=missing-braces]
-arch/x86/kvm/emulate.c:4090:39: error: missing braces around initializer [-Werror=missing-braces]
-arch/x86/kvm/emulate.c:4090:39: error: missing braces around initializer [-Werror=missing-braces]
-  CC      crypto/gcm.o
-cc1: all warnings being treated as errors
+fs/nfs/flexfilelayout/flexfilelayout.c:685:2: warning: comparison of distinct pointer types ('typeof ((mirror_idx)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
+  685 |         do_div(mirror_idx, flseg->mirror_array[0]->dss_count);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./include/asm-generic/div64.h:183:28: note: expanded from macro 'do_div'
+  183 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+      |                ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+fs/nfs/flexfilelayout/flexfilelayout.c:685:2: error: incompatible pointer types passing 'u32 *' (aka 'unsigned int *') to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
+  685 |         do_div(mirror_idx, flseg->mirror_array[0]->dss_count);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./include/asm-generic/div64.h:199:22: note: expanded from macro 'do_div'
+  199 |                 __rem = __div64_32(&(n), __base);       \
+      |                                    ^~~~
+./arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
+   24 | static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
+      |                                             ^
+fs/nfs/flexfilelayout/flexfilelayout.c:685:2: warning: shift count >= width of type [-Wshift-count-overflow]
+  685 |         do_div(mirror_idx, flseg->mirror_array[0]->dss_count);
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./include/asm-generic/div64.h:195:25: note: expanded from macro 'do_div'
+  195 |         } else if (likely(((n) >> 32) == 0)) {          \
+      |                                ^  ~~
+./include/linux/compiler.h:76:40: note: expanded from macro 'likely'
+   76 | # define likely(x)      __builtin_expect(!!(x), 1)
+      |                                             ^
+fs/nfs/flexfilelayout/flexfilelayout.c:696:9: warning: comparison of distinct pointer types ('typeof ((mirror_idx)) *' (aka 'unsigned int *') and 'uint64_t *' (aka 'unsigned long long *')) [-Wcompare-distinct-pointer-types]
+  696 |         return do_div(mirror_idx, flseg->mirror_array[0]->dss_count);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./include/asm-generic/div64.h:183:28: note: expanded from macro 'do_div'
+  183 |         (void)(((typeof((n)) *)0) == ((uint64_t *)0));  \
+      |                ~~~~~~~~~~~~~~~~~~ ^  ~~~~~~~~~~~~~~~
+fs/nfs/flexfilelayout/flexfilelayout.c:696:9: error: incompatible pointer types passing 'u32 *' (aka 'unsigned int *') to parameter of type 'uint64_t *' (aka 'unsigned long long *') [-Werror,-Wincompatible-pointer-types]
+  696 |         return do_div(mirror_idx, flseg->mirror_array[0]->dss_count);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./include/asm-generic/div64.h:199:22: note: expanded from macro 'do_div'
+  199 |                 __rem = __div64_32(&(n), __base);       \
+      |                                    ^~~~
+./arch/arm/include/asm/div64.h:24:45: note: passing argument to parameter 'n' here
+   24 | static inline uint32_t __div64_32(uint64_t *n, uint32_t base)
+      |                                             ^
+fs/nfs/flexfilelayout/flexfilelayout.c:696:9: warning: shift count >= width of type [-Wshift-count-overflow]
+  696 |         return do_div(mirror_idx, flseg->mirror_array[0]->dss_count);
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./include/asm-generic/div64.h:195:25: note: expanded from macro 'do_div'
+  195 |         } else if (likely(((n) >> 32) == 0)) {          \
+      |                                ^  ~~
+./include/linux/compiler.h:76:40: note: expanded from macro 'likely'
+   76 | # define likely(x)      __builtin_expect(!!(x), 1)
+      |                                             ^
+  AR      drivers/phy/mediatek/built-in.a
+  AR      drivers/phy/microchip/built-in.a
+4 warnings and 2 errors generated.
 
 =====================================================
 
 
 # Builds where the incident occurred:
 
-## cros://chromeos-6.6/x86_64/chromeos-amd-stoneyridge.flavour.config+lab-setup+x86-board+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y on (x86_64):
-- compiler: gcc-12
-- dashboard: https://d.kernelci.org/build/maestro:68d130d075b320799d36f202
-
-## cros://chromeos-6.6/x86_64/chromeos-intel-pineview.flavour.config+lab-setup+x86-board+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y on (x86_64):
-- compiler: gcc-12
-- dashboard: https://d.kernelci.org/build/maestro:68d130d375b320799d36f209
+## multi_v7_defconfig on (arm):
+- compiler: clang-17
+- dashboard: https://d.kernelci.org/build/maestro:68d1301275b320799d36f149
 
 
-#kernelci issue maestro:ec1d28aaff2a1b8f5b95187d16e2791bddbb5367
+#kernelci issue maestro:76d27462ca9e8dd64519bf79c841aca15d98a0e5
 
 Reported-by: kernelci.org bot <bot@kernelci.org>
 

@@ -1,95 +1,99 @@
-Return-Path: <linux-next+bounces-8446-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8447-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0888FB95C43
-	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 14:02:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F32C8B95E32
+	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 14:53:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1652F19C0A0E
-	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 12:02:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2BAE02E4E50
+	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 12:53:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1AC232128E;
-	Tue, 23 Sep 2025 12:02:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F06BA323F75;
+	Tue, 23 Sep 2025 12:53:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N950wpQG"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cYgxAMVU"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784252FC86F;
-	Tue, 23 Sep 2025 12:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A263323F57
+	for <linux-next@vger.kernel.org>; Tue, 23 Sep 2025 12:53:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758628941; cv=none; b=crQE5PXygtVXMaE998RyzdkwjEeRFH3ZI2QHrvdl2CdHxTx3c6tZkXAFhRAphe6YYC1hlaIkPGpsUk4kd3tExN13psg4d0jd2EfR6e+Tokzr/qo7JSxn6BvLdv1k8fTTbVHplwgDIhOwGuj6yjiQjf8L3wXjvW9z0JPvo1wJ1N0=
+	t=1758631985; cv=none; b=sN/+DxELUulb7fijZEu1dIRxejJoXQnu84qKOm95fQ7u2biqTcqRY+0nSniGYMLVG/1gVVTWFhtXsbfJxDyntCbOFo/GtPn0vj7sa9Q+n627QDEMXi0qc1PruV/0JrmPstnNKJz7bAc+Loypat8Dk2N5vAsVGYMyIBuB4Netsq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758628941; c=relaxed/simple;
-	bh=vfU9Jv7l/LFQE21VT4y6UJV5BM6uR9ucoi7hWXp2wSs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=azBZ1y+Po+pvUuY6B3lACekhB8BlxCqQ7NPq8rSRU7PauPMlh5pY0hCKK9vhsbpWbmKA81yhOxnD4lyjapmYthkw5HNQL7uLEWSq4Qs+2WshmTye0zZavnXDJ3kIYenmOesZFwJkayBVxE4wll/ZSt7c8Tyq+NyWqn/d3OcTsH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N950wpQG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44F83C4CEF5;
-	Tue, 23 Sep 2025 12:02:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758628940;
-	bh=vfU9Jv7l/LFQE21VT4y6UJV5BM6uR9ucoi7hWXp2wSs=;
-	h=Date:From:To:Cc:Subject:From;
-	b=N950wpQGCsIgIAEziNDtvTxUoaZHfiHZ8VICDwi1sSeOGN9zFAHJ1zBEMjOfjmY7K
-	 xljzdbhVlZ6OvJh2PrCJe6t9kcmIknnzvYYOHKJ1eXgXEw5dmQKkJDzkwnf7ytge4I
-	 gOyItrn502VJtiJWZVYP61DdzWXpAVhMieFayvWMwRqwmZfWVKSaAUsb2BVGytKGVj
-	 RQVx4GZN2t4BnpDLECqg4jnvgnWm9QMHrAPmioEaarm5VayoksATcfYTYaJirAGDvq
-	 fjUcoetLIiekvCZFUB2TDUxAx+HetlpYnoy8TQQcAqKliCx3INcUKT2PRCvjaztwM0
-	 mu43jM23lUUqg==
-Date: Tue, 23 Sep 2025 14:02:17 +0200
-From: Mark Brown <broonie@kernel.org>
-To: Alasdair G Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-Subject: Missing signoffs in the device mapper tree
-Message-ID: <aNKMSd1hhaeWvQ-A@finisterre.sirena.org.uk>
+	s=arc-20240116; t=1758631985; c=relaxed/simple;
+	bh=nifdnnN/YFXrBSaLDuXvFzfIaHl2H+EQkr7zlSF4twM=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=WwYO8T9iEaK+O2XlRAp8eBwYTxLueUmLccoprbgklFsBofLWkSTzenVUd4ZANJ4+2Ciz+omVEw+x2nmOmyeYIFbkT67efkffvbdKQHjF5Y8iggEKWAx+HFjpdS6l99+560QbmFgkbpt3CeBqNtkpu/uNIM/Jz2+Gos7OTpUMk2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=cYgxAMVU; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1758631983;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vIUqLFXCJLnNqlkFKFk7iAZM2JcoBEoVoE3P17SZOiY=;
+	b=cYgxAMVU19j5CIStGOGrxiTD1pLd0sn3OBrxOLCWxs/u6/2ioWnWr76LR6GFzeqN9dgjFT
+	CFnag4WDssenoFKabjjxU0fW72e7YHPDgskwb1qxrhz/UZ7s9Dy7TaLge2+UQbLSH4gUj0
+	LkR2UEegaQ8E/ulh9vuxnDvrt49cK/Y=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-9-btGlCJciM1ycMpHZbraiNQ-1; Tue,
+ 23 Sep 2025 08:53:01 -0400
+X-MC-Unique: btGlCJciM1ycMpHZbraiNQ-1
+X-Mimecast-MFC-AGG-ID: btGlCJciM1ycMpHZbraiNQ_1758631980
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 653701955DDD;
+	Tue, 23 Sep 2025 12:53:00 +0000 (UTC)
+Received: from [10.45.225.219] (unknown [10.45.225.219])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9A86C1955F21;
+	Tue, 23 Sep 2025 12:52:58 +0000 (UTC)
+Date: Tue, 23 Sep 2025 14:52:52 +0200 (CEST)
+From: Mikulas Patocka <mpatocka@redhat.com>
+To: Mark Brown <broonie@kernel.org>
+cc: Alasdair G Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>, 
+    linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: Missing signoffs in the device mapper tree
+In-Reply-To: <aNKMSd1hhaeWvQ-A@finisterre.sirena.org.uk>
+Message-ID: <95d76fa6-d6be-f34c-b5c6-b801e80adaf5@redhat.com>
+References: <aNKMSd1hhaeWvQ-A@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zEpDXLo2SHaqx0ax"
-Content-Disposition: inline
-X-Cookie: Filmed before a live audience.
+Content-Type: text/plain; charset=US-ASCII
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
 
---zEpDXLo2SHaqx0ax
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-Commit
+On Tue, 23 Sep 2025, Mark Brown wrote:
 
-  9fddffbf6aa35 ("dm-integrity: allocate the recalculate buffer with kmalloc")
+> Commit
+> 
+>   9fddffbf6aa35 ("dm-integrity: allocate the recalculate buffer with kmalloc")
+> 
+> is missing a Signed-off-by from its author.
+> 
+> Commit
+> 
+>   9fddffbf6aa35 ("dm-integrity: allocate the recalculate buffer with kmalloc")
+> 
+> is missing a Signed-off-by from its committer.
 
-is missing a Signed-off-by from its author.
+OK
 
-Commit
+I fixed it.
 
-  9fddffbf6aa35 ("dm-integrity: allocate the recalculate buffer with kmalloc")
+Mikulas
 
-is missing a Signed-off-by from its committer.
-
---zEpDXLo2SHaqx0ax
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjSjEQACgkQJNaLcl1U
-h9Boqwf+Nq1Afmt7KnEAo7Zwv6CyeTcLpce0eG9niifwWouVrJJQbngc9GbpsyIM
-3X9OsWWPjWOcHLv2lNvVN6wUtHSjfClD533t/uUlhQOmjjsdJATCcM4kYE/VPR/G
-JRbpbop6J65osOTHPXI1jvUubg2Nfsf5AN0wPE0rUDlJONnqWyaa3cTNGqa8FljP
-sShI7NsP2ztlsvGRDl9GyxUPqWCyoWKBVXoi2BLhl5K/1oWLrdtm6t/exio2mhDf
-n5dRtLd405ThkRiewqHELMJRIu9Hl1zv2Rk1U2laXWabvedW2gWao3bpas1XOyJ9
-DHsrDy7E++BsuTsqbt0aH5v6Da7aGg==
-=18LP
------END PGP SIGNATURE-----
-
---zEpDXLo2SHaqx0ax--
 

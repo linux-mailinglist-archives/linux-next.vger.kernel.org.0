@@ -1,110 +1,123 @@
-Return-Path: <linux-next+bounces-8444-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8445-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7B31B95047
-	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 10:36:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2F08B9595D
+	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 13:12:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A464441710
-	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 08:36:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14E1919C2145
+	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 11:13:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB19631D38A;
-	Tue, 23 Sep 2025 08:36:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F38E3321266;
+	Tue, 23 Sep 2025 11:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d/oEQTgv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BKrfdmBZ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B172C31D382;
-	Tue, 23 Sep 2025 08:36:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA30730F545;
+	Tue, 23 Sep 2025 11:12:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758616591; cv=none; b=IXWKqZcFlT63mKksdSvgzhAFpRE1VF8WiQNrB1RXOsU1dY8Z3u5AhLAjXtdvH1XqedcBvL0YC7tbUGplsAj8q5u3x3X0a+lhhjjmgkiTsfw9hy0WgKd8iRTgHee6qAX6KIL6RZnsg+M8PzWWlDZpemuk7VRwlndQ+LjzecesWKs=
+	t=1758625954; cv=none; b=nGuBhwkNRo6CpUljnnJ6H908aRjMSMw2AJC4tfVdF3fgxbtcjJJ/5ul4lKr43194BewRjuX8uc0tfIbAjdulAP0OS0A52yke7mcgriMj8dvp39lg23RwoR5csHu8B+jRNmqV7Q06tPodpZM0EykflJ5ebg6eSc04OOzANVafzbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758616591; c=relaxed/simple;
-	bh=HwC3qAi4Vb/ZTI0/KBf5ye1cSkZqvV0nCwG9ZNJDA1U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G8qnJkf7Em/YceVvSB9vXueMNJuKhSFt58dcjeSEabikktwz1b4DPbr2ZgVJdDvf3F23PkQ40yHOEQ21pDDDZ3vvwVA1ZRDTNUO36MTnOfvldelOBkdh7+uGALL9UrYcv8X8s2sU5pqYEbuFOdiOAWTUCIigayVzrgjoqyGn8tU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d/oEQTgv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FFC9C4CEF5;
-	Tue, 23 Sep 2025 08:36:29 +0000 (UTC)
+	s=arc-20240116; t=1758625954; c=relaxed/simple;
+	bh=H+GZct5cSXZhW0sO9IwNI4/Cnpyj4hl9NrIATJDpM5k=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VF47/IOZ/OD88GPYf5Y1o5IE4qylI/S+gbbVTQRNG+PlKw/ZHONPt19V1mJWLC8LA6CYywm2Xt8HIxlhuFItb9TobXH7SUzNB+s9r5pIMPwSunAsyXlBpJFtjM8d27DpnguW5bXjyX37fp39hJjqLTee8NprDt0jskPoWRB1q5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BKrfdmBZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B302EC4CEF5;
+	Tue, 23 Sep 2025 11:12:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758616591;
-	bh=HwC3qAi4Vb/ZTI0/KBf5ye1cSkZqvV0nCwG9ZNJDA1U=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d/oEQTgvj9i4B2ilNtrcSXA4ixsg1NiVP7u3D5+EqITLW/PLpY2QiXybbLIVKMfry
-	 5EoYTG+7DgcSWJIxLVqWM26dLnd1K3bqQnKbEXf/wBrb2a/FxSIBlTdhLM+giVOjB0
-	 SQi8g5nFvyFeRKYZUQJJThdHDJUXk+crETMH6jlmz4JqoAcguvxkULGN2tl3EJgdA0
-	 NsdWjBYtTKDtYjOkbzqHSfHayiHixlt5/919Q8iqqMdfHmPqi/ylJyaco3F/+DDOxy
-	 lesTMHg254t2MNI249pVGSziCbFDLrLFCL/xT5jZsW03k/VujZH7c3ZQhnxlSxJsRh
-	 kJ26IaisnF4HQ==
-Date: Tue, 23 Sep 2025 09:36:27 +0100
-From: Will Deacon <will@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Kees Cook <kees@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the arm64 tree with the origin tree
-Message-ID: <aNJcC3aAfJ-gCv6m@willie-the-truck>
-References: <aNJZaJT9elF0TDqH@finisterre.sirena.org.uk>
+	s=k20201202; t=1758625954;
+	bh=H+GZct5cSXZhW0sO9IwNI4/Cnpyj4hl9NrIATJDpM5k=;
+	h=Date:From:To:Cc:Subject:From;
+	b=BKrfdmBZkNvdXS8w2xM/Ig4BE53vV+W/D8jYyAj6Io+7w4bmaqspiE70LN5kDd9mO
+	 BOIXlyAve7SERU6STfyiIMzizmqffgKsk3iWQttatY6S8iYPOFFKyG8FMhHC4v1yzH
+	 W09CLMAY+EEbow3RvgC5sn0CKDzWuQxl/DQ7f8/MhmHueJkWuWcai+U1SuyuOZNqbU
+	 yIISytRfU5zS3O+HrNyb+dYjeJbEsRbKpEyUaDdmhVj6Y8UZb4XckNtu0nxsqC8A0t
+	 iFoDrCldaT8Aio3/mAXaLsxf3GEmhekk2CemyvfEmPlYWFSkFKkzvxT+12vAFAa4ps
+	 bOCjNUWkz6/3g==
+Date: Tue, 23 Sep 2025 13:12:29 +0200
+From: Mark Brown <broonie@kernel.org>
+To: Marcel Holtmann <marcel@holtmann.org>,
+	Johan Hedberg <johan.hedberg@gmail.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Subject: linux-next: manual merge of the bluetooth tree with the net tree
+Message-ID: <aNKAnfV3XcvY2dhZ@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="VeaPFBbprUcFGXes"
+Content-Disposition: inline
+
+
+--VeaPFBbprUcFGXes
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aNJZaJT9elF0TDqH@finisterre.sirena.org.uk>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 23, 2025 at 10:25:12AM +0200, Mark Brown wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the arm64 tree got a conflict in:
-> 
->   arch/arm64/mm/mmu.c
-> 
-> between commit:
-> 
->   ceca927c86e6f ("arm64: mm: Fix CFI failure due to kpti_ng_pgd_alloc function signature")
-> 
-> from the origin tree and commit:
-> 
->   fa93b45fd397e ("arm64: Enable vmalloc-huge with ptdump")
-> 
-> from the arm64 tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> diff --cc arch/arm64/mm/mmu.c
-> index 980d7745a5499,10c2580995814..0000000000000
-> --- a/arch/arm64/mm/mmu.c
-> +++ b/arch/arm64/mm/mmu.c
-> @@@ -47,6 -49,15 +49,8 @@@
->   #define NO_CONT_MAPPINGS	BIT(1)
->   #define NO_EXEC_MAPPINGS	BIT(2)	/* assumes FEAT_HPDS is not used */
->   
->  -enum pgtable_type {
->  -	TABLE_PTE,
->  -	TABLE_PMD,
->  -	TABLE_PUD,
->  -	TABLE_P4D,
->  -};
->  -
-> + DEFINE_STATIC_KEY_FALSE(arm64_ptdump_lock_key);
-> + 
+Hi all,
 
-Thanks, the the correct resolution. I'll merge in for-next/fixes soon
-(we have a dangling patch that depends on it) so this will disappear.
+Today's linux-next merge of the bluetooth tree got conflicts in:
 
-Will
+  net/bluetooth/mgmt.c
+  net/bluetooth/mgmt_util.c
+  net/bluetooth/mgmt_util.h
+
+between commit:
+
+  302a1f674c00d ("Bluetooth: MGMT: Fix possible UAFs")
+
+=66rom the net tree and commit:
+
+  3b3eb857d5ab6 ("Bluetooth: MGMT: Fix possible UAFs")
+
+=66rom the bluetooth tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc net/bluetooth/mgmt.c
+index 225140fcb3d6c,ee7068fb9fb59..0000000000000
+--- a/net/bluetooth/mgmt.c
++++ b/net/bluetooth/mgmt.c
+diff --cc net/bluetooth/mgmt_util.c
+index aa7b5585cb268,258c22d38809a..0000000000000
+--- a/net/bluetooth/mgmt_util.c
++++ b/net/bluetooth/mgmt_util.c
+diff --cc net/bluetooth/mgmt_util.h
+index bcba8c9d89528,e94738d992900..0000000000000
+--- a/net/bluetooth/mgmt_util.h
++++ b/net/bluetooth/mgmt_util.h
+
+--VeaPFBbprUcFGXes
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjSgJ0ACgkQJNaLcl1U
+h9B1gAf/aKyL+IY2KNUFZnHrjdYjSxe9e9r2qFn9BIFdHBzsR34bl7+oNFuc5rr9
+cJue5kNhRG+1PHzaCPMv/wK8gHNihHXa++S4ZdIwe2xbhli0XFxEg5G2C6NtRVOQ
+EGxZdDnBUwizOSJDCcthhuGg1+/zG+o/aFZR40cLSNrcOt3/QO4hIAGjuc+NhnO6
+d3iuyC7u8mVaktnhVm92U5Hu0oLWGxaHMSIVS6WMC9Mk++Xeroq4HpPnzts2+ueC
+mHxXt0wETVj/NS2Rvk1IHIFyaI2sCTKTemWkaprkMG2I9Rzqx/f9nqz/zPhS0f8T
+siTXR4XB+u1lR1fdnX3lKyrFY0HNfQ==
+=DIWd
+-----END PGP SIGNATURE-----
+
+--VeaPFBbprUcFGXes--
 

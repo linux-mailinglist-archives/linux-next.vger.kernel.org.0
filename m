@@ -1,137 +1,103 @@
-Return-Path: <linux-next+bounces-8456-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8457-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6EC2B96E15
-	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 18:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 23912B9754B
+	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 21:24:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 661323BF4FD
-	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 16:52:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2B30441837
+	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 19:24:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD2312F0690;
-	Tue, 23 Sep 2025 16:52:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D348E26CE2E;
+	Tue, 23 Sep 2025 19:24:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SVfEa2Ih"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lkd/JW9/"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C1064A8F;
-	Tue, 23 Sep 2025 16:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61777302157
+	for <linux-next@vger.kernel.org>; Tue, 23 Sep 2025 19:24:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758646369; cv=none; b=m6BPf18rWIJ5SQElefhkc2sa06nIrm8lvhPLX4Xo+C0VHL7Eyn+VwhMDRcUJE7iRbx2OufwmmLQCt0h+DcRo9vw1qa4DYxJNAgEsUD5BvXrj2K8II4Ni3JTzJeVBkHjNM41sxzEQVRhclRakeTqm4S6DZGtLBZMhx2zz+dw5mqI=
+	t=1758655470; cv=none; b=mOtOvWUh62+HgvcPN0K3l9/9VckxjPMCGoFyyWuJphiLQxvCi0Rde3DsAYfRd+4Qctfx+5B/SzhWgxgl8NIv9GWBZ9U0PFuYmUzYpN3WXJaAPApub0iSYeiD44xygCEIFOahx+J7CC+0zPaM5u/Dwv6UCp/XJ465xBaBdivv6Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758646369; c=relaxed/simple;
-	bh=OHtxc/CqAXybv5yik9nAZbCsaPQAm3nEiFYcq1dwyOc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BPGwOsH1N7fn+PCKa41xMXnhHSN3XrGWO4qQWvKG/ot2PKz7dvGIArnI1ofwGcjSlb7Tnx9luhNAP0Wpy0Ql6JWSUu1PwCIt2I0XN25DSgn6LVk+jYE6mWzd8S2wqARAt9MUwZg7JPcG5YSWz9gv52LblfB+MHJT7SaDtPc3/Ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SVfEa2Ih; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDC0BC4CEF5;
-	Tue, 23 Sep 2025 16:52:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758646369;
-	bh=OHtxc/CqAXybv5yik9nAZbCsaPQAm3nEiFYcq1dwyOc=;
-	h=Date:From:To:Cc:Subject:From;
-	b=SVfEa2Ihup6IoUE6YAeihhlw8Mkqs+k+l61YtjJhyLMELrRvShf8dJNKD1a1YVFUk
-	 3wbY9Lj8J77LWAWw0fs/fmNAaPjWTn4KUqf0uWI0aGEGUZvs2dNMJJWn9qvZ+ZwWQJ
-	 sGCb5eEHMW3CHDmcUyi6g/z1VUZK65sEk1uj85i7mO8pzmAmGxY7vngoupZdfzXtik
-	 BvEmpopLh53/RCqUPipPTQne+05WXWYTjLSw2La7zw8HZP58/BNiC1Qsp7kuf9ERac
-	 ita+llcbZNm/zPiTghbMysYzJZK0k2kwkAqFmEM+OFn3tWvWAW2TtYJhbFuth6snN+
-	 EtmNk5NmSpQLA==
-Date: Tue, 23 Sep 2025 18:52:45 +0200
-From: Mark Brown <broonie@kernel.org>
-To: Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Sep 23
-Message-ID: <aNLQXdu0wVXa0t4t@finisterre.sirena.org.uk>
+	s=arc-20240116; t=1758655470; c=relaxed/simple;
+	bh=N9a4JnHkbJgQCm+ywJBCt4OEQLE4uXwPZhIJCqUpup4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V/xZThVK1FsiU00NttUHTwzQzCV43oTh3Nv5ZiC2PkeSD9noks1XXJb49/Xc6obXUy4HMq+jx5z+kFSKr4MIW3Wb5pEfFZ2ST7ADKgQQJ87AwHw3CsGDQv6i3F9OhtWiDAmPr9vMJ836wJtWk+kmpRnalKKSxf+3MzD+mnYsAg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lkd/JW9/; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-267fa729a63so11005235ad.3
+        for <linux-next@vger.kernel.org>; Tue, 23 Sep 2025 12:24:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1758655469; x=1759260269; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N9a4JnHkbJgQCm+ywJBCt4OEQLE4uXwPZhIJCqUpup4=;
+        b=lkd/JW9/SL2GIPBW2PBUpKt0iJRoHyDok0dhyuObavUgKeIUoXrQ9ucFvqd6A+3JnV
+         E3Q4kifvW5glKqyL7fwEgejGqe69+vrb62fzyEMiWWvV+xWKVyCF0/Qlas07L7E8yB07
+         F8X0/ItqB4SqByZVJv1Z3QMWY6othwg8g/kPhWSAp3hkQXvRykJcVfPALMqrZcZiXgxL
+         WCPZVTCAdIXm3J7t+0w9azos1QWhq74wKt742XVHA+s6zZokbwuM/jCFQgLjJHXvq5Rd
+         BDtEX94wo0lZgU00mSh8PVqZQFaFVNo934H0Axivy76bpkKcV3gXdpohDmFztN996hX8
+         lekw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758655469; x=1759260269;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N9a4JnHkbJgQCm+ywJBCt4OEQLE4uXwPZhIJCqUpup4=;
+        b=oRm4sFXJ9s/swqBRhc3O3H5ZscdsDzUhkttxFaqc+/lZwdwd/IHMjsTSFMWr3IzQag
+         EoHuxsdbDN7n0KGcXVZpftTVGemg8aIzrhhBO8/JfK1RBTpO6E0CIQyBNUD/bJo/L7mY
+         YjIK1hxB1chdssuqT14sAkZCBsmZ0kRrdoMmvDYNBK5qfvIbXtfsvsjEO0Pl5oezUgvx
+         3DdIzR+Wq01OSk6IvxjVK9HysnBceB5j3uCqoPDHhcXc3F9aDsxq4qrxnfIP8ETbMmj4
+         hlhf3Ek8MFnY4whmMQ1wav/6h7+0y51feDt/uA+o6r2qVXTVUVNDIpJMfn+f7twIVANe
+         ahbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVJutD+yDmBXWCTuWb1bQs2YOsfcP7YQabbxZihEpiZc6dSbfNkqMQwwiesDm0pawuVKdSf2y5YA6O5@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyzDj42l1QqmISajx3pJE+NBT80wNsOP3wyGB9Z693Z1r2LE+i
+	yyb2Flqmmb4EY0Hotlhyo2ygTXZE8s/wHUC+ekZ8u4P+kuyeIRjEj40GucqqfFRVCra2zdiIERi
+	TQD7l3qfi8UTMCgi5iLYFpLM31ufA+qU=
+X-Gm-Gg: ASbGnctYGJgJPuMd2nj06Ar2HgHjb4SBaXXf7HwT5Xe9KSp+t8Bt99zNdhiyemdi1kb
+	w9cnuAsyBWIpjR9G7UAO61494tae1D7XIA5sag2pC+deJFxOn5mq/EjLzkWtw45mQZD5TNEtlc1
+	mA22vn5UOtWYmFdoAMrwHIYXfQdoPG4u9x5kQR4l0laQ7w+QtY0H5DtGAcfS853E73Rg7187A1o
+	0d3hQ0583CA5bH/6Wp+RLTsqSHPRKnShs/O7IVRVbO3TXftWt6fU7YZx6lzzcpEp2KWlWsZQboA
+	3E4L0/4/Ok/zW2LbWYAcsPaZOghpnTkwqDPa
+X-Google-Smtp-Source: AGHT+IFcQiModumtMVHD8aRIh8pOQHwIGYsNP00K7IKOFBbOEOOvFFtXFDdnCrBTCO4N3BIOJ+CC74WWEzOU0nsptoc=
+X-Received: by 2002:a17:903:191:b0:253:a668:b638 with SMTP id
+ d9443c01a7336-27cc1e1fc0cmr24562995ad.2.1758655468711; Tue, 23 Sep 2025
+ 12:24:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="z3yVIjN5s+xAmAkQ"
-Content-Disposition: inline
+References: <aNLOhQyd0YmJnPco@finisterre.sirena.org.uk> <22591ebe-c496-42e5-b2f8-9ca4f8fcaed5@kernel.org>
+In-Reply-To: <22591ebe-c496-42e5-b2f8-9ca4f8fcaed5@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 23 Sep 2025 21:24:15 +0200
+X-Gm-Features: AS18NWCKolACJxLsyWUtpGgTwyc_nQQiPmP9g5k3cGe-YzxrqLoSYqm_9fB8kPc
+Message-ID: <CANiq72k6fioBpFam4YhHazS1X=EVGV8RM6Y9g7ecZG_0w2FA0A@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the driver-core tree
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Mark Brown <broonie@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alexandre Courbot <acourbot@nvidia.com>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Sep 23, 2025 at 6:49=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> =
+wrote:
+>
+> This hunk doesn't seem to be related to the driver-core tree.
 
---z3yVIjN5s+xAmAkQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Yeah, that comes from drm-next, a script went awry here?
 
-Hi all,
-
-There will likely be some missing -next releases Monday to Wednesday
-this week, normal operation will resume on Thursday.
-
-Changes since 20250922:
-
-The mm-unstable tree gained a conflict.
-
-The arm64 tree gained a conflit with Linus' tree.
-
-The bluetooth tree gained a conflict with the net tree.
-
-The s390 tree gained a conflict with the net-next tree.
-
-The kvm-arm tree gained a build failure for which I did a revert.
-
-The rust tree gained a conflict with the drm-nova tree.
-
-The rust tree gained a conflict with the driver-core tree.
-
-Non-merge commits (relative to Linus' tree): 10672
- 10857 files changed, 521318 insertions(+), 200190 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with an arm64
-defconfig, an allmodconfig for x86_64, a multi_v7_defconfig for arm and
-a native build of tools/perf. After the final fixups (if any), I do an
-x86_64 modules_install followed by builds for x86_64 allnoconfig,
-powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig and
-pseries_le_defconfig and i386, arm64, s390, sparc and sparc64 defconfig
-and htmldocs. And finally, a simple boot test of the powerpc
-pseries_le_defconfig kernel in qemu (with and without kvm enabled).
-
-Below is a summary of the state of the merge.
-
-I am currently merging 407 trees (counting Linus' and 406 trees of bug
-fix patches pending for the current release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
-
---z3yVIjN5s+xAmAkQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjS0F0ACgkQJNaLcl1U
-h9AEHgf/ag4RgWoahK465Vy36RGrsfMM0il4SppiYw64AZIIwNQ1HhqleSMT78JT
-1rZh7+jVXCdHv1bzvk/EXRowiEekrVtcWUcF315ar4IHQp3yimVX5F7de+RsEPYT
-9lAop+Mcwtu+L1U6CeDX6ECoi4+7L2gPKH4wX3Eju+ltb9Tt3S9is3SYO6WaC9oC
-yPjRZVRK23uhEB5HOC0QBiTl9BmmKiy5CGRG7keZs7awVh+auxFc9ZEp9SZ5somm
-svMR++i/vrMTJvx6RqGCYfasuMwx7cDVL9Q/a14qGZIQnSRvctxmxpyJleOWq/r7
-j1ZstEnpHrIqp9ZAgn2G2eXI7KH0rg==
-=17+O
------END PGP SIGNATURE-----
-
---z3yVIjN5s+xAmAkQ--
+Cheers,
+Miguel
 

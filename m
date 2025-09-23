@@ -1,54 +1,56 @@
-Return-Path: <linux-next+bounces-8452-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8453-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73D31B96DC1
-	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 18:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 843AEB96DE2
+	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 18:45:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 379172E6653
-	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 16:42:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 483A92E7179
+	for <lists+linux-next@lfdr.de>; Tue, 23 Sep 2025 16:45:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B3BC328589;
-	Tue, 23 Sep 2025 16:42:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 706E932859B;
+	Tue, 23 Sep 2025 16:44:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HVgeFTZD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SnjKekBs"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F28322DDF;
-	Tue, 23 Sep 2025 16:42:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480C12620D2;
+	Tue, 23 Sep 2025 16:44:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758645738; cv=none; b=LyBdYADfwGqhglpy051YvIRhxqx5Ms+4ZmOmTQlIMHenpVH+JbDEybLcO97NQsmvyzvRa7h/Ksp+TM8nvsrWLLWI0Iv1nc9DVNbGQTXYFq1hxcFitAxrcky9YZQ+qDh8Rpsm7EHr7e/3ARo4Rn43m39JWYYhV4kL4GuWvsJfrgg=
+	t=1758645898; cv=none; b=uWrkanMZA4AkKf17YFJK+29d3F2oPXOF5qArcPG0S6H8JHuZRvswpOh+LxG+Cui4tzW0EHVYOVvcbbdKKjU8mAdlMsQEhEHhF8tRQ3/Z/nhX+KnWs9hugZxsHe1AsizvF5+mlVGXmZKDJXcjx2jj4coR0DkASOXQiFA0756haDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758645738; c=relaxed/simple;
-	bh=yWyoLu0p0FcWaaxUSL2Z4o3LRyP1+KMa3KR9zIHKT7w=;
+	s=arc-20240116; t=1758645898; c=relaxed/simple;
+	bh=3XO3yH5QmqA4LLs++ItSyWPZoNja/iDbo2Loa5JKPW4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=CEA7j0c/t6MCQqTMw2snvZ3G8ddWG2+sxL8VUk8FTf8QFDha5rOnr1v1N3rP0eLCwbVA0sHlnT6utJTvh/ziSWoEwuogOR88mAgmECcIxUfmNDtBd+rXXZoiBTWh/YA0CAai7CInU3KEnqPeo0q0yHJQm1B7GD6zvDdcKIkcHWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HVgeFTZD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E91E2C4CEF5;
-	Tue, 23 Sep 2025 16:42:15 +0000 (UTC)
+	 Content-Disposition; b=XuBqqO/AEqxhxqZIIxuuOS+tTPtI79CDeqEgsNdLlrNf1MJYnUrJjD7CHMgETHy7j8GvimsWBR10tns1WQnX4cT8UlvVome5RCm2+lyiS3LEXDXz8L0L1eyCUZRIP3moMjFe7p5j8l9bBJaVpjnIZxFxcWfL+Z4DgwI1G1PoOms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SnjKekBs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F727C4CEF5;
+	Tue, 23 Sep 2025 16:44:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758645736;
-	bh=yWyoLu0p0FcWaaxUSL2Z4o3LRyP1+KMa3KR9zIHKT7w=;
+	s=k20201202; t=1758645897;
+	bh=3XO3yH5QmqA4LLs++ItSyWPZoNja/iDbo2Loa5JKPW4=;
 	h=Date:From:To:Cc:Subject:From;
-	b=HVgeFTZD9/DU40/i1D45ZfhLX6DE8LKil6PpapUxsk0DiMfuTTlc3XiT+BuoitKoK
-	 svcfflAOJ7xAgrG3zbbdsdg9Du28K+KkBHR/O/8k/9JxKflblZFfEn5Tnz01cWJWvn
-	 B5VCIc8zgvj8i/hPsy5bv9XFE0WZPP5KEPaIaNrasQaTuhsdztviH4IeMWYD7i4DNO
-	 wlY1Olk5Q5iPBXrImXuUy4HXChvAziNU+CzFT7wWj3NnVF1pbP21D8sjVSI6x5ZDAc
-	 9Ez+AN5pfipZxDZxdPB+acaNRcwj2xhW14B//kIYR43vLaSKgeCVc903bDnIpfwo9o
-	 pfWbobktKtRqA==
-Date: Tue, 23 Sep 2025 18:42:11 +0200
+	b=SnjKekBsyeN/Vi9W51bnwli2auZRd7uu0AlPSXifnUQc8SIokPCtXvw2BY8NwsRH6
+	 Q8Ulubwax3TRL6RvnXF1Mq6mqoyexHdBbR4rqGTuSnhMj5ia+/XVfuU9Co5puMIig/
+	 t1+yNRagJdtxQk+CKeMPS1SlX4p5eYtrp7nFSeDSBrEjSX6YbP8Rc57aveavYPK11i
+	 ldmJ5IEHhywESDo4ptPavIQOZwEJhUjnHsmwgeS5LK8QmHV01JCoYEMNyKS5Fwbl8/
+	 6NXT01A/MhoVdFe3I3p5EFmhvXlNG//Zw/T/wX/ZOBYVz/3oFizwhLiGXdatV78gIb
+	 yN7NZ5MDxiLDA==
+Date: Tue, 23 Sep 2025 18:44:53 +0200
 From: Mark Brown <broonie@kernel.org>
 To: Miguel Ojeda <ojeda@kernel.org>
 Cc: Alexandre Courbot <acourbot@nvidia.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the rust tree with the drm-nova tree
-Message-ID: <aNLN45NdHatkNUwg@finisterre.sirena.org.uk>
+Subject: linux-next: manual merge of the rust tree with the driver-core tree
+Message-ID: <aNLOhQyd0YmJnPco@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -56,11 +58,11 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xHYMCEVpDHJPI0dQ"
+	protocol="application/pgp-signature"; boundary="j9SD9HJWL+yWAjW9"
 Content-Disposition: inline
 
 
---xHYMCEVpDHJPI0dQ
+--j9SD9HJWL+yWAjW9
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -69,17 +71,15 @@ Hi all,
 
 Today's linux-next merge of the rust tree got a conflict in:
 
-  drivers/gpu/nova-core/vbios.rs
+  rust/kernel/lib.rs
 
 between commit:
 
-  93296e9d9528f ("gpu: nova-core: vbios: store reference to Device where re=
-levant")
+  842aedc3907de ("rust: Add cpu_relax() helper")
 
-=66rom the drm-nova tree and commit:
+=66rom the driver-core tree and commit:
 
-  f3f6b3664302e ("gpu: nova-core: use Alignment for alignment-related opera=
-tions")
+  ea60cea07d8c6 ("rust: add `Alignment` type")
 
 =66rom the rust tree.
 
@@ -90,36 +90,44 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc drivers/gpu/nova-core/vbios.rs
-index e6a0607142056,091642d6a5a15..0000000000000
---- a/drivers/gpu/nova-core/vbios.rs
-+++ b/drivers/gpu/nova-core/vbios.rs
-@@@ -8,8 -8,9 +8,9 @@@ use crate::firmware::FalconUCodeDescV3
-  use core::convert::TryFrom;
-  use kernel::device;
-  use kernel::error::Result;
- -use kernel::pci;
-  use kernel::prelude::*;
-+ use kernel::ptr::{Alignable, Alignment};
- +use kernel::types::ARef;
- =20
-  /// The offset of the VBIOS ROM in the BAR0 space.
-  const ROM_OFFSET: usize =3D 0x300000;
+diff --cc rust/kernel/lib.rs
+index fa083aa44cd6f,f910a5ab80ba5..0000000000000
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@@ -17,8 -17,8 +17,9 @@@
+  // the unstable features in use.
+  //
+  // Stable since Rust 1.79.0.
++ #![feature(generic_nonzero)]
+  #![feature(inline_const)]
+ +#![feature(pointer_is_aligned)]
+  //
+  // Stable since Rust 1.81.0.
+  #![feature(lint_reasons)]
+@@@ -115,7 -112,7 +117,8 @@@ pub mod pid_namespace
+  pub mod platform;
+  pub mod prelude;
+  pub mod print;
+ +pub mod processor;
++ pub mod ptr;
+  pub mod rbtree;
+  pub mod regulator;
+  pub mod revocable;
 
---xHYMCEVpDHJPI0dQ
+--j9SD9HJWL+yWAjW9
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjSzeMACgkQJNaLcl1U
-h9B21gf/USI/atSnntv3mz1/WKpe5RPG0qkycqKgqjYl5FPHX9mwivqyLEKw4WHU
-ORYiWYn2WsrBpUHRtQZnRHWj83mZgnaMXDpXCs7T4DK379Mc6W/Sa4Ka3ZdJDkmz
-eBcHggYI3EEz6ld0HI9sZjIdPHHXujCMd6blv0Pc/P4lhoecl9saMaNmM3IM/FIq
-ksBKvBtj8ziaR2LylWTJAeCXrXfSvYSG2UIjv23IKHQO4HJkYoLEBDxYtrNXoBhQ
-5z/DYovCmy36EybJVtBjxhFaV6yfRh5xXABNsekjzpO8dg4Imf0g5V0e2XKulvIY
-SxHCM3VDyPIuFS/15PnCVnU9qTFyDg==
-=xMaW
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjSzoUACgkQJNaLcl1U
+h9Dzwwf+MD6Oh6d/Gua3HoutZBkpMpPXEtM9sNN+R15EaozuzqaFn68B8UtJI52j
+4MSeVVDATv5Rq6onYyi7YLpF8fPDTc7xh8OowrONG1ULFZPN0QvJhr4qO9OF4iwj
+SE/Jkltpepf/RyqXEGKKablC6Oibind7U78xD0h2QGlrGaS/J6z953IoWh8tAu8Y
+CAZO5aLjJMgG37F1ON7UJDnCp5VmpB1mCtl9KKPhKtCa613/b21tw2pcp/rWpF8r
++UCTQ3k1pBV8TSRB/H2dyoQ6gKJrmr1WqZiUGMeHTVq70V3iDZzj+OGOPey3s2Sj
+4G6jiTf/SaMl5+AkqQj9bODjavrUDQ==
+=gSiq
 -----END PGP SIGNATURE-----
 
---xHYMCEVpDHJPI0dQ--
+--j9SD9HJWL+yWAjW9--
 

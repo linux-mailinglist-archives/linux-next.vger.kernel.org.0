@@ -1,132 +1,92 @@
-Return-Path: <linux-next+bounces-8478-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8479-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D198B9A52F
-	for <lists+linux-next@lfdr.de>; Wed, 24 Sep 2025 16:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E101B9B23B
+	for <lists+linux-next@lfdr.de>; Wed, 24 Sep 2025 19:54:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95BA41890F6E
-	for <lists+linux-next@lfdr.de>; Wed, 24 Sep 2025 14:46:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35ACB1B268AD
+	for <lists+linux-next@lfdr.de>; Wed, 24 Sep 2025 17:54:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7E9A17BA6;
-	Wed, 24 Sep 2025 14:46:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3213A315D59;
+	Wed, 24 Sep 2025 17:54:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="hlbCyiLn"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vevfVSZA"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4482305946;
-	Wed, 24 Sep 2025 14:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 961C8314A9D;
+	Wed, 24 Sep 2025 17:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758725180; cv=none; b=rLtvezNXDDa2zVuU503uOXG48Zmzd1HzZPajusvoXn3hly7YiOiVXl3BXrbqhs5TYdMVjZ6ijOrar77yaeekBoQ6aL/pNXBGXj8VRlRBvpbF90OSpi+dAvo06cZqezOh1YqT+8KldJvWCGRZtn18RM7BBgmhkDq1iGsGm7LczrI=
+	t=1758736461; cv=none; b=qZwEh2W0yF3ydoVk7q2SZhWEDB63mPMFuZiqvXA6rDs5mCgvdS9EEFhzT9zs4BnyMRERhsRa1Ynmc+hvg066dMvmk13gxEfNHpxU1Z7V3SgEbrzNX1RLFMJ2nzU8fenPWp+MPLnZi6TfvTkRUNQqGOkkGHszizzS8ZXLyUwkBaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758725180; c=relaxed/simple;
-	bh=7j2wBjwip+TbAK+W6ajd/duuMORmgbd8rAemzHv7TWU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UAh0VZpsXDCSk9mbBXruonXTmSdx6vsFfKLCEuqrebJL0zis/vxe7amijc4wYjFu5szKqRiHkwA3uSRbqoXwVB7VutBsyrpBbLKueOeajW0jw4eGsSi/HEHsDHOVPv6iMMhxlHbwnNciS1TLW9lzy1obb11+tuBzdbkB9RljGGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=hlbCyiLn; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7783440E016D;
-	Wed, 24 Sep 2025 14:46:08 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id ztbmEybf6PuW; Wed, 24 Sep 2025 14:46:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1758725164; bh=/wOPi68hxXKhWt7shz/orRmYHj1GN+HaaQnjO0mEpDM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hlbCyiLnZDCTMwp9X0mRmfGCD8cwx9J+N9zs6B3z17F000I+s+qAIx/XYrMTMuPD5
-	 CUqaIrGD0OY3QuXu7TFIv6exlu/9h1d7zm/X+j+CWnnEipxMP3kynpnp4SeHqKkJTX
-	 J2znK49rhNuR09y9y+zB+xDRHORZHX8bnE3flj4ic1B9SrRdWi5Yj3qFBVAKkDYrub
-	 vQ7/e6iDJROzNAhqMNGB7SXysNbAchEuSxZij2vS+k61s4pusHcm7wna8HE9EsWky4
-	 C0AsCfcCr5tVH/F6gYvZitTlbFCiOByKS1MX7SNC9wWRShh2IQeX/Vvra5FCTLbuKM
-	 0T8xr98aLeimH042GOqhkXvstgv0ZJF4b6LSUyKMTTfO3s/8VWpl9p8A/ItyCOYbnt
-	 PVDH/VAJP/CSGValSKlkbdeHY3gCCdfjiU09nNAXatq4AMfFM4947zcJYJDtRuWkdV
-	 r35UTo1IYMVcCv9/ypBDVhAQUVOYK+rkAdjWgZFEys4dLeo+JvHHUe//bfuDa5xhDq
-	 9NZ/ym4eKdXVSj7E1Mble8pmu2E+mfBlajMum5wMHG3tuOx3yoNYZN+GK5S4rLgBoK
-	 +J3fk26KUDAvegXaTcT1tUcx2FEc9Y7NzDesG57zykbvfnauweaolvHDB+PTqv75xp
-	 SAa2rEiCsAsuRRfe21zFgKdE=
-Received: from zn.tnic (p5de8ed27.dip0.t-ipconnect.de [93.232.237.39])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id C429C40E016A;
-	Wed, 24 Sep 2025 14:45:55 +0000 (UTC)
-Date: Wed, 24 Sep 2025 16:45:49 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: "Aithal, Srikanth" <sraithal@amd.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Linux-Next Mailing List <linux-next@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>, KVM <kvm@vger.kernel.org>,
-	Ashish Kalra <Ashish.Kalra@amd.com>,
-	Tom Lendacky <thomas.lendacky@amd.com>
-Subject: Re: AMD SNP guest kdump broken since linuxnext-20250908
-Message-ID: <20250924144549.GAaNQEHc-wy0M_JTtJ@fat_crate.local>
-References: <e8ace4cc-eb22-4117-b34d-16ecc1c8742d@amd.com>
- <aNPxLQBxUau-FWtj@google.com>
- <CAMj1kXHxUVowtCqBCKRE2_dv4TSUK6Kgwd46RzjjskAW8qYjHg@mail.gmail.com>
- <616d8f02-a4ea-4f9a-ad4f-8bcbc2ccc887@amd.com>
+	s=arc-20240116; t=1758736461; c=relaxed/simple;
+	bh=yZaV+sxozajM6fh76n/Q3fe/F45TDwcisoxUUnq5Ds4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jwfzTqVbXU5JgBuHrtwlWzxNjZcscbZf9ovwVW1FmlHOKIOARc5NjvJ9su2jkILtLD7b5t/Y3NU95mV+uHv6Sb5sFKZP+w0Zde4cY1EuiIvtlgsySSQ8MtXlWt8NmvrXnKubG4YCXVaBaW8t+Pm41V5tiycxQRHVpoEv+Xh31qo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vevfVSZA; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=79J+s7OT4SJ76d+lyjBn2RVcHoFxmPfoh9N1Knl5A4s=; b=vevfVSZA7KAuh5przsgxSgsQV8
+	ysrMUeZAVxJUYo5gD0+VZ41D2UZbMgkMLpZFtcjHNUpjBHsXkSXSRTkgKGjl/g8qk+s6mhO34XAlT
+	CpfRxgLxPMtUG6A/pI5mzpaRVH+DH/R1ULIU136NFMHcn1xvnmsqsa9DJ8pmQaVE3pWa3x3olp7kp
+	4CukeB9QrrrNx/N+TJVzYOkjivPowDuKK4YvGsz5oAw9N/58erBbXmxXuOpqjHwyDRiZbKxKliw7s
+	oUfKZKAZPrgjGOKJH38RH7J4YiToNPDudJIXI2lEy+ut8ltJ9eVXhC70SIDaeHropF8vnJpPzGLPR
+	djEmsPyg==;
+Received: from [50.53.25.54] (helo=[192.168.254.17])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1v1Th5-00000002KNj-0pDY;
+	Wed, 24 Sep 2025 17:54:19 +0000
+Message-ID: <e7c29532-71de-496b-a89f-743cef28736e@infradead.org>
+Date: Wed, 24 Sep 2025 10:54:18 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <616d8f02-a4ea-4f9a-ad4f-8bcbc2ccc887@amd.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: Tree for Sep 24 (htmldocs / pdfdocs)
+To: Mark Brown <broonie@kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+References: <aNQC_Nv03iyldOqP@finisterre.sirena.org.uk>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <aNQC_Nv03iyldOqP@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 24, 2025 at 08:13:35PM +0530, Aithal, Srikanth wrote:
-> On 9/24/2025 7:45 PM, Ard Biesheuvel wrote:
-> > Hi,
-> > 
-> > On Wed, 24 Sept 2025 at 15:25, Sean Christopherson <seanjc@google.com> wrote:
-> > > 
-> > > +Ard and Boris (and Tom for good measure)
-> > > 
-> > 
-> > Thanks for the cc, and apologies for the breakage.
-> > 
-> > Does this help?
-> > 
-> > --- a/arch/x86/boot/startup/sev-startup.c
-> > +++ b/arch/x86/boot/startup/sev-startup.c
-> > @@ -44,7 +44,7 @@
-> >   /* Include code shared with pre-decompression boot stage */
-> >   #include "sev-shared.c"
-> > 
-> > -void __init
-> > +void
-> >   early_set_pages_state(unsigned long vaddr, unsigned long paddr,
-> >                        unsigned long npages, const struct psc_desc *desc)
-> >   {
+
+
+On 9/24/25 7:41 AM, Mark Brown wrote:
+> Hi all,
 > 
-> Tested this patch on top of 6.17.0-rc7-next-20250923 [https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tag/?h=next-20250923].
+> There will be no -next releases Tuesday and Wednesday next week, and
+> it's possible I might run out of time on Monday.
 > 
-> This patch fixes the issue reported for the SNP guest type. It was also
-> tested on [normal, SEV, SEV-ES] guest types, and kdump works fine on all.
-> 
-> Reported-by: Srikanth Aithal <Srikanth.Aithal@amd.com>
-> Tested-by: Srikanth Aithal <Srikanth.Aithal@amd.com>
 
-Cool, thanks for testing.
+When I run 'make O=DOCS htmldocs', I see these warning messages:
 
-Ard, pls send a proper patch so that I can slap it ontop.
+../Documentation/Makefile:70: warning: overriding recipe for target 'pdfdocs'
+../Documentation/Makefile:61: warning: ignoring old recipe for target 'pdfdocs'
 
-Thx.
+
+Is this a known issue?
+
+I have seen these warning messages for several days recently.
 
 -- 
-Regards/Gruss,
-    Boris.
+~Randy
 
-https://people.kernel.org/tglx/notes-about-netiquette
 

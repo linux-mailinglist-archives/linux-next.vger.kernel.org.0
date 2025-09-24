@@ -1,107 +1,102 @@
-Return-Path: <linux-next+bounces-8463-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8464-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F030B9897E
-	for <lists+linux-next@lfdr.de>; Wed, 24 Sep 2025 09:46:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 45CD4B98BD1
+	for <lists+linux-next@lfdr.de>; Wed, 24 Sep 2025 10:06:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CDB319C3F6C
-	for <lists+linux-next@lfdr.de>; Wed, 24 Sep 2025 07:46:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49ABD189B13B
+	for <lists+linux-next@lfdr.de>; Wed, 24 Sep 2025 08:06:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 764C31FDE01;
-	Wed, 24 Sep 2025 07:45:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9273E283FD5;
+	Wed, 24 Sep 2025 08:04:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GcUQfC42"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qj8R8egw"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7E0A95E;
-	Wed, 24 Sep 2025 07:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AEED283CA3;
+	Wed, 24 Sep 2025 08:04:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758699959; cv=none; b=TMTwOm4Ff4GYJaNtz6j6kPyviVSnF2lBpMPz4AzhXBUWei9RI2f/PIvQPhsC59wwpUOxNhOdb0gxXJrI50aNqFFbjvDHERa8B5+9mn8AfKf9tOjuNBCfLBDL87wc0M0RHbLX5+To5kwudXABZ0qrwvCWb0BSP7ZF8rEtHJIvyZo=
+	t=1758701058; cv=none; b=GxLkIDp7U2ZCgOTXS8KWUstJVKuPj+Y7iCo/8aT0JPyqx7Wkoafm9fAyH6ZBHSgOovNUXxH2iJufzNNN4G/NLRJ+goxWzm00R9lNIZTJ0lLEPt4+GSiVpuAwUjdU7w9HT8HJMBKULsdbHmSEODoRty7azgaCML6XPZC8uhN8wNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758699959; c=relaxed/simple;
-	bh=MBoFvQHgya9enHMqKa+N360Rs/w13Fa4CHQuLloTMJE=;
+	s=arc-20240116; t=1758701058; c=relaxed/simple;
+	bh=LmLkRsKSY2fXuY/hpUqK5Lssy9BmQtVFnRdeR7eeV8U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Aw8ha1YtLd0w4YOPhLMA72/np369FkjWqvMELfOy9XRMfTQNmpmZ3eMvq+0RPm2XFK/RuqTmsI3tBlQvwp1j210WwZbNs2mXajlrzovlnHYuMNd+YFJPTH/Vk1dUSq8HU3XTx/C4gsHvdGPvmFZkLaDZXLeHWVS0qO/V7BqIhpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GcUQfC42; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4612DC4CEE7;
-	Wed, 24 Sep 2025 07:45:57 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=F7lfow7qOqMyD2fgnjYJb4qy8yCfd6AvFmmPNizQeFnn+84sjf4Dh+IV7bEaYgqi9Dnfv79vXSM+YLdZstROyef+4R1tfTNfBFfkk0wohflx5DGwb0C9mJ75fZgAAspOEwX9vtWxc89oColJ9JvOA3qEtxLaEdm6SRrPA8Jzg+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qj8R8egw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 980ACC4CEE7;
+	Wed, 24 Sep 2025 08:04:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758699958;
-	bh=MBoFvQHgya9enHMqKa+N360Rs/w13Fa4CHQuLloTMJE=;
+	s=k20201202; t=1758701056;
+	bh=LmLkRsKSY2fXuY/hpUqK5Lssy9BmQtVFnRdeR7eeV8U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GcUQfC42MOIEhbPtP8ehL7xdTuRoTR9BsGmgZgiZuLqD+xtybN4djrzOZtpn5FdvN
-	 JcQIm5BFqhVQwXS76i3UkKA7/Q1r3pKx4umTVFV3cR03P3NtmKTFVXKaCG4dsiIPuA
-	 zKvhUBjNM3M0YO0JF0yCrThSYOV2UDi4CXNfxVIDmIGbGqj1qbIw5Pb76lfRdxGavE
-	 Dyn2qWe+xZtpkkL0lK7ZVMwtBkJigbml7KwnHYhfxxtVXfQXThtt4pMJphqiw10e9t
-	 e7wOov581jFYENCXIuHdNGxnXnWN3hsve6YQDraFrPZtNt2q2foOMLMqu2rH8Z6rGS
-	 GUhP3FX6dwjRg==
-Date: Wed, 24 Sep 2025 08:45:54 +0100
-From: Will Deacon <will@kernel.org>
-To: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Mark Brown <broonie@kernel.org>,
-	Christoffer Dall <cdall@cs.columbia.edu>,
-	Marc Zyngier <maz@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
+	b=Qj8R8egwhbRZ2Jnw3GD+EpMSFWf4uKrGWF7EscL2YNIQT8OTTjQn9ISmOWcvFEufY
+	 ChFUEVvjOyKO+yetrpu7VifmgenAIESo8Vtm8e3I9w5I5qk/UJaR6SJLtVUPydBut/
+	 3N5ViWS1YzgGyaC/9segIZ2G2/am/F/amoCPhQWKC892e7RRKPFm/gVs6s0BgLzatS
+	 1mRg+igCswI40UjYoBxcY5VWn4DkzRo49x7QoEyR34l5o/n9aptWhwyhQohk9k+5nx
+	 sODyFMflJbQ+Xjj0z8z/0iv/h+w/l1la8iMcAyPRVQn3O/tS99SfzTio+iDLLOXn0I
+	 NNGbLxZ7i+m/g==
+Date: Wed, 24 Sep 2025 10:04:11 +0200
+From: Mark Brown <broonie@kernel.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the kvm-arm tree
-Message-ID: <aNOhsvMwLJ4n4_c9@willie-the-truck>
-References: <aNK8hSSKKZhEHZbt@finisterre.sirena.org.uk>
- <aNLEem8ryBiqKfDr@willie-the-truck>
- <aNLOiRB_HeUAnFKI@willie-the-truck>
- <d36c9908-f314-414f-99d8-31440696c06b@arm.com>
+Subject: Re: linux-next: manual merge of the rust tree with the driver-core
+ tree
+Message-ID: <aNOl-0O4ikg38x0g@finisterre.sirena.org.uk>
+References: <aNLOhQyd0YmJnPco@finisterre.sirena.org.uk>
+ <22591ebe-c496-42e5-b2f8-9ca4f8fcaed5@kernel.org>
+ <CANiq72k6fioBpFam4YhHazS1X=EVGV8RM6Y9g7ecZG_0w2FA0A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="l4ucGXHfbP/Gt8Oh"
+Content-Disposition: inline
+In-Reply-To: <CANiq72k6fioBpFam4YhHazS1X=EVGV8RM6Y9g7ecZG_0w2FA0A@mail.gmail.com>
+X-Cookie: Filmed before a live audience.
+
+
+--l4ucGXHfbP/Gt8Oh
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d36c9908-f314-414f-99d8-31440696c06b@arm.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 24, 2025 at 08:07:16AM +0530, Anshuman Khandual wrote:
-> 
-> 
-> On 23/09/25 10:14 PM, Will Deacon wrote:
-> > On Tue, Sep 23, 2025 at 05:02:02PM +0100, Will Deacon wrote:
-> >> On Tue, Sep 23, 2025 at 05:28:05PM +0200, Mark Brown wrote:
-> >>> After merging the kvm-arm tree, today's linux-next build (arm64
-> >>> defconfig) failed like this:
-> >>>
-> >>> In file included from <command-line>:
-> >>> /tmp/next/build/arch/arm64/kvm/at.c: In function 'setup_s1_walk':
-> >>> /tmp/next/build/arch/arm64/kvm/at.c:229:30: error: 'TCR_SH1_MASK' undeclared (first use in this function); did you mean 'TCR_SH0_MASK'?
-> >>>   229 |                    FIELD_GET(TCR_SH1_MASK, tcr) :
-> >>>       |                              ^~~~~~~~~~~~
-> >>
-> >> [...]
-> >>
-> >>> Caused by commit
-> >>>
-> >>>    4f91624778b27 ("arm64/sysreg: Replace TCR_EL1 field macros")
-> >>>
-> >>> from the arm64 tree.  I have reverted that commit.
-> >>
-> >> Thanks, I'll drop it from arm64 as well.
-> > 
-> > (now dropped)
-> 
-> Hello Will/Mark,
-> 
-> The conflict happened as the commit c0cc438046ee (“KVM: arm64: Compute shareability for LPA2”)
-> which came in via the KVM tree, added a new TCR_SH1_MASK instance. Shall I respin the patches
-> accommodating the new changes from KVM or just wait for the next merge window ?
+On Tue, Sep 23, 2025 at 09:24:15PM +0200, Miguel Ojeda wrote:
+> On Tue, Sep 23, 2025 at 6:49=E2=80=AFPM Danilo Krummrich <dakr@kernel.org=
+> wrote:
 
-Probably best to wait at this stage. I don't think anybody is depending
-on the cleanup for anything but please correct me if I'm wrong.
+> > This hunk doesn't seem to be related to the driver-core tree.
 
-Will
+> Yeah, that comes from drm-next, a script went awry here?
+
+It's the whole diff for the file in -next.
+
+--l4ucGXHfbP/Gt8Oh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjTpfgACgkQJNaLcl1U
+h9CkqQf/TuNUSiQQ5cvgODr0V9xknSZrLzmMx2XFxMckWXVpciccpi++2YhGJUZJ
+gTveWqWSWSaWS1r4YF+p3IcJawysFzsZSsuiI//gSovtEn1dRN4seGbZjjultenT
+Ma1kd00qAdexmbJNuLL1GXtoHazMS6EGsJllO0vGm0lXn6goGK+wjM25qsudRWtG
+1PGXxwpuOt5odQjWxD7yLnyOFNM4Y2BuzDo63RfjN4wPopPgq5dGlhCds8x+NZ64
++Iz+KxQ4n4Qw7amZW9q3bGG3QsrDU5466uXQ64s6ooPnxA82ogjqpvlHdp4DRFLO
+OcQob+khqwkTdpHny3Bao+1OQRs61w==
+=/PON
+-----END PGP SIGNATURE-----
+
+--l4ucGXHfbP/Gt8Oh--
 

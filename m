@@ -1,126 +1,195 @@
-Return-Path: <linux-next+bounces-8476-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8477-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83142B9A4D4
-	for <lists+linux-next@lfdr.de>; Wed, 24 Sep 2025 16:41:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3739FB9A50A
+	for <lists+linux-next@lfdr.de>; Wed, 24 Sep 2025 16:43:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 012FA17F32B
-	for <lists+linux-next@lfdr.de>; Wed, 24 Sep 2025 14:41:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32D451B26A25
+	for <lists+linux-next@lfdr.de>; Wed, 24 Sep 2025 14:44:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 536C7309EEC;
-	Wed, 24 Sep 2025 14:41:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5978C309F07;
+	Wed, 24 Sep 2025 14:43:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XtGbaatI"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="dSsuZ7OO"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012027.outbound.protection.outlook.com [52.101.53.27])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AFE6309DBD;
-	Wed, 24 Sep 2025 14:41:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758724863; cv=none; b=c8wXkgYVYDgyl2MNpyuue+kwzLHIu0rHe0BTKIObccn/0az/Y09sMoVVl9IyINpyXVGnnMv3HlRH2oCwofHEqWWNDwpvUoQ71ij/IhEge8xKmxNjuoLnLZFbx8ahFSHlcHkVDYKFkd8/SF9cbetHSQMRqUSBfXEqUPD5M1aDefc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758724863; c=relaxed/simple;
-	bh=EFAqs2WX+zBRi51v4+gqnUMaqkhEuXEH+YcQ9V6gCog=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=iuqm9hsfpqwjGfIL3faqR8UUyxNyuaApTuKATjfBmg6ASmIOD+JmJ/0qeCeqOVTHwWWY+xGDZSWeG8lbyCDCKyPxAzqFEENFjPiycfo2j0o57gw0U/onv7wiBIMe+WWplFwCG3PL30VyWcsK6kkIIfM/s+wdkKTkn9SGcHGK1+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XtGbaatI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59433C4CEE7;
-	Wed, 24 Sep 2025 14:41:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758724862;
-	bh=EFAqs2WX+zBRi51v4+gqnUMaqkhEuXEH+YcQ9V6gCog=;
-	h=Date:From:To:Cc:Subject:From;
-	b=XtGbaatIzpX1D15VsfcPpcLI3nWjPUZbBmyhKxaYb4YA2RaRBSXrvVCW8R62KB1uy
-	 d1RK9z2ZIi+B3QGSE0ZpjhzOM6H35fbSM1ca6u90t69E9GaV1p93reB8OtNxlAbNtn
-	 6WRQVgxo9Hvet97qN5G8QHGuDY0rdAGIs+1ntGRPv4M3FqwMLHC1k0HohcalGdh3Zl
-	 qVrUlYFtcAhFJAvR9pXT3Pc28NK2vODKwRwd5+FcTfaJNuRexwIURt2hl2XLQzAI3T
-	 wu1KWawTZFOojrG3u3WzCdoPCAdCMzI4e77T0FWB9cov9gzDIMwL+DQjPOM32VJjse
-	 L3TsYExmkQfNA==
-Date: Wed, 24 Sep 2025 16:41:00 +0200
-From: Mark Brown <broonie@kernel.org>
-To: Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Sep 24
-Message-ID: <aNQC_Nv03iyldOqP@finisterre.sirena.org.uk>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE31C3093A1;
+	Wed, 24 Sep 2025 14:43:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.27
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1758725025; cv=fail; b=qOCbJqs1reptS29nFMbgn5o9ok62UGiLtWnY3lgbv1dBx+UtAAA7SJiL1bB1iRks/lZPDiKUSmj6jTXw/cp4qrm7kqy7pHR9ur24g8hAGNmUIqT0KWDY7DtvTZh6vtn45sKwos6W91gdWNutVYw8s5uKdegyK3Ug6vT8NtXd9HQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1758725025; c=relaxed/simple;
+	bh=0JYhS0UFIZ3feXFHpBDC2+JiGbUKew93l6lSF5UaKLA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=nTb0qvAPuySSBzJWRiw7+ETFa+NsLJJZTNviv+02/QvzQBzhaZd020UlpgPrUoA+3aRCcsl6fjYfRDC/mqilA+CtsI1RpRscNMN8dx8gZe7zjtyjXvRXIyXLWjbvRa99SOsTJA84FFXoL0csoZ0Js8fdNoWzwux9/eS1kfyBFZA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=dSsuZ7OO; arc=fail smtp.client-ip=52.101.53.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=joHyKePRvDVf2wkpydCWILndaGNgV5e7JyuNfJjPFNJRwnAdnMOjup6tzGt6fS+TKehgsREDSM+CfKN9OI8nHVZ8R3yt80R2KKBdToBigi/bTyp2XGtaOdNrAkcL5tWpKo4uAzuh5XwTZ8krx/i+eU72R/T9UvV8pqdzWyxJ/SxuKeOQ6tH5rvlGuJ6pTN/Wb26Fpzs3UyUQMhTDPIVSc8EEYycJyYeZqSjQTbqLc0XD3a4HB5dKx9Uo6xjddzhtXgNkVbw6N98vzwhpT95Lt+P0Dwlub+J4yRb+CL9BUeU6ofNYNkZgryYmpScMK9/RHPOKIc6WvQ4owHssuHEkBg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G4CNoIyWWca7HCbnxWE1fAczmCiEdpONHWCecFfsui0=;
+ b=Scum4WPPfxmzDXyh4f8Lcu64XvtDCyW8kzjmbN9kwbkSauv5xYzs//tpOJrJPkQq04msvm0yyFjZP01pWd0FplfDvn0QBkuvey6WtHcAw4wG2i6RoBqBHVSGU4jSt3Q2rkTtYPpOe/wntlmxko3Uu4cA07mS0nYhMgV04OrOc2r6hDcYVPjgFUir81MOZtWOjwVcY1cCk2gcqWiVbmtC53fO+00CCtBGHWdDzeCD2vuZPdPSpbCZg6q8NwIbwIuMH21baOa+B5hwsVWH6EnwKfYi6gkDNju6obKkc57JUNnvWif7oZraKz6J8qpel4+MpuGZy73ZS68TTyTd/QntrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G4CNoIyWWca7HCbnxWE1fAczmCiEdpONHWCecFfsui0=;
+ b=dSsuZ7OO0vNn7lUz7bVI/DtrkH9+M3ejrna/82KMV3WC119JoB+0SRgSq2qsK9S8A/1AKiqfBE7SwOFg1jAKg0LMvYyYMSQoRYuMY+hKFXeuaxVkvkQqHbZ2Afnqs8/fUMheq3+rX6sot0VtQmYJGAcOPwgkNnTwDSlMgfO8sfk=
+Received: from SN7PR04CA0114.namprd04.prod.outlook.com (2603:10b6:806:122::29)
+ by CY1PR12MB9582.namprd12.prod.outlook.com (2603:10b6:930:fe::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9137.19; Wed, 24 Sep
+ 2025 14:43:40 +0000
+Received: from SN1PEPF00036F43.namprd05.prod.outlook.com
+ (2603:10b6:806:122:cafe::b1) by SN7PR04CA0114.outlook.office365.com
+ (2603:10b6:806:122::29) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9137.20 via Frontend Transport; Wed,
+ 24 Sep 2025 14:43:40 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ SN1PEPF00036F43.mail.protection.outlook.com (10.167.248.27) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9160.9 via Frontend Transport; Wed, 24 Sep 2025 14:43:40 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.2562.17; Wed, 24 Sep
+ 2025 07:43:39 -0700
+Received: from satlexmb07.amd.com (10.181.42.216) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Wed, 24 Sep
+ 2025 09:43:40 -0500
+Received: from [172.31.39.154] (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
+ Transport; Wed, 24 Sep 2025 07:43:36 -0700
+Message-ID: <616d8f02-a4ea-4f9a-ad4f-8bcbc2ccc887@amd.com>
+Date: Wed, 24 Sep 2025 20:13:35 +0530
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Gt2UJl1jZJ9IHh8h"
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: AMD SNP guest kdump broken since linuxnext-20250908
+To: Ard Biesheuvel <ardb@kernel.org>, Sean Christopherson <seanjc@google.com>
+CC: Linux-Next Mailing List <linux-next@vger.kernel.org>, open list
+	<linux-kernel@vger.kernel.org>, KVM <kvm@vger.kernel.org>, Ashish Kalra
+	<Ashish.Kalra@amd.com>, Borislav Petkov <bp@alien8.de>, Tom Lendacky
+	<thomas.lendacky@amd.com>
+References: <e8ace4cc-eb22-4117-b34d-16ecc1c8742d@amd.com>
+ <aNPxLQBxUau-FWtj@google.com>
+ <CAMj1kXHxUVowtCqBCKRE2_dv4TSUK6Kgwd46RzjjskAW8qYjHg@mail.gmail.com>
+Content-Language: en-US
+From: "Aithal, Srikanth" <sraithal@amd.com>
+In-Reply-To: <CAMj1kXHxUVowtCqBCKRE2_dv4TSUK6Kgwd46RzjjskAW8qYjHg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Received-SPF: None (SATLEXMB04.amd.com: sraithal@amd.com does not designate
+ permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF00036F43:EE_|CY1PR12MB9582:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9bc22e83-f68c-4071-b610-08ddfb78c0dc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eG50SEcvSGdaN0ZScDlwNlpXbmxndSsrVXFYcTZXVkZLbVJ1Yi9mNG9oSGpm?=
+ =?utf-8?B?enM2VVlZYUxZUHl0WTFBaWJCdWZJMytjTnJMMGFSSGJ3Y0lTZlZCTXVma0ZQ?=
+ =?utf-8?B?VW4zb0lFelJqMFIzRmZpV211S0N3NmJMN1VDZjJGSml5QlNDUElyMExMMHZP?=
+ =?utf-8?B?eURZbGJRTUpuc1ZFa3ZiOXo3TURzZjBKZ1k1SGNtMS9HVmdCVFRzWlpXS2xY?=
+ =?utf-8?B?YWJNWW9PS242NEp5dHZ1M2V3TlFNcjJXYngxdlQyOHlzKzBWLzk4eHNLcjVG?=
+ =?utf-8?B?MzROblpzWS9ub3FsVS9wd3VlY3g5Y01GbFpEc3BueVE4SlVvNkowejJLQ3JI?=
+ =?utf-8?B?RE9ra0xEcTY2ejVDb1IvemcxbER3blZtQ1hXbjdTYmRJT2JQcUlzcURiWVNT?=
+ =?utf-8?B?aEpucHhvaHJOVmovUkdCRjBCN1Qvd2JRRUdPWWhJRTVVODZPdFN5cXppeWZP?=
+ =?utf-8?B?RG53V1JVbVFXY0JyUUxoTUhrUnZkUVlnWVkxb2grYzllUHBqUzNNZEs1RnZ2?=
+ =?utf-8?B?RjZKWXY0U3R5Mncxa3F5WldnQnhtMEZFTjRzYUZBQjgrSW1DU09zN28vYXBt?=
+ =?utf-8?B?cUpISVdWbFRvQ08ydm4xNTlRd3VtMEJranNDOFk5MFV3a1JzUktOMHEzT1dp?=
+ =?utf-8?B?eENrNmZ4WVNmb2dHR0YxZzh5Ri94dW1pU3hpd2k3aUJqSCtGRjhuK0cvOGlO?=
+ =?utf-8?B?eXpCZ2NtU2x0bWY5V1lJR1E2U3pOVmlkOE9KdkYwM3Z6L3ZSTUtXT2RORWFO?=
+ =?utf-8?B?cUxsamEvTndCMlhiSWNEZkNLYXQyNWMybWY3SFhXdmZqM3JXMkQ5TU5rUTM0?=
+ =?utf-8?B?eDE3OE5TZEdNZHhOc01SV2hJM2Y3SGRmemo3UHZVUEpWTTFCUnhEbkxTOGxL?=
+ =?utf-8?B?VDRBam9sSjBSd21YWmFYbEJsc1NMbkhoZlVYWUtnYkx5T2xJK0hTWlNaVTdR?=
+ =?utf-8?B?QUdYRHBYSkU1RERReWZzRzZaQXRTcFhpQUlwMDE4ZjhZOXl0NmhWVnZnQ1pD?=
+ =?utf-8?B?UFRxaHFESVphcDloY2VQMVFHQWRmK0V3RmVMUGEwN3JPcCtkbjV1eUhPa3Rz?=
+ =?utf-8?B?aFovOVNhMmRVbkF2a2E4UmFJWXV1cHlPY2Vka0xLUmJ5RVNLMlpkdmE2Ynkz?=
+ =?utf-8?B?bGhlR2RkWWZjbjE5Z1BDQzJmQjlzdWxOSERGbXdTMUxLSlZrQ2h6OEZHTmg2?=
+ =?utf-8?B?RkFGTW40dG9CK0VHZ3VtNHJjZFQ2RzdaMndtbTExck01dG94RWZzQktGYXpM?=
+ =?utf-8?B?dm5XR2JaTTczMUgyekNYdE4xNmFHOWJwM0MwNGY4dFBOdXFFRFhBWEt1azRZ?=
+ =?utf-8?B?MitPT1RBTkhpSnk3cDY5UmwrNFQ3SG1MamhWRlpQRW1QRS9OdU02OUx4Y1A2?=
+ =?utf-8?B?WHRKUTl5dWtVRmtkcktic0dKdEVSNTlXRlgyQVhUVVA3RThpa0czMTdoRmFI?=
+ =?utf-8?B?anVDQ29EbHd4MTBYWmpKbWtIZ2RXTzJid21NREFPcHRUZ3NXUnlKYytFZ3Vl?=
+ =?utf-8?B?RU82b3FiOFFadnJ6TkM4eTZNc01ZQ0hOa2lMRzlJSUxReEFPRVIxSEJ6dWxr?=
+ =?utf-8?B?UjNjYkZqQktKQnhOUDZRcHpuY2V4OVRuSkNoOVFCU1lFMjZDRG1Rc3ZmdXRI?=
+ =?utf-8?B?TjhtUlY1NEhsSDZKYlRZT3NjanFNM2VSUnRldU9hWjg4RVhqcEg2OE8zSkNy?=
+ =?utf-8?B?YXdQOTdQQjUxN0ttSVo2eTRxVFFsWkQ0T1JrVkJ0K2F3ZTVzMVllbkVuWWNI?=
+ =?utf-8?B?YnQyVGNMY3dyU2FIK0o3eGhkb3g5d3dGQ0V6ZXNXWWl3dFgyK2wxeEJsOWVX?=
+ =?utf-8?B?UDdFQ2luazFwaFBwM1FoR2JBTkpaNHlaNHdPVUVKTVVEWDRsVUp5czlLemtV?=
+ =?utf-8?B?WlZyN3grMXdRSkxoUWJCcFpIekRPSStIL2pZcWJqcnlvY25iS0ZDd2hPZE5m?=
+ =?utf-8?B?VHNvU0pEQmFWT2UwSmk1M2RTcDBOd1JqU05FcWo1eEFVRTRZbkMwQXpzMVRR?=
+ =?utf-8?B?cGFyZUZiMDFUelVpaHJScVNEZE1TZ1hCeC8rK2ZJSmFhTTk1UjAxMkd4VlBl?=
+ =?utf-8?B?bjBLUDg5UWdJaDdmSHh0dkc3NHJvVkdxS0tSQT09?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2025 14:43:40.6211
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9bc22e83-f68c-4071-b610-08ddfb78c0dc
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF00036F43.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY1PR12MB9582
 
+On 9/24/2025 7:45 PM, Ard Biesheuvel wrote:
+> Hi,
+> 
+> On Wed, 24 Sept 2025 at 15:25, Sean Christopherson <seanjc@google.com> wrote:
+>>
+>> +Ard and Boris (and Tom for good measure)
+>>
+> 
+> Thanks for the cc, and apologies for the breakage.
+> 
+> Does this help?
+> 
+> --- a/arch/x86/boot/startup/sev-startup.c
+> +++ b/arch/x86/boot/startup/sev-startup.c
+> @@ -44,7 +44,7 @@
+>   /* Include code shared with pre-decompression boot stage */
+>   #include "sev-shared.c"
+> 
+> -void __init
+> +void
+>   early_set_pages_state(unsigned long vaddr, unsigned long paddr,
+>                        unsigned long npages, const struct psc_desc *desc)
+>   {
 
---Gt2UJl1jZJ9IHh8h
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Tested this patch on top of 6.17.0-rc7-next-20250923 
+[https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tag/?h=next-20250923].
 
-Hi all,
+This patch fixes the issue reported for the SNP guest type. It was also 
+tested on [normal, SEV, SEV-ES] guest types, and kdump works fine on all.
 
-There will be no -next releases Tuesday and Wednesday next week, and
-it's possible I might run out of time on Monday.
-
-Changes since 20250923:
-
-The vfs tree gained multiple conflicts with the vfs-brauner tree.
-
-The fs-next tree gained a conflict with the mm-stable tree.
-
-The net tree gained a conflit with the net-next tree.
-
-The bpf-next tree gained a conflict with the net-next tree.
-
-Non-merge commits (relative to Linus' tree): 10946
- 11023 files changed, 529132 insertions(+), 204086 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with an arm64
-defconfig, an allmodconfig for x86_64, a multi_v7_defconfig for arm and
-a native build of tools/perf.
-
-Below is a summary of the state of the merge.
-
-I am currently merging 407 trees (counting Linus' and 406 trees of bug
-fix patches pending for the current release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
-
---Gt2UJl1jZJ9IHh8h
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjUAvsACgkQJNaLcl1U
-h9C1fgf+Lp5JnZ2HD/7IWLzTwZEcHNgtaeHf4Xs8dKG8QWyZIPCYU+QLYF7CyicZ
-Bvrw0mIKbOBTm+ZTAbc2NPRF7ZlxOP33kAoJXOQWnnFo18UdZ+iVpVFoSnNa8lfn
-dl2bW326umMWCJ05wqYzfU/4O4aT+u7xWwHSRz3lKIOWLeIdkIH1wZAtHEfTAReG
-XxHUO+NWEhNxetbI3nIPMEkxWtIXytoiRDvukeEEi4C+UeKzG6qNz9fwU4q+49kQ
-bEBuHEe6bOwP/9B2dy67smPhYpyw2J5PjJdM2Nsptpb0d3eO4h5XqQ4CE8nXYj9e
-6ijduqLyPr5iCN0qXGe8U86KALcdOQ==
-=w9HB
------END PGP SIGNATURE-----
-
---Gt2UJl1jZJ9IHh8h--
+Reported-by: Srikanth Aithal <Srikanth.Aithal@amd.com>
+Tested-by: Srikanth Aithal <Srikanth.Aithal@amd.com>
 

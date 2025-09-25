@@ -1,125 +1,145 @@
-Return-Path: <linux-next+bounces-8491-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8492-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CF96B9FF78
-	for <lists+linux-next@lfdr.de>; Thu, 25 Sep 2025 16:24:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27F89BA00B1
+	for <lists+linux-next@lfdr.de>; Thu, 25 Sep 2025 16:36:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCD122E4C0D
-	for <lists+linux-next@lfdr.de>; Thu, 25 Sep 2025 14:17:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A46054E48E6
+	for <lists+linux-next@lfdr.de>; Thu, 25 Sep 2025 14:34:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50A292BDC27;
-	Thu, 25 Sep 2025 14:15:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 074072DC79C;
+	Thu, 25 Sep 2025 14:34:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OYKnm266"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JiyB1Sw6"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBAE2BD5AD
-	for <linux-next@vger.kernel.org>; Thu, 25 Sep 2025 14:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C08F2DAFA7
+	for <linux-next@vger.kernel.org>; Thu, 25 Sep 2025 14:34:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758809709; cv=none; b=ocYvQl0VclnYeGLL7ltZxy52gI6XbdpuhvTWvbHBEMMSlARPu9uUcSgFGgLJ/fo/9hMLcZYqJKhW05SsE9Qmw6+wdwutEOxbKZeAKBM/hbrdjDzz59WdSx9tBotrQwwczZicEdfrHnAEdqw4gz76N9FMDVpqJ1ZBTjHiAX1YReI=
+	t=1758810869; cv=none; b=FT81oQmtTUmcrr2TunF58SoLtEX+N53tz4Mtq7WrrvEdq6yJNaOaMK8g7eFFysZKAycaEJ5IrjUzhNhecSqUOb2y6iev/jHdiygQfqtCtyQoPANy8RfK404gbd8cv6daGp3VOGgutx0eMVTfA9KuzIAzk3StTUgahCJs41yLXiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758809709; c=relaxed/simple;
-	bh=nuislbAtqmU78XpJlZX4vNz0vwiV71O1Kx5IczGC5SE=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=kYaLz7f1BSxc/pu2IYYA0KmU2iCSaGC81qu+NCwTYRHSBSIapGBlTLuJ1Qhzj7+Mp7llYbVaK/gDx4PknKBqf421yrz4PNXZfe7IkvOg/GOetL9Ztviops6N7v58EUv3aQHrmrBtxviix+QRbHe5xKJnWjol+yEddDZj7tA+k5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OYKnm266; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1758810869; c=relaxed/simple;
+	bh=6XA+llkjZZVH29f0iycatx4vb1CIaytfaB6lMJvlB8c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U+CBt2yriRpiLeKenJAuMVxrCBGq71JczgJEMG3ghk/piJo5IIlKR0G80/BYQoWjGUfR4weQC+kERm19Pp5/RZ0aKdNyNyWmChoSJG16LTJ0IucJQR8WQrHmKHl1rAbeQo06k8meBdxGlYeEI0cC8lIZiyUjxc9i2c2XwcI8P14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JiyB1Sw6; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-27c369f898fso12023555ad.3
-        for <linux-next@vger.kernel.org>; Thu, 25 Sep 2025 07:15:07 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3f2ae6fadb4so1098600f8f.1
+        for <linux-next@vger.kernel.org>; Thu, 25 Sep 2025 07:34:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758809707; x=1759414507; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DTn7oez8OOqttdy0B0PFYhUePNvjLlG8H/kSBIplgEA=;
-        b=OYKnm266GVr4HR4TJoNi1tcFHjlwYNPPe1UG9jcl/9e9PpAldqs41oBqireaCH8Zr8
-         NjxJ+A42kxWJxt0MVR9vCeMqBBzbMbk2pheEpWZuoCOvAZUdrMrPBPufrYxagl4oiT1Y
-         fqDq57NTEj9ZmyAXJUj1/fgHGPLCmFKTZGce8OdQSWu+pJEzLjEXjq6vYJv8kllVK7Sz
-         2arkdnJs/W8EWTzrAJbhqN7+Bm7JW9HMdaLBEmqY79IKMwX+bjPTCxI9ThcvslZAdIb0
-         BFGEKqjhUZ90vOLkuvN1v5iAPDpAwtameZBjHiJaQIJ84yn4RlRbUiG1/UA97CgMB8YF
-         ZxGA==
+        d=gmail.com; s=20230601; t=1758810866; x=1759415666; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jlmWZnzTQZk7hQJHDjRsw6Fn5BINueet3UHk9KQ1rXw=;
+        b=JiyB1Sw6yUHbhPNARjgB4h0+sV8ZsDI4K5+GauNR+yjB9Z+0sSh+OCV6cwu+Zmy58A
+         2K89axmqBy3UG31xs/Vn1wfEY6b+I1vuUw/mA3teMhdB/VKWNd3vDD2hqJ0pry5S6kuA
+         kKFZlxp4k8gKWRgjG40R9/E+nahiBh4By9DtI8wLbMC4o15IiqI59nyDw+4poxadzpQ6
+         TcwUfPORCj4cIukSELq+Ta3E+9vgvTyxpFcilxiTZxDrSFYQQ1+6tFAl581MaJiwmlns
+         CG33l1GwMqQdNX4ReQ5ccDlvPohTWUGTMhRE4gIPz1ysNXQVpUiPz5tgSccyKo8CeAnH
+         y4KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758809707; x=1759414507;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DTn7oez8OOqttdy0B0PFYhUePNvjLlG8H/kSBIplgEA=;
-        b=tGJhdAEIg0HcQIcTxxpfsOgsdBOWEKPFCsf2GZf/5Pgqwb4w3Hw+5IfMt8AweQi0rT
-         PmDbCG9mdX3B+02OEUI6XuqgSx+q1szkmiyvkqkReucronvZtlTsZWvCKjmeMpkUdSix
-         yeqQuRGXmpWXquTPn3JTcvR7IDr42iMF/vHrLFkGTtuuIuQGS+7+2BBJDg1lk/O48bSX
-         jfQVem6/FUer1pIABeIKj4wOK9m4we6u7GXGirtjEhEFCI+E6SFuvWFSsTUYxHyXeShU
-         CfHgev3LkzWLIfB4iTqLatQM054BH+WRnG7QHXo1RR+I2wxvg2K372jipdAHEPsX2D7F
-         RMaw==
-X-Forwarded-Encrypted: i=1; AJvYcCUbqxi93/RTrhXi/Ok+mYgwf//zjOelD8Fn4xevxa2yjjEra1hpZNwVAFUnsCf5SQyW4mlg0QhHxDyO@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVdE1GVWoWDIzERdABE6OAhu6aqUwn1ckda9cBp2d8OeMrimkd
-	H928vPlh8ogzk6OgVFoRGC9YjGodthS1ADyYta4DTd1VtckZhykCg5l3
-X-Gm-Gg: ASbGncs0BIFDRizm677441yUt8H9bZNbmcspAiy0seYQyPreeYt9Ie9kqETEVLYrz0D
-	tSjajmDgp6+GHooGzUW6Od0tnJ3MrLx3DFb8CPaLcNNqT94dRLth8lUHIMo1mz0rKAnE8I8HzIr
-	j3aThtyMpahYvO9rTh1j0edL73kD8z8/9FO4LkbJ2AGTP75Mi0VDTrI4HmCIpDlc61IlVokJ3pf
-	m8jKzabRYXOXrVfDvKtmv6dz3fpIDzjaqsK9fI1LiZtkDBqIk8gmCqld4d6PJkwa/IcdBsFgC3k
-	S7NcIhP7SsnL6o49B7xHpNVcdScKMiOyJLoPZMtvkBwMLkCUpcgAylV6W6c8gManqJbM3EBxSYb
-	p3W1s2RrcPCarksbJ6XNvV/HJYJnhJ3BgPiixKQyE8Qd832iVXgn4WI13lL5009Ag031J
-X-Google-Smtp-Source: AGHT+IGf+C9wBYJZEIjno4ujMvEF5ZwL9cnu0wsxmJrVEUsdaEwrDpFgSLVxq/qYS7s9JPxVrPjc9w==
-X-Received: by 2002:a17:903:bc8:b0:278:9051:8e9c with SMTP id d9443c01a7336-27ed4a56ce7mr33844965ad.42.1758809706785;
-        Thu, 25 Sep 2025 07:15:06 -0700 (PDT)
-Received: from [10.0.2.15] (KD106167137155.ppp-bb.dion.ne.jp. [106.167.137.155])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed69b0685sm26317945ad.116.2025.09.25.07.15.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Sep 2025 07:15:06 -0700 (PDT)
-Message-ID: <3666a4ec-ef29-4342-b3aa-8c602c258bea@gmail.com>
-Date: Thu, 25 Sep 2025 23:15:08 +0900
+        d=1e100.net; s=20230601; t=1758810866; x=1759415666;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jlmWZnzTQZk7hQJHDjRsw6Fn5BINueet3UHk9KQ1rXw=;
+        b=Uvs1tYjHTarfdegabtqzScYKvfbBtGQE6tOJ8Ld9lyDTjVkgtOV81dqO0LmjSbthBS
+         m4C32mZIbKu8dDD7qmEnPK1eZivMZQQ342GyOb0OauusPgAfaMPJpG7wFCvT4eIYZ3iS
+         ajD/W5R4VjuS7jGKSgRKPAKOeVjkxTuLuJkKZlUwlcx3GhWDPeBCuhBvwjWx8jZp9WzX
+         ontjoSGI3X51OzSicTZXOwGtNRc6tomxKQuvPZ+ObTZj67KgXvRK/7G9PZjNkPSfh82r
+         qRWYv/Eu9GADFV4/QCLJhcNQfiPG5PMAJ+OE1bygegyMEDKUyR37tVkxMuU7b3nVVmiJ
+         3+8g==
+X-Forwarded-Encrypted: i=1; AJvYcCWJx+phB/EtV7+z7Jrjc9kCH4lHTxIwSSw4id7ceXTWaNF49MMC+pffSSmZxNkhO5DnmpddsDECbgOv@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvOoVWbCepZ+TK6hwh+j7IeTwVXTb5oQpHVC+SyYzBqXxxOqKn
+	SQzRZ9iZvtLMI6lZpiexOnPUL92JahpS6/lb8L1rdVxORm+trNuBbVdsBlzNpHTo3zPRrGqV1JL
+	Dw5K0vg5zl0mGeWxcel+rG/V+0Qxs64U=
+X-Gm-Gg: ASbGncszYZ6yr4EgKyS8jm4qfCl8jD/w30WyjINPHiSemTsYt9Wi/vqOTF8dr/8hlnW
+	4LDcyIaVgPwxWqoCtgWZSqZN415ixO459SpB0Ph1rXA8aIq8wX84zisyHizOGc26Dpa4gsn6gth
+	Q5c/Ex1Ou2QRpdZYhwmJ0bPBzccF31skp7r0dpLEtE0ZrhFiIlwiFwTI2Nj/0SrrM+kA+9W7lkc
+	p7YxQ==
+X-Google-Smtp-Source: AGHT+IGY9M679gafputQhuXv58U54d1hWGLNXuPzatEJA13krdUY3caj/cCKqU06kl7/8uBnZ3uP82zoy5jzM0Zo1PQ=
+X-Received: by 2002:a05:6000:2486:b0:3d4:f5c2:d805 with SMTP id
+ ffacd0b85a97d-40e4458c89bmr3769232f8f.16.1758810866223; Thu, 25 Sep 2025
+ 07:34:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: rdunlap@infradead.org
-Cc: broonie@kernel.org, corbet@lwn.net, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, mchehab@kernel.org
-References: <e7c29532-71de-496b-a89f-743cef28736e@infradead.org>
-Subject: Re: linux-next: Tree for Sep 24 (htmldocs / pdfdocs)
-Content-Language: en-US
-From: Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <e7c29532-71de-496b-a89f-743cef28736e@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <aNVMR5rjA2geHNLn@sirena.org.uk>
+In-Reply-To: <aNVMR5rjA2geHNLn@sirena.org.uk>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 25 Sep 2025 15:34:15 +0100
+X-Gm-Features: AS18NWD8ZUmLb0ORW8a0yDbsVq0TSmHChIah2vxBghBU5_0NKGLYU8EJzRAlptA
+Message-ID: <CAADnVQLcNWCsazy4XudB4EPaqvdtea+d8w5q4R5MsvRJ4fmOmA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the tip tree with the bpf-next tree
+To: Mark Brown <broonie@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, 
+	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Randy,
+On Thu, Sep 25, 2025 at 3:06=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
+te:
+>
+> Hi all,
+>
+> Today's linux-next merge of the tip tree got a conflict in:
+>
+>   kernel/events/uprobes.c
+>
+> between commit:
+>
+>   4363264111e12 ("uprobe: Do not emulate/sstep original instruction when =
+ip is changed")
+>
+> from the bpf-next tree and commit:
+>
+>   ba2bfc97b4629 ("uprobes/x86: Add support to optimize uprobes")
+>
+> from the tip tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> diff --cc kernel/events/uprobes.c
+> index c2ff256dd6419,996a81080d563..0000000000000
+> --- a/kernel/events/uprobes.c
+> +++ b/kernel/events/uprobes.c
+> @@@ -2741,13 -2765,9 +2765,16 @@@ static void handle_swbp(struct pt_regs
+>
+>         handler_chain(uprobe, regs);
+>
+>  +      /*
+>  +       * If user decided to take execution elsewhere, it makes little s=
+ense
+>  +       * to execute the original instruction, so let's skip it.
+>  +       */
+>  +      if (instruction_pointer(regs) !=3D bp_vaddr)
+>  +              goto out;
+>  +
+> +       /* Try to optimize after first hit. */
+> +       arch_uprobe_optimize(&uprobe->arch, bp_vaddr);
+> +
+>         if (arch_uprobe_skip_sstep(&uprobe->arch, regs))
+>                 goto out;
 
-On Wed, 24 Sep 2025 10:54:18 -0700, Randy Dunlap wrote:
-> On 9/24/25 7:41 AM, Mark Brown wrote:
->> Hi all,
->> 
->> There will be no -next releases Tuesday and Wednesday next week, and
->> it's possible I might run out of time on Monday.
->> 
-> 
-> When I run 'make O=DOCS htmldocs', I see these warning messages:
-> 
-> ../Documentation/Makefile:70: warning: overriding recipe for target 'pdfdocs'
-> ../Documentation/Makefile:61: warning: ignoring old recipe for target 'pdfdocs'
-> 
-> 
-> Is this a known issue?
-
-I could reproduce these warnings under containers who have minimal
-packages needed for htmldocs *only*.
-
-Current "docs-mw" branch doesn't show them.  "build-scripts" is the
-one who carries this harmless regression.
-
-By "harmless", I mean "pdfdocs" needs texlive packages anyway.
-
-HTH,
-
-Akira
+Yep. That's exactly what we discussed.
+I'll mention it in the PR during the merge window.
 

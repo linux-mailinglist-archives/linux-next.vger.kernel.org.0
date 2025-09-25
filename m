@@ -1,107 +1,135 @@
-Return-Path: <linux-next+bounces-8494-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8495-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04627BA0670
-	for <lists+linux-next@lfdr.de>; Thu, 25 Sep 2025 17:42:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C164BA0649
+	for <lists+linux-next@lfdr.de>; Thu, 25 Sep 2025 17:39:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F79F3A997C
-	for <lists+linux-next@lfdr.de>; Thu, 25 Sep 2025 15:38:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2495A7A6EC8
+	for <lists+linux-next@lfdr.de>; Thu, 25 Sep 2025 15:38:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A8F72EBDD3;
-	Thu, 25 Sep 2025 15:38:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 401FE2EE611;
+	Thu, 25 Sep 2025 15:39:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="myXWvPby"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hzcdXdGv"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02FE22EC0A1
-	for <linux-next@vger.kernel.org>; Thu, 25 Sep 2025 15:38:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C7A2E1C6B
+	for <linux-next@vger.kernel.org>; Thu, 25 Sep 2025 15:39:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758814686; cv=none; b=kjwd583giEpy4anysGUV1S9lUh7sRSc8HmgsAqsCSyeKZgsv3q7Ax/rMPMZRgisAXj1lTLuDYDXr+YKG8PeDZv9cYhka7mzqFlw25Cm37SfmcUYIlacWaIjQ7v7nkKfsDcdUq5WFkMWkRxIhcD4i4wktvQhaASJ69sNJD5AXynI=
+	t=1758814790; cv=none; b=kIvDp22AJrR6dw8EXu6xhre5MiVzPFHen9+Gm7jTVLNIKxuLveLqiUGU8sJkpu2I2UXxkHLEgfklNmD/A90HrE7SIDM4imBjjPkfYjzDuFELv2FzVQJmBuqN7A9YJ9wEUeJ9aCuKFbsk1fwx7UdeAocFEDsT0Cwo9mB3S6SlMlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758814686; c=relaxed/simple;
-	bh=ZWKVJQhQO85PFVLst/dJeOTjr8/6ZNeNAjSmlGSuq6I=;
+	s=arc-20240116; t=1758814790; c=relaxed/simple;
+	bh=fcx1xsQ2HV2BsgfD6Y/SkjMcXQLAmOVXzQfm7XG4V+Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VVfz/43l9OstObTIFnMzjqa/vseVFs/jJiaTJgADF9MTEu9c9S7n9jwenxZTH3qp+jsKy3lkxTG3ZcJ0XMh9vFptxSE55mj9OVTbmbzwpGlNYJxphumFkSHR6+LklpvUfHiFpfHMrBT3f4yBMO/G1sozHRofyxz0xlFlsRkJvMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=myXWvPby; arc=none smtp.client-ip=209.85.219.42
+	 To:Cc:Content-Type; b=QrDsAwAjryrmmhjGVIniI/pK2FosLSFIUbO/v0z7QjHXbK4B2Q4oseGanADpB8CHH4TWxwGx7J6ZIGS7o62ZmswTfpUqaNfbbAgcapZDc1Vn2qdEcwmCpCT60Or7Y/rKF1OobPNoqmkEsntJXOCxXo0KWHHj3+l4G0QzWf14x60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hzcdXdGv; arc=none smtp.client-ip=209.85.219.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-795773ac2a2so8662386d6.1
-        for <linux-next@vger.kernel.org>; Thu, 25 Sep 2025 08:38:04 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-78eba712e89so8155016d6.3
+        for <linux-next@vger.kernel.org>; Thu, 25 Sep 2025 08:39:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758814684; x=1759419484; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1758814787; x=1759419587; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M8i0IjZD3Pct6jS0K9QzdWLgF5ClOIU5SO5hpVGPEko=;
-        b=myXWvPbyPVjpZDv76uP6DojN5y0CIitAIxcfDZQ/zSxsVfzb0jxK+TjRAvPr4kPoT4
-         TnFEZXc0lu7m/+so65XXeWJ5xGuIbQMAPDBApeWM1Qvt8lljvz8H4FbRMfF+j5SFj5UM
-         KXRk76KN1MfRrPe3TSmixWplfKRFxDu6qDAbNP+se9MqGoin6ljB4cDsQgJRBsiyvQjf
-         LXvKtj4zmRBDzySKl/bTndk++IuZC9auijOjWkobUEdATO5ik52SlF5o5BWShjPKm6GP
-         mYRp8PJphFbcdVs0shJ20h+fI9l7vM1OmBUTE9FOB2j+0wMDA7DaKGuy6LL9ECWr9vH1
-         REEg==
+        bh=l/gxM2GZ//p3vsM9/c44+z51oZMOCRO2uPq/3cokxHU=;
+        b=hzcdXdGvYf5Ug4nt1N55Jr1Qb7mPoptzIRJ6OI+N/LvgcvYajNsmi3CwqOwNNWCg/n
+         FoWKOLGr0oB7eWfFTvD34sw5wRmQoHWTaPNMlBXDjJEAVQycGprQpthGEIyQMt7Wfqon
+         QAgEQA6sj4fLmEqXhFRlncWk3ElYvgD7BJINo41Q9JbByNUwF28bse/aXWbPvslXSccK
+         OMhILsv3k+8ykjUzvIQGFSCo5VJ5ECz3Rd5JOzX9xLYOIIGPROeF/J0+K5zQEDMYPwoZ
+         L4dnKWuKLH2cvtJIGSZWLh7K4QX/tx8WH+R/llhvWmSuulYfpGlriXUjAszHS5rKtLzZ
+         laxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758814684; x=1759419484;
+        d=1e100.net; s=20230601; t=1758814787; x=1759419587;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=M8i0IjZD3Pct6jS0K9QzdWLgF5ClOIU5SO5hpVGPEko=;
-        b=wH0sByX0gMAdRuiapBDogBuHRBIUUT8ALZwAqIGedetpPKSLRiaCMwnw8jZloyQ75q
-         fssExZKpSuLTzq//ky6MVsQuvzQhpL6j8gm+YveOy32e5NGbtp/jvElH1VbH8kFkqEw4
-         +0LJdn+QMj8eDKU6gG3lZuTQX84IoLRjdk6qnYNsD0hDYgwprEkK17MbcPnrSg7bcTBg
-         OCOXfsr1BKOrOz0kSSLOMkSHCU1yAetB3JbGRx6YOvlF7+OSITFZ8OP+vHZRe5+cNgbH
-         vA1JsGh1cBGtVO82MgNbqGESEiZvxXKynOx5L6y0bXkTfppiDG+rvDFO5D1SzrsHHUiw
-         xRvA==
-X-Gm-Message-State: AOJu0YwMqpGW0J9UxZGZuBLsvSV+VSDqOUWE7JhxTgY6dEZbc/ELql06
-	IoYhPe9Sh/X+Y/xqtze9Ugb3qnUxiIGoTiAKAvnCkH9nEKgl/mDy4Rwp1M/k1KlShfLqwE0HOap
-	It9oq+rCGSZoz/OhduPYNeuNDBlKsveunpA==
-X-Gm-Gg: ASbGncv2dJ92ZqMOlQDgha1cje7TL8ZWjXQcRZn8Ozd7+bPrK8F9SWiEelUp55FkPmE
-	itO1Kg0ggkqOdbLk/kj5ZDOyxvaWq5XtiBYpm2J9iW7Q9WJY78Vmoy4mxO9P1/zMaDi63jZ3z4L
-	76YO7AL9IhMQCBdLClsXyXu0Zm/inBx8pk5+TQP5si7fPUoNcI8Lyw3ig4DwpsvL6tijbtdbWys
-	BqXPqeJdc2MXHKrBIBgq3yJsiPt4IkzoimgHRcsVtzSQc1gvOnxEgGTKBxjnf/A//r3Y/2RGcGv
-	7uLTKoA19KiXTMdTwDg2M9DqPWTfQTvN8UWguf6jc5pr2cU7juZLuALXyCFQRL8zoCxq/5kHBbm
-	3BfQDOgYYKIO+W5OnQ/fegA==
-X-Google-Smtp-Source: AGHT+IGYkjlNqAquvUGYdoars3aCxUqWAyfn769FJVVQKoSImqe9jR4JyUdk8MOEby7NGucpyFW/cShWe7F8c02WdP0=
-X-Received: by 2002:a05:6214:769:b0:720:8825:f1b7 with SMTP id
- 6a1803df08f44-7fc2874431emr49445596d6.9.1758814683507; Thu, 25 Sep 2025
- 08:38:03 -0700 (PDT)
+        bh=l/gxM2GZ//p3vsM9/c44+z51oZMOCRO2uPq/3cokxHU=;
+        b=pDsMP9bIV9Gq8w+lVmdIhAuCQQ3VvqIxOTPWLZTzTxXQiOje472LP5dY4rzdaE2a97
+         Zq3RqYzeAt3oyJ4rPaRzWZYaZ9T2UXPbkniB9SZCULEMyMD5VXpZG7gnSd+r/umwJr7p
+         ShNMoyYZpmT32JVJdpP5+38+hlaDkhWLjfq5ZvlEvJUalTFwwWksW5WQH4TUBQ6iKSlY
+         Im5zONh0FsAskh9SH3wAjJLhP0MJI1xRq0nhd86p5TDROxiJwN34EiGJHRD10Q5Fe9FR
+         t3Z39zUcSbdTE+diBp8eV0FKAn0D1B8wYS1IhPlccKTL8Ia6ToBBGjUj7n98vi184bJy
+         VgTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUShmOy1PPsI92g1NdwAW7z6UZfOZ0O4QCX0XAqmP4G0rg9iPJJ8UNydgZZg4ePeIO+9n5+dwBcnHvE@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRbx+5sTCn6R0QlPhNUhcIEyT0qX363NYgPWh8oxH9GnaJyvz3
+	wyS1qObidDdmr6Orr/05mBaVRGcKMaqrDbQ2VDKjY7M7ALK6tS3vQRVV2ZoGUl/AyFl/8ZOzvTh
+	/vElzjVhD0mGWOK9mYaYm6ZfK4h/4rsc=
+X-Gm-Gg: ASbGnctf/YP01Sdsk9QXXQtnFiy2DzguE73hSQ+yOi1X4yxQWPzg4jqAYAhuEYKRhB7
+	RAZrtuHcLiGC4Kz8sPmF5tONRyorv8o/e98jgDe0kU9TrbL650E35DoDPFl4W2IlTq7D527ld8j
+	/cIcv8TTjF/cRMbKMKpTr6+8Z7AstybQJXMEFjmTkOutngXmO3C4Jznc+6Qv8pdtxjO3wJPYDMX
+	7GxeWKyPuF368aW4TeELDVivArzDYjNpiXgavicx66FTETmcRdBHLiI4i0oykTCw6gSMFZo0i9u
+	km9tftnXimKamzmIfK6XlG2pQ/0BF1Sj3rVoDsp4UK1FoKiyOOIAqipq/rIYgH1a1cgJRgncIWM
+	/CoTz2gDLuXsbIK3v2JAdRjGujUp74hAT
+X-Google-Smtp-Source: AGHT+IES8OpxO46lya6Ja3cpgdYv4JUSL0YgHDVfezBAbW3XrWI16+5dA+Asr6InsRlLJadadFe3Lz5rMdcADr3IL+E=
+X-Received: by 2002:a05:6214:3017:b0:7fa:dc54:5e60 with SMTP id
+ 6a1803df08f44-7fc32001335mr55979626d6.24.1758814787364; Thu, 25 Sep 2025
+ 08:39:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <392013e6-3012-46a1-a2b9-4ee932eca80f@sirena.org.uk>
-In-Reply-To: <392013e6-3012-46a1-a2b9-4ee932eca80f@sirena.org.uk>
+References: <aNU0D_3x5WC9qBzQ@sirena.org.uk>
+In-Reply-To: <aNU0D_3x5WC9qBzQ@sirena.org.uk>
 From: Steve French <smfrench@gmail.com>
-Date: Thu, 25 Sep 2025 10:37:52 -0500
-X-Gm-Features: AS18NWDFGBwy8fo1xBeNF2K95krRG1ryr3vbF8PehvHoSMfuwAFIeXdhWkMK76o
-Message-ID: <CAH2r5mu8zURNZWKYbrUmG+mDXpCBjwGY0x0hOU1MYdjqfXo-=g@mail.gmail.com>
-Subject: Re: Missing signoff in the ksmbd tree
+Date: Thu, 25 Sep 2025 10:39:36 -0500
+X-Gm-Features: AS18NWAFD_qjJ50kmUkTB6KYbooErErcY7xLI1bEOzK65no55USKLs4S-XcQjgI
+Message-ID: <CAH2r5mt_TXXsrik3HPFBfSOcVm9Azu4Qprj5ps51S5VXGet3tA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the ksmbd tree with the cifs tree
 To: Mark Brown <broonie@kernel.org>
-Cc: linux-next@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	"Stefan (metze) Metzmacher" <metze@samba.org>, Namjae Jeon <linkinjeon@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, Stefan Metzmacher <metze@samba.org>, 
+	Steve French <stfrench@microsoft.com>, Namjae Jeon <linkinjeon@kernel.org>, 
+	CIFS <linux-cifs@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Metze fixed the missing signoff and I have updated the ksmbd-for-next
-branch (also now has fewer patches, and some he has reordered to be
-less confusing)
+I have updated cifs-2.6.git for-next to remove the duplicate patch
+(that was already in ksmbd-for-next), and have updated ksmbd-for-next
+(somewhat fewer patches, and he has reordered them to be less
+confusing, and fixed the missing Signed-off-by).   Should be ok now
 
-On Thu, Sep 25, 2025 at 5:55=E2=80=AFAM Mark Brown <broonie@kernel.org> wro=
+On Thu, Sep 25, 2025 at 7:22=E2=80=AFAM Mark Brown <broonie@kernel.org> wro=
 te:
 >
-> Commit
+> Hi all,
 >
->   d76f0acc84fa7 ("smb: server: make use of ib_alloc_cq_any() instead of i=
-b_alloc_cq()")
+> Today's linux-next merge of the ksmbd tree got conflicts in:
 >
-> is missing a Signed-off-by from its author.
+>   fs/smb/client/smbdirect.h
+>   fs/smb/client/smbdirect.c
+>
+> between commit:
+>
+>   8c78e78d99355 ("smb: client: fix sending the iwrap custom IRD/ORD negot=
+iation messages")
+>
+> from the cifs tree and commits:
+>
+>   4e152f2732650 ("smb: client: make use of smbdirect_connection_negotiate=
+_rdma_resources()")
+>   c0a6d2d41a3b6 ("smb: client: initialize recv_io->cqe.done =3D recv_done=
+ just once")
+>   d5b264e469201 ("smb: client: fix sending the iwrap custom IRD/ORD negot=
+iation messages")
+>   8435735745f65 ("smb: client: make use of smbdirect_socket_parameters.{i=
+nitiator_depth,responder_resources}")
+>
+> from the ksmbd tree.
+>
+> I don't feel equipped to sensibly resolve this today and there's also a
+> missing signoff in the ksmbd tree, I've used the version of the ksmbd tre=
+e
+> from yesterday and will hopefully have the time to look at this
+> tomorrow.
 
 
 

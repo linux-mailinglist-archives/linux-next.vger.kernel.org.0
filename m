@@ -1,127 +1,139 @@
-Return-Path: <linux-next+bounces-8504-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8506-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87ECCBA46C3
-	for <lists+linux-next@lfdr.de>; Fri, 26 Sep 2025 17:33:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F0BABA4BAF
+	for <lists+linux-next@lfdr.de>; Fri, 26 Sep 2025 18:59:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96BF17ABB7C
-	for <lists+linux-next@lfdr.de>; Fri, 26 Sep 2025 15:31:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 553B51C22CEC
+	for <lists+linux-next@lfdr.de>; Fri, 26 Sep 2025 16:59:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B6FD21767C;
-	Fri, 26 Sep 2025 15:32:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2894F30C10A;
+	Fri, 26 Sep 2025 16:59:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GS8cWXgw"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="x6vV564S"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E6921C166;
-	Fri, 26 Sep 2025 15:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC8F30C0E2
+	for <linux-next@vger.kernel.org>; Fri, 26 Sep 2025 16:59:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758900761; cv=none; b=FSdIu9QyKToSmgPgjJJO4WqkEEl0pE4ETwmeXaGWgEV7wSFhHY+yn6Z4Y3e/0/aWYS2Ha2kAvUIUX6JPiijpyZONI43Dte01a8dp8Iwi8qgRpoIZkzJ9sX62oD6KBC3/NBebEdmr0KDgztnc7qdRO4Ib7njXEbeOehJ5wPWKfTc=
+	t=1758905948; cv=none; b=UW2Ik33r5PW/AlKotCWmtPSMvNeQjH9L+a/6ccu7Xg0Fyz++buEWY2qTcEF2WxpfjHotjNHERV0vhHXskKU9ZS4/fVPrAezd1N12ldXExPshzwNzPzK0TZzx5PWf0nBl/9dWueUSAPdMrOl6cs3+9xFBa3moYTdt4Qkt64oNiMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758900761; c=relaxed/simple;
-	bh=yq2+nCeERZCb1Sgbe4eci6P9Xi+94wosE7TbKuPXbWA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=RRF8ZB+9K6LMGgMuygSlbqsAfKN/VH4c4s+1ctLeOc6v/VwdBBjvvmPTP+5/bCP1CugsQWuy6gScfl/yY0rsyyrWu6fkUTMWcVBhoh8e2Q8i/jJ+zbKxxaBLfYCxovuu5DznshtgSMIB8fKzS7QRRnvTIjLgleuJGotKpMN1Hkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GS8cWXgw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2794DC116C6;
-	Fri, 26 Sep 2025 15:32:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758900760;
-	bh=yq2+nCeERZCb1Sgbe4eci6P9Xi+94wosE7TbKuPXbWA=;
-	h=Date:From:To:Cc:Subject:From;
-	b=GS8cWXgwdu0il8h8yOtnS+m7KNezPYJddcPEiTIORVKIsrqiXzwn10JJJb4HWFF/Y
-	 ++hrU/QMhPIEBhlBYH18xT+ZkXBschDOA0VSoGIk/A5PYAAT2sWhq94z+gWgqyFEhj
-	 4RP6534LTV9CLQhVGRMzTgetY9FcwAA3S40tDWzoZWKkqRSeukvYQJO7gRLb1OB53T
-	 PXFI9DnlMrdawhTJhL96xiZh5mOG9rw2yTnFv2qLxdLsOpqV1c+oBjqXb3UiXQckWY
-	 ugR1CflmQYKutP0D2gqg/7IZTYUUHmui9dDGxLOjcfmMVrKdGZa39ND+87j1H6Ciq0
-	 piRbUHf/PbWQw==
-Date: Fri, 26 Sep 2025 16:32:37 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Sep 26
-Message-ID: <aNayFYxBh0uIYU6C@sirena.org.uk>
+	s=arc-20240116; t=1758905948; c=relaxed/simple;
+	bh=ZDbPNNwTc2xllQRq1upDRo55Uwg02Ak3IPmyPJuzBbA=;
+	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=G9R1VWvNAuCZLQqMc2KDUIE2Nh5KcuIv7oqDIc6nwmdT/gskQKdE3C0Z6i74JZxurZtuisbGOy0XxItzib88MRKrnPd0CkpIxmN5AnLZXILZd2ksDG0OwRjhdF35cWeczD9Mv6G9sZd9UeDtd9jypwOBQW5QSQbDME3A4Koj754=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=x6vV564S; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-b4ee87cc81eso2139321a12.1
+        for <linux-next@vger.kernel.org>; Fri, 26 Sep 2025 09:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1758905946; x=1759510746; darn=vger.kernel.org;
+        h=message-id:date:reply-to:cc:to:from:subject
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P9wF9E9YK/j++mNxViwWRBp72k3luVN6k0tCP2GBCao=;
+        b=x6vV564SolIQ39T0Kzd22EYnsC+kMrHH5kbj9hm4oHy0AAOyZy0wdIeQhxYaZdF8Q/
+         Rgv2X3I8JhGoYLme9OgdsSKrEyi3g9VM5GY0TDYlNh87Ix71Q+EVPc9++dDpCFxrO7kf
+         szA9g8pylgzKSNZ16EXflYOBTYyy0svzaxkMZDUficUcMJatixJ9ZpQOEOiFvASOWsNB
+         wWsP5uATRgM1WvOLzMWu4ST9JgJz42Knrq50chcsH/gccNRDq57S71qij/FWyIlAik6L
+         VPtqq7axmha2LWmv6prrxAnkGLZpPh2U6KaHhN9P3Wf3W52d96dQFsAEbOeA3fvV9Od3
+         WsLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758905946; x=1759510746;
+        h=message-id:date:reply-to:cc:to:from:subject
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=P9wF9E9YK/j++mNxViwWRBp72k3luVN6k0tCP2GBCao=;
+        b=pVSY4VZ2h+1+aBWVlf+cr+Py5AZoBKDv3w5VfNjUzEfE/3KvQlC7SpykjlCyGDmlqN
+         zs7bDzLDr+FKVCXW0bZXoT9a+fw0BFYgDlPxY+3FhwTAjOAf/uCX9CZ/V6GtRxc15xTF
+         1IB66iRDcYrW0c59y94r1wVp8YR28yOq9awrea2hl4PDbTr+rP/0HXJej1L6l8qWHxsy
+         MjQCQapW/HC5TI6j2HFmeztBzupBXxFPYEXIb2m9NRcm50KZZnXRmXRiy5GIKa3+7vfK
+         +yJnF0mhNsS/MrPl+v9+YR4FCZiAcCGZYsDwZqh9x9h1zKbZgHMnIHTWyMI16VeMV7tb
+         7ISg==
+X-Forwarded-Encrypted: i=1; AJvYcCXbiJbwL3Eojptf3CJPVitx3LgnS/CRzHPDAkYyZ5tw+n3tcgPBB99Pixc69scJM3qYEyk2A4pxaBys@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/0M+TRy/opRKG1aSgBt4FEVdxEvQLxl+tKv1LUCScO9dv9aBq
+	a3pFdsJq3FeSNo/x05PDQTRXOSUf4Tu6cvuTL2y9nhYZhtbDSD2g3bARd/Ef96rxQXc=
+X-Gm-Gg: ASbGncs+V7ixivsOexunZ0unVZqe/Ke9Li3Orr/KhCyRzw7ettYeegiGfPk7FJCFwE1
+	j3Z/az3LePirRkr7Oj6MGcuqcESauXFsr45VuYoY/Cuv9hkbwK0HpdP3/omXAw0U7hiLekkK6A/
+	zVM4FRdBDMTe3mZGijWmmvyPsgOUD8u4Th+T8B0LXzu48EEulNvQMJcovhKck58qI/8P8eyHAg5
+	5QbGqlp3KrHBrpy65z5Jc9cdHYNiwnp7XvrcWOpxf0a0z9fKLL1wjj/pzkjQApmYvtLcqRIsuFK
+	ty6VZGqJAb1OFvS8EAXyj3NHQmFNIg5ASnOYum2iQGOVQqUF7hVEIs8MRcYqp/vTuTGVY3G+keK
+	3EqPXcWSbRNG5/UM9
+X-Google-Smtp-Source: AGHT+IGdKydcAVudfo8tRjb74df6pGgrnXhjaVHzSaErxWrZA+8R5urcxY7HAacsddXeHVITgfN0qA==
+X-Received: by 2002:a17:903:3d10:b0:269:74bf:f19a with SMTP id d9443c01a7336-27ed49df3f7mr104309095ad.11.1758905945942;
+        Fri, 26 Sep 2025 09:59:05 -0700 (PDT)
+Received: from 1e895cdadf47 ([20.38.40.137])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed6aca043sm57601085ad.138.2025.09.26.09.59.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Sep 2025 09:59:05 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="D37Ez3ddLNdPxim2"
-Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+Subject: [REGRESSION] next/master: (build) undefined reference to
+ `pm_hibernation_mode_is_suspend' in vmlinux...
+From: KernelCI bot <bot@kernelci.org>
+To: kernelci-results@groups.io
+Cc: regressions@lists.linux.dev, gus@collabora.com, linux-next@vger.kernel.org
+Reply-To: kernelci@lists.linux.dev
+Date: Fri, 26 Sep 2025 16:59:03 -0000
+Message-ID: <175890594349.36.5014274970333071394@1e895cdadf47>
 
 
---D37Ez3ddLNdPxim2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-Hi all,
 
-There will be no releases Tuesday and Wednesday next week and Monday is
-at risk, normal operation will resume on Thursday.
 
-Changes since 20250925:
+Hello,
 
-The btrfs-fixes tree gained a conflict with Linus' tree.
+New build issue found on next/master:
 
-The drm tree gained a conflict with Linus' tree.
+---
+ undefined reference to `pm_hibernation_mode_is_suspend' in vmlinux.unstripped (drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c) [logspec:kbuild,kbuild.compiler.linker_error]
+---
 
-Non-merge commits (relative to Linus' tree): 11355
- 11323 files changed, 545087 insertions(+), 209367 deletions(-)
+- dashboard: https://d.kernelci.org/i/maestro:74f8fe195e9e78290f1dae54754bf5b8d4b2a893
+- giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+- commit HEAD:  262858079afde6d367ce3db183c74d8a43a0e83f
+- tags: next-20250926
 
-----------------------------------------------------------------------------
 
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
+Log excerpt:
+=====================================================
+  LD      .tmp_vmlinux1
+ld: drivers/gpu/drm/amd/amdgpu/amdgpu_drv.o: in function `amdgpu_pmops_thaw':
+/tmp/kci/linux/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:2677: undefined reference to `pm_hibernation_mode_is_suspend'
 
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with an arm64
-defconfig, an allmodconfig for x86_64, a multi_v7_defconfig for arm and
-a native build of tools/perf. After the final fixups (if any), I do an
-x86_64 modules_install followed by builds for x86_64 allnoconfig,
-powerpc allnoconfig (32 and 64 bit), ppc44x_defconfig, allyesconfig and
-pseries_le_defconfig and i386, arm64, s390, sparc and sparc64 defconfig
-and htmldocs. And finally, a simple boot test of the powerpc
-pseries_le_defconfig kernel in qemu (with and without kvm enabled).
+=====================================================
 
-Below is a summary of the state of the merge.
 
-I am currently merging 407 trees (counting Linus' and 406 trees of bug
-fix patches pending for the current release).
+# Builds where the incident occurred:
 
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
+## cros://chromeos-6.6/x86_64/chromeos-amd-stoneyridge.flavour.config+lab-setup+x86-board+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y on (x86_64):
+- compiler: gcc-12
+- dashboard: https://d.kernelci.org/build/maestro:68d6bd56aabea828fddae00b
 
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
+## cros://chromeos-6.6/x86_64/chromeos-intel-pineview.flavour.config+lab-setup+x86-board+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y on (x86_64):
+- compiler: gcc-12
+- dashboard: https://d.kernelci.org/build/maestro:68d6bd59aabea828fddae00e
 
---D37Ez3ddLNdPxim2
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+#kernelci issue maestro:74f8fe195e9e78290f1dae54754bf5b8d4b2a893
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjWshQACgkQJNaLcl1U
-h9Cc7Qf/XGm8MH4Sv5jfRUeimCryAA/mbgXPDFce2v0m8uMPjXYd1/VZL0OT1UJk
-59tza9UdTR2exvIZaxoJqXp1G4THmBzQek84xRowxXCwPbkj/izTktB30s1dvRdo
-McODgnawZ9eW36ghL2HFxMkucirvv0W2cAHX9lGk+VIC9FGjeo5sdm2N2trMkVJe
-o0WUz2HX/n31QP/OZjFXCljA7mPpBQ4cwCc5Ref6UxF6kUqhBU9seljmrsz2XZMH
-UCtL9BAqHTl1lcChbZiyhgzemZ77UgBVU/KXSTI5VfloaTMvKC/w95ak2RNqQjh2
-iCLKYqxcAj6nm6W6SfR7f22tMi3QqQ==
-=8v0c
------END PGP SIGNATURE-----
+Reported-by: kernelci.org bot <bot@kernelci.org>
 
---D37Ez3ddLNdPxim2--
+--
+This is an experimental report format. Please send feedback in!
+Talk to us at kernelci@lists.linux.dev
+
+Made with love by the KernelCI team - https://kernelci.org
 

@@ -1,55 +1,57 @@
-Return-Path: <linux-next+bounces-8501-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8502-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24971BA3777
-	for <lists+linux-next@lfdr.de>; Fri, 26 Sep 2025 13:20:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FF3DBA3A51
+	for <lists+linux-next@lfdr.de>; Fri, 26 Sep 2025 14:38:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3FD34C6FA7
-	for <lists+linux-next@lfdr.de>; Fri, 26 Sep 2025 11:20:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0672E561A89
+	for <lists+linux-next@lfdr.de>; Fri, 26 Sep 2025 12:38:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19505246BC6;
-	Fri, 26 Sep 2025 11:20:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE1551E503D;
+	Fri, 26 Sep 2025 12:38:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U/03Z5zI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QHIYMopI"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D1C1A2398;
-	Fri, 26 Sep 2025 11:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20C32AD3D;
+	Fri, 26 Sep 2025 12:38:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758885632; cv=none; b=LIDT6N8bXEQjlV26wgfIkhJIaQkwtnLem0dqCsEYJ6MC+4TcMS85StMhqoQ2MWLOQ7k6WtTkWxTW3g1wcfcBHmpuYDApm6oNn+5DrCG1BolzuaV3eEwHcALHmxkg8rfySPY6NKwFqYEywzK806DOEZT31/ymXNPgfA0qZX46eMI=
+	t=1758890294; cv=none; b=PpwTVxoRjAjJ5OAUdXc5+gfETUlZGm1xxWn1e7N52y9peMLlZGdqqD+W4i9far8oEVRTN4HfNBsTmSzvWX0ebum7WICj31+BERBnNhdaHOaknIPu8b27lV4MyFANMIaG5VuJUhukvvpsEreXfwHhWK8p6hW5KKu8vmFDePs41Pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758885632; c=relaxed/simple;
-	bh=K8AahNd6DL4smpboYZBm2E+eJM2r7KJlkG/ThKxeJSw=;
+	s=arc-20240116; t=1758890294; c=relaxed/simple;
+	bh=r3+KoqyxYaumJVlhxlnDPVZa+TxdsWD5Z5JBjgUvoI0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qhxONTr/BD/mW6kMoycA9oRJjAB747Ntj9YOIqJkLe4MRKvL6r0Nd314gq7iMclj5HOI9rs9RWKBnmgLi38QIOYhNS9uTxSnhHATkurltpsLib99cDhRCe6W5+QH+x13c2k//MxCdiTRYG9YHskq5Tohvc5LgrE5Qe+Ndx8Tb5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U/03Z5zI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 640F2C4CEF4;
-	Fri, 26 Sep 2025 11:20:30 +0000 (UTC)
+	 Content-Disposition; b=YeldrUYIftI9wZ85cQaG8zAN/is8x7DZCfiAQW5CjXf7z5pV+YEUf4pCYrhgRVffQ9PV2Kg3LZMZC6ZC+3k0ozAv4FNHkLQQFvcrpDcMDM9soqn89NJZR0MaTv1ifDqUKHUPgq8magYzPImak6iTU7RxLiV1uE6rF+z1J+3QhwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QHIYMopI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D88F1C4CEF4;
+	Fri, 26 Sep 2025 12:38:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758885631;
-	bh=K8AahNd6DL4smpboYZBm2E+eJM2r7KJlkG/ThKxeJSw=;
+	s=k20201202; t=1758890294;
+	bh=r3+KoqyxYaumJVlhxlnDPVZa+TxdsWD5Z5JBjgUvoI0=;
 	h=Date:From:To:Cc:Subject:From;
-	b=U/03Z5zIOnNug3cCk74UshOTojRT6e7wH5IP0kNO/sSMrMEfIP16L0psZX4bQ4jpN
-	 QhasIDLTxtgqC3Hh3XFMOCLa1mBBu3np835ks5jhR433G87Er03EVExZkIwEApixTk
-	 0pgwjiDBpHGxaW7TQlGUmy2YkqqzVUpPcbzC+emlQ+XqKx2dcZQOi5snjC4Xb+JN4t
-	 rlQdv0XZh64mkmJrOYu5/QEd9vFVvKswWNk7phSU7vyG7KlOzPXrStCyn24o8Tlha8
-	 SbGjZINeWyFbN70P63i5wHZmKnP0NnKmfgf+Q00xUrJcRAK0Xin+SeetkAH6ptPuf2
-	 AUCR46sXcpI0g==
-Date: Fri, 26 Sep 2025 12:20:27 +0100
+	b=QHIYMopIY+gQS3kKXdhPUcz8jiFap380Z47bFJf4Wcsa2aS+42YUndaWedYkYzlrf
+	 CV/HFUf8GTdz9n71aIKN9b/HLv0R8cOdoWaeBzafCFW/xWWcu1CoG3VtYjoW1UH1uP
+	 BHsXMaiRBVAzRqqWhuo+pjhsz8WUtGIB0oXF5rEJnW+LfEK370pksmtmQJ3nCYCHwT
+	 3aPcTxMXYjjrx+cybuzwwk0T7gX3kX6cabrVzGh1dnYN6K6cpb1j/MaJSQAD7mFHUT
+	 +swWShow5ORzYl5bGkTPauYF7RLBVZo7mpTQ1TQdylKB9sbD79T3mKi05h1jrtatZ5
+	 I4wWfd/6gVCnA==
+Date: Fri, 26 Sep 2025 13:38:10 +0100
 From: Mark Brown <broonie@kernel.org>
-To: David Sterba <dsterba@suse.cz>
-Cc: David Sterba <dsterba@suse.com>,
-	Johannes Thumshirn <johannes.thumshirn@wdc.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the btrfs-fixes tree with the origin tree
-Message-ID: <aNZ2-6TZzpXbS50a@sirena.org.uk>
+To: Dave Airlie <airlied@redhat.com>, DRI <dri-devel@lists.freedesktop.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Michal Wajdeczko <michal.wajdeczko@intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Zongyao Bai <zongyao.bai@intel.com>
+Subject: linux-next: manual merge of the drm tree with the origin tree
+Message-ID: <aNaJMgOnsuoBywwH@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -57,32 +59,35 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Olj9ztmq2NnX06//"
+	protocol="application/pgp-signature"; boundary="dFuDA49CIsVn8cs8"
 Content-Disposition: inline
 
 
---Olj9ztmq2NnX06//
+--dFuDA49CIsVn8cs8
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the btrfs-fixes tree got a conflict in:
+Today's linux-next merge of the drm tree got a conflict in:
 
-  fs/btrfs/zoned.c
+  drivers/gpu/drm/xe/xe_device_sysfs.c
 
-between commit:
+between commits:
 
-  53de7ee4e28f6 ("btrfs: zoned: don't fail mount needlessly due to too many=
- active zones")
+  ff89a4d285c82 ("drm/xe/sysfs: Add cleanup action in xe_device_sysfs_init")
+  500dad428e5b0 ("drm/xe/vf: Don't expose sysfs attributes not applicable f=
+or VFs")
 
-=66rom the origin tree and commit:
+=66rom the origin tree and commits:
 
-  cc53bd2085c8f ("btrfs: add unlikely annotations to branches leading to EI=
-O")
+  1a869168d91f1 ("drm/xe/sysfs: Add cleanup action in xe_device_sysfs_init")
+  a2d6223d224f3 ("drm/xe/vf: Don't expose sysfs attributes not applicable f=
+or VFs")
+  fb3c27a69c473 ("drm/xe/sysfs: Simplify sysfs registration")
 
-=66rom the btrfs-fixes tree.
+=66rom the drm tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -91,25 +96,25 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc fs/btrfs/zoned.c
-index f426276e2b6bf,e3341a84f4ab3..0000000000000
---- a/fs/btrfs/zoned.c
-+++ b/fs/btrfs/zoned.c
+diff --cc drivers/gpu/drm/xe/xe_device_sysfs.c
+index 927ee7991696b,c5151c86a98ae..0000000000000
+--- a/drivers/gpu/drm/xe/xe_device_sysfs.c
++++ b/drivers/gpu/drm/xe/xe_device_sysfs.c
 
---Olj9ztmq2NnX06//
+--dFuDA49CIsVn8cs8
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjWdvoACgkQJNaLcl1U
-h9BUqAf/c7+BudQ0cSYvKvTzcVwm4N7pFzuhnX+SuYxTdJNMpbaGdN53brh63QMN
-qielK5x29FBFj3DiR7KzswtmaiORiWJuGzT+3QFQAb/cW/0HJmAAh+lVbOURrCyx
-Ucjz28gExTzYU3eNztGMXD5j1wxhJ5ybaw7ZoCnM1VFE1Xw2whp7BPimbagvSgZC
-/2SktxcUVutyfEUi1Wr06A/7SHxjdOmyET41NZ9GV8dRT9zo+VwcK1XRrLNPWhs3
-jB9M2iZJoZMNJNTmhbUNXffwuP/M2QAoY6oBY0JRx/xBkepiuMShoW9Q7etiRp++
-Wvz72AewZHRDYQtDZxGzbHvPHUOIjg==
-=z6jd
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjWiTEACgkQJNaLcl1U
+h9DEmAf9GQ01UWfutzagSRDip7bv0ShVJC/eCrs98dxllk20nSbahausZ6G5iyeT
+mgV5iHrDbjNBJFDNZhCOgVtnvkzDyrLpZJfUhXWv2GIQu4DjyhjCshN8ZTa6SbtZ
+1b4RF+xyDUsXM4BDgeCGTwVlD/Rdux4Ez4auHP/CDIjobAh2wOPjSQ3hn2Vut366
+0QmAumcSwfZzBw47J/gtM6Xt+3L9gmluKLzO1BIfwBu2ki43yrBrUpUAzEIK68om
+7KmvV1SGzSfyg+DX6BrBoahQ6VT0KT8JK2kGX8Eyz149P/9XFgqqWNumk3NH5fbk
+wU4fACxLSr6CPkm4YbTOJ5iQarWVQQ==
+=VETx
 -----END PGP SIGNATURE-----
 
---Olj9ztmq2NnX06//--
+--dFuDA49CIsVn8cs8--
 

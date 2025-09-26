@@ -1,57 +1,56 @@
-Return-Path: <linux-next+bounces-8502-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8503-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FF3DBA3A51
-	for <lists+linux-next@lfdr.de>; Fri, 26 Sep 2025 14:38:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D743BA3BFC
+	for <lists+linux-next@lfdr.de>; Fri, 26 Sep 2025 15:03:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0672E561A89
-	for <lists+linux-next@lfdr.de>; Fri, 26 Sep 2025 12:38:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC2E0382C57
+	for <lists+linux-next@lfdr.de>; Fri, 26 Sep 2025 13:03:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE1551E503D;
-	Fri, 26 Sep 2025 12:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3C602DCF57;
+	Fri, 26 Sep 2025 13:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QHIYMopI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CU4d8sAM"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20C32AD3D;
-	Fri, 26 Sep 2025 12:38:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2D42750F3;
+	Fri, 26 Sep 2025 13:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758890294; cv=none; b=PpwTVxoRjAjJ5OAUdXc5+gfETUlZGm1xxWn1e7N52y9peMLlZGdqqD+W4i9far8oEVRTN4HfNBsTmSzvWX0ebum7WICj31+BERBnNhdaHOaknIPu8b27lV4MyFANMIaG5VuJUhukvvpsEreXfwHhWK8p6hW5KKu8vmFDePs41Pg=
+	t=1758891809; cv=none; b=XyRT2B9cuX4NzzK/X5Qav8SV4iU+d4F3689FMVbM382fim0AZRdhVUOJCjJf8S5935EHG0MxekvQtxCgTVMjTWZY3HdMpS89vDjt64JDZEVQM91qmWpex5+uOwlZgx8dhcIRAk9AAmlyOdG9gP+pYK6gSDBnAraciCXpMoqXtR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758890294; c=relaxed/simple;
-	bh=r3+KoqyxYaumJVlhxlnDPVZa+TxdsWD5Z5JBjgUvoI0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=YeldrUYIftI9wZ85cQaG8zAN/is8x7DZCfiAQW5CjXf7z5pV+YEUf4pCYrhgRVffQ9PV2Kg3LZMZC6ZC+3k0ozAv4FNHkLQQFvcrpDcMDM9soqn89NJZR0MaTv1ifDqUKHUPgq8magYzPImak6iTU7RxLiV1uE6rF+z1J+3QhwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QHIYMopI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D88F1C4CEF4;
-	Fri, 26 Sep 2025 12:38:12 +0000 (UTC)
+	s=arc-20240116; t=1758891809; c=relaxed/simple;
+	bh=EcC1TqJdAPf4+0zm1K1JWRSiIjRzN1jQRUVqHufx5l0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YLfx1v8aoZZsNI+1r0nOUzk+B/yr9JaP90yN262VLHpwsmiAbihS5/CyCuOa7VNm9x66XAcRK9GNy893vdkJLszUFqLxnWb8dKRfXAllJ1Fwnpbiu8sz71viToAH3JsBNmNghLqYLxNLdU+0sQDCUKMGArE+8j7WDtgjr1ptbeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CU4d8sAM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0C5AC4CEF4;
+	Fri, 26 Sep 2025 13:03:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758890294;
-	bh=r3+KoqyxYaumJVlhxlnDPVZa+TxdsWD5Z5JBjgUvoI0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=QHIYMopIY+gQS3kKXdhPUcz8jiFap380Z47bFJf4Wcsa2aS+42YUndaWedYkYzlrf
-	 CV/HFUf8GTdz9n71aIKN9b/HLv0R8cOdoWaeBzafCFW/xWWcu1CoG3VtYjoW1UH1uP
-	 BHsXMaiRBVAzRqqWhuo+pjhsz8WUtGIB0oXF5rEJnW+LfEK370pksmtmQJ3nCYCHwT
-	 3aPcTxMXYjjrx+cybuzwwk0T7gX3kX6cabrVzGh1dnYN6K6cpb1j/MaJSQAD7mFHUT
-	 +swWShow5ORzYl5bGkTPauYF7RLBVZo7mpTQ1TQdylKB9sbD79T3mKi05h1jrtatZ5
-	 I4wWfd/6gVCnA==
-Date: Fri, 26 Sep 2025 13:38:10 +0100
+	s=k20201202; t=1758891809;
+	bh=EcC1TqJdAPf4+0zm1K1JWRSiIjRzN1jQRUVqHufx5l0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CU4d8sAMV4F7OuOQdjCs4tYDXVfrM1/4/2yL9lzh6OMOmrQl6hj8vqdJ9TuhXE2Wo
+	 T6G3a2X5xUWsDbwFJJxFFKZfoaaXCUY86gHRW5z0vqYsAHOz6MnpIa1TuHwvD4I8KF
+	 //FAkMizYeQ3mqSUgz0dyBKGi69ovNvePPeJc6OwdyqOkkcDkvOUSYVbflCgLZXK8o
+	 W4Qa70SGRFPsRxngUy6VBitMAMRZ00H1Vv3D69VEWMoBD0dQGFEMqmpvaP3Daws+6r
+	 PiiHJQbhKwdpIBmHHbTR/TgMpPSreZgP+vTP1219jLc3BcSrloxT4nh03x0vNBj7I3
+	 4FsiM1VyoZAwA==
+Date: Fri, 26 Sep 2025 14:03:24 +0100
 From: Mark Brown <broonie@kernel.org>
-To: Dave Airlie <airlied@redhat.com>, DRI <dri-devel@lists.freedesktop.org>
+To: Lee Jones <lee@kernel.org>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Michal Wajdeczko <michal.wajdeczko@intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Zongyao Bai <zongyao.bai@intel.com>
-Subject: linux-next: manual merge of the drm tree with the origin tree
-Message-ID: <aNaJMgOnsuoBywwH@sirena.org.uk>
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mfd tree
+Message-ID: <8c54836a-5cda-4734-b933-31c8b16f3fff@sirena.org.uk>
+References: <aMqxWGx0asGTWZ2V@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -59,62 +58,42 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dFuDA49CIsVn8cs8"
+	protocol="application/pgp-signature"; boundary="uTqezygsQVLLGKIS"
 Content-Disposition: inline
+In-Reply-To: <aMqxWGx0asGTWZ2V@sirena.org.uk>
+X-Cookie: Your canceled check is your receipt.
 
 
---dFuDA49CIsVn8cs8
+--uTqezygsQVLLGKIS
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Wed, Sep 17, 2025 at 02:02:16PM +0100, Mark Brown wrote:
+> Hi all,
+>=20
+> After merging the mfd tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+>=20
+> x86_64-linux-gnu-ld: vmlinux.o: in function `stmpe_gpio_get':
+> gpio-stmpe.c:(.text+0x213ed29): undefined reference to `stmpe_reg_read'
 
-Today's linux-next merge of the drm tree got a conflict in:
+This is still present in today's -next.
 
-  drivers/gpu/drm/xe/xe_device_sysfs.c
-
-between commits:
-
-  ff89a4d285c82 ("drm/xe/sysfs: Add cleanup action in xe_device_sysfs_init")
-  500dad428e5b0 ("drm/xe/vf: Don't expose sysfs attributes not applicable f=
-or VFs")
-
-=66rom the origin tree and commits:
-
-  1a869168d91f1 ("drm/xe/sysfs: Add cleanup action in xe_device_sysfs_init")
-  a2d6223d224f3 ("drm/xe/vf: Don't expose sysfs attributes not applicable f=
-or VFs")
-  fb3c27a69c473 ("drm/xe/sysfs: Simplify sysfs registration")
-
-=66rom the drm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc drivers/gpu/drm/xe/xe_device_sysfs.c
-index 927ee7991696b,c5151c86a98ae..0000000000000
---- a/drivers/gpu/drm/xe/xe_device_sysfs.c
-+++ b/drivers/gpu/drm/xe/xe_device_sysfs.c
-
---dFuDA49CIsVn8cs8
+--uTqezygsQVLLGKIS
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjWiTEACgkQJNaLcl1U
-h9DEmAf9GQ01UWfutzagSRDip7bv0ShVJC/eCrs98dxllk20nSbahausZ6G5iyeT
-mgV5iHrDbjNBJFDNZhCOgVtnvkzDyrLpZJfUhXWv2GIQu4DjyhjCshN8ZTa6SbtZ
-1b4RF+xyDUsXM4BDgeCGTwVlD/Rdux4Ez4auHP/CDIjobAh2wOPjSQ3hn2Vut366
-0QmAumcSwfZzBw47J/gtM6Xt+3L9gmluKLzO1BIfwBu2ki43yrBrUpUAzEIK68om
-7KmvV1SGzSfyg+DX6BrBoahQ6VT0KT8JK2kGX8Eyz149P/9XFgqqWNumk3NH5fbk
-wU4fACxLSr6CPkm4YbTOJ5iQarWVQQ==
-=VETx
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjWjxsACgkQJNaLcl1U
+h9Ae0wf+IPzEULqrPp7wI1vAYM5NJaXsbyj6roVp6eJKRzrMJDq+8y4tGJnecxxK
++aHQ7RnIvcmNXlTYkUB6H1zZcpgxTiInPBlr45QnncDb6c5ornZZNXQdkny6ACaK
+Ku2zVeMumu6m0h8FHmdaCh1WLu0Iu/uZ93rRXwcbivfXqVrCGdcJ3RYIBZPl5Xxp
+R4N/cBRuInPJ/AzNawhqqbj54vpWZVw+kTRA1AjeaIyeryYnvrGSQfpPjk+Za5zb
+IfMBO22DQ07QDQoJRfjFnoz3McnztRDJ0Ftk5M85HQ/0QHqMumrx4Q5ggA9Sz8Jy
+KWhF0vnZkraXP2t3TYbrgHY/D1mF0Q==
+=RBEE
 -----END PGP SIGNATURE-----
 
---dFuDA49CIsVn8cs8--
+--uTqezygsQVLLGKIS--
 

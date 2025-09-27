@@ -1,651 +1,175 @@
-Return-Path: <linux-next+bounces-8507-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8509-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F333EBA5832
-	for <lists+linux-next@lfdr.de>; Sat, 27 Sep 2025 04:30:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEAC9BA5A03
+	for <lists+linux-next@lfdr.de>; Sat, 27 Sep 2025 09:01:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7FA94A2787
-	for <lists+linux-next@lfdr.de>; Sat, 27 Sep 2025 02:30:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F492324759
+	for <lists+linux-next@lfdr.de>; Sat, 27 Sep 2025 07:01:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A463670808;
-	Sat, 27 Sep 2025 02:30:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA29E1C860C;
+	Sat, 27 Sep 2025 07:01:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="sIeE50y+"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="JA0UmAn2"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EF178BEC
-	for <linux-next@vger.kernel.org>; Sat, 27 Sep 2025 02:30:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F502C8CE;
+	Sat, 27 Sep 2025 07:01:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758940247; cv=none; b=fjTFW8OS3dPd5GlvjqLQvEjqTzVBI02mjOoC7lNf9U9DJ/XNO8TZQMaj3EFV9Ez7NZVUi3fYvccnUTU9XE/NtszBo1a/uCL6Wd1p6fnDCmnoIam0qWHv23cJViphKO5C0JR79q+e2ffFjb9ah/1MzRRkfmLuAGVGEpSXXTFj4YE=
+	t=1758956490; cv=none; b=GlHcgSp05DhGekWQj8EmEW8FC1blTTsHJamuP2gdhnpDlUazF0/tkqLx1LItxBTOWJcwOg8CD/HQegPWkLlGKxtfio71LlA23LvlER7gaod6vuwgc890I+obEXTXONEW6RQIDKdSOWpcrDGhvmeWstQlfgHWuhO+2NWIDFIMVtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758940247; c=relaxed/simple;
-	bh=59Trrtn00SgueutEqhyc1y+vXcIKBTTgKWIVnMxbNkE=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=r5dgplIsPMTiAMLuK07GzVfgn0FkEVKOyA0Kdfeg4ZnJsfQ8uvZ8l7JUxyv27vRZqNOds4NkUKFQ8SMJqC4Qm9l6jvESQA0E4roZSi9VqL8VCNf3GSjaSi2qm9tZDW0grfRdqksrv/gQH+jrQ5yC3h0t75gFxj0bYAaN6s6nN30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=sIeE50y+; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-27d2c35c459so23362315ad.0
-        for <linux-next@vger.kernel.org>; Fri, 26 Sep 2025 19:30:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1758940245; x=1759545045; darn=vger.kernel.org;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rcbuV4b6H5oR4WUcvQZZhTutID8U3gdTYmpeB8JpPCo=;
-        b=sIeE50y+RqjE9OFvQHDUXAn/9HT3nxQFFX8m8OxlB5r3vWf5Q439PnaWDdM8i3TJq4
-         RWkP3s40GECtcYOyAFTHk6jODXLRUKOksBnUT7Qv2FeUMkHZBsPqQYG1d6IUDRkMsB7g
-         sKzQC4Rqj+tOVR/ZDrFCIkwXuQr7TtY3Zkvp5CWj+ibhFy154v2TwBvmEnc08hqtHY33
-         9I6Iuv99uzbANmjtCKHyjE+WPYysITd6MpclKN51xUkBzdkTeAoZe+dOxdprm0xQuagt
-         3QPnux7En24fnlAnEx2qrYkfIUZTY0fkRX5il+EtXcSWPNBMG9i9330omJ6Fj9/TDA4w
-         qWaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758940245; x=1759545045;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=rcbuV4b6H5oR4WUcvQZZhTutID8U3gdTYmpeB8JpPCo=;
-        b=UB+dlf1E3/mH/tB6dIONZVxtrLLa9gvdOf3MkGKSuXB9tHkQbC1YFPClUFJZsPhq2Y
-         3ZCRRWG3KzVomLpkwUixa2Vy9cuY+Au1Je9MDNHUjHJBXxC8ht/t5hPtJ0jWx1Q4W0fw
-         Cy7uhO6UaE8pVQYTNQZ2G41bMt66R1XvQffnkyUPbO8QM6f4Tt3Gk9pQQaF8i5lBqD2o
-         A9pY+Sp2G3LE9LcZXvla3GI1LpOWKvuXgYDblsun1NcTlvw305FY5j+s9gfnNouS71ss
-         IuDZl52uUhRbt/79Rp9MXbnwtB+OZ7bFYEy8XHYcYxlEvXKB2V/5UbqCDfkknSQFKe6q
-         xjvQ==
-X-Gm-Message-State: AOJu0YwFGNDEWb5t1QWuOijL9TX2HA07DYpwHKKjwhf4eLbAQeTIWXvf
-	7tB0o9SfamlGeTTIngN6VaJt7buyZKaiJavyI0V67YVlN27ibYv0KHQi3ZGTp2vTT3OnqcSnv3G
-	t8nLUDVA=
-X-Gm-Gg: ASbGncvAblX1D8WBkcW5uTVYkKKTTI120KghURo7LRr0883ZCTj17FL8MGpLQTd1ecs
-	jzAAoQsXG0IpAXNltJNwbe8awtNj1eABvb562QI1a/blKn/XY2lLrYVeFUDuwtelCtG76MgIwpE
-	qYiN4IrORiHLTD79nABsDW0m0WDrAuYEljsEn2GaOs6TK989UNx4ZgfMlRPJ1p8F+231NifIAsg
-	TaHmti4GHB23caWmmtEAFIxr2kuo7QSjNmWVBXTnH2fv1tFjJRH+nvh+qX98Jf/9MQzoqrNVczN
-	IaTuW0b3X92VAZxfOuWz0zut26IaqZ6fytOyT4nApm+yXlG565mkLNLqoOzanVuIN/EXkpMEa2g
-	UNTW91AZzx9pvoZStWGNl6rD79zU=
-X-Google-Smtp-Source: AGHT+IH8zCc8mKebtLZuniTxSTBvXxKlJMjYxAF0l75jgAZ0hkmJx3M1APB0iCYpEXevk8Bzj2LELA==
-X-Received: by 2002:a17:903:2291:b0:27e:dc53:d222 with SMTP id d9443c01a7336-27edc53d5ddmr77808375ad.44.1758940244666;
-        Fri, 26 Sep 2025 19:30:44 -0700 (PDT)
-Received: from 1dfac204f25d ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-27ed671732asm68046175ad.49.2025.09.26.19.30.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Sep 2025 19:30:44 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1758956490; c=relaxed/simple;
+	bh=7SHaprNodxj8zBds5Y9LV1amr5gBsiPxGO5lKnTDsqQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eAJsyyziuUTXMyaPvPdG7hjB2exHRd5b/orJYthQv2OEh+7/ZbpvoyMAih/ovrAIb2D2haOn2Yvh+okUSZyFVqbAU08GbXmSTXHZq6v7kC/jXRghvAUWDUgzitiG9RjAwkJ9g7mA2/b5FuNloWvzbsJe5AnTd9psOD/LRAbSYRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=JA0UmAn2; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=aS1bMUN422aSyFnyffqqsGN9POA+Q9RpYAHQ+N9wwe0=; t=1758956488;
+	x=1759388488; b=JA0UmAn2666zIZAIRK3wwzFrHl2iPQUKKS2ngOJYHutFPv9861/NSCVuU6KyR
+	u9Mu72MfeEUdvzW/89ygNs4+O+x0iG0UEdlGqtLE9/JnDC+AYm5OgGfSYPtdHAjmlCta3s8x8Mctk
+	1ig3GMQ0FafJYxlYeORK7XrsmVZwy2okHX5nL+txRAI7dxuPUZ0hBwWUdeKQ0Nv8+n1TCGggVxmTh
+	gXxhFjjBhvPiMbHmz0Kvsynil93vm7sG61N932OvDBAA3o4TNpOnge1nCl1zLr7PUQ4ZN9Mt6NcHD
+	3HyMvzdaFXZqkMdel1QT/uybE/9BGZ6Pg1LZEQ1wP2G2t3MW7Q==;
+Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+	id 1v2OOx-00AUVj-0y;
+	Sat, 27 Sep 2025 08:27:23 +0200
+Message-ID: <3e5abb75-2192-46dc-a44e-d66fed87fc63@leemhuis.info>
+Date: Sat, 27 Sep 2025 08:27:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/6] vduse: make domain_lock an rwlock
+To: =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
+ "Michael S . Tsirkin" <mst@redhat.com>
+Cc: Yongji Xie <xieyongji@bytedance.com>, Cindy Lu <lulu@redhat.com>,
+ jasowang@redhat.com, linux-kernel@vger.kernel.org,
+ Maxime Coquelin <mcoqueli@redhat.com>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Laurent Vivier <lvivier@redhat.com>,
+ virtualization@lists.linux.dev, Stefano Garzarella <sgarzare@redhat.com>,
+ Linux kernel regressions list <regressions@lists.linux.dev>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20250925091335.1964283-1-eperezma@redhat.com>
+ <20250925091335.1964283-2-eperezma@redhat.com>
+From: Thorsten Leemhuis <linux@leemhuis.info>
+Content-Language: de-DE, en-US
+Autocrypt: addr=linux@leemhuis.info; keydata=
+ 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 n7RI
+In-Reply-To: <20250925091335.1964283-2-eperezma@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: [STATUS] next/master - 262858079afde6d367ce3db183c74d8a43a0e83f
-From: KernelCI bot <bot@kernelci.org>
-To: kernelci-results@groups.io
-Cc: linux-next@vger.kernel.org
-Reply-To: kernelci@lists.linux.dev
-Date: Sat, 27 Sep 2025 02:30:43 -0000
-Message-ID: <175894024351.1699.7637667820852711870@1dfac204f25d>
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1758956488;410e1dfe;
+X-HE-SMSGID: 1v2OOx-00AUVj-0y
 
+On 25.09.25 11:13, Eugenio Pérez wrote:
+> It will be used in a few more scenarios read-only so make it more
+> scalable.
+> [...]
+> diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+> index e7bced0b5542..2b6a8958ffe0 100644
+> --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+> +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/cdev.h>
+>  #include <linux/device.h>
+>  #include <linux/eventfd.h>
+> +#include <linux/rwlock.h>
 
+Lo! My daily -next builds based for Fedora using the Fedora rawhide
+failed yesterday on various archs. I suspect it's due to above change,
+as this was the error I got:
 
+"""
+In file included from drivers/vdpa/vdpa_user/vduse_dev.c:17:
+./include/linux/rwlock.h:5:3: error: #error "Please do not include this
+file directly."
+    5 | # error "Please do not include this file directly."
+      |   ^~~~~
+./include/linux/rwlock.h:27:10: warning: ‘rwlock_init’ redefined
+   27 | # define rwlock_init(lock)                                      \
+      |          ^~~~~~~~~~~
+In file included from ./include/linux/spinlock_rt.h:153,
+                 from ./include/linux/spinlock.h:455,
+                 from ./include/linux/sched.h:37,
+                 from ./include/linux/percpu.h:12,
+                 from ./arch/x86/include/asm/msr.h:16,
+                 from ./arch/x86/include/asm/tsc.h:11,
+                 from ./arch/x86/include/asm/timex.h:6,
+                 from ./include/linux/timex.h:67,
+                 from ./include/linux/time32.h:13,
+                 from ./include/linux/time.h:60,
+                 from ./include/linux/jiffies.h:10,
+                 from ./include/linux/ktime.h:25,
+                 from ./include/linux/timer.h:6,
+                 from ./include/linux/netdevice.h:24,
+                 from ./include/linux/if_vlan.h:10,
+                 from ./include/linux/virtio_net.h:5,
+                 from drivers/vdpa/vdpa_user/vduse_dev.c:11:
+"""
 
+For a complete log, see
+https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/fedora-rawhide-x86_64/09603789-next-next-all/builder-live.log.gz
 
-Hello,
+Reverting the series made things work for me.
 
-Status summary for next/master
+> [...]
 
-Dashboard:
-https://d.kernelci.org/c/next/master/262858079afde6d367ce3db183c74d8a43a0e83f/
-
-giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-branch: master
-commit hash: 262858079afde6d367ce3db183c74d8a43a0e83f
-origin: maestro
-test start time: 2025-09-26 16:14:29.438000+00:00
-
-Builds:	   58 ✅    2 ❌    0 ⚠️
-Boots: 	  165 ✅    9 ❌    6 ⚠️
-Tests: 	13396 ✅  523 ❌ 3679 ⚠️
-
-### POSSIBLE REGRESSIONS
-    
-Hardware: acer-chromebox-cxi4-puff
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-12
-      - kselftest.cpufreq.suspend
-      last run: https://d.kernelci.org/test/maestro:68d6d430aabea828fddb1952
-      history:  > ✅  > ✅  > ✅  > ❌  
-            
-      - kselftest.cpufreq.suspend.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:68d6d69eaabea828fddb2ffb
-      history:  > ✅  > ✅  > ✅  > ❌  
-            
-Hardware: dell-latitude-5400-4305U-sarien
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-12
-      - kselftest.cpufreq.hibernate
-      last run: https://d.kernelci.org/test/maestro:68d6d42baabea828fddb1925
-      history:  > ✅  > ✅  > ❌  
-            
-      - kselftest.cpufreq.hibernate.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:68d6d629aabea828fddb2cce
-      history:  > ✅  > ✅  > ❌  
-            
-Hardware: imx6dl-udoo
-  > Config: multi_v7_defconfig
-    - Architecture/compiler: arm/gcc-12
-      - kselftest.device_error_logs
-      last run: https://d.kernelci.org/test/maestro:68d6cda4aabea828fddb11a7
-      history:  > ✅  > ❌  > ❌  
-            
-Hardware: imx6q-udoo
-  > Config: multi_v7_defconfig
-    - Architecture/compiler: arm/gcc-12
-      - kselftest.alsa.alsa_pcm-test_default_time2_fslimx6qudooac9_0_0_PLAYBACK
-      last run: https://d.kernelci.org/test/maestro:68d6e182aabea828fddb4231
-      history:  > ✅  > ✅  > ❌  
-            
-Hardware: k3-am625-verdin-wifi-mallow
-  > Config: defconfig+arm64-chromebook+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.pkvm
-      last run: https://d.kernelci.org/test/maestro:68d6c847aabea828fddafad3
-      history:  > ✅  > ❌  > ❌  > ❌  
-            
-Hardware: meson-g12b-a311d-khadas-vim3
-  > Config: defconfig+preempt_rt
-    - Architecture/compiler: arm64/gcc-12
-      - rt-tests.rt-migrate-test
-      last run: https://d.kernelci.org/test/maestro:68d6c79faabea828fddaf278
-      history:  > ✅  > ✅  > ❌  > ❌  
-            
-      - rt-tests.rt-migrate-test.rt-migrate-test
-      last run: https://d.kernelci.org/test/maestro:68d6c8d3aabea828fddb03d5
-      history:  > ✅  > ✅  > ❌  > ❌  
-            
-
-
-### FIXED REGRESSIONS
-    
-Hardware: imx6q-udoo
-  > Config: multi_v7_defconfig
-    - Architecture/compiler: arm/gcc-12
-      - kselftest.alsa.alsa_mixer-test_event_spurious_fslimx6qudooac9_18
-      last run: https://d.kernelci.org/test/maestro:68d6e182aabea828fddb42b9
-      history:  > ❌  > ✅  > ✅  
-            
-
-
-### UNSTABLE TESTS
-    
-Hardware: bcm2711-rpi-4-b
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.arm64
-      last run: https://d.kernelci.org/test/maestro:68d6c5fcaabea828fddaebc5
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-Hardware: bcm2837-rpi-3-b-plus
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.arm64
-      last run: https://d.kernelci.org/test/maestro:68d6c5fdaabea828fddaebc8
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c8deaabea828fddb05e2
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-stress
-      last run: https://d.kernelci.org/test/maestro:68d6c8deaabea828fddb05d9
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_hwcap
-      last run: https://d.kernelci.org/test/maestro:68d6c8ddaabea828fddb040a
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c8ddaabea828fddb03fe
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_sve-probe-vls
-      last run: https://d.kernelci.org/test/maestro:68d6c8deaabea828fddb053e
-      history:  > ⚠️  > ⚠️  > ❌  > ⚠️  
-            
-      - kselftest.arm64.arm64_sve-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c8deaabea828fddb0540
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_syscall-abi
-      last run: https://d.kernelci.org/test/maestro:68d6c8ddaabea828fddb03fb
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_tpidr2
-      last run: https://d.kernelci.org/test/maestro:68d6c8ddaabea828fddb03f5
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_vec-syscfg
-      last run: https://d.kernelci.org/test/maestro:68d6c8ddaabea828fddb0528
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-fork
-      last run: https://d.kernelci.org/test/maestro:68d6c8ddaabea828fddb0526
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c8ddaabea828fddb0524
-      history:  > ⚠️  > ⚠️  > ❌  > ⚠️  
-            
-Hardware: dell-latitude-5400-4305U-sarien
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-12
-      - kselftest.cpufreq
-      last run: https://d.kernelci.org/test/maestro:68d6d423aabea828fddb18db
-      history:  > ✅  > ❌  > ✅  > ✅  
-            
-      - kselftest.cpufreq.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:68d6d57faabea828fddb1dc5
-      history:  > ✅  > ❌  > ✅  > ✅  
-            
-Hardware: dell-latitude-5400-8665U-sarien
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-12
-      - kselftest.cpufreq.suspend
-      last run: https://d.kernelci.org/test/maestro:68d6d433aabea828fddb1970
-      history:  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.cpufreq.suspend.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:68d6d66faabea828fddb2dc7
-      history:  > ✅  > ❌  > ✅  > ❌  
-            
-Hardware: imx8mp-evk
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.arm64
-      last run: https://d.kernelci.org/test/maestro:68d6c5feaabea828fddaebcf
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c8c9aabea828fddb0391
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-stress
-      last run: https://d.kernelci.org/test/maestro:68d6c8c9aabea828fddb0388
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_hwcap
-      last run: https://d.kernelci.org/test/maestro:68d6c8c9aabea828fddb01ba
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c8c9aabea828fddb01ae
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_sve-probe-vls
-      last run: https://d.kernelci.org/test/maestro:68d6c8c9aabea828fddb02ea
-      history:  > ⚠️  > ❌  > ⚠️  
-            
-      - kselftest.arm64.arm64_sve-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c8c9aabea828fddb02ec
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_syscall-abi
-      last run: https://d.kernelci.org/test/maestro:68d6c8c9aabea828fddb01ab
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_tpidr2
-      last run: https://d.kernelci.org/test/maestro:68d6c8c9aabea828fddb01a5
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_vec-syscfg
-      last run: https://d.kernelci.org/test/maestro:68d6c8c9aabea828fddb02d4
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-fork
-      last run: https://d.kernelci.org/test/maestro:68d6c8c9aabea828fddb02d2
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c8c9aabea828fddb02d0
-      history:  > ⚠️  > ❌  > ⚠️  
-            
-Hardware: imx8mp-verdin-nonwifi-dahlia
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.arm64
-      last run: https://d.kernelci.org/test/maestro:68d6c5feaabea828fddaebd2
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c88baabea828fddafdaf
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-stress
-      last run: https://d.kernelci.org/test/maestro:68d6c88baabea828fddafda6
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_hwcap
-      last run: https://d.kernelci.org/test/maestro:68d6c88baabea828fddafbcd
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c88baabea828fddafbb5
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_sve-probe-vls
-      last run: https://d.kernelci.org/test/maestro:68d6c88baabea828fddafd0a
-      history:  > ⚠️  > ⚠️  > ❌  > ⚠️  
-            
-      - kselftest.arm64.arm64_sve-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c88baabea828fddafd0c
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_syscall-abi
-      last run: https://d.kernelci.org/test/maestro:68d6c88baabea828fddafbaf
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_tpidr2
-      last run: https://d.kernelci.org/test/maestro:68d6c88baabea828fddafba3
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_vec-syscfg
-      last run: https://d.kernelci.org/test/maestro:68d6c88baabea828fddafcf3
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-fork
-      last run: https://d.kernelci.org/test/maestro:68d6c88baabea828fddafcf1
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c88baabea828fddafcef
-      history:  > ⚠️  > ⚠️  > ❌  > ⚠️  
-            
-Hardware: juno-uboot
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.arm64
-      last run: https://d.kernelci.org/test/maestro:68d6c5feaabea828fddaebd5
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_hwcap
-      last run: https://d.kernelci.org/test/maestro:68d6c94baabea828fddb08a9
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c94baabea828fddb089d
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_sve-probe-vls
-      last run: https://d.kernelci.org/test/maestro:68d6c94baabea828fddb09dd
-      history:  > ⚠️  > ⚠️  > ❌  > ⚠️  
-            
-      - kselftest.arm64.arm64_sve-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c94baabea828fddb09df
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_syscall-abi
-      last run: https://d.kernelci.org/test/maestro:68d6c94baabea828fddb089a
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_tpidr2
-      last run: https://d.kernelci.org/test/maestro:68d6c94baabea828fddb0894
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_vec-syscfg
-      last run: https://d.kernelci.org/test/maestro:68d6c94baabea828fddb09c7
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-fork
-      last run: https://d.kernelci.org/test/maestro:68d6c94baabea828fddb09c5
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c94baabea828fddb09c3
-      history:  > ⚠️  > ⚠️  > ❌  > ⚠️  
-            
-Hardware: k3-am625-verdin-wifi-mallow
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.arm64
-      last run: https://d.kernelci.org/test/maestro:68d6c5ffaabea828fddaebda
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c7e2aabea828fddaf798
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-stress
-      last run: https://d.kernelci.org/test/maestro:68d6c7e2aabea828fddaf792
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_hwcap
-      last run: https://d.kernelci.org/test/maestro:68d6c7e2aabea828fddaf5c4
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c7e2aabea828fddaf5b8
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_sve-probe-vls
-      last run: https://d.kernelci.org/test/maestro:68d6c7e2aabea828fddaf6f6
-      history:  > ⚠️  > ❌  > ⚠️  
-            
-      - kselftest.arm64.arm64_sve-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c7e2aabea828fddaf6f8
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_syscall-abi
-      last run: https://d.kernelci.org/test/maestro:68d6c7e2aabea828fddaf5b5
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_tpidr2
-      last run: https://d.kernelci.org/test/maestro:68d6c7e2aabea828fddaf5af
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_vec-syscfg
-      last run: https://d.kernelci.org/test/maestro:68d6c7e2aabea828fddaf6e0
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-fork
-      last run: https://d.kernelci.org/test/maestro:68d6c7e2aabea828fddaf6de
-      history:  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c7e2aabea828fddaf6dc
-      history:  > ⚠️  > ❌  > ⚠️  
-            
-Hardware: meson-gxl-s905x-libretech-cc
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.arm64
-      last run: https://d.kernelci.org/test/maestro:68d6c600aabea828fddaebe0
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c7d6aabea828fddaf572
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-stress
-      last run: https://d.kernelci.org/test/maestro:68d6c7d6aabea828fddaf569
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_hwcap
-      last run: https://d.kernelci.org/test/maestro:68d6c7d5aabea828fddaf39b
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c7d5aabea828fddaf38f
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_sve-probe-vls
-      last run: https://d.kernelci.org/test/maestro:68d6c7d5aabea828fddaf4ce
-      history:  > ⚠️  > ⚠️  > ❌  > ⚠️  
-            
-      - kselftest.arm64.arm64_sve-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c7d5aabea828fddaf4d0
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_syscall-abi
-      last run: https://d.kernelci.org/test/maestro:68d6c7d5aabea828fddaf38c
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_tpidr2
-      last run: https://d.kernelci.org/test/maestro:68d6c7d5aabea828fddaf386
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_vec-syscfg
-      last run: https://d.kernelci.org/test/maestro:68d6c7d5aabea828fddaf4b8
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-fork
-      last run: https://d.kernelci.org/test/maestro:68d6c7d5aabea828fddaf4b6
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c7d5aabea828fddaf4b4
-      history:  > ⚠️  > ⚠️  > ❌  > ⚠️  
-            
-      - kselftest.mqueue
-      last run: https://d.kernelci.org/test/maestro:68d6c622aabea828fddaec72
-      history:  > ❌  > ❌  > ✅  > ❌  
-            
-Hardware: sun50i-a64-pine64-plus
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.arm64
-      last run: https://d.kernelci.org/test/maestro:68d6c601aabea828fddaebed
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c89faabea828fddb0028
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-stress
-      last run: https://d.kernelci.org/test/maestro:68d6c89faabea828fddb001f
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_hwcap
-      last run: https://d.kernelci.org/test/maestro:68d6c89eaabea828fddafe51
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c89eaabea828fddafe45
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_sve-probe-vls
-      last run: https://d.kernelci.org/test/maestro:68d6c89faabea828fddaff83
-      history:  > ⚠️  > ⚠️  > ❌  > ⚠️  
-            
-      - kselftest.arm64.arm64_sve-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c89faabea828fddaff85
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_syscall-abi
-      last run: https://d.kernelci.org/test/maestro:68d6c89eaabea828fddafe42
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_tpidr2
-      last run: https://d.kernelci.org/test/maestro:68d6c89eaabea828fddafe3c
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_vec-syscfg
-      last run: https://d.kernelci.org/test/maestro:68d6c89faabea828fddaff6f
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-fork
-      last run: https://d.kernelci.org/test/maestro:68d6c89faabea828fddaff6d
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c89faabea828fddaff6b
-      history:  > ⚠️  > ⚠️  > ❌  > ⚠️  
-            
-Hardware: sun50i-h5-libretech-all-h3-cc
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.arm64
-      last run: https://d.kernelci.org/test/maestro:68d6c601aabea828fddaebf0
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c7e5aabea828fddaf9c3
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_fp-stress
-      last run: https://d.kernelci.org/test/maestro:68d6c7e5aabea828fddaf9ba
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_hwcap
-      last run: https://d.kernelci.org/test/maestro:68d6c7e4aabea828fddaf7ed
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c7e4aabea828fddaf7e1
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_sve-probe-vls
-      last run: https://d.kernelci.org/test/maestro:68d6c7e5aabea828fddaf91a
-      history:  > ⚠️  > ⚠️  > ❌  > ⚠️  
-            
-      - kselftest.arm64.arm64_sve-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c7e5aabea828fddaf91c
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_syscall-abi
-      last run: https://d.kernelci.org/test/maestro:68d6c7e4aabea828fddaf7de
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_tpidr2
-      last run: https://d.kernelci.org/test/maestro:68d6c7e4aabea828fddaf7d8
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_vec-syscfg
-      last run: https://d.kernelci.org/test/maestro:68d6c7e5aabea828fddaf904
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-fork
-      last run: https://d.kernelci.org/test/maestro:68d6c7e5aabea828fddaf902
-      history:  > ✅  > ✅  > ❌  > ✅  
-            
-      - kselftest.arm64.arm64_za-ptrace
-      last run: https://d.kernelci.org/test/maestro:68d6c7e5aabea828fddaf900
-      history:  > ⚠️  > ⚠️  > ❌  > ⚠️  
-            
-  > Config: defconfig+arm64-chromebook+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.uevent
-      last run: https://d.kernelci.org/test/maestro:68d6c853aabea828fddafb16
-      history:  > ❌  > ✅  > ✅  > ❌  
-            
-      - kselftest.uevent.uevent_uevent_filtering
-      last run: https://d.kernelci.org/test/maestro:68d6c98faabea828fddb0b01
-      history:  > ❌  > ✅  > ✅  > ❌  
-            
-      - kselftest.uevent.uevent_uevent_filtering_global_uevent_filtering
-      last run: https://d.kernelci.org/test/maestro:68d6c98faabea828fddb0b02
-      history:  > ❌  > ✅  > ✅  > ❌  
-            
-
-### NEW BUILD ISSUES
-- Issue: maestro:74f8fe195e9e78290f1dae54754bf5b8d4b2a893 | version: 1
-  Build: maestro:68d6bd56aabea828fddae00b
-  Comment:  undefined reference to `pm_hibernation_mode_is_suspend' in vmlinux.unstripped (drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c) [logspec:kbuild,kbuild.compiler.linker_error]
-  First seen: 2025-09-26 16:34:06.057303+00:00
-  Culprit: code
-- Issue: maestro:74f8fe195e9e78290f1dae54754bf5b8d4b2a893 | version: 1
-  Build: maestro:68d6bd59aabea828fddae00e
-  Comment:  undefined reference to `pm_hibernation_mode_is_suspend' in vmlinux.unstripped (drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c) [logspec:kbuild,kbuild.compiler.linker_error]
-  First seen: 2025-09-26 16:34:06.057303+00:00
-  Culprit: code
-
-Sent every day if there were changes in the past 24 hours.
-Legend: ✅ PASS   ❌ FAIL  ⚠️ INCONCLUSIVE
-
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
+Ciao, Thorsten
 

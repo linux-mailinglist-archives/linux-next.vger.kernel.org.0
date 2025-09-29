@@ -1,166 +1,165 @@
-Return-Path: <linux-next+bounces-8513-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8514-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A257BA7EDB
-	for <lists+linux-next@lfdr.de>; Mon, 29 Sep 2025 06:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DDABFBA8026
+	for <lists+linux-next@lfdr.de>; Mon, 29 Sep 2025 07:43:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4538117DD33
-	for <lists+linux-next@lfdr.de>; Mon, 29 Sep 2025 04:15:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FE1617D8C2
+	for <lists+linux-next@lfdr.de>; Mon, 29 Sep 2025 05:43:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBEE786323;
-	Mon, 29 Sep 2025 04:15:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF1C29BD91;
+	Mon, 29 Sep 2025 05:43:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=denys.f@collabora.com header.b="aAn1LdMe"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bq29YAo4"
 X-Original-To: linux-next@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69CA33F9
-	for <linux-next@vger.kernel.org>; Mon, 29 Sep 2025 04:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759119346; cv=pass; b=EHQ3j9U+itTi1+fZEuZhD+FvzatOXZ/NtCrZNRl5+Eh9m1x0FhzzY0jBz8NrOkvHZZ7/EeNPcu3UsB81+SO/GPtSeEVbteNocpyG4TqfGbw4nJOC1xG2cCakRstQN0j/d/2qVFTlgsGHwdxRk81wiF/2kIwvjVxnMZgbUvonjXM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759119346; c=relaxed/simple;
-	bh=4VGHV4/A319H/0sQtCBFb7zsNGq2H+CR9M+BkV8xXOw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=D41yVvUHUPHA58ByX/3PSsTEtpNQU1gDNJ5AHg2WXX+lh43NVw5Pl5us+pKQXLFXLfMnu0saOyHP1gs7Wm0iJDahjcvU+8OiYsZSR9QW0kAODwt1RNnVEG1Ajilasln3B/6Qq7qF9d8yaPjOQbm0BUxlf0QsmgGH655ql5KieH4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=denys.f@collabora.com header.b=aAn1LdMe; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1759119331; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Vh089FZjQ2qtMyvXrcHAQIe+HVCm19NtZSmTK3kQH4Uj1unesXsg2Pb4i8W8wGm2bTor0W6h8z9uHdDp43p/NrDUzATK3c36uUFxZMX0JXRl3sqwBbJBn9HGBYaSIcksJMWVxXrNZS2/Zgq69cKA6UpMF9IPgipXQRIXJXE2Tpk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1759119331; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=4VGHV4/A319H/0sQtCBFb7zsNGq2H+CR9M+BkV8xXOw=; 
-	b=DIVuZ1pmm/NMjgxW/paaZOr8vejdAnbYrk9EFgxpzx39ThePgK5FMpCxEKq7waFaVi9TdohLPnYZbDyYyfmYj7jS9IxNf+wnKIG+946RRr0cDBVN9FF1Fq28AQ6uX38G/PFDCUbwdX8yuuBLG9S+1+Xezsaou5m84dhti0pk5y8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=denys.f@collabora.com;
-	dmarc=pass header.from=<denys.f@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1759119331;
-	s=zohomail; d=collabora.com; i=denys.f@collabora.com;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-	bh=4VGHV4/A319H/0sQtCBFb7zsNGq2H+CR9M+BkV8xXOw=;
-	b=aAn1LdMebKOOUpLZv0Q2MJ4ftaPK9BzbelFpKYbKnHC74U8owgjpMvkYKp7bfWHk
-	M8XAGk1qC9qi6w+9u/C+PP9Wy7f1SESHgbTSn75aHzgdSUIILfVBf/u+boaUi1gQd9D
-	Mi5OqIoSGDVHIBHazR2XOsVMiPZ9mU7DqNfKLrOA=
-Received: by mx.zohomail.com with SMTPS id 1759119327847600.3374137196645;
-	Sun, 28 Sep 2025 21:15:27 -0700 (PDT)
-Message-ID: <b10bcf92dfd2fc13ed90b4da6e9ab8a3b61ce724.camel@collabora.com>
-Subject: Re: [REGRESSION] next/master: (build) undefined reference to
- `pm_hibernation_mode_is_suspend' in vmlinux...
-From: Denys Fedoryshchenko <denys.f@collabora.com>
-To: Randy Dunlap <rdunlap@infradead.org>, kernelci@lists.linux.dev, 
-	kernelci-results@groups.io
-Cc: regressions@lists.linux.dev, gus@collabora.com,
- linux-next@vger.kernel.org
-Date: Mon, 29 Sep 2025 07:15:24 +0300
-In-Reply-To: <bb21b532-b68f-4c02-a9bd-7e8aa3c07258@infradead.org>
-References: <175890594349.36.5014274970333071394@1e895cdadf47>
-	 <bb21b532-b68f-4c02-a9bd-7e8aa3c07258@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.1-1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B96A29ACDD
+	for <linux-next@vger.kernel.org>; Mon, 29 Sep 2025 05:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759124601; cv=none; b=IhGWRYk8s0dDHQ87g61XernQPm/rRrEUWuHb9CrQeR73m7S5V0BA+JkeZos/RITWyhM1/TUzqpMNss6aEBKZTa2jc5NOpnyVxgAGAT9MFHHu9Xx4SQb3we1oTppbJyGcyRC1lPk+jgZmmP3ZpabSd8495hp11pn9DjPtavYY0OM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759124601; c=relaxed/simple;
+	bh=KkdQm9LnjT0oDZgSyvNFLyYVXfgAVdlyFZQg4ncaicA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GXWuIgMUDNJAM3w6y/+k/SHmpOqO7Hn/6Gy0K8S5n4mgpU4kWB76kcXxbSImcnv6QOJ5dGsqfuS1lDKHNyaa253YVQTsSTDfNdjuvf0V813M4UTFYvDCFu22Jlczt7is5BiEjT/3SI+4v8E59dN/2O2uaEoOW2Tbqeycu6gcrtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bq29YAo4; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1759124599;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DLDJM/v1GnCONjQIRc/rqkZtzK/nAlZhViXrPHYBAQ0=;
+	b=bq29YAo4Scu78XCZbmXpy03GT6cUYzT1rHfgMEI5o6pwp8PVNs30DJSVC458G/6IyYg6Mh
+	73e+Bm/pLmYjhrAA0y1l6EErQcM2TdO9qf/XAEXYyiarUd0tiEGlDEi9FssH9FtMX8RWOe
+	oHy6ShZivLEcWJVCLkGBsXUgCvY/aWY=
+Received: from mail-yx1-f72.google.com (mail-yx1-f72.google.com
+ [74.125.224.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-486-kOzWYr7XPJi4RGKSeh6c9g-1; Mon, 29 Sep 2025 01:43:17 -0400
+X-MC-Unique: kOzWYr7XPJi4RGKSeh6c9g-1
+X-Mimecast-MFC-AGG-ID: kOzWYr7XPJi4RGKSeh6c9g_1759124597
+Received: by mail-yx1-f72.google.com with SMTP id 956f58d0204a3-6354174c1a4so5107219d50.0
+        for <linux-next@vger.kernel.org>; Sun, 28 Sep 2025 22:43:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759124597; x=1759729397;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DLDJM/v1GnCONjQIRc/rqkZtzK/nAlZhViXrPHYBAQ0=;
+        b=N8SW+3d0puGGKhm7NbqCVuF2kOHApOlz3rLDjRBn4i6BSh3SSXJhAyrlELQ3t5SflI
+         voLSL+MYenhij9N6ZwsO8p4XjLMdv83DjcOAnhzukguDlDjdGxs4YgZouDSydNdbxitp
+         OnVS2AqqmGKnJgEIY0bVnUO926V6fBxiMJSjEbxk4/uPTd2p9p+VvbhZXVLOQtn9SLP4
+         Rx9LRO72tbtR4BYQfjz95rqMqwMXaP7pMOPdlAM2jqIsuh+cOa3PywWd+Djz2QiMAJk7
+         GNJxFuQzk4uzK6CBhhrgB+y/HzCKreVkJMYsGcco5hOfOhVxYx/MhR+YjqpYBQniWUgy
+         01Eg==
+X-Forwarded-Encrypted: i=1; AJvYcCVBgFgvqRjcPTQp32cQ6PcM0+PYyvM+xX6F0oW3p7aipnz4jgTCIEBzTEiU7+SJBsbEC7aMxTltDzhI@vger.kernel.org
+X-Gm-Message-State: AOJu0YxQ5Xzs+OMkoGIJi8Ko9wmMga1ccFwKKmAFqT4fSTxMfxHAYgdr
+	w7l9nyPn3hP79a2Bgqwadr8O/30mFBn/gPG6d+HLHI9hcXJhT1o/NhLdEnbIOLrfmyH97b/qEQh
+	YNAJh2RCPH8NLNjecWRU/aGXGBKBJsByhth0hkdJMz9UbM5MvS/yXfBtQy/D/JwmDlaS6yqGOLu
+	AOy9HihiylVsDxauZrti4MmKRdqMU8e/Q7wMdXyg==
+X-Gm-Gg: ASbGncuhE8mEYNqh5NNxKewzvr5PQUCoXt/Qf2SGwdE+l+fLy1CfhpXv9+BdaEfk0yx
+	4+mCVJoZEMiuINRyAjy+NAxATpkhKPo/aRBmpZH/pWaC2re5w3DkZHgElg9JGaKzITc/ZJ1FfPc
+	T08afed0jGnuoZLCONb4oMqDacDHJsSAKbLP2YvbvLMxqosEPweJnCm3mwWV46YntKUEiw+1r/6
+	HiWOXg2
+X-Received: by 2002:a05:690e:22c4:b0:635:4ece:20ab with SMTP id 956f58d0204a3-6361a873801mr13564067d50.48.1759124596994;
+        Sun, 28 Sep 2025 22:43:16 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHZRprYWH3GKFK0J+/EVnsfKtUL40W8QVLXJUwLVUPi9R0BTd57XmXjDp56sXiMQ2Op70w6PccJcX5wX4kfJoA=
+X-Received: by 2002:a05:690e:22c4:b0:635:4ece:20ab with SMTP id
+ 956f58d0204a3-6361a873801mr13564052d50.48.1759124596652; Sun, 28 Sep 2025
+ 22:43:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ZohoMailClient: External
+References: <20250925091335.1964283-1-eperezma@redhat.com> <20250925091335.1964283-2-eperezma@redhat.com>
+ <3e5abb75-2192-46dc-a44e-d66fed87fc63@leemhuis.info>
+In-Reply-To: <3e5abb75-2192-46dc-a44e-d66fed87fc63@leemhuis.info>
+From: Eugenio Perez Martin <eperezma@redhat.com>
+Date: Mon, 29 Sep 2025 07:42:38 +0200
+X-Gm-Features: AS18NWBlM_AwzI2-s0Otvy63KDuzlTLedZ6DoP5wCZ9FlMjm8eYezVLoJQUZ6gw
+Message-ID: <CAJaqyWehjiVeq360A=1_+=eRSDjoF3zNsNF0Lf-45YeiT5Pk7Q@mail.gmail.com>
+Subject: Re: [PATCH v4 1/6] vduse: make domain_lock an rwlock
+To: Thorsten Leemhuis <linux@leemhuis.info>
+Cc: "Michael S . Tsirkin" <mst@redhat.com>, Yongji Xie <xieyongji@bytedance.com>, Cindy Lu <lulu@redhat.com>, 
+	jasowang@redhat.com, linux-kernel@vger.kernel.org, 
+	Maxime Coquelin <mcoqueli@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Laurent Vivier <lvivier@redhat.com>, virtualization@lists.linux.dev, 
+	Stefano Garzarella <sgarzare@redhat.com>, 
+	Linux kernel regressions list <regressions@lists.linux.dev>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Randy,
+On Sat, Sep 27, 2025 at 9:01=E2=80=AFAM Thorsten Leemhuis <linux@leemhuis.i=
+nfo> wrote:
+>
+> On 25.09.25 11:13, Eugenio P=C3=A9rez wrote:
+> > It will be used in a few more scenarios read-only so make it more
+> > scalable.
+> > [...]
+> > diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_use=
+r/vduse_dev.c
+> > index e7bced0b5542..2b6a8958ffe0 100644
+> > --- a/drivers/vdpa/vdpa_user/vduse_dev.c
+> > +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+> > @@ -14,6 +14,7 @@
+> >  #include <linux/cdev.h>
+> >  #include <linux/device.h>
+> >  #include <linux/eventfd.h>
+> > +#include <linux/rwlock.h>
+>
+> Lo! My daily -next builds based for Fedora using the Fedora rawhide
+> failed yesterday on various archs. I suspect it's due to above change,
+> as this was the error I got:
+>
+> """
+> In file included from drivers/vdpa/vdpa_user/vduse_dev.c:17:
+> ./include/linux/rwlock.h:5:3: error: #error "Please do not include this
+> file directly."
+>     5 | # error "Please do not include this file directly."
+>       |   ^~~~~
+> ./include/linux/rwlock.h:27:10: warning: =E2=80=98rwlock_init=E2=80=99 re=
+defined
+>    27 | # define rwlock_init(lock)                                      \
+>       |          ^~~~~~~~~~~
+> In file included from ./include/linux/spinlock_rt.h:153,
+>                  from ./include/linux/spinlock.h:455,
+>                  from ./include/linux/sched.h:37,
+>                  from ./include/linux/percpu.h:12,
+>                  from ./arch/x86/include/asm/msr.h:16,
+>                  from ./arch/x86/include/asm/tsc.h:11,
+>                  from ./arch/x86/include/asm/timex.h:6,
+>                  from ./include/linux/timex.h:67,
+>                  from ./include/linux/time32.h:13,
+>                  from ./include/linux/time.h:60,
+>                  from ./include/linux/jiffies.h:10,
+>                  from ./include/linux/ktime.h:25,
+>                  from ./include/linux/timer.h:6,
+>                  from ./include/linux/netdevice.h:24,
+>                  from ./include/linux/if_vlan.h:10,
+>                  from ./include/linux/virtio_net.h:5,
+>                  from drivers/vdpa/vdpa_user/vduse_dev.c:11:
+> """
+>
+> For a complete log, see
+> https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/f=
+edora-rawhide-x86_64/09603789-next-next-all/builder-live.log.gz
+>
+> Reverting the series made things work for me.
+>
 
-On Sun, 2025-09-28 at 18:13 -0700, Randy Dunlap wrote:
-> Hi,
->=20
-> On 9/26/25 9:59 AM, KernelCI bot wrote:
-> >=20
-> >=20
-> >=20
-> >=20
-> > Hello,
-> >=20
-> > New build issue found on next/master:
-> >=20
-> > ---
-> > =C2=A0undefined reference to `pm_hibernation_mode_is_suspend' in
-> > vmlinux.unstripped (drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c)
-> > [logspec:kbuild,kbuild.compiler.linker_error]
-> > ---
-> >=20
-> > - dashboard:
-> > https://d.kernelci.org/i/maestro:74f8fe195e9e78290f1dae54754bf5b8d4b2a8=
-93
-> > - giturl:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> > - commit HEAD:=C2=A0 262858079afde6d367ce3db183c74d8a43a0e83f
-> > - tags: next-20250926
-> >=20
-> >=20
-> > Log excerpt:
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-> > =C2=A0 LD=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 .tmp_vmlinux1
-> > ld: drivers/gpu/drm/amd/amdgpu/amdgpu_drv.o: in function
-> > `amdgpu_pmops_thaw':
-> > /tmp/kci/linux/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c:2677:
-> > undefined reference to `pm_hibernation_mode_is_suspend'
-> >=20
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-> >=20
-> >=20
-> > # Builds where the incident occurred:
-> >=20
-> > ## cros://chromeos-6.6/x86_64/chromeos-amd-
-> > stoneyridge.flavour.config+lab-setup+x86-
-> > board+CONFIG_MODULE_COMPRESS=3Dn+CONFIG_MODULE_COMPRESS_NONE=3Dy on
-> > (x86_64):
-> > - compiler: gcc-12
-> > - dashboard:
-> > https://d.kernelci.org/build/maestro:68d6bd56aabea828fddae00b
-> >=20
-> > ## cros://chromeos-6.6/x86_64/chromeos-intel-
-> > pineview.flavour.config+lab-setup+x86-
-> > board+CONFIG_MODULE_COMPRESS=3Dn+CONFIG_MODULE_COMPRESS_NONE=3Dy on
-> > (x86_64):
-> > - compiler: gcc-12
-> > - dashboard:
-> > https://d.kernelci.org/build/maestro:68d6bd59aabea828fddae00e
-> >=20
->=20
-> Is there a URL for the .config file that causes the
-> build error?
-Yes,
-https://files.kernelci.org/kbuild-gcc-12-x86-chromeos-intel-68d6bd59aabea82=
-8fddae00e/.config
+I don't know how this error didn't shout out in my env, fixing it.
+Thanks for the heads up!
 
-You can safely disable the firmware files option. The build error will
-still be reproducible.
-
-Thank you for feedback!
-
-
->=20
-> Thanks.
->=20
-> >=20
-> > #kernelci issue maestro:74f8fe195e9e78290f1dae54754bf5b8d4b2a893
-> >=20
-> > Reported-by: kernelci.org bot <bot@kernelci.org>
-> >=20
-> > --
-> > This is an experimental report format. Please send feedback in!
-> > Talk to us at kernelci@lists.linux.dev
-> >=20
-> > Made with love by the KernelCI team - https://kernelci.org
-> >=20
 

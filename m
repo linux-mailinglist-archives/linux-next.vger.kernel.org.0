@@ -1,165 +1,289 @@
-Return-Path: <linux-next+bounces-8514-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8515-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDABFBA8026
-	for <lists+linux-next@lfdr.de>; Mon, 29 Sep 2025 07:43:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF581BA8F1C
+	for <lists+linux-next@lfdr.de>; Mon, 29 Sep 2025 13:01:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FE1617D8C2
-	for <lists+linux-next@lfdr.de>; Mon, 29 Sep 2025 05:43:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3644C7AF2C5
+	for <lists+linux-next@lfdr.de>; Mon, 29 Sep 2025 10:59:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAF1C29BD91;
-	Mon, 29 Sep 2025 05:43:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49B3F2FF677;
+	Mon, 29 Sep 2025 11:01:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bq29YAo4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k1Gxm7ZM"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B96A29ACDD
-	for <linux-next@vger.kernel.org>; Mon, 29 Sep 2025 05:43:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2112B2FF66D;
+	Mon, 29 Sep 2025 11:01:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759124601; cv=none; b=IhGWRYk8s0dDHQ87g61XernQPm/rRrEUWuHb9CrQeR73m7S5V0BA+JkeZos/RITWyhM1/TUzqpMNss6aEBKZTa2jc5NOpnyVxgAGAT9MFHHu9Xx4SQb3we1oTppbJyGcyRC1lPk+jgZmmP3ZpabSd8495hp11pn9DjPtavYY0OM=
+	t=1759143680; cv=none; b=PPHTy4LE/h4nqt3c61E3h8LeelYi7g2NSd9zIIgU/95y7tw8Vx+VRk83cJ1TRC04rBVo86ImZMp/8J83smMgbETfUyroxkCNrWivIkaH0br3hRINOlMHYVL+YTKcMzJXoZ1T/eIPHla/4v5MMZnZXrTKdQRnDVCgGb6YweQeZdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759124601; c=relaxed/simple;
-	bh=KkdQm9LnjT0oDZgSyvNFLyYVXfgAVdlyFZQg4ncaicA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GXWuIgMUDNJAM3w6y/+k/SHmpOqO7Hn/6Gy0K8S5n4mgpU4kWB76kcXxbSImcnv6QOJ5dGsqfuS1lDKHNyaa253YVQTsSTDfNdjuvf0V813M4UTFYvDCFu22Jlczt7is5BiEjT/3SI+4v8E59dN/2O2uaEoOW2Tbqeycu6gcrtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bq29YAo4; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1759124599;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DLDJM/v1GnCONjQIRc/rqkZtzK/nAlZhViXrPHYBAQ0=;
-	b=bq29YAo4Scu78XCZbmXpy03GT6cUYzT1rHfgMEI5o6pwp8PVNs30DJSVC458G/6IyYg6Mh
-	73e+Bm/pLmYjhrAA0y1l6EErQcM2TdO9qf/XAEXYyiarUd0tiEGlDEi9FssH9FtMX8RWOe
-	oHy6ShZivLEcWJVCLkGBsXUgCvY/aWY=
-Received: from mail-yx1-f72.google.com (mail-yx1-f72.google.com
- [74.125.224.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-486-kOzWYr7XPJi4RGKSeh6c9g-1; Mon, 29 Sep 2025 01:43:17 -0400
-X-MC-Unique: kOzWYr7XPJi4RGKSeh6c9g-1
-X-Mimecast-MFC-AGG-ID: kOzWYr7XPJi4RGKSeh6c9g_1759124597
-Received: by mail-yx1-f72.google.com with SMTP id 956f58d0204a3-6354174c1a4so5107219d50.0
-        for <linux-next@vger.kernel.org>; Sun, 28 Sep 2025 22:43:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759124597; x=1759729397;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DLDJM/v1GnCONjQIRc/rqkZtzK/nAlZhViXrPHYBAQ0=;
-        b=N8SW+3d0puGGKhm7NbqCVuF2kOHApOlz3rLDjRBn4i6BSh3SSXJhAyrlELQ3t5SflI
-         voLSL+MYenhij9N6ZwsO8p4XjLMdv83DjcOAnhzukguDlDjdGxs4YgZouDSydNdbxitp
-         OnVS2AqqmGKnJgEIY0bVnUO926V6fBxiMJSjEbxk4/uPTd2p9p+VvbhZXVLOQtn9SLP4
-         Rx9LRO72tbtR4BYQfjz95rqMqwMXaP7pMOPdlAM2jqIsuh+cOa3PywWd+Djz2QiMAJk7
-         GNJxFuQzk4uzK6CBhhrgB+y/HzCKreVkJMYsGcco5hOfOhVxYx/MhR+YjqpYBQniWUgy
-         01Eg==
-X-Forwarded-Encrypted: i=1; AJvYcCVBgFgvqRjcPTQp32cQ6PcM0+PYyvM+xX6F0oW3p7aipnz4jgTCIEBzTEiU7+SJBsbEC7aMxTltDzhI@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ5Xzs+OMkoGIJi8Ko9wmMga1ccFwKKmAFqT4fSTxMfxHAYgdr
-	w7l9nyPn3hP79a2Bgqwadr8O/30mFBn/gPG6d+HLHI9hcXJhT1o/NhLdEnbIOLrfmyH97b/qEQh
-	YNAJh2RCPH8NLNjecWRU/aGXGBKBJsByhth0hkdJMz9UbM5MvS/yXfBtQy/D/JwmDlaS6yqGOLu
-	AOy9HihiylVsDxauZrti4MmKRdqMU8e/Q7wMdXyg==
-X-Gm-Gg: ASbGncuhE8mEYNqh5NNxKewzvr5PQUCoXt/Qf2SGwdE+l+fLy1CfhpXv9+BdaEfk0yx
-	4+mCVJoZEMiuINRyAjy+NAxATpkhKPo/aRBmpZH/pWaC2re5w3DkZHgElg9JGaKzITc/ZJ1FfPc
-	T08afed0jGnuoZLCONb4oMqDacDHJsSAKbLP2YvbvLMxqosEPweJnCm3mwWV46YntKUEiw+1r/6
-	HiWOXg2
-X-Received: by 2002:a05:690e:22c4:b0:635:4ece:20ab with SMTP id 956f58d0204a3-6361a873801mr13564067d50.48.1759124596994;
-        Sun, 28 Sep 2025 22:43:16 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHZRprYWH3GKFK0J+/EVnsfKtUL40W8QVLXJUwLVUPi9R0BTd57XmXjDp56sXiMQ2Op70w6PccJcX5wX4kfJoA=
-X-Received: by 2002:a05:690e:22c4:b0:635:4ece:20ab with SMTP id
- 956f58d0204a3-6361a873801mr13564052d50.48.1759124596652; Sun, 28 Sep 2025
- 22:43:16 -0700 (PDT)
+	s=arc-20240116; t=1759143680; c=relaxed/simple;
+	bh=HACZwtgS4NXqTUSazNLqro1BqZ+l7JNxPg5TZijxq5o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=u6WHogRqEuNm7bulmuEm8s0qwE33OZD4/8xYZQpZOnpzwmq/8+OLYhXCCGg7YYm/H3THfpuIls+VnuR694wwG0c612Hgou8xsAOjRERuvCqr8DYhP+Vk3sGTBmN2lPs8CMRWF9CHj5PEumi1BZCfm+AdrTYHbEag+QapR4X4vRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k1Gxm7ZM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C32B6C4CEF5;
+	Mon, 29 Sep 2025 11:01:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759143679;
+	bh=HACZwtgS4NXqTUSazNLqro1BqZ+l7JNxPg5TZijxq5o=;
+	h=Date:From:To:Cc:Subject:From;
+	b=k1Gxm7ZMR/U2vY5FsrKfCL8nIwbD1VBKRjqu1rFo4L7h5TQwZ80DKYwEy+NexRjCo
+	 yaTYvHAD/3pzQe4hZY1gao3YUmajBBll4WgKSwRzCZLVclxkZt9vHJA8+QfRlkV0nL
+	 XD8w6LSyc1OLOl5u37SQuL+Ma38EMt9D5KBmgK2N+HkHxZso6cXACrWchleQGc1EC1
+	 KDrnon/8aZTrwaokGtB7OnlYIYY5kxcQK0YTR321D0/wlI2vy/YJpzpXRDQkGV99Q+
+	 DoDoQ4eI1IzO4gBq57Pek1cymnfq5Rcu4+5KMSkhQ+UadMeP5k30jLMozZWoPZLtsI
+	 4GPEsTNlq3rdg==
+Date: Mon, 29 Sep 2025 12:01:15 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the vfs tree
+Message-ID: <aNpm-6LS0ZHJQMI-@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250925091335.1964283-1-eperezma@redhat.com> <20250925091335.1964283-2-eperezma@redhat.com>
- <3e5abb75-2192-46dc-a44e-d66fed87fc63@leemhuis.info>
-In-Reply-To: <3e5abb75-2192-46dc-a44e-d66fed87fc63@leemhuis.info>
-From: Eugenio Perez Martin <eperezma@redhat.com>
-Date: Mon, 29 Sep 2025 07:42:38 +0200
-X-Gm-Features: AS18NWBlM_AwzI2-s0Otvy63KDuzlTLedZ6DoP5wCZ9FlMjm8eYezVLoJQUZ6gw
-Message-ID: <CAJaqyWehjiVeq360A=1_+=eRSDjoF3zNsNF0Lf-45YeiT5Pk7Q@mail.gmail.com>
-Subject: Re: [PATCH v4 1/6] vduse: make domain_lock an rwlock
-To: Thorsten Leemhuis <linux@leemhuis.info>
-Cc: "Michael S . Tsirkin" <mst@redhat.com>, Yongji Xie <xieyongji@bytedance.com>, Cindy Lu <lulu@redhat.com>, 
-	jasowang@redhat.com, linux-kernel@vger.kernel.org, 
-	Maxime Coquelin <mcoqueli@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Laurent Vivier <lvivier@redhat.com>, virtualization@lists.linux.dev, 
-	Stefano Garzarella <sgarzare@redhat.com>, 
-	Linux kernel regressions list <regressions@lists.linux.dev>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="h0TZPnOca6Oct4Bc"
+Content-Disposition: inline
 
-On Sat, Sep 27, 2025 at 9:01=E2=80=AFAM Thorsten Leemhuis <linux@leemhuis.i=
-nfo> wrote:
->
-> On 25.09.25 11:13, Eugenio P=C3=A9rez wrote:
-> > It will be used in a few more scenarios read-only so make it more
-> > scalable.
-> > [...]
-> > diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_use=
-r/vduse_dev.c
-> > index e7bced0b5542..2b6a8958ffe0 100644
-> > --- a/drivers/vdpa/vdpa_user/vduse_dev.c
-> > +++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-> > @@ -14,6 +14,7 @@
-> >  #include <linux/cdev.h>
-> >  #include <linux/device.h>
-> >  #include <linux/eventfd.h>
-> > +#include <linux/rwlock.h>
->
-> Lo! My daily -next builds based for Fedora using the Fedora rawhide
-> failed yesterday on various archs. I suspect it's due to above change,
-> as this was the error I got:
->
-> """
-> In file included from drivers/vdpa/vdpa_user/vduse_dev.c:17:
-> ./include/linux/rwlock.h:5:3: error: #error "Please do not include this
-> file directly."
->     5 | # error "Please do not include this file directly."
->       |   ^~~~~
-> ./include/linux/rwlock.h:27:10: warning: =E2=80=98rwlock_init=E2=80=99 re=
-defined
->    27 | # define rwlock_init(lock)                                      \
->       |          ^~~~~~~~~~~
-> In file included from ./include/linux/spinlock_rt.h:153,
->                  from ./include/linux/spinlock.h:455,
->                  from ./include/linux/sched.h:37,
->                  from ./include/linux/percpu.h:12,
->                  from ./arch/x86/include/asm/msr.h:16,
->                  from ./arch/x86/include/asm/tsc.h:11,
->                  from ./arch/x86/include/asm/timex.h:6,
->                  from ./include/linux/timex.h:67,
->                  from ./include/linux/time32.h:13,
->                  from ./include/linux/time.h:60,
->                  from ./include/linux/jiffies.h:10,
->                  from ./include/linux/ktime.h:25,
->                  from ./include/linux/timer.h:6,
->                  from ./include/linux/netdevice.h:24,
->                  from ./include/linux/if_vlan.h:10,
->                  from ./include/linux/virtio_net.h:5,
->                  from drivers/vdpa/vdpa_user/vduse_dev.c:11:
-> """
->
-> For a complete log, see
-> https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/f=
-edora-rawhide-x86_64/09603789-next-next-all/builder-live.log.gz
->
-> Reverting the series made things work for me.
->
 
-I don't know how this error didn't shout out in my env, fixing it.
-Thanks for the heads up!
+--h0TZPnOca6Oct4Bc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hi all,
+
+After merging the vfs tree, today's linux-next build (x86 allmodconfig)
+failed like this:
+
+In file included from /tmp/next/build/include/rv/ltl_monitor.h:11,
+                 from /tmp/next/build/kernel/trace/rv/monitors/pagefault/pagefault.c:19:
+/tmp/next/build/include/rv/ltl_monitor.h: In function 'ltl_monitor_init':
+/tmp/next/build/include/rv/ltl_monitor.h:75:51: error: passing argument 1 of 'check_trace_callback_type_task_newtask' from incompatible pointer type [-Wincompatible-pointer-types]
+   75 |         rv_attach_trace_probe(name, task_newtask, handle_task_newtask);
+      |                                                   ^~~~~~~~~~~~~~~~~~~
+      |                                                   |
+      |                                                   void (*)(void *, struct task_struct *, long unsigned int)
+/tmp/next/build/include/rv/instrumentation.h:18:48: note: in definition of macro 'rv_attach_trace_probe'
+   18 |                 check_trace_callback_type_##tp(rv_handler);                             \
+      |                                                ^~~~~~~~~~
+In file included from /tmp/next/build/kernel/trace/rv/monitors/pagefault/pagefault.c:9:
+/tmp/next/build/include/linux/tracepoint.h:260:49: note: expected 'void (*)(void *, struct task_struct *, u64)' {aka 'void (*)(void *, struct task_struct *, long long unsigned int)'} but argument is of type 'void (*)(void *, struct task_struct *, long unsigned int)'
+  260 |         check_trace_callback_type_##name(void (*cb)(data_proto))        \
+      |                                          ~~~~~~~^~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:270:9: note: in expansion of macro '__DECLARE_TRACE_COMMON'
+  270 |         __DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:481:9: note: in expansion of macro '__DECLARE_TRACE'
+  481 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
+      |         ^~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:619:9: note: in expansion of macro 'DECLARE_TRACE_EVENT'
+  619 |         DECLARE_TRACE_EVENT(name, PARAMS(proto), PARAMS(args))
+      |         ^~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/trace/events/task.h:9:1: note: in expansion of macro 'TRACE_EVENT'
+    9 | TRACE_EVENT(task_newtask,
+      | ^~~~~~~~~~~
+In file included from /tmp/next/build/include/asm-generic/bug.h:7,
+                 from /tmp/next/build/arch/x86/include/asm/bug.h:103,
+                 from /tmp/next/build/arch/x86/include/asm/alternative.h:9,
+                 from /tmp/next/build/arch/x86/include/asm/barrier.h:5,
+                 from /tmp/next/build/include/asm-generic/bitops/generic-non-atomic.h:7,
+                 from /tmp/next/build/include/linux/bitops.h:28,
+                 from /tmp/next/build/include/linux/kernel.h:23,
+                 from /tmp/next/build/include/linux/interrupt.h:6,
+                 from /tmp/next/build/include/linux/trace_recursion.h:5,
+                 from /tmp/next/build/include/linux/ftrace.h:10,
+                 from /tmp/next/build/kernel/trace/rv/monitors/pagefault/pagefault.c:2:
+/tmp/next/build/include/rv/ltl_monitor.h:75:51: error: passing argument 1 of 'register_trace_task_newtask' from incompatible pointer type [-Wincompatible-pointer-types]
+   75 |         rv_attach_trace_probe(name, task_newtask, handle_task_newtask);
+      |                                                   ^~~~~~~~~~~~~~~~~~~
+      |                                                   |
+      |                                                   void (*)(void *, struct task_struct *, long unsigned int)
+/tmp/next/build/include/linux/once_lite.h:28:41: note: in definition of macro 'DO_ONCE_LITE_IF'
+   28 |                 bool __ret_do_once = !!(condition);                     \
+      |                                         ^~~~~~~~~
+/tmp/next/build/include/rv/instrumentation.h:19:17: note: in expansion of macro 'WARN_ONCE'
+   19 |                 WARN_ONCE(register_trace_##tp(rv_handler, NULL),                        \
+      |                 ^~~~~~~~~
+/tmp/next/build/include/rv/ltl_monitor.h:75:9: note: in expansion of macro 'rv_attach_trace_probe'
+   75 |         rv_attach_trace_probe(name, task_newtask, handle_task_newtask);
+      |         ^~~~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:241:38: note: expected 'void (*)(void *, struct task_struct *, u64)' {aka 'void (*)(void *, struct task_struct *, long long unsigned int)'} but argument is of type 'void (*)(void *, struct task_struct *, long unsigned int)'
+  241 |         register_trace_##name(void (*probe)(data_proto), void *data)    \
+      |                               ~~~~~~~^~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:270:9: note: in expansion of macro '__DECLARE_TRACE_COMMON'
+  270 |         __DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:481:9: note: in expansion of macro '__DECLARE_TRACE'
+  481 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
+      |         ^~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:619:9: note: in expansion of macro 'DECLARE_TRACE_EVENT'
+  619 |         DECLARE_TRACE_EVENT(name, PARAMS(proto), PARAMS(args))
+      |         ^~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/trace/events/task.h:9:1: note: in expansion of macro 'TRACE_EVENT'
+    9 | TRACE_EVENT(task_newtask,
+      | ^~~~~~~~~~~
+/tmp/next/build/include/rv/ltl_monitor.h: In function 'ltl_monitor_destroy':
+/tmp/next/build/include/rv/ltl_monitor.h:92:51: error: passing argument 1 of 'unregister_trace_task_newtask' from incompatible pointer type [-Wincompatible-pointer-types]
+   92 |         rv_detach_trace_probe(name, task_newtask, handle_task_newtask);
+      |                                                   ^~~~~~~~~~~~~~~~~~~
+      |                                                   |
+      |                                                   void (*)(void *, struct task_struct *, long unsigned int)
+/tmp/next/build/include/rv/instrumentation.h:28:39: note: in definition of macro 'rv_detach_trace_probe'
+   28 |                 unregister_trace_##tp(rv_handler, NULL);                                \
+      |                                       ^~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:254:40: note: expected 'void (*)(void *, struct task_struct *, u64)' {aka 'void (*)(void *, struct task_struct *, long long unsigned int)'} but argument is of type 'void (*)(void *, struct task_struct *, long unsigned int)'
+  254 |         unregister_trace_##name(void (*probe)(data_proto), void *data)  \
+      |                                 ~~~~~~~^~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:270:9: note: in expansion of macro '__DECLARE_TRACE_COMMON'
+  270 |         __DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:481:9: note: in expansion of macro '__DECLARE_TRACE'
+  481 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
+      |         ^~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:619:9: note: in expansion of macro 'DECLARE_TRACE_EVENT'
+  619 |         DECLARE_TRACE_EVENT(name, PARAMS(proto), PARAMS(args))
+      |         ^~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/trace/events/task.h:9:1: note: in expansion of macro 'TRACE_EVENT'
+    9 | TRACE_EVENT(task_newtask,
+      | ^~~~~~~~~~~
+make[6]: *** [/tmp/next/build/scripts/Makefile.build:287: kernel/trace/rv/monitors/pagefault/pagefault.o] Error 1
+make[6]: *** Waiting for unfinished jobs....
+In file included from /tmp/next/build/include/rv/ltl_monitor.h:11,
+                 from /tmp/next/build/kernel/trace/rv/monitors/sleep/sleep.c:23:
+/tmp/next/build/include/rv/ltl_monitor.h: In function 'ltl_monitor_init':
+/tmp/next/build/include/rv/ltl_monitor.h:75:51: error: passing argument 1 of 'check_trace_callback_type_task_newtask' from incompatible pointer type [-Wincompatible-pointer-types]
+   75 |         rv_attach_trace_probe(name, task_newtask, handle_task_newtask);
+      |                                                   ^~~~~~~~~~~~~~~~~~~
+      |                                                   |
+      |                                                   void (*)(void *, struct task_struct *, long unsigned int)
+/tmp/next/build/include/rv/instrumentation.h:18:48: note: in definition of macro 'rv_attach_trace_probe'
+   18 |                 check_trace_callback_type_##tp(rv_handler);                             \
+      |                                                ^~~~~~~~~~
+In file included from /tmp/next/build/kernel/trace/rv/monitors/sleep/sleep.c:3:
+/tmp/next/build/include/linux/tracepoint.h:260:49: note: expected 'void (*)(void *, struct task_struct *, u64)' {aka 'void (*)(void *, struct task_struct *, long long unsigned int)'} but argument is of type 'void (*)(void *, struct task_struct *, long unsigned int)'
+  260 |         check_trace_callback_type_##name(void (*cb)(data_proto))        \
+      |                                          ~~~~~~~^~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:270:9: note: in expansion of macro '__DECLARE_TRACE_COMMON'
+  270 |         __DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:481:9: note: in expansion of macro '__DECLARE_TRACE'
+  481 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
+      |         ^~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:619:9: note: in expansion of macro 'DECLARE_TRACE_EVENT'
+  619 |         DECLARE_TRACE_EVENT(name, PARAMS(proto), PARAMS(args))
+      |         ^~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/trace/events/task.h:9:1: note: in expansion of macro 'TRACE_EVENT'
+    9 | TRACE_EVENT(task_newtask,
+      | ^~~~~~~~~~~
+In file included from /tmp/next/build/include/asm-generic/bug.h:7,
+                 from /tmp/next/build/arch/x86/include/asm/bug.h:103,
+                 from /tmp/next/build/arch/x86/include/asm/alternative.h:9,
+                 from /tmp/next/build/arch/x86/include/asm/barrier.h:5,
+                 from /tmp/next/build/include/asm-generic/bitops/generic-non-atomic.h:7,
+                 from /tmp/next/build/include/linux/bitops.h:28,
+                 from /tmp/next/build/include/linux/kernel.h:23,
+                 from /tmp/next/build/include/linux/interrupt.h:6,
+                 from /tmp/next/build/include/linux/trace_recursion.h:5,
+                 from /tmp/next/build/include/linux/ftrace.h:10,
+                 from /tmp/next/build/kernel/trace/rv/monitors/sleep/sleep.c:2:
+/tmp/next/build/include/rv/ltl_monitor.h:75:51: error: passing argument 1 of 'register_trace_task_newtask' from incompatible pointer type [-Wincompatible-pointer-types]
+   75 |         rv_attach_trace_probe(name, task_newtask, handle_task_newtask);
+      |                                                   ^~~~~~~~~~~~~~~~~~~
+      |                                                   |
+      |                                                   void (*)(void *, struct task_struct *, long unsigned int)
+/tmp/next/build/include/linux/once_lite.h:28:41: note: in definition of macro 'DO_ONCE_LITE_IF'
+   28 |                 bool __ret_do_once = !!(condition);                     \
+      |                                         ^~~~~~~~~
+/tmp/next/build/include/rv/instrumentation.h:19:17: note: in expansion of macro 'WARN_ONCE'
+   19 |                 WARN_ONCE(register_trace_##tp(rv_handler, NULL),                        \
+      |                 ^~~~~~~~~
+/tmp/next/build/include/rv/ltl_monitor.h:75:9: note: in expansion of macro 'rv_attach_trace_probe'
+   75 |         rv_attach_trace_probe(name, task_newtask, handle_task_newtask);
+      |         ^~~~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:241:38: note: expected 'void (*)(void *, struct task_struct *, u64)' {aka 'void (*)(void *, struct task_struct *, long long unsigned int)'} but argument is of type 'void (*)(void *, struct task_struct *, long unsigned int)'
+  241 |         register_trace_##name(void (*probe)(data_proto), void *data)    \
+      |                               ~~~~~~~^~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:270:9: note: in expansion of macro '__DECLARE_TRACE_COMMON'
+  270 |         __DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:481:9: note: in expansion of macro '__DECLARE_TRACE'
+  481 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
+      |         ^~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:619:9: note: in expansion of macro 'DECLARE_TRACE_EVENT'
+  619 |         DECLARE_TRACE_EVENT(name, PARAMS(proto), PARAMS(args))
+      |         ^~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/trace/events/task.h:9:1: note: in expansion of macro 'TRACE_EVENT'
+    9 | TRACE_EVENT(task_newtask,
+      | ^~~~~~~~~~~
+/tmp/next/build/include/rv/ltl_monitor.h: In function 'ltl_monitor_destroy':
+/tmp/next/build/include/rv/ltl_monitor.h:92:51: error: passing argument 1 of 'unregister_trace_task_newtask' from incompatible pointer type [-Wincompatible-pointer-types]
+   92 |         rv_detach_trace_probe(name, task_newtask, handle_task_newtask);
+      |                                                   ^~~~~~~~~~~~~~~~~~~
+      |                                                   |
+      |                                                   void (*)(void *, struct task_struct *, long unsigned int)
+/tmp/next/build/include/rv/instrumentation.h:28:39: note: in definition of macro 'rv_detach_trace_probe'
+   28 |                 unregister_trace_##tp(rv_handler, NULL);                                \
+      |                                       ^~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:254:40: note: expected 'void (*)(void *, struct task_struct *, u64)' {aka 'void (*)(void *, struct task_struct *, long long unsigned int)'} but argument is of type 'void (*)(void *, struct task_struct *, long unsigned int)'
+  254 |         unregister_trace_##name(void (*probe)(data_proto), void *data)  \
+      |                                 ~~~~~~~^~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:270:9: note: in expansion of macro '__DECLARE_TRACE_COMMON'
+  270 |         __DECLARE_TRACE_COMMON(name, PARAMS(proto), PARAMS(args), PARAMS(data_proto)) \
+      |         ^~~~~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:481:9: note: in expansion of macro '__DECLARE_TRACE'
+  481 |         __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),              \
+      |         ^~~~~~~~~~~~~~~
+/tmp/next/build/include/linux/tracepoint.h:619:9: note: in expansion of macro 'DECLARE_TRACE_EVENT'
+  619 |         DECLARE_TRACE_EVENT(name, PARAMS(proto), PARAMS(args))
+      |         ^~~~~~~~~~~~~~~~~~~
+/tmp/next/build/include/trace/events/task.h:9:1: note: in expansion of macro 'TRACE_EVENT'
+    9 | TRACE_EVENT(task_newtask,
+      | ^~~~~~~~~~~
+make[6]: *** [/tmp/next/build/scripts/Makefile.build:287: kernel/trace/rv/monitors/sleep/sleep.o] Error 1
+make[5]: *** [/tmp/next/build/scripts/Makefile.build:556: kernel/trace/rv] Error 2
+make[5]: *** Waiting for unfinished jobs....
+make[4]: *** [/tmp/next/build/scripts/Makefile.build:556: kernel/trace] Error 2
+make[4]: *** Waiting for unfinished jobs....
+make[3]: *** [/tmp/next/build/scripts/Makefile.build:556: kernel] Error 2
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [/tmp/next/build/Makefile:2011: .] Error 2
+make[1]: *** [/tmp/next/build/Makefile:248: __sub-make] Error 2
+make: *** [Makefile:248: __sub-make] Error 2
+Command exited with non-zero status 2
+17036.15user 1313.54system 1:54.95elapsed 15962%CPU (0avgtext+0avgdata 1394068maxresident)k
+0inputs+0outputs (5021major+224011004minor)pagefaults 0swaps
+
+I couldn't figure out exactly which commit was causing this in a timely
+fashion (and suspect it may be an interaction with another tree), I've
+used the VFS tree from 20250926 instead.
+
+--h0TZPnOca6Oct4Bc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjaZvsACgkQJNaLcl1U
+h9C+8Qf9EXGUITIpLvCAhldW9PSNYWRIZ0S1dgk1DSLPd6tPVdPPubFEmvRrb5bb
+G/zEO3ceWxg1CbVdaU/VZL7T7hJQJsVNIS1uJFwDlSNxLsj/p2SR/1MVpPH/J5zF
+E0VluFc3hlT5+0wKm4euDxx84APiL9nCBDCe+3+LYJn1imWHwtKlArT8s1rSfxmc
+WVgJdLz/VMfgjhKQUPdMKYBucNPtSkKOIF+TDWFnULHSQc6G1mgdMlRGQZa4ifC4
+DTDU6j2A3rM4PFJYwCRU3t7mn2BGiiOW3FxJ5h7x7drpnsUKaPeIAa4ASs35hAhl
+RALerTPgBLZc/c6+7TRlbullTJf8gg==
+=DosL
+-----END PGP SIGNATURE-----
+
+--h0TZPnOca6Oct4Bc--
 

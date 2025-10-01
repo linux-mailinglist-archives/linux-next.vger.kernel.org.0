@@ -1,100 +1,110 @@
-Return-Path: <linux-next+bounces-8530-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8531-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98277BB0614
-	for <lists+linux-next@lfdr.de>; Wed, 01 Oct 2025 14:50:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D53A1BB15A1
+	for <lists+linux-next@lfdr.de>; Wed, 01 Oct 2025 19:21:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4BE97B0F6A
-	for <lists+linux-next@lfdr.de>; Wed,  1 Oct 2025 12:48:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91D6316FF88
+	for <lists+linux-next@lfdr.de>; Wed,  1 Oct 2025 17:21:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08FBE2EBDD0;
-	Wed,  1 Oct 2025 12:50:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0FC62D373E;
+	Wed,  1 Oct 2025 17:21:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GBewT8F2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fm1s2YkN"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D584F1547F2;
-	Wed,  1 Oct 2025 12:50:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E0E2D372E;
+	Wed,  1 Oct 2025 17:21:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759323032; cv=none; b=gS8PbBZISKI4BjA2ttUIifJkuK4gvo4VisyiTXjjjS7eaDY+PVJ7slHEhn7Itb0vYx86Cu1sfBHyaPy6m8lU6ZCjkFig4oAUg/I05g7cSECRg7wm/a5xIC3YHxh5Li/dytxh0EyA9nCJ8oQM5R2ppVvObR0YlPwSme/EDsrl538=
+	t=1759339299; cv=none; b=Ee7JDlM0nLxgORO3SOUoGYRpXAF4Bj0wkYpz5kexvRd+j5/atEUm8HVNU+grRrIEHwUEJ/O+KtmTa5qajswnz2XVkI+JaHEH5T/xoPKZFJg/SCoGvobw/NJOMfQrvfoIwzDInxzyBdy/SgtHRxfwP8FnmxjbnW9U+HKruqpdzqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759323032; c=relaxed/simple;
-	bh=uHq8wYDUhs4uc88I55ik1um76kTHQDHbX/YMjgz3fX0=;
+	s=arc-20240116; t=1759339299; c=relaxed/simple;
+	bh=HyTDnAffjvigGqtHt+eqnaxvoS5wThfd8l8xoAJoL8I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yt0aB0bieEIfDtep7UOw9L9ESzmNlRuN+l5ObmN83Ohej9gPK9JflzsK39j8vneIhyahYxPs1Wdyqi3U/YnwKUmNu5aSPvJuMm3aIzrWX9lrRzhQDuABhNJYhFnxBYdtZIgMnrV5KkzZJSgpkr8jdHEQVhmEuD9z12hjx+JodIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GBewT8F2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30850C4CEF4;
-	Wed,  1 Oct 2025 12:50:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=evovthQIjsfAKg8KxWSdEAx0odgz5VwMZ1NZCo3gR6ZQjBAeLknLcp3EhRO0hRyBeVJkA+LUUysVY2qIJHiTfCO/MxfyEwn4SsQZLYt3Tt6c7bhvnxakZvA/2TnQpZtqOxq/yMEK1+Zw/hYKkQ7odouBX0oAW0yrtzlYD4ciRQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fm1s2YkN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2A3DC4CEF1;
+	Wed,  1 Oct 2025 17:21:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759323032;
-	bh=uHq8wYDUhs4uc88I55ik1um76kTHQDHbX/YMjgz3fX0=;
+	s=k20201202; t=1759339299;
+	bh=HyTDnAffjvigGqtHt+eqnaxvoS5wThfd8l8xoAJoL8I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GBewT8F2lnM4XtQyAV5NvgtiDLxcjTHbj8o6Er2yKDj0md1iKW3npsGVq3QnDX0Ek
-	 GfxhNwG8ygfjlTKazugwymkOi9Jhz0ZA4FN3BFtiGuSPaDb2IkG7VWtM9kq4EFd99I
-	 pVQXgpUtvmgyfaPSO0xZKt9h/z+yIvwXhOY1Nl7p46Ly/UpnnQAUVO3MD2EzHCNXTf
-	 QlPuDMESYAe/E4zOwfDAw0Jy1RD4py+RfMqOS+OecQdC5abp4eNk9FZ1uWPSF+1Y4q
-	 4W9J/XwnFLKlxdr8nXer8MfuSqbFa+d1qalm3H3ltblDbPqo71PdoNmoUaFA+2PTmE
-	 WnPUV6iwOi31A==
-Date: Wed, 1 Oct 2025 13:50:28 +0100
-From: Lee Jones <lee@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+	b=fm1s2YkN2RXkjDOYbHCWLai2V393zjfHb3r4BOOWoeSDf6P6/DkBSjZepXLxN9qmK
+	 m1lUMKQWw6voui+Knq1CYMdzTIS2dMQRJBSQQRkffVFosyZKYQ1VDf/NmLXpwE2nbG
+	 S2NXzCRqFxjBx3MPrWHb6nQlWzfVJTeyge3RTFoFptdp86/W7jmrBwSQZVVUSKo8GX
+	 YFX3NSxXCNT+/W2wzSur4R3SOTV2mA1kro2DW2hSoaN3fi4YnCPQy8IscyymGZ2uyq
+	 sMlstsjVgpL9SMNwr6SNAM3m/IRd6OGobiJ8BHxmFvP3Paf7OvYtPpcClY7k3ijJ8V
+	 leoLvs4miDf3Q==
+Date: Wed, 1 Oct 2025 18:21:35 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Lee Jones <lee@kernel.org>
 Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
 	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the mfd tree
-Message-ID: <20251001125028.GS8757@google.com>
+Message-ID: <aN1jHx0sgkOFAYM4@finisterre.sirena.org.uk>
 References: <aMqxWGx0asGTWZ2V@sirena.org.uk>
  <20251001095108.GO8757@google.com>
  <aN0CkwO7vxzpp30I@finisterre.sirena.org.uk>
+ <20251001125028.GS8757@google.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ZsqiOUGwz3fM7XsN"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aN0CkwO7vxzpp30I@finisterre.sirena.org.uk>
+In-Reply-To: <20251001125028.GS8757@google.com>
+X-Cookie: If in doubt, mumble.
 
-On Wed, 01 Oct 2025, Mark Brown wrote:
 
-> On Wed, Oct 01, 2025 at 10:51:08AM +0100, Lee Jones wrote:
-> > On Wed, 17 Sep 2025, Mark Brown wrote:
-> 
-> > > After merging the mfd tree, today's linux-next build (x86_64 allmodconfig)
-> > > failed like this:
-> 
-> > > Caused by commit
-> 
-> > >    df6a44003953f ("mfd: stmpe: Allow building as module")
-> 
-> > > which needs commit
-> 
-> > >    03db20aaa3ba3 ("gpio: stmpe: Allow to compile as a module")
-> 
-> > > from the gpio tree.  I have used the version from yesterday instead.
-> 
-> > Isn't the later already in -next?
-> 
-> Your tree gets merged first so we get a build failure when your tree is
-> merged, it would get sorted out eventually when the gpio trees are added
-> but all the intermediate builds are broken.
+--ZsqiOUGwz3fM7XsN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Interesting.
+On Wed, Oct 01, 2025 at 01:50:28PM +0100, Lee Jones wrote:
+> On Wed, 01 Oct 2025, Mark Brown wrote:
 
-I thought the point of -next was to test everything integrated.
+> > Your tree gets merged first so we get a build failure when your tree is
+> > merged, it would get sorted out eventually when the gpio trees are added
+> > but all the intermediate builds are broken.
 
-Thanks for the heads-up though.  I'll wait until this has been merged
-before sending out my own PR to Linus.
+> Interesting.
 
--- 
-Lee Jones [李琼斯]
+> I thought the point of -next was to test everything integrated.
+
+It is, but part of how we do that is we add a tree at a time and see if
+they break - there's byproducts of the whole process like pending-fixes
+which allows fixes to be tested without all the new work in -next.
+
+> Thanks for the heads-up though.  I'll wait until this has been merged
+> before sending out my own PR to Linus.
+
+Note that this has kept everything added after it out of -next.
+
+--ZsqiOUGwz3fM7XsN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjdYxwACgkQJNaLcl1U
+h9BrAQf9Fmztt3vsQM63QmvaHqsaKpAiiFrLUVCplP45CuzRfC4KVgb2gSBALTrW
+fo83Nj0nKk5wJiugKSgS4mME65zYHg7LRAz9cJh0ZUk9mvi6Py9vydFsmFHuTI8H
+sjy1iuzHw+aIVeHHPB5JBgrC7ymFFtqYCFGNfXMp0EJexsAs6HmD02Svcxg1GUrh
+ZZULSZ51z8jz8Q0y2/wxfSezued1bn26SnKCCg1eMXz4z6RquD+uMqvKHyu2AxFt
+FFTuOQnIEBCCMVTHvRuwpxss+RI8asWs0XmjwtgABNYNLSTFeuq7kGnFyEiS2ev7
+5CNdkxHxu5oX69dRzrB6lswW9IeQEw==
+=xwUQ
+-----END PGP SIGNATURE-----
+
+--ZsqiOUGwz3fM7XsN--
 

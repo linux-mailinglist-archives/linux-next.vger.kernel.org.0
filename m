@@ -1,55 +1,56 @@
-Return-Path: <linux-next+bounces-8541-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8542-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79E4BBB46DE
-	for <lists+linux-next@lfdr.de>; Thu, 02 Oct 2025 18:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CD61BB475F
+	for <lists+linux-next@lfdr.de>; Thu, 02 Oct 2025 18:14:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D29073BA2DB
-	for <lists+linux-next@lfdr.de>; Thu,  2 Oct 2025 16:01:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 013903B0B69
+	for <lists+linux-next@lfdr.de>; Thu,  2 Oct 2025 16:14:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 623C51E8324;
-	Thu,  2 Oct 2025 16:01:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C3C3246760;
+	Thu,  2 Oct 2025 16:14:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="INDhLYg8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cWQJDLbm"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3408E19F127;
-	Thu,  2 Oct 2025 16:01:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BD32417FB;
+	Thu,  2 Oct 2025 16:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759420871; cv=none; b=HUYPV1FdGso+TIx+v1g9SZyl+vSSw4+Z2o+OY1NrnklHpBzghLchAmQ/2aD/z3BLAMoBqJc25JKLfDr5DXx6lknu5qQRMeGw3Wp6X1Bc3dSqLjiCrD4m6Xyd9r5VRw6182XAZZEb1ncOaoUBYlO2PCthN24SWbrEq9w9Zqb+vxU=
+	t=1759421684; cv=none; b=RGap31DKpdHyW2dSbVmxVKNjINzrqWRXqatrIITmGc6bhSUIWBI+yCyG8QoGU4dHtJXiy8ugCCR+IyfUs80Sct4tYSAqpIQ+rSbmqRPYerGv+M1G0PLDRAfF10pbXDJIHGyOL+jG4xpO/FJsfdtsSbPaNqaC3pwmkPslb0pyZvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759420871; c=relaxed/simple;
-	bh=AZPSBFYCIjS5xV6SLPct7R9cTCi/OTV+8qDbbOzqpIw=;
+	s=arc-20240116; t=1759421684; c=relaxed/simple;
+	bh=qYK9tIlRdM4ftIEjUodiuu8y/vbcNvvDnzhbabm8v1g=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VrWgjNEn/nBCwK8DHtpjPGaR2xeIs2aXWebWG4q8qxWnOpMHvENbZ8S+J3FDq3VuL6wBOLLZoT07pmZNyvUKX6vXC3OKo6cSGln/9CYre4MhhjxXPjC80ZiVtJdCnAlzDZzl1dj3eDMNMJSWIY3H7qIIUH95oHscIue+pjat+CU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=INDhLYg8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33AA4C4CEF4;
-	Thu,  2 Oct 2025 16:01:07 +0000 (UTC)
+	 Content-Disposition; b=LTMYF40CKwnkm6oz21qQfHIv/lbiDY3ULkw8BdqNw3XJqezclmttzpTvIynSurUmT6iftjcmSkxMbG+15iofLLswPOr62FlNpajY13cZOIozySf/Ws7zRCZ+8DTrS745iiSbYc3iMLwPvscPq2ZfOyNi/lJ+w0UrupomOvkFGZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cWQJDLbm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E9BDC4CEF4;
+	Thu,  2 Oct 2025 16:14:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759420869;
-	bh=AZPSBFYCIjS5xV6SLPct7R9cTCi/OTV+8qDbbOzqpIw=;
+	s=k20201202; t=1759421683;
+	bh=qYK9tIlRdM4ftIEjUodiuu8y/vbcNvvDnzhbabm8v1g=;
 	h=Date:From:To:Cc:Subject:From;
-	b=INDhLYg8Q0+sSmM5DC38E/vcwVrlswanWcgPKExgdQ+BQ1Bt8BvhsonbiQSADJojB
-	 W6VQ3kY8VhlIn5WcoG8gzIY6i6AhkmKobm4ilP1TwCBmglI/cMDRzVGrlk7byYr0oR
-	 sqbdTewbPlQ/gQ6BiUdiNxCiRpEvohNtCXHOraFbmFaiBJZJXjyw4xvqHuecMhjFlz
-	 f0zy3IFQuCZ3BvjFB6OnzuI3QcGQdEG46y9LXjHD89mh4w20RFHqG/G/Jhrnsb0/hq
-	 FIwqrMZSX/4EJWkB22EzuvmdOeiPhdOg1WkTgkM7eWaPtu7zKK0G/x3rJeuwmfb792
-	 r2urE3nXf2yug==
-Date: Thu, 2 Oct 2025 17:01:04 +0100
+	b=cWQJDLbmavDJre+NaTqCVXEEGNCSXibM+xor439mhET4AOjy+T/NQ2KDaXYQduA2I
+	 HdQ2JHcrIB4eSs/lIybbB9SpCi1K0hSqZpVSnGXvNqGJvMi4UE7Oh0JJQoEcSzzwks
+	 TROi5H3ONpNWvhMlWasZJoZpWmc/KjuhcK+vlg+H+Q2SLbeJwYIzmR/KqTX4GALMWf
+	 w59JToZWk1ktKWoS6rs6ceIrKn6kewMIQ69WJ3J9ck1ZZSfPuPfIHku2H/LM+owz88
+	 ONeKjQcvoeEpbYBJik0xdeXBRkF3UhG/a1shBtrDClYVCs1aazphAQiFZzhn3cnDTK
+	 jZ9W7iehAzG2w==
+Date: Thu, 2 Oct 2025 17:14:39 +0100
 From: Mark Brown <broonie@kernel.org>
-To: Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>
-Cc: Babu Moger <babu.moger@amd.com>, Borislav Petkov <bp@alien8.de>,
+To: Wei Liu <wei.liu@kernel.org>
+Cc: Helge Deller <deller@gmx.de>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Sean Christopherson <seanjc@google.com>, Xin Li <xin@zytor.com>
-Subject: linux-next: manual merge of the kvm tree with the origin tree
-Message-ID: <aN6hwNUa3Kh08yog@sirena.org.uk>
+	Mukesh Rathor <mrathor@linux.microsoft.com>,
+	Prasanna Kumar T S M <ptsm@linux.microsoft.com>
+Subject: linux-next: manual merge of the hyperv tree with the fbdev tree
+Message-ID: <aN6k79cY8mKSrKQq@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -57,32 +58,31 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dMCEnt+bT9Zc3PZR"
+	protocol="application/pgp-signature"; boundary="u6Tp12HfwbG15J4B"
 Content-Disposition: inline
 
 
---dMCEnt+bT9Zc3PZR
+--u6Tp12HfwbG15J4B
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm tree got a conflict in:
+Today's linux-next merge of the hyperv tree got a conflict in:
 
-  arch/x86/include/asm/cpufeatures.h
+  drivers/video/fbdev/Kconfig
 
 between commit:
 
-  e19c06219985f ("x86/cpufeatures: Add support for Assignable Bandwidth Mon=
-itoring Counters (ABMC)")
+  9e84636785c5e ("fbdev: hyperv_fb: Deprecate this in favor of Hyper-V DRM =
+driver")
 
-=66rom the origin tree and commit:
+=66rom the fbdev tree and commit:
 
-  3c7cb84145336 ("x86/cpufeatures: Add a CPU feature bit for MSR immediate =
-form instructions")
+  94b04355e6397 ("Drivers: hv: Add CONFIG_HYPERV_VMBUS option")
 
-=66rom the kvm tree.
+=66rom the hyperv tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -91,41 +91,36 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc arch/x86/include/asm/cpufeatures.h
-index b2a562217d3ff,f1a9f40622cdc..0000000000000
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@@ -496,7 -497,7 +497,8 @@@
-  #define X86_FEATURE_TSA_L1_NO		(21*32+12) /* AMD CPU not vulnerable to TS=
-A-L1 */
-  #define X86_FEATURE_CLEAR_CPU_BUF_VM	(21*32+13) /* Clear CPU buffers usin=
-g VERW before VMRUN */
-  #define X86_FEATURE_IBPB_EXIT_TO_USER	(21*32+14) /* Use IBPB on exit-to-u=
-serspace, see VMSCAPE bug */
- -#define X86_FEATURE_MSR_IMM		(21*32+15) /* MSR immediate form instruction=
-s */
- +#define X86_FEATURE_ABMC		(21*32+15) /* Assignable Bandwidth Monitoring C=
-ounters */
-++#define X86_FEATURE_MSR_IMM		(21*32+16) /* MSR immediate form instruction=
-s */
+diff --cc drivers/video/fbdev/Kconfig
+index a7500251f41ac,72c63eaeb983a..0000000000000
+--- a/drivers/video/fbdev/Kconfig
++++ b/drivers/video/fbdev/Kconfig
+@@@ -1771,8 -1773,8 +1771,8 @@@ config FB_BROADSHEE
+  	  a bridge adapter.
  =20
-  /*
-   * BUG word(s)
+  config FB_HYPERV
+ -	tristate "Microsoft Hyper-V Synthetic Video support"
+ +	tristate "Microsoft Hyper-V Synthetic Video support (DEPRECATED)"
+- 	depends on FB && HYPERV
++ 	depends on FB && HYPERV_VMBUS
+  	select DMA_CMA if HAVE_DMA_CONTIGUOUS && CMA
+  	select FB_IOMEM_HELPERS_DEFERRED
+  	help
 
---dMCEnt+bT9Zc3PZR
+--u6Tp12HfwbG15J4B
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjeob8ACgkQJNaLcl1U
-h9BB9wf+ORnhBeVabhjjATUrOjlox0RBiVs7xg381xsH/sMNw79c9YxMKyFVhzlI
-4vz4+KahOaXqfKPKWHYyHcb6RTd1knf/V9uBSP8A/7sz4kBhL8Q6cRBFyWemRPqD
-mRqfX8bTrmixW468VS08Mtx5/hGOKRxjdrnSba0JddD8ORWiv90uv+PoNkqUpDb1
-VDCwv2UUjW5+9EZYWQE/fdEhJzYw+JaHxhvwOCZLZ+Td7dZQcg2eQhid6ujT4lGP
-558YFCX9+ztvB5QHjV8csNfR8H5pIRds4Yp0HV2m5Ew/eoUnGTfvUWo1oG0Khn4n
-Rg4VU6XLG7HfayNw96wnzUwBEZbhWw==
-=tfMq
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjepO4ACgkQJNaLcl1U
+h9BWfgf9Fty7eVKVXKZ1RqiQ8VJ0WUrkya43vIdWQBEsSc7hF8R7NckWhvfYTNoA
+C94+/5tcRzQd4lGKMgiHlpYUa86GUdYeb1qjqIhRDB5EoCowjaUWMlU31bVSmrFG
+0gbEBvHUZpfRI2blKVQbnP4q7+11NZqu6/xIsnyuR3d7ngob5Sgn+VvZfJaqz22e
+M/E5kGT+A+UXHljESSUvXG2OTPOT4t40a6On0E0HvTF1J+wtB31Mo43EqzCk82mb
+zgfsvO6IGF0VfINsyvvhUEIzKBnz4Mc5e5R/kbE4UhSVeWY5VNfe5UOCYGvUH8v0
+aw8DsFcYUq7AneVKO411ANsWKqZZgA==
+=e1xn
 -----END PGP SIGNATURE-----
 
---dMCEnt+bT9Zc3PZR--
+--u6Tp12HfwbG15J4B--
 

@@ -1,91 +1,111 @@
-Return-Path: <linux-next+bounces-8558-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8559-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DD55BBCE74
-	for <lists+linux-next@lfdr.de>; Mon, 06 Oct 2025 02:31:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72848BBDECC
+	for <lists+linux-next@lfdr.de>; Mon, 06 Oct 2025 13:54:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50897189153B
-	for <lists+linux-next@lfdr.de>; Mon,  6 Oct 2025 00:31:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 540271896388
+	for <lists+linux-next@lfdr.de>; Mon,  6 Oct 2025 11:54:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50D5141C71;
-	Mon,  6 Oct 2025 00:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20797270EBF;
+	Mon,  6 Oct 2025 11:54:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F/E8tJ6L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kdcWn/gA"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2870C1E49F;
-	Mon,  6 Oct 2025 00:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DD526A0F8;
+	Mon,  6 Oct 2025 11:54:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759710687; cv=none; b=p22Wbvbo99ZQ3Obx2UvnTYgwUsP4omF/typaDykWWb4TDCn8wSsr9pklbfyxqbQxH3JAnIpdJZjC4UVB0Ap3b2Nit8LPbKFryugeZnCXj0N0BRnVrhxHGKqpPV64h3C5I+hdakRLtxROV1AvXbYqU2dRAyb6tO6XB0+u5Tghssg=
+	t=1759751658; cv=none; b=R4j5ous1mdAE1Cam6w8UJ8L/tkRLF3xD6fstz5IVZorlm9KA+TBDVM+c7RbmUneT7Xf9w2I4ws5Wiq5sQD+PpbW8w+0cPZMXuw7ceHqE3YWQNPabQ4heeAPPgLjB0TWDQYPbpl2WKUYuGM5rKHxLBTenjpp6e0okc9wray+nAKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759710687; c=relaxed/simple;
-	bh=w4V2/m3skwlikC16DhlKeNYYOZoi8ZUngvkwOhByhGI=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Mzf+KnZqy0S/HCHl0vKoBfhtJEWQoHdczsVgRi2xTUfvyzyB1yKMimMr2jo6IyxQ2HoHdLaQum0vbuuFrpB/+GkJX+TK0V5B/kyq6GLLR31pCKOOGk9KX3ao4Kh7QphPut4VMFKzaxu06Zd9P/q5vCReIRXUVDG8aeQlgKIeosg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F/E8tJ6L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A3DAC4CEF4;
-	Mon,  6 Oct 2025 00:31:25 +0000 (UTC)
+	s=arc-20240116; t=1759751658; c=relaxed/simple;
+	bh=zAlIHE6x1M34eEodphiC58UODS3SZhqAITFtTCAHeM0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=fsvOMgYhS/8KwO05md0uVH+Mzo1y/7Tl4LKrVh2/0y4ic68wR/1gdSH8ZngS30XWTAGUwV+FXVe7uUK1ABM5yVkEh1RGMATdFR1XD8yglWbaFgNb5oiYZVlDM+JRMMljYriWyNf9Rl/oUhjPWgpuu7AdHPsS/rWM85a2CaMxgMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kdcWn/gA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35A8DC4CEF5;
+	Mon,  6 Oct 2025 11:54:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759710686;
-	bh=w4V2/m3skwlikC16DhlKeNYYOZoi8ZUngvkwOhByhGI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=F/E8tJ6L8pvmS0zJaIKpi++JIvXkvB7grR9IOLFRBkkxixqXt6vPI7XBGhqYi2GeR
-	 PRSl00D7l2mztHhSz+nOQx0giDLjvKhD+BmFH/Ieifj1qjKtF+yvL6onZe7me7/nYu
-	 VydYf7Z+D/+yPLlSPRyRhv40NB4nlaJIkq2ZLR9Zc24HUeMiX2qThziCBwvsPzQE3s
-	 ++oLRxO+HJmWX2ubmkupfUc7aH0ICPwX69LwR7dXt7QnWHEWnJpiYUydul5JjVEk7u
-	 kS5SFLDK47n4N3i+4soy73DTJTyYF/CZ3PIPR5wSuV/BiF/4bvbbUt0qbQGfaxlfM5
-	 Ju/tQe/VrLWgg==
-Date: Mon, 6 Oct 2025 09:31:23 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the ftrace tree
-Message-Id: <20251006093123.c06337b8f9928ab8c8278b74@kernel.org>
-In-Reply-To: <aN6fTmAjD7-SJsw2@sirena.org.uk>
-References: <aN6fTmAjD7-SJsw2@sirena.org.uk>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=k20201202; t=1759751657;
+	bh=zAlIHE6x1M34eEodphiC58UODS3SZhqAITFtTCAHeM0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=kdcWn/gATu/E0RWcVx6r/whmu9AjQuCJQNeDB1zMHsdCi2GF4yA2Ke1bha+jYgXKe
+	 12fRD1X2w7G7yrj/3fY3RCX+ErrQjrH/6wweP7475rnP8cNZdZWhKNhfpXzSRpqhqP
+	 KSGZmf+5/HCLKCi7uJUVoOkLl5BnLf8QbRVF4VG5gBVtgQN/uj4VN88uyUruWRJjpL
+	 XQeR3ExLVeQVMNx5xNjIxrCbP+M0KB/ayF8kWjNNMJ4EeBspShb63PDwukY05MhWzg
+	 mtXz1h1JgaW0zWxlv2nnEDc0UvbX8IROhdmKD8immVP3L3vXeTrwqNGU1dOhGKPNjO
+	 w7/2AADZPdi7w==
+Date: Mon, 6 Oct 2025 12:54:07 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Jassi Brar <jassisinghbrar@gmail.com>,
+	Joonwon Kang <joonwonkang@google.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mailbox tree
+Message-ID: <aOOt32hRRt-obb5w@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-
-On Thu, 2 Oct 2025 16:50:38 +0100
-Mark Brown <broonie@kernel.org> wrote:
-
-> Hi all,
-> 
-> After merging the ftrace tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> /tmp/next/build/kernel/trace/trace_wprobe.c: In function '__register_trace_wprobe':
-> /tmp/next/build/kernel/trace/trace_wprobe.c:176:20: error: cast to generic address space pointer from disjoint '__seg_gs' address space pointer [-Werror]
->   176 |         if (IS_ERR((void * __force)tw->bp_event)) {
->       |                    ^
-> /tmp/next/build/kernel/trace/trace_wprobe.c:177:35: error: cast to generic address space pointer from disjoint '__seg_gs' address space pointer [-Werror]
->   177 |                 int ret = PTR_ERR((void * __force)tw->bp_event);
->       |                                   ^
-> 
-> Caused by commit
-> 
->    eaa7b0b3b9875 ("tracing: wprobe: Add watchpoint probe event based on hardware breakpoint")
-> 
-> I have used the version from 20250929 instead.
-
-Oops, this is the error. Thanks for reporting!
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="O0XO5ZDUQRd+y9EN"
+Content-Disposition: inline
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+--O0XO5ZDUQRd+y9EN
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi all,
+
+After merging the mailbox tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
+
+/tmp/next/build/drivers/mailbox/mailbox.c: In function 'fw_mbox_index_xlate':
+/tmp/next/build/drivers/mailbox/mailbox.c:494:15: error: 'const struct fwnode_reference_args' has no member named 'args_count'
+  494 |         if (sp->args_count < 1 || ind >= mbox->num_chans)
+      |               ^~
+make[5]: *** [/tmp/next/build/scripts/Makefile.build:287: drivers/mailbox/mailbox.o] Error 1
+make[5]: *** Waiting for unfinished jobs....
+make[4]: *** [/tmp/next/build/scripts/Makefile.build:556: drivers/mailbox] Error 2
+make[4]: *** Waiting for unfinished jobs....
+make[3]: *** [/tmp/next/build/scripts/Makefile.build:556: drivers] Error 2
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [/tmp/next/build/Makefile:2011: .] Error 2
+make[1]: *** [/tmp/next/build/Makefile:248: __sub-make] Error 2
+make: *** [Makefile:248: __sub-make] Error 2
+Command exited with non-zero status 2
+2388.97user 520.10system 0:21.52elapsed 13514%CPU (0avgtext+0avgdata 323276maxresident)k
+0inputs+0outputs (1008major+37863234minor)pagefaults 0swaps
+
+Caused by commit
+
+  c889daa5a773 ("mailbox: Prevent out-of-bounds access in of_mbox_index_xlate()")
+
+I have used the version from 20251003 instead.
+
+--O0XO5ZDUQRd+y9EN
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjjrd4ACgkQJNaLcl1U
+h9Ckiwf+NJPOPsh+nkFrEJZYUDlX5dpO/CF03X6h/7g4WUAIN4YtbW+vuYzYTruN
+7y3cBxjmaSVjl2761Wmb3zt4oSusKKmbs6sucTBN+Wm9kS7ERjA87q1Vc/syezMh
+hlh6xCq8RX/eHBEjEP7ElbSuzSeqATKywDLA/mpWvSjuE66Y8m/9khkL8Z4ft0Gm
+Cxa2mwRQ13uVgR8pRx4YgQBm6WvKUG1DukrLM/K2WURRYzPLOBY0rbvfz29mropl
+VCZ/Szc25584uQJok4U+N14cqujfQQ/o/tN7QMAYaq35d6TCllhAdWBrL3/prwin
+gxGb24PiowKvrs3yYYY08gTGBpTWGw==
+=DRpM
+-----END PGP SIGNATURE-----
+
+--O0XO5ZDUQRd+y9EN--
 

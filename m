@@ -1,246 +1,284 @@
-Return-Path: <linux-next+bounces-8567-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8568-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98780BBE0E3
-	for <lists+linux-next@lfdr.de>; Mon, 06 Oct 2025 14:39:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 049B3BBEA28
+	for <lists+linux-next@lfdr.de>; Mon, 06 Oct 2025 18:25:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 75DAC4EBE7A
-	for <lists+linux-next@lfdr.de>; Mon,  6 Oct 2025 12:39:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F160189CCF7
+	for <lists+linux-next@lfdr.de>; Mon,  6 Oct 2025 16:24:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37EB027FD74;
-	Mon,  6 Oct 2025 12:39:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C282DC76D;
+	Mon,  6 Oct 2025 16:22:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="heLLUgLK"
+	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="rlSchkIY"
 X-Original-To: linux-next@vger.kernel.org
-Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010046.outbound.protection.outlook.com [52.101.56.46])
+Received: from mout.web.de (mout.web.de [212.227.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 708F927FB2D;
-	Mon,  6 Oct 2025 12:39:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759754373; cv=fail; b=dxaFC8e7DMTYCjKon7ZrHDnuwO+X+4VBLyDXRIdXvzZX8DgOllLuAB9dst1XuzkiE7sMIBfhsfnmxmwknVdj+DHQv9EKL6jEsz32RNXHi+a3ji5pkE/QhIsxVKZeyLqAjcD+yO/r5XOiVHhhmEQ+JrznwlzUEM1iSg4RXIwVPvU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759754373; c=relaxed/simple;
-	bh=087ikd8H+bdvPuugxUwKGUV36a3K4xSyTyaI7X8ors8=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=SfXBZXQ2E596nFltRakIu3bR16leeQZvCJ3i8UqEXBlKayvANSfuQzVFhHo+s2eTCfLS0xbSVvncFh+JPtBRIVMW0sWyhwGdOuV0rNGnEBj3j0p0WUW+pO10UaGLJ8ezJ/4BPD3Ado7IEYeV5wDxhYK/+NSL9/FzSGt82ee8hb8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=heLLUgLK; arc=fail smtp.client-ip=52.101.56.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DiDnLQiSqmopAXcuuXLgxQpFi0+GG1xkHroRV3pe6yFsqKwR1jkeGz/bm4t+rPt3v3ax1tv1RbE/9YnI5HN7FayfCoP3hKtA3fWj4UPDIKBlgMYmPCRhUi8KyPMv/U//8Fkg2HoF3zHIwqoHY6PAYDwkSS14YHfh8/0wbM3DaAklMIrgTuCE3xJw3kzRrLG7Bn+SqFYoSFDxfCcktVxBdX1sUttom28+UBkA+UFdln2J9eSTaVnqHrF8UkF/WP843lHW+wNBJuxSjRhYtC5iP9eMqTMepLIau2yWEgobWlZwV2OKUJFwyEb3UuqB59/lbZNIgnABjLH2F6WGmVzWWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=URTVXFld53GTnQdqySFtus1ZUVhjs6zvEzSyqybdr9w=;
- b=FlLm9EcA3va8DBEbJH8yFhVttB5T8XysrFg5y60r82Gi2GzIjz6L5n6byxrd5ClcWZoMUY82c9+7C1rkV5vdGVuZwVy/L1b7RRW9ZjMPtj1RycO05u0PGLg1XXJLRTKHSL9k5TSyOINxLER+YayXAeTjnrQN6PvDeLNgtumpXw43tvZU7M7KdoxCjAclDaIe6mhKP1L1KwWyBFFxuFRWummiTfmHCVKy79p6g8CdLqIhZD1Pt3AYopl/wyXQjqoeWHaMFcVgTHWYEpAY6VJ1ShA7+ClxPd66nbNcT8lto9ltVUcYGTsz/N8zJ0TekSbL6en0OkjKewB8Qj2N1REpEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=URTVXFld53GTnQdqySFtus1ZUVhjs6zvEzSyqybdr9w=;
- b=heLLUgLKKij8gLBUAt58zh4btlnq72rgum+Kb0Tqn4AuvHTiW4oV9op/zrSbceI+I5cLl7TM7rhNM7OzRmG3Nugizy52ubkvW8rKR6WoPojigFhvZdEswx9N29qnHsXeZL08eV9uYsMWhdHbbZHkLlMsYZPYogHadrz82kw/XZc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
- by SA0PR12MB7090.namprd12.prod.outlook.com (2603:10b6:806:2d5::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9182.20; Mon, 6 Oct
- 2025 12:39:23 +0000
-Received: from PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::46fb:96f2:7667:7ca5]) by PH7PR12MB5685.namprd12.prod.outlook.com
- ([fe80::46fb:96f2:7667:7ca5%4]) with mapi id 15.20.9182.017; Mon, 6 Oct 2025
- 12:39:23 +0000
-Message-ID: <232324a9-e82d-40b3-b88b-538947411a24@amd.com>
-Date: Mon, 6 Oct 2025 14:39:18 +0200
-User-Agent: Mozilla Thunderbird
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9F1B2DAFBB;
+	Mon,  6 Oct 2025 16:22:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759767775; cv=none; b=RyiT28MoC5L0FmgZC3RcA/nuTDegK4r2/WEGg75iOmLFgENeDVy6N96e1l2SJMGXOMudEeKk0N0lIIK2vYBlyxGwE1+S1KgniddnJKX2worpDH1gvyLaxYhwG0lMu0qgqWVftyhbxAuL9bYANAaysdzOv41NwV513HAcluoZM0M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759767775; c=relaxed/simple;
+	bh=884PvJHcm2i0Tf4+TwZK5v+OMKywwSpAClbiq7l7D1k=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=KxEwyN2vwOU3S8FyrZJpQTxAsZNWu97oHO6EOLNcdPlhLpuRkaDHEzm+Vu8c4z4UeGj2Ui/1DRaWZHBwNZinPTh+CDZmWpZVfsp14usZvD2OQmpS0cGuyKIf8fPkfn2y05oMUKQZr4aA4GlPfp/Eq3UofU8ZMTKpBasdxmbaB3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=rlSchkIY; arc=none smtp.client-ip=212.227.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1759767753; x=1760372553; i=spasswolf@web.de;
+	bh=uxOUA7vfdhaJVB3s0ofk5wbAtw/kPvEKyV3TRgRaZQU=;
+	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=rlSchkIYyzSidwJKXq1vPE6J7JMiGP0nd4cqxRYF4A5eFfUoz4rH34Zx2Mw56Y5f
+	 uzpe08vD2PuXg2fDBdGgHUL252IPIIfPzmedYYmJNytpGS+M/LCmCBKIvTADlvTms
+	 zOm+STAIZmoA0W9eILs+/UzFisxjkyJRUWm5YwGCup9CAoMUdjq/mj+2ACwRYSQt5
+	 Boe4cHzYRDV03f/Uz2Sc4DvvYQ3YHtUZ4qCaJSD0jHdhHqI5lUOA1a38DC4YfvWPF
+	 9k0SEuNhNAUDB6rRFJI9+7jlb8fGEHVzJ26EUM7stS3E/VBI7ft3c++dJfdYFNi66
+	 kFbhk7jktp4Glwgo1A==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.0.101] ([95.223.134.88]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MECCd-1uxnEy12Xd-0054Qx; Mon, 06
+ Oct 2025 18:22:33 +0200
+Message-ID: <e60d2cf59666b6f670996bac80cb948acb1d7b5c.camel@web.de>
 Subject: Re: [REGRESSION 00/04] Crash during resume of pcie bridge
-To: Bert Karwatzki <spasswolf@web.de>, linux-kernel@vger.kernel.org
-Cc: linux-next@vger.kernel.org, linux-stable@vger.kernel.org,
- regressions@lists.linux.dev, linux-pci@vger.kernel.org,
- linux-acpi@vger.kernel.org, Mario Limonciello <superm1@kernel.org>,
- "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+From: Bert Karwatzki <spasswolf@web.de>
+To: Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>, 
+	linux-kernel@vger.kernel.org
+Cc: linux-next@vger.kernel.org, linux-stable@vger.kernel.org, 
+	regressions@lists.linux.dev, linux-pci@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, Mario Limonciello <superm1@kernel.org>, "Rafael
+ J . Wysocki" <rafael.j.wysocki@intel.com>, spasswolf@web.de
+Date: Mon, 06 Oct 2025 18:22:31 +0200
+In-Reply-To: <232324a9-e82d-40b3-b88b-538947411a24@amd.com>
 References: <20251006120944.7880-1-spasswolf@web.de>
-Content-Language: en-US
-From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20251006120944.7880-1-spasswolf@web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR4P281CA0307.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:f6::20) To PH7PR12MB5685.namprd12.prod.outlook.com
- (2603:10b6:510:13c::22)
+	 <232324a9-e82d-40b3-b88b-538947411a24@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.56.1-1 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|SA0PR12MB7090:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0071bce3-c7bb-4ee5-2de6-08de04d56096
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TnZkVlVtK0h0WDNtYmk5eEN3RlRsTU83ejVpeldTa3JpWTFDbFlDZVBncGxh?=
- =?utf-8?B?a3FKcGVYaEVaT0RvNnoxQmg4QldKL1Z2RENtcnAxZGpPeDlwWkthaGRrT1Yy?=
- =?utf-8?B?L0QyS3h5TkhLS0hiK0tnckFNcUNSQTdweFRDR3BWcEFWQmUrVUNJNGZMZVUv?=
- =?utf-8?B?YTlocGZVUFQybGpibWtCQzMxQU10ck56QlpQclZXYjB1NUpwa0xlaXkvOE51?=
- =?utf-8?B?SVNYb045TTNuRnpOeHR5UkhhSUFFVmhIZDJKeEdpNnFiUzBzRklINllJSFRp?=
- =?utf-8?B?NU1hQUhNSlUxNUdyRWlGTkJBTlVZc01SMHQ5bjdXajh1MkQ4TklDY1FCM0pO?=
- =?utf-8?B?aDJMQ056SWNYckZrOExhbk16NDJJWWJRZTZQT2M3YVpBaTI5emw0NVpGQ2ZW?=
- =?utf-8?B?ZzZWR0crZXNlYWpNWnBBa1R5bCt0UHJJV0sxQlVrNXZRTkVzRGRxUUNIRzdF?=
- =?utf-8?B?QkRieXZLSkdGazJnL0hYRmhKZ1Z3QXRicWVYV2MvY2ZBTmE0L21xWWgvOFht?=
- =?utf-8?B?R2NEeFhjMW5hRzdNOUkzajVyN1JxUGtkRTVsdTRWSUExQjFEc1RMd1VKYkQy?=
- =?utf-8?B?SFMvNy9rbnpPaElZSGUzUEFudkppTlhhUFZDd3JxSm1ONlluR1VZMU5rWWhR?=
- =?utf-8?B?YU80TDdYclR1bDI3MXVlUWVnQWFsdXd1eVc3YVA3NHNoZGNMVHBWZ3BOTm5l?=
- =?utf-8?B?SnFnS25iUDlyWkprWWFXU1VDMUtMZkRMTHZ0UmY4bDFIb0hva1MwcU1zYkNF?=
- =?utf-8?B?K0IzRlRvekdQUWcwUGcrWFhmcGpaeENob0xDVWRRTHJmOG5rVGFhSDBzcWNh?=
- =?utf-8?B?OGxmVGp2Wk4ySFF3VmgwL1kxeWZRdXVESVRhVDRrem8yWS8vZ2FtaTFQd05U?=
- =?utf-8?B?VjBjczRtZWMzMENZeUs2U1pEUGFSVTluUWJNV0dQak93SExWak80ZlYzU1g5?=
- =?utf-8?B?TjBMMld4Q2NzTFluQ3VDYkZTTFo4K0l6UDc2SFhYMEZnY1VjaUV2OStmMXA3?=
- =?utf-8?B?ejc5c1EvMWNpOG44bEtFOTVrMWVoR2N1OGRHdFovRnptc3NmZm5JWmFqdDJw?=
- =?utf-8?B?MU5OTkhVeDRCZHFnS3gwRHFZNGl6SDkvT1kzblZWM3hoSGU0UjBYY04rblAw?=
- =?utf-8?B?cmpwZ29OQnNVOTZ1U29WTzRQWEhHYUh0MUVsWlFxY21BU3dTTGhXeFF6UVpm?=
- =?utf-8?B?c3RjOHI2dU8zdlVSOGlHTUZ1Zkora2NlRzhML1plZXU5UHlVNTB4V0MzRi9y?=
- =?utf-8?B?TzNOTjltK0djR1VTKzVwTDZLUG9hNkk2d2ZtRm14LzdHSk5zNHR3VFVJMi9k?=
- =?utf-8?B?R1RSU3RQKzRwd3ZwQndEWHhITGN6MS9WVENQenorR1JDRXQrNzIyTGUzWjY1?=
- =?utf-8?B?WHN4dmVMeE41ZzNiajJFNGdkZHBnTmcwZzduRzlSSVpaNUVLU21NQVBLeDd6?=
- =?utf-8?B?Z0JBRWZqQUxLZzk2cTZneUxQbEY1d0ptZC85TlNBZEVacHI4Ym5IVVVDSHNG?=
- =?utf-8?B?VlNxeEY2MWU3bUlCMUdGWUZZaHdQbDZza0Q4NGhaN0kyUFVkbjV6c0JWTFdS?=
- =?utf-8?B?ZGYxQm5hVDE4ckRpZkd4TERFYmQxYVM5UnN0ckZtV0RwTU5pRlVKOFlkTkJp?=
- =?utf-8?B?bkFQK1NJbHNac0ozMDFrd3dQaW00N0piaG5acjZEdEFSOHc0eitORFZlcmlO?=
- =?utf-8?B?MmN0ZTVMS0JqcUxRUmJTQXFzdlIwRksxTU9qL3pINmVlTmo5QlUyUVpIbnZU?=
- =?utf-8?B?ajl0Z2dQbVcyRUJzRTBJWThuc1h5SXZFSHppNkNPbDVGZWR0aWtJNldIdGVw?=
- =?utf-8?B?TFkreEpSdldmRjZ4Y3NDTDdnNlM4YVBvVFhxMHl5VmI5djAxQXZjWEtmRXkr?=
- =?utf-8?B?R0s5SWlyS0xYelVzNDBBd0Rha0swcVhmOXJPWHIrbUVmZ2tRSzNnR1JDdmpk?=
- =?utf-8?Q?+Z1rtCtNgBpwzQoEqfXfhikbxtPR8U9N?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?YUl1Wlp6RGJJTTJBdFVuNHZKUmJKcldiWmtGUzdzYkRLaGJOdHdERmJUMUJB?=
- =?utf-8?B?eW91Y01FWDVMNlFXZmNsVmtuaUswcEo0dkY1L1dvWTVtMitUOWlQZThaM2xk?=
- =?utf-8?B?S29JTlFZSTBOQmtJOG9wczExWGkzazZVMUo5SzF4NkxVREJ0c1NReVArYUZx?=
- =?utf-8?B?bW9ENGpROUhVU0VpVkZnNVQyS3hMN04rWGVWU0JsbTVoMm1pb3krdFBqR1lr?=
- =?utf-8?B?c0ZFRHFNOUZ0ZVk0bzNYOWU3M1pNbUM0TllwR3hwK3VzcGg2SlJDQTFDQ0hM?=
- =?utf-8?B?bUYxNVJNV0RRYzV3azYyMUJvYmNjdmEySng4WlBNZ09zaVVxeDF1OEt5N1hM?=
- =?utf-8?B?ZTd0SU5HazFSdGRhbWtUeHAxcTR3NHF5VkRxSlZqb0ZwYU93ZVJvaVJ5SGxL?=
- =?utf-8?B?OE5xRDVmS3RmZUZVc2pEa25sK3hiN05QWHBOYlhqdE1VM1NpVllzUStTY0Z3?=
- =?utf-8?B?em1QemtsQ1FFc21GNWxlNjZLSW1pajZ0dHR3Q1JNTzFQdFoxblhPdStBZXJI?=
- =?utf-8?B?ZnJWeUpmSnRPSDlkMXBxdElIeXl6QnIyRmJRek92SEJweTA5U0llOFhNZE0w?=
- =?utf-8?B?SmVNVVF0KzRrd0x3OXVaMWx1dGNWbnE0Y2VWSnZsZzFzajcwcVVYNkFRb0pa?=
- =?utf-8?B?aXdGYjhyOWtoQnNyLy81UnRoSGx3N0tuN0FiaGVGUU1aTkFFLzc0c0lYRlFG?=
- =?utf-8?B?N3ZENENTdWpTb0tHSGtnd2JyNm9UR0JXOHVVMnQxNlhZRStzT3htUW1RMkpH?=
- =?utf-8?B?Z093VHJPNGVnZjVRcWNRNGdac2RjbTNDYkVzUHJQMGE4bGUrMUo1ZEJBN2Jn?=
- =?utf-8?B?N1g2aHBTVUNhOHJGRm9NNmhQcnpOOWdSM0VYQ05GSzlzWjU5RGtiTXIwbHFU?=
- =?utf-8?B?VmNwc0xVVWJJOHlMK29RVmdiZHBFRnFuOGpnV1NndHkvMG9rQW0zelROMHhx?=
- =?utf-8?B?MWx1emVGTWhBSmRiNFZHVHRnMzNhTG55YjlFSmlxcmIzaWt4dXphOUlXQkJC?=
- =?utf-8?B?VHdhVTZ6TUc3RnVCWDhNdit2S3J4dDU3dGZYOVBKOVRpNHVIVi8vSzZ1QU4v?=
- =?utf-8?B?Q0c2TkM2ekwyNDVaNlRDUVJCbDJXZWtvaGpuSTdvdXhzZkhKR1RVN21ZZVho?=
- =?utf-8?B?ZkkzZ1UwV0VmckMyMkVUd056cHhGamllbURZa0F3RG0yMmpJL1psajE1eGJk?=
- =?utf-8?B?cFJTL1VYTytzRkhTbXJBdWRyblpHYVNKQXRCd29TcGpLZzRBcXJiT0c1clpG?=
- =?utf-8?B?S0xsdDljUXdzWkIwS1Zhbi9UelJqN3Nrdk5PWWdRMy8za3VrRzFFNVJMaHJy?=
- =?utf-8?B?SU5jOENuTVEybksxSis2V3N1Y0VLRW0xc254d0J5RXBETUlYRGVSdmtSWUZi?=
- =?utf-8?B?MTZIWVRUMTNuanJYNDdjVER5Rkd5UFBFUWJCTFNwK2hkNy8wbWtpeWhvejZC?=
- =?utf-8?B?RjRXQ2d0WnZ1YjN2VkFEWVcvbmhRLzhFd2hEUEpxaDNrTHhZQktzRFZjajhN?=
- =?utf-8?B?cUt1bVV4bmJ6VHJCQ2p5NlIvdThyRThGRExjYTlrOXE1Z3FUSjlSVERRczNZ?=
- =?utf-8?B?ajMwWDd3TEdoQTYzV0NzRXp1cXBLZmtUOHBiQWFBaU5qN0ZybDFURUsvWmM2?=
- =?utf-8?B?ekFYa3c5cEwySndRb0t6amF2UWt0dWhCY2xQeXRkZnBmQlZTRlBiS3poN0pS?=
- =?utf-8?B?U2piRTdvb0FMRjYyY2VFdnUwOFNYM1BVSW5JUjJscVg4VGNOL0l5eURKZ0pw?=
- =?utf-8?B?UVdKekllUnlYbThCVjlaSy8zWkVtUTQrcnhTenhiQUNjaFpjZENVWGYvMWV4?=
- =?utf-8?B?NW9rRkVLc3pyUTR3L1d3dTNEdlpaYVZJTnpCSUk3VzFZOEpEN1NCajcxaGNx?=
- =?utf-8?B?aWtZQnhLeUtGMXBLc0x5VEVJNTJrMHhEUC9SdjlQRDVsMm5uT0JNaVdQKzVG?=
- =?utf-8?B?U1hVeXZvZmhBQkp3bHVMRy84MXZyOXBxYnVBa0JqZ0JOejgrSmVPdk1wNUlW?=
- =?utf-8?B?K2UzOXdrZlREbHg4QmpsYzh0SHhoTjJaNnY3K3dBTklhemVjY0pQenY3STdI?=
- =?utf-8?B?bkc1NDhzVUFFdXNtZHFrYXl5eTVQMlppNmVjck1lWi8zc21kK3ZCNHUyV1V1?=
- =?utf-8?Q?HnPo=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0071bce3-c7bb-4ee5-2de6-08de04d56096
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2025 12:39:23.1561
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: FDzFEA5V4ZpNypFKh4VJjfaFaWAd1FPqOzabnYnV4/DbXYiK7NETrjSRJ4iOxTsm
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7090
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:7cQZzUVy1ojSzHMbW/eUEZ6O/KpGeiU4sASK9dN7IHrgWmGoXNX
+ 61vpV1modSJBe+6mNXKTX8JzRLNcSXYX+E4lSDht033bKkR0UOpYJnpRt8lPlRjzrVChqTA
+ UG9BFxL5NGzepHWyfTch4bMarNJdd2Qr0672zz4otyIJkI3uKAqGSv7vDOoMZ+psUcbsmNo
+ 76/iwRA/TAXlCcL5MpOcg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:E4teUIpIjH4=;wZmGLM/xSZt9VfD/NO5BwFC0qNf
+ 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
+ bCAJTMXHrD3dQe5H0=
 
-On 06.10.25 14:09, Bert Karwatzki wrote:
-> Since linux version v6.15 I experience random crashes on my MSI Alpha 15 Laptop
-> running debian trixie (amd64). The first such crash happened about in the midth
-> of june, and as there were no useful log messages and even using netconsole
-> gave no useful message I suspected faulty hardware. So I ran memtest86+ and
-> found a faulty address line and replaced the memory (unfortunately 64G to 16G).
-> But the crashes occured again and so I did a thorough investigation.
-> 
-> The crashes occur after 30min to 33h (yes, hours) of uptime and consist of a
-> sudden reboot after which the PCI bridge at 00:02.4 and the nvme device 
-> connected to it are missing. If there's sound running during the crash then the
-> first sign of the crash is the sound looping like a broken record for about 2s,
-> after which the reboot happens. With the missing nvme device the reboot drops to
-> a rescue shell. Using "shutdown -h now" from that shell and starting the laptop
-> with the power button restores the missing PCI bridge and nvme device.
+Am Montag, dem 06.10.2025 um 14:39 +0200 schrieb Christian K=C3=B6nig:
+> On 06.10.25 14:09, Bert Karwatzki wrote:
+> > Since linux version v6.15 I experience random crashes on my MSI Alpha =
+15 Laptop
+> > running debian trixie (amd64). The first such crash happened about in =
+the midth
+> > of june, and as there were no useful log messages and even using netco=
+nsole
+> > gave no useful message I suspected faulty hardware. So I ran memtest86=
++ and
+> > found a faulty address line and replaced the memory (unfortunately 64G=
+ to 16G).
+> > But the crashes occured again and so I did a thorough investigation.
+> >=20
+> > The crashes occur after 30min to 33h (yes, hours) of uptime and consis=
+t of a
+> > sudden reboot after which the PCI bridge at 00:02.4 and the nvme devic=
+e=20
+> > connected to it are missing. If there's sound running during the crash=
+ then the
+> > first sign of the crash is the sound looping like a broken record for =
+about 2s,
+> > after which the reboot happens. With the missing nvme device the reboo=
+t drops to
+> > a rescue shell. Using "shutdown -h now" from that shell and starting t=
+he laptop
+> > with the power button restores the missing PCI bridge and nvme device.
+>=20
+> Oh well, it sounds like some PCIe device is dropping of the bus and taki=
+ng it's upstream bridge with it.
+>=20
+> > As the bisections were not succesfull I tried to monitor the crash usi=
+ng
+> > netconsole and CONFIG_ACPI_DEBUG and "acpi.debug_layer=3D0xf acpi.debu=
+g_level=3D0x107"
+> > as command line parameters. With this the last message on netconsole b=
+efore
+> > the crash is usually:
+> >=20
+> > [21465.639279] [    T251]    evmisc-0132 ev_queue_notify_reques: Dispa=
+tching Notify on [GPP0] (Device) Value 0x00 (Bus Check) Node 00000000f81f3=
+6b8
+>=20
+> A full dump of that might be helpful. That sounds like the dGPU is power=
+ing up/down.
 
-Oh well, it sounds like some PCIe device is dropping of the bus and taking it's upstream bridge with it.
+Yes, that's what's happening.
 
-> As the bisections were not succesfull I tried to monitor the crash using
-> netconsole and CONFIG_ACPI_DEBUG and "acpi.debug_layer=0xf acpi.debug_level=0x107"
-> as command line parameters. With this the last message on netconsole before
-> the crash is usually:
-> 
-> [21465.639279] [    T251]    evmisc-0132 ev_queue_notify_reques: Dispatching Notify on [GPP0] (Device) Value 0x00 (Bus Check) Node 00000000f81f36b8
+>=20
+> >=20
+> > GPP0 is the ACPI name of this PCI bridge (at least that's my best gues=
+s):
+> >=20
+> > 00:01.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Renoir P=
+CIe GPP Bridge [1022:1633]
+> >=20
+> > to which the discrete GPU is connected
+> >=20
+> > 03:00.0 Display controller [0380]: Advanced Micro Devices, Inc. [AMD/A=
+TI] Navi 23 [Radeon RX 6600/6600 XT/6600M] [1002:73ff] (rev c3)
+> >=20
+> > via the pci express switch
+> >=20
+> > 01:00.0 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD/ATI] Navi=
+ 10 XL Upstream Port of PCI Express Switch [1002:1478] (rev c3)
+> > 02:00.0 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD/ATI] Navi=
+ 10 XL Downstream Port of PCI Express Switch [1002:1479]
+> >=20
+> > While the GUI (xfce on xorg) on my laptop runs on the built-in GPU the=
+ discrete=20
+> > GPU usually wakes up quite often, e.g. when a window is opened or when=
+ scrolling down on youtube.
+>=20
+> Yeah, that is a known issue and we are working on it.
 
-A full dump of that might be helpful. That sounds like the dGPU is powering up/down.
+Until linux v6.15 this didn't cause any harm.
 
-> 
-> GPP0 is the ACPI name of this PCI bridge (at least that's my best guess):
-> 
-> 00:01.1 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD] Renoir PCIe GPP Bridge [1022:1633]
-> 
-> to which the discrete GPU is connected
-> 
-> 03:00.0 Display controller [0380]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 23 [Radeon RX 6600/6600 XT/6600M] [1002:73ff] (rev c3)
-> 
-> via the pci express switch
-> 
-> 01:00.0 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 XL Upstream Port of PCI Express Switch [1002:1478] (rev c3)
-> 02:00.0 PCI bridge [0604]: Advanced Micro Devices, Inc. [AMD/ATI] Navi 10 XL Downstream Port of PCI Express Switch [1002:1479]
-> 
-> While the GUI (xfce on xorg) on my laptop runs on the built-in GPU the discrete 
-> GPU usually wakes up quite often, e.g. when a window is opened or when scrolling down on youtube.
+>=20
+> Basically an application enumerates the possible render or video decode =
+devices in the system and that wakes up the dGPU even when it isn't actual=
+ly used.
+>=20
+> > A somewhat reliable method to generate GPP0 notifies is putting on a y=
+outube
+> > video and the periodically starting evolution with this script:
+> >=20
+> > #!/bin/bash
+> > for i in {0..1000}
+> > do
+> > 	echo $i
+> > 	evolution &
+> > 	sleep 5
+> > 	killall evolution
+> > 	sleep 55
+> > done
+> >=20
+> > This is also the method I used to test the debug kernel in the followi=
+ng mails.
+>=20
+> To further narrow down the issue please run your laptop with amdgpu.runp=
+m=3D0 on the kernel command line for a while and see if that is stable or =
+not.
+>=20
+Even versions that did crash can be stable for 24h of uptime so I think th=
+is=C2=A0
+will take too long.
+I think I've already chased down the crash to this part of rpm_resume()
+(I'm currently doing a testrun with more dev_info()s in this part):
 
-Yeah, that is a known issue and we are working on it.
+ skip_parent:
 
-Basically an application enumerates the possible render or video decode devices in the system and that wakes up the dGPU even when it isn't actually used.
+	if (!strcmp(dev_name(dev), "0000:00:01.1"))
+		dev_info(dev, "%s %d\n", __func__, __LINE__); // this is the last report=
+ed line in netconsole
+	if (dev->power.no_callbacks)
+		goto no_callback;	/* Assume success. */
 
-> A somewhat reliable method to generate GPP0 notifies is putting on a youtube
-> video and the periodically starting evolution with this script:
-> 
-> #!/bin/bash
-> for i in {0..1000}
-> do
-> 	echo $i
-> 	evolution &
-> 	sleep 5
-> 	killall evolution
-> 	sleep 55
-> done
-> 
-> This is also the method I used to test the debug kernel in the following mails.
+	__update_runtime_status(dev, RPM_RESUMING);
 
-To further narrow down the issue please run your laptop with amdgpu.runpm=0 on the kernel command line for a while and see if that is stable or not.
+	callback =3D RPM_GET_CALLBACK(dev, runtime_resume);
 
-Thanks,
-Christian.
+	dev_pm_disable_wake_irq_check(dev, false);
+	retval =3D rpm_callback(callback, dev);
+	if (retval) {
+		__update_runtime_status(dev, RPM_SUSPENDED);
+		pm_runtime_cancel_pending(dev);
+		dev_pm_enable_wake_irq_check(dev, false);
+	} else {
+ no_callback:
 
-> 
-> Bert Karwatzki
 
+Bert Karwatzki
 

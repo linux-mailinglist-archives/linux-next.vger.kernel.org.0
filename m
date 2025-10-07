@@ -1,256 +1,232 @@
-Return-Path: <linux-next+bounces-8570-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8571-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5905CBC0078
-	for <lists+linux-next@lfdr.de>; Tue, 07 Oct 2025 04:30:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EA3CBC0634
+	for <lists+linux-next@lfdr.de>; Tue, 07 Oct 2025 08:52:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3BB4B4E143B
-	for <lists+linux-next@lfdr.de>; Tue,  7 Oct 2025 02:30:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22CE3189EB61
+	for <lists+linux-next@lfdr.de>; Tue,  7 Oct 2025 06:53:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86A584A1E;
-	Tue,  7 Oct 2025 02:30:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3812D23E350;
+	Tue,  7 Oct 2025 06:51:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="KRZHUmKn"
+	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="O8fkMZJ9"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.15.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A379034BA3C
-	for <linux-next@vger.kernel.org>; Tue,  7 Oct 2025 02:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6218523D7EB;
+	Tue,  7 Oct 2025 06:51:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759804217; cv=none; b=kYNoRt2nTiEzVxUaEQIz3M7AsGwgKKLjWkLhkWQULp0bPWua0ndK+CNgLkAm+0AUqMm/bCo+Y+0xUxJxmAZRz84CRuVWmWDt/ytoLhfVW5rmL7OrmhOpEiXSSAIVXrSsYWLAPVA6FCoGc+Jnlst0GgYQKDTbjNmMkBRZDxZYmic=
+	t=1759819880; cv=none; b=ACS3z4TEY8mPTkCBbY3u55Pnw95RKVr86Yui1Bq8pE3cin2H0zo7upSkpdi2lvMlxYvvZFAqH1+EzMxOW2BRGKGsI7S5uQGUzS9esnOdlSAVlHtaFOCkb1+ZnHtqBpDVCCQjsbJSbPodYssWEC4gpw7JWiwlKtvF8AAT+ZNInrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759804217; c=relaxed/simple;
-	bh=VUkIL8kEWT5zKsu4tjnC7JLnHuLtAbAkKJpGx39gnjw=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=MZ/rkzwUpCRZd9cyMqFClEQ6XwRYDEEg7/0J7fdgBZ/jdFdnf/EhN2QRnhVihdJL0EqQCgQPGsvHEgnlotXQgbEkXuXi712CrZrPljmLYbjSkA64iQZXZNjDYsySfjI9yND8BjX5ljuncRI7dcR5ig890RhySSyLF9ONjMEM9Ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=KRZHUmKn; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-b62ed9c3e79so1719539a12.0
-        for <linux-next@vger.kernel.org>; Mon, 06 Oct 2025 19:30:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1759804215; x=1760409015; darn=vger.kernel.org;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/ZBsPhJgjMLpSt+Lxjo+jANmg7g2NPs+LCHizaXiHn4=;
-        b=KRZHUmKnAnFJ5qo25xhOALfzVCWWr2cF9+T3roUEhrXLzDaKNzhE98JYlZYZ2TValI
-         JRK6o2voBCXSNbF+fIH72wJiVeyI171tyEsLf1Guu3dknkRVHmDQ7uHGgsqtI6MS4YPb
-         27rKRrzGPZ3szirhDoKV1RE/oxLo/ntohRJVGS8uv/5blG0Hg5qf8Jevl6acAWhflwpi
-         oC/IaHrZNgQevjxNLqhIWVsMNEi+hk2xX6RsJomCsV7WiJm+ObrLPD0KX+mK/5JjJxMu
-         xhrYAvjSDGdk2yUP3pp2GDCeNTroV8Ey1h3cqVsrEpHg4D7xtIm2FWIgO8xTdFUA4YrR
-         y2+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759804215; x=1760409015;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/ZBsPhJgjMLpSt+Lxjo+jANmg7g2NPs+LCHizaXiHn4=;
-        b=LvL0pWlwpcRHOhHLg7TR2uwpHRIgXs2iHfehZBK9yFg+sDV5Qp0AXX1ik+2dkW1KZW
-         oam4VXau+y50hQhobZW5mClaKv+06U2f6XfdW6LgIfRa0u/o7ySrmR4t8ZT2yOeibfPq
-         VnMeX9EZs3J3Yia0qe5ZjPXYmALTyjoOlB36p/iFFB5XUxunE/xn3pVg7FFPOMZxXNnx
-         Dtw24oKZK+U0o5hDJtu4JkEOeW1H7PRDDwhLvID7ZA60+5xyLVK7z6JoePy8BAUndZUi
-         hixWJL56gxwbH5cXvx9FFNR9si7TtUO11lx6DEOEVGsWvQZaaCUv0BK4DMXz3kJZGSey
-         zvCw==
-X-Gm-Message-State: AOJu0YyNbLYz1txlCckRx1tbFijmMX/ZyAPVs0oCgDqNJq+hnE7HrNRZ
-	GkRiQoSKQerhUYPusT6EiSwBaG+KCLMDjbznbj5buRA49iT6hjkd/CM1Gv8Vfd9zwJMAID2S2S3
-	+0L5G
-X-Gm-Gg: ASbGncvsymycnfMtGGk1T+5HsuvtkFyu+v4JbCAlEOKKQxWqQC2pNrZPwbEK4XX9WgX
-	oD3kbo2jGnGLieWnhIgmXRUfIheR7cp4/VjBsWmHJXMpVK0ISJ37gLi6/lpgXjI4V6ujk6VJXas
-	m86/5l0YOyfi7iM2EEH8yMuNger0pdl3GdqzppsZ/vMxXfcP33KUy4Ml8vL+NTHxF3CmbwxUBDI
-	NVaew6qx6z5Sk+JlZtoowilomtJXXFqPzRwa/NobdC7sQVCUZMLF1CQIyIJzO/6UYetQUBWb2cU
-	AY5IrMsz6NAxd+4Fun3zSq5ChILTXKJthk2nphrD1XLGGW3xRVYHSWThgA4kzdHBy9a6ITfOQNq
-	GWQwHMAhIaWzOgGheBgEe4YpwaineKZOXSj9cywR+
-X-Google-Smtp-Source: AGHT+IFvbWN3p50aS1ufH2gTQvO5JnUYyHKuAT1T15vI/mckake2ceXgBbNawlzntCVY1cotJCUb+A==
-X-Received: by 2002:a17:902:d4ca:b0:280:caeb:ed67 with SMTP id d9443c01a7336-28e9a5441c7mr188724505ad.23.1759804214676;
-        Mon, 06 Oct 2025 19:30:14 -0700 (PDT)
-Received: from d76c3c94e839 ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-28e8d1b8796sm147364785ad.77.2025.10.06.19.30.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Oct 2025 19:30:14 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1759819880; c=relaxed/simple;
+	bh=GtbhvKiArLsYQIx3MfRsDS+EuExg22K9a2ED8U/fIoE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=O3ab9JT9CohxaJouONd5InU7+70cPwnEIZ1ZVpL8nlfgdsnheeuPNYIGUQGVAj3vtt4a24MZ9dSUUq5nqgyDx42cRnoBLaUKxbyP/IAeeEDUQ0g2hnPXSSOGNPMiovZ9Xk1xW3Nfvm1p9V93QRRPBsBSolgq4cD0cVLCryv504g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=O8fkMZJ9; arc=none smtp.client-ip=212.227.15.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1759819832; x=1760424632; i=spasswolf@web.de;
+	bh=hMv2KA500eT5A2cLBEJygRRyPv5VC2X953xjqw/qJNg=;
+	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=O8fkMZJ9iKSTLRbKEjVrQJYeyqxGIZG/OkmsO4QTCNmzIczsdh8pYQ5jsaZd90v9
+	 O+73Yu5QME1Bft9jEUqifhgN6QMdZ8FbJ01K3rZc23YcKgDzAyTApnYs7G/Arifmc
+	 txmD09y/UoL4GX/wCY/8ZfOa/j6aofbcCBcFgYR1T1krj/lprCkeONiG0nuP8+LT+
+	 1e2WgdpZaCQHaREo+pLQLan+UePvUt+aNmhVXE64Df5JzgkHnM0EU+vArWDAFZsdq
+	 3qXRU6XjuluvZbEInTGY0J1/yGZ7j2qQOdZS/WoGcYU1kaE+xUVwA1lBdivVeQLX+
+	 D+UpsLS4dk/WXzRHUw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.0.101] ([95.223.134.88]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MXGKA-1ulgqU07l0-00VCMN; Tue, 07
+ Oct 2025 08:50:32 +0200
+Message-ID: <93d21bb6887310d331fa67a3766e47af9669dfc3.camel@web.de>
+Subject: Re: [REGRESSION 00/04] Crash during resume of pcie bridge
+From: Bert Karwatzki <spasswolf@web.de>
+To: Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>, 
+	linux-kernel@vger.kernel.org
+Cc: linux-next@vger.kernel.org, regressions@lists.linux.dev, 
+	linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org, Mario Limonciello
+	 <superm1@kernel.org>, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, 
+	spasswolf@web.de
+Date: Tue, 07 Oct 2025 08:50:30 +0200
+In-Reply-To: <e60d2cf59666b6f670996bac80cb948acb1d7b5c.camel@web.de>
+References: <20251006120944.7880-1-spasswolf@web.de>
+		 <232324a9-e82d-40b3-b88b-538947411a24@amd.com>
+	 <e60d2cf59666b6f670996bac80cb948acb1d7b5c.camel@web.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.56.1-1 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: [STATUS] next/master - 4a71531471926e3c391665ee9c42f4e0295a4585
-From: KernelCI bot <bot@kernelci.org>
-To: kernelci-results@groups.io
-Cc: linux-next@vger.kernel.org
-Reply-To: kernelci@lists.linux.dev
-Date: Tue, 07 Oct 2025 02:30:13 -0000
-Message-ID: <175980421349.60.755907050733119685@d76c3c94e839>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:P2lTxUYjpSJLpmPegmqbkcyB6sbH+UfSUmWzVDV9JBVg0nVP1n/
+ 4H6Fk4fTK58n9InB522qyqur+nTI1XA/dDROjtVjyqHKcqj8W+3D2Jyfm0mLVFiCZSUjI5A
+ Dq8UH/Fz5BPV5irPojc8TuSv5pS3OWW2fNpyUx1MCzPUMsninR4iLgSGs++3WrCQ5iy8Ccr
+ rU1NZuRNoGfd26MWYN/VQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:Dpnenm5dL5I=;6Bd1JKSW2d9/a+Z1liuNly437rD
+ y3tzt6nud5r4+BnMt4/OFqqN+cG7pvYGHWtFNh/hgwfSQeK6ugbqzObJqOp4MdvdWz5os6A+R
+ W6o+KYiv7ldv7LgNnuE7NmLQkW2xxZgZGElxH57ZHBCqE1v9276cSoWHyrhnSW/dZN0LiEWbl
+ DweI42onfw0JnliYk9fMbYP1sJpC2pEHWWJ8ffO7GAU3V6Io9zhJtAIv/Q0svSOqxOsroGcpD
+ LbGmigXs4FmHuaFyJmR3W3zHGWZu99yRvZusmIQ/DuvBhn99A4ZTQ/jcdFh3HVT3mAd3etHnL
+ eWBfdb1Ur7QQ012SlGvzOF8+AXLMciuR4BSy/9zhDR5GdwqmEF4G9te4dHUDEmYLWb3qsMq3+
+ YXjp7Urgn8cF2x8ieJ9lh8bFPXcBaySshAvd8ErGAH2Yplh1CSTugMXErYVJJMoc5Z3+MM35p
+ t1sJhA0kewOjdH88otEEnSgWaksacfiVHffQjjX2wSsaEwi+T9REG5n8Mf8h19LzZ+IGuat14
+ IMgClJ962+0I4qurHKQWjeK6709Btd4kkQiVY7+B8bw4soAqm9e3YMv0Zx//F8ShyhZkzpttY
+ 49+8r7tZVVyTo0weIO05YBb8JrWixMHrpIIhV+LjizLOP98pl+Ag2cWsh0tdTuAT40YHfDy97
+ ierl+NaI16fpzAk2C1bLst5HZOWq4pOydwG2BCs3KqgRhQkd02oGNTUA6PzHrwBNwYuLhAI32
+ FDLHf6wo5cY4+8I0M9LaLSqOJKRQb2conojk5Vw+jdcG1JXFZqkZgAH8k4lwsZWNd09Vbgz9D
+ wW0R9DyNZ6AZnPMJLj5qeXvGLsOSsA+zEkC3Or6XkZfS33HKnBKWRs+SnOu7EAQ+1qK3oEDuq
+ UaCsPcypN+vIpebZqieAuCBLRDldaeAdAuVK5Laldpy6vSeIltlA7Ymk5H6pBnks+AT3X6u84
+ +olScmTXjmDD2T6hdyJEkFvDPLTNOHHPKJKSD7xu8axHQX+Tuz7OMBZ9XRou2Z7TiepucdBC7
+ fRDk2cNDHduEQLyWcrYOkamOf15vVB/miOV9t8Y2c9dVeZVTaH3wwRRSYF2EfCDK1M/bOCy1A
+ eodc43QOSycmbLD2G0DgBFr6rqWzcC2wo2j1Lwkwe7dOkgyQydycTm0MJifLBnly5DJf8f1rI
+ Txrgf5c+Em7Pg7xGyceuQWUbhNFiZC84PTs1Aoabd5HzVMA9db6Y070xu3Cmu0gEsxzelAm5y
+ RFczVY/6QG0YYqime7U+/yMnTqYM+oWYYQlcfbotKfx1Cr/psxGu0/cjbSElpxMLQNPE7yZRf
+ xViziQH/NRR+xVGlVcTPiDm2SlPd+OY+y6R8YYaEDL3o5/n97Rg6YhpYAWeYVISLzyePemEuh
+ bkuXRX5/C1nO+KSX3dsIhJWJf77mgvND6TTbNYrAqTRhrzmx5/w8HRCErcx+eluSbGpqpcRB5
+ E0F+eddEkcuLTjZNdsMYiQtdCq7TgxPN3pgLNs6aEQGuTQgnapUHUQT4OnLzvhwn9ImKhJ79X
+ E001oG8hx4zP+Abmv/OaFhA4x/a8j1MrCPP3XEzfGOazB8RvvHoOztfN+5/wTotXff2hy4Mj9
+ R4xl8tJuRdl1vH5O2WbKfrw60RdbFaVYFGwDT8ZoLGDnx0bsf5Ey34MO2XdZpOgqxlvxEsafZ
+ YtV/S7Ov3wdOt+Yt18Qw2BLFK5Jqn/nNt3QioeDz4HGMLTRwB3Ky0kUaTGCvzZ8qZnOQjBhld
+ Z+F8uzzVe0EPN/QJDal6tA+z0Fumb/TkWUZlf6f81gR6gVY4RfAUFHDwxSRc50135ggyYnn19
+ NHyUvGte2/629UH6ilwzfx9JswPSZDgj+p/SzIB0IqqKppbcFU/ngisR9L1naJGrDaVADYNNi
+ vzPHnf8bc6VaQ9/bzvdM7RqlQ2qqMCC14NifEZbnSveMG7TTZJdMjhTNIY2DCjMw9qv1egMKD
+ 2GJ5m0R0wWFrOwdzd14R6t5anj3ETgfeQoBaJdCcPPgzcFYs92Y0rcQM7ouJiadkOWOFRWcqz
+ tQxdnl9Af0Rg3cUtp16zG7m0Ooo0gPn3Gk1VX9yEIClZBR4F6onfb4Wbw5XKsFKMEYxWIb9mu
+ 01weImR1N8PYjW5cOLhTTj/oRmmBkZBDFjJwj5ieFNJQDDS5goacrKFJ5x3ZPNlaHm6VfB9ro
+ FXTk7EPr9/SspJIFIKoURpJk0z6PsznnzYz2raqE122Cipw9fnv+uzWN1ZSKcCcNuKk57F51l
+ 5lglYD1FzvLHoAa4m5DW/dxfz1jixzTBQQvsY8YnxIqJQUu1+X3vUzjTus3k76uUiTJ8Ddmps
+ HcrGMRJg5MUOed1SEjDZxNjdi2z3spGLFul/Mz8sVfIZik1DdTwAk21FeNI8ljItMHIYq2oU2
+ ryV5gmxaoJgP0NxidNKt9hK55jQf24xtP5OJWDtiGHHWZwywY4nfwtLwkxac1Y2MFL5itUQZ0
+ 0zjQsfW/4bv3VVwK/LlCCqk7M5QzTrgl868J71c1lCEWE0twl2HzVt0iEuaZY/TC5W4xk9+ag
+ qoy+KsC0lRjutEnXuBrm+ciMw8DN6faHpwQW2CLW/muja8E+cSVLGyG+p7nXex2Dc08LGSkF0
+ I4q/V1m6z3CfeP3oscgo+6vH5VIci09pLWqPIvMA+wOYFYxP4ADhWX/KXIs0SVJIWnhX4qBD7
+ 5kDBw7pW71/X5k+i2D7UArgs8DL2OyQhTx2kqQdi9s47M5Jjy2bn7uRni/OPXGoJFvYJWxO7w
+ DT75gKKBgFcxKbEBxT5mkLhxlithNWmxje854E6yfysyq5o4snhLyWA4Ls0oVH6wRAFf3ZqVj
+ S6RiL8oknSZlmCqCgYqs8iS8Z3fU7fp+w/j04qQxSqCNxRu/CG3K0UAu+QHUfL0Dt4PF9Cpvz
+ eyb6g6fhFHSBfXolU9rCI1uGx2oMoFDOvdG+uv1ATgdFyheeF49m+tEmlX2FXQwR/aygoOC2J
+ 2i6AqRVJmF/Ac/UQLKwJcTZkDE0SxeY9khyo1VpnlAsdegzhch8uMCUNj3WNRC6HA65D6326Q
+ L5bwdMYqPfR7J8bJkgLaWTJfVD5mrN79aIg7xsHpTrqHkKCCebUM45ZVtr8KbVExx30AXFw6B
+ 36f51CKGgLec+2oNEhrXoY7q+7sDqJaQOaSBw0hN7prnC80rk31TObXlyyR+dJSd6xeZkoPFi
+ PFZmNd8nf8QAS3JJlzdZs98B6wHrc/fiqWWF1rSpxXBzwk+okG5Ha9lyQwxWJtOUdKkPe7OIT
+ CXFRIzMppe0DYpyMhso8u7cA1FrzVMJct+tz1ehMQjebokQpFoSwKtbz1Jusx/MiiGPuqYUg0
+ e+bsv6M5zVDA3s/i2VatVTu1P+rp5jaPuWkoPYgfAfxG0olgfCMZTi51Y1ZhFjtV+wCPkceoz
+ VR9NYd8bO0GeTUEsHcI1xfX4IGqrFJUYmWZoTEmcwMIstgEAatqgbEuvmGdbb62t8FJBaDGvA
+ 3oKtWArlch1xTJBYyCQ9DxtmLSygpp0Gno/mBl2BHZrndyFJQxUmivsJyLRPuWFIwof/W0dBk
+ +/1ik9a8TYg4FKnlGqLk56WdMfVgvlm2iotMrRH3C1++iyar0zPu6jaJSGd9K3K6rlekizKg5
+ FAg85jo6isoagrwovltYAUJv1Vir73Kn9rKD4j21887160pRx0LkXLQPR4yNP4BbJidvQEoup
+ JDCasaGwhQaep/vZQ7SIBRrpmmz029uEfXrq+nfHU07zwTsixQdYkrdOVdwArIrNks5KWPGp8
+ Y34nTgdkQTxgQWYFjHRtRGp8Gu2s+/pyRkdIPW/UVbsXqri/pB5IRo//eyg2iawv0gIPRC2oC
+ R2ywwN6lUavTNvxObq+uaZM1eg9FCnWTR7rdwc78hLOthy0qcNRg1scBebOz8dzzCLVFED2dE
+ ztlWfB1nYDAEEQZlisOMI7JP059ysWk5slKVqA/fGmZ7VbgjPK4m1f0xK4lcQG6emc0c5uVW6
+ X1GGMK2cN4AMH/wQ5+wG9rZE+3qYAkXH/AcUNZttws/E51hOPy6DCwugDapV9fNaz4jzD5b3a
+ o1BxjKDhLz/yOPYaTH8Ztj3m3e3tSBmvnUwiG4CAmFXx0t6vGQ6+bbATZfhB6wDImb4gSsWh6
+ 5Zdpal4oNgTJOJCse0yOEsBWNZTmDJGbNzmtfsBc3dEsdIiZyYg45oAJcZhr66JOg04ts7Zua
+ V1e1F9n3qM/6TSeLKxhEg6CbI2y6j5LlVpIKAVG2J3kazyv0m7kzuiKwa49LvSt9lNcGfWiWG
+ o/QtGIPnSaGfD5X0fa2e066PbREHZtZ6Zfg9KniNbe/NHL3KU8PYw2y7dhE4XOC17xesTNQXY
+ EnEF3wfAindCyuqHs9utlsAVKUoiSVhI7Ex9YXwMSy/o8dizAf0Mhjb9AB4UpTl4eVfg06hae
+ xWQvZKtP9XJSWIhk0Zi7+sfL724jDkEbEmxHNioKfqNeg6mnar7nMeZQN/Hy3vX7Vtvoxqy0S
+ /DGUIL2VNo5LjDGymgpugapootkCzLvjq/X+4gUSb9+8PaMQccIU+8HgoskvV+8yZ1SatdpfP
+ IrCAamH+jS9Ryxht8U7pZfp9G+3uG1vdDHJzmpLFj20CDGyjkeV8unJtQGYrQmY4V8MM9XUGP
+ RA9/1EHxKCdMRi7pOqgoHBZk6SMYo6m5XX0cSBbm2y/+5F6Ps+nZf1gcE3EJATMIff1CEJFgD
+ vBT84Y44ActyGWyzE77O4UtNgxw5lCIVV0aJR2GU7WTuIF3kRY8RZT2DQqCl2PJAyydRtAwiL
+ KDN6vrIUjw+5fd7BxrC/VIQ02SxIWuZl44FTV+ytbm/o+GykunAMVPWWV5qiL2qG5VtMcfk3J
+ hGmWumHLHZ/zUdbbQ2r/niJsvM/M3n9730gsc/ZdD2RVZUA7hzuw/WD21s6NggbmRBSas8/d1
+ yxHd5kTgpIzRWpVZ9Z7O5G2Fnkwe/p78sDTTZPInVdNHM1c2CLgg7SrsvmkM4kS877eOPKpIz
+ zAhpIcgSwENxKKIipk/dv9AT1VoEmVXNYNasK0qrV0wuvj/+4EBx5/FGXZqFzaLqw2OYCE28R
+ hnYnLbooqBCTaMRLMC0AMr/MvssCk7buUA2oqd1vIgGq0N/
 
+Am Montag, dem 06.10.2025 um 18:22 +0200 schrieb Bert Karwatzki:
+>=20
+> >=20
+> Even versions that did crash can be stable for 24h of uptime so I think =
+this=C2=A0
+> will take too long.
+> I think I've already chased down the crash to this part of rpm_resume()
+> (I'm currently doing a testrun with more dev_info()s in this part):
+>=20
+>  skip_parent:
+>=20
+> 	if (!strcmp(dev_name(dev), "0000:00:01.1"))
+> 		dev_info(dev, "%s %d\n", __func__, __LINE__); // this is the last repo=
+rted line in netconsole
+> 	if (dev->power.no_callbacks)
+> 		goto no_callback;	/* Assume success. */
+>=20
+> 	__update_runtime_status(dev, RPM_RESUMING);
+>=20
+> 	callback =3D RPM_GET_CALLBACK(dev, runtime_resume);
+>=20
+> 	dev_pm_disable_wake_irq_check(dev, false);
+> 	retval =3D rpm_callback(callback, dev);
+> 	if (retval) {
+> 		__update_runtime_status(dev, RPM_SUSPENDED);
+> 		pm_runtime_cancel_pending(dev);
+> 		dev_pm_enable_wake_irq_check(dev, false);
+> 	} else {
+>  no_callback:
+>=20
+>=20
+> Bert Karwatzki
 
+The testrun is already finished the crash occured after 10h and ~700 GPP0 =
+notifies,
+the part of rpm_resume() above was monitored like this:
 
+ skip_parent:
 
+	if (!strcmp(dev_name(dev), "0000:00:01.1"))
+		dev_info(dev, "%s %d\n", __func__, __LINE__);
+	if (dev->power.no_callbacks)
+		goto no_callback;	/* Assume success. */
 
-Hello,
+	if (!strcmp(dev_name(dev), "0000:00:01.1"))
+		dev_info(dev, "%s %d\n", __func__, __LINE__);
+	__update_runtime_status(dev, RPM_RESUMING);
 
-Status summary for next/master
+	if (!strcmp(dev_name(dev), "0000:00:01.1"))
+		dev_info(dev, "%s %d\n", __func__, __LINE__);
+	callback =3D RPM_GET_CALLBACK(dev, runtime_resume);
 
-Dashboard:
-https://d.kernelci.org/c/next/master/4a71531471926e3c391665ee9c42f4e0295a4585/
+	if (!strcmp(dev_name(dev), "0000:00:01.1"))
+		dev_info(dev, "%s %d callback =3D %px\n", __func__, __LINE__, (void *) c=
+allback);
+	dev_pm_disable_wake_irq_check(dev, false);
+	if (!strcmp(dev_name(dev), "0000:00:01.1"))
+		dev_info(dev, "%s %d\n", __func__, __LINE__);   // This is the last repo=
+rted line!
+	retval =3D rpm_callback(callback, dev);
+	if (!strcmp(dev_name(dev), "0000:00:01.1"))
+		dev_info(dev, "%s %d\n", __func__, __LINE__);
+	if (retval) {
+		if (!strcmp(dev_name(dev), "0000:00:01.1"))
+			dev_info(dev, "%s %d\n", __func__, __LINE__);
+		__update_runtime_status(dev, RPM_SUSPENDED);
+		pm_runtime_cancel_pending(dev);
+		dev_pm_enable_wake_irq_check(dev, false);
+	} else {
+ no_callback:
 
-giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-branch: master
-commit hash: 4a71531471926e3c391665ee9c42f4e0295a4585
-origin: maestro
-test start time: 2025-10-06 13:38:43.261000+00:00
+The result is that in the case of the crash rpm_callback() didn't return, =
+so
+I'll continue the investigation in rpm_callback().
 
-Builds:	   60 ✅    0 ❌    0 ⚠️
-Boots: 	  164 ✅   10 ❌    6 ⚠️
-Tests: 	13644 ✅  566 ❌ 4534 ⚠️
+The whole calltrace is:
+acpiphp_check_bridge()->pm_runtime_get_sync()->__pm_runtime_resume()->rpm_=
+resume()->rpm_callback()
 
-### POSSIBLE REGRESSIONS
-    
-Hardware: dell-latitude-5400-8665U-sarien
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-12
-      - kselftest.cpufreq.hibernate
-      last run: https://d.kernelci.org/test/maestro:68e3d01e9512ca527453e506
-      history:  > ✅  > ✅  > ✅  > ❌  
-            
-      - kselftest.cpufreq.hibernate.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:68e3d1e19512ca527453f600
-      history:  > ✅  > ✅  > ❌  
-            
-      - kselftest.cpufreq.suspend
-      last run: https://d.kernelci.org/test/maestro:68e3d0259512ca527453e677
-      history:  > ✅  > ✅  > ✅  > ❌  
-            
-      - kselftest.cpufreq.suspend.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:68e3d2049512ca527453f659
-      history:  > ✅  > ✅  > ❌  
-            
-Hardware: imx6q-udoo
-  > Config: multi_v7_defconfig
-    - Architecture/compiler: arm/gcc-12
-      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_10
-      last run: https://d.kernelci.org/test/maestro:68e3d0499512ca527453e826
-      history:  > ✅  > ✅  > ❌  
-            
-      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_23
-      last run: https://d.kernelci.org/test/maestro:68e3d04a9512ca527453e882
-      history:  > ✅  > ❌  
-            
-      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_24
-      last run: https://d.kernelci.org/test/maestro:68e3d04a9512ca527453e889
-      history:  > ✅  > ❌  
-            
-Hardware: k3-am625-verdin-wifi-mallow
-  > Config: defconfig+arm64-chromebook+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.tpm2
-      last run: https://d.kernelci.org/test/maestro:68e3cf029512ca527453e0f5
-      history:  > ✅  > ❌  > ❌  
-            
-Hardware: meson-sm1-s905d3-libretech-cc
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.alsa
-      last run: https://d.kernelci.org/test/maestro:68e3d8d89512ca5274542548
-      history:  > ✅  > ❌  
-            
-Hardware: sun50i-h5-libretech-all-h3-cc
-  > Config: defconfig+arm64-chromebook+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.uevent
-      last run: https://d.kernelci.org/test/maestro:68e3cf059512ca527453e0fb
-      history:  > ✅  > ✅  > ✅  > ❌  
-            
-      - kselftest.uevent.uevent_uevent_filtering
-      last run: https://d.kernelci.org/test/maestro:68e3d0249512ca527453e667
-      history:  > ✅  > ✅  > ❌  
-            
-      - kselftest.uevent.uevent_uevent_filtering_global_uevent_filtering
-      last run: https://d.kernelci.org/test/maestro:68e3d0249512ca527453e668
-      history:  > ✅  > ✅  > ❌  
-            
-
-
-### FIXED REGRESSIONS
-    
-Hardware: bcm2711-rpi-4-b
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.alsa
-      last run: https://d.kernelci.org/test/maestro:68e3d8d59512ca5274542531
-      history:  > ❌  > ✅  > ✅  
-            
-Hardware: imx6q-udoo
-  > Config: multi_v7_defconfig
-    - Architecture/compiler: arm/gcc-12
-      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_21
-      last run: https://d.kernelci.org/test/maestro:68e3d04a9512ca527453e875
-      history:  > ❌  > ✅  > ✅  
-            
-      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_22
-      last run: https://d.kernelci.org/test/maestro:68e3d04a9512ca527453e87c
-      history:  > ❌  > ✅  > ✅  
-            
-      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_9
-      last run: https://d.kernelci.org/test/maestro:68e3d0499512ca527453e81f
-      history:  > ❌  > ✅  > ✅  
-            
-Hardware: meson-sm1-s905d3-libretech-cc
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.dt
-      last run: https://d.kernelci.org/test/maestro:68e3d8f69512ca5274542607
-      history:  > ❌  > ✅  
-            
-
-
-### UNSTABLE TESTS
-    
-Hardware: dell-latitude-5400-8665U-sarien
-  > Config: defconfig+kcidebug+x86-board
-    - Architecture/compiler: i386/gcc-12
-      - boot
-      last run: https://d.kernelci.org/test/maestro:68e3d04a9512ca527453e88f
-      history:  > ❌  > ⚠️  > ⚠️  
-            
-Hardware: imx6q-udoo
-  > Config: multi_v7_defconfig
-    - Architecture/compiler: arm/gcc-12
-      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_12
-      last run: https://d.kernelci.org/test/maestro:68e3d0499512ca527453e836
-      history:  > ✅  > ❌  > ✅  
-            
-Hardware: meson-g12b-a311d-khadas-vim3
-  > Config: defconfig+preempt_rt
-    - Architecture/compiler: arm64/gcc-12
-      - rt-tests.rt-migrate-test
-      last run: https://d.kernelci.org/test/maestro:68e3d5979512ca5274541572
-      history:  > ❌  > ✅  > ❌  
-            
-      - rt-tests.rt-migrate-test.rt-migrate-test
-      last run: https://d.kernelci.org/test/maestro:68e3d67f9512ca5274541c4b
-      history:  > ❌  > ✅  > ❌  
-            
-Hardware: meson-sm1-s905d3-libretech-cc
-  > Config: defconfig+arm64-chromebook+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.kvm
-      last run: https://d.kernelci.org/test/maestro:68e3cee69512ca527453e06a
-      history:  > ❌  > ✅  > ❌  
-            
-
-
-Sent every day if there were changes in the past 24 hours.
-Legend: ✅ PASS   ❌ FAIL  ⚠️ INCONCLUSIVE
-
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
+Bert Karwatzki
 

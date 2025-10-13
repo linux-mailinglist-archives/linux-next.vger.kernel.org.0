@@ -1,214 +1,198 @@
-Return-Path: <linux-next+bounces-8583-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8584-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E30C1BD137C
-	for <lists+linux-next@lfdr.de>; Mon, 13 Oct 2025 04:30:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDD6DBD1572
+	for <lists+linux-next@lfdr.de>; Mon, 13 Oct 2025 05:57:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DD7E18947E8
-	for <lists+linux-next@lfdr.de>; Mon, 13 Oct 2025 02:30:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1CCA1890EEB
+	for <lists+linux-next@lfdr.de>; Mon, 13 Oct 2025 03:58:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 160C716132F;
-	Mon, 13 Oct 2025 02:30:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87710199935;
+	Mon, 13 Oct 2025 03:57:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="IN00/ehs"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="CViKSc4H"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 135C315E8B
-	for <linux-next@vger.kernel.org>; Mon, 13 Oct 2025 02:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B792AD1F;
+	Mon, 13 Oct 2025 03:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760322614; cv=none; b=Kcg/XOp4Gn/5kmomFC4ZWzMiGWdDJckqN16v2nr8/707eZ6xG6PueeJe2tkINDStW5q+vkBXov4Z4rC5qM7QR4aA87QuukO2XcqiT6cNZZ96nvkPpcABX7wdzwy9zV+n7s4g1WZOOqfoFvCDDTdiNkZ/0zR0/mGW4kMISeAWbFI=
+	t=1760327866; cv=none; b=NgylH4d6A9yIDPbXOhtnrYJBIDdeV4hOrRez20XVoQkGgMY0vqrvr8d2TArn/0XLGMsbhXD+ji8fawDc6AvNGRuZcSJ6s4ZJOETe0BGbIX5fuM6MbOEx7SfzmZAs0+ojoJ7+I/cC1S82wBnR6YDIpmGyfp2weTbc9VfYBvVmnro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760322614; c=relaxed/simple;
-	bh=bBLr6QBkj7U+BixwG4FsGGCJscMfTDZkwe/8k07lzpA=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=Z3AuaGD3+GiRTYjt46MKFWENyfip6g2P6sB0loU78Qil0n9Mk9Jr6XTz4yZLkCq4MlUmh7+OwpwkFiAXxLsrDdyCnQnpLQ5ZzUFutN7l3ITLih/uFLGjDwCEqvvTpHJ14Jg+yT4ZPoQbG655SzUK8B9I/m1ExSwDg47Q2MLIsl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=IN00/ehs; arc=none smtp.client-ip=209.85.215.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-b609a32a9b6so2240682a12.2
-        for <linux-next@vger.kernel.org>; Sun, 12 Oct 2025 19:30:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1760322611; x=1760927411; darn=vger.kernel.org;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wmc3Q2mvyrvxRyV1fEOURXX5g3HRIkvjnoYu2vUVdNk=;
-        b=IN00/ehstSdPAJum0WK8JkVMLO1cnJM/V2UBw9S6Mk+ElbJ9YlNz5Czm6WIdxk1Woh
-         qd1U25uJagJtmNUMyhQOoyZIxkomggJ1rLPWN19bclddBfMoG0S7reXn+cp8+9Jqikks
-         i6n11NTWDSC/o/bw0CqEWR+uhb5zu49KPv33Tj8mRhwyiGTtniK3XENSDFqCv5xyUCB9
-         wt6uVsNCER7eUy84J0UxpDCpgEdlYe1KP9/5NCvlJRXOLaq5stlR17MxQtRP8b4rEXnD
-         lDEdG+u1fZv196L3YiWvZN1lMNzVyb0Jh8zO8koFtIl3L4YlTNb5p2EgwXuuKfVzaTBf
-         y7sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760322611; x=1760927411;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Wmc3Q2mvyrvxRyV1fEOURXX5g3HRIkvjnoYu2vUVdNk=;
-        b=SAr94+kWFR2kfQd2JtRzbPzs40gvI/OExI6WTcoDuVdUqJt1A+sqVEcNoMBnGOddMf
-         gnxdMwj6XzdXIuc6a4bhQe6CWgEJwj7qhO7z3liJU+jC437+mvwywOXk9UvM6UDycMIT
-         F38lGTdfyH/ND0n+32M/yhMzljU4VVJbM1pwas02g+HWvxudZCXT0ip01Kt6cwxCiI97
-         ubSk8rd5KFh9xF+93RkdmvPtKpWyUpe3WcfGUrN1jE+lraqSUa5ciSmKfNhfaMDP6HUI
-         skrBAYHL1R5xI5GQdm/ocVRgtsljzXqBKPpUzRcqLGjKIofGjPofuV4dcKfWUC1ZxOVU
-         5jDw==
-X-Gm-Message-State: AOJu0YwX9iH6AULba93gPexHBY8+2uBY0oNH6Ao243O2kkrRI0/cjhX2
-	Z3id/E8fuLIf7tCwo09rj3qVN6T0gwvwzQ7N7cXDvGnTxCDdgSLy8tic/UrfyXZjwESHlVzclMA
-	dtpGp
-X-Gm-Gg: ASbGncuqTjsJxqWdOSVM2+DadOfiA3xSiCWqt9iuOL+RTsd8F6JqX1ea02IvtZTe5/g
-	gLPSS3UFhngnIAjdfY0PKY+2PXlskv9c48+KtRpZZGTJ8V9yU9amU7mA+ErxaWq1jqYT4H1lhd4
-	qkxQZUhbrkDFenvxkEKK48io6gNQ9pgQX7sXM6ytDAovDrzo55MnWJ5WwLqtRpoun0TnXAh/mR+
-	Qhz7+RcFiP2w82tDnotwkrMiNFLjEvXZPXu/TPXHbTOnL1UgdDMpo+K648zj5Av/3aIOeM/MRzP
-	/QZ23anmZ1BAVQhEh91ASqBM0fue1rg+cIUzdzor5qDVz9duQ+w7+RJcuvK+VO7zZG3KI2SQlRp
-	zo2b2QglcjWFvylFV9Zt/7RxOeN17KTdH2k90ifopN4vq5Q==
-X-Google-Smtp-Source: AGHT+IG/8EkelpUS6YDkXomz1tmyJwxbFGGQ++ZlXMtZGpbJKm4Botwt+Twt4mrbHJ5q5BbCqUUzBg==
-X-Received: by 2002:a17:903:3c2c:b0:270:b6d5:f001 with SMTP id d9443c01a7336-2902723faa2mr228722175ad.23.1760322611165;
-        Sun, 12 Oct 2025 19:30:11 -0700 (PDT)
-Received: from 15dd6324cc71 ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29034de6f08sm117335785ad.26.2025.10.12.19.30.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Oct 2025 19:30:10 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1760327866; c=relaxed/simple;
+	bh=ACTQCMpcLCMdn0AofjDbGddjXxI54/UwKORP5gAUWhs=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=NdPR//JI6LeLsHlHn89/TW7Lx6Maav6taY5HJw1LTTEaMpNHarFTb1zRK70h0oXO6t3Hm72RiXTZqIuiGX0i+R2anHqjbufki0GnlMxM5m2QaOq1ulsyVqYG/oe3cYgG6rMwFFTxD5W0whIlV7xTLG04v5GfyNhTDDv2/UyqBd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=CViKSc4H; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59CNFtcN018669;
+	Mon, 13 Oct 2025 03:57:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=dYUcld
+	CDYjtOt/aJ7U1T2u+0/QboOdgpM6QvMKLCerk=; b=CViKSc4Hmfnnk//MmMMHBI
+	eGj0rjdw+lDPtkS8e4GBT+H0oLEa54E/MOIymzoxOi4ateznQQHh6sM2X1ZIkHBB
+	rUkPHHc4zmxQK45paGXWr2BiWY9X7hlyT7K9Hdb0kgT+QKM6QGTkWoN4rT3/VmA6
+	e0OdswYTg3YYhQY7xvFNAaBlW4/PVD7bDLc2WLXGwPsLilORPqIznk7dW1iubKkx
+	f0NpfUk5c3HEAtIXj3M+SOkzLX2sIOushniyq14V3IxlIoSpFR6seIhAvXWeQiEU
+	wGQlIyRYP3MxwWq2em7MMyYbmJXR0kHbbnJELucxdvH6ezDL63nZx5RG1vC7BCHQ
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49qcnqy2a5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 13 Oct 2025 03:57:31 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 59D1NMXc016756;
+	Mon, 13 Oct 2025 03:57:30 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 49r32jkxsg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 13 Oct 2025 03:57:30 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 59D3vUG735258850
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 13 Oct 2025 03:57:30 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 43C4A58056;
+	Mon, 13 Oct 2025 03:57:30 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 75D275805D;
+	Mon, 13 Oct 2025 03:57:27 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.61.255.227])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon, 13 Oct 2025 03:57:27 +0000 (GMT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: [STATUS] next/master - 2b763d4652393c90eaa771a5164502ec9dd965ae
-From: KernelCI bot <bot@kernelci.org>
-To: kernelci-results@groups.io
-Cc: linux-next@vger.kernel.org
-Reply-To: kernelci@lists.linux.dev
-Date: Mon, 13 Oct 2025 02:30:10 -0000
-Message-ID: <176032260973.1102.7480128800660437557@15dd6324cc71>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.600.62\))
+Subject: Re: [linux-next20250912] Build warnings at
+ drivers/net/ethernet/intel/idpf/xdp.c:6
+From: Venkat <venkat88@linux.ibm.com>
+In-Reply-To: <440ef1ad-6690-48e9-be02-1ccd69f6623e@intel.com>
+Date: Mon, 13 Oct 2025 09:27:14 +0530
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>, michal.kubiak@intel.com,
+        ramu.r@intel.com, anthony.l.nguyen@intel.com,
+        LKML <linux-kernel@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <3BDEECFD-5267-4453-B45B-07D3A1545D75@linux.ibm.com>
+References: <22ac36cb-1ba5-429b-85e0-4e3f2da1f87f@linux.ibm.com>
+ <440ef1ad-6690-48e9-be02-1ccd69f6623e@intel.com>
+To: Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>
+X-Mailer: Apple Mail (2.3774.600.62)
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=M5ZA6iws c=1 sm=1 tr=0 ts=68ec78ab cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=x6icFKpwvdMA:10 a=QyXUC8HyAAAA:8 a=VnNF1IyMAAAA:8
+ a=4drnqeK61DyJAoi-yfcA:9 a=QEXdDO2ut3YA:10 a=cPQSjfK2_nFv0Q5t_7PE:22
+X-Proofpoint-GUID: 1BeZCayoiwzxwpxlj-op3k4Zc5SRH0e7
+X-Proofpoint-ORIG-GUID: 1BeZCayoiwzxwpxlj-op3k4Zc5SRH0e7
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDEwMDE0MCBTYWx0ZWRfX22XyIiGd3ULE
+ y+Oljm6tmKBkXehnxpiC6/IvFlhRjeCDgsVtQ+363MNprfMsnd54LG/npsg41MdmgKnJWmizHSp
+ OznguIWUYBVNV3vYWTnG9k6YZBASq8Q0dWq0zuIwKkbGUTF7vX4H+EnHnoLf4jvqx7wnt0mWCGH
+ 7X+ZUOa3JDaiWJaihy+9UP2jH+CbcUPmjvTkX61CkqwycJFcl8RhAi7sfTb2JJLSWfgvgkYNZp4
+ nRuGKy4UIAEqXxxVg71w/2+oh6azn0lg47q7kmmYZvonYXjqZkABtP7X5IYg9KNYjd6pr/QFAQy
+ gSrLcEFdrumaRXzfihq2eypYnqshI8TlQ+Ts+E2sHRJwz94etghkTqXsq7UTYs0RFkjfv0ZIxqb
+ 5nutZ2noKQjSQpMKPAOKC1/P9H6HIw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-13_02,2025-10-06_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 bulkscore=0 spamscore=0 clxscore=1015 impostorscore=0
+ phishscore=0 adultscore=0 suspectscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510020000
+ definitions=main-2510100140
 
 
 
+> On 12 Sep 2025, at 7:00=E2=80=AFPM, Alexander Lobakin =
+<aleksander.lobakin@intel.com> wrote:
+>=20
+> From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+> Date: Fri, 12 Sep 2025 18:39:33 +0530
+>=20
+>> Greetings!!!
+>>=20
+>>=20
+>> IBM CI has reported a build warning on IBM Power Server, on linux-
+>> next20250912 kernel.
+>>=20
+>>=20
+>> gcc version 11.5.0 20240719 (Red Hat 11.5.0-2) (GCC)
+>>=20
+>> GNU ld version 2.35.2-54.el9
+>>=20
+>>=20
+>> Attached is the .config file.
+>>=20
+>>=20
+>> Warnings:
+>>=20
+>> In file included from drivers/net/ethernet/intel/idpf/xdp.c:6:
+>> drivers/net/ethernet/intel/idpf/xdp.h: In function =
+=E2=80=98idpf_xdp_tx_xmit=E2=80=99:
+>> drivers/net/ethernet/intel/idpf/xdp.h:28:20: note: the ABI of passing
+>> aggregates with 16-byte alignment has changed in GCC 5
+>>   28 | static inline void idpf_xdp_tx_xmit(struct libeth_xdp_tx_desc
+>> desc, u32 i,
+>>      |                    ^~~~~~~~~~~~~~~~
+>=20
+> Yes, I do pass 16-byte variables/structures directly.
+>=20
+> I would say this warning makes no sense, due to the following reasons:
+>=20
+> 1. IIRC the minimum required GCC version for building the latest =
+kernel
+>   is way above 5.
+> 2. This warning should appear only with `-Wabi`, which the upstream
+>   kernel never sets.
+
+Now, this warning is seen on upstream kernel also.=20
+
+Not sure if this is something we need to fix it or suppress the warning?
+
+Regards,
+Venkat.
+
+> 3. Kernel is a self-contained project, this function is not uAPI, so =
+we
+>   shouldn't care in general about backward ABI compatibility for =
+purely
+>   in-kernel stuff.
+>=20
+> We have plenty of functions, mostly generic, which either passes or
+> returns >=3D 16-byte objects, but I see this warning for the first =
+time.
+> Despite that my repo is attached to the open Intel CI bots infra which
+> does daily builds on a good bunch of different architectures and
+> toolchains (inc. GCC 8+).
+>=20
+>>=20
+>>=20
+>> Git bisect is pointing below commit as the first bad commit.
+>>=20
+>>=20
+>> first bad commit: [cba102cd719029a10bda1d0ca00ed646796f1f21] idpf: =
+add
+>> support for XDP on Rx
+>=20
+> Thanks,
+> Olek
 
 
-Hello,
-
-Status summary for next/master
-
-Dashboard:
-https://d.kernelci.org/c/next/master/2b763d4652393c90eaa771a5164502ec9dd965ae/
-
-giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-branch: master
-commit hash: 2b763d4652393c90eaa771a5164502ec9dd965ae
-origin: maestro
-test start time: 2025-10-12 18:08:57.632000+00:00
-
-Builds:	   47 ✅    0 ❌    0 ⚠️
-Boots: 	  131 ✅    7 ❌    0 ⚠️
-Tests: 	11072 ✅  271 ❌ 4018 ⚠️
-
-### POSSIBLE REGRESSIONS
-    
-Hardware: bcm2711-rpi-4-b
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.alsa
-      last run: https://d.kernelci.org/test/maestro:68ebfd4a9512ca52745b1ad4
-      history:  > ✅  > ❌  > ❌  > ❌  > ❌  
-            
-Hardware: acer-chromebox-cxi4-puff
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-12
-      - kselftest.cpufreq.suspend
-      last run: https://d.kernelci.org/test/maestro:68ec5ebc9512ca52745ca9ad
-      history:  > ✅  > ✅  > ✅  > ✅  > ❌  
-            
-      - kselftest.cpufreq.suspend.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:68ec609e9512ca52745cbfde
-      history:  > ✅  > ✅  > ✅  > ✅  > ❌  
-            
-
-
-### FIXED REGRESSIONS
-    
-Hardware: sun50i-h5-libretech-all-h3-cc
-  > Config: defconfig+arm64-chromebook+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.uevent
-      last run: https://d.kernelci.org/test/maestro:68ebfbba9512ca52745b1837
-      history:  > ❌  > ❌  > ✅  > ✅  > ✅  
-            
-      - kselftest.uevent.uevent_uevent_filtering
-      last run: https://d.kernelci.org/test/maestro:68ebfdee9512ca52745b1ecf
-      history:  > ❌  > ❌  > ✅  > ✅  > ✅  
-            
-      - kselftest.uevent.uevent_uevent_filtering_global_uevent_filtering
-      last run: https://d.kernelci.org/test/maestro:68ebfdee9512ca52745b1ed0
-      history:  > ❌  > ❌  > ✅  > ✅  > ✅  
-            
-Hardware: dell-latitude-5400-8665U-sarien
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-12
-      - kselftest.cpufreq.suspend
-      last run: https://d.kernelci.org/test/maestro:68ec5ec09512ca52745ca9cb
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-      - kselftest.cpufreq.suspend.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:68ec61509512ca52745cc269
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-
-
-### UNSTABLE TESTS
-    
-Hardware: imx6dl-udoo
-  > Config: multi_v7_defconfig
-    - Architecture/compiler: arm/gcc-12
-      - kselftest.alsa
-      last run: https://d.kernelci.org/test/maestro:68ec1e039512ca52745bb6a1
-      history:  > ❌  > ✅  > ❌  > ❌  > ❌  
-            
-Hardware: k3-am625-verdin-wifi-mallow
-  > Config: defconfig+arm64-chromebook+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.kvm
-      last run: https://d.kernelci.org/test/maestro:68ebfb999512ca52745b17e4
-      history:  > ❌  > ❌  > ✅  > ❌  > ❌  
-            
-Hardware: meson-g12b-a311d-khadas-vim3
-  > Config: defconfig+preempt_rt
-    - Architecture/compiler: arm64/gcc-12
-      - rt-tests.rt-migrate-test
-      last run: https://d.kernelci.org/test/maestro:68ec0af89512ca52745b7a45
-      history:  > ❌  > ❌  > ✅  > ✅  > ❌  
-            
-      - rt-tests.rt-migrate-test.rt-migrate-test
-      last run: https://d.kernelci.org/test/maestro:68ec0ec39512ca52745b8748
-      history:  > ❌  > ❌  > ✅  > ✅  > ❌  
-            
-Hardware: sun50i-h5-libretech-all-h3-cc
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.dt
-      last run: https://d.kernelci.org/test/maestro:68ebfdf09512ca52745b1ed6
-      history:  > ❌  > ❌  > ❌  > ✅  > ❌  
-            
-  > Config: defconfig+arm64-chromebook+kselftest
-    - Architecture/compiler: arm64/gcc-12
-      - kselftest.ipc
-      last run: https://d.kernelci.org/test/maestro:68ebfb929512ca52745b17d2
-      history:  > ❌  > ✅  > ❌  > ❌  > ❌  
-            
-
-
-Sent every day if there were changes in the past 24 hours.
-Legend: ✅ PASS   ❌ FAIL  ⚠️ INCONCLUSIVE
-
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
 

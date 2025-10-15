@@ -1,52 +1,52 @@
-Return-Path: <linux-next+bounces-8601-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8602-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EEDEBE0DC6
-	for <lists+linux-next@lfdr.de>; Wed, 15 Oct 2025 23:47:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74DEEBE0DF9
+	for <lists+linux-next@lfdr.de>; Wed, 15 Oct 2025 23:53:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7C0C84E687D
-	for <lists+linux-next@lfdr.de>; Wed, 15 Oct 2025 21:47:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25E1F547CF5
+	for <lists+linux-next@lfdr.de>; Wed, 15 Oct 2025 21:53:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F73D3002D3;
-	Wed, 15 Oct 2025 21:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EE6F2D24AC;
+	Wed, 15 Oct 2025 21:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="N4b5eF6r"
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="THNiNvxi"
 X-Original-To: linux-next@vger.kernel.org
 Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D250C30149C;
-	Wed, 15 Oct 2025 21:47:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF63226863;
+	Wed, 15 Oct 2025 21:53:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760564858; cv=none; b=r+FDvhoCwGWaP02ZxC41ae9amGWu9Yy+/cAkgnpwC8xl/ZZjn8u6f1rMqEebv+cf8klNlxhKldZ67L8lZvUNeoqgT4uEpjY2fjk+Qy4LzGfp2IRIuMKarQ8HZfJDCFN7v5sjO49k+8BBLBBy3zS1Gd1X+KUao1IQDfQq4AHWyow=
+	t=1760565217; cv=none; b=YJ9Lq1yfLuc/0ZnetsEoIzTGA6BVqg6ECW+IUsmJQ4NrIA6Nyt6D68VszGj93w4OvCPSfxTMOF5g1LP8y0i+Tel56RUW3CX0qjgDkfeGRoxmqW4qboZiTzf0IcAqiml+ywVlWdSifB0Gv3VAZtfOFnfY7n2CqgjWC0YeANWtZUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760564858; c=relaxed/simple;
-	bh=OjXC4ef6EuzpmkUlj5zQ6PhG9BKHLGUPVKob55x47ys=;
+	s=arc-20240116; t=1760565217; c=relaxed/simple;
+	bh=vqqYmwW/qB7w/dAAFgMDjUeaNmw05d6FAFwNJXgCpmA=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Pky06zu3tY4/NY/Q0qbTLN2odS5QFY4QK2FXvQa/9VvZXqMvpbqK+QkexYgcXuoxZSbb0isyElZknH2RwpFUXIIrYNiN7o/Cceuh3uPTPyEdBI5MqzL6QfiQO5ysg+VEa3dUK4rZVqnlPatNRUIStEhx1VxHcEQ7fBa+Iy3Pa4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=N4b5eF6r; arc=none smtp.client-ip=45.79.88.28
+	 MIME-Version:Content-Type; b=h7wjjXv3+2Ty4S8kogMFfPTI/H56wWthU+6ZCzfxW8kNG8v8FwQOWjr5c9hl4wgSZ6fFqTSP0xw8nvq2+/cuirIEkZnuxw6KaxRNlZlRwjRNamCpVL2G5DjGLsl5dGn87jSj8ighTi9SklRRcLgcw/2cpkwSyqGhlQv1ZwJU3h0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=THNiNvxi; arc=none smtp.client-ip=45.79.88.28
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net B7DD840B36
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 8F6B040B34
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1760564855; bh=Zi+g+T/gEpl6TaEaDIS7NVLfD/9U+OYSb1z/+K5caCg=;
+	t=1760565214; bh=RYhF06pFtI4vtm/AMksQCSyoyLIJFqOu90ym0QRg0Ww=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=N4b5eF6ryrDFPxb4SMloHg4Y8aqe4gudaPDtHASKit5dHzzq40KCljstLiOPtavb5
-	 DyO2/iPbMMflEWups+B9h7mAKF3J1SBPwPaxwQc+R1jTIxxdvaG1m8j1Sila6++T52
-	 ZQDHKheeAQ6qzqDiA8meQ2maNSuzCwcw6oA1h1ljogGpQje7qvCUw3E0Euo5FLhnw1
-	 xSIe3j2ATijER22HIdJS9fkRkBgAZwE1mB7KRcZzCYap8ovCjOJLzvx/67WSbOXjbY
-	 jokk8Nq3QaoBW1yUm4GdoCrARS6f5hp1RgyYzT37cFJNNKcwig5MafL6Sd1hQeIpcZ
-	 THSw6Zx0zI4jA==
+	b=THNiNvxiQx9TvTwJTasCKwMRjz6fCvessJf7ntMmGAb9TBeHW/Kx9F9hhY7ONMO+B
+	 QhuiXVf8NpOQb1oKoRli4O1mwkjcmld+svaPuv3ziMBmBTfMIZnLZF/7Wx2+HB6PKK
+	 mchCfvznMyWqaTRKKKWQS/VkCYWk378jz92RWWyHswFswT6YsBa3JQjkQ2G6dWz2Pm
+	 6EFmJIKhxd//hogsL62NnQM0vH4CEkMSVdlasaKqDVFakFce6Jr+kwiHtWDY2gslWN
+	 hTzZjeBVirwlUHuDxTGo8xm0iCIVzCFmhQh3F4rR6E/AW57zb0vUE/scCLdzC3Fh1c
+	 W0EbOk+aL+5DA==
 Received: from localhost (unknown [IPv6:2601:280:4600:2da9::1fe])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id B7DD840B36;
-	Wed, 15 Oct 2025 21:47:35 +0000 (UTC)
+	by ms.lwn.net (Postfix) with ESMTPSA id 8F6B040B34;
+	Wed, 15 Oct 2025 21:53:34 +0000 (UTC)
 From: Jonathan Corbet <corbet@lwn.net>
 To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc: Randy Dunlap <rdunlap@infradead.org>, Linux Documentation
@@ -56,8 +56,8 @@ Subject: Re: docs build problems
 In-Reply-To: <20251015184416.4340e8f2@sal.lan>
 References: <c9e9134c-97a2-405a-918d-41aafdd92fa1@infradead.org>
  <87sefj7tom.fsf@trenco.lwn.net> <20251015184416.4340e8f2@sal.lan>
-Date: Wed, 15 Oct 2025 15:47:34 -0600
-Message-ID: <87o6q77s7d.fsf@trenco.lwn.net>
+Date: Wed, 15 Oct 2025 15:53:33 -0600
+Message-ID: <87jz0v7rxe.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -68,30 +68,6 @@ Content-Type: text/plain
 
 Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
 
-> Em Wed, 15 Oct 2025 15:15:37 -0600
-> Jonathan Corbet <corbet@lwn.net> escreveu:
->
->> Randy Dunlap <rdunlap@infradead.org> writes:
->> 
->> > Hi,
->> >
->> > I am back to having one former error and one former pair of warnings
->> > on today's linux-next (20251015):
->> >
->> > ../Documentation/Makefile:71: warning: overriding recipe for target 'pdfdocs'
->> > ../Documentation/Makefile:62: warning: ignoring old recipe for target 'pdfdocs'
->> >   File "/usr/bin/sphinx-build", line 1
->> >     ELF...
->> > SyntaxError: source code cannot contain null bytes
->> >
->> >
->> > Did something happen to the docs/docs-next tree or was there some kind
->> > of mis-merge problem?  
->> 
->> I pulled docs-next forward to -rc1 and merged a few things, but I
->> wouldn't expect any of that to create that kind of problem.  It seems we
->> lost the makefile fix somehow...?
->
 > Just did a rebase. Those patches are missing:
 >
 > e2c3ba36aee2 tools/docs: sphinx-build-wrapper: -q is a boolean, not an integer
@@ -108,10 +84,14 @@ Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
 >
 > Want me to re-send them?
 
-I'll have them around, I think.  I need to figure out why they
-disappeared, though; this is a bit weird.
+*Sigh*
 
-Thanks,
+I forgot to pull the build-script branch back to the desktop machine
+once I got back home, so I was missing everything that I applied while
+on the road.  That has been rectified, and the needed patches are now in
+docs-next.
+
+My apologies for the screwup.
 
 jon
 

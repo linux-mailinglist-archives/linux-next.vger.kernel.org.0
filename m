@@ -1,205 +1,130 @@
-Return-Path: <linux-next+bounces-8606-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8607-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B141BE2B4A
-	for <lists+linux-next@lfdr.de>; Thu, 16 Oct 2025 12:16:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8ED60BE3D2F
+	for <lists+linux-next@lfdr.de>; Thu, 16 Oct 2025 15:56:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB821587E1F
-	for <lists+linux-next@lfdr.de>; Thu, 16 Oct 2025 10:08:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 34A591882D4C
+	for <lists+linux-next@lfdr.de>; Thu, 16 Oct 2025 13:57:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB8F031D73F;
-	Thu, 16 Oct 2025 10:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C41E32BF33;
+	Thu, 16 Oct 2025 13:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=gus@collabora.com header.b="JOCdKZjM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bE7rEyBd"
 X-Original-To: linux-next@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B713195F0;
-	Thu, 16 Oct 2025 09:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760608800; cv=pass; b=OJXMMNCZd1wekmcMVqoTs9/5TFj9rhaPr73fshUYZRKtcJ87E86g9ln89va5yQsxjxUS2WWNMn9cI337XfpTd2JL5tHb4Lq3/S/8J7Hr6DSZH3qT0FFxLYEQ68jL1QBm/MpVgmbbkdKk4l5X5+0khRIdKzuGYNm+jTdjzA03OOc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760608800; c=relaxed/simple;
-	bh=UaBllWeys3yP01+T9Ndcfu+M6xTIM+j/0LMxc+1LY5s=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=ZABVOEI8dM3ZhuHChzbHEbABJWr4ozZucifVcc6Vu3rpGZ4T0JjR9eEcWmuvx2pzpi/X1itLQ/ihu/TcrLM9ouqBqc1KRH94gWy1CeS5isUiGWWFqLWxmF1BwFrLMP0TZrqF2U5X8YCN4DfX4Aek2RigIzLej3Eji3UNXCQqOFE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=gus@collabora.com header.b=JOCdKZjM; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1760608768; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=UPQ+aBY94US7ij1tO9uyyLy+BbQVyKqTekj1jpsjWfL1A25b2i9Dzlis52ArtMqcmYs3EmEypYleJkX3AiMnKRmwQrde0TYuqI5haONAm1ww2sC+pXN4N5GSmwyRz33A/GrdHtxXjhwTMFDQlIg71VXHTkhvVlCJ9FoXqjVW/tA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1760608768; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=CVJ7y67b8YKm3o8RTHQrQS1h70ifhx7DfX3PMdznC1M=; 
-	b=JZkla3npPJIjv6/21LNKCPZ/SK0vahuWZ71eWmhgz3Hbb5C1NvN89sPjaQrixJ2caU5o9+XfroTldT0mI0CmL57VRQTHmV5EEo1X36Rhocp2xWrspnmKgeQQZLct3LeRNv0y5sRsQi+egwHtPQAxkgZxgUkNqmEgKTihSKiTZFA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=gus@collabora.com;
-	dmarc=pass header.from=<gus@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1760608768;
-	s=zohomail; d=collabora.com; i=gus@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=CVJ7y67b8YKm3o8RTHQrQS1h70ifhx7DfX3PMdznC1M=;
-	b=JOCdKZjMjN79GRhasfc7d4Hr17q8Zu10Yas+F2oSIiIvC131SZx2nE3poO8VSmt1
-	ebUi69gktLf6u8iMEaSmCY3QHTNPf4gUy6/BSX1PDvC0jNnjv+tOfanJN7iTZLTRQwv
-	5NiOhr80cQCQdzGpOKqOquWsNJ2LF+rolZlvDZQU=
-Received: from mail.zoho.com by mx.zohomail.com
-	with SMTP id 1760608767219157.4044678793631; Thu, 16 Oct 2025 02:59:27 -0700 (PDT)
-Date: Thu, 16 Oct 2025 06:59:27 -0300
-From: Gustavo Padovan <gus@collabora.com>
-To: "Randy Dunlap" <rdunlap@infradead.org>
-Cc: "kernelci" <kernelci@lists.linux.dev>,
-	"kernelci-results" <kernelci-results@groups.io>,
-	=?UTF-8?Q?=22Guido_G=C3=BCnther=22?= <agx@sigxcpu.org>,
-	"Neil Armstrong" <neil.armstrong@linaro.org>,
-	"dri-devel" <dri-devel@lists.freedesktop.org>,
-	"phone-devel" <phone-devel@vger.kernel.org>,
-	"regressions" <regressions@lists.linux.dev>,
-	"linux-next" <linux-next@vger.kernel.org>
-Message-ID: <199ec75cce1.3f69ac7c921986.1695662047481478034@collabora.com>
-In-Reply-To: <73bf512e-fe5f-420c-8d47-eccfa079af99@infradead.org>
-References: <176045034384.1788.868853922191153052@15dd6324cc71> <73bf512e-fe5f-420c-8d47-eccfa079af99@infradead.org>
-Subject: Re: [REGRESSION] next/master: (build) undefined reference to
- `devm_backlight_device_register' in vmlinux...
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63142224AED;
+	Thu, 16 Oct 2025 13:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760623003; cv=none; b=Xy0kFF/yVny6MilksMWx3TAIw4S8Af6WrtE0YVXgaqmveyylzLEpjxZyLsCCly714u8KOC2R2rasxZiIrN5Rsu0f5p7W3FOQJqxqGF/L/y4XT2shyGUPtP8CgxHAwkvJ+wV+EFI73h1hLRTQ51nUDaKTxwLqvpLS9+abbKUV/RM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760623003; c=relaxed/simple;
+	bh=GRMrHfu8qqOJHXTQAvotFtKcTP9Xxjk2kf9bouP7CMc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=jDV+6iM8gqcNT2vd23cHH/xmoU/o/MC+pRsOL/utR5ttKt9pKeBQ5Hz94muM4C34pi+TMmltTMqpQ6e6K6jJq7aOmd8Vbx/kjgyLHrueERf6Fn/J8bnA4KUZIu1Rf+jEQOwPEqqzvZrVvNJGwv+cqprmy6h8JrhcX4wOG6fOHDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bE7rEyBd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17CE2C4CEF1;
+	Thu, 16 Oct 2025 13:56:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760623002;
+	bh=GRMrHfu8qqOJHXTQAvotFtKcTP9Xxjk2kf9bouP7CMc=;
+	h=Date:From:To:Cc:Subject:From;
+	b=bE7rEyBdYOxlWsGO/dXqVV/CZ5ONu2lLjvBLlesHj8bEXI1S+Xeq84kJN9FMWzajR
+	 oe19zMQe4HwiySUUDJ0YZvRk4VIUcoeyfrsMX+n36C90LkygwzD308tn6Xrqk58bH8
+	 vtiATeiY8xiMzGMjzU6BPLuZpx/JdDil1OzFg5lGMxtXOmTxYb2/LgWRuqaSlhP1D9
+	 FMF2682dwQE6EZoCIgWXeN8i9hjRB7juPSGEYoYDKpVPUxHZqB5HWEphFExUd+JHC6
+	 vHIPTjjYVARx2hWudygfhdUuNlfxMinpaXqQpLQMwUrDIdlbfCtZf4MXplHb8aEM/G
+	 lhk18FfgTQ5yg==
+Date: Thu, 16 Oct 2025 14:56:38 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Simona Vetter <simona.vetter@ffwll.ch>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Intel Graphics <intel-gfx@lists.freedesktop.org>,
+	DRI <dri-devel@lists.freedesktop.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+Subject: linux-next: manual merge of the drm-intel tree with the
+ drm-intel-fixes tree
+Message-ID: <aPD5lh67aWgLCzTl@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-
-Hi Randy,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="9iKBVB9RjFSWzKZi"
+Content-Disposition: inline
 
 
----- On Thu, 16 Oct 2025 00:47:35 -0300 Randy Dunlap <rdunlap@infradead.org> wrote ---
+--9iKBVB9RjFSWzKZi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- > Guido, 
- >  
- > Looks like this driver needs 
- >  
- > +    depends on BACKLIGHT_CLASS_DEVICE 
- >  
- > to fix the build. 
- >  
- > @Gus- please read comments near bottom/end. 
- >  
- >  
- > On 10/14/25 6:59 AM, KernelCI bot wrote: 
- > > 
- > > 
- > > 
- > > 
- > > Hello, 
- > > 
- > > New build issue found on next/master: 
- > > 
- > > --- 
- > >  undefined reference to `devm_backlight_device_register' in vmlinux.unstripped (drivers/gpu/drm/panel/panel-visionox-rm69299.c) [logspec:kbuild,kbuild.compiler.linker_error] 
- > > --- 
- > > 
- > > - dashboard: https://d.kernelci.org/i/maestro:c1e01dcc5d8b9be9ec47f44bbdb346c2464c0f02 
- > > - giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git 
- > > - commit HEAD:  13863a59e410cab46d26751941980dc8f088b9b3 
- > > - tags: next-20251014 
- > > 
- > > 
- > > Log excerpt: 
- > > ===================================================== 
- > >   LD      .tmp_vmlinux1 
- > > aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected! 
- > > aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected! 
- > > aarch64-linux-gnu-ld: drivers/gpu/drm/panel/panel-visionox-rm69299.o: in function `visionox_rm69299_create_backlight': 
- > > /tmp/kci/linux/drivers/gpu/drm/panel/panel-visionox-rm69299.c:343: undefined reference to `devm_backlight_device_register' 
- > > 
- > > ===================================================== 
- > > 
- > > 
- > > # Builds where the incident occurred: 
- > > 
- > > ## defconfig+arm64-chromebook+CONFIG_ARM64_16K_PAGES=y on (arm64): 
- > > - compiler: gcc-12 
- > > - config: https://files.kernelci.org/kbuild-gcc-12-arm64-16k_pages-68ee4f14a6dc7c71db9fda21/.config 
- > > - dashboard: https://d.kernelci.org/build/maestro:68ee4f14a6dc7c71db9fda21 
- > > 
- > > ## defconfig+arm64-chromebook+CONFIG_ARM64_64K_PAGES=y on (arm64): 
- > > - compiler: gcc-12 
- > > - config: https://files.kernelci.org/kbuild-gcc-12-arm64-64k_pages-68ee4f17a6dc7c71db9fda24/.config 
- > > - dashboard: https://d.kernelci.org/build/maestro:68ee4f17a6dc7c71db9fda24 
- > > 
- > > ## defconfig+arm64-chromebook+CONFIG_CPU_BIG_ENDIAN=y+debug+kselftest+tinyconfig on (arm64): 
- > > - compiler: gcc-12 
- > > - config: https://files.kernelci.org/kbuild-gcc-12-arm64-mainline-big_endian-68ee4f32a6dc7c71db9fda39/.config 
- > > - dashboard: https://d.kernelci.org/build/maestro:68ee4f32a6dc7c71db9fda39 
- > > 
- > > ## defconfig+arm64-chromebook+CONFIG_RANDOMIZE_BASE=y on (arm64): 
- > > - compiler: gcc-12 
- > > - config: https://files.kernelci.org/kbuild-gcc-12-arm64-randomize-68ee4f1fa6dc7c71db9fda2a/.config 
- > > - dashboard: https://d.kernelci.org/build/maestro:68ee4f1fa6dc7c71db9fda2a 
- > > 
- > > ## defconfig+arm64-chromebook+kcidebug+lab-setup on (arm64): 
- > > - compiler: gcc-12 
- > > - config: https://files.kernelci.org/kbuild-gcc-12-arm64-chromebook-kcidebug-68ee4f2ba6dc7c71db9fda33/.config 
- > > - dashboard: https://d.kernelci.org/build/maestro:68ee4f2ba6dc7c71db9fda33 
- > > 
- > > ## defconfig+arm64-chromebook+kselftest on (arm64): 
- > > - compiler: gcc-12 
- > > - config: https://files.kernelci.org/kbuild-gcc-12-arm64-kselftest-16k_pages-68ee4f23a6dc7c71db9fda2d/.config 
- > > - dashboard: https://d.kernelci.org/build/maestro:68ee4f23a6dc7c71db9fda2d 
- > > 
- > > ## defconfig+arm64-chromebook+preempt_rt on (arm64): 
- > > - compiler: gcc-12 
- > > - config: https://files.kernelci.org/kbuild-gcc-12-arm64-preempt_rt_chromebook-68ee4f3aa6dc7c71db9fda3f/.config 
- > > - dashboard: https://d.kernelci.org/build/maestro:68ee4f3aa6dc7c71db9fda3f 
- > > 
- > > 
- > > #kernelci issue maestro:c1e01dcc5d8b9be9ec47f44bbdb346c2464c0f02 
- > > 
- > > Reported-by: kernelci.org bot <bot@kernelci.org> 
- > > 
- > > -- 
- > > This is an experimental report format. Please send feedback in! 
- > > Talk to us at kernelci@lists.linux.dev 
- > > 
- > > Made with love by the KernelCI team - https://kernelci.org 
- > > 
- >  
- > Gus, the CI reporter needs to learn how to do a few things because developers 
- > (other than me ?) don't scrounge mailing lists to look for problems. 
+Hi all,
 
-Absolutely. Our goal is to automate as many steps as possible!
- 
- > a. find the commit that caused the problem (or the email series) 
- >  
- > b. send the report (Cc:) to whoever wrote the patch and to the 
- > appropriate mailing list. 
- >  
- > I expect that b. is easier than a., so do it first. 
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-b. is easier that a. yes, but I don't think we can do it first because we
-need to figure the patch first. Essentially, you are asking us for
-build bisections. Something that is already on our roadmap, but
-we didn't had the time to tackle yet, but should come to it in the
-coming months.
+  drivers/gpu/drm/i915/display/intel_fb.c
 
- >  
- > And I'm sure that I have missed a thing or two that could be 
- > added as well. 
+between commit:
 
-Please keep the feedback coming!
+  86af6b90e0556 ("drm/i915/fb: Fix the set_tiling vs. addfb race, again")
 
-Best,
+=66rom the drm-intel-fixes tree and commits:
 
-- Gus
+  1d1e4ded21601 ("drm/i915/fb: Fix the set_tiling vs. addfb race, again")
+  d76eeea515700 ("drm/i915/fb: Drop the 'fb' argument from intel_fb_bo_fram=
+ebuffer_init()")
 
+=66rom the drm-intel tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc drivers/gpu/drm/i915/display/intel_fb.c
+index b817ff44c0439,3958628c73e97..0000000000000
+--- a/drivers/gpu/drm/i915/display/intel_fb.c
++++ b/drivers/gpu/drm/i915/display/intel_fb.c
+@@@ -2323,6 -2327,9 +2327,8 @@@ err_bo_framebuffer_fini
+  	intel_fb_bo_framebuffer_fini(obj);
+  err_frontbuffer_put:
+  	intel_frontbuffer_put(intel_fb->frontbuffer);
++ err_free_panic:
++ 	kfree(intel_fb->panic);
+ -
+  	return ret;
+  }
+ =20
+
+--9iKBVB9RjFSWzKZi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmjw+ZUACgkQJNaLcl1U
+h9A3Hwf+IHG/SVHPFaVvtxq01tpNJPB/TJCiHWBI4N2lFXEHpSo+u7I+Lt/opDdz
+kpgqinlNOnUgY7ymhwW7ao0gTVaS1QMQfwdRvtSE3i6ZnIxFvMPHnNWPuwSkNG1H
+hCIJ+6DPeXx8pWn22CYCYjEmc95V0xZMiQA4b7rMsmPiEyKGOo9S9qOaETC0eLJ5
+PDiUHqn36KZFketdD73KMfS4AAEld9urZA9qqI5sf3DxOgvvSNooM8iqlFNIHxda
+J5Y3854bIU/pcIBtr4a7VwqDEDYMOF98vXIAY9KO48BcYINJaVtJzZHsRJongoTh
+c4b10c5Nr3zAxcwubMej8D2uPRZHbA==
+=yC1O
+-----END PGP SIGNATURE-----
+
+--9iKBVB9RjFSWzKZi--
 

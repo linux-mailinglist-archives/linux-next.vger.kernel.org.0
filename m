@@ -1,116 +1,185 @@
-Return-Path: <linux-next+bounces-8615-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8616-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91450BE958A
-	for <lists+linux-next@lfdr.de>; Fri, 17 Oct 2025 16:54:29 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D3E9BE95A8
+	for <lists+linux-next@lfdr.de>; Fri, 17 Oct 2025 16:55:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 70B0D4E2EBF
-	for <lists+linux-next@lfdr.de>; Fri, 17 Oct 2025 14:53:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 958034E45E8
+	for <lists+linux-next@lfdr.de>; Fri, 17 Oct 2025 14:54:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A27C3370E3;
-	Fri, 17 Oct 2025 14:52:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FC585695;
+	Fri, 17 Oct 2025 14:54:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="jlSTYU/P"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dXtEyu6v"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2023370EF
-	for <linux-next@vger.kernel.org>; Fri, 17 Oct 2025 14:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40B8337101
+	for <linux-next@vger.kernel.org>; Fri, 17 Oct 2025 14:54:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760712744; cv=none; b=SaFWLI+BzaMOnQZxCVauwyyLydNyOwgDqxmuD9Ilm5cqKPw6mZne51neQ2cjnypYP/J6QHpEoIsWYaqDrZzwi0+z5hPuRsOMrqt0bU9WUev8TWHjYIiL8v8IFeSIe2eYo5maN/m9BxoA+9i1lAl54o2CZuTLGWZpfVRWbTWb/x0=
+	t=1760712858; cv=none; b=rRrjS35bqQX4fs+2Z98xfs5T4bFNtpa3MIddvtEp0wBgILu2fcyPal8C5VukSspBMTdh00bZaVKZYIMCg1yZKjb5S8dDl4pK8Zms/3vNAqq5z+IJRwZ6+HEb1aAZ7IBz0nxdz2Z8i/7zmhGx7MglTo/fgnDVerGpG6rBTZZR8+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760712744; c=relaxed/simple;
-	bh=VnfXtL2xC4VzguJRr7gehYXlYD1fT0JPfUxMRmpisNQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=edZr/KbeVOKe/wjtZL21UiBlQm05LAA4aSlInSIXHVWWiF5Gf0hBKr4JWzJhUnL/cUNbQLNVXeOimgPlQ/bIf6cbT2r4Sq1Kx+iCEpm7s73Pr8P3lqTBBUwFltcYgW2zllK6JYRFFkA/LgpBPOqxwmyzWLNQrSPtuPX7CGAPEUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=jlSTYU/P; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-59054fc6a45so2387014e87.3
-        for <linux-next@vger.kernel.org>; Fri, 17 Oct 2025 07:52:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1760712740; x=1761317540; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0sfzPDcrhLkEpvH58DO2RFlCkKiwdjaDP32oJmQSiwg=;
-        b=jlSTYU/Pf4KHQOo2/sYFqPfhPJ9nnfwcScfGSjZi94CI+WmL8Xt8ulJ5dHtxrI95ZP
-         gnwH5eWEHKzR8eTuss4+x81t4MXnDDPz1FdsdKImXbNEZtJzkIBRX7CErXppymB5KPMD
-         HngoC9ylRJPljk2WnWw13ohmjvI4CQwj1HbVj0K3lD+xQ6jl+TujcQJn6wymWWFp4X8r
-         IN85GyJmiNn6/o41oHp/ay0FprfN6guLFCHhkcapQ1FKYEpbRq8n2V5e+ZjF8epZa5iO
-         qiMDgzZLH55CJWxg+/DWgTRPuNME15kDdwAMhU3Eg1T7WolQK2AD548xhOz71Fol+cQz
-         /VFg==
+	s=arc-20240116; t=1760712858; c=relaxed/simple;
+	bh=ODoMSp+xvQn4/jR2mgceN3qvccWf2toY9+KFUZPJbUM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YaH1HAF2JTJLDGbBoqxY1K4BeKQQ/UZ3GQgkauorC6LNK7z4wWWudfPz3ddrmvj25VbOCBsMFmnsYoHeHW5/ouvpXCd8uRrP7js5c0MjFZWxcPtEHt+DkXL2yvm2X/VrWgZ7WqtiL54TTyhncW40XGjUUsxch/rnDLCOGeQ57PA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dXtEyu6v; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1760712855;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=KVg3pi7NpQHtM6ZoxI30PgKBLj0yHkiDuj7fimQcvas=;
+	b=dXtEyu6vp5Nsi2eSfm1wHHtsPoExkT+aQQsTTubCoWJ6ZSW/H06MlowI5MDdfYc49WuWom
+	TzSPLb8H45ZAgtBaQyCxao5szVbz0btBA7YHGCiBs0VigDUVnHmbqNeohTGyc+5DmhjfyC
+	WG4TPsLQIDTOrrjCoiNACU9h1RmfafE=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-94-9RKhvTt8ODCP46G7dko1jA-1; Fri, 17 Oct 2025 10:54:14 -0400
+X-MC-Unique: 9RKhvTt8ODCP46G7dko1jA-1
+X-Mimecast-MFC-AGG-ID: 9RKhvTt8ODCP46G7dko1jA_1760712853
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-42558f501adso1038783f8f.1
+        for <linux-next@vger.kernel.org>; Fri, 17 Oct 2025 07:54:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760712740; x=1761317540;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0sfzPDcrhLkEpvH58DO2RFlCkKiwdjaDP32oJmQSiwg=;
-        b=t/HF9SEYmqEZ8xuOPwOVQntbbNHakshVnPt5BG+/iYYD70BaHSj6mFu+uuVmZ5vyAF
-         xQWIzmyGIsInsbcOaT7Bau38meC6wbSggT31hDDM7bY2HT+lJh7K61cvtaZqavSQakHa
-         e94Koly4re4/VUm/tj/Kcv3Pdjtj2VBqIbDeevnFwggzRfZjAfQiOUZUR8THEJ4fzBV6
-         D2zBUj79Hn3icS4cMUIU2ndJswnVNfzd5mQuE3j/ZUoV7Hx8qAhk03He1U/j0g66w1Gv
-         OK+tycODmktQvvHMfSfaeR2YqhmT0icbBTQNNQsOxcfc83f5xyd4o+9MhR4IDe2E2Eb4
-         RzGw==
-X-Forwarded-Encrypted: i=1; AJvYcCWF5JB5/v2+Nzv8zkp8r5JieN/Es5suhaXm3+rEtMQpC+IPwSoa4JeykUVa8VvqbSyvKSEBt/1lOA9y@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywi4RCbeQ7fSRvdrnct7Md+GkpRLUQksYn3vPX79LQo0iFOB95E
-	V/LmTBCkyAFwhCpWHX3x/UKd1EQwlzTWq2KOoTEVFKHaQCBjpJnJKo37FRwVmGMbVHWXUxU9E9A
-	y3YdYYE5E3bR99P9JvNnVrOAoKILzFCar3b4FBqh+Wg==
-X-Gm-Gg: ASbGncucMgOf3V38tQ10L0abdTe6J/pZxNBB8WrpiK4Hr21Ll9RrZQw4gJZsML9lmPl
-	WKMvT9zp+SCil6+W4nPE2M+j/9IOrasDzW75NcHNDe6M5ggA8UFg3UrJiBxd9HgLzbJA3icT7+n
-	abkh8P32pos0hhmi7Zg+xjS0Aa7ifibeK41SuJu6mWIID8JriuAAWEFqHp3VQk/nfVNM5egZAtx
-	JYj9zxN4bCypfCfPMavApRtQUyxuskn2clO9/dnwOpwAShgInkwOL8frOpSklHPBLm4Q8Y1vTGv
-	jaxYqdqJ58aSKQu+
-X-Google-Smtp-Source: AGHT+IE72wOQZ+LIs/OXsye4cWPFFSe4QVTCmvrbwwx51cB1q/UrQK9+rzRhjrj+Cx4wEHABWKff44JhW3HgrfK1oZk=
-X-Received: by 2002:a05:6512:33c9:b0:591:c60d:b852 with SMTP id
- 2adb3069b0e04-591d8597bccmr1632259e87.43.1760712740520; Fri, 17 Oct 2025
- 07:52:20 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1760712853; x=1761317653;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KVg3pi7NpQHtM6ZoxI30PgKBLj0yHkiDuj7fimQcvas=;
+        b=ZWKgGcUVH9xnVmHqIZVtmKgf7qJ7HDUfkFf0MjXtP+8Us6AaUi+ZQZXcu80EQ5KwK3
+         WpbeVxGeEFfEn/5cgc1THxatB/oM0HqwXyRTyJGTNANNlSM0TVNSIEqVBsEeOHB4AZss
+         nVJ6wERF9Zhv5A2hrkO2pu3sJfYUq8Jwl3qsc82cpeKFmPVD8gc07yY8ebpqg5gZOh8j
+         /FqiUfP7xT+CdVhs9LCzhJI+1NnOp3mzp024v7O6+OvXCFfSBhjPEqd7LFH93N9sPZQl
+         Z4ufm7EjqJ20B3AYVD255dMuSj0AuRDUfixy/hoPXl+auU+k8ZSL1EtK298Msx9T4bZn
+         jyyA==
+X-Forwarded-Encrypted: i=1; AJvYcCX7BBnALsCp9p41Pt0QeQ3UbHJXCj//UjlFSz0y8QfyGoW9yWprW2zQ/G3HRdFL9mxLDpnAc91AwDl3@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcbC/t1uym79qQItzIyfhJAFR7cvmml+6JZB/Okep/YYXD1F1J
+	SPkmnSpfXPNbtqz+M5DEbPd2x94dM9/8SiM5AlnmsQw++OdsHlUMBcBvO2u3/Soy9QpJTueNtOp
+	nGbhlZmba6RMYj+1I6ccbykmr6DY9U+WSZsI3JD4j80BbdODLIclZ8unogkbPErA=
+X-Gm-Gg: ASbGncsQBAjzUSJXyVEBMHpYl8y3jTd+NuRVYFs3pAlYM/IeHxcajysNyh2Gzqwss94
+	TdNaj25sJjhZ/Mik0DQ9/RDcRFEuJUUZAk+NDoWVLA8wJ97IhIYw0xc0YgWNhLcCaFLrcRoK7ZM
+	m32MlcqPrX+vDCIAjsuE+nZw4Z+riALNYV7MRe9Sooq3Iaeyl5Vdbl9c9NLKT+0A12/CpgpYx6H
+	3BCyhapWetTQVjcR6bgqpYIa9SxTR3odU7UXXRfBEvlRQo/nexzASgzeFZhvzayBjL57FopM21b
+	HDpdRRgjRrBSD7/ZMtjd3iD47rN88ZI7+gUdXHYiKYaZgAS3M0Po66lJaWQJs47LALCvHERYIBx
+	RD1zJaKs1IWUOfQoqCQH83jFf7jN68wRSIoL9URvwZv8HVQuCcfWRI68WIuENGfObxs/YCuWfub
+	XVBaO8ls7tfgDSkUdcAkbtBH3ZvPg=
+X-Received: by 2002:a05:600c:1d9b:b0:46e:4f25:aace with SMTP id 5b1f17b1804b1-4711787604fmr35583545e9.6.1760712853329;
+        Fri, 17 Oct 2025 07:54:13 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEY2i/XrXLNkdMltGFV0J0tBrRne+zVRBnrRcoyDQuxJFLmGYGJuLXfF8xyMKL8G2V4YC2CkQ==
+X-Received: by 2002:a05:600c:1d9b:b0:46e:4f25:aace with SMTP id 5b1f17b1804b1-4711787604fmr35583205e9.6.1760712852931;
+        Fri, 17 Oct 2025 07:54:12 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f0c:c200:fa4a:c4ff:1b32:21ce? (p200300d82f0cc200fa4ac4ff1b3221ce.dip0.t-ipconnect.de. [2003:d8:2f0c:c200:fa4a:c4ff:1b32:21ce])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4711441f975sm87898455e9.4.2025.10.17.07.54.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Oct 2025 07:54:12 -0700 (PDT)
+Message-ID: <9beff9d6-47c7-4a65-b320-43efd1e12687@redhat.com>
+Date: Fri, 17 Oct 2025 16:54:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <aPJW8HIke5pj3doX@sirena.org.uk>
-In-Reply-To: <aPJW8HIke5pj3doX@sirena.org.uk>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Fri, 17 Oct 2025 16:52:08 +0200
-X-Gm-Features: AS18NWCt-sC4eLPZuRtwoQG-DMUhSZhvcy_XwuPsgyaFXgQS-NGNCRoftf4DbFc
-Message-ID: <CAMRc=MePe-dxinjBMu1NZGNsCrj2gp9UF4AfZinrQbYBjmNQQQ@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the gpio-brgl tree
-To: Ioana Ciornei <ioana.ciornei@nxp.com>, Mark Brown <broonie@kernel.org>
-Cc: Frank Li <Frank.Li@nxp.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Michael Walle <mwalle@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: KVM/s390x regression
+To: Christian Borntraeger <borntraeger@linux.ibm.com>, balbirs@nvidia.com
+Cc: Liam.Howlett@oracle.com, airlied@gmail.com, akpm@linux-foundation.org,
+ apopple@nvidia.com, baohua@kernel.org, baolin.wang@linux.alibaba.com,
+ byungchul@sk.com, dakr@kernel.org, dev.jain@arm.com,
+ dri-devel@lists.freedesktop.org, francois.dugast@intel.com,
+ gourry@gourry.net, joshua.hahnjy@gmail.com, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, lorenzo.stoakes@oracle.com, lyude@redhat.com,
+ matthew.brost@intel.com, mpenttil@redhat.com, npache@redhat.com,
+ osalvador@suse.de, rakie.kim@sk.com, rcampbell@nvidia.com,
+ ryan.roberts@arm.com, simona@ffwll.ch, ying.huang@linux.alibaba.com,
+ ziy@nvidia.com, kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+ linux-next@vger.kernel.org
+References: <20251001065707.920170-4-balbirs@nvidia.com>
+ <20251017144924.10034-1-borntraeger@linux.ibm.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20251017144924.10034-1-borntraeger@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Oct 17, 2025 at 4:47=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> Hi all,
->
-> After merging the gpio-brgl tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> ERROR: modpost: missing MODULE_LICENSE() in drivers/gpio/gpio-qixis-fpga.=
-o
-> WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/gpio/gpio-qixis=
--fpga.o
->
-> Caused by commit
->
->   e88500247dc32 ("gpio: add QIXIS FPGA GPIO controller")
->
-> I have used the version from 20251016 instead.
+On 17.10.25 16:49, Christian Borntraeger wrote:
+> This patch triggers a regression for s390x kvm as qemu guests can no longer start
+> 
+> error: kvm run failed Cannot allocate memory
+> PSW=mask 0000000180000000 addr 000000007fd00600
+> R00=0000000000000000 R01=0000000000000000 R02=0000000000000000 R03=0000000000000000
+> R04=0000000000000000 R05=0000000000000000 R06=0000000000000000 R07=0000000000000000
+> R08=0000000000000000 R09=0000000000000000 R10=0000000000000000 R11=0000000000000000
+> R12=0000000000000000 R13=0000000000000000 R14=0000000000000000 R15=0000000000000000
+> C00=00000000000000e0 C01=0000000000000000 C02=0000000000000000 C03=0000000000000000
+> C04=0000000000000000 C05=0000000000000000 C06=0000000000000000 C07=0000000000000000
+> C08=0000000000000000 C09=0000000000000000 C10=0000000000000000 C11=0000000000000000
+> C12=0000000000000000 C13=0000000000000000 C14=00000000c2000000 C15=0000000000000000
+> 
+> KVM on s390x does not use THP so far, will investigate. Does anyone have a quick idea?
 
-Ioana: Can you please send a follow-up fix for this, please?
+Only when running KVM guests and apart from that everything else seems 
+to be fine?
 
-Bartosz
+That's weird :)
+
+-- 
+Cheers
+
+David / dhildenb
+
 

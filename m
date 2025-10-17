@@ -1,89 +1,89 @@
-Return-Path: <linux-next+bounces-8624-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8625-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E103BEBE53
-	for <lists+linux-next@lfdr.de>; Sat, 18 Oct 2025 00:15:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA18FBEBF06
+	for <lists+linux-next@lfdr.de>; Sat, 18 Oct 2025 00:41:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8069919A47DF
-	for <lists+linux-next@lfdr.de>; Fri, 17 Oct 2025 22:15:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83CF53AEA4F
+	for <lists+linux-next@lfdr.de>; Fri, 17 Oct 2025 22:41:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47919354AC3;
-	Fri, 17 Oct 2025 22:15:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF0C72D6E73;
+	Fri, 17 Oct 2025 22:41:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XxzuRKIl"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fsatUJsY"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422212D77EA
-	for <linux-next@vger.kernel.org>; Fri, 17 Oct 2025 22:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C76B2D77EA
+	for <linux-next@vger.kernel.org>; Fri, 17 Oct 2025 22:41:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760739311; cv=none; b=YNoq9xbGrP7PQOl1TvVftE8pqD3QemyQdHt1ayvUyn02LD0RPH0hcd+sStjBo+i9+pHPrSoff8xCvrWZHff4oGLX9xOpasn7nVhT0MO0bH8Xq3HIoGMkMV+mhKpvUj4Yo7qcA46MVoVfsRiaEu10Y/RFgXCF3UcrhXVYLmMP5y8=
+	t=1760740894; cv=none; b=LWkKg3UjWhu+vy4Dx3RI/cA2YXD7Tocq3prmtP1JYw5Go+5enZaDCCdpUfMPkePLpzW7SxUs45589hQpqaNGjeB3deUATfOoAd+ZH755xhR3MqmmKyIRSSSdTUftwCY3KswAvoMAQj7hCp1mKTjeWM1e9x/elt2Wbu9esZSA+sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760739311; c=relaxed/simple;
-	bh=Goe+m3foBg9oxCuQWwryjTCfsBI1kD16tKH9CIRwdWA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=q+Oj9+OhFdhSkJLQ6UCDXcRw8AMb1/hTesFlj1j9dPgG+UhcuC2If1bQKU4glwGEepuJvzdIBR3Whx/nGxw4+Ys6TjT/hp4aZZJ/STTBQql9lJq/Cjxqb8gc6oGDovO8GbiHGTUDmwy4H8lLhhke3CJxzrPhcraYUsvzML2/hL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XxzuRKIl; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1760740894; c=relaxed/simple;
+	bh=I+vLvWX9tt3ZjPonM8Tn9nuLD6RlJN9iZ3xM1BPuumg=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=sO3XzY2+DrK9YgPONZ4w2itrUCDCQQvpsjJhNVaaTHg/zs6ax1mykoQBWrXjJQpun0/y0xJs7E6e24yyffZ2iH8Gj3qvnEKHpnHtxK9zXXWzO6g5wO3xlsWqPDqwRpeGJrI5+sf+Jp66/f+F9WMdChl47Za2U/gutujxlzBMMsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fsatUJsY; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1760739308;
+	s=mimecast20190719; t=1760740890;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=p87jyAVhs2BuPZGE+8O/0+Webgsr4ZrQSN48o7Lfr60=;
-	b=XxzuRKIl3TkMEEVxRz1kVUBwuG262o0DwC6XN+N33G5iX13jrkBwmPIsdINlQXncO1spLt
-	g8pmTIPnA1oBZGuNmNKipnx+4DtJWRZKJ31mXtWiIM9498qNQq3qWQCVXoTld816LG4XvA
-	c8Tt62LLmJT+DRVKKZTx8m8sjDJCa0s=
+	bh=uH8LJn4ypQODNYJ3orBEKrIWWsg1DgFIAiLDa76fO34=;
+	b=fsatUJsYa0aovfrulAxVVhzCRmqKXmES8VlODQRP/ocmuKvZARGHjOTf8BuGbrKY/Axjvf
+	cGdbvsv/2bMVP+XU5K1eqsmHOL0VLSaVhGFZQCXYBX25lLp1fD++MpJ6j/+5xVBkVY+3Hx
+	tamULMqw9PFrz+hJhNRfeiAqnF7WSvc=
 Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
  [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-641-F9A83DTYM-yP8XF5VM4f1w-1; Fri, 17 Oct 2025 18:15:06 -0400
-X-MC-Unique: F9A83DTYM-yP8XF5VM4f1w-1
-X-Mimecast-MFC-AGG-ID: F9A83DTYM-yP8XF5VM4f1w_1760739306
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-47108163eeaso12810685e9.3
-        for <linux-next@vger.kernel.org>; Fri, 17 Oct 2025 15:15:06 -0700 (PDT)
+ us-mta-210-mR6EqubgPZKM-82ezgl8Kw-1; Fri, 17 Oct 2025 18:41:29 -0400
+X-MC-Unique: mR6EqubgPZKM-82ezgl8Kw-1
+X-Mimecast-MFC-AGG-ID: mR6EqubgPZKM-82ezgl8Kw_1760740887
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-470fd59d325so12862165e9.0
+        for <linux-next@vger.kernel.org>; Fri, 17 Oct 2025 15:41:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760739306; x=1761344106;
+        d=1e100.net; s=20230601; t=1760740887; x=1761345687;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
+         :references:cc:to:from:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=p87jyAVhs2BuPZGE+8O/0+Webgsr4ZrQSN48o7Lfr60=;
-        b=qRNlTlF71jbS0XBlha/W81ezpQkp1/HeJjFwSWJy9lUkDNF/rJS4dZ1eR9VX+zXK+F
-         ir0SxbKy2l2gygfxk9psQwz9EaBtyHOOz2OAHbf9eWGwnZ820VmNS2zEsH4OQNMRJoHq
-         6F/yDe2aH7oNgMCUf0QFpibS33SfU7rBriImIedZaEpBnmrQMAmC/6TqsmCjuwpV6h4/
-         QF45QCC/5dapxp/dDLi0Gs9u4QDwBgFPqYTBiZnEZDgR/4p5tvJ3lLc9DEYm++GqhD7Z
-         Vu9VP/Smy9Lr+cXUW039wmz1JtXIBlKFyZhtGZdfSESKSB30GBxZDKKZZN1zIN9o7hr9
-         mugg==
-X-Forwarded-Encrypted: i=1; AJvYcCUuCwbbyq/IEpLZlqpqpTN1Qk9HDgzS7wpKYNFYuFkkAKhJ5/amdwbuNkKfYFceKbTx9S3UPn+vKDj4@vger.kernel.org
-X-Gm-Message-State: AOJu0YygIHHbZW8tKeyy36f555XFZOEp+DY2QJ7s3LaSkF5hT96Kr02P
-	e5zR+68+BVUT8vDxsu6vXBm2JaOmL5v5AEVmxWjkcPPQwpLCvE39hV5vzIOJUYyu65STYXSApWe
-	lvnuanqTIuIbZKC/90HKd5GrGyvmDNHszXCqscpaae8drB27PURuRYeSqyvyG1bg=
-X-Gm-Gg: ASbGnctGvMfQSgv0wKp7BWNlvlXoDigR1LXKO4JHH/7HKxPUzSbeb+mhllIHFrj6N2T
-	/JLkq0/ecwIivyq8lwTSAYL5HeRnYHRnzRvVg6F0xozOO1FDsQPcLP1G5eeIJE3EiesGV0DURT9
-	zvACMaV2xRPSDh51PdpA2LDk3iHHOV0Y+7uelpalH5EcDwk4qdpztUQWaQyxBdi1adarL2VQAze
-	IkSesFh0WyoCk3c99wTLzrRZkbzkYEd7si+H4SOnAbnzOQBnxUYWqg1G2WSxotfN1Gm7DMv6kxZ
-	+jLJIrc6ZJt7TCjo6Jfb5hQAxcJ0HlTBdbzo9pCVSmoDfjJXO4LPOBNWkNpdYlTcfWCyOtBLMft
-	D4F04zxbmDylP3C/dPhhX0wcRlxCt9QJ+uuGClLAmDhLl27WzRQRKl4CWrCdb4iieFqZVOZBJS9
-	v6kJwCqVq7J1BRVyRJ0WGiWkQsL38=
-X-Received: by 2002:a05:600c:4e89:b0:45d:dc85:c009 with SMTP id 5b1f17b1804b1-471178a236cmr39238315e9.10.1760739305662;
-        Fri, 17 Oct 2025 15:15:05 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGJgtzXHc65CCqPCrsxYTy/FGHHoInqVbQf9Pu97ZUWTn7m80M3tFIb6Fx8eayPacnZBj7iXQ==
-X-Received: by 2002:a05:600c:4e89:b0:45d:dc85:c009 with SMTP id 5b1f17b1804b1-471178a236cmr39238055e9.10.1760739305218;
-        Fri, 17 Oct 2025 15:15:05 -0700 (PDT)
+        bh=uH8LJn4ypQODNYJ3orBEKrIWWsg1DgFIAiLDa76fO34=;
+        b=lHT+L9QZsAYoMGgcOnuWVx/jpr6vnjkTOrn97jeQf4JZZTjsF8oM1BY6MAhDAn/4o6
+         7+TjSX9DbrLf2kKK8q+P7hnMRB6mt19LysyMXgJjB/MbtyZVPfON/C6Csg9IQ3W8PTLB
+         Dr62+5cHKpQyEhHf4snMKiXfOhqDKMIMc4A6opDOy4xKEe40QLxrL+ndHAJCQg41y0F7
+         Z8UvVgGnTWVEsQvNAG2GNu2VkNCbx79RFU/S9bn1nzStI5+nZUzUunxk0qgrCErr+QJ7
+         lzlrKJKd9rC9K2XyPjjwv6afgGGou/wgrbcQftLjSgIz1g8NdX6Azs7Hqg7sJtGs0rL3
+         bZaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVNSAoxqTlVRIaD1cJjLxEYy2lsoWx3K/9Bg7/JkIbqW7hgBAjkrVFWYy+s7EhS3OCZkrNdOPk6YCpz@vger.kernel.org
+X-Gm-Message-State: AOJu0YxL2NifMZm7s/ylu5xZ9fOWraGrmzaSlOQ6PvSICgZj1N8gaaD4
+	Jxt0CxFDmfImvXTuvL8VOhtvx3km8TrKREBC+ghqdvDrqhekVZ/BJ9jvLF16kgh/gmBGNJAg+Ft
+	8mIahPCbUNH6a5uLfgKp4muYzdbTQyLz246xkbGZIpMg8xvcPBtrQ7/A/tvNFcbU=
+X-Gm-Gg: ASbGncui8JVxz5n0See9A2bkyae3VPXQmu3mqD2s5hjmn7u5hxNARNQCN813cEcut1O
+	Ykd/n1FtDJjDepTRPCU6CQPpnAF+ZPOideXTaDpHyPrwkaGBHQHEPsnOQoin+tLYerFwF3uPK3+
+	Y6+lZ9kd/PjOGF+siYBGZdYZ1PwETib/T3FzUyvH+GbowIOEFZ7lVROZ1urGfgJJ60Em7p65D5D
+	BclMzYjD8aXi74gsP/usK4Mm0Kl4VQEH//73N7893Aff+Kz6u63KM8MVylCO90kFKB+VhbcGCtx
+	k8Nu9p0auyZMk0mfso6L+y7PJEG6nG3u1IBgZJkk9eQxzqh8Cnt8nr7s/pyTW0EKfJMr8mTwXvp
+	pZfLWD+sftZaa5o77iMSEQIGoEAR8tztyOauAbVR5nNDFn7uKvKoxR6R5XtWjM9rBTzjMAmoop2
+	rrWEYTWpkxSnDGLpbMUXlSkOA24NE=
+X-Received: by 2002:a05:600c:681b:b0:45f:2ed1:d1c5 with SMTP id 5b1f17b1804b1-47117925e39mr44633785e9.36.1760740887425;
+        Fri, 17 Oct 2025 15:41:27 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFOhQlU/0jutSd2tKVW+63SmQtJ+uWLZ1QBUrTpaFXK1fSJ1MmohMxqY5ZVQykyp7L0xHjr7w==
+X-Received: by 2002:a05:600c:681b:b0:45f:2ed1:d1c5 with SMTP id 5b1f17b1804b1-47117925e39mr44633605e9.36.1760740886944;
+        Fri, 17 Oct 2025 15:41:26 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f0c:c200:fa4a:c4ff:1b32:21ce? (p200300d82f0cc200fa4ac4ff1b3221ce.dip0.t-ipconnect.de. [2003:d8:2f0c:c200:fa4a:c4ff:1b32:21ce])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427f00ce56csm1338836f8f.50.2025.10.17.15.15.02
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-427ea5a0f19sm1596288f8f.9.2025.10.17.15.41.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Oct 2025 15:15:04 -0700 (PDT)
-Message-ID: <3a2db8fc-d289-415b-ae67-5a35c9c32a76@redhat.com>
-Date: Sat, 18 Oct 2025 00:15:01 +0200
+        Fri, 17 Oct 2025 15:41:26 -0700 (PDT)
+Message-ID: <cb85aaa3-e456-4fd8-b323-46c75d453a02@redhat.com>
+Date: Sat, 18 Oct 2025 00:41:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -92,6 +92,7 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: linux-next: KVM/s390x regression
+From: David Hildenbrand <david@redhat.com>
 To: Balbir Singh <balbirs@nvidia.com>,
  Christian Borntraeger <borntraeger@linux.ibm.com>
 Cc: Liam.Howlett@oracle.com, airlied@gmail.com, akpm@linux-foundation.org,
@@ -113,7 +114,7 @@ References: <20251001065707.920170-4-balbirs@nvidia.com>
  <74272098-cfb7-424b-a55e-55e94f04524e@linux.ibm.com>
  <84349344-b127-41f6-99f1-10f907c2bd07@redhat.com>
  <c9f28d0c-6b06-47a2-884d-7533f7b49c45@nvidia.com>
-From: David Hildenbrand <david@redhat.com>
+ <3a2db8fc-d289-415b-ae67-5a35c9c32a76@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
@@ -159,115 +160,135 @@ Autocrypt: addr=david@redhat.com; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <c9f28d0c-6b06-47a2-884d-7533f7b49c45@nvidia.com>
+In-Reply-To: <3a2db8fc-d289-415b-ae67-5a35c9c32a76@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 17.10.25 23:56, Balbir Singh wrote:
-> On 10/18/25 04:07, David Hildenbrand wrote:
->> On 17.10.25 17:20, Christian Borntraeger wrote:
->>>
->>>
->>> Am 17.10.25 um 17:07 schrieb David Hildenbrand:
->>>> On 17.10.25 17:01, Christian Borntraeger wrote:
->>>>> Am 17.10.25 um 16:54 schrieb David Hildenbrand:
->>>>>> On 17.10.25 16:49, Christian Borntraeger wrote:
->>>>>>> This patch triggers a regression for s390x kvm as qemu guests can no longer start
+On 18.10.25 00:15, David Hildenbrand wrote:
+> On 17.10.25 23:56, Balbir Singh wrote:
+>> On 10/18/25 04:07, David Hildenbrand wrote:
+>>> On 17.10.25 17:20, Christian Borntraeger wrote:
+>>>>
+>>>>
+>>>> Am 17.10.25 um 17:07 schrieb David Hildenbrand:
+>>>>> On 17.10.25 17:01, Christian Borntraeger wrote:
+>>>>>> Am 17.10.25 um 16:54 schrieb David Hildenbrand:
+>>>>>>> On 17.10.25 16:49, Christian Borntraeger wrote:
+>>>>>>>> This patch triggers a regression for s390x kvm as qemu guests can no longer start
+>>>>>>>>
+>>>>>>>> error: kvm run failed Cannot allocate memory
+>>>>>>>> PSW=mask 0000000180000000 addr 000000007fd00600
+>>>>>>>> R00=0000000000000000 R01=0000000000000000 R02=0000000000000000 R03=0000000000000000
+>>>>>>>> R04=0000000000000000 R05=0000000000000000 R06=0000000000000000 R07=0000000000000000
+>>>>>>>> R08=0000000000000000 R09=0000000000000000 R10=0000000000000000 R11=0000000000000000
+>>>>>>>> R12=0000000000000000 R13=0000000000000000 R14=0000000000000000 R15=0000000000000000
+>>>>>>>> C00=00000000000000e0 C01=0000000000000000 C02=0000000000000000 C03=0000000000000000
+>>>>>>>> C04=0000000000000000 C05=0000000000000000 C06=0000000000000000 C07=0000000000000000
+>>>>>>>> C08=0000000000000000 C09=0000000000000000 C10=0000000000000000 C11=0000000000000000
+>>>>>>>> C12=0000000000000000 C13=0000000000000000 C14=00000000c2000000 C15=0000000000000000
+>>>>>>>>
+>>>>>>>> KVM on s390x does not use THP so far, will investigate. Does anyone have a quick idea?
 >>>>>>>
->>>>>>> error: kvm run failed Cannot allocate memory
->>>>>>> PSW=mask 0000000180000000 addr 000000007fd00600
->>>>>>> R00=0000000000000000 R01=0000000000000000 R02=0000000000000000 R03=0000000000000000
->>>>>>> R04=0000000000000000 R05=0000000000000000 R06=0000000000000000 R07=0000000000000000
->>>>>>> R08=0000000000000000 R09=0000000000000000 R10=0000000000000000 R11=0000000000000000
->>>>>>> R12=0000000000000000 R13=0000000000000000 R14=0000000000000000 R15=0000000000000000
->>>>>>> C00=00000000000000e0 C01=0000000000000000 C02=0000000000000000 C03=0000000000000000
->>>>>>> C04=0000000000000000 C05=0000000000000000 C06=0000000000000000 C07=0000000000000000
->>>>>>> C08=0000000000000000 C09=0000000000000000 C10=0000000000000000 C11=0000000000000000
->>>>>>> C12=0000000000000000 C13=0000000000000000 C14=00000000c2000000 C15=0000000000000000
->>>>>>>
->>>>>>> KVM on s390x does not use THP so far, will investigate. Does anyone have a quick idea?
+>>>>>>> Only when running KVM guests and apart from that everything else seems to be fine?
 >>>>>>
->>>>>> Only when running KVM guests and apart from that everything else seems to be fine?
+>>>>>> We have other weirdness in linux-next but in different areas. Could that somehow be
+>>>>>> related to use disabling THP for the kvm address space?
 >>>>>
->>>>> We have other weirdness in linux-next but in different areas. Could that somehow be
->>>>> related to use disabling THP for the kvm address space?
+>>>>> Not sure ... it's a bit weird. I mean, when KVM disables THPs we essentially just remap everything to be mapped by PTEs. So there shouldn't be any PMDs in that whole process.
+>>>>>
+>>>>> Remapping a file THP (shmem) implies zapping the THP completely.
+>>>>>
+>>>>>
+>>>>> I assume in your kernel config has CONFIG_ZONE_DEVICE and CONFIG_ARCH_ENABLE_THP_MIGRATION set, right?
 >>>>
->>>> Not sure ... it's a bit weird. I mean, when KVM disables THPs we essentially just remap everything to be mapped by PTEs. So there shouldn't be any PMDs in that whole process.
+>>>> yes.
 >>>>
->>>> Remapping a file THP (shmem) implies zapping the THP completely.
+>>>>>
+>>>>> I'd rule out copy_huge_pmd(), zap_huge_pmd() a well.
+>>>>>
+>>>>>
+>>>>> What happens if you revert the change in mm/pgtable-generic.c?
 >>>>
->>>>
->>>> I assume in your kernel config has CONFIG_ZONE_DEVICE and CONFIG_ARCH_ENABLE_THP_MIGRATION set, right?
+>>>> That partial revert seems to fix the issue
+>>>> diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
+>>>> index 0c847cdf4fd3..567e2d084071 100644
+>>>> --- a/mm/pgtable-generic.c
+>>>> +++ b/mm/pgtable-generic.c
+>>>> @@ -290,7 +290,7 @@ pte_t *___pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp)
+>>>>                if (pmdvalp)
+>>>>                     *pmdvalp = pmdval;
+>>>> -       if (unlikely(pmd_none(pmdval) || !pmd_present(pmdval)))
+>>>> +       if (unlikely(pmd_none(pmdval) || is_pmd_migration_entry(pmdval)))
 >>>
->>> yes.
+>>> Okay, but that means that effectively we stumble over a PMD entry that is not a migration entry but still non-present.
 >>>
->>>>
->>>> I'd rule out copy_huge_pmd(), zap_huge_pmd() a well.
->>>>
->>>>
->>>> What happens if you revert the change in mm/pgtable-generic.c?
+>>> And I would expect that it's a page table, because otherwise the change
+>>> wouldn't make a difference.
 >>>
->>> That partial revert seems to fix the issue
->>> diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
->>> index 0c847cdf4fd3..567e2d084071 100644
->>> --- a/mm/pgtable-generic.c
->>> +++ b/mm/pgtable-generic.c
->>> @@ -290,7 +290,7 @@ pte_t *___pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp)
->>>               if (pmdvalp)
->>>                    *pmdvalp = pmdval;
->>> -       if (unlikely(pmd_none(pmdval) || !pmd_present(pmdval)))
->>> +       if (unlikely(pmd_none(pmdval) || is_pmd_migration_entry(pmdval)))
+>>> And the weird thing is that this only triggers sometimes, because if
+>>> it would always trigger nothing would ever work.
+>>>
+>>> Is there some weird scenario where s390x might set a left page table mapped in a PMD to non-present?
+>>>
 >>
->> Okay, but that means that effectively we stumble over a PMD entry that is not a migration entry but still non-present.
+>> Good point
 >>
->> And I would expect that it's a page table, because otherwise the change
->> wouldn't make a difference.
+>>> Staring at the definition of pmd_present() on s390x it's really just
+>>>
+>>>       return (pmd_val(pmd) & _SEGMENT_ENTRY_PRESENT) != 0;
+>>>
+>>>
+>>> Maybe this is happening in the gmap code only and not actually in the core-mm code?
+>>>
 >>
->> And the weird thing is that this only triggers sometimes, because if
->> it would always trigger nothing would ever work.
 >>
->> Is there some weird scenario where s390x might set a left page table mapped in a PMD to non-present?
+>> I am not an s390 expert, but just looking at the code
 >>
+>> So the check on s390 effectively
+>>
+>> segment_entry/present = false or segment_entry_empty/invalid = true
 > 
-> Good point
+> pmd_present() == true iff _SEGMENT_ENTRY_PRESENT is set
 > 
->> Staring at the definition of pmd_present() on s390x it's really just
->>
->>      return (pmd_val(pmd) & _SEGMENT_ENTRY_PRESENT) != 0;
->>
->>
->> Maybe this is happening in the gmap code only and not actually in the core-mm code?
->>
+> because
 > 
+> 	return (pmd_val(pmd) & _SEGMENT_ENTRY_PRESENT) != 0;
 > 
-> I am not an s390 expert, but just looking at the code
+> is the same as
 > 
-> So the check on s390 effectively
+> 	return pmd_val(pmd) & _SEGMENT_ENTRY_PRESENT;
 > 
-> segment_entry/present = false or segment_entry_empty/invalid = true
+> But that means we have something where _SEGMENT_ENTRY_PRESENT is not set.
+> 
+> I suspect that can only be the gmap tables.
+> 
+> Likely __gmap_link() does not set _SEGMENT_ENTRY_PRESENT, which is fine
+> because it's a software managed bit for "ordinary" page tables, not gmap
+> tables.
+> 
+> Which raises the question why someone would wrongly use
+> pte_offset_map()/__pte_offset_map() on the gmap tables.
+> 
+> I cannot immediately spot any such usage in kvm/gmap code, though.
+> 
 
-pmd_present() == true iff _SEGMENT_ENTRY_PRESENT is set
+Ah, it's all that pte_alloc_map_lock() stuff in gmap.c.
 
-because
+Oh my.
 
-	return (pmd_val(pmd) & _SEGMENT_ENTRY_PRESENT) != 0;
+So we're mapping a user PTE table that is linked into the gmap tables 
+through a PMD table that does not have the right sw bits set we would 
+expect in a user PMD table.
 
-is the same as
+What's also scary is that pte_alloc_map_lock() would try to pte_alloc() 
+a user page table in the gmap, which sounds completely wrong?
 
-	return pmd_val(pmd) & _SEGMENT_ENTRY_PRESENT;
+Yeah, when walking the gmap and wanting to lock the linked user PTE 
+table, we should probably never use the pte_*map variants but obtain
+the lock through pte_lockptr().
 
-But that means we have something where _SEGMENT_ENTRY_PRESENT is not set.
-
-I suspect that can only be the gmap tables.
-
-Likely __gmap_link() does not set _SEGMENT_ENTRY_PRESENT, which is fine 
-because it's a software managed bit for "ordinary" page tables, not gmap 
-tables.
-
-Which raises the question why someone would wrongly use 
-pte_offset_map()/__pte_offset_map() on the gmap tables.
-
-I cannot immediately spot any such usage in kvm/gmap code, though.
+All magic we end up doing with RCU etc in __pte_offset_map_lock()
+does not apply to the gmap PMD table.
 
 -- 
 Cheers

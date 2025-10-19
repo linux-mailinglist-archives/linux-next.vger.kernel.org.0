@@ -1,108 +1,135 @@
-Return-Path: <linux-next+bounces-8634-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8635-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36E34BEEC7C
-	for <lists+linux-next@lfdr.de>; Sun, 19 Oct 2025 22:59:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00C5FBEEEA1
+	for <lists+linux-next@lfdr.de>; Mon, 20 Oct 2025 01:31:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD0D43E447B
-	for <lists+linux-next@lfdr.de>; Sun, 19 Oct 2025 20:59:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA611188F467
+	for <lists+linux-next@lfdr.de>; Sun, 19 Oct 2025 23:31:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD2F2253F2;
-	Sun, 19 Oct 2025 20:59:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0DAF212F98;
+	Sun, 19 Oct 2025 23:31:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pBueZTyA"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Kxv3o1fo"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61CF3F9FB;
-	Sun, 19 Oct 2025 20:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE14BC2EA;
+	Sun, 19 Oct 2025 23:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760907555; cv=none; b=T3mEFLomEfPJiRkXOgb1zBglkjru3pmYGWGX+vI28EpkqAu2aWtgJ+a3NLcq+8PzCL/YA1b0ZKw/154U1pGWAQAgfwF56x2n5gnXIPeYc4U8zp8Ga+xAuRydh/hTWtnRpMkzWDStilOIxssCxqrkWOob9HYm9/GiiCZfQbmM300=
+	t=1760916688; cv=none; b=SsNJo7lTdclacKt+Ccm3U9M0UCenF871uFt2OIA0V+xzudhCifV6tWawrKOlBtnqGxQAOPp49u1a3tsjIwP3ejHKym8zkjqCE9q25pp7fjcLvyOqxRS2+/vewhE9AR3kzE6LIsMXjGJlKdSPA0O5zx4gfYxicKlXpddLNmBE08A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760907555; c=relaxed/simple;
-	bh=lhhtb+7Ex+xa4d8TMKrKG9ZmklCP6ybs+OY4TKXN4x8=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Zt0jQOaV2WZeb89UiS25BGQ83mtv5VVSc6oVnN3Ezqpk9JY24NCequtc9RYDMjWGqsJy9t2poCnVFX3D9Wbc9eyBI7to/JCVaXd2j4z++H/fD24/bSFrCQmoTinQiXLkBzoERm79hfNmrEAZCbyw1MFtHhTd1oOCx0Gk2PBuKcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pBueZTyA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59E15C4CEE7;
-	Sun, 19 Oct 2025 20:59:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1760907554;
-	bh=lhhtb+7Ex+xa4d8TMKrKG9ZmklCP6ybs+OY4TKXN4x8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=pBueZTyAn4/t8Xk4w48pv7BUQkjV0MZCNLaGmrgPGGeR1tyMYkFkW1ShG4PVVMfF+
-	 MDxPAeAnrzcLTW55GmY45EN0CsxOAp09uw9j3ShS9qOQRln95iku5FK8F5J30iWc6h
-	 aq87PiRkH2OuN7ZFXUSt5HYUhpnQcJj0kRXXf6RiiHqiohqErcn2AKMVbD9FuEkhWJ
-	 wvN1x51caoIxLAY4zOZNpQ1R00Q3g/fmTNOTXcDR1uIWHai4eo2K/aH6sdlbnrs1JW
-	 93b7M6qKpwVQGCJoyKyXmIjaOw57ymCgLIbWes2oNqt+1IqGFAtji2oqNwl+pRBDtS
-	 Ek6E3J3MEAxrw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1vAaUi-0000000FJfb-0hz5;
-	Sun, 19 Oct 2025 20:59:12 +0000
-Date: Sun, 19 Oct 2025 21:59:11 +0100
-Message-ID: <86sefewqu8.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Christoffer Dall <cdall@cs.columbia.edu>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patches in the kvm-arm tree
-In-Reply-To: <20251020075102.4f6df4fb@canb.auug.org.au>
-References: <20251020075102.4f6df4fb@canb.auug.org.au>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1760916688; c=relaxed/simple;
+	bh=mpVyr7UeDn6x0eU+r+JHGrDw9sJXjj7Bn5ew2TVvSIs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=fvCanfZPRNMx9fSSWelLYcr6DXIRnEJLFua2wSEXiq30hKaNbCmYTvDLBMf8VgOEcAgWCLcXAnio3/WUoT8xxwlWppEYrzPLovvo47Fi+L4IcQh6C4YbQG09eaVNjvIPOxmuxbyi/JnqjuyJCD/ci6rsV8UxG4qcSNusbbx4JaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Kxv3o1fo; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1760916681;
+	bh=UoGToMhmBvEkGtFCZAK2Hfm8FjJbcOJcRKBGQzSH3uk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Kxv3o1forkHd7Kw9IxA6kAr7BphZdpSx4oj/w9NqLMQXh15veMVaN37hr18BZkidr
+	 oKVtEL/8Rp9K/Z3kUQ6loa8g0e7aD/GtuQpTfWs27JA+zmS1s3rmB07TeK1hKaJZUG
+	 8kT1mVj+IOhplw+PPoJ6ZAlPWorg1UIRXSkkrgTx4DivJ/waafhJhWIQLKF2qLWY5p
+	 3ticRZ8Ul9i3+c9CLl+QOK0UQfrdepO3lBN3mmhTR1267iCc9JmFnPidFuzGwbQew4
+	 0GDlnBKt3EjZQxjd/2G+U7QdXIm+7tuhLS+ccsjKtRZA7rzXprO8u0Jn60rag/J+LO
+	 MBj6L70PkItCw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cqZZJ1QW7z4w9Q;
+	Mon, 20 Oct 2025 10:31:19 +1100 (AEDT)
+Date: Mon, 20 Oct 2025 10:31:19 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Lucas De Marchi <lucas.demarchi@intel.com>, Thomas =?UTF-8?B?SGVsbHN0?=
+ =?UTF-8?B?csO2bQ==?= <thomas.hellstrom@linux.intel.com>, Simona Vetter
+ <simona.vetter@ffwll.ch>, Jani Nikula <jani.nikula@linux.intel.com>, Joonas
+ Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi
+ <rodrigo.vivi@intel.com>
+Cc: Dnyaneshwar Bhadane <dnyaneshwar.bhadane@intel.com>, Matt Roper
+ <matthew.d.roper@intel.com>, Suraj Kandpal <suraj.kandpal@intel.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ DRM XE List <intel-xe@lists.freedesktop.org>
+Subject: linux-next: manual merge of the drm-xe tree with the drm-intel tree
+Message-ID: <20251020103119.3215fa25@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/zoF=3JrYD9.aAWKh3I7OTaC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/zoF=3JrYD9.aAWKh3I7OTaC
 Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, cdall@cs.columbia.edu, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 19 Oct 2025 21:51:02 +0100,
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> 
-> Hi all,
-> 
-> The following commits are also in Linus Torvalds' tree as different
-> commits (but the same patches):
-> 
->   34f46fecfe96 ("KVM: arm64: selftests: Track width of timer counter as "int", not "uint64_t"")
->   0c5bc849fd76 ("KVM: arm64: selftests: Test effective value of HCR_EL2.AMO")
->   fcaa3f59fda3 ("KVM: arm64: Use the in-context stage-1 in __kvm_find_s1_desc_le
->   5bd5d7d43a92 ("KVM: arm64: nv: Don't advance PC when pending an SVE exception")
->   eea94a0ea55d ("KVM: arm64: nv: Don't treat ZCR_EL2 as a 'mapped' register")
-> 
-> these are commits
-> 
->   cb49b7b8622e ("KVM: arm64: selftests: Track width of timer counter as "int", not "uint64_t"")
->   890c608b4d5e ("KVM: arm64: selftests: Test effective value of HCR_EL2.AMO")
->   a46c09b382ee ("KVM: arm64: Use the in-context stage-1 in __kvm_find_s1_desc_level()")
->   9a1950f97741 ("KVM: arm64: nv: Don't advance PC when pending an SVE exception")
->   ed25dcfbc432 ("KVM: arm64: nv: Don't treat ZCR_EL2 as a 'mapped' register")
-> 
-> in Linus' tree.
+Hi all,
 
-Ah, thanks for the heads up, I forgot to drop those. Now fixed.
+Today's linux-next merge of the drm-xe tree got a conflict in:
 
+  drivers/gpu/drm/xe/xe_pci.c
+
+between commit:
+
+  32620e176443 ("drm/pcids: Split PTL pciids group to make wcl subplatform")
+
+from the drm-intel tree and commit:
+
+  c002b1764e7b ("drm/xe/nvl: Define NVL-S platform")
+
+from the drm-xe tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
 Cheers,
+Stephen Rothwell
 
-	M.
+diff --cc drivers/gpu/drm/xe/xe_pci.c
+index 89cc6d32f041,c326430e75b5..000000000000
+--- a/drivers/gpu/drm/xe/xe_pci.c
++++ b/drivers/gpu/drm/xe/xe_pci.c
+@@@ -375,7 -422,7 +422,8 @@@ static const struct pci_device_id pciid
+  	INTEL_LNL_IDS(INTEL_VGA_DEVICE, &lnl_desc),
+  	INTEL_BMG_IDS(INTEL_VGA_DEVICE, &bmg_desc),
+  	INTEL_PTL_IDS(INTEL_VGA_DEVICE, &ptl_desc),
+ +	INTEL_WCL_IDS(INTEL_VGA_DEVICE, &ptl_desc),
++ 	INTEL_NVLS_IDS(INTEL_VGA_DEVICE, &nvls_desc),
+  	{ }
+  };
+  MODULE_DEVICE_TABLE(pci, pciidlist);
 
--- 
-Without deviation from the norm, progress is not possible.
+--Sig_/zoF=3JrYD9.aAWKh3I7OTaC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmj1dMcACgkQAVBC80lX
+0GyPMQf/ToOBFxvQNw2oteVkjpM/0z+8iG8ISnM1FvDa21g72UesBZhT4EX04u6/
+wOYpD1n3q4MTzjViVsfRE0Y2v457Z7897w+szt4y2tV67EJrIhVeDouhIVwFLsbM
+UqR2NQnVImkMFvcz6MraNxohiduykQx1CH91F2BMJ+4wl7kpSV7zE8hfJTM5OQhK
+byDBmHn1VY8ZSLse5pLmfGvdZmivDv2BWFyjL0a48GloJR0nj6+Stq3+n0rb0eSf
+0Aypbhz0qTuxtPvPhWMWv2uhMXqnc6e3Ku9nY9mHvakDWjQWttZK7lB12UwIFZkC
+TlnzJBchDkPZn3iL6UyqNOCHvJDKiw==
+=m7WL
+-----END PGP SIGNATURE-----
+
+--Sig_/zoF=3JrYD9.aAWKh3I7OTaC--
 

@@ -1,98 +1,108 @@
-Return-Path: <linux-next+bounces-8633-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8634-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42C10BEEC76
-	for <lists+linux-next@lfdr.de>; Sun, 19 Oct 2025 22:57:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36E34BEEC7C
+	for <lists+linux-next@lfdr.de>; Sun, 19 Oct 2025 22:59:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E05C0189982A
-	for <lists+linux-next@lfdr.de>; Sun, 19 Oct 2025 20:58:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD0D43E447B
+	for <lists+linux-next@lfdr.de>; Sun, 19 Oct 2025 20:59:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BCA52253F2;
-	Sun, 19 Oct 2025 20:57:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD2F2253F2;
+	Sun, 19 Oct 2025 20:59:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ITpuq3MS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pBueZTyA"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71853148832;
-	Sun, 19 Oct 2025 20:57:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61CF3F9FB;
+	Sun, 19 Oct 2025 20:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760907463; cv=none; b=WqijwxF2M6V/32+lykGY7RCBp2YMPdTPCWRrArH4Az/RGLqu9Dyh76qLc9SGJJ7/Wq3PaOSfnsZovKR4Qq618ftIRReWwrX60FFzewHaRV3i5v+dedL7BMjqEepLQlhpNkl0Gq/CQTGZOhcIfArw+pSSEuPc+Sk1uuDzv/GcuoI=
+	t=1760907555; cv=none; b=T3mEFLomEfPJiRkXOgb1zBglkjru3pmYGWGX+vI28EpkqAu2aWtgJ+a3NLcq+8PzCL/YA1b0ZKw/154U1pGWAQAgfwF56x2n5gnXIPeYc4U8zp8Ga+xAuRydh/hTWtnRpMkzWDStilOIxssCxqrkWOob9HYm9/GiiCZfQbmM300=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760907463; c=relaxed/simple;
-	bh=I+N0k31FfV2RRJUGcE30M3Bnzvpzh2014i9crKXd2QE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=VPZjKJHVoUIhAMfa8qw1TzNq4EBVzJG9XtovlUadzVLOhSu/51fbMTJCVkRmBIiP+FALvfnjCoSet1WZI7ZaNzJPg7xVKeQNZbfNThYVPwqQ0eJMyMqNxP9TVaDrxbvM8M4L56AiOM1xgKGt5RY1SFZ9Axi953p/WkE3/eBID58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ITpuq3MS; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1760907459;
-	bh=I+N0k31FfV2RRJUGcE30M3Bnzvpzh2014i9crKXd2QE=;
-	h=Date:From:To:Cc:Subject:From;
-	b=ITpuq3MSyANkm41DqZxTsVrnb9WWr6MDOynmDH06XfVKXGvVQJzgAyN2RTy/GE7Y+
-	 O78PSLI6vOQ8YP28XVWKXC/MZGvk6HVzxJeg0fNUo2qL0Kq87WUfjc7kL6jSOmt5Sg
-	 3D0ulu1NA0TaFn0tzLhw/uUyxzPHBOsoHBWc19Q6QMZhOPEJvIagRCO7EeUErt1BCk
-	 gSIqPdh0qudNMR+imko3E9bkA2LzlvYXQhdLJwaToIBtEBjs/vqKsqBg/o9jIclWph
-	 hw4E/stQP85Z/IR01libDjz0OBkbC6qJWxgCKynRJuZfsPqQv3gNMTPIijwvJl2Iv9
-	 RK7K1csrGjymA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cqW8z3w4pz4wB8;
-	Mon, 20 Oct 2025 07:57:39 +1100 (AEDT)
-Date: Mon, 20 Oct 2025 07:57:38 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Serge Hallyn <sergeh@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+	s=arc-20240116; t=1760907555; c=relaxed/simple;
+	bh=lhhtb+7Ex+xa4d8TMKrKG9ZmklCP6ybs+OY4TKXN4x8=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Zt0jQOaV2WZeb89UiS25BGQ83mtv5VVSc6oVnN3Ezqpk9JY24NCequtc9RYDMjWGqsJy9t2poCnVFX3D9Wbc9eyBI7to/JCVaXd2j4z++H/fD24/bSFrCQmoTinQiXLkBzoERm79hfNmrEAZCbyw1MFtHhTd1oOCx0Gk2PBuKcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pBueZTyA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59E15C4CEE7;
+	Sun, 19 Oct 2025 20:59:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760907554;
+	bh=lhhtb+7Ex+xa4d8TMKrKG9ZmklCP6ybs+OY4TKXN4x8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=pBueZTyAn4/t8Xk4w48pv7BUQkjV0MZCNLaGmrgPGGeR1tyMYkFkW1ShG4PVVMfF+
+	 MDxPAeAnrzcLTW55GmY45EN0CsxOAp09uw9j3ShS9qOQRln95iku5FK8F5J30iWc6h
+	 aq87PiRkH2OuN7ZFXUSt5HYUhpnQcJj0kRXXf6RiiHqiohqErcn2AKMVbD9FuEkhWJ
+	 wvN1x51caoIxLAY4zOZNpQ1R00Q3g/fmTNOTXcDR1uIWHai4eo2K/aH6sdlbnrs1JW
+	 93b7M6qKpwVQGCJoyKyXmIjaOw57ymCgLIbWes2oNqt+1IqGFAtji2oqNwl+pRBDtS
+	 Ek6E3J3MEAxrw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1vAaUi-0000000FJfb-0hz5;
+	Sun, 19 Oct 2025 20:59:12 +0000
+Date: Sun, 19 Oct 2025 21:59:11 +0100
+Message-ID: <86sefewqu8.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Christoffer Dall <cdall@cs.columbia.edu>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next
  Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: failed to fetch the capabilities-next tree
-Message-ID: <20251020075738.2de7288c@canb.auug.org.au>
+Subject: Re: linux-next: duplicate patches in the kvm-arm tree
+In-Reply-To: <20251020075102.4f6df4fb@canb.auug.org.au>
+References: <20251020075102.4f6df4fb@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/FJ3ewj_ZyEF12Dqy1CNZ+9k";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/FJ3ewj_ZyEF12Dqy1CNZ+9k
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sfr@canb.auug.org.au, cdall@cs.columbia.edu, linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hi all,
+On Sun, 19 Oct 2025 21:51:02 +0100,
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+> Hi all,
+> 
+> The following commits are also in Linus Torvalds' tree as different
+> commits (but the same patches):
+> 
+>   34f46fecfe96 ("KVM: arm64: selftests: Track width of timer counter as "int", not "uint64_t"")
+>   0c5bc849fd76 ("KVM: arm64: selftests: Test effective value of HCR_EL2.AMO")
+>   fcaa3f59fda3 ("KVM: arm64: Use the in-context stage-1 in __kvm_find_s1_desc_le
+>   5bd5d7d43a92 ("KVM: arm64: nv: Don't advance PC when pending an SVE exception")
+>   eea94a0ea55d ("KVM: arm64: nv: Don't treat ZCR_EL2 as a 'mapped' register")
+> 
+> these are commits
+> 
+>   cb49b7b8622e ("KVM: arm64: selftests: Track width of timer counter as "int", not "uint64_t"")
+>   890c608b4d5e ("KVM: arm64: selftests: Test effective value of HCR_EL2.AMO")
+>   a46c09b382ee ("KVM: arm64: Use the in-context stage-1 in __kvm_find_s1_desc_level()")
+>   9a1950f97741 ("KVM: arm64: nv: Don't advance PC when pending an SVE exception")
+>   ed25dcfbc432 ("KVM: arm64: nv: Don't treat ZCR_EL2 as a 'mapped' register")
+> 
+> in Linus' tree.
 
-Fetching the capabilities-next tree
-(https://git.kernel.org/pub/scm/linux/kernel/git/sergeh/linux.git#caps-next)
-produces this error:
+Ah, thanks for the heads up, I forgot to drop those. Now fixed.
 
-fetch_git: Could not fetch capabilities-next branch caps-next
-
---=20
 Cheers,
-Stephen Rothwell
 
---Sig_/FJ3ewj_ZyEF12Dqy1CNZ+9k
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+	M.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmj1UMMACgkQAVBC80lX
-0GwPAwf+JtXpjztb7DTxV/hVDzxb2rlQMcYG+HgsRAWerGuFpeGoT9/mND5Eiwoh
-tBirOd50uHokok8l0nJ/YH1I5t7WuvQYX5ehHOjMMhd2WG1HWrNivrK4XxeFD4vJ
-fWsSM85fesAEudG7Bd44i2vZ3WUjq51FpP3CGegX40k017IT1AWRrOM7v6bOpNjt
-Ixc1dqmU+Oels6GcuYpKO2GR38pFhJ9ht8i1k+QU1Ru4AjyhwGnzTa1MOY6mKPob
-25a6zw62cWaXOWB0lGZavAzsYOgwHnTMVLWweFaKkt8HcxxMj2BWXOcagfkgM+RO
-iG3aRHWtHH+/7YwUwGBpPBx/oja9Zg==
-=Ztfj
------END PGP SIGNATURE-----
-
---Sig_/FJ3ewj_ZyEF12Dqy1CNZ+9k--
+-- 
+Without deviation from the norm, progress is not possible.
 

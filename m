@@ -1,112 +1,107 @@
-Return-Path: <linux-next+bounces-8648-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8649-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2246BEF254
-	for <lists+linux-next@lfdr.de>; Mon, 20 Oct 2025 05:07:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05DABBEF25D
+	for <lists+linux-next@lfdr.de>; Mon, 20 Oct 2025 05:09:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EEC0188C39A
-	for <lists+linux-next@lfdr.de>; Mon, 20 Oct 2025 03:08:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20FC43B98D9
+	for <lists+linux-next@lfdr.de>; Mon, 20 Oct 2025 03:09:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 462B0248176;
-	Mon, 20 Oct 2025 03:07:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C462D1F63CD;
+	Mon, 20 Oct 2025 03:09:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jKMb7xPF"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="OOWAuGez"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA3433987;
-	Mon, 20 Oct 2025 03:07:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68F8A1DDC2B;
+	Mon, 20 Oct 2025 03:09:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760929661; cv=none; b=HoPWyVYwser+O5wbzcEjODKUMZ0JvHRMP5o3kSKwhgGNYMA+6bjMrAhJP9KO2IHEvfdkiKrqw3pHhOIVqHjZCSQon8vQaGylvncQ3LFavw6WCJSbAdAwPSDsBmNaKAqdnDEdwRxtYUMbpF95EKseeyDqDzmM9e+JHYPnrfJ9JOM=
+	t=1760929792; cv=none; b=YpAjA+NstyH3dZNLF6bvAW/kCD2br+M0ibXwq0Ru2EBYRigAFZySFzH7j5ohQIsphBBDLlznghOU0Q8gQ6f2Eh7Zrw5a3y+NpaE/nij6B7C+2ar+ZeNEE5WldZ7HEAEXkfOyAF6Ztyk4CX13p4Dpvlz6nZSY68VrswR9vSJGWfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760929661; c=relaxed/simple;
-	bh=vwz/ZV7ZBVKmELGx3Q8Ld/vgZJUtSdseOwB4y/u7fmo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=gEJdvDLEHiO3f0IYhFAuGr86SUJRREw6Sq0T5bHXo0GFvk9mwb0Vfw7H8U9nNn4osTWSkbgf9iXX0DoXtV2Bk3R41vJKJogVW2QoV0ije31awvo6yW2wNwNb/ce3vP+0tCtFthv223uF/jl4sxD+1kkJPtvGq5apg21O17AtwoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=jKMb7xPF; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1760929792; c=relaxed/simple;
+	bh=6z97mHrm0Up9qFuFwB6f+UuVSJTBhjMEP/sNL5A3ZHY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YhGcydUiPu8y5ZN3kEmGFefWu+V6Ywjst9VxBbtbwG4YSkJQMaPqoCJldbLEtZMiXLJBI7Ne2wNF/77AAlAwb8SuqO7u/eX7VWORaypcL+m1kA94yLlvmBZD8vah0toj8z/98JrK/dY9eqHL29GuPH3PrEi+nKedl2SUvLT2oaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=OOWAuGez; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1760929656;
-	bh=ycNA5QZP2shWwu+eA5hqxuvfOvT/eyPKJE6eFZiVZ+0=;
-	h=Date:From:To:Cc:Subject:From;
-	b=jKMb7xPF8V1cQa3+I9I44/msEwwgRNtHgCzrinUMt6tOfdD1qstk+2NqDrICiF4Xh
-	 o42iSWY2aoRXJjf66jrQo5noADXlk0LX+p3zNiUQutNfXoLrg0B80oobitCq58hcjw
-	 AkauZhlFArAXPul5BRkrVx/2xIweisWeIEc6KjLnHvG4oUGOOi5UrlCuvnNvjwtwnl
-	 SICj4JDhFMLRwZHecvN+6PdNpG0mAdsGIR48HjMDI190O2AbIv4xtex8sqmgkfP7nR
-	 EHwqxq9OD8DpIs8xpSXQ3ovBvauzFUD/R1jLoKHEf5RJboupWB3OoTgdG8QBfqnj6Z
-	 vpuAfJs1oZX7Q==
+	s=202503; t=1760929788;
+	bh=EK1MIi+sb6cHsQz0mvnbsyZ7mAvdQ2vWHXSm9X0hQdc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=OOWAuGezXNzQ2/vSSV5HFYhvvNoFPZ9YbbvhU9iIzuYKjli4/o5Cs+r9cmsoG1R3A
+	 BPKbHZl4XzOaAHrA/0Fhdl9yyYp4ypD6JpFdvlzau/exuxBbtbIyQvwYLFVi480cjY
+	 f/d15vnqKeVowsPPx5/DGr/xqpT422x8/vJETeVUVDXDnnXHnr75RuOq4ByhckWXxw
+	 3gx70WMGlHVgMtwVgAzGErm4gVhpMykFFiE4o9UJlt0gkUFCoOUwujW48Yt/shlU7/
+	 oLlTWRGQk8SZrF8vzYRomu10t8fBeFB+4iOx1Z65OAIgyJIjc8SCpmgbANUBvrppAV
+	 fx55MPzGhabfw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cqgMr0vCTz4w0q;
-	Mon, 20 Oct 2025 14:07:36 +1100 (AEDT)
-Date: Mon, 20 Oct 2025 14:07:35 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cqgQN3HChz4w0q;
+	Mon, 20 Oct 2025 14:09:48 +1100 (AEDT)
+Date: Mon, 20 Oct 2025 14:09:47 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>, Pankaj Gupta
- <pankaj.gupta@nxp.com>, Linux Crypto List <linux-crypto@vger.kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the crypto tree
-Message-ID: <20251020140735.39084e85@canb.auug.org.au>
+To: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: Serge Hallyn <sergeh@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: failed to fetch the capabilities-next tree
+Message-ID: <20251020140947.0dfa07c9@canb.auug.org.au>
+In-Reply-To: <aPWPWEfPpyE94qcs@mail.hallyn.com>
+References: <20251020075738.2de7288c@canb.auug.org.au>
+	<aPWPWEfPpyE94qcs@mail.hallyn.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5M/pzNkGpv55YL_hm7iuxve";
+Content-Type: multipart/signed; boundary="Sig_/Q7OBhp_3KZrPtI1FsxY+7WW";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/5M/pzNkGpv55YL_hm7iuxve
+--Sig_/Q7OBhp_3KZrPtI1FsxY+7WW
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Serge,
 
-After merging the crypto tree, today's linux-next build (x86_64
-allmodconfig) produced this warning:
+On Sun, 19 Oct 2025 20:24:40 -0500 "Serge E. Hallyn" <serge@hallyn.com> wro=
+te:
+>
+> Sorry, there's nothing in there right now, so I think I deleted the
+> tag during the last cycle.  Is the right thing to just leave it
+> pointing at something like 6.18 with no changes and let your
+> automation calculate an empty set?
 
-security/keys/trusted-keys/trusted_caam.c: In function 'dump_options':
-security/keys/trusted-keys/trusted_caam.c:37:20: note: the ABI of passing s=
-truct with a flexible array member has changed in GCC 4.4
-   37 | static inline void dump_options(struct caam_pkey_info pkey_info)
-      |                    ^~~~~~~~~~~~
-
-Introduced by commit
-
-  9eb25ca6c973 ("KEYS: trusted: caam based protected key")
-
-I am not sure what to do about this.  It would be nice if we could
-suppress the note as we do not support gcc 4.4 any more.  Otherwise,
-I suspect that converting the pkey_info argument to a pointer will get
-rid of the note.
+Yeah, that makes it easier for me (probably just reset it to v6.18-rc2).
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/5M/pzNkGpv55YL_hm7iuxve
+--Sig_/Q7OBhp_3KZrPtI1FsxY+7WW
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmj1p3cACgkQAVBC80lX
-0GzLgggAnI63ZEczZoQRbkSjQa364x0GKkxghxbIU3yOlijZC3zVlfRK22A4rBzM
-VZh0Aqc8rCTU5xYTH6gdZKA1HsdylL+KzSk9zMwaHmXt7V1WnbU2T1Sra8RBjYHm
-TgfKOLkJfgsLVy/3IQLmXGrm4PE9k8ogSU2pHrhRIs15d4h3saaSJd9t4vPLF39H
-X40+sHjdNwGfH/4VtA21LuVqzmRDjKSDalMc8i+ABmQbba4NoDlNj1tg5oB2CpL8
-3kqMLg+SgjB0j3896lXF0dp/qNqz4ti1fh1BX7QSbhV5Yc6P3DOaJ2x5ZWAQuxj4
-xuztswSApACC5LTgR3O3wlZIOmVF7Q==
-=k+R0
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmj1p/sACgkQAVBC80lX
+0Gy3BQf8DVbYNAJmNw0UyLzXUAg3wEUkPzGVNtsWh/ohVkl+K5iujBtdKkICCWCU
+jG/2YcMpHD9mcj875b7dvKXBuZtvEVOIaXtzeMASYxaf8R2LReV0uUKf+h24ofNR
+ME2YiWzuHfQmCQojcQqeu3FMnYV3IkMWwJafIabtZl0khtEPDzSWu+eSCPfDqlPW
+iQp1XbnUl8TxV94QS9TW4v3ylplAiBpWIuQUSHOwEu6hBlyOpBulfYsUuUIc1Pn5
+DGmHE+7LF8dBSgfkVaqRC04wE81iriisjxQZyowv5MacHMPQbko9owpPdjEdk2GH
+Do3s5hXtMj5Hbw7i942A3SJDnNPTLA==
+=NwSQ
 -----END PGP SIGNATURE-----
 
---Sig_/5M/pzNkGpv55YL_hm7iuxve--
+--Sig_/Q7OBhp_3KZrPtI1FsxY+7WW--
 

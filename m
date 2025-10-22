@@ -1,149 +1,125 @@
-Return-Path: <linux-next+bounces-8678-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8679-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 552DDBFA039
-	for <lists+linux-next@lfdr.de>; Wed, 22 Oct 2025 06:59:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 795EBBFA0CE
+	for <lists+linux-next@lfdr.de>; Wed, 22 Oct 2025 07:26:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C9503B59DB
-	for <lists+linux-next@lfdr.de>; Wed, 22 Oct 2025 04:59:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 211B718C1A48
+	for <lists+linux-next@lfdr.de>; Wed, 22 Oct 2025 05:26:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 864A52D8DB8;
-	Wed, 22 Oct 2025 04:59:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10A402E973F;
+	Wed, 22 Oct 2025 05:26:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="0h0cVpCF"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Hn48pNTX"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6442D9481
-	for <linux-next@vger.kernel.org>; Wed, 22 Oct 2025 04:59:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206782E8B7C;
+	Wed, 22 Oct 2025 05:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761109147; cv=none; b=cm8nzPqSZJYdllY4CPWHTPIeJStxJtkhdYDLVi4kmoOZO+kNre5Vw6Cg9eV83b7glGZtJBPi6mO/X+e41Mywx2GdVtdfpUST9ot8yjbBQ/vLyqgtW3OWb5dSY0HqH7VDmhdLfXuGuc1OkQtqKEQcIs4LeIfKc8NxkFzs1I2iEJs=
+	t=1761110762; cv=none; b=G7dQxVfRJ1Ns5Nzq11YS4ubwnDoZKC0ep1WtOL1MmAOFQzk7aOnZtUDba1vB7PjADVmFS3cyAIr+vcVIburaWHBDews2mfYt9o+VjFyVL/1ttupJxyWrgmg+S49f/wdpsdv/q7Z8A0hMC8Aqc2RZgGkvx9Z5KomeGrPEq/7nEb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761109147; c=relaxed/simple;
-	bh=KhqM1NrT/8XQgZX2oLYZnYQtiWE7ZB8lY5Pxm0UGfrs=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=MqMAN5dSQDebpmX5gZretNd/Wg/Fa3W05m9t3+BG0csKIr5+lk7cwxL0GnB/i3zw8tpmlAbWuZa2G3KhRCyJg0/cgSh5fzjIrnXmcjKQXEt9y5m8iAfEj/MfVURJjbsthI1gtRb6DWGejjqrNRtwIrh7UQjR1RelmMu4ABd/8r4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=0h0cVpCF; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-33ba37b3ff7so642448a91.1
-        for <linux-next@vger.kernel.org>; Tue, 21 Oct 2025 21:59:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1761109145; x=1761713945; darn=vger.kernel.org;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XljzsX8rFdvLVOxvx3w7VqFqu1GNuTKVNMAlBz/xv0A=;
-        b=0h0cVpCF8HjaMwp0Ur3AAZ+gYsEMHQlRrAJdPvP/tWDa2KsVjpCxvv7oM/Nfu/uqTl
-         93rycagcUwuT1MDH4f2aiKUQZzrSmLWbtoVf+YwIzIkFgWnfaDIUkyPNrCLCjS0bvasX
-         1s0RmBAEW3dIfCMFk0RoNhXCk95OAWbxPPQ5TjxSUpHY/xzzolyET85EIou9ywL1+Poj
-         ry3ATqiQUPU9ZvoyhH8p5lYZraMVBkv/kd+VQOBpFpuEtsKuckg/dlRLoq9izrtW7iGH
-         k+bNm6Sq9l9SB+tbUHEGHqxHBgQoEMzfskM6S61GEbmP4nk2v5pM09YyCSkpJopWF/u4
-         BquQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761109145; x=1761713945;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XljzsX8rFdvLVOxvx3w7VqFqu1GNuTKVNMAlBz/xv0A=;
-        b=c2+tZ/+axVrDbqx8itAgTwWpH8FQfSdHjao1A6MDZfJYnbNxKVfsUxPwEbX4T0ZF1f
-         DcydNN3APWtOQmOMmQCu3IlOCb1C2iBSr9ahR8h1UR+3x1YnTH95yWkj5oWV12meT/go
-         pCw8b6XyNcSe8vuRrNAkrN+f7FPHQVOxZ7T0X7q66Uq+AtDlk4mWxtWTo4D9B6A1UOOj
-         9T/1Q5X96mRjuKN70ZZ2p1U2WOpDeUHZfiOzS33r4UhXgFybK0rzbbJmprKdUE7IA0XW
-         QTvI3SOuAeyCVU27d3U2d9GFLse4yB5+QqOYY1ztvfmxEkzHMrF8bOtc2wXF+uscgm8k
-         SUkg==
-X-Forwarded-Encrypted: i=1; AJvYcCXZrkfjnknUoeruA/xXwyiR86DbI3SxUCa7lSlkgOMNRLd358Ft2lsjmqvnLbxp4QqLsSoHEjtToOSC@vger.kernel.org
-X-Gm-Message-State: AOJu0YyV961gwio15e6Ca9yOeJ3AQ84mVfgItsSvLvk9oSNEIq9h06a/
-	+G/F8eMIoW4vLeiuwRUmMNelF9ZEPpWkRIt/sN6pq04fl8Os8OcY+Du8hrF9I74wvHk=
-X-Gm-Gg: ASbGncsn8eVcPomjdnlIMl0dDMIg3FKtYbbjaVfwxhmzh8qxwNUObPN4JX+Pdwy/0PW
-	+q4p9AZQapPfdRZ83BwQ1lJrlrRVfxOXLX7HOKhdrkO7XZsgrBAjoSobaLwb76a/zcvo0zM2LiA
-	OzuR1xBKvGd6Acjyp/Pifxz5HBbWf+81u10iWLSctdp+rB8WlvTFxYWy3Ex/SklfXwpe5O6qO6M
-	anT2yFiv9O18RRanvdHgokLHl6L3mieXJ0fBudPyMvCS9vjFXFiRANcP9PtE985wgIj7N765slv
-	bxk47iCrFI6uuSQyj7VolVdmz0fvluHeLoVE0ef6gCVwA9Sd0VgRp5Iq5McmFFU0kvIsRKP6l2X
-	aUJkl/3x24vAViF9dK8bhTXoCFjkGK/bOJwTcknNye1WLqF8K9SxfF7hMK45NwB/sUvJj1A==
-X-Google-Smtp-Source: AGHT+IGGrOExh+SSr7Xifn+Bg1nCtg/cwiq7wtsYAbA6u+ujfGROcYrCEOCfEz0xmUMPv0o2MclUSg==
-X-Received: by 2002:a17:90b:1e42:b0:33b:dff1:5f44 with SMTP id 98e67ed59e1d1-33e905eed0fmr181531a91.6.1761109144734;
-        Tue, 21 Oct 2025 21:59:04 -0700 (PDT)
-Received: from 15dd6324cc71 ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a23010e25asm13084992b3a.56.2025.10.21.21.59.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Oct 2025 21:59:04 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1761110762; c=relaxed/simple;
+	bh=mXpas3Q7II2E3RIoc0YNALZ0k7lZjrC4FDNfZkG9wws=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=JFxuqj9HF8rKnGeJioWLNZ5q8GpNe4i7sfFwuKfQo2YlImuyTUqTZtTbg7elSRZBj15jlS2JV6qN2cdu8fAtkdSIBYzr+zkVsGMNw5Wypnfms5kbsWnsTrnMHSlHWJst1JOTxaBWyFxYFMpxBG+WzCTp4a8jmgUhWXsbviue7So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Hn48pNTX; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1761110755;
+	bh=Czzn4YjA0DxoPNd1smsST42zqWunupnU/PC+dbX27q0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Hn48pNTXmbmy0HLGHugXg6Mara41fmRu4FlwF1r5eBInq3XSbdg9W4Ug6CpEerpTc
+	 zMDglorDskudJJoadv4JKEzi9fGA+aNSE7ax65IJV+zrwkrVUjiYU+KK82IChi9xj3
+	 NlYHOsAwE25JMDLi6ijibjHgHQm6PkLe5pwyo9S8J1iaTyrbTTjWfHLhX/rLvN7eDR
+	 4O2h6ielaXzohBVKnuU7MU7kVywl2mVisMjo6uPkHZ5OYtaIXfx9POsudCp5Ozmubd
+	 mvAJMV8lo3uhXxPgP5Vrh/gekeg2Yd0aUsKvKtMsB3ISvFwPx0i80Thrb3nArlDRBX
+	 2N25eV2OMMlRQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cryLV6bXTz4w9Q;
+	Wed, 22 Oct 2025 16:25:54 +1100 (AEDT)
+Date: Wed, 22 Oct 2025 16:25:53 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: Keith Busch <kbusch@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "kernelci.org bot" <bot@kernelci.org>
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20251022162553.5dfb4df9@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: [REGRESSION] next/master: (build) variable 'sqe' is uninitialized
- when used
- here [-Werror,-Wuninitia...
-From: KernelCI bot <bot@kernelci.org>
-To: kernelci-results@groups.io
-Cc: regressions@lists.linux.dev, gus@collabora.com, linux-next@vger.kernel.org
-Reply-To: kernelci@lists.linux.dev
-Date: Wed, 22 Oct 2025 04:59:03 -0000
-Message-ID: <176110914348.5309.724397608932251368@15dd6324cc71>
+Content-Type: multipart/signed; boundary="Sig_/4Cy70XElTL/JV3ERhJ7mIjd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/4Cy70XElTL/JV3ERhJ7mIjd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
+After merging the block tree, today's linux-next build (x86_64 defconfig
+clang-17) failed like this:
 
-
-Hello,
-
-New build issue found on next/master:
-
----
- variable 'sqe' is uninitialized when used here [-Werror,-Wuninitialized] in io_uring/fdinfo.o (io_uring/fdinfo.c) [logspec:kbuild,kbuild.compiler.error]
----
-
-- dashboard: https://d.kernelci.org/i/maestro:764471d48b9e1faab06d96f79a325cdcf2a995b7
-- giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-- commit HEAD:  aaa9c3550b60d6259d6ea8b1175ade8d1242444e
-- tags: next-20251022
-
-
-Log excerpt:
-=====================================================
-io_uring/fdinfo.c:103:22: error: variable 'sqe' is uninitialized when used here [-Werror,-Wuninitialized]
-  103 |                 opcode = READ_ONCE(sqe->opcode);
+io_uring/fdinfo.c:103:22: error: variable 'sqe' is uninitialized when used =
+here [-Werror,-Wuninitialized]
+  103 |                 opcode =3D READ_ONCE(sqe->opcode);
       |                                    ^~~
 ./include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
-   50 |         __READ_ONCE(x);                                                 \
+   50 |         __READ_ONCE(x);                                            =
+     \
         AR      drivers/irqchip/built-in.a
 |                     ^
-./include/asm-generic/rwonce.h:44:72: note: expanded from macro '__READ_ONCE'
-   44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
-      |                                                                         ^
-io_uring/fdinfo.c:92:27: note: initialize the variable 'sqe' to silence this warning
+./include/asm-generic/rwonce.h:44:72: note: expanded from macro '__READ_ONC=
+E'
+   44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x)=
+ *)&(x))
+      |                                                                    =
+     ^
+io_uring/fdinfo.c:92:27: note: initialize the variable 'sqe' to silence thi=
+s warning
    92 |                 struct io_uring_sqe *sqe;
       |                                         ^
-      |                                          = NULL
+      |                                          =3D NULL
 1 error generated.
 
-=====================================================
+Introduced by commit
 
+  31dc41afdef2 ("io_uring: add support for IORING_SETUP_SQE_MIXED")
 
-# Builds where the incident occurred:
+See the KerneCI report here:
+https://d.kernelci.org/i/maestro:764471d48b9e1faab06d96f79a325cdcf2a995b7
 
-## x86_64_defconfig on (x86_64):
-- compiler: clang-17
-- config: https://files.kernelci.org/kbuild-clang-17-x86-68f854869533132a189705c5/.config
-- dashboard: https://d.kernelci.org/build/maestro:68f854869533132a189705c5
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/4Cy70XElTL/JV3ERhJ7mIjd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-#kernelci issue maestro:764471d48b9e1faab06d96f79a325cdcf2a995b7
+-----BEGIN PGP SIGNATURE-----
 
-Reported-by: kernelci.org bot <bot@kernelci.org>
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmj4auEACgkQAVBC80lX
+0GzLvQf/XqMj9cyI3VRKC3CHrDrAvKoc++cyQw284WK6XLPsZjJ0DxBQWyt5xe/F
+0yodv5ebJzP/KaF+HBHVaVCihu2sFX6GXHdO9kNnnQFaWVqLA3hAevfyTyv+kV7m
+4e8lv3x8HIIYsKwJLttnWgkUAqm9F5wOD6C3eYBGQIIevkUNQs+9M7x2WRYpLnQs
+cVzj2ZINDhbSYv7UQCmgd/hwp0VCbM6fpwIjmKRv0Fu6cCKk4xg4uY5zDMJ7dvbu
+xlthtgjEZ+JrPkapChii41+gx5l5IudVA4iFXNaw57vRtND6cw8cus/H1PoT7K0f
+fC5KBSiMsN83SYDqiFZWK4cANlI5KA==
+=tgp6
+-----END PGP SIGNATURE-----
 
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
+--Sig_/4Cy70XElTL/JV3ERhJ7mIjd--
 

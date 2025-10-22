@@ -1,191 +1,107 @@
-Return-Path: <linux-next+bounces-8674-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8675-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F85BBF9C4E
-	for <lists+linux-next@lfdr.de>; Wed, 22 Oct 2025 04:51:23 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E24FBF9CF7
+	for <lists+linux-next@lfdr.de>; Wed, 22 Oct 2025 05:17:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 271BD4022EC
-	for <lists+linux-next@lfdr.de>; Wed, 22 Oct 2025 02:51:22 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C6F524E7AC1
+	for <lists+linux-next@lfdr.de>; Wed, 22 Oct 2025 03:17:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE5B21D5CF2;
-	Wed, 22 Oct 2025 02:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8309D2264A0;
+	Wed, 22 Oct 2025 03:17:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iUjimvD7"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="fCiRjH/H"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1740A15CD7E
-	for <linux-next@vger.kernel.org>; Wed, 22 Oct 2025 02:51:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E26319E82A;
+	Wed, 22 Oct 2025 03:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761101479; cv=none; b=Nwkw/VUvUx/lWYVTme1dgUVuPqda9vS2mfx1XrGv/Qm014pvjJz7wCbeidTKbA2ehyZWvySVwYZ7Ktq6PsTKKqwGMBd3iouVxAKiDKy3S/c/aCK/Skfvjay69z89kEx1cZC7ZsloXKcm+pCzpRF5qZ34eTzwLkayNHQNvgj+XS4=
+	t=1761103033; cv=none; b=M2T1cHCv3sBCUpnNyu1gXrvIsugDRVarWWwKsNGLSLDSVkiEoR2n21N1Rp1Kpf7Ca8Ci+oi8Wx+1jn97pz0+3GRMjh8Ou6GuI2DVdFW23kYYSwsq+ftAvFnqfae312UtyLR/c0afBEMnMywKiwXavDNT8q5eyaqrYuOU57HRqZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761101479; c=relaxed/simple;
-	bh=DN2zzjuR1XBFiecBiRFeq+IT9NsiVCtgBLl23iLlhjI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IFyYfhT/46qC8duAKwL7mPoIeSWmuYFb3bN0KUxNkig3zkrJHCSmawcjBqeiC5PCpecoiaNEx3kYbXUOvqrNHhQzCfGQa91UH3JSadlhEgDTq7VYZvKU471Pp3JaYV5ehIaDzk7GVkQlxRQl+SWF67yklTa0MXneEFWU64x5l5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iUjimvD7; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4e89de04d62so5569471cf.0
-        for <linux-next@vger.kernel.org>; Tue, 21 Oct 2025 19:51:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761101477; x=1761706277; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NyhW697pM1Zdwkt3dzJURt6zsYm6OZUy7a/3856PR+s=;
-        b=iUjimvD7u6MSMKejIaVDE/L0eo+gPeNWv3PPnY1iqpi+p37zO2oaIdybs/pQkVm5Wr
-         A9GZc+BKC3XOcNTknH+6B35fEDjiCSdYzl20aORAYQH2LHbg3qPLfnzkXH1Sa/nkq0jf
-         QiNHLOdU/hx8+o872gwQq38WA0IA9HaZaupslEAnbPR6qxfoBfYa+VinwiJM1PUdWo1x
-         aUcfyssYMdns2xZbH53sgrI1ICZxtJ3J64JM3Yzn8DxYEOhjvsz8iT9MorGacJS0PdTU
-         NfimfTkJkUBo5ORm9vSg4j5TzLsOXWVGBKJhO8e2sYGDOJwM6KvyekkyijzfuBt3Lid7
-         FYag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761101477; x=1761706277;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NyhW697pM1Zdwkt3dzJURt6zsYm6OZUy7a/3856PR+s=;
-        b=Ayx6uIR/xa9XAasBqYQfMSFIQWw82JHx+tRnEachGqyiVmx5xMgJHd2+9j/4GIcaI8
-         W9QOo3gu6pv5bVOF4FtTtLb7zLpEft4hFVIahuTySOs1BpQ8QlZmM1zZhdo4oolixN4z
-         fFiwJkUCEgFGqMrkTOPwmsRXsjXML4WXJ7bkTCSQ2baScqTxn8ukDY3eRREyZNDmkUPA
-         8buypgZIjTXVignQ87h4vQTenGPuJ42LQtMdd+zDvCR2WZ/wVPBgdEq5ic1u+X1BH74S
-         RyYqGa+Q9uxOTpp8oI+yBnccsJoRK1Mgp/QngFe2deFgaNlVdIdmJB4EPuNB3P1OGTUJ
-         KzgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU/TrLzubIXsT9WnyUxgrCHDRSeIB+J4TS5idjkWCkGv1CDcCZndmTFUBWRX3bo3TLXdVQHrHjm6Emo@vger.kernel.org
-X-Gm-Message-State: AOJu0YxG5XV6QTb3WV81MFNzKJ4f/91Va419xkKKr/1C7a+2mGLZoUDr
-	LwfGNnZfR+rKdu20Slicht+QoVYLWBSV0oPypzpR659ijTi1YzhUsOWh
-X-Gm-Gg: ASbGncsdxHmxDfemGX45dQidY+y99nCA2Y3B8tCz33VN3HQZKCDzvHxw6Itd84fHDXy
-	7cn0upKTljaFgkU1AeXf6lZTV/Yl/zItVTxz7KMdXf1Q77dUfizSmy7ABy8pkYB6Hq1bltEbESl
-	lGdhrS1htXggei/8i8KxuYyxbDqGmhpACJrPeuNAfFLLHortG1fNRo/LCII9eK1wpkblKKs0Iql
-	VPlM8QP45LlnjgqI3Y5IJFYLTg37KxImUHnzGWHoyjJP3DL83Cm0dctmpK7W6lP9snHFV2MiV8S
-	PJocwHhMMH4LDLOi9UN9fjCaYHcJLIJBsCIP5hTbbIDxxM9lzTY1lXsoy3TqGPEWkvVoc/OnkSV
-	EXy102qikr7uNQIRhFs5wT9k7KMvUMyy47YoBxGpukKSaoP5VTL2twkUuDvCrMp9bfjVykSkd8O
-	Qr03nD6lMFQxL8d+SZ9tk5f5Vg60feHp/StewmWOxSwVKBW7Cp7kAx6tm3xSTS1jTtFVr+FpcaI
-	m61
-X-Google-Smtp-Source: AGHT+IH76FHEmO22At9FXgcUJuu8my/jDBE2unDwsrmXoj8Aexa9wRTIw+yZ5wFWZlv6yISqjZiYrQ==
-X-Received: by 2002:a05:622a:7505:b0:4e8:9d50:f751 with SMTP id d75a77b69052e-4e89d50f8b6mr172479011cf.60.1761101476654;
-        Tue, 21 Oct 2025 19:51:16 -0700 (PDT)
-Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-891cc8d611esm882004585a.11.2025.10.21.19.51.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Oct 2025 19:51:16 -0700 (PDT)
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfauth.phl.internal (Postfix) with ESMTP id CE113F40066;
-	Tue, 21 Oct 2025 22:51:15 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Tue, 21 Oct 2025 22:51:15 -0400
-X-ME-Sender: <xms:o0b4aDOFoTMqlXFTW_4S8zGXQ6pFKR73m_wKUoD91VzSFM7ZklL7CQ>
-    <xme:o0b4aJzzptvvKw7KN1KJOuafCmtset7LZ8qFyXjNVSSuoEErFN4yDmh0j9ni90d7p
-    Tb68hj6071MdvWQ6ryX3mXUg87t8Z5Na9BYYF2zEceekAHnxODPPw>
-X-ME-Received: <xmr:o0b4aNoaFSm4dYbusiPo7dzShRFTIFwa4UIW0b9J3fK7MulSVkAByinDF39tpCILWzskiDAafoJ1QbZ3kkrnbmdI6Tp-2mgaFyk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddugedvgedvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueevieduffei
-    vdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
-    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
-    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
-    gvrdhnrghmvgdpnhgspghrtghpthhtohepuddupdhmohguvgepshhmthhpohhuthdprhgt
-    phhtthhopehsfhhrsegtrghnsgdrrghuuhhgrdhorhhgrdgruhdprhgtphhtthhopehtgh
-    hlgieslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehmihhnghhosehkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehhphgrseiihihtohhrrdgtohhmpdhrtghpthhtohepph
-    gvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepuggrnhhivghlrdgr
-    lhhmvghiuggrsegtohhllhgrsghorhgrrdgtohhmpdhrtghpthhtoheplhhinhhugidqkh
-    gvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidq
-    nhgvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhmrghurhgvrh
-    esghhoohhglhgvrdgtohhm
-X-ME-Proxy: <xmx:o0b4aBOIwnPC6jKnxdfYeMUHZytZ1Qw8nEOKNb2bL9GyoNCsVoYGGw>
-    <xmx:o0b4aJeYI0KEZLf71lOqD8xYCDufDI8BMt_RzMUr1PzhC2uh_5Ro-Q>
-    <xmx:o0b4aPVzcuwstMw_Z-hwuP-4XIaD6MCrOqgNfhLNy4cGW6cwJ5iyIw>
-    <xmx:o0b4aCCLXqY5vaHc1fcKSck8AwA0p-EBhRmbKRO9dTbA9J8cu9-Ejw>
-    <xmx:o0b4aC57KhuNHMyKLI77sYp8NT8r_tmFFBdtVpBm-UwfFz_YX9b3QQAD>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 21 Oct 2025 22:51:15 -0400 (EDT)
-Date: Tue, 21 Oct 2025 22:51:15 -0400
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Matthew Maurer <mmaurer@google.com>,
-	Danilo Krummrich <dakr@kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <aPhGo5WjbPM1Yu95@tardis-2.local>
-References: <20251022114644.4437c2d9@canb.auug.org.au>
- <aPg_EnqRSqmFVdOX@tardis-2.local>
+	s=arc-20240116; t=1761103033; c=relaxed/simple;
+	bh=nior2QHsSfqjXt7gF5sqo0VrHudLeQr6Vhei1aA4Ohk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jwI8idqvIckHTALojSrvyP0ebE8Nhx1lLlm5rvsswL3amsib3zaCRw9e3FvM1I2hhIh5kgTAhZiQQd5qSXnJYFbmd1PXkyrXnohxkYQmkYGwRcrMTNttMiEdxmR3/1QIbjcwZjh+fo1sGgJIe/KjBpm7TcOaHqDsp6wulRf9jnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=fCiRjH/H; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1761103026;
+	bh=u+kD9LptVizFe7Bpv5czGKc/bHfylT4QBDtA0fUC0rE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=fCiRjH/HzAOQHlgL66X2qgV/7oov6vv7IJPBxCSS0LEY9BvHlrbgRNTgVcc+82sqm
+	 EdX5oNdWue7wYB/SGZ7uQHRIZxxUZ68nasSN/xMgYvtUpX/4vD43nr3tESJEhFmSrI
+	 ox+OUX7m5+ozFG4M3nUj/jxe4vF0kobe+QO6lf5YhCe95IvjoO1H+B6YEDVNBEEj6m
+	 Em50+qMb9i9dnommEemYV/K3xYWSDSRugl+2C0yPfnZMj/RVxV6F1wxBPllG/f7qjl
+	 8/rfFWEXRWIeXm97AD6U1pyaXkWI0LYI/b0jggoTUxiE3ncuEOSwLidC97lIYzQ/uk
+	 q24AzONMUdNDA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4crvTt2prCz4wCV;
+	Wed, 22 Oct 2025 14:17:06 +1100 (AEDT)
+Date: Wed, 22 Oct 2025 14:17:05 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>
+Cc: Jinmei Wei <weijinmei@linux.spacemit.com>, Troy Mitchell
+ <troy.mitchell@linux.spacemit.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the sound-asoc tree
+Message-ID: <20251022141705.714b19b5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aPg_EnqRSqmFVdOX@tardis-2.local>
+Content-Type: multipart/signed; boundary="Sig_/bShkLQBYTl6yB_oh_26ckZZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Oct 21, 2025 at 10:18:58PM -0400, Boqun Feng wrote:
-> On Wed, Oct 22, 2025 at 11:46:44AM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> 
-> Hi Stephen,
-> 
-> Thanks for reporting this.
-> 
-> Cc Mathhew and Danilo,
-> 
+--Sig_/bShkLQBYTl6yB_oh_26ckZZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-(now really Cc them...)
+Hi all,
 
-Regards,
-Boqun
+After merging the sound-asoc tree, today's linux-next build (powercp
+allyesconfig) produced this warning:
 
-> > After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> > failed like this:
-> > 
-> > error[E0594]: cannot assign to data in dereference of `lock::Guard<'_, T, MutexBackend>`
-> >   --> rust/kernel/debugfs/traits.rs:64:9
-> >    |
-> > 64 |         *self.lock() = val;
-> >    |         ^^^^^^^^^^^^ cannot assign
-> >    |
-> >    = help: trait `DerefMut` is required to modify through a dereference, but it is not implemented for `lock::Guard<'_, T, MutexBackend>`
-> > 
-> 
-> Could we make the `impl Reader` for `Mutex<T>` to bound where `T:
-> Unpin`? Since `Mutex<T>` is structurally pinning `T`, you cannot use
-> `*self.lock()` to overwrite `T` directly. And that'll fix this.
-> 
-> Thanks!
-> 
-> Regards,
-> Boqun
-> 
-> > error: aborting due to 1 previous error
-> > 
-> > For more information about this error, try `rustc --explain E0594`.
-> > 
-> > Caused by commit
-> > 
-> >   da123f0ee40f ("rust: lock: guard: Add T: Unpin bound to DerefMut")
-> > 
-> > I have used the tip tree from next-20251021 for today.
-> > 
-> > -- 
-> > Cheers,
-> > Stephen Rothwell
-> 
-> 
+WARNING: unmet direct dependencies detected for DMA_CMA
+  Depends on [n]: HAVE_DMA_CONTIGUOUS [=3Dn] && CMA [=3Dy]
+  Selected by [y]:
+  - SND_SOC_K1_I2S [=3Dy] && SOUND [=3Dy] && SND [=3Dy] && SND_SOC [=3Dy] &=
+& (COMPILE_TEST [=3Dy] || ARCH_SPACEMIT) && HAVE_CLK [=3Dy]
+
+Probably introduced by commit
+
+  fce217449075 ("ASoC: spacemit: add i2s support for K1 SoC")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/bShkLQBYTl6yB_oh_26ckZZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmj4TLEACgkQAVBC80lX
+0Gxgogf9Ean8AdS8yIU3f//+KXGCC4LMIc/wCKdL54dl+EGdehBdRIn/6H4rh0HW
+8vyLi9v2KIHKyAY40543x76anOUsVYwjOnJJDdsWk/La8nsUQ7szcEAnGtU69u0Z
+JkbKlJM9kZ3ilS/76EsXc8PQQXKF/BArJ/ZqLjBjkvLated6lWsXsNkL2wUZ/yIp
+5FJZJlzH/TPWpoeQR5gLPENETN/5lFWvawdHGuE+/wfK93/BLF5hTyEjQn+yX9x1
+IeHuXohiMrKLi5xjOXp+jl/Axeu+qMEQqHVW04fikH2+qFpVYqCyd2Ns8hSEJmFP
+lWiDko4BPsk5EKuI0iVLeysi2SAL4g==
+=QQaG
+-----END PGP SIGNATURE-----
+
+--Sig_/bShkLQBYTl6yB_oh_26ckZZ--
 

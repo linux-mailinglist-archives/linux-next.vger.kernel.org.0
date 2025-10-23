@@ -1,103 +1,136 @@
-Return-Path: <linux-next+bounces-8696-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8697-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8862C00735
-	for <lists+linux-next@lfdr.de>; Thu, 23 Oct 2025 12:25:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6527C03D2C
+	for <lists+linux-next@lfdr.de>; Fri, 24 Oct 2025 01:20:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 39030500B8D
-	for <lists+linux-next@lfdr.de>; Thu, 23 Oct 2025 10:24:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44BE21A06767
+	for <lists+linux-next@lfdr.de>; Thu, 23 Oct 2025 23:20:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F9A30BB82;
-	Thu, 23 Oct 2025 10:24:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12999285C9F;
+	Thu, 23 Oct 2025 23:19:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dgjSj7YL"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="otHJIMjH"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2460F30B536
-	for <linux-next@vger.kernel.org>; Thu, 23 Oct 2025 10:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B1E2BB1D;
+	Thu, 23 Oct 2025 23:19:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761215069; cv=none; b=Ar2E9IEoEbE9EjhuZydlRf2FcsqJ7lN9R+TQKzX1t25Y1oR2Q2Q89jBiGXpeCD180/9mbX+gKhYT0Xa3K2ffxbNd/tP3fGduwh6B/+d3uJaPCutgkxwKzY8Q06c6sG9sU4l0CA9ugAObxmv5pygpDz/GvLvwPYswS2f3BExn4m4=
+	t=1761261581; cv=none; b=Kl+7EAeHRMuy0fROzHDO7Ff223ZuzRVjBV4jn4ygjUhPWFLP7ibq1HXHqvpvtwpc0Ybx2L3HuIyfeMD02GyaHrolcVtH8DZWat0n9TMU6rnQ3MfBsVAG/J3n7ZcgGxGcp50YgVlJJO2N4YNmuagR0vrYI7+pKQ/g8JJZHjIVu1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761215069; c=relaxed/simple;
-	bh=TWqoNj5YdoeJ9asRq6lMhjfB3nhbhwLuJ+gEtX0Kgu0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Jh9dYNyR7RypdkU/EfDH3tZrg6SM+QHpT9yLKPvcXmn8mhZhfq/pXG309f5jPnxXWeJuG+ks7rAdR6GyMzblmU6++fQDjBers80Hg5UOLUYM9NTax80I1aBU6wtkq1g1G+3nOiyG0WOUYN/CfOL+zlcbCAqdJJDsmz/GZkpyxhA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dgjSj7YL; arc=none smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b5509894ee9so32476a12.2
-        for <linux-next@vger.kernel.org>; Thu, 23 Oct 2025 03:24:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761215066; x=1761819866; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TWqoNj5YdoeJ9asRq6lMhjfB3nhbhwLuJ+gEtX0Kgu0=;
-        b=dgjSj7YLkHRsdLp9SLAZD38kP6hxEwPLvahw3f6f9+sPnyQPOzuFYJWNWnt1r46Lw8
-         uzQMWdXknRhEayElUKCjCbePA9n0i6gX+SOlUD/zPOvekhdlz5QA0XshmA9/grglK2C4
-         uSyRoKHunayOhjT/Dmcf+qP4SUEeV9Z7/9ZVeIh2XW/y8yoktthY44yE4EShtUGGDqi5
-         5aC+KtfpmueJMhLUWPHcTgVI33cBjCPh01feSOAsfmMz+C6va0Cvg9O3fL5AuFP8V+Ut
-         UDftB8ezbwrUbJvLt4tSGs19kyxlppydFFsYdb3nfSRnaJ/y24wm7PE3iHEQ4s7PXo2i
-         T1xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761215066; x=1761819866;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TWqoNj5YdoeJ9asRq6lMhjfB3nhbhwLuJ+gEtX0Kgu0=;
-        b=aNdQiKG1WDL1pMiDJ/GWJsIpBtY/nvvO6PmL6w976Oj51hE20PHnuuIFjn0Y9o7R6A
-         TIQbpokQUp5XlfJDAAkxa/qj4A60lJ4qGmUiRgCSjfzM9syXDfhOMW7sSZh1wwc1aUkd
-         aJ++ynCQUDovJPjaxtSLQ0zhSpRZ0DJ2fQ47IsxO/4dJ0jwi86spBzJkFJoOi/JQXsqw
-         s/T7kBS7Igmc4cbivSYgW5sUXpJjhqTYMG1vbhgLbUTttI6I1qdvj3YTpy5H5doBRxI7
-         2IKkGZIXrJoKwHPUgUAikSe9l3lWGvARKjQAldK0O5L0Jnc62LUH7VjEnQmD7z/iP2h2
-         eUdg==
-X-Forwarded-Encrypted: i=1; AJvYcCU+7Ho2VvhxmWgwOT0+I/wwIbOkdBgogmC5FDjW9JiyfZYN8sesgxCf3GfDyLoJ+CoCvO03sz+md5PM@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqvMDIEdJuUrfvmkEHyDAALy7P30JktcR05VJY2F2C0PhAc8Jh
-	xhLBm5AEZoEI4295RYbsIIFDKvFMUSVjBmJvzJheBSfQaqBmSQsnmFo/qx92ygDtqUgw4fnMWWd
-	1AkzWHyHUu/hN+0juySOzOZi20DuzQsqUF32k
-X-Gm-Gg: ASbGnctUVeSkSUdnV/iHaFWgzJy835u/y2nrtQ4YGDlt/czSQshGX5wCBG6eZGAIj8I
-	1loXC4U99CVKukAdLjEAt/kDQAswoTLt0mkQvsHpKoJUQ12lDJ4Dgd91iVaSL8MoB5qD9lBFUqd
-	IUCyZ1Mxxv13jjOR6XDHnNEwpAzJR7on3ogTbnd9UEFGVKKDkr4qOjRoAUAQX/6CpHVSHQjrstw
-	9iBrITzQ4s4R5y2tNOuSJAtddIEyHv1W13sDcj70uox5SrP8xEj7BdheiWYDNxhu5XGV+Ppx4eY
-	1CvfdcK9UpbSNzVFj14Amws6HTqbam/momn+zhbb/roPEPyBrY1UlZrxIYAOvkysq7bzPyhXT6V
-	lpJs=
-X-Google-Smtp-Source: AGHT+IHL/NOfl30TWfKU/BaCMVnjssdI5BFI0bm1pxWmrt4ppzKzR8Akyjxfr+nN3dvIwG3o1qnBpfOu4tjDcZC532E=
-X-Received: by 2002:a17:902:ef08:b0:266:914a:2e7a with SMTP id
- d9443c01a7336-292d3fad068mr69723455ad.6.1761215066415; Thu, 23 Oct 2025
- 03:24:26 -0700 (PDT)
+	s=arc-20240116; t=1761261581; c=relaxed/simple;
+	bh=pqzPEr83Wlp5RWs/H6YYQ2P5xAPk/5VgUVSEbEPhJCo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Wjxsjd6wGoTOAsZgmP3+MCORP6ce611gqOgl5yqWtotc5z7czoMewtsVOjW/rxS9DNb2Upm8ogqnNiQomo8AthBuZHAXtxf/PZnB56Mpm9qEWMKuDnggHwYd8ooets55FPh6aaVwHgBsACoszUwv389jejTYGQVT8dTCR36At1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=otHJIMjH; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1761261573;
+	bh=PHe8Y/auY0lx1sCeSGOFYE+yhFxujm0kfMzAgdgRW80=;
+	h=Date:From:To:Cc:Subject:From;
+	b=otHJIMjHccfGzutmvWvukr7Ow9YnYLYVBKv/QwzF6CuBquoe9fpZe1EWRHTlup1IL
+	 8Q9lSa9ddzfiEiRJLmlHCmHXFI3cUud/bZyZKiYNhIEBucdAK6GabeE2yRZze5y1EP
+	 jgl8UsDQfCr3g4Y5KkJ+aZ5SP7FAHBFyKdZiU9DCW5SgamRS3PRcWUwnUspNMXhKqh
+	 SgTOae/ktx9pxnKIg6jkt9P6xl68yETAHUytRIb7UsD4YMgMDrxfST1gM0bO20hLNw
+	 QX32THB7rCmeoy5nfAXCQkmsOrGxAb+PIIodEJejBqwgaeUCcaUeyQqdP2OizxLmOc
+	 cNK9/QEqNkCLg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ct26r1XBFz4w2S;
+	Fri, 24 Oct 2025 10:19:32 +1100 (AEDT)
+Date: Fri, 24 Oct 2025 10:19:31 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Mark Brown <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>
+Cc: Bard Liao <yung-chuan.liao@linux.intel.com>, Shuming Fan
+ <shumingf@realtek.com>, Richard Fitzgerald <rf@opensource.cirrus.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the sound-asoc-fixes tree
+Message-ID: <20251024101931.49f46027@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251023124926.35a9ded0@canb.auug.org.au>
-In-Reply-To: <20251023124926.35a9ded0@canb.auug.org.au>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 23 Oct 2025 12:24:13 +0200
-X-Gm-Features: AWmQ_bnsu34G0TQ6Z1JJkqPuJ6rfaooZhtnhvtFcP91QXFBKiKlSmqUmS8utRp4
-Message-ID: <CANiq72kwsk8NYUR+8Sia86YSUhYyvLXWD8kJCR8fD+_Hv6qz8A@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with the opp tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Tamir Duberstein <tamird@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/N_geh_a0mPmG+rH8BndhD_l";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/N_geh_a0mPmG+rH8BndhD_l
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 23, 2025 at 3:49=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
-.au> wrote:
->
-> I fixed it up (see below) and can carry the fix as necessary. This
+Hi all,
 
-Looks good, thanks!
+After merging the sound-asoc-fixes tree, today's linux-next build
+(x86_64 allmodconfig) failed like this:
 
+sound/soc/sdw_utils/soc_sdw_utils.c:316:18: error: 'struct asoc_sdw_codec_i=
+nfo' has no member named 'name_prefix'
+  316 |                 .name_prefix =3D "rt1320",
+      |                  ^~~~~~~~~~~
+sound/soc/sdw_utils/soc_sdw_utils.c:316:32: error: initialization of 'int' =
+from 'char *' makes integer from pointer without a cast [-Wint-conversion]
+  316 |                 .name_prefix =3D "rt1320",
+      |                                ^~~~~~~~
+sound/soc/sdw_utils/soc_sdw_utils.c:316:32: note: (near initialization for =
+'codec_info_list[12].version_id')
+sound/soc/sdw_utils/soc_sdw_utils.c:316:32: error: initializer element is n=
+ot computable at load time
+sound/soc/sdw_utils/soc_sdw_utils.c:316:32: note: (near initialization for =
+'codec_info_list[12].version_id')
+sound/soc/sdw_utils/soc_sdw_utils.c:564:18: error: 'struct asoc_sdw_codec_i=
+nfo' has no member named 'name_prefix'
+  564 |                 .name_prefix =3D "AMP",
+      |                  ^~~~~~~~~~~
+sound/soc/sdw_utils/soc_sdw_utils.c:564:32: error: initialization of 'int' =
+from 'char *' makes integer from pointer without a cast [-Wint-conversion]
+  564 |                 .name_prefix =3D "AMP",
+      |                                ^~~~~
+sound/soc/sdw_utils/soc_sdw_utils.c:564:32: note: (near initialization for =
+'codec_info_list[23].version_id')
+sound/soc/sdw_utils/soc_sdw_utils.c:564:32: error: initializer element is n=
+ot computable at load time
+sound/soc/sdw_utils/soc_sdw_utils.c:564:32: note: (near initialization for =
+'codec_info_list[23].version_id')
+
+Caused by commits
+
+  3293d3d7b088 ("ASoC: sdw_utils: add name_prefix for rt1321 part id")
+  61eb4112a8fb ("ASoC: soc_sdw_utils: add cs35l57 support")
+
+But something else has changed because 3293d3d7b088 was also in
+yesterday's linux-next - which did not fail to build.
+
+I have used the sound-asoc-fixes tree from next-20251022 for today.
+
+--=20
 Cheers,
-Miguel
+Stephen Rothwell
+
+--Sig_/N_geh_a0mPmG+rH8BndhD_l
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmj6uAMACgkQAVBC80lX
+0Gz5Twf/XACncpQ3iIx1CoZq0T778CHLHlXczIJ4jOp8HD3hS0lj31UBGHCgZKBI
+6Gn7xsX7z3yBSvlbB8NNG5yJM+8ljxc5etrtYhPMlY4Ntr2awjOJs10ebcmYvhnR
+YjxooOf/skhaSCNzNo9+4kgvndtFw1ze4CEw0Uhq2tXBNmm+ckUHwlzqUOJMfotg
+kYlwl9neVoOmXygXLFaNJxzm17OQduyLYmSg3QzWTO/Q03ekIgD4xuftdJijIqZd
+XaTIpH6cyBXeuY95EsutzTski+bUfCy/drLWsqfT9yD4a+2GJXBnkqYNgpDAmjel
+uL2OUtJgqKm6AXh6EZ29prj6B1M8VA==
+=L94P
+-----END PGP SIGNATURE-----
+
+--Sig_/N_geh_a0mPmG+rH8BndhD_l--
 

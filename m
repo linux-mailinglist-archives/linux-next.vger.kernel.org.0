@@ -1,103 +1,159 @@
-Return-Path: <linux-next+bounces-8703-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8704-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BBDAC04577
-	for <lists+linux-next@lfdr.de>; Fri, 24 Oct 2025 06:31:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEF80C04642
+	for <lists+linux-next@lfdr.de>; Fri, 24 Oct 2025 07:24:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAC013B6C6F
-	for <lists+linux-next@lfdr.de>; Fri, 24 Oct 2025 04:31:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A1261A04D13
+	for <lists+linux-next@lfdr.de>; Fri, 24 Oct 2025 05:24:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700BC191F98;
-	Fri, 24 Oct 2025 04:31:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E28821DE4C4;
+	Fri, 24 Oct 2025 05:24:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="r/y7rmdI"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="nQtR3tla";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Z53lB5uA"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D06EE125A9;
-	Fri, 24 Oct 2025 04:31:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECF0518FDAF;
+	Fri, 24 Oct 2025 05:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761280294; cv=none; b=FN+dmbkt++BZt/NjTUeKzSWH5EtLnEhgBB1mQ0XW8nSl1NhyDBZFwsXSrBbvMhUtwMDCZ97pjkAa/fqUfYMJpBHGkN2iBKVfuitnDwKlDVtGTD1NSz+3DeSNbUoJh18UcrI+Ip7euAgcXZ8Ea2w4ulOMl/XShsKt7nuvCOc0Enc=
+	t=1761283452; cv=none; b=obpl2wSDjyPl19jOZN3VRhIk3f7DYe/Ld13/NF+3qgKHyb50f+ukfVojHpf0/sYwbG+RAeKqJZj2BIiJJYM7yChqAj4nIsOEG2lo/pEsaJIoYqzcVbIn5m74FB6P0UueQ6sFaebTav+ZEJIqS7XloDF9WjjmH+bruIxSPZwuAL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761280294; c=relaxed/simple;
-	bh=yx4K1K85toZ/E5o6jya7RkVBvy1UnqNR5rY2AuzuhCU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=JQGU+0EMdPrBQy39sGE47ZUAPs6+wfdXk7bXIKaCRvHpATK6Kjv3umJMXGXwr9GT9p2GTmlZzzsAbQF0Gi9h5tUr0HgQnV8b8rjDYW+2eZIFmhXGyGd9lFSVRve3hWGA845a2XKSlcQtY0ASmTbzLXZ+hnoYarIpQE/sbfcd40U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=r/y7rmdI; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1761280287;
-	bh=LSeXo3qHPEQXI4tmXQ+7HeGWbGKJODt/U5vq8NEzn2o=;
-	h=Date:From:To:Cc:Subject:From;
-	b=r/y7rmdIC3ECGkj4e8FHVLyh8pPQr9Ong4qb2TMVlpbKmyiipESQfGlsdV2eXlnLU
-	 CaiOcWdspQ4CDosUj4dqd6bNANsEC1udKMx4QCtg8qbIfP4yyb03mO2LMwUUzPtqYz
-	 BREyeGsqXPUj682/Woq5wHA1J8uQ3/Ir6toNQ7upMC2CrC/86O3I17FOX4io4tDbC5
-	 roWmKKVPN2G7OAoIq7d7/A91ql6Y9z2603JoAVB+Z44QY8QJNeQSFO1IwsDm3C/z4Z
-	 CHzXnCE2uctjMzaqDCSlD0ipHw0ewasgEGxxsyD/iBhIqPZB/YC92ksgLbI/HwDxj8
-	 zol2BR387cbaA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ct92l5ZTQz4wCR;
-	Fri, 24 Oct 2025 15:31:27 +1100 (AEDT)
-Date: Fri, 24 Oct 2025 15:31:26 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the mm-hotfixes tree
-Message-ID: <20251024153127.25f42dbd@canb.auug.org.au>
+	s=arc-20240116; t=1761283452; c=relaxed/simple;
+	bh=NkXYq5Y1DtBiY/fJleyZOFYqLgHNMhz2vKYk/rGQ5nY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sgj2QBGHYNaQsqqr6ggEYJT9deIWhOGA+o/yLufOHH4ULcFQH/kGIBPcr5+vLP5wxGO8LBKFcwUh4lcEn30nKRYsqFAypMet9uJH3g6yt7KYjsEzJp8wzMsEkHeKPKEpxGfeM4OctdSuhruRWueQfy4s2jAu6hEUDeozoK1afmY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=nQtR3tla; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Z53lB5uA; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
+	by mailfout.phl.internal (Postfix) with ESMTP id D4E30EC0288;
+	Fri, 24 Oct 2025 01:24:08 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-07.internal (MEProxy); Fri, 24 Oct 2025 01:24:08 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1761283448; x=1761369848; bh=OXPzRTNSgR
+	WkmQae3N485kKFjn4ctYst9EikgzCRO6A=; b=nQtR3tla6rd1TfWQnCejH/lM8y
+	GOxNPH0u2H2jOEvoBtrHH93ZPbQ5nTuYgoXGBKLXmMubcjP1stHyT5ua4hFecVAa
+	ckZk2u7GYybfuidlIsDZ9OWloPcv8xYblhNko9EfsHWQujrQnSmt6239bMtnNq2S
+	3s9s0G7dGN8F8rcVEFVtGts4FlNAeQ/3z0BjKVURtLybDgGSs7cQbHQOTb0hrAIm
+	QEYfDgRhxvAs64k2+Ynwz9J2W944g2YRirbBf6Z32W273S3bInIagpXCDstb71cE
+	5X08/FcKYAQs841uwHwGRAI73sCkSFU4XyefHcBPDTpvsJYRQFBDVS6iwb8g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1761283448; x=1761369848; bh=OXPzRTNSgRWkmQae3N485kKFjn4ctYst9Ei
+	kgzCRO6A=; b=Z53lB5uAZP6nAAZI8aCAWbNADWirsYP4MiiZJK0qph+9BkmNByI
+	vNHiJkSZDHKEd2zqh1SVNMDEITTKzODi1rxI6fw1hFq+7Ez41t3sM1K+GN1COFsj
+	/0lYxZr8wY4EWk5cgOkZDGIiocONn++NvkLDqWtTq0UYaxP3wIjBRcoZB9/laiZD
+	A/W1MRCBirv0duAfdkmvhCwMQ/PPnAjHkOgTyhYveg6aTbT03zRxL/+nRWbACR4z
+	+RF4+3Es8dTsxD2QsLyAYVW3k85rkmp5WkhJoB4qb73Ggoq7VBeG827qFcH7n6VB
+	+KlO3zHl/Ou6JZkcZLqy9xTwfCGrxlq9zHQ==
+X-ME-Sender: <xms:dw37aMVMniGqbVKkn3eUp9eOg78YWjkjM2Y5jVA9T5-7oIU5u9UirQ>
+    <xme:dw37aFz1e1W8s1IncHDJbDvEN4po41iPPy_1g98zvYceqK1pplBcXj7nZ8tbg4U-C
+    FzcX1rF2aObIjxAuaPhNay6ywB4dS-iMphUL1U7SsZGgqlt>
+X-ME-Received: <xmr:dw37aDyoctyHOy1wdcSbyZTUVDzS2YjLhyTOtaQllrrAsa2LYBePYR-Xf6HfhlrjzVNjiVJqg1ScDXwZg8YBrvWi5z1jkQ07eGwgYA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddugeekgeelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvdevvd
+    eljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
+    gtohhmpdhnsggprhgtphhtthhopeduvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthht
+    ohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupdhrtghpthhtoheprghrnhguse
+    grrhhnuggsrdguvgdprhgtphhtthhopegrkhhshhgrhidrghhuphhtrgesrghmugdrtgho
+    mhdprhgtphhtthhopehjuggvlhhvrghrvgesshhushgvrdguvgdprhgtphhtthhopehlih
+    hnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehl
+    ihhnuhigqdhnvgigthesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:dw37aK3IZZ3P7NuevJyKCymQmvtCnL3frZQVf9qecDMlsGrpgoIF1Q>
+    <xmx:dw37aBpzmV75Poj5hVbZKRwLRRU3tgb6qKi8KW9Sfjk8WRvJj4yxTg>
+    <xmx:dw37aADelw0xC_YxA4qmNulzo29QT0wQRUPdyU4140JteeqzyetKtQ>
+    <xmx:dw37aCoX2SXL83gxqXW3dWjrZtTS4E7ABUxkaAHjXKoqVcT0dEunag>
+    <xmx:eA37aBy0MpT9woTYlgKXCQycLVSE4FkE0D87arG8ZshlZFKn7XTigkyv>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 24 Oct 2025 01:24:07 -0400 (EDT)
+Date: Fri, 24 Oct 2025 07:24:04 +0200
+From: Greg KH <greg@kroah.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Arnd Bergmann <arnd@arndb.de>, Akshay Gupta <akshay.gupta@amd.com>,
+	Jean Delvare <jdelvare@suse.de>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the char-misc tree with the
+ char-misc.current tree
+Message-ID: <2025102457-sleek-unrented-a6f9@gregkh>
+References: <20251024124906.70323e51@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//8=NumWf4XcSTcOl0zH4O/y";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251024124906.70323e51@canb.auug.org.au>
 
---Sig_//8=NumWf4XcSTcOl0zH4O/y
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Oct 24, 2025 at 12:49:06PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the char-misc tree got a conflict in:
+> 
+>   drivers/misc/amd-sbi/Kconfig
+> 
+> between commit:
+> 
+>   70ad06df73a9 ("misc: amd-sbi: Clarify that this is a BMC driver")
+> 
+> from the char-misc.current tree and commit:
+> 
+>   5c7dddd7360b ("misc: amd-sbi: Add support for SB-RMI over I3C")
+> 
+> from the char-misc tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/misc/amd-sbi/Kconfig
+> index ab594908cb4a,acf0450ba220..000000000000
+> --- a/drivers/misc/amd-sbi/Kconfig
+> +++ b/drivers/misc/amd-sbi/Kconfig
+> @@@ -2,11 -2,11 +2,13 @@@
+>   config AMD_SBRMI_I2C
+>   	tristate "AMD side band RMI support"
+>   	depends on I2C
+>  +	depends on ARM || ARM64 || COMPILE_TEST
+>   	select REGMAP_I2C
+> + 	depends on I3C || !I3C
+> + 	select REGMAP_I3C if I3C
+>   	help
+> - 	  Side band RMI over I2C support for AMD out of band management.
+> + 	  Side band RMI over I2C/I3C support for AMD out of band management.
+>  +	  This driver is intended to run on the BMC, not the managed node.
+>   
+>   	  This driver can also be built as a module. If so, the module will
+>   	  be called sbrmi-i2c.
 
-Hi all,
+Looks good to me, thanks!
 
-The following commit is also in Linus Torvalds' tree as a different commit
-(but the same patch):
-
-  d8858aa4bc8f ("MAINTAINERS: add Mark Brown as a linux-next maintainer")
-
-This is commit
-
-  6fab32bb6508 ("MAINTAINERS: add Mark Brown as a linux-next maintainer")
-
-in Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_//8=NumWf4XcSTcOl0zH4O/y
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmj7AR8ACgkQAVBC80lX
-0GzXAgf43a0ANoIAuzqU0n5fykQfEUYPHhgcW17wNcFYZkNDDT1vHymCuzJDVO0q
-hhVmd6nIN06QZ8/tIRRhFVH1rXG6meyzS6DFe0LOLSIQvVWjOumpkqOrR9s+F20j
-BYusm9F1c7ZDa2o9cd58oZDvN45nAXaOe+ZRXK01ggmse94nOXo+Df3MyYdt8VuG
-LWBaeXDtjUNadYA5OHcx3AkXRJeGSKQMQXWjX6FFQ3xjsQmzKa5ev93CWSNFlQHv
-Mz0zLGdoDq73zVS9TTNI8Qq6Y3OLXX7d5sPRhXM0F5tst/+CSnnPhvwlpt+CTNEl
-aAls2PRw7Hrv1U8RjdAsey72s6Xw
-=w6yn
------END PGP SIGNATURE-----
-
---Sig_//8=NumWf4XcSTcOl0zH4O/y--
+greg k-h
 

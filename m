@@ -1,163 +1,105 @@
-Return-Path: <linux-next+bounces-8707-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8708-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C472C088EE
-	for <lists+linux-next@lfdr.de>; Sat, 25 Oct 2025 04:30:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9CD7C0B3DE
+	for <lists+linux-next@lfdr.de>; Sun, 26 Oct 2025 22:08:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C639E3AD11C
-	for <lists+linux-next@lfdr.de>; Sat, 25 Oct 2025 02:30:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF50F18970A0
+	for <lists+linux-next@lfdr.de>; Sun, 26 Oct 2025 21:09:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 716171C1F0C;
-	Sat, 25 Oct 2025 02:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C05DD207A09;
+	Sun, 26 Oct 2025 21:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="mtbCRISf"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="gCSFO0eb"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7789D2405F8
-	for <linux-next@vger.kernel.org>; Sat, 25 Oct 2025 02:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF8472633;
+	Sun, 26 Oct 2025 21:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761359411; cv=none; b=qs4XjdXhLgFNBybQkoVQaq1VTOmFdo6zrBarQWKMJ3XIZL/SVv3r1BlX4gMrmShSffoRIi7V6cn2el41bODdJh51U7rC65uE4l6WPFkZDTyax3SRsdd0/gOiNhg/NOj/Nk8Oajb75UYRY8vFOYm02Oie0iVU7iRpmMKfvx40URs=
+	t=1761512929; cv=none; b=UtPLIFClALUSQOBQnD6sN0buBr79iubmh1TtpCqZRtx0py3rOrzB2p0bQJRQ3lCj4/DxRrwEbLgFJwyNvgEnJi5jd/iC+Kq+HGBYm9zrJXMK5hkIkog2tyMKbYojd/ymaThaCIegCvfGEi0WCgG++4O6mqEYMrr2EAf9FIhRXb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761359411; c=relaxed/simple;
-	bh=D1pzp1YPClM00t96/oTqJTRfxWwUr5YA2i5OB1WwhZ8=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=sQ3uvIbWZqUevPyOZGDVwoz6ZEwFARFTUB77c/Zhj+B1vuNUXTW0ffVsfxlMlqvpf2lXsIQC/7Rrhe11e+6JDpPd5jduvqU2tX5+NO2CEtrYZpynutbA+QjD6U73bZ4JvPwGMbEKzDWc7QklfTtANN2kC7xkGEYddi4WHjeDuuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=mtbCRISf; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-781997d195aso1990297b3a.3
-        for <linux-next@vger.kernel.org>; Fri, 24 Oct 2025 19:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1761359409; x=1761964209; darn=vger.kernel.org;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7eOgn2zH1/O9VRyLAAWbUrXp8HzUQEIIDAyHfM5kcxk=;
-        b=mtbCRISfQZk8zsdD6TWvwitRfyKGBiNqmmBOKyFxnfJhQIyWj0q0266k22HyvJzB/f
-         xObEDXREEXkv7dc+Q42+v50YY9qKXeLI1NRCeKWgsQlX657SGHvOHEnjeLmr8soBGSt/
-         dtMFPl7IqbSGzGPAwwEyoSj+S8WbQfww9ntKlZkASi9ZKvaZhqWc0MaqSX18h1R74Nkz
-         lr9hqeg1cu1NkunejmKij0QGgto7grXvjuV038qS3dW2w5r+361I0Be88rLIy9EZmaU+
-         XKCdN/Lm0IixdAvqqABaDlJ9WEH6uvKGwK2sL34MBJKSh1oL2OUpMtIUR2PXZQ46i+XK
-         z8BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761359409; x=1761964209;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7eOgn2zH1/O9VRyLAAWbUrXp8HzUQEIIDAyHfM5kcxk=;
-        b=ZWWIbQXGN/YcUkOUY4qd7jIFF1Ftak8vI6FLqt7f3pG9Ybj0G4wWfn+wq1+oKczf2h
-         0LiSr+yw5BLO56vtyURKvsWyyphNbUrsQQ7Yr25NYxMJ2XIKT3oa54f8EUwVNBzWTdzg
-         1mxkyitWw1v7FcRYjXpl5WI/R9JL9i6IyLWWfGVVvBXS9soIlW9bw+Qdc8YNUawjyH+V
-         6ls9M7ZZ6y+0vaKLQAGd8Td0zOJM5PsH5ttgNrECoTLtVLz1YPFQ2Qg6o6v8jmf3UfPg
-         aXywWNJ+B+T+EgiYkto3h3OznVdvr18V5hZbtEsqcrCGTQe6cu+68Xqpm14NZ0nPHTIQ
-         pJwA==
-X-Gm-Message-State: AOJu0YwR8dsCVJAHka/FCiRNsGQ6U696FBaKPlhaNWWpxTJZiUSNo3lZ
-	ne8ifWwYbGe1F7G8oKHp5oY0mL8+PUX/YiM9O6Ztnbo3qzaFuOwpW+R9/+XvG25okKmqWV4hl2q
-	QlhTmxRk5JQ==
-X-Gm-Gg: ASbGncv2OlwW1VIH7yZXoxzVbVH8O69GQXdsY9HuIlaGjMR+pbA9PGXdtUW35+WCdEI
-	0LYHlPduPrhTGu7Kyd6OrnWNrTW6oz19F7a43sNipLKQySKx57/sPzBFspnJ2ED63rWcKM5Kg9l
-	/XID3mQd7dtiPx6FvTpCOsD4cXMNX24hSwDJ6dPOQFT2nWKyGdZ3pg1PsbBuW/qIoFO+1QA0GYp
-	l72sdBASJQ9UOc6hlTGyvp3bCH45+Jh0CUfkfwFn17bxq2p7FQY+u2BKC/BYMZS1Pg5MCnfW21Z
-	ck1qQcd9eQFCesdUXclHj9kPxsYafzVbmJfTfriVq6zihW5A68GqAInaLiENN8p7ewmV5HDy0Ju
-	6BGQgyxRuV6BWjP71CPVO3KQOAchVP8kuGsEw4YKq0ogOoVR/G83fsgqQjA3xrBTXOIdOZr2+Rh
-	9IX8Ja
-X-Google-Smtp-Source: AGHT+IH4FKtsJZTn+X8+qz7LeaxG8k7j/XJkvK65UUwcn7KhwAYeZ7eJuzesF6Zjweb6CwhxhQ1rXQ==
-X-Received: by 2002:a05:6a00:a8c:b0:7a1:49f7:ad04 with SMTP id d2e1a72fcca58-7a28678f84emr5006324b3a.14.1761359408602;
-        Fri, 24 Oct 2025 19:30:08 -0700 (PDT)
-Received: from 15dd6324cc71 ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7a414069164sm669464b3a.45.2025.10.24.19.30.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Oct 2025 19:30:07 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1761512929; c=relaxed/simple;
+	bh=wtmaUcmUQO2/j1dA5UlzGbNz1/zPq+JvqBmW1XNu4hg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=nUrGoIwCVbVkT/mcDngjkNn0O/DHfR9R3c3Y1nZSgwfc+Uglqtm5xF0erq/AL6bR842XYOGnj+nnF2FdM98rGL9YqlYgHdJkJjkeHVK382YYCM7JedFgAHmSJveIApJYpQGMweIZWLns7AixF4UgCkYa0Q8quFrC8H2xmVZL2F4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=gCSFO0eb; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1761512916;
+	bh=KNGlZDI97pDFpHcN6XMMluyye9W7EKnY2DtK4oajiHE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=gCSFO0ebq2Fviw+0lRsWmsXzviw/58EoRoC5cFFESZCQilTQ9ls3KGdfxH45BUhBr
+	 zvcEciyytMp71Rnx5RFh/0BIsefhTc3jZdQ8eFw3WeWmYG/rumwMc/+BaKXDScei8T
+	 GxlwQ75DIKWI40ao6IMVLMxdMbiK9kh4uXB4oyirxQxo7tCZypCRrPi9FLwHpn+Tes
+	 rrfcGb3rc7cy4xKh2S8R9KmA4lJI564cLIAdyBC8oF+Gwu+Vtydjzwj2O2cNYaMMAO
+	 JMuGv97jfoPQMAJV4gIynaG6sh6HJmxcOSIgtHe0a5mwtRnjPGtGx1d0/hC1cmtrO/
+	 Zy4hof8/rIqTg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cvq4N1Nh0z4wCV;
+	Mon, 27 Oct 2025 08:08:36 +1100 (AEDT)
+Date: Mon, 27 Oct 2025 08:08:35 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Lee Jones <lee@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the mfd-fixes tree
+Message-ID: <20251027080835.04e0a4c2@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: [STATUS] next/master - 72fb0170ef1f45addf726319c52a0562b6913707
-From: KernelCI bot <bot@kernelci.org>
-To: kernelci-results@groups.io
-Cc: linux-next@vger.kernel.org
-Reply-To: kernelci@lists.linux.dev
-Date: Sat, 25 Oct 2025 02:30:07 -0000
-Message-ID: <176135940711.6647.12426098864724738842@15dd6324cc71>
+Content-Type: multipart/signed; boundary="Sig_/OiQeCwxxs9cyHX.b1aGV1x9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/OiQeCwxxs9cyHX.b1aGV1x9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
+  91a3e1f5453a ("mfd: ls2kbmc: Check for devm_mfd_add_devices() failure")
+  fdff3cadeea9 ("mfd: ls2kbmc: Fix an IS_ERR() vs NULL check in probe()")
 
-Hello,
+These are commits
 
-Status summary for next/master
+  4af66c2bcab0 ("mfd: ls2kbmc: check for devm_mfd_add_devices() failure")
+  0892507f4a0b ("mfd: ls2kbmc: Fix an IS_ERR() vs NULL check in probe()")
 
-Dashboard:
-https://d.kernelci.org/c/next/master/72fb0170ef1f45addf726319c52a0562b6913707/
+in Linus' tree.
 
-giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-branch: master
-commit hash: 72fb0170ef1f45addf726319c52a0562b6913707
-origin: maestro
-test start time: 2025-10-24 04:46:53.945000+00:00
+--=20
+Cheers,
+Stephen Rothwell
 
-Builds:	   45 ✅    9 ❌    0 ⚠️
-Boots: 	  128 ✅    3 ❌    0 ⚠️
-Tests: 	 4422 ✅ 3017 ❌  647 ⚠️
+--Sig_/OiQeCwxxs9cyHX.b1aGV1x9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-### POSSIBLE REGRESSIONS
+-----BEGIN PGP SIGNATURE-----
 
-  No possible regressions observed.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmj+jdMACgkQAVBC80lX
+0GwspAgAnVOdEQYjIuoFHKwnfEQthnwIeLBhSGg7byoTvzilQr96WKiiDmY8OIXT
+tHVDMvg2qKVLdgaPt8K05Yugs7NX7w3WOOB1rlbsNI1u6iLUvgn+U0GnauxXS0UY
+4Br8Fr9Vo0lh2ks4gYpv3cOD6DeAsNwrl0ibiRfvxBbDfi7ws+8ZNA1oj2EQRgwl
+QX/Rq+DElcwtoB01TqlDymxdTRVcwml/CEohuzDujhi3lrdr2c1SkJ0nxvT+Sa2q
+YAM5rXDVnzBKXXsxY6Sw3/9B51u9MlLsRPZ/MccMcQJb+qClX//WevbGzXxebx6s
+w6msYSa86s3PSU43nUKePT1JEoMSGQ==
+=pS8G
+-----END PGP SIGNATURE-----
 
-
-### FIXED REGRESSIONS
-
-  No fixed regressions observed.
-
-
-### UNSTABLE TESTS
-    
-Hardware: hp-11A-G6-EE-grunt
-  > Config: defconfig+preempt_rt+x86-board
-    - Architecture/compiler: x86_64/gcc-12
-      - rt-tests.pi-params
-      last run: https://d.kernelci.org/test/maestro:68fb155a417a3386b1d34579
-      history:  > ✅  > ✅  > ✅  > ⚠️  
-            
-Hardware: dell-latitude-5400-4305U-sarien
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-12
-      - kselftest.cpufreq.hibernate
-      last run: https://d.kernelci.org/test/maestro:68fb13f2417a3386b1d342af
-      history:  > ❌  > ✅  > ❌  
-            
-      - kselftest.cpufreq.hibernate.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:68fb1d5e417a3386b1d3637d
-      history:  > ❌  > ✅  > ❌  
-            
-Hardware: acer-cb317-1h-c3z6-dedede
-  > Config: defconfig+preempt_rt+x86-board
-    - Architecture/compiler: x86_64/gcc-12
-      - rt-tests.pi-params
-      last run: https://d.kernelci.org/test/maestro:68fb15d6417a3386b1d34619
-      history:  > ✅  > ✅  > ✅  > ⚠️  
-            
-
-
-
-This branch has 9 pre-existing build issues. See details in the dashboard.
-
-Sent every day if there were changes in the past 24 hours.
-Legend: ✅ PASS   ❌ FAIL  ⚠️ INCONCLUSIVE
-
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
+--Sig_/OiQeCwxxs9cyHX.b1aGV1x9--
 

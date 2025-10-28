@@ -1,134 +1,146 @@
-Return-Path: <linux-next+bounces-8743-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8744-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E416DC147A7
-	for <lists+linux-next@lfdr.de>; Tue, 28 Oct 2025 12:56:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74947C14C01
+	for <lists+linux-next@lfdr.de>; Tue, 28 Oct 2025 14:05:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2AE51984FE9
-	for <lists+linux-next@lfdr.de>; Tue, 28 Oct 2025 11:54:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACEA63A69D5
+	for <lists+linux-next@lfdr.de>; Tue, 28 Oct 2025 13:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1099F30F806;
-	Tue, 28 Oct 2025 11:53:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4755D1DD525;
+	Tue, 28 Oct 2025 13:02:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qUQsdYLu"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BdygRNTl"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA22A2E06ED;
-	Tue, 28 Oct 2025 11:53:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C8711E834B;
+	Tue, 28 Oct 2025 13:02:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761652437; cv=none; b=VZZbnwVeJqY2xTVG7s54UcVp01XCUVr3vCWzqjE/+fqxQH2dooavGu4avxoCUiwNEP5SYufByzTmpGTUYIm57YhfxCRNLB5s5yV8awax/peShTzmq+Pv3BwjlaqM0xgF7r2hDdsTRuJBLXJHuNif9CRhdfbBk2RbayAMd575ct8=
+	t=1761656553; cv=none; b=m6xiqp1CEybs4a/4VBT10VrCOWBRyIVsVjnOtYjvbmyrf0h5l4DGaEWWFSkUctUhNxF+zHoefuDfTT2HjreLAwx5RLPrhtQ76q7eJbyvGIeUXIuN0QTxuKR5Jm0+JllwC14bEfzO87LIfq0QgNXF8+Kkvv0Y5SjSfIyl8wbK70w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761652437; c=relaxed/simple;
-	bh=fXciL9iAbpGR6MKXzs+4d4rQPN9O/stPm84VqkWZjWY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tu1ITbOtEQpxiSzusbsidsrlY1Y5z3dAObbzpmge+66dsFLpNuFEMCjd9cuqiabgaZva58deUGFltBmtq109awsz2aTZey5lAySwCDHi7dBPz2j6C0u7jIw3hMZRLhoq1xvCXjVv2t8HONQb48aIxHSA1txhSpMdUfHlWG2I42s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qUQsdYLu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 445CEC4CEFD;
-	Tue, 28 Oct 2025 11:53:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761652436;
-	bh=fXciL9iAbpGR6MKXzs+4d4rQPN9O/stPm84VqkWZjWY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qUQsdYLu8bddtS4iP4So2jDOaFInw/RYrDHPCTH8Vc1yJ2G0dvymnL5B7oGZ2IABI
-	 m7qu88vSwm5ZqD8UvvMlE32R1R5/QGDD/d89AlC5/0ZR028Z5JrkEXJtm1M75jrHrO
-	 ODgM3EV+5CMxdrCsTgfqiNVxNwXhsS6yHJvD9m/eagc5maSE6yY4UuzxMsnsl54SXo
-	 ed9gwWsp7Kn0SXPVU9UwaCCYqxK3t8Ix8WB2XFP1TWGtP3XEQy71Crri4AmcswzSME
-	 DuzecLPQAeOycoX6a9PMVxUjNizC71BbBN0fKJ9FG4EcZuoyFCNysPSZztaV94/z9c
-	 X4EoNn3NYqS3w==
-Date: Tue, 28 Oct 2025 11:53:48 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Liam Girdwood <lgirdwood@gmail.com>,
-	Bard Liao <yung-chuan.liao@linux.intel.com>,
-	Shuming Fan <shumingf@realtek.com>,
-	Richard Fitzgerald <rf@opensource.cirrus.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the sound-asoc-fixes
- tree
-Message-ID: <731ec83a-1dd8-467e-88db-84d6ce313c72@sirena.org.uk>
-References: <20251024101931.49f46027@canb.auug.org.au>
- <86578286-39f7-4d08-a41b-cd7e15f1bfaa@sirena.org.uk>
- <20251024120920.23f707f5@canb.auug.org.au>
- <20251028093411.605431d0@canb.auug.org.au>
- <20251028093725.6e065eeb@canb.auug.org.au>
+	s=arc-20240116; t=1761656553; c=relaxed/simple;
+	bh=y/xOa8Xh8jFmE2shEhUgqxjsZ8meX9xHnR17we9AuXc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=grkc0hVVMOfKz0s98RoJSGETyONDQc75ImdjEtihGRbJsUth/29wYX7YRjg9cEPS9meds8MNcwMY0utn0sOZ00i7sJOjjpXpbaAJyPNh9vFxuCTh/9h7fP21KX2jfItDZ1uP1twDb+h//Cz442exLW87RDhYwsPFzE0m/5pGTKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BdygRNTl; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59S41AJ5019381;
+	Tue, 28 Oct 2025 13:01:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=+oHSK3Wn0f9C36Iap
+	LRaRQi98NQen+5vx+thDJ3dB1o=; b=BdygRNTld3droNAcxcRkNVzezz3YSaotl
+	tc101bYpC35KLz6GGndl9JWrswb8t4WJzj8B9y2F+e0QRWLJeWURs11TOcnk9h38
+	P4Y7fu+VVZ1c6Ib1Cr/lp65nKsF9kdnPZgxHRYHgUZ5cxLvi/IhfUAfNSCDboSHP
+	XU+R0hN+Gl7v9VXxotnRjWhEVVWaJCbpNCuyvq+8EM9pA27Er4HYaZgTRk8mY3HF
+	XhTY6BryWOchXHZkVnCuU7dtvVx7qupv8KfWbeEaegyVZq+I5LT40ZAuPAp/HBUf
+	4lmjLxJGUnWCZjS63Le7i4IOvcnn+WPb7N4fejg4eGj8QxKObnHmg==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a0mys3vwn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Oct 2025 13:01:59 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 59SD1w1A002820;
+	Tue, 28 Oct 2025 13:01:58 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4a0mys3vwh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Oct 2025 13:01:58 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 59SBii72022886;
+	Tue, 28 Oct 2025 13:01:57 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4a198xjust-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Oct 2025 13:01:57 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 59SD1pYn59769092
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Oct 2025 13:01:51 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BE2F420043;
+	Tue, 28 Oct 2025 13:01:51 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0898820040;
+	Tue, 28 Oct 2025 13:01:51 +0000 (GMT)
+Received: from p-imbrenda.boeblingen.de.ibm.com (unknown [9.155.209.42])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 28 Oct 2025 13:01:50 +0000 (GMT)
+From: Claudio Imbrenda <imbrenda@linux.ibm.com>
+To: akpm@linux-foundation.org
+Cc: balbirs@nvidia.com, borntraeger@de.ibm.com, david@redhat.com,
+        Liam.Howlett@oracle.com, airlied@gmail.com, apopple@nvidia.com,
+        baohua@kernel.org, baolin.wang@linux.alibaba.com, byungchul@sk.com,
+        dakr@kernel.org, dev.jain@arm.com, dri-devel@lists.freedesktop.org,
+        francois.dugast@intel.com, gourry@gourry.net, joshua.hahnjy@gmail.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        lorenzo.stoakes@oracle.com, lyude@redhat.com, matthew.brost@intel.com,
+        mpenttil@redhat.com, npache@redhat.com, osalvador@suse.de,
+        rakie.kim@sk.com, rcampbell@nvidia.com, ryan.roberts@arm.com,
+        simona@ffwll.ch, ying.huang@linux.alibaba.com, ziy@nvidia.com,
+        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-next@vger.kernel.org, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com
+Subject: [PATCH v1 0/1] KVM: s390: Fix missing present bit for gmap puds
+Date: Tue, 28 Oct 2025 14:01:49 +0100
+Message-ID: <20251028130150.57379-1-imbrenda@linux.ibm.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <d4a09cc8-84b2-42a8-bd03-7fa3adee4a99@linux.ibm.com>
+References: <d4a09cc8-84b2-42a8-bd03-7fa3adee4a99@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="NEjjOtWgl11Wa+dr"
-Content-Disposition: inline
-In-Reply-To: <20251028093725.6e065eeb@canb.auug.org.au>
-X-Cookie: I smell a wumpus.
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 1IWaxgKcCbAX9g5eiUEXUSG6dBW8TC1L
+X-Authority-Analysis: v=2.4 cv=ct2WUl4i c=1 sm=1 tr=0 ts=6900bec7 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=MufDUWcMhQhyWPk8zPQA:9
+ a=nl4s5V0KI7Kw-pW0DWrs:22 a=pHzHmUro8NiASowvMSCR:22 a=xoEH_sTeL_Rfw54TyV31:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDI1MDAxMCBTYWx0ZWRfX6Uvt5YQT4Rzu
+ Tqc2flA5F4AywAliJ9GXPbqvkkbBuJVPyZyvNiaY7+M/pj+XSET0R0dwD2xHsc/WXb13c/R1Cjn
+ Za5QtJZlG6ZTkuvrx43BGLO82Woudw/pHuSQXcaRwmg3Lw6YmJ7sjZu5i0MK7ctxfkxJQxK66mJ
+ iUydtgZhoO7Sehzgvtxrb+VHYtsVaadTSVdkAjgZhCQLbaYmjKzlt8/gcOrHOVpevOPP57IYzLv
+ 6mfnnQJISIym2RFVnBtG8szVTssvL9luBu3qa2k8x1JLhes6sA8bMrPqrgAWSPManWYziIlF/Fw
+ EzpQvpBrq58QOph5lnVIGQDcv/K9ufmZ2IfgUocUxknLybmR07ddRAZKMUmknhiqTzbK3UaP5f7
+ DrTdt7VhqVn6zRemDJJ7w1VsUWz37w==
+X-Proofpoint-GUID: 2WzbgKRyldG4biHvk5FucE2LQMmFKT8t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-28_04,2025-10-22_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 phishscore=0 lowpriorityscore=0 impostorscore=0 malwarescore=0
+ spamscore=0 adultscore=0 priorityscore=1501 clxscore=1015 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510250010
+
+This patch solves the issue uncovered by patch caf527048be8
+("mm/huge_memory: add device-private THP support to PMD operations"),
+which is at the moment in -next.
+
+@Andrew: do you think it's possible to squeeze this patch in -next
+_before_ the patches that introduce the issue? This will guarantee that
+the patch is merged first, and will not break bisections once merged.
 
 
---NEjjOtWgl11Wa+dr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Claudio Imbrenda (1):
+  KVM: s390: Fix missing present bit for gmap puds
 
-On Tue, Oct 28, 2025 at 09:37:25AM +1100, Stephen Rothwell wrote:
-> On Tue, 28 Oct 2025 09:34:11 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
+ arch/s390/mm/gmap.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> > I am still getting this failure.  I cannot find anything that would
-> > have interacted with this addition of name_prefix.  I can only
-> > speculate that maybe this file was not built in the past for an x86_64
-> > allmodconfig (i.e. some KCONFIG change) or an update to an include file
-> > has messed being committed.
+-- 
+2.51.0
 
-> Found it!  There is commit
-
->   ea9771390378 ("ASoC: soc_sdw_utils: add name_prefix to asoc_sdw_codec_i=
-nfo struct")
-
-> in the sound-asoc tree (which is not merged into linux-next until much
-> later).
-
-Yes, I know that.  What was bothering me was why it wasn't showing up in
-my build tests which normally include allmodconfig.  I just realised
-that I'm still suppressing those tests because mainline failed to build
-an allmodconfig due to:
-
-/build/stage/linux/drivers/dma/mmp_pdma.c:1188:14: error: shift count >=3D =
-width o
-f type [-Werror,-Wshift-count-overflow]
- 1188 |         .dma_mask =3D DMA_BIT_MASK(64),   /* force 64-bit DMA addr =
-capabil
-ity */
-      |                     ^~~~~~~~~~~~~~~~
-/build/stage/linux/include/linux/dma-mapping.h:93:54: note: expanded from m=
-acro=20
-'DMA_BIT_MASK'
-   93 | #define DMA_BIT_MASK(n) (((n) =3D=3D 64) ? ~0ULL : ((1ULL<<(n))-1))
-      |                                                      ^ ~~~
-
-and never gets far enough into the build to show anything else.  I think
-that subsequently got fixed in mainline but I didn't merge up yet.
-
---NEjjOtWgl11Wa+dr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkArssACgkQJNaLcl1U
-h9CwYQf/V6lwE6f0Bli99xLkXXhDyHrPpLlxq+YyD+Z6TzSWnWw/9iYn95yeyu73
-wk/ClmGOUMepgS8E14c/c73m+Oil5FBAFZy2J6TOEkQs1yme4OPsL4A2G/kbQ7Yk
-g2U8EgChfjk0nt3bRPpPgNDOpvev7aX0/RJQ00gGGFALb30zmI1rPOKuJ0ydlkIC
-PgorJN1wej4UwpvNoqtXxuXHQb1QxPgGagSNAH/MRkxwqFS5Wx3y4qhxRCUX90XX
-JUi+pZrZiKF9/kV1Ec78MPFoK5WoLUTNr7DpO+V0KD8bNOv//3FQfvVHj7J5vufZ
-7lCDCgIxHN+5QR4W/kAY1oKUBKXN5g==
-=FJU1
------END PGP SIGNATURE-----
-
---NEjjOtWgl11Wa+dr--
 

@@ -1,104 +1,137 @@
-Return-Path: <linux-next+bounces-8728-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8729-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAA2FC127F2
-	for <lists+linux-next@lfdr.de>; Tue, 28 Oct 2025 02:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C903C12973
+	for <lists+linux-next@lfdr.de>; Tue, 28 Oct 2025 02:52:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1FCDD501A1E
-	for <lists+linux-next@lfdr.de>; Tue, 28 Oct 2025 01:11:01 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2C13F500630
+	for <lists+linux-next@lfdr.de>; Tue, 28 Oct 2025 01:51:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 455621EC01B;
-	Tue, 28 Oct 2025 01:10:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E40EB257841;
+	Tue, 28 Oct 2025 01:51:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rjLBw+iW"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="We9MTdBx"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DAD51DEFE8;
-	Tue, 28 Oct 2025 01:10:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D9316F288;
+	Tue, 28 Oct 2025 01:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761613845; cv=none; b=EF42w/P5pvxwrcUsc+aV89+DMwuHPTmoX+SXwganjkxKdkUzSWBEWYHP/qpGBveIPhdgyB1QEL6sqXDxaOGjzK9sn7WfKuU1VzI+vV94rb1+zXE9KlEdsk0GVShvk5rJAgc7jbeRxBr+xCjKLBZ9TtTbz+61zguETGM8uBoHdC4=
+	t=1761616310; cv=none; b=RIpKbLLyA3bgJkT0lGOqkOKR+YN0PiyOkpAjeCUKYJVdiJ/+LhAiXVllSVPpCjUps2yYG8h4oZU2Bk8fdvUm5ZYs+Nzz2TSTjSpNArJ6Hc/0bu6NiobO5qqW+u2JrBvj5QDxOy4X3OK5UtoV7V0glsJJ4E7CiagA4jj5Wy6OgDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761613845; c=relaxed/simple;
-	bh=h8m0uzzs5hXDsRMcDozsw8gCj9kOMe+SLj90Tna4wVk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FMSrzkn+5S1O1meCw7bFBZozdlhRXJzQZyNUaaP4JmTR5YnjBVqxkwj3AeWwtcGdl0Sj462nQ6WnsEVVRIGNHWpx76z+P7n26Tn4YuwMJVyDXm3wqDhCL5S+XaN2sc//hq94vmJYXdrvSt5a0h91+zpeO3nmCLXyChwIj3Kh4kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rjLBw+iW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B10AC4CEF1;
-	Tue, 28 Oct 2025 01:10:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761613844;
-	bh=h8m0uzzs5hXDsRMcDozsw8gCj9kOMe+SLj90Tna4wVk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rjLBw+iWUre3p+EK5G70MUTkoP1SG8fKH0+bFhu8XPbhKkd6puZMMlhop54LLAwPS
-	 aS46bzmLzWjaB/GdD1+CnOJ90LWut/UNzvOpC0s3K307De0cnoYqcILf4PFZWYA8We
-	 7CK27gmLo1huDk7ZhHy+Ii/5tHb3lSg/lczPqqCRmLfSUw/LBovWTWK52JNANsGsR6
-	 UBvhcp95lvbmJDgTuwhWDLw0/l8gE1qKfrkO6I0t6JdaEmxe1mFC4VAhcNl5AZ76ys
-	 NlxdVYI4QgB+j0xtYKuX4wXBV4NbtWh86LAYt+SwnQr7xMkECe0dVk/Un65VyoMjyg
-	 HPF7bicx5cMyQ==
-Date: Mon, 27 Oct 2025 15:10:43 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Emil Tsalapatis (Meta)" <emil@etsalapatis.com>,
-	Emil Tsalapatis <etsal@meta.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the tip tree with Linus' tree
-Message-ID: <aQAYE_X9XJ9RgJb3@slm.duckdns.org>
-References: <20251028112205.47129816@canb.auug.org.au>
+	s=arc-20240116; t=1761616310; c=relaxed/simple;
+	bh=Hdcmonauq1UQrJeJkRK9OcxLmaBkB1a8SCYWp4aotd0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bCFaFr91ojN4eBoFPCSocl6VINskunQKjoMOwnv9MTsMTEkN5fCt+XSIjrYXMicvwhx7CcyhTR4J9Y6+gzf4U0fRUIT9DyDYDKx/+jfvEDNfFIfIYINaJudFHa7MO09kkNUO1JtZ5D1khvaan/46NVN8RZhmJXXJ9ARfDHVIaJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=We9MTdBx; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1761616304;
+	bh=EXGkxCzISUK4Z047COz0deGKs8c/Xj/XbyOZARODuKw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=We9MTdBxZdvuRdZ6awYl7BCBwKPIhyBYOzNfhMVrKh/3vesmzUl1KRoNJMcP79iOC
+	 DctAtL/BTGOpOhzYczqtdpZJzmzaQ20wR91y7YJ3V5hu5bFr3Vtx7lQFPeUFvvKgQv
+	 o0oxgh8QZymNac93raMxeXVFUYy3JEFJ7ICEA942ktdu8KV3vZtMxAfM8GpHd8oLGH
+	 VRGDTnGDe6K+ereaG8nn8/8IP5b9L+WfjFZrplsM/LvKhQFhkmk+Y18jc7Exmdo1R/
+	 tiQqyYhlbLdZ1C49k47N/GXLhPNcStSgEnjvoelhLEilatlQr/GuplCdQZpCseht1U
+	 h3xohRq9gKXUw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cwYJb2FBfz4w9w;
+	Tue, 28 Oct 2025 12:51:43 +1100 (AEDT)
+Date: Tue, 28 Oct 2025 12:51:42 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <ukleinek@kernel.org>
+Cc: "Danilo Krummrich" <dakr@kernel.org>, "Michal Wilczynski"
+ <m.wilczynski@samsung.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Daniel
+ Almeida" <daniel.almeida@collabora.com>, "Peter Colberg"
+ <pcolberg@redhat.com>, "Lyude Paul" <lyude@redhat.com>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Linux Kernel Mailing List"
+ <linux-kernel@vger.kernel.org>, "Linux Next Mailing List"
+ <linux-next@vger.kernel.org>, "Alice Ryhl" <aliceryhl@google.com>, "Viresh
+ Kumar" <viresh.kumar@linaro.org>, "Alexandre Courbot"
+ <acourbot@nvidia.com>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Subject: Re: linux-next: build failure after merge of the pwm tree
+Message-ID: <20251028125142.01a32039@canb.auug.org.au>
+In-Reply-To: <DDT05KLECH04.37PKIHQQ4K3MX@kernel.org>
+References: <20251027125148.7f7d8ed6@canb.auug.org.au>
+	<22fl35khmbf6ufyjzbfvxor7b6nohqakqovjoya3v4mmlenz5c@6wbdednrd2pb>
+	<DDT05KLECH04.37PKIHQQ4K3MX@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251028112205.47129816@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/+pX0/Gm5.DwGVWB9ZmDNeDR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Tue, Oct 28, 2025 at 11:22:05AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the tip tree got a conflict in:
-> 
->   kernel/sched/ext.c
-> 
-> between commit:
-> 
->   a8ad873113d3 ("sched_ext: defer queue_balance_callback() until after ops.dispatch")
-> 
-> from Linus' tree and commit:
-> 
->   4c95380701f5 ("sched/ext: Fold balance_scx() into pick_task_scx()")
-> 
-> from the tip tree.
-> 
-> I fixed it up (see below - but I was not sure if the
-> "maybe_queue_balance_callback(rq);" is positioned correctly) and can
-> carry the fix as necessary. This is now fixed as far as linux-next is
-> concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+--Sig_/+pX0/Gm5.DwGVWB9ZmDNeDR
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-I resolved this in sched_ext/for-6.19 by pulling for-6.18-fixes but yeah the
-conflict is through tip/sched/core. I think your resolution is correct and
-matches sched_ext/for-6.19 (sans whitespaces).
+Hi all,
 
-I don't know how tip tree resolves these conflicts but either way - leaving
-it as-is until the merge window, or pulling master and resolving in tip - is
-fine from sched_ext POV. I can sync with tip/sched/core as necessary.
+On Mon, 27 Oct 2025 10:38:05 +0100 "Danilo Krummrich" <dakr@kernel.org> wro=
+te:
+>
+> On Mon Oct 27, 2025 at 9:11 AM CET, Uwe Kleine-K=C3=B6nig wrote:
+> > Translating the changes that commit does to
+> > drivers/gpu/drm/nova/driver.rs for drivers/pwm/pwm_th1520.rs results in:
+> >
+> > diff --git a/drivers/pwm/pwm_th1520.rs b/drivers/pwm/pwm_th1520.rs
+> > index 0ad38b78be85..dd554574adc8 100644
+> > --- a/drivers/pwm/pwm_th1520.rs
+> > +++ b/drivers/pwm/pwm_th1520.rs
+> > @@ -328,7 +328,7 @@ impl platform::Driver for Th1520PwmPlatformDriver {
+> >      fn probe(
+> >          pdev: &platform::Device<Core>,
+> >          _id_info: Option<&Self::IdInfo>,
+> > -    ) -> Result<Pin<KBox<Self>>> {
+> > +    ) -> impl PinInit<Self, Error> {
+> >          let dev =3D pdev.as_ref();
+> >          let request =3D pdev.io_request_by_index(0).ok_or(ENODEV)?;
+> > =20
+> > @@ -365,7 +365,7 @@ fn probe(
+> > =20
+> >          pwm::Registration::register(dev, chip)?;
+> > =20
+> > -        Ok(KBox::new(Th1520PwmPlatformDriver, GFP_KERNEL)?.into())
+> > +        Ok(Th1520PwmPlatformDriver)
+> >      }
+> >  } =20
+>=20
+> Yes, this looks good.
 
-Thanks.
+OK, I have applied that to linux-next from today.
 
--- 
-tejun
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+pX0/Gm5.DwGVWB9ZmDNeDR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkAIa4ACgkQAVBC80lX
+0GxCMQf+IA4Zj3fPiMiNAgnJm37uJDx86hP1sd4KBBGjStgXzYVi3pPg5NtME88D
+o/nAfgLWxMccgt21iw33eZontRCj5VJVx8v72PLG3vWtVairSRPX8yOrwGXZtLVV
+sGs1ZRP5CFFBOfdZOCh3PoA8p3OGV67FiLJlgN/G5t+ephZHDnyC7aqmA2lNTKKU
+WmUnmBVk5YJsukFzVrPGVbKzBSLYjFbO/CE/DAdR8ct6ixjdN2jAjahcNrcd8phv
+ku+k4awhkzHPp8S8spMGqzZ5WqQbfimtqzcKVeTFWIlfXGqBDxpMe4/Ckr8H1eOm
+JjwtsCkvOfMsB73fnEXxgLy3Kt+6Yg==
+=Lm9L
+-----END PGP SIGNATURE-----
+
+--Sig_/+pX0/Gm5.DwGVWB9ZmDNeDR--
 

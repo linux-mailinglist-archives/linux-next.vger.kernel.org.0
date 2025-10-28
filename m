@@ -1,109 +1,134 @@
-Return-Path: <linux-next+bounces-8742-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8743-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50609C13F29
-	for <lists+linux-next@lfdr.de>; Tue, 28 Oct 2025 10:56:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E416DC147A7
+	for <lists+linux-next@lfdr.de>; Tue, 28 Oct 2025 12:56:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71FBC463E2D
-	for <lists+linux-next@lfdr.de>; Tue, 28 Oct 2025 09:52:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2AE51984FE9
+	for <lists+linux-next@lfdr.de>; Tue, 28 Oct 2025 11:54:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 397302F25EB;
-	Tue, 28 Oct 2025 09:52:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1099F30F806;
+	Tue, 28 Oct 2025 11:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="L1DVlw5E"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qUQsdYLu"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1882D877B
-	for <linux-next@vger.kernel.org>; Tue, 28 Oct 2025 09:52:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA22A2E06ED;
+	Tue, 28 Oct 2025 11:53:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761645151; cv=none; b=LDrjvmXQNMBfMhBdIN4wIWZ+Dq8DGa06Uqt+dzYQ3KaAVGfx68WpZJFVwuI5YsT4Utl1/QuPGTOWhIrRKkXdWENFXcrhoynMxPd7S59u+E4OcNVhrAKW+kiK7N+P7lRZWGykR4SQt8baYs4JEcA05PHlhroy21M+rjRYhdWC/p4=
+	t=1761652437; cv=none; b=VZZbnwVeJqY2xTVG7s54UcVp01XCUVr3vCWzqjE/+fqxQH2dooavGu4avxoCUiwNEP5SYufByzTmpGTUYIm57YhfxCRNLB5s5yV8awax/peShTzmq+Pv3BwjlaqM0xgF7r2hDdsTRuJBLXJHuNif9CRhdfbBk2RbayAMd575ct8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761645151; c=relaxed/simple;
-	bh=CTCRbXjK1xSjiiNC3T8U4qCRVUyZeqG1PI/yXheWtMA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=aU1bnox9iAAa2vqrO74xiL+8/yxOajd0+0rqUyh8ZlQZevLGLhr+D3ftVkKQ3XSOo7Q/xrCUI195M0WT1Pq7vUW/Ed3ES4IRrv2qenC5XfBc97X9pV8lU9tnAwVnCtmQoiSR/24KYBr7+x+MrndUFL0ByJlRFy2BPBEbjs4KuSg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=L1DVlw5E; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20251028095220euoutp023ba037ac0e2a09e7da0cf895b8912641~ynuwQNYCB2058620586euoutp02A
-	for <linux-next@vger.kernel.org>; Tue, 28 Oct 2025 09:52:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20251028095220euoutp023ba037ac0e2a09e7da0cf895b8912641~ynuwQNYCB2058620586euoutp02A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1761645141;
-	bh=5DRRsPiWfCTULqTag5q8vJYQP8UI8UuEIkFTOc7lJ8A=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=L1DVlw5EPZn0MwvD7thqUUvjfJHTkiCm+rLl+4Xd7IyCofp9wJOf85YkvNjYs495A
-	 dm3wuuCTuBdmu9NzwUqTPUP+ixumNsjvN8X8+rmuiwzVI6tRmCsJ50pM/OYYcKYR7M
-	 ycRq5862aio7vH71UsRfar/cnTlj+PuQ7cUOf9Sw=
-Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20251028095220eucas1p2f8973d1aa76637cf907eff2dce7fa9a4~ynuwCr6O00826208262eucas1p2c;
-	Tue, 28 Oct 2025 09:52:20 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20251028095220eusmtip275cfb7e2c20ddad1f8de11636653766d~ynuv0BYCh1470214702eusmtip2j;
-	Tue, 28 Oct 2025 09:52:20 +0000 (GMT)
-Message-ID: <5748e9f5-b560-467b-a50d-5590b9acbaf1@samsung.com>
-Date: Tue, 28 Oct 2025 10:52:20 +0100
+	s=arc-20240116; t=1761652437; c=relaxed/simple;
+	bh=fXciL9iAbpGR6MKXzs+4d4rQPN9O/stPm84VqkWZjWY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tu1ITbOtEQpxiSzusbsidsrlY1Y5z3dAObbzpmge+66dsFLpNuFEMCjd9cuqiabgaZva58deUGFltBmtq109awsz2aTZey5lAySwCDHi7dBPz2j6C0u7jIw3hMZRLhoq1xvCXjVv2t8HONQb48aIxHSA1txhSpMdUfHlWG2I42s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qUQsdYLu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 445CEC4CEFD;
+	Tue, 28 Oct 2025 11:53:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761652436;
+	bh=fXciL9iAbpGR6MKXzs+4d4rQPN9O/stPm84VqkWZjWY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qUQsdYLu8bddtS4iP4So2jDOaFInw/RYrDHPCTH8Vc1yJ2G0dvymnL5B7oGZ2IABI
+	 m7qu88vSwm5ZqD8UvvMlE32R1R5/QGDD/d89AlC5/0ZR028Z5JrkEXJtm1M75jrHrO
+	 ODgM3EV+5CMxdrCsTgfqiNVxNwXhsS6yHJvD9m/eagc5maSE6yY4UuzxMsnsl54SXo
+	 ed9gwWsp7Kn0SXPVU9UwaCCYqxK3t8Ix8WB2XFP1TWGtP3XEQy71Crri4AmcswzSME
+	 DuzecLPQAeOycoX6a9PMVxUjNizC71BbBN0fKJ9FG4EcZuoyFCNysPSZztaV94/z9c
+	 X4EoNn3NYqS3w==
+Date: Tue, 28 Oct 2025 11:53:48 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Liam Girdwood <lgirdwood@gmail.com>,
+	Bard Liao <yung-chuan.liao@linux.intel.com>,
+	Shuming Fan <shumingf@realtek.com>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the sound-asoc-fixes
+ tree
+Message-ID: <731ec83a-1dd8-467e-88db-84d6ce313c72@sirena.org.uk>
+References: <20251024101931.49f46027@canb.auug.org.au>
+ <86578286-39f7-4d08-a41b-cd7e15f1bfaa@sirena.org.uk>
+ <20251024120920.23f707f5@canb.auug.org.au>
+ <20251028093411.605431d0@canb.auug.org.au>
+ <20251028093725.6e065eeb@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build warnings after merge of the pwm tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
-	=?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
-	Mailing List <linux-next@vger.kernel.org>
-Content-Language: en-US
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <20251028133924.30a058af@canb.auug.org.au>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20251028095220eucas1p2f8973d1aa76637cf907eff2dce7fa9a4
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20251028023933eucas1p1ea7f8b51a5da190b593635cea7e72982
-X-EPHeader: CA
-X-CMS-RootMailID: 20251028023933eucas1p1ea7f8b51a5da190b593635cea7e72982
-References: <CGME20251028023933eucas1p1ea7f8b51a5da190b593635cea7e72982@eucas1p1.samsung.com>
-	<20251028133924.30a058af@canb.auug.org.au>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="NEjjOtWgl11Wa+dr"
+Content-Disposition: inline
+In-Reply-To: <20251028093725.6e065eeb@canb.auug.org.au>
+X-Cookie: I smell a wumpus.
 
 
+--NEjjOtWgl11Wa+dr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 10/28/25 03:39, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the pwm tree, today's linux-next build (x86_64 allmodconfig)
-> produced these warnings:
-> 
-> WARNING: modpost: module pwm_th1520 uses symbol pwmchip_release from namespace PWM, but does not import it.
-> WARNING: modpost: module pwm_th1520 uses symbol __pwmchip_add from namespace PWM, but does not import it.
-> WARNING: modpost: module pwm_th1520 uses symbol pwmchip_alloc from namespace PWM, but does not import it.
-> WARNING: modpost: module pwm_th1520 uses symbol pwmchip_remove from namespace PWM, but does not import it.
+On Tue, Oct 28, 2025 at 09:37:25AM +1100, Stephen Rothwell wrote:
+> On Tue, 28 Oct 2025 09:34:11 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
 
-Hi, Thank you for the report. Interestingly this seems to be the first
-Rust driver that needs to write 'import_ns' in the .modpost section. For
-C drivers the macro MODULE_IMPORT_NS("PWM") was simply included with
-pwm.h. I think the module! macro needs to be extended to support
-import_ns in rust/macros/module.rs. I think I know how to do it code
-wise, will post a patch.
+> > I am still getting this failure.  I cannot find anything that would
+> > have interacted with this addition of name_prefix.  I can only
+> > speculate that maybe this file was not built in the past for an x86_64
+> > allmodconfig (i.e. some KCONFIG change) or an update to an include file
+> > has messed being committed.
 
-> 
-> Presumably introduced by commit
-> 
->   fb3957af9ec6 ("pwm: Add Rust driver for T-HEAD TH1520 SoC")
-> 
+> Found it!  There is commit
 
-Best regards,
--- 
-Michal Wilczynski <m.wilczynski@samsung.com>
+>   ea9771390378 ("ASoC: soc_sdw_utils: add name_prefix to asoc_sdw_codec_i=
+nfo struct")
+
+> in the sound-asoc tree (which is not merged into linux-next until much
+> later).
+
+Yes, I know that.  What was bothering me was why it wasn't showing up in
+my build tests which normally include allmodconfig.  I just realised
+that I'm still suppressing those tests because mainline failed to build
+an allmodconfig due to:
+
+/build/stage/linux/drivers/dma/mmp_pdma.c:1188:14: error: shift count >=3D =
+width o
+f type [-Werror,-Wshift-count-overflow]
+ 1188 |         .dma_mask =3D DMA_BIT_MASK(64),   /* force 64-bit DMA addr =
+capabil
+ity */
+      |                     ^~~~~~~~~~~~~~~~
+/build/stage/linux/include/linux/dma-mapping.h:93:54: note: expanded from m=
+acro=20
+'DMA_BIT_MASK'
+   93 | #define DMA_BIT_MASK(n) (((n) =3D=3D 64) ? ~0ULL : ((1ULL<<(n))-1))
+      |                                                      ^ ~~~
+
+and never gets far enough into the build to show anything else.  I think
+that subsequently got fixed in mainline but I didn't merge up yet.
+
+--NEjjOtWgl11Wa+dr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkArssACgkQJNaLcl1U
+h9CwYQf/V6lwE6f0Bli99xLkXXhDyHrPpLlxq+YyD+Z6TzSWnWw/9iYn95yeyu73
+wk/ClmGOUMepgS8E14c/c73m+Oil5FBAFZy2J6TOEkQs1yme4OPsL4A2G/kbQ7Yk
+g2U8EgChfjk0nt3bRPpPgNDOpvev7aX0/RJQ00gGGFALb30zmI1rPOKuJ0ydlkIC
+PgorJN1wej4UwpvNoqtXxuXHQb1QxPgGagSNAH/MRkxwqFS5Wx3y4qhxRCUX90XX
+JUi+pZrZiKF9/kV1Ec78MPFoK5WoLUTNr7DpO+V0KD8bNOv//3FQfvVHj7J5vufZ
+7lCDCgIxHN+5QR4W/kAY1oKUBKXN5g==
+=FJU1
+-----END PGP SIGNATURE-----
+
+--NEjjOtWgl11Wa+dr--
 

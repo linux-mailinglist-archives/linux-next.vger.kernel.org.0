@@ -1,89 +1,92 @@
-Return-Path: <linux-next+bounces-8756-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8757-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39EDFC1DE71
-	for <lists+linux-next@lfdr.de>; Thu, 30 Oct 2025 01:26:23 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AA6AC1DE9E
+	for <lists+linux-next@lfdr.de>; Thu, 30 Oct 2025 01:30:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D78D189C86E
-	for <lists+linux-next@lfdr.de>; Thu, 30 Oct 2025 00:26:47 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id ECA784E4F1C
+	for <lists+linux-next@lfdr.de>; Thu, 30 Oct 2025 00:30:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E25521D88D7;
-	Thu, 30 Oct 2025 00:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAC981D5ABF;
+	Thu, 30 Oct 2025 00:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UZotQNYa"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="IdLEkiY0"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FE63A1C9;
-	Thu, 30 Oct 2025 00:26:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FBCB1BC5C;
+	Thu, 30 Oct 2025 00:30:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761783978; cv=none; b=jan0rIXdmQ6C8d2zvYNxYI3bBhR1AyfoDpuCBEZ2k6cXmn4tXUuGFD1iuzR6atJdAoiswbTD35KmKA/UzKcSuJJqtCDAUjOew7gNI2XeSlaesRYUCq8GIjxoE/lo07jD9QUkJgV4Moq6/vAmqBpOaIlSJKanpr8dlH7+Q4y3wEM=
+	t=1761784242; cv=none; b=u9DbtVaaneTt4pG6BkGe0oRdN/cllTXUFYdZFJU1m+59BCgAcxZ276i1tqTkLVSbODYGoXZp1xa9T9iLkn6g0K3LQSkcnlM6i9qCyznkSjP0q3fGRZ72DY0kdA8nB4A8aT2p0I2+M16MQIiXnCU8kSWExGGvL90PiO9HCoDzlss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761783978; c=relaxed/simple;
-	bh=7swxkkw+LgMHXDEOspWaG7Lnx1L+MbKswDgzVFO82L0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=juGilaoiVIQGBvhXDeaPJViaDW/AeELqiBTwIOMwkBobXHcie+NQyj7Me4B7c2Ntr5mULlSPoljBV2ti24CpUfIAZ1W37ZKzT508Dl1iBoB9iBuBQoZ6aPnopZIhVOaVSKp9WQvhF1CJGYdI8QFM+ClTSXVSqgO6QNFywXKn7Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=UZotQNYa; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1761784242; c=relaxed/simple;
+	bh=Txnr89VXikYYaxDOzCqXxJN03Ls2E4x46dgPoc9oWf0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=PaZyxXu1JibiZl91fMrYsZgd+8offq9Md5dQUPJmaNPJeFT2fxIRjzt/vgoDh+K2GoTgF8JmuaVsYDvcR5t+6/J5sXf2FsfMsMELlKxko3yDV0u++UWtvVV+fIZ9GAVJZrAXrHEJZzYIMB1T2kUtMmL78kQqsRg+vEx+HoIT69c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=IdLEkiY0; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1761783972;
-	bh=NhXeb7cf9lLfqVSw45QhwL8FWQK2bBZFACFxWRrK7ag=;
+	s=202503; t=1761784238;
+	bh=2WeXajEOg+HIBucEauDzL6tvQXFBWPQg9mkWjCQUjfc=;
 	h=Date:From:To:Cc:Subject:From;
-	b=UZotQNYaHrgK6VxrP+3sZvqVdtHv4t/DacZ/AEZQjg/kW9nVenwM5tU64NNxbmLtW
-	 52hJI8/qcwAARuqr8Ute2fTM3kZWctp7NfqYIth+kFV19YgY9uz/PABLbF+a9ZEVtH
-	 cWOrsJ7gsqszdAfz4uZ8A+dkjLOPr2ljARem0Ub1IrbkKKljZoFNxijXoQPg7AqMhr
-	 mwI31kU7t7YKi6aDrIHOCKeAs5vNN5wyaho6+FwOWxaIPVkCVnNkTvEPCSnfbmDe60
-	 bMeNZnR8hCFc+rc4iB3b/Qgg3HM1TYpFsI94dKTIoN4jAEnnr497OwWCDclGO8FQVV
-	 7ytKRe3cWDxEQ==
+	b=IdLEkiY0cjzKQKrEi8Cm6UIa8sWDg4YBXsZj0sdfWjkh5JFcJSlr4XQgVzKOYl1vz
+	 NQWoI6PY9bvUyFWi1W6ph5bwQfCmyLMmx5gHM8X0ZZEqkjxrpM9iZ3MFkrxHjQhg2o
+	 +pZf8gMplWZqgA5LpEDdDePLvW6vsq1QBJPLLCPcrdWlJdRqzOwWBT640S/FOoPOh7
+	 19XkUVuCkWm/TJ6H8k4Tvg/tl34liT2kUkXT9NCpXvJLBRi6gJRjQznHLuwYKLyyCi
+	 HoH7BUaqt0PUx1+rNgzqS90g/IDP0VQhp1QfxNqly8QXjoHunWbzkOK87kj5RBTjJh
+	 1k3VfU3/RD/uA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cxlJy630Sz4wM9;
-	Thu, 30 Oct 2025 11:26:10 +1100 (AEDT)
-Date: Thu, 30 Oct 2025 11:26:10 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4cxlQ600vPz4wMB;
+	Thu, 30 Oct 2025 11:30:37 +1100 (AEDT)
+Date: Thu, 30 Oct 2025 11:30:37 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Bjorn Helgaas <bhelgaas@google.com>, Lorenzo Pieralisi
- <lpieralisi@kernel.org>, Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?=
- <kwilczynski@kernel.org>
-Cc: Ilpo =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: linux-next: manual merge of the pci tree with Linus' tree
-Message-ID: <20251030112610.63b1185d@canb.auug.org.au>
+To: Kalle Valo <kvalo@kernel.org>, Jeff Johnson <jjohnson@kernel.org>
+Cc: Aditya Kumar Singh <aditya.kumar.singh@oss.qualcomm.com>, Jeff Johnson
+ <jeff.johnson@oss.qualcomm.com>, Ath10k List <ath10k@lists.infradead.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Maharaja Kennadyrajan
+ <maharaja.kennadyrajan@oss.qualcomm.com>, Miaoqing Pan
+ <miaoqing.pan@oss.qualcomm.com>
+Subject: linux-next: manual merge of the ath-next tree with the ath tree
+Message-ID: <20251030113037.1932c6d2@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7+sOFzGHIfdJ9nc1HW3HdLH";
+Content-Type: multipart/signed; boundary="Sig_/6.h=RHeyuNtqfndL6hyggW3";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/7+sOFzGHIfdJ9nc1HW3HdLH
+--Sig_/6.h=RHeyuNtqfndL6hyggW3
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the pci tree got a conflict in:
+Today's linux-next merge of the ath-next tree got a conflict in:
 
-  drivers/gpu/drm/xe/xe_vram.c
+  drivers/net/wireless/ath/ath12k/mac.c
 
 between commit:
 
-  d30203739be7 ("drm/xe: Move rebar to be done earlier")
+  9222582ec524 ("Revert "wifi: ath12k: Fix missing station power save confi=
+guration"")
 
-from Linus' tree and commit:
+from the ath tree and commit:
 
-  4f963693c60b ("drm/xe/vram: Use PCI rebar helpers in resize_vram_bar()")
+  6917e268c433 ("wifi: ath12k: Defer vdev bring-up until CSA finalize to av=
+oid stale beacon")
 
-from the pci tree.
+from the ath-next tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -96,61 +99,35 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/xe/xe_vram.c
-index 652df7a5f4f6,f18232668810..000000000000
---- a/drivers/gpu/drm/xe/xe_vram.c
-+++ b/drivers/gpu/drm/xe/xe_vram.c
-@@@ -24,31 -24,8 +24,29 @@@
-  #include "xe_vram.h"
-  #include "xe_vram_types.h"
- =20
-- #define BAR_SIZE_SHIFT 20
--=20
- -static void
- -_resize_bar(struct xe_device *xe, int resno, resource_size_t size)
- +/*
- + * Release all the BARs that could influence/block LMEMBAR resizing, i.e.
- + * assigned IORESOURCE_MEM_64 BARs
- + */
- +static void release_bars(struct pci_dev *pdev)
- +{
- +	struct resource *res;
- +	int i;
- +
- +	pci_dev_for_each_resource(pdev, res, i) {
- +		/* Resource already un-assigned, do not reset it */
- +		if (!res->parent)
- +			continue;
- +
- +		/* No need to release unrelated BARs */
- +		if (!(res->flags & IORESOURCE_MEM_64))
- +			continue;
- +
- +		pci_release_resource(pdev, i);
- +	}
- +}
- +
- +static void resize_bar(struct xe_device *xe, int resno, resource_size_t s=
-ize)
+diff --cc drivers/net/wireless/ath/ath12k/mac.c
+index db351c922018,e79d457e3c03..000000000000
+--- a/drivers/net/wireless/ath/ath12k/mac.c
++++ b/drivers/net/wireless/ath/ath12k/mac.c
+@@@ -4209,7 -4286,7 +4267,8 @@@ static void ath12k_mac_bss_info_changed
   {
-  	struct pci_dev *pdev =3D to_pci_dev(xe->drm.dev);
-  	int bar_size =3D pci_rebar_bytes_to_size(size);
+  	struct ath12k_vif *ahvif =3D arvif->ahvif;
+  	struct ieee80211_vif *vif =3D ath12k_ahvif_to_vif(ahvif);
+ +	struct ieee80211_vif_cfg *vif_cfg =3D &vif->cfg;
++ 	struct ath12k_link_vif *tx_arvif;
+  	struct cfg80211_chan_def def;
+  	u32 param_id, param_value;
+  	enum nl80211_band band;
 
---Sig_/7+sOFzGHIfdJ9nc1HW3HdLH
+--Sig_/6.h=RHeyuNtqfndL6hyggW3
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkCsKIACgkQAVBC80lX
-0GzXSgf+JbA8rvneM/dy17pNphKi9zYbUxi7O0R2Q+UpdqI84Qga3C6B/3WB1za1
-+YGHwZQTGmltgdfrsBo1R+3GnFPquyDvNAx1AW8SvkxqVOzOFZ/icpSMDcu9L4d2
-N8iAjuBX91ivoyCqULbW8jWXkQ6TdYauCUiolXzSWgcTM8xyz9Fnzod0NlUpwZEv
-Cwi0S8YGPI6kI/NdnEQtv+/h1qqfEfnEs9vVnPflfRBKGK4plp94SxOKdySLYdW0
-tXIyPDgi1sEBjDPxGuoYzueSxsCL8Uza+Ko7E/qmIHZ5jWAb4j3USLJkahllSn+r
-3cGhsrgND5WJg7p64aJLr00ZtV6XqQ==
-=MsJw
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkCsa0ACgkQAVBC80lX
+0Gz9fwf9GUdRyyXnRqEaf8BfJNwgY3rYVLwA4zH6WV0jAKSwjaaptX2XRiSMKzJ7
+ZWW+MCDS03Xxbkex1H2Boja2rDNDq+tXAdsMQMPKj8pTYnAdc6xxWDuPsuL3J1Y8
+A1B/hLF24zy9HRWfpqNBXIKwrMF+jJ6Ff2iEnNJa2W+E5APVlNwo711gQbx9Opml
+oNAx3ciJiEWDukO26VUFa0EXd/gLYDOxRdacuNtr+UL+ieiAZ3gdM0teFAYLno7L
+lL6Uhc5MSdWxrkCUs9puwzdraY3c3jcDcMGum1UYetizLXQOhWJ6jbeCq9tZt//6
+uDTJ9xvdfYeBF677VqYti1q8SuzaUw==
+=3JsI
 -----END PGP SIGNATURE-----
 
---Sig_/7+sOFzGHIfdJ9nc1HW3HdLH--
+--Sig_/6.h=RHeyuNtqfndL6hyggW3--
 

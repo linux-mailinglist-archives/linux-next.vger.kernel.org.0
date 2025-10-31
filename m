@@ -1,436 +1,201 @@
-Return-Path: <linux-next+bounces-8777-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8778-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4438C254BD
-	for <lists+linux-next@lfdr.de>; Fri, 31 Oct 2025 14:44:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E3265C25559
+	for <lists+linux-next@lfdr.de>; Fri, 31 Oct 2025 14:47:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A398425CEC
-	for <lists+linux-next@lfdr.de>; Fri, 31 Oct 2025 13:42:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72A784622B7
+	for <lists+linux-next@lfdr.de>; Fri, 31 Oct 2025 13:47:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 813A722A4E5;
-	Fri, 31 Oct 2025 13:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCA6723BF83;
+	Fri, 31 Oct 2025 13:47:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N+10atIp"
+	dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b="ShO+uEFY"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E65190473;
-	Fri, 31 Oct 2025 13:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7968070814;
+	Fri, 31 Oct 2025 13:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761918172; cv=none; b=dx5m4Gh0FFnFh28TdokNehI1vHjl+58YDl2Di8pTDgl3ZKGNX40xAZy+oyNdGgGahGxIAFXbQxTYHeMljfdYYsGFgd3W1n+oF+yGhp8qmDap/9IAjKshrH5x1auEzbZYTEtzlDDHS/6Pgw/IRJHtMy3t/lL+s/ak276AXPmN4sU=
+	t=1761918458; cv=none; b=EsvmV/NzX/LB7yDWDqDI6Er3DuWVkNhrWFE1eIby+xD5CZ7kreeEnxeyG4sr6RUX8bjwXO9UgswnaeCCozhTtbSgWw5UpJ8z3ymi6w0LMnsMciQB6e0UKu3ESJLdCuz/hrPnBTXdQMGsP2ZuQvJAc2HD1YZUrcTsNtqhoBeH4AE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761918172; c=relaxed/simple;
-	bh=GfddodwHKuBQ8XcOTjqKEzJRr4fv1VnxxqWl59wfXVM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SBhru1ebVEAo/ljmjQxY2YKPHU8Pm9qiTCorl6g41zWnGYM3NNV+VwkqDwrnxg1hAZSb3VUjVEk5okaYmbizchirlrQpe/BtZTbzlD0PhyZQzmnTn7cqVAjpBkGi1F2NCLaPeKvjfyehSoRhQT/p6crkW7l3qH0rk3emdRE7TEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N+10atIp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85409C4CEE7;
-	Fri, 31 Oct 2025 13:42:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761918171;
-	bh=GfddodwHKuBQ8XcOTjqKEzJRr4fv1VnxxqWl59wfXVM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N+10atIpWxU6qSNFy1LeKI/GZ6qDuDdIOQ3uaiTp8pdL7x6s1uwTM64E0B7vr8oHW
-	 kOKLfLodAHRVhq1vMiA3lssC+4SeRMs90HFvvYqLoX1cbrbtJNHsoTC1WSIPeNRb7y
-	 UtzN2aSNourk5iNUWfjqF9ZHQEu0HOo1bGuOJPCUjMUWyRjZ6RnHqBGgpFA2WI9OPk
-	 g0TVPEDT3Qwhf4HoJBHrgig3dMuaVGBQsTIe6WuRij1FOeCp2cHgawiROjDSXm1N5J
-	 fdtVP2t/imat2a57HrT525hSytEVG6ecc6zhbsXl8X0JlvCYpyxR9kx/mD7LJ+7Jgf
-	 ojhBItWYax4aQ==
-Date: Fri, 31 Oct 2025 14:42:46 +0100
-From: Joel Granados <joel.granados@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the sysctl tree
-Message-ID: <rvvbiogh3palkhlbq7ymnntujvzfuiivbaabvyplbidgf5djqy@ullh6sl2q43t>
-References: <20251031094958.432f4e44@canb.auug.org.au>
+	s=arc-20240116; t=1761918458; c=relaxed/simple;
+	bh=RGf9cfCIhxuq/vaRuNGbk2qeO2YTTDICUdifwVGN2Ps=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pA5+D3qg5+Caf/kcNdSQ3wjog04qXMh0XPVaqWQDMw9WSJ53cU/8uWbc/yXCcvXXr+BNinsu8/NaRcRZUm5TXymwQrOzQZB/vBKI7rYKdwRsqo1qhGqDIbLENC0iSYmBnX8U6G9wjiHlgcs3FiwQw2aSzJRYAY2/FKsqNdruD1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=spasswolf@web.de header.b=ShO+uEFY; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1761918441; x=1762523241; i=spasswolf@web.de;
+	bh=eEf9FtMftpf7rRdhDbyeVWuCRJ8OhLV37hbp0uqbBD4=;
+	h=X-UI-Sender-Class:Message-ID:Subject:From:To:Cc:Date:In-Reply-To:
+	 References:Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=ShO+uEFYOmYlOgvsAsuB5M2OswcdOTiSek/gSQkissa60zfCH5rz0Yb0AFxwWYQx
+	 zbT8gxIpizohDkhQGHJOlm2sf2O5t7h5mmNeEBfF8QBZUHXEdcxnJqU6oSpNNBZlW
+	 H0GXf6y9diutdl7UitbJDgmwXtAxjiiHeB9npZi9YxePYiCoHLjJUPwLpNB9PEWGf
+	 Fuy/KYO4XyetNI2Wo2EPlakQjNpwsUwLoSMzpeQMmb98bYMnxtWJSaP4CPATXzpmQ
+	 D5JhTg9sOisvEOzgWoAo2CXY9tnglwLJjkXx2PHo5GN+7dhUXdrkqJrqS95xmvA8Q
+	 fJh0lUdppUaJpZBcgA==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.0.101] ([95.223.134.88]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MMpCg-1vVOO52iRQ-00Tpm6; Fri, 31
+ Oct 2025 14:47:21 +0100
+Message-ID: <26bf82303f661cdd34e4e8c16997e33eb21d1ee4.camel@web.de>
+Subject: Re: [REGRESSION 00/04] Crash during resume of pcie bridge
+From: Bert Karwatzki <spasswolf@web.de>
+To: Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>, Mario
+ Limonciello <superm1@kernel.org>, linux-kernel@vger.kernel.org
+Cc: linux-next@vger.kernel.org, regressions@lists.linux.dev, 
+	linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org, "Rafael J . Wysocki"
+	 <rafael.j.wysocki@intel.com>, spasswolf@web.de
+Date: Fri, 31 Oct 2025 14:47:20 +0100
+In-Reply-To: <f18bafacbd8316c9623658e2935f8fc3b276af64.camel@web.de>
+References: <20251006120944.7880-1-spasswolf@web.de>
+					 <8edcc464-c467-4e83-a93b-19b92a2cf193@kernel.org>
+					 <4903e7c36adf377bcca289dbd3528055dc6cfb32.camel@web.de>
+					 <4a8302a0-209f-446a-9825-36cb267c1718@kernel.org>
+					 <25f36fa7-d1d6-4b81-a42f-64c445d6f065@amd.com>
+		 <1853e2af7f70cf726df278137b6d2d89d9d9dc82.camel@web.de>
+	 <f18bafacbd8316c9623658e2935f8fc3b276af64.camel@web.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.56.1-1+deb13u1 
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="uoi3vevm2kj5mp36"
-Content-Disposition: inline
-In-Reply-To: <20251031094958.432f4e44@canb.auug.org.au>
-
-
---uoi3vevm2kj5mp36
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:EjRqDMd/Z70FrDVz13IfKacOJSLO+KqbIRk3DhAnL3MhjrI/TPe
+ hgag+npBPbfOJsus7sL7uxfamxeJGX78r2y0RV08TjDwY9RbUMx0eV0cLT+HviCHf5bX5ld
+ ZarmhKmP7UOEhrN9vI44sDiwAZiDOWNNLitwP/Gm2pGXDFL0hl9GplQdCS8BUyXTCbI2Fop
+ MU5nQv5zd+LR53ljbbAJA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:pzeKkoOKzOQ=;+MX7KvkhiMrJ7amnBNF6vIVRSnJ
+ 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
+ jDYFg==
 
-On Fri, Oct 31, 2025 at 09:49:58AM +1100, Stephen Rothwell wrote:
-> Hi all,
+Upon closer inspection I noticed that the PCIe bandwitdth has been reduced=
+:
+
 >=20
-> After merging the sysctl tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-Is it *only* powerpc. Right? I'll take a look at this ASAP.
+> [76621.870884] [    T140] pcieport 0000:01:00.0: Unable to change power =
+state from D3cold to D0, device inaccessible
+> [76621.870977] [    T140] pcieport 0000:02:00.0: Unable to change power =
+state from D3cold to D0, device inaccessible
+> [76621.876006] [    T140] pci_bus 0000:03: busn_res: [bus 03] is release=
+d
+> [76621.878237] [    T140] pci_bus 0000:02: busn_res: [bus 02-03] is rele=
+ased
+> [76621.879867] [    T140] pcieport 0000:00:01.1: pciehp: Slot(0): Card p=
+resent
+> [76621.879873] [    T140] pcieport 0000:00:01.1: pciehp: Slot(0): Link U=
+p
+> [76622.006565] [    T140] pci 0000:01:00.0: [1002:1478] type 01 class 0x=
+060400 PCIe Switch Upstream Port
+> [76622.006606] [    T140] pci 0000:01:00.0: BAR 0 [mem 0xfcc00000-0xfcc0=
+3fff]
+> [76622.006616] [    T140] pci 0000:01:00.0: PCI bridge to [bus 02-03]
+> [76622.006630] [    T140] pci 0000:01:00.0:   bridge window [mem 0xfca00=
+000-0xfcbfffff]
+> [76622.006644] [    T140] pci 0000:01:00.0:   bridge window [mem 0xfc000=
+00000-0xfe0fffffff 64bit pref]
+> [76622.006772] [    T140] pci 0000:01:00.0: PME# supported from D0 D3hot=
+ D3cold
 
-Thx for the heads up.
+The PCIe band with seems to be have been reduce to PCIe 1.0 (2.5GT/s):
 
-Best
-
+> [76622.006874] [    T140] pci 0000:01:00.0: 16.000 Gb/s available PCIe b=
+andwidth, limited by 2.5 GT/s PCIe x8 link at 0000:00:01.1 (capable of 126=
+.024 Gb/s with
+> 16.0 GT/s PCIe x8 link)
 >=20
-> In file included from drivers/tty/n_tty.c:38:
-> include/linux/jiffies.h:614:40: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   614 | int proc_dointvec_jiffies(const struct ctl_table *table, int dir,=
- void *buffer,
->       |                                        ^~~~~~~~~
-> include/linux/jiffies.h:616:50: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   616 | int proc_dointvec_ms_jiffies_minmax(const struct ctl_table *table=
-, int dir,
->       |                                                  ^~~~~~~~~
-> include/linux/jiffies.h:618:47: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   618 | int proc_dointvec_userhz_jiffies(const struct ctl_table *table, i=
-nt dir,
->       |                                               ^~~~~~~~~
-> include/linux/jiffies.h:620:43: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   620 | int proc_dointvec_ms_jiffies(const struct ctl_table *table, int d=
-ir, void *buffer,
->       |                                           ^~~~~~~~~
-> include/linux/jiffies.h:622:52: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   622 | int proc_doulongvec_ms_jiffies_minmax(const struct ctl_table *tab=
-le, int dir,
->       |                                                    ^~~~~~~~~
-> In file included from arch/powerpc/kvm/emulate_loadstore.c:10:
-> include/linux/jiffies.h:614:40: error: 'struct ctl_table' declared inside=
- parameter list will not be visible outside of this definition or declarati=
-on [-Werror]
->   614 | int proc_dointvec_jiffies(const struct ctl_table *table, int dir,=
- void *buffer,
->       |                                        ^~~~~~~~~
-> include/linux/jiffies.h:616:50: error: 'struct ctl_table' declared inside=
- parameter list will not be visible outside of this definition or declarati=
-on [-Werror]
->   616 | int proc_dointvec_ms_jiffies_minmax(const struct ctl_table *table=
-, int dir,
->       |                                                  ^~~~~~~~~
-> include/linux/jiffies.h:618:47: error: 'struct ctl_table' declared inside=
- parameter list will not be visible outside of this definition or declarati=
-on [-Werror]
->   618 | int proc_dointvec_userhz_jiffies(const struct ctl_table *table, i=
-nt dir,
->       |                                               ^~~~~~~~~
-> include/linux/jiffies.h:620:43: error: 'struct ctl_table' declared inside=
- parameter list will not be visible outside of this definition or declarati=
-on [-Werror]
->   620 | int proc_dointvec_ms_jiffies(const struct ctl_table *table, int d=
-ir, void *buffer,
->       |                                           ^~~~~~~~~
-> include/linux/jiffies.h:622:52: error: 'struct ctl_table' declared inside=
- parameter list will not be visible outside of this definition or declarati=
-on [-Werror]
->   622 | int proc_doulongvec_ms_jiffies_minmax(const struct ctl_table *tab=
-le, int dir,
->       |                                                    ^~~~~~~~~
-> cc1: all warnings being treated as errors
-> make[5]: *** [scripts/Makefile.build:287: arch/powerpc/kvm/emulate_loadst=
-ore.o] Error 1
-> make[5]: *** Waiting for unfinished jobs....
-> In file included from drivers/infiniband/hw/mthca/mthca_catas.c:33:
-> include/linux/jiffies.h:614:40: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   614 | int proc_dointvec_jiffies(const struct ctl_table *table, int dir,=
- void *buffer,
->       |                                        ^~~~~~~~~
-> include/linux/jiffies.h:616:50: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   616 | int proc_dointvec_ms_jiffies_minmax(const struct ctl_table *table=
-, int dir,
->       |                                                  ^~~~~~~~~
-> include/linux/jiffies.h:618:47: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   618 | int proc_dointvec_userhz_jiffies(const struct ctl_table *table, i=
-nt dir,
->       |                                               ^~~~~~~~~
-> include/linux/jiffies.h:620:43: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   620 | int proc_dointvec_ms_jiffies(const struct ctl_table *table, int d=
-ir, void *buffer,
->       |                                           ^~~~~~~~~
-> include/linux/jiffies.h:622:52: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   622 | int proc_doulongvec_ms_jiffies_minmax(const struct ctl_table *tab=
-le, int dir,
->       |                                                    ^~~~~~~~~
-> make[4]: *** [scripts/Makefile.build:556: arch/powerpc/kvm] Error 2
-> make[4]: *** Waiting for unfinished jobs....
-> In file included from drivers/scsi/scsi_netlink.c:8:
-> include/linux/jiffies.h:614:40: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   614 | int proc_dointvec_jiffies(const struct ctl_table *table, int dir,=
- void *buffer,
->       |                                        ^~~~~~~~~
-> include/linux/jiffies.h:616:50: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   616 | int proc_dointvec_ms_jiffies_minmax(const struct ctl_table *table=
-, int dir,
->       |                                                  ^~~~~~~~~
-> include/linux/jiffies.h:618:47: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   618 | int proc_dointvec_userhz_jiffies(const struct ctl_table *table, i=
-nt dir,
->       |                                               ^~~~~~~~~
-> include/linux/jiffies.h:620:43: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   620 | int proc_dointvec_ms_jiffies(const struct ctl_table *table, int d=
-ir, void *buffer,
->       |                                           ^~~~~~~~~
-> include/linux/jiffies.h:622:52: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   622 | int proc_doulongvec_ms_jiffies_minmax(const struct ctl_table *tab=
-le, int dir,
->       |                                                    ^~~~~~~~~
-> In file included from kernel/irq/spurious.c:8:
-> include/linux/jiffies.h:614:40: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   614 | int proc_dointvec_jiffies(const struct ctl_table *table, int dir,=
- void *buffer,
->       |                                        ^~~~~~~~~
-> include/linux/jiffies.h:616:50: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   616 | int proc_dointvec_ms_jiffies_minmax(const struct ctl_table *table=
-, int dir,
->       |                                                  ^~~~~~~~~
-> include/linux/jiffies.h:618:47: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   618 | int proc_dointvec_userhz_jiffies(const struct ctl_table *table, i=
-nt dir,
->       |                                               ^~~~~~~~~
-> include/linux/jiffies.h:620:43: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   620 | int proc_dointvec_ms_jiffies(const struct ctl_table *table, int d=
-ir, void *buffer,
->       |                                           ^~~~~~~~~
-> include/linux/jiffies.h:622:52: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   622 | int proc_doulongvec_ms_jiffies_minmax(const struct ctl_table *tab=
-le, int dir,
->       |                                                    ^~~~~~~~~
-> In file included from net/sunrpc/auth_gss/gss_krb5_unseal.c:61:
-> include/linux/jiffies.h:614:40: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   614 | int proc_dointvec_jiffies(const struct ctl_table *table, int dir,=
- void *buffer,
->       |                                        ^~~~~~~~~
-> include/linux/jiffies.h:616:50: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   616 | int proc_dointvec_ms_jiffies_minmax(const struct ctl_table *table=
-, int dir,
->       |                                                  ^~~~~~~~~
-> include/linux/jiffies.h:618:47: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   618 | int proc_dointvec_userhz_jiffies(const struct ctl_table *table, i=
-nt dir,
->       |                                               ^~~~~~~~~
-> include/linux/jiffies.h:620:43: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   620 | int proc_dointvec_ms_jiffies(const struct ctl_table *table, int d=
-ir, void *buffer,
->       |                                           ^~~~~~~~~
-> include/linux/jiffies.h:622:52: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   622 | int proc_doulongvec_ms_jiffies_minmax(const struct ctl_table *tab=
-le, int dir,
->       |                                                    ^~~~~~~~~
-> In file included from net/netfilter/nf_conntrack_proto_generic.c:7:
-> include/linux/jiffies.h:614:40: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   614 | int proc_dointvec_jiffies(const struct ctl_table *table, int dir,=
- void *buffer,
->       |                                        ^~~~~~~~~
-> include/linux/jiffies.h:616:50: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   616 | int proc_dointvec_ms_jiffies_minmax(const struct ctl_table *table=
-, int dir,
->       |                                                  ^~~~~~~~~
-> include/linux/jiffies.h:618:47: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   618 | int proc_dointvec_userhz_jiffies(const struct ctl_table *table, i=
-nt dir,
->       |                                               ^~~~~~~~~
-> include/linux/jiffies.h:620:43: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   620 | int proc_dointvec_ms_jiffies(const struct ctl_table *table, int d=
-ir, void *buffer,
->       |                                           ^~~~~~~~~
-> include/linux/jiffies.h:622:52: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   622 | int proc_doulongvec_ms_jiffies_minmax(const struct ctl_table *tab=
-le, int dir,
->       |                                                    ^~~~~~~~~
-> In file included from net/sunrpc/auth_gss/gss_krb5_seal.c:62:
-> include/linux/jiffies.h:614:40: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   614 | int proc_dointvec_jiffies(const struct ctl_table *table, int dir,=
- void *buffer,
->       |                                        ^~~~~~~~~
-> include/linux/jiffies.h:616:50: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   616 | int proc_dointvec_ms_jiffies_minmax(const struct ctl_table *table=
-, int dir,
->       |                                                  ^~~~~~~~~
-> include/linux/jiffies.h:618:47: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   618 | int proc_dointvec_userhz_jiffies(const struct ctl_table *table, i=
-nt dir,
->       |                                               ^~~~~~~~~
-> include/linux/jiffies.h:620:43: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   620 | int proc_dointvec_ms_jiffies(const struct ctl_table *table, int d=
-ir, void *buffer,
->       |                                           ^~~~~~~~~
-> include/linux/jiffies.h:622:52: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   622 | int proc_doulongvec_ms_jiffies_minmax(const struct ctl_table *tab=
-le, int dir,
->       |                                                    ^~~~~~~~~
-> In file included from net/core/hotdata.c:3:
-> include/linux/jiffies.h:614:40: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   614 | int proc_dointvec_jiffies(const struct ctl_table *table, int dir,=
- void *buffer,
->       |                                        ^~~~~~~~~
-> include/linux/jiffies.h:616:50: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   616 | int proc_dointvec_ms_jiffies_minmax(const struct ctl_table *table=
-, int dir,
->       |                                                  ^~~~~~~~~
-> include/linux/jiffies.h:618:47: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   618 | int proc_dointvec_userhz_jiffies(const struct ctl_table *table, i=
-nt dir,
->       |                                               ^~~~~~~~~
-> include/linux/jiffies.h:620:43: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   620 | int proc_dointvec_ms_jiffies(const struct ctl_table *table, int d=
-ir, void *buffer,
->       |                                           ^~~~~~~~~
-> include/linux/jiffies.h:622:52: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   622 | int proc_doulongvec_ms_jiffies_minmax(const struct ctl_table *tab=
-le, int dir,
->       |                                                    ^~~~~~~~~
-> make[3]: *** [scripts/Makefile.build:556: arch/powerpc] Error 2
-> make[3]: *** Waiting for unfinished jobs....
-> In file included from fs/btrfs/discard.c:3:
-> include/linux/jiffies.h:614:40: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   614 | int proc_dointvec_jiffies(const struct ctl_table *table, int dir,=
- void *buffer,
->       |                                        ^~~~~~~~~
-> include/linux/jiffies.h:616:50: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   616 | int proc_dointvec_ms_jiffies_minmax(const struct ctl_table *table=
-, int dir,
->       |                                                  ^~~~~~~~~
-> include/linux/jiffies.h:618:47: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   618 | int proc_dointvec_userhz_jiffies(const struct ctl_table *table, i=
-nt dir,
->       |                                               ^~~~~~~~~
-> include/linux/jiffies.h:620:43: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   620 | int proc_dointvec_ms_jiffies(const struct ctl_table *table, int d=
-ir, void *buffer,
->       |                                           ^~~~~~~~~
-> include/linux/jiffies.h:622:52: warning: 'struct ctl_table' declared insi=
-de parameter list will not be visible outside of this definition or declara=
-tion
->   622 | int proc_doulongvec_ms_jiffies_minmax(const struct ctl_table *tab=
-le, int dir,
->       |                                                    ^~~~~~~~~
->=20
-> Caused by commit
->=20
->   44df6a7821ed ("sysctl: Move jiffies converters to kernel/time/jiffies.c=
-")
->=20
-> I have used the sysctl tree from next-20251030 for today.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
+> Bert Karwatzki
 
+This is the same message from system startup (here it's PCIe 3.0 (8.0GT/s)=
+, which is the PCIe version
+of the CPU (AMD Ryzen 7 5800H with Radeon Graphics)):=09
+[    0.289221] [      T1] pci 0000:01:00.0: 63.008 Gb/s available PCIe ban=
+dwidth, limited by 8.0 GT/s PCIe x8 link at 0000:00:01.1 (capable of 126.0=
+24 Gb/s with
+16.0 GT/s PCIe x8 link)
 
-
---=20
-
-Joel Granados
-
---uoi3vevm2kj5mp36
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmkEvM8ACgkQupfNUreW
-QU/ZVwv/edjtx3fFeph1/SYaSO2VPYjFmW3Uxbu38glruWnt/ciogcAUktOxWIa+
-Ge/4jEUAw3/rQXvi/sSHv8olb8EfXn/lys1UZ3hNsUouPkOQZpduha1kbv5FP/q8
-ZPQExMif/lyCU1pukFb8sou/gDaWv0y2/3i1PZl8L2lJh+j/TcquirBAUNNXK6HB
-dSG2lj0NkLbHbD4YxF3u1VhCLKFXLzOVLtsvkgGvroGuDM2bbwt+Ze5DjMxJ+lDP
-stxo1UUvLvFW8jMDoNDhf3+njnwU/kkwIdszs096y7qBiKcvM/xa6Bt+vbnJjDQR
-kGzQ5vArsKcXzPv35OB8AthIMaQGsPRPCcpOhuhsIe/iYSFfpooM6lMm3oOHp1k6
-fxUowt87oKXf9FX63RO7ksDdUOdvvWwcEMonvSHs/Q8A+eMCWkucA5j+JnFmRBqs
-VyfX9l0OcVYvu7i7MHOILimt8wPP69xwJposCtyOHhScL7i+mZbOsIHRNpyr6BGJ
-q6C0O/Go
-=uISF
------END PGP SIGNATURE-----
-
---uoi3vevm2kj5mp36--
+Bert Karwatzki
 

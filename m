@@ -1,90 +1,92 @@
-Return-Path: <linux-next+bounces-8791-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8792-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB4D6C29973
-	for <lists+linux-next@lfdr.de>; Mon, 03 Nov 2025 00:08:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62D84C299BC
+	for <lists+linux-next@lfdr.de>; Mon, 03 Nov 2025 00:14:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 252F43ABCBD
-	for <lists+linux-next@lfdr.de>; Sun,  2 Nov 2025 23:08:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACC8E3ACC05
+	for <lists+linux-next@lfdr.de>; Sun,  2 Nov 2025 23:13:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6622E20F08C;
-	Sun,  2 Nov 2025 23:08:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3047319992C;
+	Sun,  2 Nov 2025 23:13:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ni3GNGq8"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Yt8NQl0B"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 169F8846F;
-	Sun,  2 Nov 2025 23:07:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C53AE24DCFD;
+	Sun,  2 Nov 2025 23:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762124883; cv=none; b=pyD0MdZD8l2GOw2fzIEJxbs4fEVjnob0dLNwB2aqr0wOn7YK0M7GIBzk0QUAvf6jvszNyv2nCVXeYskDn0ZTvzfor7AxkONN8JQis3qWfGvpRwqQJV21TyUwFUvdfFDGJuuZlOLMXSxolMjQg5UU9zLvbfhB5DSNjdlqRpF+f54=
+	t=1762125236; cv=none; b=emy+68LODXzfwryz+FLVZsW9bT20poEzmppwHNlWgzHXlL5ADiSmzZ9c8stAduDhjropJGAhz8fAfkPKwKRUmciW4pC9Y/FCbFd1mjap/NozYi9xhJXbPzkWbl8iHfrpiGYneaHb9nrpJ+TNe/0/HBzhc7IPCcj8Ot56KFFrmKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762124883; c=relaxed/simple;
-	bh=Mmsz4AsAPrgzvy+/DPeF0gUarOJZ9zlb61UAEWNeghM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=XJOeVLQCuQV3cElsxxbrFCxml5oOY04vHXPTF4OG9uf6GT7679gLbTwqu5JpmOKpyNQGFnzEWVaSmg9dF0RfwmIRWB2JlTnuJrBG4xFDYil1lSuPHdAC5qcwmJJ3zZ7b0kiE+1aoT8RKH2tTm+pYSoOMoRjvD0GlKDfJszZCdLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ni3GNGq8; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1762125236; c=relaxed/simple;
+	bh=ME4LvPnxhDyFfIKP9x/XGoGmUz2ZHvdsiI8gRxGXlAo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=RDH5CpvTdqjIQL2Fdj5lk+QKvDpr1qWLS17PsmhfUURhbklCOdymB7GAw0isuXFVQi3RarMoiZUFQRnoTzf0SApE92CVRN5T4Z5ajyFS3uCD7n8JlPbcHEuHQh/wlSeiKphHHjxwRRWbUnoqATfnw6yUBrNB2BaAhTn6E18JeFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Yt8NQl0B; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1762124873;
-	bh=fCH5++WfvKpTknvdl0m4vyQqVpmFKtADZZLeJc7HYao=;
+	s=202503; t=1762125231;
+	bh=UrApUplrhg650aeZjiGycPOh3SlW4EIV3RN/nqafq1E=;
 	h=Date:From:To:Cc:Subject:From;
-	b=ni3GNGq8yTM2J5vHa6ElQMcricCHBD4aHfX+WPxXSplgOo3+5LNmtuEVbAUkEC8v9
-	 6HsGPjGhhN4gbHSY4MB2WKcf0e3GaZRHyj2v4Gue6iaCpScx2/Xlo9ctu4KeUdZbV8
-	 9z07GkkuCbPcWM5ker+chfgy1z5rX7qYW9LrvJMO8QE8+GQaVjb00IUN1rm3VnWeoX
-	 MKHnxyOX9sgt2lCjgP4hr4QWNhHmq6uLLEFjMC9T4axRfxly/nWrKNib9/XRrDw/k/
-	 rLL5eLI/f02Dt7od1wJdUFje3MMa/rkWC+mThNo0kk3UbeAkWj1cW1Qj63WFZEkOwb
-	 QfIgi2ekKJCUA==
+	b=Yt8NQl0BCT6YyP6Ob7vUHE3jJT/zHLqfXClfbB4WesXkBOO2tzgl/AeTUbFcXcaNW
+	 vF5WawPsb2+39n/qKKELR7EYcSFRWEms+6RtK/xJBKPMOA14yRqojVY31ePzLGRfgv
+	 MeKs5Ap0F2EVAAzfqroqW1QCzhTLVC+lUADd8HUXYQQH2ux90jT4/BcuH95b6ibifO
+	 p2V2Uoq/fTS6ZmR6Hfiz7xJRWO+BxlsHqujChOZKQORAdZ8Y3frMI9Z9/JXwpLHA6S
+	 53LH2sLMw75+SssbBnKvt4mOLPZQhZMah5YnryLgw22t6L3YUaZFJQM3lEIIL3Mths
+	 Do70td8lTNP+A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d09Nl6dM1z4w93;
-	Mon, 03 Nov 2025 10:07:51 +1100 (AEDT)
-Date: Mon, 3 Nov 2025 10:07:50 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d09Wf1QQXz4w0p;
+	Mon, 03 Nov 2025 10:13:49 +1100 (AEDT)
+Date: Mon, 3 Nov 2025 10:13:49 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Christian Borntraeger <borntraeger@de.ibm.com>, Andrew Morton
- <akpm@linux-foundation.org>
-Cc: Israel Batista <linux@israelbatista.dev.br>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Sumanth Korikkar <sumanthk@linux.ibm.com>
-Subject: linux-next: manual merge of the s390 tree with the mm-unstable tree
-Message-ID: <20251103100750.4522060e@canb.auug.org.au>
+To: Simona Vetter <simona.vetter@ffwll.ch>, Jani Nikula
+ <jani.nikula@linux.intel.com>, Joonas Lahtinen
+ <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Jani Nikula <jani.nikula@intel.com>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the drm-intel tree with the drm-misc
+ tree
+Message-ID: <20251103101349.5af777a5@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e429RH3BDT+DdvNkIbp8xSw";
+Content-Type: multipart/signed; boundary="Sig_/z21a/cOLsFpemMoUDjgkfrw";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/e429RH3BDT+DdvNkIbp8xSw
+--Sig_/z21a/cOLsFpemMoUDjgkfrw
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the s390 tree got a conflict in:
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-  include/linux/memory.h
+  drivers/gpu/drm/i915/gt/intel_rc6.c
 
 between commit:
 
-  074be77d684a ("mm: convert memory block states (MEM_*) macros to enum")
+  f6e8dc9edf96 ("drm: include drm_print.h where needed")
 
-from the mm-unstable tree and commit:
+from the drm-misc tree and commits:
 
-  300709fbefd1 ("mm/memory_hotplug: Remove MEM_PREPARE_ONLINE/MEM_FINISH_OF=
-FLINE notifiers")
+  8c2833ff1df3 ("drm/i915: add vlv_clock_get_czclk()")
+  5615e78e813e ("drm/i915: split out vlv_clock.[ch]")
 
-from the s390 tree.
+from the drm-intel tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -97,72 +99,36 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/memory.h
-index ca3eb1db6cc8,ba1515160894..000000000000
---- a/include/linux/memory.h
-+++ b/include/linux/memory.h
-@@@ -64,21 -64,9 +64,19 @@@ struct memory_group=20
-  	};
-  };
+diff --cc drivers/gpu/drm/i915/gt/intel_rc6.c
+index 13721c9081b6,932f9f1b06b2..000000000000
+--- a/drivers/gpu/drm/i915/gt/intel_rc6.c
++++ b/drivers/gpu/drm/i915/gt/intel_rc6.c
+@@@ -6,8 -6,7 +6,9 @@@
+  #include <linux/pm_runtime.h>
+  #include <linux/string_helpers.h>
  =20
- +enum memory_block_state {
- +	/* These states are exposed to userspace as text strings in sysfs */
- +	MEM_ONLINE,		/* exposed to userspace */
- +	MEM_GOING_OFFLINE,	/* exposed to userspace */
- +	MEM_OFFLINE,		/* exposed to userspace */
- +	MEM_GOING_ONLINE,
- +	MEM_CANCEL_ONLINE,
- +	MEM_CANCEL_OFFLINE,
-- 	MEM_PREPARE_ONLINE,
-- 	MEM_FINISH_OFFLINE,
- +};
+ +#include <drm/drm_print.h>
  +
-  struct memory_block {
-  	unsigned long start_section_nr;
- -	unsigned long state;		/* serialized by the dev->lock */
- +	enum memory_block_state state;	/* serialized by the dev->lock */
-  	int online_type;		/* for passing data to online routine */
-  	int nid;			/* NID for this memory block */
-  	/*
-@@@ -101,14 -89,15 +99,7 @@@ int arch_get_memory_phys_device(unsigne
-  unsigned long memory_block_size_bytes(void);
-  int set_memory_block_size_order(unsigned int order);
- =20
- -/* These states are exposed to userspace as text strings in sysfs */
- -#define	MEM_ONLINE		(1<<0) /* exposed to userspace */
- -#define	MEM_GOING_OFFLINE	(1<<1) /* exposed to userspace */
- -#define	MEM_OFFLINE		(1<<2) /* exposed to userspace */
- -#define	MEM_GOING_ONLINE	(1<<3)
- -#define	MEM_CANCEL_ONLINE	(1<<4)
- -#define	MEM_CANCEL_OFFLINE	(1<<5)
- -
-  struct memory_notify {
-- 	/*
-- 	 * The altmap_start_pfn and altmap_nr_pages fields are designated for
-- 	 * specifying the altmap range and are exclusively intended for use in
-- 	 * MEM_PREPARE_ONLINE/MEM_FINISH_OFFLINE notifiers.
-- 	 */
-- 	unsigned long altmap_start_pfn;
-- 	unsigned long altmap_nr_pages;
-  	unsigned long start_pfn;
-  	unsigned long nr_pages;
-  };
++ #include "display/vlv_clock.h"
+  #include "gem/i915_gem_region.h"
+  #include "i915_drv.h"
+  #include "i915_reg.h"
 
---Sig_/e429RH3BDT+DdvNkIbp8xSw
+--Sig_/z21a/cOLsFpemMoUDjgkfrw
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkH5EYACgkQAVBC80lX
-0GxwXwf9GP9Y8nYvm1QzAV/4Vfn3V/zgZaKDAnm9ZZyhlhEEcor6nLGXIfAhPHV8
-HGY3KAhogff6vCGY5YNQxaa8HuVnK+hId8dKzpFcvORe5DgmvzpdFs2+jepKPNBK
-GmNuz7bN3AyJOVAVyOV2ceuvUe4nV7AgH220J1r5JggkaUDsPQWfzTYtw+5tjfIK
-3gF2pMpQyP02q924YnjBENtZXOKDmuLHYNqkcU9JiH/QAXXJvMh7I/GmykWIkmog
-/VaFwmBcx3DDZXxTMDIE2WvUwnThKzjgVb7ly3raGgp6kLDwRTdaFCJ3eHAM7gsO
-GQf5wHdVBGv6Cmyzxe6sRBba69sGQA==
-=vbzc
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkH5a0ACgkQAVBC80lX
+0GwATAf+IaMAVNnjxQs9NAYsjoodKNpiqtMya/5O4WpRBOXablOVAi64oRQ1fViR
+SJJx3BBzT+wgoQOiiw8Cbt9yYumCNVAfNGfpUEBXxPbkXr4S9gioxVI88eMhn4Ob
+OjJrzUCbQFAz3yORvpZ5g/opYgkFdVQRxHtw0QgS5QOxFcIvWzWD3vFOAnuj1yL2
+Vui1+OAVM+dqVa4V2+A9ITd+KeArkOr9J220hDlx8wU7efheCh8deoHJ9nndlCl2
+lGmq92cRH0CAfjXsxq0IDnTz58//cobXBUWj2Peaxxnd52o7rfWbn9EgN/khgCHK
+EKJZs8U03LQ1G+FidjQVmPmbvWqXwQ==
+=BAmB
 -----END PGP SIGNATURE-----
 
---Sig_/e429RH3BDT+DdvNkIbp8xSw--
+--Sig_/z21a/cOLsFpemMoUDjgkfrw--
 

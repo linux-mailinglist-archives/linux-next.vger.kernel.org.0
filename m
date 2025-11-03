@@ -1,103 +1,133 @@
-Return-Path: <linux-next+bounces-8801-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8802-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D784DC2ACDE
-	for <lists+linux-next@lfdr.de>; Mon, 03 Nov 2025 10:41:01 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA413C2B23F
+	for <lists+linux-next@lfdr.de>; Mon, 03 Nov 2025 11:50:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7D9C94F3E7C
-	for <lists+linux-next@lfdr.de>; Mon,  3 Nov 2025 09:38:21 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 579233494A9
+	for <lists+linux-next@lfdr.de>; Mon,  3 Nov 2025 10:50:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B24A12EC0A0;
-	Mon,  3 Nov 2025 09:38:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931142FFF90;
+	Mon,  3 Nov 2025 10:49:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fS2bv1Kp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R654j01t"
 X-Original-To: linux-next@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE482EBB98;
-	Mon,  3 Nov 2025 09:38:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652A92FD69B;
+	Mon,  3 Nov 2025 10:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762162688; cv=none; b=jm+f6fWiWrHU+ulC43VIfXZIG07bEGboS26w1FoO1L4WYNdbZNwRjOQVFNGy6PFJtdc1fwS0eTltHj6rGa6Up47DA2Zc9rGiorbJl0Ynk9Pk1vs0LZrhd1IjtEqf8efvfMnNoK+b92wfFLITt2HNCRKu51uQKnSfqS1m/MGQrCo=
+	t=1762166994; cv=none; b=lrXHJShZ7zHg+W1CrqHNpVlv5fr6g6MSYgNMYlecz89j3t3o4s98sHSr9g93uWuptp/xIVOKkHU7ajoTyOL2O461npcNvz1acCbMPV8jE49xwqy3NJn1EMJsTzaoCXYJrniVtzPSR2q4iGkPQDD7AAVOuBQDegcep59BNbNLwBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762162688; c=relaxed/simple;
-	bh=buv33Uz2Fo5fwFIVaIdaFUPAiAI11WQiPVvmTTQ8Zw4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TjQ/jOVFaI6M79nyj55HIZjIAQByPDeZUYsI66n7cEcJSh8qyGk4WmS0vYeIwhq5KwToTZmOcWRvweO9kCa/67z5wDiTMOQlWYV+Ej6Rb6Pe63YUScG5/EtXTEdaLZbU4X2JRlscDyxMYeXMwEktSs9BSIQU3aInlxzsnSxLEl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=fS2bv1Kp; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=gsDapFRugM+4XwGq22nVfGICtpH+R8BdlGsLTJySzLk=; b=fS2bv1KpeHE/vj0SlxiKC7ffk3
-	CKn04SPP2TPAJSHdqAAzRiod6AHFz1c/UCJ3cI9/KnHufmCdiX8owqRDox/9wE/1NUeHduAPp2HR8
-	TV02nXRa0EopydUkHTe+dMaukt11gXDUysJCB/lWdVU5t2Bw5vI2BUxTRo7OaSf58j+shL2Gk+qBO
-	D6LVPlQqeYD12WvCcyqbLZXQPI9zH0BdVB1S/7jCeEC0sxnh/VrRYr+XgvcBlusuvKrZDYyke2rfT
-	okfbzv6U23kCTtfOSfU/vMWr17w/a6SN4gD0xOLtdn4Z97Beg1V0Qv/k3NE4IEkcdnPjd9px7MqiL
-	YbA3aGeQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vFq95-0000000F0Es-1EO8;
-	Mon, 03 Nov 2025 08:42:35 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 9947E30023C; Mon, 03 Nov 2025 10:38:04 +0100 (CET)
-Date: Mon, 3 Nov 2025 10:38:04 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: new objtool warnings
-Message-ID: <20251103093804.GY3245006@noisy.programming.kicks-ass.net>
-References: <20251031111515.09c9a4ed@canb.auug.org.au>
- <20251103091006.GV3245006@noisy.programming.kicks-ass.net>
- <20251103203256.5ac39302@canb.auug.org.au>
+	s=arc-20240116; t=1762166994; c=relaxed/simple;
+	bh=uUifxonKcla3BWytmq2yxQx+E6zovUda0T3W9rcNDck=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DJwdjAUDMje3toXMNO+ntWjEb3WifeHGybrIMO3B4jDulz5mOmd05gHiIgYSmiDsi7xrM5bgPutsy6iLOqnKJpnC3cTgeLVx6bymJP069DbBVfHbsL71YrkpjC7ovrAfCNrFHDJBJcn6Wd+M3zP2mpqQK1NwvLamnW3/PVRPw58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R654j01t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5903DC4CEF8;
+	Mon,  3 Nov 2025 10:49:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762166994;
+	bh=uUifxonKcla3BWytmq2yxQx+E6zovUda0T3W9rcNDck=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=R654j01tkgr7j+kGctXGIU7wXdjqv9jn/OELsSKcDst5bpbuP0wRucegkwsqf/Aiu
+	 IJktZHywCzfnkRDZsFHJQ5H6QkW9S+m31mYwJqq6gpV5PJjFrocgDpHPBnqbBoyjev
+	 YhWoKyHS3b/u2HFvQCiiTyrfOI8rGYxzpdjaAxI1kUSOl2hERJ+aV+p1HzmZw8hEOJ
+	 mqtmD7ChPljk8VWDVxn3KhmuyedV1bY1oi2UCzNup3eRP5CgmcmvRVlAPm6MLnKL33
+	 J+r3xdNbig6e9bWe+QUbIJy/JxUvmitqi78ft1WAl4qIaPguQG4mkHFlRNYDv7fxd2
+	 vyOdw0liTWB0Q==
+Message-ID: <bebb6b2b-869d-4931-adb3-de5a2a201401@kernel.org>
+Date: Mon, 3 Nov 2025 11:49:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20251103203256.5ac39302@canb.auug.org.au>
+User-Agent: Mozilla Thunderbird
+Subject: Re: Build error on -next in rust/kernel/usb.rs:92:34
+To: Thorsten Leemhuis <linux@leemhuis.info>
+Cc: gregkh@linuxfoundation.org, rafael@kernel.org, bhelgaas@google.com,
+ kwilczynski@kernel.org, david.m.ertman@intel.com, ira.weiny@intel.com,
+ leon@kernel.org, acourbot@nvidia.com, ojeda@kernel.org,
+ alex.gaynor@gmail.com, boqun.feng@gmail.com, gary@garyguo.net,
+ bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
+ aliceryhl@google.com, tmgross@umich.edu, pcolberg@redhat.com,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>, rust-for-linux@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251020223516.241050-1-dakr@kernel.org>
+ <20251020223516.241050-2-dakr@kernel.org>
+ <1c8afbc0-e888-4702-9e4e-fa8aef0f97ae@leemhuis.info>
+From: Danilo Krummrich <dakr@kernel.org>
+Content-Language: en-US
+In-Reply-To: <1c8afbc0-e888-4702-9e4e-fa8aef0f97ae@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 03, 2025 at 08:32:56PM +1100, Stephen Rothwell wrote:
-> Hi Peter,
->=20
-> On Mon, 3 Nov 2025 10:10:06 +0100 Peter Zijlstra <peterz@infradead.org> w=
-rote:
-> >
-> > On Fri, Oct 31, 2025 at 11:15:15AM +1100, Stephen Rothwell wrote:
-> > >=20
-> > > My x86_64 allmodconfig builds started producing these warnings today:
-> > >=20
-> > > vmlinux.o: warning: objtool: user_exc_vmm_communication+0x15a: call t=
-o __kasan_check_read() leaves .noinstr.text section
-> > > vmlinux.o: warning: objtool: exc_debug_user+0x182: call to __kasan_ch=
-eck_read() leaves .noinstr.text section
-> > > vmlinux.o: warning: objtool: exc_int3+0x123: call to __kasan_check_re=
-ad() leaves .noinstr.text section
-> > > vmlinux.o: warning: objtool: noist_exc_machine_check+0x17a: call to _=
-_kasan_check_read() leaves .noinstr.text section
-> > > vmlinux.o: warning: objtool: fred_exc_machine_check+0x17e: call to __=
-kasan_check_read() leaves .noinstr.text section
-> > >=20
-> > > I can't easily tell what caused this change, sorry. =20
-> >=20
-> > What compiler? This smells like a broken compiler, these are all
-> > noinstr and that very much has __no_sanitize_address.
->=20
-> And today I didn't get them.  So who knows?  I did *not* change compiler
-> since Friday.
+On 11/3/25 7:43 AM, Thorsten Leemhuis wrote:
+> """
+> error[E0599]: no method named `data` found for struct `core::pin::Pin<kbox::Box<T, Kmalloc>>` in the current scope
+>   --> rust/kernel/usb.rs:92:34
+>    |
+> 92 |         T::disconnect(intf, data.data());
+>    |                                  ^^^^ method not found in `core::pin::Pin<kbox::Box<T, Kmalloc>>`
+> 
+> error: aborting due to 1 previous error
+> 
+> For more information about this error, try `rustc --explain E0599`.
+> make[2]: *** [rust/Makefile:553: rust/kernel.o] Error 1
+> make[1]: *** [/builddir/build/BUILD/kernel-6.18.0-build/kernel-next-20251103/linux-6.18.0-0.0.next.20251103.436.vanilla.fc44.x86_64/Makefile:1316: prepare] Error 2
+> make: *** [Makefile:256: __sub-make] Error 2
+> """
+> 
+> Full log:
+> https://download.copr.fedorainfracloud.org/results/@kernel-vanilla/next/fedora-rawhide-aarch64/09759703-next-next-all/builder-live.log.gz
+> 
+> A quick search for "T::disconnect(intf, data.data());" on lore
+> lead me here:
+> 
+>> diff --git a/rust/kernel/usb.rs b/rust/kernel/usb.rs
+>> index 9238b96c2185..05eed3f4f73e 100644
+>> --- a/rust/kernel/usb.rs
+>> +++ b/rust/kernel/usb.rs
+>> @@ -87,9 +87,9 @@ extern "C" fn disconnect_callback(intf: *mut bindings::usb_interface) {
+>>          // SAFETY: `disconnect_callback` is only ever called after a successful call to
+>>          // `probe_callback`, hence it's guaranteed that `Device::set_drvdata()` has been called
+>>          // and stored a `Pin<KBox<T>>`.
+>> -        let data = unsafe { dev.drvdata_obtain::<Pin<KBox<T>>>() };
+>> +        let data = unsafe { dev.drvdata_obtain::<T>() };
+>>  
+>> -        T::disconnect(intf, data.as_ref());
+>> +        T::disconnect(intf, data.data());
+>>      }
+>>  }
 
-Oh well, lets chalk it up to gremlins for now. I'll have a look if it
-happens again/reliably.
+This error is cause by commit 6bbaa93912bf ("rust: device: narrow the generic of
+drvdata_obtain()").
+
+It seems it slipped through, since the USB abstractions are disabled in all
+trees other than the USB tree. I tested with enabling them locally, but it seems
+I forgot to re-enable them after a rebase etc.
+
+I will send a patch with the following fix:
+
+diff --git a/rust/kernel/usb.rs b/rust/kernel/usb.rs
+index 92215fdc3c6a..534e3ded5442 100644
+--- a/rust/kernel/usb.rs
++++ b/rust/kernel/usb.rs
+@@ -89,7 +89,7 @@ extern "C" fn disconnect_callback(intf: *mut
+bindings::usb_interface) {
+         // and stored a `Pin<KBox<T>>`.
+         let data = unsafe { dev.drvdata_obtain::<T>() };
+
+-        T::disconnect(intf, data.data());
++        T::disconnect(intf, data.as_ref());
+     }
+ }
 

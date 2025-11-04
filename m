@@ -1,100 +1,104 @@
-Return-Path: <linux-next+bounces-8812-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8813-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 323CBC3011E
-	for <lists+linux-next@lfdr.de>; Tue, 04 Nov 2025 09:54:17 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CDA2C303F3
+	for <lists+linux-next@lfdr.de>; Tue, 04 Nov 2025 10:25:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D0A7F34DDF6
-	for <lists+linux-next@lfdr.de>; Tue,  4 Nov 2025 08:54:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0FCC64E97FD
+	for <lists+linux-next@lfdr.de>; Tue,  4 Nov 2025 09:21:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCDDD26ED3F;
-	Tue,  4 Nov 2025 08:52:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eToozsEt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AAA031A56D;
+	Tue,  4 Nov 2025 09:17:31 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A309A3FCC;
-	Tue,  4 Nov 2025 08:52:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0052C3247
+	for <linux-next@vger.kernel.org>; Tue,  4 Nov 2025 09:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762246364; cv=none; b=ucB8u8pddw10jL6Mvk01Orn21CByZbjve/EujwD6adMIsvPrRcQH15sStXCRcEUydfU64xiHNPajwhnr3cVq1Xs1mfCi/QDX+HackCOWAA7QDsixKOWLkx0DhVlE/M6JTcVw3j1HDZcBOv/mgcRrYo5UPp/79cfP/wHESgEpHbE=
+	t=1762247851; cv=none; b=IaDsHyV9uYq2ejClCmo8AqlElX62thBML0vSfRY3wJpeR/whR8iC8eGXfcqmysGBd9TylS+/CZ+yAkoM5CIaFXQEvXQFWZne6Hr17/tVKjDsu75+E7a9GpPTKATl5lxCUmVyXI9q5jB1UKGTAidzGZ8qiEEPK3kKrg1PhgEqNSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762246364; c=relaxed/simple;
-	bh=WF/zlLlpEJhAsaTH3NSuhuskPpUsy2F/aSE6n5sJB/A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s/jbzpEOghK8x+4yJEdD2mk5/nm+Ykzj+SvT/oe0lNF5qL6IlbCJ6GWMTtLYl8pZrosv29kOZhrDqG3iTjhCq8i33QJC9s7Adg/UHyU81+jSpD8Djqjbc1nHeuTEjjO4dc/DknY0KrlKf2oe0DeW7MRdjOxoUyq12FNE3g4blvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eToozsEt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38D4DC4CEF7;
-	Tue,  4 Nov 2025 08:52:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762246364;
-	bh=WF/zlLlpEJhAsaTH3NSuhuskPpUsy2F/aSE6n5sJB/A=;
-	h=Date:Reply-To:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eToozsEt0RIhc9vtbCDziOTTtHHTI6uOD+ZlZRtgTNiRW7qK05j4JTHOYDtd8Ryxj
-	 oBrdF902xKXtKIeQVEgQtWdH0z+Y5hU+oCKcTw0L0GC/BdFGnSBswPbm55+08/0u77
-	 XfvyCN5xr5Aj3jXedu0PZF76wrCVZYGZQKMYGEWpdEZ+nWpXTlkNnxN8r1sG3yGe4L
-	 bKae4gq6DCzLc+pBvhKwoE1LtzufdEhO34Qf38hQpwFHtvTSb3I4BQ9Wqk8lYzMLf7
-	 xLRxGFqZ/PiGfaakf1xWI08dBZoLI8SUmF89IKTewG6irX8tvSXFSBmdn4jeg1s4wq
-	 i5ObDGBMnKwuQ==
-Message-ID: <13c0ac62-cfa9-4b96-9cfa-807def89593e@kernel.org>
-Date: Tue, 4 Nov 2025 09:52:40 +0100
+	s=arc-20240116; t=1762247851; c=relaxed/simple;
+	bh=x2N2Ao/VUOm5LHMgeVOcIdZt4S8Z8P71A7OBDYHROeo=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=crHMDWebwVUvX69lbOoUOEMPXjuUXaG51CDvxYF8djvj8ZFDYyS96hxs/tv+o4DAgomRXp6msyRg0wqZaMlm55WrTgjCX/KJD0jQkRSbZ5JqUwn6lqUc3pcaaOlc5FWqHotIrJy1BHU2Ul3d1Vu9aU2W20bXCShC0vZHWwzhso4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-432f8352633so147433845ab.0
+        for <linux-next@vger.kernel.org>; Tue, 04 Nov 2025 01:17:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762247849; x=1762852649;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Y0G+klVvNi3geMbF/DqTCZY2vlIqhu0rrXDM72V6APk=;
+        b=ifbOhQxOuD0LF1AnIktf+qe+dkQGRVpulGsszBQIMzql0B/5NsKJ3xueaAdH1Ks+5I
+         skRkBQvT/wpNxBTd1SU0hXM9tVQ93G/o9rdWbKFbsYkuPUmUjjUDks6xZqAssH+1I/Bm
+         8koJudH46HoAVggxmy40OtnFTeJ7zIAO5tCzij0Hr325xiIEdphMbzwfKhVk+jL2hdjC
+         OnegGYIgmvHnFJBkOljxyw8RJ4D+yz61rM35Z+LiLg8m5iMNXeZnOKkjkrUTJfFO26Ma
+         gHFfpVV+q+Aarpe2c6dRiwnrLJTc4SCg03yv+ngJAST4UvD8onCX5VTb+JzZ8E+g7ePP
+         XsYA==
+X-Forwarded-Encrypted: i=1; AJvYcCWLCnqYMhyBI6mu5qBYsLkLJqEpBPI9WozWVF3Qnf349XkCHZQ3rpwuux4fo27qosedmj1J/gt7h/II@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCF+bsLLt+61oIik30OnX40T7d5UdlEqZQr4GmJctCVCGx2l9b
+	mawL06qrPU2gQsLB74DFRilo5iCE38wJC601KIW0hBqz2injZHzhtghJT7qPt1o3xywl++N2qC4
+	WBwXs7u/VEkZSNtSCOuF5LYe8mRgKFvFGEg8AHIRWojwEaXwu1bMg2IHayYM=
+X-Google-Smtp-Source: AGHT+IENivPcLxYnYpgLYPv9zvCQyccHTCmdN4XNfgrF3nTOylMianJzqRB5o2G7ybt7oMVsfdpfOBtBrXK02tWuklnLrW4u6i97
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Reply-To: Daniel Gomez <da.gomez@kernel.org>
-Subject: Re: linux-next: manual merge of the rust tree with the modules tree
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>,
- Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen <samitolvanen@google.com>,
- Daniel Gomez <da.gomez@samsung.com>, Andreas Hindborg
- <a.hindborg@kernel.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Tamir Duberstein <tamird@gmail.com>
-References: <20251104105516.40fea116@canb.auug.org.au>
- <CANiq72kP0YMCEMjEVdTfVt4eokbXm6iRAk2PxmFZybNgJaFzGA@mail.gmail.com>
-Content-Language: en-US
-From: Daniel Gomez <da.gomez@kernel.org>
-Organization: kernel.org
-In-Reply-To: <CANiq72kP0YMCEMjEVdTfVt4eokbXm6iRAk2PxmFZybNgJaFzGA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:1a28:b0:430:a14f:314c with SMTP id
+ e9e14a558f8ab-4330d121e2cmr196825385ab.7.1762247849063; Tue, 04 Nov 2025
+ 01:17:29 -0800 (PST)
+Date: Tue, 04 Nov 2025 01:17:29 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6909c4a9.050a0220.98a6.00a9.GAE@google.com>
+Subject: [syzbot] linux-next build error (24)
+From: syzbot <syzbot+c78a89917a1b7c0fa4c6@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
+	sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
+Hello,
 
+syzbot found the following issue on:
 
-On 04/11/2025 00.59, Miguel Ojeda wrote:
-> On Tue, Nov 4, 2025 at 12:55 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Today's linux-next merge of the rust tree got a conflict in:
->>
->>   rust/kernel/str.rs
->>
->> between commit:
->>
->>   51d9ee90ea90 ("rust: str: add radix prefixed integer parsing functions")
->>
->> from the modules tree and commit:
->>
->>   3b83f5d5e78a ("rust: replace `CStr` with `core::ffi::CStr`")
->>
->> from the rust tree.
->>
->> I fixed it up (see below) and can carry the fix as necessary. This
-> 
-> Looks good, thanks!
-> 
-> Cheers,
-> Miguel
+HEAD commit:    982312090977 Add linux-next specific files for 20251103
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=110f817c580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1cf6c387ad3e8e7a
+dashboard link: https://syzkaller.appspot.com/bug?extid=c78a89917a1b7c0fa4c6
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
 
-Yes, looks good to me as weel. Thanks!
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c78a89917a1b7c0fa4c6@syzkaller.appspotmail.com
+
+error[E0599]: no method named `data` found for struct `core::pin::Pin<kbox::Box<T, Kmalloc>>` in the current scope
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 

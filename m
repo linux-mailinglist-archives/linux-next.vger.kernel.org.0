@@ -1,61 +1,78 @@
-Return-Path: <linux-next+bounces-8816-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8817-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 787A0C3071D
-	for <lists+linux-next@lfdr.de>; Tue, 04 Nov 2025 11:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 94D9FC30733
+	for <lists+linux-next@lfdr.de>; Tue, 04 Nov 2025 11:17:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1959188C0AE
-	for <lists+linux-next@lfdr.de>; Tue,  4 Nov 2025 10:16:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C6141884339
+	for <lists+linux-next@lfdr.de>; Tue,  4 Nov 2025 10:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8429929B796;
-	Tue,  4 Nov 2025 10:15:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9479B2D249A;
+	Tue,  4 Nov 2025 10:17:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SLndK42C"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c0rXDAzY"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AAA134D3B2;
-	Tue,  4 Nov 2025 10:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E43634D3B2;
+	Tue,  4 Nov 2025 10:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762251334; cv=none; b=mWyseJtHWaFa+iuxz5cD1+tw+6TKcXsRcGeyqXGWKS3UUTs9go82Zmt9eO2ATdbAV9VlOvAAo/X91G+CIyPSCX2aO91ugYwXE0pRkkysWdQy7ujKeDJ7Iudp/vo7Hvs4JcYgrQBsZZQ6KQMu4ZAJme8yBP05rVbEQIPZAdaloU8=
+	t=1762251442; cv=none; b=sj7osWQb17skJe+0rW0rLyhwjFpVQOT5LGG2nY921gOM3pJS1QiBtUQpcPCNl9E8qKwbDz5ZCF7cNBPPc6U8sr+2YyPVQZnEx6Oq7oChnFz13icnvulLVuhIu0YxAtes8saOyfh0RhU0PtOMazWHNnBPPsI5bVT2NGZXVtVgBRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762251334; c=relaxed/simple;
-	bh=BRj8esTTDryhQeeEzSsbv7Pz8jeCQ845F+Owhbq2SYQ=;
+	s=arc-20240116; t=1762251442; c=relaxed/simple;
+	bh=K9IsUGi2wKpFhfnL6iptoWIjbutL+DAGLt1r4zaWAlQ=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=enNKPTSg03u48YKC77+A4hNQm+P2iASxeFivyBol8ca95xnjqa9HvnB3GMBcLfUSzFHk9pmb9s3a8r0lYcpV9eIbbi6UUIkf0sa+ABx4ST3SbxkHJqlndGLWlKQyjOCN5FpbHe6tlf9Pif5cShtO6Viw5q2XtKpt8nO4sQRBDEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SLndK42C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12583C4CEF7;
-	Tue,  4 Nov 2025 10:15:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762251334;
-	bh=BRj8esTTDryhQeeEzSsbv7Pz8jeCQ845F+Owhbq2SYQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=SLndK42CLJ8T1Mr54f3uVDUBEvBVUaXG7Tqg2x0E8xyk22Y8oNx25p5LEM5QqeDUy
-	 XbxSGZadCMMaXQobMLy5XwuA+l7P414RCHgV78CbW5Mz4eYQaHfF56d9EMDYCe+GuB
-	 zJrseGc9Ng8oUYO4P3HCScHoW91IEsfd4cHy1Fn7K9rpghDgXZLTrkAym0gJrg3eBV
-	 PbHRISjCsy9uc0kYc0st4xo7ryPvIjouwubE6dvdLEoe6hc/VFTX1FaGjpdDTS4qBY
-	 oUgjhLghyUkIt+JT1kzZ/S8cVtj4izwwLjuGHt8QFfi6F+IgEZHWjc8R/zmETc/M5y
-	 9noJHkGjNEUBw==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Luis Chamberlain
- <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, Sami Tolvanen
- <samitolvanen@google.com>, Daniel
- Gomez <da.gomez@samsung.com>, Miguel Ojeda <ojeda@kernel.org>
-Cc: Tamir Duberstein <tamird@gmail.com>, Daniel Gomez <da.gomez@kernel.org>,
- Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing
- List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the modules tree
-In-Reply-To: <20251104154500.5acb5340@canb.auug.org.au>
-References: <mb_jUGmjgayTheAB5ZLGso-I856wAQhMkb6zPGnzUyAoUjhzm-QIzkGPLTe-sPI29ax91vO1D3aVy6J7rdTtgg==@protonmail.internalid>
- <20251104154500.5acb5340@canb.auug.org.au>
-Date: Tue, 04 Nov 2025 11:15:21 +0100
-Message-ID: <87jz0685om.fsf@t14s.mail-host-address-is-not-set>
+	 MIME-Version:Content-Type; b=o+9bmTYA94OLmZ8aONkGi2utZYWMMtuqlqgd8ivJpg1gy/MOS+i2oKzT6UYK3Tf1ktvOw8gkPJwaaRr9pXUMWaIYYrW7Dz7N6jJ3nrJbOVoCDWMaqNaUyPQCVOefBh7LtOr/EPSXcywArOd2VeqjI89N6JGPwygyOKfyhcnJTSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c0rXDAzY; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762251440; x=1793787440;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=K9IsUGi2wKpFhfnL6iptoWIjbutL+DAGLt1r4zaWAlQ=;
+  b=c0rXDAzYtP2L3ORj7+/S+Hx1slnJUhNGSIUf7AQZpTKxo9VQpFjglJ6o
+   3HusEBQl82KlKWbE5ApfbDsi/8kRXOYYWXl1DzWe2oCXYLbXfCe6ShpAN
+   dVoyHkl7xeIujk6+2rFDgTTPwvq4XDYqr14SuTsuWjSM5l1yryvhIm1Gw
+   /ydMJJQFEdt66yzxElkvIG4sSjWu0BWNbfucVAdRhLdHi8ueZKZvJO1c1
+   FaPUl3sgoxnIS1rbD8LMcQ4GJhZnvsNmfoLXrmpzUEKBoVASdad/8aHby
+   gF7eYuUak8lRWQ8XTu+sJOmqTM542czgfX7LGGLLtGvoEEi4kzExc7cxZ
+   w==;
+X-CSE-ConnectionGUID: 5Ndbn5o4T7eVPEeZzjuUmA==
+X-CSE-MsgGUID: DUESihMYTAKfkrXO6KqL2g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11602"; a="81970891"
+X-IronPort-AV: E=Sophos;i="6.19,278,1754982000"; 
+   d="scan'208";a="81970891"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2025 02:17:19 -0800
+X-CSE-ConnectionGUID: kvc8uvYsS7yF+E03YkuOZA==
+X-CSE-MsgGUID: kQv+ZSHeSwqzS3z9bIuzhg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,278,1754982000"; 
+   d="scan'208";a="186363416"
+Received: from hrotuna-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.246.182])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2025 02:17:17 -0800
+From: Jani Nikula <jani.nikula@intel.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Simona Vetter <simona.vetter@ffwll.ch>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Thomas Zimmermann
+ <tzimmermann@suse.de>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+In-Reply-To: <20251104101158.1cc9abcd@canb.auug.org.au>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20251103112418.031b3f8c@canb.auug.org.au>
+ <b4faab8bee2b4430447ff7aeac0f2b3e9aac8ec8@intel.com>
+ <20251104101158.1cc9abcd@canb.auug.org.au>
+Date: Tue, 04 Nov 2025 12:17:14 +0200
+Message-ID: <adda2398c0a29e0c5b0dcaa93a5be6ed0b67a1ce@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -64,86 +81,42 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-Hi,
-
-"Stephen Rothwell" <sfr@canb.auug.org.au> writes:
-
+On Tue, 04 Nov 2025, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > Hi all,
 >
-> After merging the modules tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
+> On Mon, 03 Nov 2025 11:26:01 +0200 Jani Nikula <jani.nikula@intel.com> wrote:
+>>
+> And now this:
 >
-> error[E0308]: mismatched types
->   --> rust/kernel/module_param.rs:75:47
->    |
-> 75 |         let new_value = T::try_from_param_arg(arg)?;
->    |                         --------------------- ^^^ expected `&BStr`, found `&CStr`
->    |                         |
->    |                         arguments to this function are incorrect
->    |
->    = note: expected reference `&BStr`
->               found reference `&ffi::CStr`
-> note: associated function defined here
->   --> rust/kernel/module_param.rs:32:8
->    |
-> 32 |     fn try_from_param_arg(arg: &BStr) -> Result<Self>;
->    |        ^^^^^^^^^^^^^^^^^^
+> drivers/gpu/drm/hyperv/hyperv_drm_drv.c: In function 'hyperv_setup_vram':
+> drivers/gpu/drm/hyperv/hyperv_drm_drv.c:80:17: error: implicit declaration of function 'drm_err'; did you mean 'pr_err'? [-Wimplicit-function-declaration]
+>    80 |                 drm_err(dev, "Failed to allocate mmio\n");
+>       |                 ^~~~~~~
+>       |                 pr_err
+> drivers/gpu/drm/hyperv/hyperv_drm_drv.c: In function 'hyperv_vmbus_probe':
+> drivers/gpu/drm/hyperv/hyperv_drm_drv.c:140:17: error: implicit declaration of function 'drm_warn'; did you mean 'dev_warn'? [-Wimplicit-function-declaration]
+>   140 |                 drm_warn(dev, "Failed to update vram location.\n");
+>       |                 ^~~~~~~~
+>       |                 dev_warn
+> drivers/gpu/drm/hyperv/hyperv_drm_modeset.c: In function 'hyperv_plane_atomic_check':
+> drivers/gpu/drm/hyperv/hyperv_drm_modeset.c:161:17: error: implicit declaration of function 'drm_err'; did you mean 'pr_err'? [-Wimplicit-function-declaration]
+>   161 |                 drm_err(&hv->dev, "fb size requested by %s for %dX%d (pitch %d) greater than %ld\n",
+>       |                 ^~~~~~~
+>       |                 pr_err
 >
-> error: aborting due to 1 previous error
->
-> For more information about this error, try `rustc --explain E0308`.
->
-> Caused by commit
->
->   0b08fc292842 ("rust: introduce module_param module")
->
-> This is some interaction with something later in linux-next - presumably
-> commit
->
->   3b83f5d5e78a ("rust: replace `CStr` with `core::ffi::CStr`")
->
-> from the rust tree.
->
-> Hopefully someone can provide a resolution for me tomorrow.
->
-> I have used the modules tree from next-20251103 for today.
+> I have used the drm-misc tree from next-20251031 again.
 
-Please use the following resolution:
+And now this fix [1]...
 
-diff --git a/rust/kernel/module_param.rs b/rust/kernel/module_param.rs
-index e7d5c930a467d..6a8a7a875643a 100644
---- a/rust/kernel/module_param.rs
-+++ b/rust/kernel/module_param.rs
-@@ -70,6 +70,7 @@ pub trait ModuleParam: Sized + Copy {
-     // SAFETY: By function safety requirement, val is non-null, null-terminated
-     // and valid for reads for the duration of this function.
-     let arg = unsafe { CStr::from_char_ptr(val) };
-+    let arg: &BStr = arg.as_ref();
- 
-     crate::error::from_result(|| {
-         let new_value = T::try_from_param_arg(arg)?;
-diff --git a/rust/macros/module.rs b/rust/macros/module.rs
-index d62e9c1e2a898..decb0849f3d33 100644
---- a/rust/macros/module.rs
-+++ b/rust/macros/module.rs
-@@ -133,10 +133,10 @@ fn emit_params(&mut self, info: &ModuleInfo) {
-                         ::kernel::module_param::KernelParam::new(
-                             ::kernel::bindings::kernel_param {{
-                                 name: if ::core::cfg!(MODULE) {{
--                                    ::kernel::c_str!(\"{param_name}\").as_bytes_with_nul()
-+                                    ::kernel::c_str!(\"{param_name}\").to_bytes_with_nul()
-                                 }} else {{
-                                     ::kernel::c_str!(\"{module_name}.{param_name}\")
--                                        .as_bytes_with_nul()
-+                                        .to_bytes_with_nul()
-                                 }}.as_ptr(),
-                                 // SAFETY: `__this_module` is constructed by the kernel at load
-                                 // time and will not be freed until the module is unloaded.
+Thanks for the report, and sorry for the trouble.
+
+BR,
+Jani.
 
 
-
-Best regards,
-Andreas Hindborg
+[1] https://lore.kernel.org/r/20251104100253.646577-1-jani.nikula@intel.com
 
 
+-- 
+Jani Nikula, Intel
 

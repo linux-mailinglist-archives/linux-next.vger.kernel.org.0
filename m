@@ -1,130 +1,133 @@
-Return-Path: <linux-next+bounces-8822-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8823-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2824C33341
-	for <lists+linux-next@lfdr.de>; Tue, 04 Nov 2025 23:24:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E802BC33712
+	for <lists+linux-next@lfdr.de>; Wed, 05 Nov 2025 01:11:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 457ED466B3A
-	for <lists+linux-next@lfdr.de>; Tue,  4 Nov 2025 22:20:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C16218C5DDF
+	for <lists+linux-next@lfdr.de>; Wed,  5 Nov 2025 00:11:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23B782690D5;
-	Tue,  4 Nov 2025 22:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC42621C9E1;
+	Wed,  5 Nov 2025 00:10:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="EDJyKSj0"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BODv1wQ/"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657462D061C;
-	Tue,  4 Nov 2025 22:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3128218592;
+	Wed,  5 Nov 2025 00:10:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762294796; cv=none; b=kDeAhsQmcT0eY79czomVbQ3DQdEbvWqRfV/Ea4CNE4tpmvuSZL5QaZKQbbaySLo/4dijvxlk2yDtWfQaORgi3FfGlmMJEjNseVArbSUYOR6rybGRJpT9xNn43QARxVq1nqrqyxZCL0id4ViZaNro8m1B4el4u0Cjkd4Z1w/lK98=
+	t=1762301459; cv=none; b=V32EIeaBX4Lg7zAkB7uKvNLewrUuTCNWAP0k0DH2FQ2rjc3EVIotOFccudaF+Ys2a0L/U3nYli32N1Lyg8omH2xBgnaxKGai4Ufqbw+a1rpt7kgpF8v24x95IMWGZSkaVTyJvghG93xXThABLvVAN93+yVLmlDvuGbsZk+5xah0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762294796; c=relaxed/simple;
-	bh=Qz/fqXRWiPHQN3ewpaRgvnz+eM4EoT2NCq5O9Sx62/8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LAgIUEqTgxEbQT2LqeY7HBKB40w61bSJcH82XX6IhC7jS9XhIKgM/GQzrCfGb3BHe+BOF+HZGF3mpTNQhWUN5cASsodOG5vI/1xGOKItxo46x7jsZTxEeJwQqdh6yc6ZMtpJ0hlKWsRde04GMXhO5MhEa7QeDu5vfrl8DqKlh3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=EDJyKSj0; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1762301459; c=relaxed/simple;
+	bh=S02hYBml1iDpQh+WfVVbwWOB8gM7bQ8VdseyNtRTrM8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=l2SbOBEV4lpHXSmF9hRSez4PzcukKvgbPlgNmctMjBkDAMTbdX5PqVM2Mp7S/Z9PmYey/6pH4CuSglGKqpdsLGOz1MB4clrncDkd+Fj//2OsGuQ1sksmiizC4KYdw2wB5KCWS6J8J/CiLEsi6jwJ7HY+m9tWgSKBPbeZamPelkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BODv1wQ/; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1762294788;
-	bh=CPd1XVl0PC+zgXR94idC0ZyTnwALPOoPLFtBmKFwa98=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=EDJyKSj0QxhQdmj2JMQYkGNx8tM7ez18EGIeVjYopIeCATY+pG6kyJ1V3TMBJU6yg
-	 UsRgzOU/SHAPL1AYH0f4xfc5BAu5bwET4Msa+Nw4RDe6EPxJ+FRKKEMDR01hvSr0sf
-	 PBOtH2mzo5F/EvRUNdzqrbs0WB2zh/qVGcCdTerSatopUjFISKbZN5ndAhXkOHRjS8
-	 sR3dM/jEb+lDYpm02vOtniFQybn/7ZQG6bSQzOHo0kkYV7h+dJuTT9UasnvtvzCoz3
-	 I7PjoElVaBhaxhTjyzX4ZrK3Y/kGIrOL4SS7f1i86ER/TayjZsO2tyMStzbwmTqz/b
-	 B+fid2E7MDXzA==
+	s=202503; t=1762301446;
+	bh=XJXJwzNDXjJcLY+uLPpULxy4f1iCFqB3zpdrUZHJdC0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=BODv1wQ/sa3hDVxmV/RjsgZ+MlKEJOhj7E96MP+ScIYI+51b2bLbXJJcF5zgl0m4R
+	 3xwFEqLnVTkNEWEUH5StTcETul3DFiVU/KRZWlY8Yv6W1dJ63S5YI6YWiMxc1wnHol
+	 iTFpxLdP/TfYzUrkAg2ZnoTZBsu+gdve/tzgWmdRnRJtAHDwaVZKRE4kgc4OZRGpoH
+	 I3gJ0QNC0kLY+YPnY3rM9g6l23SJacRlJKJYXN25W4M4cuYZko5xBUKq5qM6ryUWp5
+	 C4iwIWhEhmCCDpkY+EfCFgW9gqY8whC5qdtuVyt/JWYWs7I1o1XTYro4fJE4OBqlVh
+	 BGt6Y2gwD5A0w==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d1NDN0Dqjz4wCZ;
-	Wed, 05 Nov 2025 09:19:48 +1100 (AEDT)
-Date: Wed, 5 Nov 2025 09:19:47 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d1QhQ5GhWz4w0p;
+	Wed, 05 Nov 2025 11:10:46 +1100 (AEDT)
+Date: Wed, 5 Nov 2025 11:10:45 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Drew Fustini <fustini@kernel.org>
-Cc: linux-next@vger.kernel.org, linux-kernel@vger.kernel.org, Conor Dooley
- <conor@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: Add tenstorrent to linux-next
-Message-ID: <20251105091947.2692a796@canb.auug.org.au>
-In-Reply-To: <aQpkDYXT3N6qWiZs@x1>
-References: <aQpkDYXT3N6qWiZs@x1>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the vfs-brauner tree
+Message-ID: <20251105111045.2a5f0713@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ULWV=an8W5NfKQGUzapEptF";
+Content-Type: multipart/signed; boundary="Sig_/cBwdGFpc5BwcqULumwajoeg";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/ULWV=an8W5NfKQGUzapEptF
+--Sig_/cBwdGFpc5BwcqULumwajoeg
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Drew,
+Hi all,
 
-On Tue, 4 Nov 2025 12:37:33 -0800 Drew Fustini <fustini@kernel.org> wrote:
->
-> I have setup device tree branches for Tenstorrent RISC-V SoCs, and I
-> would like to add them to linux-next for testing coverage. I have sent a
-> v6.19 PR to Arnd to add the Tenstorrent Blachkole SoC device tree [1].
->=20
-> tenstorrent-dt-fixes git https://github.com/tenstorrent/linux.git#tenstor=
-rent-dt-fixes
-> tenstorrent-dt-for-next git https://github.com/tenstorrent/linux.git#tens=
-torrent-dt-for-next
+After merging the vfs-brauner tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Added from today (I called the second "tenstorrent-dt").  I have just
-you as contact so far - should I add anyone else?
+drivers/crypto/ccp/sev-dev.c: In function 'open_file_as_root':
+drivers/crypto/ccp/sev-dev.c:263:28: error: unused variable 'old_cred' [-We=
+rror=3Dunused-variable]
+  263 |         const struct cred *old_cred;
+      |                            ^~~~~~~~
+cc1: all warnings being treated as errors
 
-Also, should I update your other trees (thead-clk, thead-clk-fixes,
-thead-dt and thead-dt-fixes) to use your kernel.org address as contact?
+Caused by commit
 
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
+  a5f40c848a5a ("sev-dev: use override credential guards")
 
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
+I have applied this fix patch for today:
 
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 5 Nov 2025 10:35:52 +1100
+Subject: [PATCH] fix up for "sev-dev: use override credential guards"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/crypto/ccp/sev-dev.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+index 03e08ed8da8f..b28a6f50daaa 100644
+--- a/drivers/crypto/ccp/sev-dev.c
++++ b/drivers/crypto/ccp/sev-dev.c
+@@ -260,7 +260,6 @@ static int sev_cmd_buffer_len(int cmd)
+ static struct file *open_file_as_root(const char *filename, int flags, umo=
+de_t mode)
+ {
+ 	struct path root __free(path_put) =3D {};
+-	const struct cred *old_cred;
+=20
+ 	task_lock(&init_task);
+ 	get_fs_root(init_task.fs, &root);
+--=20
+2.51.1
 
 --=20
 Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
+Stephen Rothwell
 
---Sig_/ULWV=an8W5NfKQGUzapEptF
+--Sig_/cBwdGFpc5BwcqULumwajoeg
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkKfAMACgkQAVBC80lX
-0GzALwf/fyDxySEYKsqJatdQeIxMChR8AMtPBSNdDU/+v38ZI1d8cpsIibMC+T9J
-8jcu0O0NZKPre6v9dOr4qOcbGBWRvtTYxu888QnT+P2Ck1VqlcG9wWjVv0u7LoLW
-A87WKE8XV3DbL0VgEgY+5kqZs3c9i3zGj23dgDCx+0syCW1SL8M1fOP2xd14qs10
-9OQZH2utD/W22vvIkFmSBIiSpF6qDmRiuYS5IBKnD091MexpYjFR0K/4q0tNEzG0
-z0iZY2KOOoqUSCfRgxp8EPecXOv+BW/pBJACUFUk4QilsJq+j8ACE8Ntl5gc7cPS
-CgwWGXf+Q4mXNHvePnpObPmPOctWtA==
-=XONg
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkKlgUACgkQAVBC80lX
+0GyxKggAhI3qrS9EQoEC9WvoxJileKolOzMuWcpihysQ+jlJULBP1aAMbijHhLUG
+NJUj9dkJ38OuiFnFAjE2fXTa7VlI6SocvkCmmKbjYUYjrlzHLK/sJwE1EZDMPJA7
++Qn1Su/tK5Xe3aynnBOwaLeYZUexyFQoxj3rF5s+Ua1uXjtibNVfIinQxAr8Qr01
+DFll2oKHA0Hb+2J5mFZ/RgY1hl0PKjZll/Er/+0JraSQkJI0nnY0Q+W8oXIGJoi1
+iOD8SYxdLQKZ/3beb9pFEa/mw3o58mEHYk0jHX2ia+0cdWqyMTEzJpltRqoWBIHp
+mYNz6BV6uVyiAUBI0Q7zBawlHf6Kfg==
+=zeO7
 -----END PGP SIGNATURE-----
 
---Sig_/ULWV=an8W5NfKQGUzapEptF--
+--Sig_/cBwdGFpc5BwcqULumwajoeg--
 

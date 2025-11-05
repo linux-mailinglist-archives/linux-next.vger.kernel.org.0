@@ -1,56 +1,62 @@
-Return-Path: <linux-next+bounces-8849-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8850-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3224CC370CF
-	for <lists+linux-next@lfdr.de>; Wed, 05 Nov 2025 18:24:02 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5317C3773E
+	for <lists+linux-next@lfdr.de>; Wed, 05 Nov 2025 20:18:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B6F06507607
-	for <lists+linux-next@lfdr.de>; Wed,  5 Nov 2025 17:09:37 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1AEBE4EC9D7
+	for <lists+linux-next@lfdr.de>; Wed,  5 Nov 2025 19:16:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7AC33F8D7;
-	Wed,  5 Nov 2025 17:07:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF0D633DEF8;
+	Wed,  5 Nov 2025 19:16:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H9JYaLzy"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="W94hmpWc"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215BE3431FC;
-	Wed,  5 Nov 2025 17:07:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71947335567;
+	Wed,  5 Nov 2025 19:16:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762362440; cv=none; b=l9nvz12B4eBPCZDB99TfbF0y+331L7TS+mslr3xL80P6iy8ivGeIKL9y0tOj4WJGYwmC31AV2C14kwtv1l81nDs/1QLZ3ae3GN40xq8aKDfQMpACPpmVNDlUavRllT5BWp8UUSvCQ46BzoWjlzVVxlRXYUehvockXqJKtvCPa2E=
+	t=1762370179; cv=none; b=ByPlb7mT7LS+O4DhwCuA/wm0nL3sn55kB8rDxpvEC7Kr8KlzLGKw9PHzhOjdk1wRlu5AKMNMPAdYT2SQypp8XCZ4sTl/bMdQ56IieiSG/Uu6BqDT1QDD+gbbNUQrNQsXM+uCDqS9gns76wvubekLU7QkE8p75V30lu7RjWW0yr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762362440; c=relaxed/simple;
-	bh=BELkoVxTs5SAwNyOCNROpeZoIObP8eqfaNIDaCrXlTY=;
+	s=arc-20240116; t=1762370179; c=relaxed/simple;
+	bh=LvFCw2GT3XSKjjbezDneebu0Zzj2K249jCRRso+s0/0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BSVjCJldzpt5bA32EY8+vwLsnhd95H2VBIZOdN3UkDNu5SPuNB2pAs9U7r7vgVZsuQMh9+LU/kuVp4B2DSkdyXDcoRW2Z68701Y0XohLRRSZgvsBdvhYyTuKEEm3X6ouCKTcRCL9YkirItD9OR08myELYYj0FD0rO5BQB3KCqO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H9JYaLzy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10107C116B1;
-	Wed,  5 Nov 2025 17:07:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762362439;
-	bh=BELkoVxTs5SAwNyOCNROpeZoIObP8eqfaNIDaCrXlTY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H9JYaLzy0zSC8AVFoextq9sVyCzeAXLwLbLjNmLaTh1XfftIxtZujWdXEvvZqfuN4
-	 0q4v6IAks/5DQC8TajZB/6+PmyHiQDi+NeYtIHW0Rr0iglw+7rb0jV8UxksaB50Din
-	 23sQD/vlS2RyrQedWpZsS5GAoQLYuDoEHH+LyXCB4DIVRGKYCpyxS6HCbZ7GbPXNGr
-	 7rIQAVlyx5WwrnnIt6v6dY0chAUFOtu6uonFWwOgHmkxbCbw4Pe1xLyQQABorsR8bI
-	 r0PhdqBOUViDZDKgLcgfGJvlk/rQBKHKkoOd/SfwK4q7PEmxXU+5ZAwhGH8+ehMsmt
-	 fXuC1Dnc93oNw==
-Date: Wed, 5 Nov 2025 10:07:15 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=flPP8IfMndMSijuQ2OS3NgzZYaCu543lW0OVvi8m5pM+RBZv8EHwxrUoZY4lvsbDag1RG2/weYjxAt68ILGC6ZJCdSou4ZJVPzoClsiEclYoc7YzuzjdzjFxhgKs4YHpdO8RIq5RRNAqf3liFGhkox0i6cexvbDXG1LQhnee+rA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=W94hmpWc; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=y9nnRAMUrIWQISQm8qOZ3DHfH7zNFoiFJNKHLmrXVU8=; b=W94hmpWcKE/3rDJ4fjm+B1arFf
+	gsUk0+R3nAphcDGlZR67gTwSXK4XiyjIkmP7c1uAmGCzkAcpM+64qwFePLIVvz9vAkANR1TEAziQJ
+	5R7IWBUoQisKmjmv/1hf0BUDYMwR99ypvKt8u1YjFUacxKIGNacsxTRYNJ43gG5g+vCiyX5S0uLif
+	/vSlDpN8MLrcQL4I+9g4ITuKAGRExYA7KwIFKRPQjP4HDKkJG5AAnVwiNiM/6ZYd2l1hcjiHUgPOP
+	Fl9az1dNveiq7FDJ2YWxSGQ/dDS9jKcUlIN8j3NePGVlIrOSTONqwkUMpSNDfDYHw/3f5OBpYGFIS
+	mvx34EqA==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vGi7h-00000002nKX-2Lf8;
+	Wed, 05 Nov 2025 18:20:45 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id B3EB43001D4; Wed, 05 Nov 2025 20:16:13 +0100 (CET)
+Date: Wed, 5 Nov 2025 20:16:13 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Nathan Chancellor <nathan@kernel.org>
 Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
 	Josh Poimboeuf <jpoimboe@kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	linux-kbuild@vger.kernel.org, Nicolas Schier <nsc@kernel.org>
 Subject: Re: linux-next: new objtool warnings
-Message-ID: <20251105170715.GA706366@ax162>
+Message-ID: <20251105191613.GA1831451@noisy.programming.kicks-ass.net>
 References: <20251031111515.09c9a4ed@canb.auug.org.au>
  <20251103091006.GV3245006@noisy.programming.kicks-ass.net>
  <20251103203256.5ac39302@canb.auug.org.au>
@@ -60,6 +66,7 @@ References: <20251031111515.09c9a4ed@canb.auug.org.au>
  <20251105100014.GY4068168@noisy.programming.kicks-ass.net>
  <20251105100202.GZ4068168@noisy.programming.kicks-ass.net>
  <20251105101010.GA4068168@noisy.programming.kicks-ass.net>
+ <20251105170715.GA706366@ax162>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -68,67 +75,55 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251105101010.GA4068168@noisy.programming.kicks-ass.net>
+In-Reply-To: <20251105170715.GA706366@ax162>
 
-Hey Peter,
+On Wed, Nov 05, 2025 at 10:07:15AM -0700, Nathan Chancellor wrote:
 
-On Wed, Nov 05, 2025 at 11:10:10AM +0100, Peter Zijlstra wrote:
-> + Nathan
+>   $ make -skj"$(nproc)" ARCH=x86_64 vmlinux.o
+>   Makefile:1912: warning: overriding recipe for target 'vmlinux.o'
+>   Makefile:1150: warning: ignoring old recipe for target 'vmlinux.o'
+>   make[2]: *** No rule to make target 'vmlinux.o'.
+> 
+> When did this work? 
 
-Thanks for the heads up.
+Dunno, I have vague memories of it working. The only reason I tried
+is that vmlinux seems to be misbehaving.
 
-> On Wed, Nov 05, 2025 at 11:02:02AM +0100, Peter Zijlstra wrote:
-> > Also, someone wrecked the build system.
-> > 
-> > vmlinux.o is no longer a valid build target, and the vmlinux target
-> > seems to build a ton of module stuff :/
+> As for the second comment, if I build the vmlinux target, I see:
+> 
+>   AR      built-in.a
+>   AR      vmlinux.a
+>   LD      vmlinux.o
+>   MODPOST vmlinux.symvers
+>   CC      .vmlinux.export.o
+>   UPD     include/generated/utsversion.h
+>   CC      init/version-timestamp.o
+>   KSYMS   .tmp_vmlinux0.kallsyms.S
+>   AS      .tmp_vmlinux0.kallsyms.o
+>   LD      .tmp_vmlinux1
+>   NM      .tmp_vmlinux1.syms
+>   KSYMS   .tmp_vmlinux1.kallsyms.S
+>   AS      .tmp_vmlinux1.kallsyms.o
+>   LD      .tmp_vmlinux2
+>   NM      .tmp_vmlinux2.syms
+>   KSYMS   .tmp_vmlinux2.kallsyms.S
+>   AS      .tmp_vmlinux2.kallsyms.o
+>   LD      vmlinux.unstripped
+>   NM      System.map
+>   SORTTAB vmlinux.unstripped
+>   OBJCOPY vmlinux
+>   OBJCOPY modules.builtin.modinfo
+>   GEN     modules.builtin
 
-I tested the major stable releases (6.1, 6.6, and 6.12), long before
-Nicolas and I took over Kbuild, and vmlinux.o does not work as a target
-in any of them:
-
-  $ make -skj"$(nproc)" ARCH=x86_64 mrproper
-  $ make -skj"$(nproc)" ARCH=x86_64 defconfig
-  $ make -skj"$(nproc)" ARCH=x86_64 vmlinux.o
-  Makefile:1912: warning: overriding recipe for target 'vmlinux.o'
-  Makefile:1150: warning: ignoring old recipe for target 'vmlinux.o'
-  make[2]: *** No rule to make target 'vmlinux.o'.
-
-When did this work? Is it configuration dependent? FWIW, it looks like
-the 'vmlinux_o' targets does the right thing? I am not sure why it
-exists instead of just vmlinux.o, Masahiro did that in commit
-7a342e6c7735 ("kbuild: move modules.builtin(.modinfo) rules to
-Makefile.vmlinux_o") in 6.1.
-
-As for the second comment, if I build the vmlinux target, I see:
-
-  AR      built-in.a
-  AR      vmlinux.a
-  LD      vmlinux.o
-  MODPOST vmlinux.symvers
-  CC      .vmlinux.export.o
-  UPD     include/generated/utsversion.h
-  CC      init/version-timestamp.o
-  KSYMS   .tmp_vmlinux0.kallsyms.S
-  AS      .tmp_vmlinux0.kallsyms.o
-  LD      .tmp_vmlinux1
-  NM      .tmp_vmlinux1.syms
-  KSYMS   .tmp_vmlinux1.kallsyms.S
-  AS      .tmp_vmlinux1.kallsyms.o
-  LD      .tmp_vmlinux2
-  NM      .tmp_vmlinux2.syms
-  KSYMS   .tmp_vmlinux2.kallsyms.S
-  AS      .tmp_vmlinux2.kallsyms.o
-  LD      vmlinux.unstripped
-  NM      System.map
-  SORTTAB vmlinux.unstripped
-  OBJCOPY vmlinux
-  OBJCOPY modules.builtin.modinfo
-  GEN     modules.builtin
-
-at the end of the build with no instances of [M]. What "ton of module
-stuff" are you seeing in your build? Also configuration dependent?
-
-Cheers,
-Nathan
+# make O=tmp-build clean
+# make O=tmp-build allmodconfig
+# make O=tmp-build -j64 vmlinux 2>&1 | grep "\[M\]"
+  CC [M]  sound/sound_core.o
+  CC [M]  virt/lib/irqbypass.o
+  AS [M]  arch/x86/crypto/twofish-x86_64-asm_64.o
+  CC [M]  arch/x86/crypto/twofish_glue.o
+  CC [M]  samples/vfio-mdev/mtty.o
+  CC [M]  sound/ac97_bus.o
+  AS [M]  arch/x86/crypto/twofish-x86_64-asm_64-3way.o
+  CC [M]  arch/x86/crypto/twofish_glue_3way.o
 

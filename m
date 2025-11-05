@@ -1,115 +1,111 @@
-Return-Path: <linux-next+bounces-8824-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8825-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D653C3389F
-	for <lists+linux-next@lfdr.de>; Wed, 05 Nov 2025 01:54:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43AFDC33972
+	for <lists+linux-next@lfdr.de>; Wed, 05 Nov 2025 02:10:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A225B34DEE2
-	for <lists+linux-next@lfdr.de>; Wed,  5 Nov 2025 00:54:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5C9B18C2C3D
+	for <lists+linux-next@lfdr.de>; Wed,  5 Nov 2025 01:10:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FFC623EAA7;
-	Wed,  5 Nov 2025 00:54:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61A6C236437;
+	Wed,  5 Nov 2025 01:10:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="AxU0XoB2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cnv/qcxT"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2718623BCFD;
-	Wed,  5 Nov 2025 00:54:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38E9F27462;
+	Wed,  5 Nov 2025 01:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762304050; cv=none; b=eDv5lJvu6Y9sIrUqj0OaDUjBM6+ZqlhoOYKNoNFg+oCw1RM3nPvfL3wpnu8LHHNnWTbdmj0djiFnaVoGRwdcfuwRXnyQKWMSrhS89hY+wrPws6KH4JveDhMX8K2umpNUNvRrM6f73YJyMSC5FOD/wUFFGvXbtD2hOePPh6mg/xI=
+	t=1762305014; cv=none; b=MWYuS4Trxjn9WhRcQkwZ9WNdRCzTfX0nbE052euNVCH/n7QChPv6vMDTVR1psoWUAXTQaH4OxW7BjdqCYThHSn+8gNrvBE2bjflUjsxB/Aw9DOGHS2FmYFZIlDNvXWr+jPFhOkHbfrz6jGjN9E4dFUo+FQKLt5B/soBE0ddqrnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762304050; c=relaxed/simple;
-	bh=9elG4V9zzkegnqI9Sxxxo+FVcPHLOu5APv5z8h2KepM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jXo2Ils1Nb0Vw15R0e9gSxoVNZcLyQ5If2epYYsny4UrFv8JRtYEATcm82fheIE4ohbVi9vXbQSRRc/7tc+LgfxL20K9na90gWpON0piP7w6Llknuxf5/KpDMlEuqCEc1VlIL3RLOLMct7YNJbjb39FDqmitDGcyaE/BxTKr9sU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=AxU0XoB2; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1762304044;
-	bh=fBepn761sKXjDfElRugVGYEiyQ4J3/P/XDLs0DLwlYY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=AxU0XoB2v3RIKbxjaa6Z+TeP7bj1CWg18EVMhdmug66WV61cG/tPv5b7zqWmOfJxq
-	 RFapTfaljTbMQ4yvrCQ+Tn6IwyaXyNdGcgOBOAWgWmCITpvf3eA+9kEzQTP6YMtOAm
-	 kJneoumaTmL/3Cqqo1uYDapAAqWw+0lh9tRtoEdMgH5GLAn0rIDzaYhDLSDi2rNETi
-	 CDL+UR/BKmHeWJTpERkvtSlwP6nXBJIGg92Cu8m8t2UJ/2btsIbRp46x3dEqx2Muci
-	 TeaapUS+GjmebkYhgwUjZ2kUQkCc6BOBvkauBqcOBS0OpUhpffcD20XmEeMfLK9h/M
-	 db9x+HyRtGKhA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d1RfM1V7yz4w93;
-	Wed, 05 Nov 2025 11:54:02 +1100 (AEDT)
-Date: Wed, 5 Nov 2025 11:54:02 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Kevin Hilman <khilman@baylibre.com>
-Cc: Andreas Kemnade <andreas@kemnade.info>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Theodore Ts'o <tytso@mit.edu>
-Subject: linux-next: manual merge of the omap tree with Linus' tree
-Message-ID: <20251105115402.1b03f921@canb.auug.org.au>
+	s=arc-20240116; t=1762305014; c=relaxed/simple;
+	bh=BR9QOkMBKtKQNFZBXhVhpUa+W8KCMPzKLzdfkVez+Pc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uvMvwIeS2fGm6NBJcU8ar/9E9ZJdJaD1eYgpvmJ8r+djcrbgrGMtiMhmWfXX4QiQdGMD/qcehr3tvb0WKpHPAleRMbZIYBTvhSfPtQti3a+suiQzcZN+eWMEXaszfFFenY8X4+GZz+Yo4/9oY9nAr89BjU5uDkUXBkWQZi+922Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cnv/qcxT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5587C4CEF7;
+	Wed,  5 Nov 2025 01:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762305012;
+	bh=BR9QOkMBKtKQNFZBXhVhpUa+W8KCMPzKLzdfkVez+Pc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Cnv/qcxTuwvpuaFbOkgxhwPhIjiuY8i0WBvmeo8bbKesf9fimeM6dooW3EORbcug6
+	 +hihFA0uY49GgaImD3HnpUaRdJaJfccr0QrmDMZGBPCxrfBvZjwRfNw4DWZOcZRavG
+	 hGeGfZRBN/l1qwdiemzqj6eufubYNxUqQ148uRWzp+GCYI0z7yYho/9BQirVm+2B1E
+	 mM/We650ebIw9w7HxwiBkZLgrz7fM12HcjUhsJ4+6maqhKGgXo6AOqO0P508jMBGC0
+	 xr9ceG0HxHdGOiQNpX4KjNpnu1fy3usOq5JhUvhBca3vwWslHYuzsTAZVDZipanYOg
+	 dRrlBnBaT4Xig==
+Date: Tue, 4 Nov 2025 17:10:11 -0800
+From: Drew Fustini <fustini@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Conor Dooley <conor@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: Add tenstorrent to linux-next
+Message-ID: <aQqj8yBEUUxfqPA5@x1>
+References: <aQpkDYXT3N6qWiZs@x1>
+ <20251105091947.2692a796@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0mMpINXgvqszb6wlyHZgtPL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="zkB9bKyoC6CL6du+"
+Content-Disposition: inline
+In-Reply-To: <20251105091947.2692a796@canb.auug.org.au>
 
---Sig_/0mMpINXgvqszb6wlyHZgtPL
-Content-Type: text/plain; charset=US-ASCII
+
+--zkB9bKyoC6CL6du+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Wed, Nov 05, 2025 at 09:19:47AM +1100, Stephen Rothwell wrote:
+> Hi Drew,
+>=20
+> On Tue, 4 Nov 2025 12:37:33 -0800 Drew Fustini <fustini@kernel.org> wrote:
+> >
+> > I have setup device tree branches for Tenstorrent RISC-V SoCs, and I
+> > would like to add them to linux-next for testing coverage. I have sent a
+> > v6.19 PR to Arnd to add the Tenstorrent Blachkole SoC device tree [1].
+> >=20
+> > tenstorrent-dt-fixes git https://github.com/tenstorrent/linux.git#tenst=
+orrent-dt-fixes
+> > tenstorrent-dt-for-next git https://github.com/tenstorrent/linux.git#te=
+nstorrent-dt-for-next
+>=20
+> Added from today (I called the second "tenstorrent-dt").  I have just
+> you as contact so far - should I add anyone else?
 
-Today's linux-next merge of the omap tree got a conflict in:
+Thank you. Yes, please add:
 
-  arch/arm/configs/omap2plus_defconfig
+Joel Stanley <joel@jms.id.au>
 
-between commit:
+> Also, should I update your other trees (thead-clk, thead-clk-fixes,
+> thead-dt and thead-dt-fixes) to use your kernel.org address as contact?
 
-  c065b6046b34 ("Use CONFIG_EXT4_FS instead of CONFIG_EXT3_FS in all of the=
- defconfigs")
+Yes, please update my address to be fustini@kernel.org.
 
-from Linus' tree and commit:
+Thanks,
+Drew
 
-  810c5ef6efe9 ("arm: omap2plus_defconfig: enable ext4 directly")
-
-from the omap tree.
-
-I fixed it up (the latter includes the former) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/0mMpINXgvqszb6wlyHZgtPL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--zkB9bKyoC6CL6du+
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkKoCoACgkQAVBC80lX
-0GwcCQgAhANprpdXH0Wh/D7/TE8HXyuGrgUfpHvatL8iLrElvPfYhJr6d3z0AyRW
-zlpByiN31YnX+PSRed8RXv4S3g5WzCdcE8MsRjRccs2nImxL/3AmrUzE9lPrWMWO
-JeCfDj5GN42XzbW1t31li/HIf3DbV9LKaS1XoCg1IZk+i9cAjmtE/nXs825mNVRU
-y8oP3snNGLgViIUsYJ2uK234JIGYW6qa4NMmT1FDqY5RDJfQt1tp0+FneYFBqdcx
-DD5ZDcw7+ViAHMwwiFhCGpRxTWeu2f9opgNF/053qXBRIBKsP0T73xaoeM/kf8eK
-qWryMrvzLSnTNOPvysdDcUFmbStC6A==
-=7PAZ
+iHUEABYIAB0WIQSy8G7QpEpV9aCf6Lbb7CzD2SixDAUCaQqj7QAKCRDb7CzD2Six
+DL58AQCpFIUMeXY0rCeIY01BQ2uMYaDh5orPo+zf7ywG4VB6ZAEAvIBjWVj0Y6+C
+fuZ9e77niZ/sOIZgzVm5IlOAQzbqswA=
+=ZSEW
 -----END PGP SIGNATURE-----
 
---Sig_/0mMpINXgvqszb6wlyHZgtPL--
+--zkB9bKyoC6CL6du+--
 

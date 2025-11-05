@@ -1,160 +1,136 @@
-Return-Path: <linux-next+bounces-8829-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8830-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77498C33C6C
-	for <lists+linux-next@lfdr.de>; Wed, 05 Nov 2025 03:33:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA8E7C33D6A
+	for <lists+linux-next@lfdr.de>; Wed, 05 Nov 2025 04:30:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7DC03B5F2E
-	for <lists+linux-next@lfdr.de>; Wed,  5 Nov 2025 02:32:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74470426326
+	for <lists+linux-next@lfdr.de>; Wed,  5 Nov 2025 03:30:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DDEF21ADB7;
-	Wed,  5 Nov 2025 02:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9ECA18BBAE;
+	Wed,  5 Nov 2025 03:30:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="g7qCS6Ka"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dyDMjZCf"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395FD1624D5;
-	Wed,  5 Nov 2025 02:32:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B138F4A;
+	Wed,  5 Nov 2025 03:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762309934; cv=none; b=BNt4vK8hNUcLoAdN+K8tNjVxTSeswa7Oqw8044npoZxTwlf5xRNzLOSbEf757d8F2a6ee7RhQKZhCbC6sHVIVtwEYeJvQaZLF4Nr+85SsJU3mpEz3YgmpB4ZFywaweOIhDc25+80v5rgAd4rzGWbBP2fn3zI8qXOvyqyadKZLxc=
+	t=1762313434; cv=none; b=QIF4nmmjAsf9mjCgjmOW4JGOW+EqLhGeRbWsELXqE+DaosOu+OGL2EmOBWwyAReGn1gkLf8YKJIS5EN98XechzK+40Ws7Dgl89JnGhjD5ljMgKovmZI57BYcBBHYRnAVEBX6lr1UcJ3PKb5+IYbBySRRicICu0NllaSAlsoqKPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762309934; c=relaxed/simple;
-	bh=oazV4JOKBA2vqOi6rlfJo/k2juAIH9NuVotjR+Z/4LM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=GCBoGKdxzDb04wto3Gee8pWVxUoZQhwMfxHkRNEHetE/Hd13sf8XYPYgmQl8WgqwtrFheaF8YXdU8oNICCWpPBfY79xPqy27/oy2fLwznMGrT20sa6e5gn9ReFgH1NRCglz0z9qfzY8fLoHFOJY1cQLg0rFHm5yINmyR83JCIp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=g7qCS6Ka; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1762313434; c=relaxed/simple;
+	bh=eT3BZi+5sPqFB4z9Rk311qAkkCUr6WTNyCKVTm1XJE0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KgbTMX4H5AQKJvJ9b5RvtaKG4nLC06Qj8cknOaw2aV6YqyQSsQqeIvGtQcE6Af9Y/dCjHg3MoxcZy6zyP5Wh4rWRzCYsdqaTftRZzGuyn9zNpVQ+4J6Eb8n8ppgdxg3WV+iEQk7x1ZxG9qFrf6FFdEnM3/gBJLNITByWqkEhHIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dyDMjZCf; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1762309923;
-	bh=xbpnPeTN3sNe5hwyh0I7bt+HxkzyN2NKAz4dbYCQm24=;
-	h=Date:From:To:Cc:Subject:From;
-	b=g7qCS6Kaf2/ZonCXUFVBFutQKbsQ7IJgAzrTPpG+R/2jK5D2wxGnxWh+oxtazehNv
-	 e9hnViPCyN0fpcu/O4nJK7KN9meyIjW/CKrQkDho/kNT3px3MVyNalUYR8Y/f6McXb
-	 tKANEWfkghGcZz3DBwQNPXA19ocP13JPBmhNJTcuav6lmGB2m46nVbHYTfXvzz6CvT
-	 i1TT3R0uZtx8HT2+2d/ohTuFHzGwxK7J+YKnA0/BerXYwm5BA3IVZ3exWLthmFcjKv
-	 LLT2z/rf7CPgxlxrO9g+nXh/jVKm52A57ZqTrD9eq87T9l1EpvRykkxZMpjRL3gedT
-	 CnCvcQhDq7QhQ==
+	s=202503; t=1762313428;
+	bh=NoX0TaXICTAckgNWU+qmhek9oO8LZUr7AiAd0doE5r0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=dyDMjZCfyJXUBWTyRUhKeRYT0xH3sJ+Q3TaJAhCEQnI1/LMeNnz8oaxSOShnakCuU
+	 OaItlP9UiOGgylw6sipbngNWVKBLnDK65K/qfR6oYTatA40SP9JGQ7OcJcRlmQAcba
+	 QsjLRRV4sU2ep9HYYRpVSMFUQvzx4Vmn7enaX6AYBjJXIn+kWxZBKrLycpxAfYYbAr
+	 8Ax9mntjbGI7UiAJbd/R9+n++WFOGcFtw2hhUUETUiD3XgPWTq5RyUKQoOJvyXc6XV
+	 e7k/H3Ra3Ojb+0oGmZSAJ6TCuJkSq6Z65VUAh4AlJizC9WpVVX7fKMduzKg4wuycA9
+	 IrMqgduto7LFg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d1TqP0RJSz4w1j;
-	Wed, 05 Nov 2025 13:32:00 +1100 (AEDT)
-Date: Wed, 5 Nov 2025 13:31:59 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d1W6r4BYHz4w0L;
+	Wed, 05 Nov 2025 14:30:28 +1100 (AEDT)
+Date: Wed, 5 Nov 2025 14:30:27 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>
-Cc: Arnaud Lecomte <contact@arnaud-lcm.com>, bpf <bpf@vger.kernel.org>,
- Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tip tree with the bpf-next tree
-Message-ID: <20251105133159.6303b1ee@canb.auug.org.au>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: new objtool warnings
+Message-ID: <20251105143027.214f491c@canb.auug.org.au>
+In-Reply-To: <20251103093804.GY3245006@noisy.programming.kicks-ass.net>
+References: <20251031111515.09c9a4ed@canb.auug.org.au>
+	<20251103091006.GV3245006@noisy.programming.kicks-ass.net>
+	<20251103203256.5ac39302@canb.auug.org.au>
+	<20251103093804.GY3245006@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hHbeuxLOfeh=yC3==zvTqlN";
+Content-Type: multipart/signed; boundary="Sig_/3sk+RQrI_4wm/uJ7qnL=.54";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/hHbeuxLOfeh=yC3==zvTqlN
+--Sig_/3sk+RQrI_4wm/uJ7qnL=.54
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Peter,
 
-Today's linux-next merge of the tip tree got a conflict in:
+On Mon, 3 Nov 2025 10:38:04 +0100 Peter Zijlstra <peterz@infradead.org> wro=
+te:
+>
+> On Mon, Nov 03, 2025 at 08:32:56PM +1100, Stephen Rothwell wrote:
+> >=20
+> > On Mon, 3 Nov 2025 10:10:06 +0100 Peter Zijlstra <peterz@infradead.org>=
+ wrote: =20
+> > >
+> > > On Fri, Oct 31, 2025 at 11:15:15AM +1100, Stephen Rothwell wrote: =20
+> > > >=20
+> > > > My x86_64 allmodconfig builds started producing these warnings toda=
+y:
+> > > >=20
+> > > > vmlinux.o: warning: objtool: user_exc_vmm_communication+0x15a: call=
+ to __kasan_check_read() leaves .noinstr.text section
+> > > > vmlinux.o: warning: objtool: exc_debug_user+0x182: call to __kasan_=
+check_read() leaves .noinstr.text section
+> > > > vmlinux.o: warning: objtool: exc_int3+0x123: call to __kasan_check_=
+read() leaves .noinstr.text section
+> > > > vmlinux.o: warning: objtool: noist_exc_machine_check+0x17a: call to=
+ __kasan_check_read() leaves .noinstr.text section
+> > > > vmlinux.o: warning: objtool: fred_exc_machine_check+0x17e: call to =
+__kasan_check_read() leaves .noinstr.text section
+> > > >=20
+> > > > I can't easily tell what caused this change, sorry.   =20
+> > >=20
+> > > What compiler? This smells like a broken compiler, these are all
+> > > noinstr and that very much has __no_sanitize_address. =20
+> >=20
+> > And today I didn't get them.  So who knows?  I did *not* change compiler
+> > since Friday. =20
+>=20
+> Oh well, lets chalk it up to gremlins for now. I'll have a look if it
+> happens again/reliably.
 
-  kernel/bpf/stackmap.c
-
-between commit:
-
-  e17d62fedd10 ("bpf: Refactor stack map trace depth calculation into helpe=
-r function")
-
-from the bpf-next tree and commit:
-
-  c69993ecdd4d ("perf: Support deferred user unwind")
-
-from the tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+These objtool messages have returned today.  No change in compiler.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc kernel/bpf/stackmap.c
-index 2365541c81dd,8f1dacaf01fe..000000000000
---- a/kernel/bpf/stackmap.c
-+++ b/kernel/bpf/stackmap.c
-@@@ -333,9 -310,12 +333,9 @@@ BPF_CALL_3(bpf_get_stackid, struct pt_r
-  			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
-  		return -EINVAL;
- =20
- -	max_depth +=3D skip;
- -	if (max_depth > sysctl_perf_event_max_stack)
- -		max_depth =3D sysctl_perf_event_max_stack;
- -
- +	max_depth =3D stack_map_calculate_max_depth(map->value_size, elem_size, =
-flags);
-  	trace =3D get_perf_callchain(regs, kernel, user, max_depth,
-- 				   false, false);
-+ 				   false, false, 0);
- =20
-  	if (unlikely(!trace))
-  		/* couldn't fetch the stack trace */
-@@@ -463,15 -446,13 +463,15 @@@ static long __bpf_get_stack(struct pt_r
-  	if (may_fault)
-  		rcu_read_lock(); /* need RCU for perf's callchain below */
- =20
- -	if (trace_in)
- +	if (trace_in) {
-  		trace =3D trace_in;
- -	else if (kernel && task)
- +		trace->nr =3D min_t(u32, trace->nr, max_depth);
- +	} else if (kernel && task) {
-  		trace =3D get_callchain_entry_for_task(task, max_depth);
- -	else
- +	} else {
-  		trace =3D get_perf_callchain(regs, kernel, user, max_depth,
-- 					   crosstask, false);
-+ 					   crosstask, false, 0);
- +	}
- =20
-  	if (unlikely(!trace) || trace->nr < skip) {
-  		if (may_fault)
-
---Sig_/hHbeuxLOfeh=yC3==zvTqlN
+--Sig_/3sk+RQrI_4wm/uJ7qnL=.54
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkKtx8ACgkQAVBC80lX
-0Gzsbgf/cj+cg7MDVkATjRrphld5ewGcoa8oh9IZs6ux/Ips33Tdnh0firBtZXb+
-ot3C8ySymjlNaZERZeFd3l13M8loMDrj9MhUDlpT5xkxmobYQ3HbA57F+ZSgI7If
-/CbyDEVuo/+8/HCP0Oq9Liosbi9/4brC1RdVJyIT81TwGFCg/Thc9PlG137kWVni
-gLPkCpNFpVrrWChXWWZGj+Rzi9w4gS6Rs4vZej2eVQhm58PB1aKC+GvbgCm4fTqA
-dNK5+iJ/jRc+/NZ7J6ZhePkS34Kw5vG6VR7nJFYK8i44oGvKTixPJCGycU2FP3DZ
-j5ppkGQQRtX6dDmkEG4EQr1D4jlwFQ==
-=ZjLt
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkKxNMACgkQAVBC80lX
+0GwtTQf8DsXHQzbVJC0VmaAERoYUZAqyiMPpLzd/ZP5M0VLXypPJlvgPc/hROpz4
+rP1KSxuL8HdQC+T63QQMUlxWamPOnLndfzAzmELTwHoyTGOBn4M9+6OcrIBkTJ2b
+XogHUXjx1060pDl73PYNHuN4ISxXUskejKOVg1JzkX+ozCQQax9gmQ1iRUzOlA2I
+GKUNjR+UioJeTWdPtHfZcl5ApFq1bKustbJZs6XUI/0gUkv/4yCTgYDNufRRTIoC
+VRLYixTVYMKn5FRACm3RaL1XlUKNk3NV8FKbB8PDcCVXf+p3J0kM6Ddkt2DTWVfu
+eoponhdSqdSOh6fPUW06nfuDCCeyGA==
+=k4Ti
 -----END PGP SIGNATURE-----
 
---Sig_/hHbeuxLOfeh=yC3==zvTqlN--
+--Sig_/3sk+RQrI_4wm/uJ7qnL=.54--
 

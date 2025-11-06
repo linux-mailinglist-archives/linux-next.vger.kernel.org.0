@@ -1,99 +1,208 @@
-Return-Path: <linux-next+bounces-8863-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8864-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 566F1C38C8F
-	for <lists+linux-next@lfdr.de>; Thu, 06 Nov 2025 03:02:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 881F1C38DED
+	for <lists+linux-next@lfdr.de>; Thu, 06 Nov 2025 03:30:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9285B3A45C6
-	for <lists+linux-next@lfdr.de>; Thu,  6 Nov 2025 02:01:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44CC53B3819
+	for <lists+linux-next@lfdr.de>; Thu,  6 Nov 2025 02:30:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C7221146C;
-	Thu,  6 Nov 2025 02:01:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B527D27E;
+	Thu,  6 Nov 2025 02:30:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="hl37XPb5"
 X-Original-To: linux-next@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF7F1EB1A4;
-	Thu,  6 Nov 2025 02:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3015695
+	for <linux-next@vger.kernel.org>; Thu,  6 Nov 2025 02:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762394516; cv=none; b=p4f1ktMHbMFXwYpCfR6EOZFLEO17pqHBc18/9YgllXSeDdLXvJ837WTK8Nins+EJgtaUgaTC5RYXrMoraZwGXuSZ+cJErR1vj+MwHbjFcu8UhLl7fEO8hL6RmbtOIGKpD2IUWyZSTMLmmJfIuCmB9JvpX14aBBrnvJxIslChLng=
+	t=1762396230; cv=none; b=JGBQrSF2mLEwH9Ywb6ee9XWRuyKp5LDGmeVIBqtHikPWpxMWjasIOyAisDKAp6pM969Nse45O9VMvLruGh039Nt4Bs/hq9pDKzdMRzBuVAE7nEWAJUkkPoYZKjFmWG1UwWPTwI3cboBKAwnsAgB9y+oljEVmbJJL4uRki3RHNTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762394516; c=relaxed/simple;
-	bh=dO4FE21Zua9R4vz9RM9/cPVMk1N63kCDv91oB1BEKbU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kq6Q7nKQx5WGBAQvzuUvYjKMMdYV8cQsKBfsX6TUIHXZr8mYLSnJLRklUDWpM0kj7tbkwumF0nMoM2RnUaJIAGTVAwDbO7ZNVeTah2wOfk3Au+89Yz4xWKfiSSQDSC+UNNurjlMLom9ewHRnig3OX8TToQQbKVLHaSceqp+e+tE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf20.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id 66ECF14050B;
-	Thu,  6 Nov 2025 02:01:52 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf20.hostedemail.com (Postfix) with ESMTPA id ABB3120025;
-	Thu,  6 Nov 2025 02:01:50 +0000 (UTC)
-Date: Wed, 5 Nov 2025 21:01:59 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the ftrace tree
-Message-ID: <20251105210159.2334ba3c@gandalf.local.home>
-In-Reply-To: <20251106123317.217e24ed@canb.auug.org.au>
-References: <20251106123317.217e24ed@canb.auug.org.au>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1762396230; c=relaxed/simple;
+	bh=rolrt8DYpq83a43IzB8bUehKvLp0gorVPK/NHnwuQco=;
+	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=kKdWJpP1ZSAKGktbQW8rLpDnBnLvrXwPLpE1qcBzr2IfWRY5uGZ1kXYTPudth7H2rQLJclLakaDT4k6I1JZ/eVlCePqSbuUTCQUJ56M6X6dDzEhuvgNH/8rYd7EskkQO4BGwUXfn2XdF5kwJdR1SWauqcONThmjVpKlnmzoAOxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=hl37XPb5; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7af6a6f20easo542929b3a.0
+        for <linux-next@vger.kernel.org>; Wed, 05 Nov 2025 18:30:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1762396227; x=1763001027; darn=vger.kernel.org;
+        h=message-id:date:reply-to:cc:to:from:subject
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/89TK+m9dKy6rEAd4V16353CT4rnzIzXr06h3cOtmq4=;
+        b=hl37XPb5oqGP3x/MlfXns1XpBDDRW+XZBnsJlHuReeftEMnufucmEq94Nl7G2R/2Wv
+         qw4tNpJaTbb13xu9Uu6jnija5/N2NtqmN9mEDqpBhF+qTCIMJjNkA+RNZjYY/DyppWOy
+         Z6EWAdm6tfcwfXpo/Xpg/KuDKc6VrmMhmc8vMwK+9YMO/0isSJNtvpaV68jhULeU/noB
+         7Njyud6KpQw9/pDSD6VD30O09uGOFWNhvrxZhGUi5W7MPhO3jAhLya7T6HuJVpDMl9Ti
+         /iJyTeiwHEWN1Qn5LnqnNCc/9cdqqaCvqefTRboUbUyGxXLdmIluL0P1e4BZtyGEKgaR
+         CXnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762396227; x=1763001027;
+        h=message-id:date:reply-to:cc:to:from:subject
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/89TK+m9dKy6rEAd4V16353CT4rnzIzXr06h3cOtmq4=;
+        b=g1NSNVb9EcVlDthTsFWHXez48+vbycVgSpXvxJzHvyuTC/CCRcfrRyUzN/80yJqyLR
+         Gfx+wmOhhzlp/TpPGNZCcZU1dXCfxDy5sN1Kf5y4t7yOJ/jyiY2A3JQWZPeWZpD+L9AN
+         HbnzMaxbEhZnflNbCOusBPYzKX5/Vi01z/4+yCdGhSpHU9424V6TpZpT8Bd1VIsm8kS0
+         7eBcGRw6aYD1ULV2ZWL9VDiop4SZi5ZYwWtakefdNowhLtm85c3gH6S/IIES3xwbjFSa
+         RP9XGRy0uLzM0yqLoiwASJNSPPZzil3QzIKcMftJD2krHM5q4g9uwDmWhm7WDF+75iu4
+         erXA==
+X-Gm-Message-State: AOJu0YygKwUxXQVRM4y5cPtHFT0A5sMnwoocYxuEcA4B20eBxn/3HrZi
+	PLORFgnhZW4RdkOQuHEMq4Vs5Xc1uprvKkuC14aZbee6NPM51me5Ep/dxOC2AqnU8c6mfPKZlHK
+	DE8Cd
+X-Gm-Gg: ASbGncvxiCUzny3SKYt2tMVQ7NTm59W8X1JojlVjvIRqnrrjtU/P7dUbB/H64CI6P8V
+	GNbBzjdWNRFXH91cRmslUMwc76Ko1on3MQDvR4CIZJm85jPoUJ24mXB5Y0jv4OxnK7gjTtY9mDq
+	IicWQCJPmXOz5FxIJfIeKroOS+2HL0EMdW8QuOdCoVll94moRybicwVbIaaixpQHDVbDT8fHOBB
+	nQaRXFENl6kf0jS0VWr+d6g9pYP+it5YvBFryNhdYvU6Q54678H4t1SuKQO+rBzidUpKr8Lqkhv
+	EOZhebcpWIz8iKvuuZY/RbXIFBQUBw66ihaY4rmRSS7xEdZ5F6tinnRqryhQSwb5Ia63YxWJ2eF
+	HBnlrawSuzKfswaqSUufb7ad4fFZRSwHlqLU2ibRcvVZKNdzzXPeuC2Iw7hF6nQTVXu0uaixzY9
+	QHLyqV
+X-Google-Smtp-Source: AGHT+IGEG/ggOQuj56vUtJLQSlT01bOriczeeG9qMG0k4NrWm7vE+Hghv1OT3wM/nG6OC0VrmCqXtA==
+X-Received: by 2002:a05:6a00:3e15:b0:7aa:81fc:a83a with SMTP id d2e1a72fcca58-7ae1cc60757mr7202244b3a.6.1762396227241;
+        Wed, 05 Nov 2025 18:30:27 -0800 (PST)
+Received: from efdf33580483 ([20.38.40.137])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7af82204ecbsm846421b3a.38.2025.11.05.18.30.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Nov 2025 18:30:26 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: ABB3120025
-X-Stat-Signature: 5w9samtco698mhw199fgimuxugexy6f8
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+6k4fUAW9Fg4Wmq7JiUW6tey5kHaShdu8=
-X-HE-Tag: 1762394510-850612
-X-HE-Meta: U2FsdGVkX1+8dDZho369NEeDVMgwQNQ7xG712XN8KUpgDfN8b+FuU2BFRm+r3rAq8Oo2mcQlgNOHGLTY9Q696DluJ9RP4ohfG3aJ2gv3rfrByJvZi44djB4Z/dyJkDhXzgwq7F3z815QgyPtCF2yt15SHZAvh65L7rNt2CdgPVagc9eSR5x0HiLfyx0mwnAJTFwTKnUlt7iVf4qLtsRCSTduIB5BvFoq6cyV0+MafVPOvF0tY9tvtWqoUTfIIC9GdOMLyLdVrAnZesPr2rN8+y+cEexpz4fzDwS3kTPQEt2ECKmpHtRb9UbLUIAAkk1CACapG4NLKPN2NdQx6JffTXkvn+2178cAf3W/EVVWfEz5NbMydzkulrn19JgiRjmK
+Content-Transfer-Encoding: 8bit
+Subject: [STATUS] next/master - 84d39fb9d529f27d2f3d295430d1be0abdae7a6d
+From: KernelCI bot <bot@kernelci.org>
+To: kernelci-results@groups.io
+Cc: linux-next@vger.kernel.org
+Reply-To: kernelci@lists.linux.dev
+Date: Thu, 06 Nov 2025 02:30:26 -0000
+Message-ID: <176239622580.4404.11314453735736345763@efdf33580483>
 
-On Thu, 6 Nov 2025 12:33:17 +1100
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-> Hi all,
-> 
-> After merging the ftrace tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-> 
-> kernel/trace/trace_syscalls.c: In function 'print_syscall_enter':
-> kernel/trace/trace_syscalls.c:267:48: error: 'TRACE_ITER_VERBOSE' undeclared (first use in this function); did you mean 'TRACE_ITER_VERBOSE_BIT'?
->   267 |                 if (!tr || !(tr->trace_flags & TRACE_ITER_VERBOSE))
->       |                                                ^~~~~~~~~~~~~~~~~~
->       |                                                TRACE_ITER_VERBOSE_BIT
-> kernel/trace/trace_syscalls.c:267:48: note: each undeclared identifier is reported only once for each function it appears in
-> 
-> Caused by commit
-> 
->   64b627c8da9a ("tracing: Add parsing of flags to the sys_enter_openat trace event")
-> 
-> interacting with commit
-> 
->   bbec8e28cac5 ("tracing: Allow tracer to add more than 32 options")
-> 
-> which should have been fixed up in commit
-> 
->   2021eabbdb41 ("Merge probes/for-next")
-> 
-> I have used the ftrace tree from next-20251105 for today.
-> 
 
-Ah, Masami made a branch that I had to merge with a fix and I'm still
-testing that. But my scripts merged it without the fix. Hopefully I'll have
-that fixed soon.
 
--- Steve
+
+Hello,
+
+Status summary for next/master
+
+Dashboard:
+https://d.kernelci.org/c/next/master/84d39fb9d529f27d2f3d295430d1be0abdae7a6d/
+
+giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+branch: master
+commit hash: 84d39fb9d529f27d2f3d295430d1be0abdae7a6d
+origin: maestro
+test start time: 2025-11-05 06:27:09.766000+00:00
+
+Builds:	   41 ✅   13 ❌    0 ⚠️
+Boots: 	   94 ✅   38 ❌    0 ⚠️
+Tests: 	10494 ✅ 5759 ❌ 3472 ⚠️
+
+### POSSIBLE REGRESSIONS
+    
+Hardware: hp-x360-14a-cb0001xx-zork
+  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
+    - Architecture/compiler: x86_64/gcc-12
+      - kselftest.iommu
+      last run: https://d.kernelci.org/test/maestro:690af91ff21f07610dcd698a
+      history:  > ✅  > ❌  > ❌  
+            
+Hardware: imx6dl-udoo
+  > Config: multi_v7_defconfig
+    - Architecture/compiler: arm/gcc-12
+      - kselftest.alsa.alsa_mixer-test_event_spurious_fslimx6qudooac9_3
+      last run: https://d.kernelci.org/test/maestro:690af900f21f07610dcd67c4
+      history:  > ✅  > ❌  > ❌  > ❌  
+            
+      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_10
+      last run: https://d.kernelci.org/test/maestro:690af900f21f07610dcd67fa
+      history:  > ✅  > ❌  > ❌  > ❌  
+            
+
+
+### FIXED REGRESSIONS
+    
+Hardware: imx6dl-udoo
+  > Config: multi_v7_defconfig
+    - Architecture/compiler: arm/gcc-12
+      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_21
+      last run: https://d.kernelci.org/test/maestro:690af900f21f07610dcd6847
+      history:  > ❌  > ✅  > ✅  > ✅  
+            
+      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_8
+      last run: https://d.kernelci.org/test/maestro:690af900f21f07610dcd67ec
+      history:  > ❌  > ✅  > ✅  > ✅  
+            
+
+
+### UNSTABLE TESTS
+    
+Hardware: acer-cp514-3wh-r0qs-guybrush
+  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
+    - Architecture/compiler: x86_64/gcc-12
+      - kselftest.iommu
+      last run: https://d.kernelci.org/test/maestro:690af91df21f07610dcd6978
+      history:  > ❌  > ✅  > ❌  > ❌  
+            
+Hardware: imx6dl-udoo
+  > Config: multi_v7_defconfig
+    - Architecture/compiler: arm/gcc-12
+      - kselftest.dt
+      last run: https://d.kernelci.org/test/maestro:690af7c8f21f07610dcd64d3
+      history:  > ❌  > ✅  > ❌  > ❌  > ❌  
+            
+Hardware: acer-cp514-2h-1160g7-volteer
+  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
+    - Architecture/compiler: x86_64/gcc-12
+      - kselftest.iommu
+      last run: https://d.kernelci.org/test/maestro:690af91af21f07610dcd6957
+      history:  > ❌  > ✅  > ❌  > ❌  
+            
+Hardware: dell-latitude-5400-4305U-sarien
+  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
+    - Architecture/compiler: x86_64/gcc-12
+      - kselftest.cpufreq.hibernate
+      last run: https://d.kernelci.org/test/maestro:690af8faf21f07610dcd6761
+      history:  > ❌  > ✅  > ❌  
+            
+      - kselftest.cpufreq.hibernate.cpufreq_main_sh
+      last run: https://d.kernelci.org/test/maestro:690afb00f21f07610dcd9316
+      history:  > ❌  > ✅  > ❌  
+            
+Hardware: meson-g12b-a311d-khadas-vim3
+  > Config: defconfig+preempt_rt
+    - Architecture/compiler: arm64/gcc-12
+      - rt-tests.rt-migrate-test
+      last run: https://d.kernelci.org/test/maestro:690afa7af21f07610dcd7f7b
+      history:  > ✅  > ❌  > ✅  
+            
+      - rt-tests.rt-migrate-test.rt-migrate-test
+      last run: https://d.kernelci.org/test/maestro:690afb35f21f07610dcd9bbc
+      history:  > ✅  > ❌  > ✅  
+            
+
+
+
+This branch has 13 pre-existing build issues. See details in the dashboard.
+
+Sent every day if there were changes in the past 24 hours.
+Legend: ✅ PASS   ❌ FAIL  ⚠️ INCONCLUSIVE
+
+--
+This is an experimental report format. Please send feedback in!
+Talk to us at kernelci@lists.linux.dev
+
+Made with love by the KernelCI team - https://kernelci.org
 

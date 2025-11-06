@@ -1,107 +1,151 @@
-Return-Path: <linux-next+bounces-8875-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8876-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0433C39126
-	for <lists+linux-next@lfdr.de>; Thu, 06 Nov 2025 05:16:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F1D4C39136
+	for <lists+linux-next@lfdr.de>; Thu, 06 Nov 2025 05:21:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 46D194EBF6B
-	for <lists+linux-next@lfdr.de>; Thu,  6 Nov 2025 04:16:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F6843B1265
+	for <lists+linux-next@lfdr.de>; Thu,  6 Nov 2025 04:21:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D49E1200110;
-	Thu,  6 Nov 2025 04:16:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FE602C11D1;
+	Thu,  6 Nov 2025 04:21:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="llcLsLYU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tuDnGUaQ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C81F23FC5A;
-	Thu,  6 Nov 2025 04:16:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E4A2BDC3E;
+	Thu,  6 Nov 2025 04:21:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762402572; cv=none; b=GABs64J9KJA5cnhMK/1/r8iPQhg6YbIUbuk7aNLralx1t/RTSx8wvbkaJGJHfZOTtWUaBQEe9zJmZfEePSqoX7VGYydzTTD3W6wOvJmSiM8aAGT2nG8HhtBa82TUH2XRM3oU4aoR1xHDy9rl9dNOseoc5lmeo7pmH67Rrco2c84=
+	t=1762402895; cv=none; b=GMfi/FuqRmaMt+yAyW1Bfmddfmh4M9SvPVqjyCC6QR5Sc8RrPS9+0BomB1VMypSIAYRIAe/HfgosX9sOTq+OVosD82eZnGRT0z5KNWjW3iWGv3KmYNJJOZiJjfrKx9QdH7+tb3ZtcUd+Kwx8LPG3bkS9Dtvh7uZu7N5G1kj4mpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762402572; c=relaxed/simple;
-	bh=z8r0/UHrCAS+ggl8iWpv5mb9DDQ8Wn1uBKaa8kiQZJc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=JSj8UhbZ/t6GDw8bolaKhXcDhofKEBoG+v2MVhyxe0gaUzvvslc2CA6HKPPW59X0u3XvyDmHavVNaO378uNQYvLqTCh5aawKvW14vagnznouEx3l9z9S+NpcZuVoE2NT5UHipmaBfFqqgbKOzrt7wHB/tt33ed6QR1i4ntdT3C4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=llcLsLYU; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1762402567;
-	bh=xUu6wEpn5sykkeo/aZJ4nU3VopqW/04iob6Zy9wGR00=;
-	h=Date:From:To:Cc:Subject:From;
-	b=llcLsLYUv945sDAofkRoXL2+laBArzuXp/6WcbXy7rwoYThWoBmzf1GreeM+EjDQk
-	 zUAqyXVIVgviV4VeuQiK1yXqm17p2QHDF45CJhC8sKb61Je+OQSqdk0l3l8VDBVAhB
-	 NXH/m6EFMgL0qkFqsw5aZyapRy/qJhQqyfQmAHdkXn2SqpN6R4oTVPg7TJQMF2Uej1
-	 AmK99kCPSZzJnFEHYJWliv+D5arL8vIl9C1MN8CIFFQSgF92+zesT++l4ofDytIXMw
-	 VQmUN4QsREGlq/ls5vubhrMqJBUzGjfoEnE2anHIxsBf0WLeapHvPE88pwrzuFw7Ex
-	 7xVFT7n58jBcw==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d285340bNz4wM7;
-	Thu, 06 Nov 2025 15:16:07 +1100 (AEDT)
-Date: Thu, 6 Nov 2025 15:16:06 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Matthew Auld <matthew.auld@intel.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings in Linus' tree
-Message-ID: <20251106151606.0b5487ca@canb.auug.org.au>
+	s=arc-20240116; t=1762402895; c=relaxed/simple;
+	bh=j4bqPrG81dXQivWfYqO7HoNwllyea7OW+/68drQnzfo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uDwpwhu9xZlmD92Epytl6DNKbQX6o/VRkKrEPROyId4Nvg6ciFwjXUJxfB/APaUm812mmKkNbCk4NnPoy5EhkT4CH9NCzgRR/El47lMX3pGGcULLzGTNindCG+/T5xXEzqvhu5VBM2Sy0nF0H4SADRfV3pnedgDzMKSV4+r16FI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tuDnGUaQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 615AFC4CEF7;
+	Thu,  6 Nov 2025 04:21:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762402894;
+	bh=j4bqPrG81dXQivWfYqO7HoNwllyea7OW+/68drQnzfo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tuDnGUaQx/clfyPXz2wSOU92rhyqYDKvnYyd2QrtJ9UpIs3GB59HYjFMA/EbsHgRn
+	 77wHmb3mXnsAoS5XEbZSOuECE/EE6IqYhSwZSUEGVJA3eBW4NsbTqOiTx0wvfs350r
+	 evtCy2V1JuzIIB1f5V+gRoXIgqH+qTUnnYZzZQWKNBHC9KWUEz8lDUOneym8NhK9wZ
+	 nEWkAKQn+gifR5xrK6n89ziYb8fcRROY4u+xn83IyDWMBdQ//t3EZzfutQTMqG755N
+	 /3KU+4ndcKyqyCzPbN8W2hWDt4n5Nk05eADJuVPsfEok/IeCGm44OoxQlppq8FPjO2
+	 lv7jCWE36MUeg==
+Date: Wed, 5 Nov 2025 20:19:53 -0800
+From: Eric Biggers <ebiggers@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Linux Crypto List <linux-crypto@vger.kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the libcrypto tree
+Message-ID: <20251106041953.GB1650@sol>
+References: <20251106143623.06b23d57@canb.auug.org.au>
+ <20251106035521.GA1650@sol>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LCKl.SxW3=o/IFaQjzQm06o";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251106035521.GA1650@sol>
 
---Sig_/LCKl.SxW3=o/IFaQjzQm06o
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Nov 05, 2025 at 07:55:23PM -0800, Eric Biggers wrote:
+> On Thu, Nov 06, 2025 at 02:36:23PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the libcrypto tree, today's linux-next build (htmldocs)
+> > produced this warning:
+> > 
+> > WARNING: /home/sfr/kernels/next/next/include/crypto/sha3.h:74 This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+> >  * Zeroize a sha3_ctx.  This is already called by sha3_final().  Call this
+> > 
+> > Introduced by commit
+> > 
+> >   58873ecf091b ("lib/crypto: sha3: Add SHA-3 support")
+> 
+> Thanks.  Do you know if there's an easy way to find these ahead of time?
+> I usually run './scripts/kernel-doc -v -none ${filename}' to catch
+> kerneldoc issues.  I did run it on include/crypto/sha3.h, but for some
+> reason it doesn't detect this issue.
+> 
+> 'make htmldocs' doesn't find it either, but does generate a bunch of
+> unrelated warnings.  I may be missing an option to make it even more
+> verbose.  Either way, it's also slow to run.
+> 
+> - Eric
 
-Hi all,
+Okay, it's because some kernel-doc warnings were accidentally turned off
+for everyone :-(  And they just got turned back on by
+https://lore.kernel.org/r/20251104215502.1049817-1-andriy.shevchenko@linux.intel.com/
+With that applied, './scripts/kernel-doc -v -none include/crypto/sha3.h'
+does catch this.
 
-Today's linux-next build (htmldocs) produced these warnings:
+I folded the following into "lib/crypto: sha3: Add SHA-3 support" to
+convert the comments starting with "/**" into proper kerneldoc comments:
 
-WARNING: drivers/gpu/drm/drm_gpusvm.c:1229 expecting prototype for drm_gpus=
-vm_range_pages_valid_unlocked(). Prototype was for drm_gpusvm_pages_valid_u=
-nlocked() instead
-WARNING: drivers/gpu/drm/drm_gpusvm.c:1229 function parameter 'svm_pages' n=
-ot described in 'drm_gpusvm_pages_valid_unlocked'
-
-Introduced by commit
-
-  6364afd532bc ("drm/gpusvm: refactor core API to use pages struct")
-
-"make htmldocs" was not reporting all warnings for some time.  This has
-now been fixed and these appeared today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/LCKl.SxW3=o/IFaQjzQm06o
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkMIQYACgkQAVBC80lX
-0Gx57Qf/R/Qdzd73oQZ+2X1nK+0X8tBkPSjTyERWg/G/W7/ehu7yDM+JWBz7fONI
-k6La/mMLI0IWmvosY50xh/F1aqiJTTEvYOQ5OMqhi4xv/gHVzSV9X019CkV/ok0h
-4hRHAZdzyXtWfz8k+IPxWs2VQYThxPaMj7uPqxNeRjEI0/Hn3Y8oDkWDq0MZIVa/
-ahpCkV1+gyWr7kVZkYsz2My3vW8p03Gw1Fecn5NIVIu17PYOHxliSi/vTJv5Y2lq
-UnMrpMHkG0KguV+oNhrRYUadJi0uI+yF00g2tp7nsGJn5be6cpPpJpCB1DWv65EB
-z8lbfwqt+LDTIuqxE0rtwyLjYfiOEQ==
-=KKYG
------END PGP SIGNATURE-----
-
---Sig_/LCKl.SxW3=o/IFaQjzQm06o--
+diff --git a/include/crypto/sha3.h b/include/crypto/sha3.h
+index d713b5e3d695..c9e4182ff74f 100644
+--- a/include/crypto/sha3.h
++++ b/include/crypto/sha3.h
+@@ -66,26 +66,40 @@ struct __sha3_ctx {
+ 
+ void __sha3_update(struct __sha3_ctx *ctx, const u8 *in, size_t in_len);
+ 
+-/** Context for SHA3-224, SHA3-256, SHA3-384, or SHA3-512 */
++/**
++ * struct sha3_ctx - Context for SHA3-224, SHA3-256, SHA3-384, or SHA3-512
++ * @ctx: private
++ */
+ struct sha3_ctx {
+ 	struct __sha3_ctx ctx;
+ };
+ 
+ /**
+- * Zeroize a sha3_ctx.  This is already called by sha3_final().  Call this
+- * explicitly when abandoning a context without calling sha3_final().
++ * sha3_zeroize_ctx() - Zeroize a SHA-3 context
++ * @ctx: The context to zeroize
++ *
++ * This is already called by sha3_final().  Call this explicitly when abandoning
++ * a context without calling sha3_final().
+  */
+ static inline void sha3_zeroize_ctx(struct sha3_ctx *ctx)
+ {
+ 	memzero_explicit(ctx, sizeof(*ctx));
+ }
+ 
+-/** Context for SHAKE128 or SHAKE256 */
++/**
++ * struct shake_ctx - Context for SHAKE128 or SHAKE256
++ * @ctx: private
++ */
+ struct shake_ctx {
+ 	struct __sha3_ctx ctx;
+ };
+ 
+-/** Zeroize a shake_ctx.  Call this after the last squeeze. */
++/**
++ * shake_zeroize_ctx() - Zeroize a SHAKE context
++ * @ctx: The context to zeroize
++ *
++ * Call this after the last squeeze.
++ */
+ static inline void shake_zeroize_ctx(struct shake_ctx *ctx)
+ {
+ 	memzero_explicit(ctx, sizeof(*ctx));
 

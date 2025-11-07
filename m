@@ -1,210 +1,129 @@
-Return-Path: <linux-next+bounces-8890-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8891-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49A97C3E400
-	for <lists+linux-next@lfdr.de>; Fri, 07 Nov 2025 03:31:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B9E2C3E454
+	for <lists+linux-next@lfdr.de>; Fri, 07 Nov 2025 03:42:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 037B23AAD8D
-	for <lists+linux-next@lfdr.de>; Fri,  7 Nov 2025 02:31:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E770C4E39C1
+	for <lists+linux-next@lfdr.de>; Fri,  7 Nov 2025 02:42:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 893F918DB1E;
-	Fri,  7 Nov 2025 02:31:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51D112F12A3;
+	Fri,  7 Nov 2025 02:41:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="RjNNvZC/"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="n+AUUfLb"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B70282F5
-	for <linux-next@vger.kernel.org>; Fri,  7 Nov 2025 02:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96D7D2EF654;
+	Fri,  7 Nov 2025 02:41:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762482688; cv=none; b=BfLRdl0zipUFYUekwcDMV/QzNdtQVCjMFwL4+EEZQ1pKG/y4bxf/NswB+DMPhisES61QpqTCfHVSI6uYiVK1vPunoVlX9qDQ1zU6s+8cpLvMuY6Bir5v/LfkDCCu7donMBgUjqIlBXJvLo5wr1HQ5xKW3BYu7/T+ed2pYS+yi/Q=
+	t=1762483317; cv=none; b=KHtZAOUHswkY4pv+DaReLaQt+5Ympq2SMBbeD+Z+E8eNPVruE9wb0b2C5kksLmh2laEZofJmEyq+8UYjYQih+oG4Aqv9222f6ex46ztJzWO35jzdZXQJTzfA9OEPIqBcSD5rgo1VTtr8PBZoAOEyb3OHumwNmX3JoGfX+P/ptSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762482688; c=relaxed/simple;
-	bh=qUlfLRapY6svyWrr1gPioYJq70UgPOf+0B8sezDP3xE=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=cHzk8Z0FmuyunmLLuTdWPvcM7U4gb/qkk0tndipIbVhfz0OLveWpx6Rk03nnkgbsqIYxJVy3oT/h4q2wWUZGraBbg90tPRWulRxqF4QzupNJCTvuIt3NEftajHoksxioy6HN95Qpju4tYXryI7FjXRCEmhZHj/2NniwW+7zC6lY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=RjNNvZC/; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7b0c3451272so403081b3a.0
-        for <linux-next@vger.kernel.org>; Thu, 06 Nov 2025 18:31:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1762482686; x=1763087486; darn=vger.kernel.org;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uZNLI7dP+U6alsDoE+/A4meoiGQMC7Ah50NNQx9kU90=;
-        b=RjNNvZC/i6QlQnCu1/c3Df3Zbtb27gtPUwh/d2z26cQKU3LrGiEws39t+zy7c31Z66
-         lBawqepEJ+03enwTXm8PTjyrmQxo2gNCl0NvF5UokiFqqbXTvFqiIG28Cg+IqB20YK86
-         6gdiXCz0WL5uigiMKrULHXLk8f6YlpufjVf8AHPRgVXmFBe/eJieKB14XLp8K4PEWnGn
-         G+Shop0D8XKZZEiKImk7aHxHfJ2nDIVkbLauUBrv+sHOftn+6T+tovUtJW1ALoEBFQsi
-         DBozRcuIwo5BzXKO97x/QkZmksXv+ilF+62sxc9NWPrNuJ4IMHHoeEs2/4IOSe2x3M4e
-         f1jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762482686; x=1763087486;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uZNLI7dP+U6alsDoE+/A4meoiGQMC7Ah50NNQx9kU90=;
-        b=mv4u1QVnpqL6EduC/blW/mDK/h3o06vw4B8SeK8uA9sayP9ekFFHx/BkCVU+xaptLm
-         jysBkdktqVwhGDgQZbM39s4sY14iwSzbpFQG94LXLYrUHDQQkVPGdYsQ/Vasbn3//j0n
-         wE/ZhF4pI+VDxwGArnSUi91DxYZKDvPsL4whKxvijdXAo+2wJJ4AeWgeQ2TmmV7HBGxH
-         dfuEYVFDcXUR/7a3dtBJeRvJq/jHCnIwf5zTrUEKNbOpWoH7QfXfTaDjEvlQWPR8KaWJ
-         O/cJEoHGYcDOMfFByJ4lVreyuHIf2rPCK4o57AqwJ7QHvMF1F3CqP+oMUWCqy2WH6UpB
-         NoEQ==
-X-Gm-Message-State: AOJu0Yxi+OEjB2KTyQ+lUOrJTwKrhFg3Q+jNUsAZhWrQhUIRFCnQYaDz
-	AC1nYmIqVZacFEwXyqPnjsH7UyWo5dBVqOsFpEKXb0ckc+GPIPUsCpUREyDZh60sZH8=
-X-Gm-Gg: ASbGncvwMY1Vh4Xe0MvRQv9PFbiNfLzr93cjNKWcQbYz+LOT8dEtU0onrn1tg1fg6yO
-	26moUtdxEqY+1h5sVN/UKuTgyKkyPBujtgHpfy3m/JlB1KBtzD1ViZjiCRNxf+0KmM4l96TNwJc
-	25GWATTf0gStHLokmjnCShHplziR7TxxTJlD5aNmOKvesXHqPqhd6elE3mwwfMZIhTHCSmUiYo5
-	gcbUlq1LH8zofgyn0GwMWf5hCRVmYHAt+4S+LsN8OmWe8YbitI2dN5rdGnSrQm+kONisXXD5HiU
-	rxsUzK7Wunr3j5Lre2cCeMb5H/e8cu7fGnvmVLGYEZcq2U0R4z7tzuS2rhCSqrSQVklu6acnK9w
-	0DCBTIsXNOh6h/FFpO8VSLwp93qoLksVsf4+ln1WCB4E8ryNtCK7lnGbHAoYOyorlGPcaKg==
-X-Google-Smtp-Source: AGHT+IHilIA1KsWnHyutZVYThqnA/mrcsEYs4DLdQ3XM9p0xvYXqKftt68zCFiW0tGSHpYo9LdHoGA==
-X-Received: by 2002:a05:6a00:1144:b0:7ad:e4c5:2d5f with SMTP id d2e1a72fcca58-7b0bb4421c2mr2270359b3a.3.1762482686100;
-        Thu, 06 Nov 2025 18:31:26 -0800 (PST)
-Received: from efdf33580483 ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b0c953d103sm1044084b3a.5.2025.11.06.18.31.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Nov 2025 18:31:25 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1762483317; c=relaxed/simple;
+	bh=FmruP6J7ngIFA2fOydOR4seJY2QbN+NMV+7QTiYajz8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=YOnSm3tScwY6GAbG9WMRYu/q88TNzZlgLxdu605papvn6Nk96mYHmMUOukFJQ1akRd+OYQR8ks79FLwRjKK4MOO6iaZ4LchD63rCa9UEntzIlnGEA0Hr2DXY4GwCCkBDOl3v+vTsuCb0veQWtNv/aTqssf57prIRK6Fcrf0gmV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=n+AUUfLb; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1762483305;
+	bh=RPXZG/rFL8T2xBBHG/8KBw0So2faMzolPkqooXqMCDI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=n+AUUfLb6HNxKt/Q4iOqFKazwGBJFY0Rl80nV8TNfdpJO073HTvU21lhbWLJ6sEul
+	 IAXENSoUfpe3bQy7q8Jdvx8mSjC/WFxi4ZZJiw+82CPSe0zgN2RcPvapQa9DoHd2ej
+	 +r7m8C6yd7PZALHfTAZEFVXvyKajp+R9ZzLcvAlgcRsGRj/YOWaHcN8PmGiB0qGKE/
+	 DbrdJiTdj3paD52VM+gJTk0U4YMCZAkbyxNuiKd+dyKwJ5urA6LlVAGmGdxVfAcnAQ
+	 sQ67IgCzuQfSCb83CDYmUr76w0SZKPEtJBpeF0hcGbhoPkPEV8jalrvouQGdTJN0JH
+	 S8jj/2G5NEoBA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d2jxj2LMXz4wM7;
+	Fri, 07 Nov 2025 13:41:45 +1100 (AEDT)
+Date: Fri, 7 Nov 2025 13:41:44 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Greg KH <greg@kroah.com>, Danilo Krummrich <dakr@kernel.org>, "Rafael J.
+ Wysocki" <rafael@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the driver-core tree
+Message-ID: <20251107134144.117905bd@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: [STATUS] next/master - df5d79720b152e7ff058f11ed7e88d5b5c8d2a0c
-From: KernelCI bot <bot@kernelci.org>
-To: kernelci-results@groups.io
-Cc: linux-next@vger.kernel.org
-Reply-To: kernelci@lists.linux.dev
-Date: Fri, 07 Nov 2025 02:31:25 -0000
-Message-ID: <176248268499.4864.2857251149314767148@efdf33580483>
+Content-Type: multipart/signed; boundary="Sig_/xwV4ge5l7_2S=LCvc7odwz/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/xwV4ge5l7_2S=LCvc7odwz/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
+After merging the driver-core tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
+error: variable does not need to be mutable
+   --> rust/kernel/debugfs/traits.rs:266:13
+    |
+266 |         let mut this =3D self.lock();
+    |             ----^^^^
+    |             |
+    |             help: remove this `mut`
+    |
+    =3D note: `-D unused-mut` implied by `-D warnings`
+    =3D help: to override `-D warnings` add `#[allow(unused_mut)]`
 
-Hello,
+error[E0596]: cannot borrow data in dereference of `lock::Guard<'_, T, Mute=
+xBackend>` as mutable
+   --> rust/kernel/debugfs/traits.rs:268:9
+    |
+268 |         this.read_from_slice_mut(reader, offset)
+    |         ^^^^ cannot borrow as mutable
+    |
+    =3D help: trait `DerefMut` is required to modify through a dereference,=
+ but it is not implemented for `lock::Guard<'_, T, MutexBackend>`
 
-Status summary for next/master
+error: aborting due to 2 previous errors
 
-Dashboard:
-https://d.kernelci.org/c/next/master/df5d79720b152e7ff058f11ed7e88d5b5c8d2a0c/
+For more information about this error, try `rustc --explain E0596`.
 
-giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-branch: master
-commit hash: df5d79720b152e7ff058f11ed7e88d5b5c8d2a0c
-origin: maestro
-test start time: 2025-11-06 05:22:41.977000+00:00
+Caused by commit
 
-Builds:	   41 ✅   13 ❌    0 ⚠️
-Boots: 	   90 ✅   39 ❌    0 ⚠️
-Tests: 	11068 ✅ 5541 ❌ 3794 ⚠️
+  a9fca8a7b2c5 ("rust: debugfs: support blobs from smart pointers")
 
-### POSSIBLE REGRESSIONS
-    
-Hardware: hp-x360-14a-cb0001xx-zork
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-12
-      - kselftest.iommu
-      last run: https://d.kernelci.org/test/maestro:690c3860f21f07610dd20cdf
-      history:  > ✅  > ❌  > ❌  > ❌  
-            
-Hardware: imx6dl-udoo
-  > Config: multi_v7_defconfig
-    - Architecture/compiler: arm/gcc-12
-      - kselftest.alsa.alsa_mixer-test_event_spurious_fslimx6qudooac9_3
-      last run: https://d.kernelci.org/test/maestro:690c3bb3f21f07610dd24055
-      history:  > ✅  > ❌  > ❌  > ❌  > ❌  
-            
-      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_10
-      last run: https://d.kernelci.org/test/maestro:690c3bb4f21f07610dd2408b
-      history:  > ✅  > ❌  > ❌  > ❌  > ❌  
-            
-Hardware: dell-latitude-5400-8665U-sarien
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-12
-      - kselftest.cpufreq.hibernate
-      last run: https://d.kernelci.org/test/maestro:690c3840f21f07610dd20b86
-      history:  > ✅  > ✅  > ✅  > ❌  
-            
-      - kselftest.cpufreq.hibernate.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:690c39f1f21f07610dd22783
-      history:  > ✅  > ✅  > ✅  > ❌  
-            
+(maybe interacting with some other change).
 
+I have used the driver-core tree from next-20251106 for today.
 
-### FIXED REGRESSIONS
-    
-Hardware: imx6dl-udoo
-  > Config: multi_v7_defconfig
-    - Architecture/compiler: arm/gcc-12
-      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_21
-      last run: https://d.kernelci.org/test/maestro:690c3bb4f21f07610dd240d8
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_8
-      last run: https://d.kernelci.org/test/maestro:690c3bb4f21f07610dd2407d
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/xwV4ge5l7_2S=LCvc7odwz/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-### UNSTABLE TESTS
-    
-Hardware: acer-cp514-3wh-r0qs-guybrush
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-12
-      - kselftest.iommu
-      last run: https://d.kernelci.org/test/maestro:690c385ef21f07610dd20cc7
-      history:  > ❌  > ✅  > ❌  > ❌  > ❌  
-            
-Hardware: acer-cp514-2h-1160g7-volteer
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-12
-      - kselftest.iommu
-      last run: https://d.kernelci.org/test/maestro:690c385bf21f07610dd20ca2
-      history:  > ❌  > ✅  > ❌  > ❌  > ❌  
-            
-Hardware: dell-latitude-5400-4305U-sarien
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-12
-      - kselftest.cpufreq.hibernate
-      last run: https://d.kernelci.org/test/maestro:690c3840f21f07610dd20b83
-      history:  > ❌  > ✅  > ❌  > ❌  
-            
-      - kselftest.cpufreq.hibernate.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:690c39d2f21f07610dd22199
-      history:  > ❌  > ✅  > ❌  > ❌  
-            
-Hardware: meson-g12b-a311d-khadas-vim3
-  > Config: defconfig+preempt_rt
-    - Architecture/compiler: arm64/gcc-12
-      - rt-tests.rt-migrate-test
-      last run: https://d.kernelci.org/test/maestro:690c3a5bf21f07610dd23438
-      history:  > ✅  > ❌  > ✅  > ❌  
-            
-      - rt-tests.rt-migrate-test.rt-migrate-test
-      last run: https://d.kernelci.org/test/maestro:690c3f90f21f07610dd2567f
-      history:  > ✅  > ❌  > ✅  > ❌  
-            
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkNXGgACgkQAVBC80lX
+0Gwb4Qf/brtE7UCUQSYQb+9sHcQBhpNIckaZfXM1aUs4OO9pFalmWEJEA4MKTK/w
+AanCKQV9bVt4T+KV5vl37tJsBp1D2RgTeRJV0QhEAVtMabRUcDd1/yBCbd6haVic
+/8nlk8Bw2Q7CZiAF3QAd5/f40NXSZiH3mA+41Vc4ZkZwqjUnETsU8eTcQl0zae9L
+zmtZSMjRSr6O0p/mstqLBbcpmOgRpxg4zcfdz6OBUtE9ZM4ggOFyV9U02z2YxLzQ
+oFWxNXpb0FwjPnhwHV0UTzTQj5PknrfJTnN84X7oL7kob0PC0jUFytscQfjVjr1p
+sqPuAlb7EFyWREfSVh/5YAEq/Kktxw==
+=xB/d
+-----END PGP SIGNATURE-----
 
-
-This branch has 13 pre-existing build issues. See details in the dashboard.
-
-Sent every day if there were changes in the past 24 hours.
-Legend: ✅ PASS   ❌ FAIL  ⚠️ INCONCLUSIVE
-
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
+--Sig_/xwV4ge5l7_2S=LCvc7odwz/--
 

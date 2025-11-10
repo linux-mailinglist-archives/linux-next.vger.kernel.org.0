@@ -1,145 +1,304 @@
-Return-Path: <linux-next+bounces-8917-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8918-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40430C489A9
-	for <lists+linux-next@lfdr.de>; Mon, 10 Nov 2025 19:38:34 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FE6FC49CAD
+	for <lists+linux-next@lfdr.de>; Tue, 11 Nov 2025 00:39:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3C0DD4F5A79
-	for <lists+linux-next@lfdr.de>; Mon, 10 Nov 2025 18:33:34 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 053504F06EB
+	for <lists+linux-next@lfdr.de>; Mon, 10 Nov 2025 23:38:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4504531D75D;
-	Mon, 10 Nov 2025 18:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A546288C22;
+	Mon, 10 Nov 2025 23:38:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IdYG5yJL"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="TMHd2hFq"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14A1631D72D;
-	Mon, 10 Nov 2025 18:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6840821B196;
+	Mon, 10 Nov 2025 23:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762799531; cv=none; b=eBClc9G7OG5TPlFZ8ZCdq/RZABLwZrKrCTxZz4ucIdZqj/G2Hwx7LutLwfnAU6CURY1ygpWKfyy1fzlXSizXa7QzotOlaeo6lHbdLYHcO81DaCVE4xS0hjq9rcjNinRSxN7xv2xjP2b9SljXJeLoBOM2AB6+IjZ6y6pNGyKEyD0=
+	t=1762817931; cv=none; b=gki2rwmjgGUez8+9u7hhrgCyQRn09InCkVnuq9TR8DOnTtWlfHgOjEkMPpwJszZlpCQVZcHpJyqji7DwdIxc3hk/ex9i9FKhG4F9cvAHoIJkt49Zx6wl+zNxtkNY8OUO5a1MoTm3a5hEiBtPyOwNcI2gkH4BQvLd8/locAtPVEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762799531; c=relaxed/simple;
-	bh=BTRplCCHPczrZhMIDCxF5mqdQYsf+JH2XCbk3qFQ6N0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DwRDj24BB0fSOATHEwoWoLXZfnL0EF3sionnAH0xGEqpKGqD55eVVYyCIW1qCuuZk5CIZEOC5ggnM8qHa+7rAhouAhaI1MWHnbG9t75qiIZurAz54TEVh3pSSFvzycgJ5oZXM+A6D02PqZVMKWlCEi3NZzk/4TT+Jyf4WcAmeZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IdYG5yJL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 520E5C113D0;
-	Mon, 10 Nov 2025 18:32:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762799530;
-	bh=BTRplCCHPczrZhMIDCxF5mqdQYsf+JH2XCbk3qFQ6N0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IdYG5yJL3Fz3o7Tdm6oYFGRFwqlvLC6LbCgJwDbFWk7OkYbjnfM/BMxOiD4PNSKvw
-	 vnMGjjmgbv088ZqB8U1JoIA+lO5mxPvfFY8UNo5Ixxb6JSOazGOeraJC8VSlGtdGBb
-	 ceLVuXdDC8rsGign0NQs/YGzK5BQQMjCDQVZdg7vKZZvFHnLykn9o3BnUrvTmgmQ5E
-	 szmaiTchR+NAO/SsMdQrZeBGzQCWxGrbZgOiRBtSNGgGrq7zY6FGgiSOxwUkB64q1u
-	 dq1vFgtIjnIEPpqvALYJcDa7uOyKMs4EK8ytUQcMrChxtwHpS9G7biEzA2kcv+toDB
-	 cwQ8f1tdPFXkQ==
-Date: Mon, 10 Nov 2025 19:32:05 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-To: Daniel Gomez <da.gomez@kernel.org>
-Cc: Daniel Gomez <da.gomez@samsung.com>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Sami Tolvanen <samitolvanen@google.com>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Michal Wilczynski <m.wilczynski@samsung.com>
-Subject: Re: linux-next: manual merge of the pwm tree with the modules tree
-Message-ID: <6ydyoh5yfqk3qwha2lysmqohvh3ffhmv52yph4aqzq46eaa7t2@clpm2eqydmpi>
-References: <20251104104827.1de36ea0@canb.auug.org.au>
- <20251104105415.68bfb090@canb.auug.org.au>
- <f374sh5rsbxvboowft6xpiimxlzw264i32txgiok53on2vxxu7@lpetaklaofzb>
- <ad9c5b79-8a33-4183-a048-48ba516e6aaf@kernel.org>
- <26c7zdxc4nv3wx25xferlggtjipigtd3tc6fk554g4tmqsuvmr@e6cll772nz2r>
- <2b53a2d1-3e86-4558-ba7f-5ce3b1368f0f@kernel.org>
+	s=arc-20240116; t=1762817931; c=relaxed/simple;
+	bh=sR43zrzrdmlvoBwZ64SsCIgT5y5AVagDKmg9rPhaoxU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Z2IoC4s+PIug6fAQcpn/q82ZZ3Rw9rkw8f2MEX3J+lSlWEeZB5XIqXC6sQN/bXSVfToiYY+k1lNNx27xlVHo5TDYbz8iPgCd+6dtMURJf/v5r3l+9xGQWEFbukrsSKbb9yQ8quEc4u4s93GWXfPjkuuU9iVGGLM1+PJbwF2bryE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=TMHd2hFq; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1762817918;
+	bh=9+n8g7Oe9NC8CoA1EbspLz1bfjTzk0COygqpR6OrGWs=;
+	h=Date:From:To:Cc:Subject:From;
+	b=TMHd2hFqVdpC/DVSfVnmat3/dUC/bZpxo/YLMSqzt8eDSwy8vSXtk21YTg1EtQfPR
+	 Bk4jMUcDeWFAEoGfaJZ44scMuTI+g3KJzqfFwawOg+RLiJLwK2HzP2S6s6VC00d0G6
+	 quRPFMV981VFgGjyGLlIPIFc9zLDBcYLbVhEV8Y4hEKPZNzcRYFmmYJwqKvGRKnCJz
+	 F/ci82lOtwUXf4Ph9EL4DABe+Dzk/qTDjJDwgONeFv6XOkFvJkJQmcNM2VMQek7oV8
+	 7KPH6nBY1k0GvOvJulpJcaU3WZasvc/+JO+tLlgoiyg95ew9E7Biq7GHUsya8+ngGA
+	 lih91MUZpr1dg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d55hZ4kggz4wBD;
+	Tue, 11 Nov 2025 10:38:38 +1100 (AEDT)
+Date: Tue, 11 Nov 2025 10:38:37 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>, Anna Schumaker
+ <anna@kernel.org>, Trond Myklebust <trondmy@gmail.com>
+Cc: Anna Schumaker <anna.schumaker@oracle.com>, Mike Snitzer
+ <snitzer@kernel.org>, NFS Mailing List <linux-nfs@vger.kernel.org>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the vfs-brauner tree with the nfs-anna
+ tree
+Message-ID: <20251111103837.0ecdf26d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7rfnzqrclml6k2z3"
-Content-Disposition: inline
-In-Reply-To: <2b53a2d1-3e86-4558-ba7f-5ce3b1368f0f@kernel.org>
+Content-Type: multipart/signed; boundary="Sig_/TDV1KL+3TQeTorugdiyX=w5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-
---7rfnzqrclml6k2z3
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
+--Sig_/TDV1KL+3TQeTorugdiyX=w5
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: linux-next: manual merge of the pwm tree with the modules tree
-MIME-Version: 1.0
 
-Hello Daniel,
+Hi all,
 
-On Mon, Nov 10, 2025 at 04:54:01PM +0100, Daniel Gomez wrote:
-> On 10/11/2025 16.42, Uwe Kleine-K=F6nig wrote:
-> > On Mon, Nov 10, 2025 at 02:59:15PM +0100, Daniel Gomez wrote:
-> >> On 07/11/2025 17.44, Uwe Kleine-K=F6nig wrote:
-> >>> Given that the conflict resolution is non-trivial and we already know
-> >>> what to do, I suggest you merge my commit into the modules tree.
-> >>
-> >> Do you mean creating a separate branch that includes the conflict reso=
-lution, to
-> >> be used as an example when sending the PR?
-> >=20
-> > If I were the module maintainer I'd pull
-> >=20
-> > 	https://git.kernel.org/pub/scm/linux/kernel/git/ukleinek/linux.git rus=
-t-module-namespace
-> >=20
-> > into my tree and include that into the v6.19-rc1 pull request. That way
-> > the merge conflict doesn't happen at all for Linus.
->=20
->=20
-> That's not my understanding on how to deal with conflicts:
->=20
-> https://docs.kernel.org/maintainer/rebasing-and-merging.html#merging-from=
--sibling-or-upstream-trees
+Today's linux-next merge of the vfs-brauner tree got a conflict in:
 
-Note the "don't" described in the docs isn't what I suggested to do
-here. The rust-module-namespace is a change that belongs into the
-modules tree and that I build upon in my tree.
+  fs/nfs/localio.c
 
-So this is (somewhat) the case "Another reason for doing merges of
-upstream or another subsystem tree is to resolve dependencies". Only the
-merge direction is wrong because the usual expectation is that a change
-to rust/macros/module.rs originates in the modules (or some rust) tree.
-But for the justification and also the resulting commit topology that
-doesn't matter.
+between commits:
 
-Also "[back merges] will significantly increase your chances of
-encountering bugs from elsewhere in the community and make it hard to
-ensure that the work you are managing is stable and ready for upstream."
-doesn't apply because by merging the suggested tag you only get a single
-commit and not my complete pwm tree.
+  51a491f2708d ("nfs/localio: remove unecessary ENOTBLK handling in DIO WRI=
+TE support")
+  f2060bdc21d7 ("nfs/localio: add refcounting for each iocb IO associated w=
+ith NFS pgio header")
+  d0497dd27452 ("nfs/localio: backfill missing partial read support for mis=
+aligned DIO")
+  6a218b9c3183 ("nfs/localio: do not issue misaligned DIO out-of-order")
 
-If you want to convince yourself this is in fact quite usual I suggest
-looking at https://lore.kernel.org/all/?q=3Ds%3APULL+AND+s%3AImmutable.
+from the nfs-anna tree and commit:
 
-Best regards
-Uwe
+  94afb627dfc2 ("nfs: use credential guards in nfs_local_call_read()")
 
---7rfnzqrclml6k2z3
-Content-Type: application/pgp-signature; name="signature.asc"
+from the vfs-brauner tree.
+
+I fixed it up (I think - see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/nfs/localio.c
+index 656976b4f42c,0c89a9d1e089..000000000000
+--- a/fs/nfs/localio.c
++++ b/fs/nfs/localio.c
+@@@ -620,37 -595,30 +620,34 @@@ static void nfs_local_call_read(struct=20
+  	struct nfs_local_kiocb *iocb =3D
+  		container_of(work, struct nfs_local_kiocb, work);
+  	struct file *filp =3D iocb->kiocb.ki_filp;
+- 	const struct cred *save_cred;
+ +	bool force_done =3D false;
+  	ssize_t status;
+ +	int n_iters;
+ =20
+- 	save_cred =3D override_creds(filp->f_cred);
++ 	scoped_with_creds(filp->f_cred) {
+ -		for (int i =3D 0; i < iocb->n_iters ; i++) {
+++		n_iters =3D atomic_read(&iocb->n_iters);
+++		for (int i =3D 0; i < n_iters ; i++) {
++ 			if (iocb->iter_is_dio_aligned[i]) {
++ 				iocb->kiocb.ki_flags |=3D IOCB_DIRECT;
+ -				iocb->kiocb.ki_complete =3D nfs_local_read_aio_complete;
+ -				iocb->aio_complete_work =3D nfs_local_read_aio_complete_work;
+ -			}
+++				/* Only use AIO completion if DIO-aligned segment is last */
+++				if (i =3D=3D iocb->end_iter_index) {
+++					iocb->kiocb.ki_complete =3D nfs_local_read_aio_complete;
+++					iocb->aio_complete_work =3D nfs_local_read_aio_complete_work;
+++				}
+++			} else
+++				iocb->kiocb.ki_flags &=3D ~IOCB_DIRECT;
+ =20
+- 	n_iters =3D atomic_read(&iocb->n_iters);
+- 	for (int i =3D 0; i < n_iters ; i++) {
+- 		if (iocb->iter_is_dio_aligned[i]) {
+- 			iocb->kiocb.ki_flags |=3D IOCB_DIRECT;
+- 			/* Only use AIO completion if DIO-aligned segment is last */
+- 			if (i =3D=3D iocb->end_iter_index) {
+- 				iocb->kiocb.ki_complete =3D nfs_local_read_aio_complete;
+- 				iocb->aio_complete_work =3D nfs_local_read_aio_complete_work;
+- 			}
+- 		} else
+- 			iocb->kiocb.ki_flags &=3D ~IOCB_DIRECT;
+-=20
+- 		status =3D filp->f_op->read_iter(&iocb->kiocb, &iocb->iters[i]);
+- 		if (status !=3D -EIOCBQUEUED) {
+- 			if (unlikely(status >=3D 0 && status < iocb->iters[i].count))
+- 				force_done =3D true; /* Partial read */
+- 			if (nfs_local_pgio_done(iocb, status, force_done)) {
+- 				nfs_local_read_iocb_done(iocb);
+- 				break;
+ -			iocb->kiocb.ki_pos =3D iocb->offset[i];
++ 			status =3D filp->f_op->read_iter(&iocb->kiocb, &iocb->iters[i]);
++ 			if (status !=3D -EIOCBQUEUED) {
+ -				nfs_local_pgio_done(iocb->hdr, status);
+ -				if (iocb->hdr->task.tk_status)
+++				if (unlikely(status >=3D 0 && status < iocb->iters[i].count))
+++					force_done =3D true; /* Partial read */
+++				if (nfs_local_pgio_done(iocb, status, force_done)) {
+++					nfs_local_read_iocb_done(iocb);
++ 					break;
+++				}
+  			}
+  		}
+  	}
+--
+- 	revert_creds(save_cred);
+ -	if (status !=3D -EIOCBQUEUED) {
+ -		nfs_local_read_done(iocb, status);
+ -		nfs_local_pgio_release(iocb);
+ -	}
+  }
+ =20
+  static int
+@@@ -820,47 -781,78 +817,55 @@@ static void nfs_local_write_aio_complet
+  	nfs_local_pgio_aio_complete(iocb); /* Calls nfs_local_write_aio_complete=
+_work */
+  }
+ =20
+- static void nfs_local_call_write(struct work_struct *work)
++ static ssize_t do_nfs_local_call_write(struct nfs_local_kiocb *iocb,
++ 				       struct file *filp)
+  {
+- 	struct nfs_local_kiocb *iocb =3D
+- 		container_of(work, struct nfs_local_kiocb, work);
+- 	struct file *filp =3D iocb->kiocb.ki_filp;
+- 	unsigned long old_flags =3D current->flags;
+- 	const struct cred *save_cred;
+ +	bool force_done =3D false;
+  	ssize_t status;
+ +	int n_iters;
+ =20
+- 	current->flags |=3D PF_LOCAL_THROTTLE | PF_MEMALLOC_NOIO;
+- 	save_cred =3D override_creds(filp->f_cred);
+-=20
+  	file_start_write(filp);
+ -	for (int i =3D 0; i < iocb->n_iters ; i++) {
+ +	n_iters =3D atomic_read(&iocb->n_iters);
+ +	for (int i =3D 0; i < n_iters ; i++) {
+  		if (iocb->iter_is_dio_aligned[i]) {
+  			iocb->kiocb.ki_flags |=3D IOCB_DIRECT;
+ -			iocb->kiocb.ki_complete =3D nfs_local_write_aio_complete;
+ -			iocb->aio_complete_work =3D nfs_local_write_aio_complete_work;
+ -		}
+ -retry:
+ -		iocb->kiocb.ki_pos =3D iocb->offset[i];
+ +			/* Only use AIO completion if DIO-aligned segment is last */
+ +			if (i =3D=3D iocb->end_iter_index) {
+ +				iocb->kiocb.ki_complete =3D nfs_local_write_aio_complete;
+ +				iocb->aio_complete_work =3D nfs_local_write_aio_complete_work;
+ +			}
+ +		} else
+ +			iocb->kiocb.ki_flags &=3D ~IOCB_DIRECT;
+ +
+  		status =3D filp->f_op->write_iter(&iocb->kiocb, &iocb->iters[i]);
+  		if (status !=3D -EIOCBQUEUED) {
+ -			if (unlikely(status >=3D 0 && status < iocb->iters[i].count)) {
+ -				/* partial write */
+ -				if (i =3D=3D iocb->end_iter_index) {
+ -					/* Must not account partial end, otherwise, due
+ -					 * to end being issued before middle: the partial
+ -					 * write accounting in nfs_local_write_done()
+ -					 * would incorrectly advance hdr->args.offset
+ -					 */
+ -					status =3D 0;
+ -				} else {
+ -					/* Partial write at start or buffered middle,
+ -					 * exit early.
+ -					 */
+ -					nfs_local_pgio_done(iocb->hdr, status);
+ -					break;
+ -				}
+ -			} else if (unlikely(status =3D=3D -ENOTBLK &&
+ -					    (iocb->kiocb.ki_flags & IOCB_DIRECT))) {
+ -				/* VFS will return -ENOTBLK if DIO WRITE fails to
+ -				 * invalidate the page cache. Retry using buffered IO.
+ -				 */
+ -				iocb->kiocb.ki_flags &=3D ~IOCB_DIRECT;
+ -				iocb->kiocb.ki_complete =3D NULL;
+ -				iocb->aio_complete_work =3D NULL;
+ -				goto retry;
+ -			}
+ -			nfs_local_pgio_done(iocb->hdr, status);
+ -			if (iocb->hdr->task.tk_status)
+ +			if (unlikely(status >=3D 0 && status < iocb->iters[i].count))
+ +				force_done =3D true; /* Partial write */
+ +			if (nfs_local_pgio_done(iocb, status, force_done)) {
+ +				nfs_local_write_iocb_done(iocb);
+  				break;
+ +			}
+  		}
+  	}
+  	file_end_write(filp);
+ =20
+- 	revert_creds(save_cred);
++ 	return status;
++ }
++=20
++ static void nfs_local_call_write(struct work_struct *work)
++ {
++ 	struct nfs_local_kiocb *iocb =3D
++ 		container_of(work, struct nfs_local_kiocb, work);
++ 	struct file *filp =3D iocb->kiocb.ki_filp;
++ 	unsigned long old_flags =3D current->flags;
++ 	ssize_t status;
++=20
++ 	current->flags |=3D PF_LOCAL_THROTTLE | PF_MEMALLOC_NOIO;
++=20
++ 	scoped_with_creds(filp->f_cred)
++ 		status =3D do_nfs_local_call_write(iocb, filp);
++=20
+  	current->flags =3D old_flags;
+ -
+ -	if (status !=3D -EIOCBQUEUED) {
+ -		nfs_local_write_done(iocb, status);
+ -		nfs_local_vfs_getattr(iocb);
+ -		nfs_local_pgio_release(iocb);
+ -	}
+  }
+ =20
+  static int
+
+--Sig_/TDV1KL+3TQeTorugdiyX=w5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmkSL6IACgkQj4D7WH0S
-/k4FoQgAqzJC4KCpwOTjrF2iXkDPYEi+ohaej7Y7xLMCuKBxGSY38wFFFo/Xov0c
-L8spyKy7vezgh6WTxVzLTgaNUdGVgfIycC0fzYiQ4gWn4BUO7I6FhUTCrzLT4uKw
-pAYrfYe8pb6+NhyixRMx5DCzru8wAWBLEsXjYs+2mUqcTGCtViRnHR3CJkjYlBda
-uill8bZlR2W5xR4gR1TmAbXzjRpf1lVL2ReRcNbk/chgmn6TJH1OwFcw03E+KGIf
-jQxy6AgFyLCjGm8QGhFWPIEMudNJmUaHAVHz7DbCp0MrH8ETBTiC43DA1sQ0LSeL
-xS2HvQXIKbvHn0LvDqJwy5zaJU1QYA==
-=Xd5P
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkSd30ACgkQAVBC80lX
+0GwQ8Qf+JNBhJW3HHY9s99XWPThbcmK/3t6eMDCUnS9dUKhIyD0jTAkoe2ugAX+o
+EEaAycevgrLcaUDWjXFN8kak3CARIfgZbLUDmoH5pL9oL5KfeQxSP6RO+Pb9C32h
+srguHNv0E8KJglMpFXxwtFJN9npR2Ce+FudgfdouseCFKxLP26VLd/EpsDDaiXbu
+y9shhSUD8Fyq3RtUbWp7wr5gF+mQz/+7LTlpp7LW/YFs9depCeMg9I0t9dErzUue
+fJz9VB9wACvrIcBplZMbGxpy3yf9u4ap0tz6jDa6jqK3dQTPHE1ok6lgOGnE5Aw6
+gtvGRLgzEeqN5tlEtQJmgGKSHrRTaw==
+=4z7x
 -----END PGP SIGNATURE-----
 
---7rfnzqrclml6k2z3--
+--Sig_/TDV1KL+3TQeTorugdiyX=w5--
 

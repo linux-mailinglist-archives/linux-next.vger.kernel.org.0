@@ -1,110 +1,110 @@
-Return-Path: <linux-next+bounces-8909-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8910-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E89F9C44E34
-	for <lists+linux-next@lfdr.de>; Mon, 10 Nov 2025 05:03:30 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A8F2C45C8F
+	for <lists+linux-next@lfdr.de>; Mon, 10 Nov 2025 11:01:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85C4E188D96F
-	for <lists+linux-next@lfdr.de>; Mon, 10 Nov 2025 04:03:55 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 282B64F054A
+	for <lists+linux-next@lfdr.de>; Mon, 10 Nov 2025 09:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87696299928;
-	Mon, 10 Nov 2025 04:03:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2ED2301716;
+	Mon, 10 Nov 2025 09:55:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BWxAoMxs"
+	dkim=pass (1024-bit key) header.d=paragon-software.com header.i=@paragon-software.com header.b="Svnw0OTo"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B3028FFE7;
-	Mon, 10 Nov 2025 04:02:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A1983016F0;
+	Mon, 10 Nov 2025 09:55:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.157.23.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762747380; cv=none; b=Mu4clhf1gVJtZN2+l1ge5ug4wGDUZa/VDXX5zhA9YwJNZ51l/PPJjHeRV3hpDYruhoNqQIoLAh75Ks1SEuCbLJW/NogVzgl7kFTTrrl4wGGO36yh2mYyHkeG6XDoA6otFW8TJHtf5nynzXSI1D4qLyd8Yfhyc62dm2s4DbVUl5w=
+	t=1762768557; cv=none; b=eovgVgDZOOkda6FJKQVEtHw0MrFCzuW9nrfjYbnLY5FyySJ9Sf4jRJ59RHZF8tEV4+pZI3y2jLUwno9ns3LoODirwkZdHnc4m0eqe//qYKZq8XkO8czmwjXyQhe/wC0VgfrpWySYNAHDrA3HA0glVNWAgKMHnSBFtTd6ZwlSndw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762747380; c=relaxed/simple;
-	bh=Z6fQ0Yz+trntsuSzGB7GLHNJStdZw3kwoeRyU/jtnGY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tBP9Bfqmx0Zsniq8yy6ONG5Ae/fv2bz/ZXlVNCNurAZWkNls/YwFm7vZ3NLCuXEO8d7xtNerAenfZr0KtfjvtKtaQSJ5cncXA24SAKTvvxifjqGobuJHUD6+gmHC9GBin45Hj9lqW6aullGqQeDQdIb1anrA95X4/8FHRZkxBXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BWxAoMxs; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1762747373;
-	bh=dNUM8ue5EXaD5dTFa1aKJ3VMqhV/PgINqGPbQ28J3po=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=BWxAoMxspxaJE9uP8tkzOzIss+PGWchTNXCwRKEJWGCKCXIcFWKvdDJo64kXhYDB/
-	 fMmsgPDNhi6LFVcujZBO5hCA7uq2ZpL+LMEWIxDtwq1+dUnUQ1qAJfk+9wjP3QZhV5
-	 2gh6DtxFEBt6miY+fw+QpHIQJOJlwvp1hol3toS8snWkm2n83mIPTIRcttvKzfGkt3
-	 t7JgxNo3xR6fHv5bQHAaQBYSFqMrfCEcIytAKEfYUKUjYBtYDXzZFC2cyYzBtdIb0U
-	 nusiz43jIzgJPBcYv5ySvks8NKryUD8DXIA3uo4ZnqlpDYG7Oa6YMi9GtUMfuGxe1F
-	 0txjKciiyf25w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d4bbx1q1pz4wCp;
-	Mon, 10 Nov 2025 15:02:52 +1100 (AEDT)
-Date: Mon, 10 Nov 2025 15:02:52 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Huacai Chen <chenhuacai@loongson.cn>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the loongarch tree
-Message-ID: <20251110150252.032ab0bc@canb.auug.org.au>
-In-Reply-To: <20251110083140.67ca8722@canb.auug.org.au>
-References: <20251110083140.67ca8722@canb.auug.org.au>
+	s=arc-20240116; t=1762768557; c=relaxed/simple;
+	bh=wsPWCXS4NOREA5ZX2rDTE0G02mKkk6b/v6ZohKrSa7o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=D31xPOt+Qk8gmtz0wAoT2t7WDyuoKkPsqghFpKVPTfdS7zMck58jMJeTKUY72DZjrHqTF5bUjjXbClp+ddpTpC7cC05IkOJ3pJCWKzrVp2GZBabo1tGJtNydzpknaUEglruu8DZ9xbI4O8svTMnzoXC/ul/QjNeP6gQrmJsAoXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=paragon-software.com; spf=pass smtp.mailfrom=paragon-software.com; dkim=pass (1024-bit key) header.d=paragon-software.com header.i=@paragon-software.com header.b=Svnw0OTo; arc=none smtp.client-ip=35.157.23.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=paragon-software.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paragon-software.com
+Received: from relayfre-01.paragon-software.com (unknown [176.12.100.13])
+	by relayaws-01.paragon-software.com (Postfix) with ESMTPS id 391CE1D1D;
+	Mon, 10 Nov 2025 09:43:58 +0000 (UTC)
+Authentication-Results: relayaws-01.paragon-software.com;
+	dkim=pass (1024-bit key; unprotected) header.d=paragon-software.com header.i=@paragon-software.com header.b=Svnw0OTo;
+	dkim-atps=neutral
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+	by relayfre-01.paragon-software.com (Postfix) with ESMTPS id 3681021D8;
+	Mon, 10 Nov 2025 09:47:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=paragon-software.com; s=mail; t=1762768037;
+	bh=voH1Rv006o8A7RjE1XYleW8tjbC0FIHx+wORPgKYlpg=;
+	h=Date:Subject:To:CC:References:From:In-Reply-To;
+	b=Svnw0OToM66eTFjVNtxpyjJaf5u+u/k9X7RFm00Xtwnc9wmzUEoWOuvWHrRucTQcd
+	 Hh9vqMMBaJ+NUff1tfnQyIqJexQdJHXlPQvg/0g2jJkJ11f43CoRczByXq9a3bApaW
+	 qpwiZ55essbLr+9i6sxNVtv9KOysAx/FYY95L7rc=
+Received: from [192.168.95.128] (172.30.20.129) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 10 Nov 2025 12:47:16 +0300
+Message-ID: <033fe015-f96f-40d1-ba63-995982f7ba26@paragon-software.com>
+Date: Mon, 10 Nov 2025 10:47:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RhO+J54lB+92Cipm2w5HJbk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build failure after merge of the ntfs3 tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+CC: Pedro Demarchi Gomes <pedrodemargomes@gmail.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	<linux-next@vger.kernel.org>, Christian Brauner <brauner@kernel.org>,
+	Yongpeng Yang <yangyongpeng@xiaomi.com>
+References: <20251106095733.600e04ac@canb.auug.org.au>
+Content-Language: en-US
+From: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20251106095733.600e04ac@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
 
---Sig_/RhO+J54lB+92Cipm2w5HJbk
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 11/5/25 23:57, Stephen Rothwell wrote:
 
-Hi all,
+> Hi all,
+>
+> After merging the ntfs3 tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> fs/ntfs3/super.c: In function 'ntfs_init_from_boot':
+> fs/ntfs3/super.c:951:9: error: ignoring return value of 'sb_min_blocksize' declared with attribute 'warn_unused_result' [-Werror=unused-result]
+>    951 |         sb_min_blocksize(sb, PAGE_SIZE);
+>        |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
+>
+> Caused by commit
+>
+>    c1b61f715e4d ("ntfs: set dummy blocksize to read boot_block when mounting")
+>
+> Exposed by commit
+>
+>    8637fa89e678 ("block: add __must_check attribute to sb_min_blocksize()")
+>
+> from the vfs-brauner-fixes tree.
+>
+> I have reverted that commit from the ntfs3 tree for today.
+>
+Hello,
 
-On Mon, 10 Nov 2025 08:31:40 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Commit
->=20
->   4f82248f363d ("LoongArch: Let {pte,pmd}_modify() record the status of _=
-PAGE_DIRTY")
->=20
-> is missing a Signed-off-by from its committer.
+Thanks for the report and for reverting it. I’ll prepare a fix for this issue.
 
-This is now commit
+Regards,
+Konstantin
 
-  a073d637c8cf ("LoongArch: Let {pte,pmd}_modify() record the status of _PA=
-GE_DIRTY")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/RhO+J54lB+92Cipm2w5HJbk
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkRY+wACgkQAVBC80lX
-0GyMkQf+LN/Sd1zXyDdUybbScxXLPiQRQE+9/9WMW50LaJuree/uBxOxOrYaS6EH
-7aDh7PVIYIdNhbZ9iEZ+rHLiURiz0U61/jLR34sAvEXHUMTONeDzW8sGzU+cRuqv
-a/SuAXYCZzoMyTRM3TrlxZCXPqnC+PY89LMo6vBvBUda/Vu5nOCWYZ1b1T6C+/vD
-359TZh21GPMW+YAcbJgXeAxT2GmiN04T58LwxyAkngpYZbqpd1+s+rwH4UDFipyU
-WtbQwHv3HYRWk+37VBCPuk7XWutE2/jfzBrKppNl/q9HXtnbDL5fQrKpPVEc7wY9
-V7a5NPjguI8+wSWYyzKrH95s5Kc93w==
-=hJmR
------END PGP SIGNATURE-----
-
---Sig_/RhO+J54lB+92Cipm2w5HJbk--
 

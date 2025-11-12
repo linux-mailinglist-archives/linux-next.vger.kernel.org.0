@@ -1,103 +1,132 @@
-Return-Path: <linux-next+bounces-8941-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8942-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA96FC52458
-	for <lists+linux-next@lfdr.de>; Wed, 12 Nov 2025 13:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AA3DC54C2D
+	for <lists+linux-next@lfdr.de>; Wed, 12 Nov 2025 23:56:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89CD23B1B46
-	for <lists+linux-next@lfdr.de>; Wed, 12 Nov 2025 12:31:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FCDE3AF0C7
+	for <lists+linux-next@lfdr.de>; Wed, 12 Nov 2025 22:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECDCD3314DB;
-	Wed, 12 Nov 2025 12:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D629B2E091D;
+	Wed, 12 Nov 2025 22:55:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HNBkTfOS"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iSz6+8PY"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E7035CBC6;
-	Wed, 12 Nov 2025 12:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F19C2DEA71;
+	Wed, 12 Nov 2025 22:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762950682; cv=none; b=YyDwhryScoBNJA1GQFyGQm07IhhrfLNPDTe0djXwso6y9bUCJd3EjfH1GieGVIHu90O4Ec3ijXeMa8V4stgWggBU8t4U/d3GtGwNDNPyztIt0s9vKGr2Fk4W5bFrtwN5GZ7nYsYadJdZz8gnbkdLRCtL7FY3baApeWI9Jr5TlQE=
+	t=1762988149; cv=none; b=rkfUmYQXIms5ajUiSCKFl/Wb//dm/bOFNrLm6HC75yJ+InZ9gsx+DWiZtrulBxtO7Ago0/sSW5sp6QOkh8iug1tWkIrKscHdJhOl+UzXSaBIoL4BJFiUnHY2O2I3KF18iQbAykPO2C6I3rtrDB+73IWmjCU5qUug82VMKvHTdeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762950682; c=relaxed/simple;
-	bh=BlE5g+SiMSq6fj99+C5fH+eZFaLaTysnZRh+Dln4QhY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OQf6cxYF9nuwouVGTkzpUq/0dMQ0hWaUeL+P94dD8BmfNKcB8lXi//FTFlYHKvBKto6BzLdS2psWh0emvQimpVij8bIhDiiepU1ugT4S3jO+XOUWzJoOqUDj/3pcMXJKLswXPkuBVGaQJp7wXfKYDlt34VWOKB1Sp7OJOtncpIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HNBkTfOS; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762950680; x=1794486680;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BlE5g+SiMSq6fj99+C5fH+eZFaLaTysnZRh+Dln4QhY=;
-  b=HNBkTfOScyG0GE/hCvBw1W66hprFUFiHKm8Q/1ONnkByqAxK3eraHySQ
-   EqjUALOWu5dp767b4STj7BK8v6EDtwiBTikfLt0HR3sKHWSD/sPrrR0Xw
-   GpSiMd6JrCfVSuB7f7DAifoa2af8u54SATIlpzoVlhK+6g752oUhqwBlr
-   cpnEDczev/4D0LUkfusuIXQe1ZjIrsY1lTs/MXBEA4dzo+rK1EZDf90Zn
-   ThmigeSwvlpKMr0AxGbpre1ECfwI5n5ZRRv1r5OdKlda0SpODPOL6IcPi
-   xfe7rN6rN7J31sY/mD7X1vWQ/TFyPgAf2aJ86cIEK3irv6AN9MHrSDSDh
-   Q==;
-X-CSE-ConnectionGUID: qsiyQ0RqRRaVYmDPecIdoA==
-X-CSE-MsgGUID: fjf4CbUYSzO2xhF9TPcEbw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11610"; a="65163337"
-X-IronPort-AV: E=Sophos;i="6.19,299,1754982000"; 
-   d="scan'208";a="65163337"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 04:31:19 -0800
-X-CSE-ConnectionGUID: VwBKkr/QSdClLx3bkIHvCQ==
-X-CSE-MsgGUID: fVZS0ikbRoCheqNQv8PZmg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,299,1754982000"; 
-   d="scan'208";a="219945965"
-Received: from dapengmi-mobl1.ccr.corp.intel.com (HELO [10.124.232.65]) ([10.124.232.65])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2025 04:31:16 -0800
-Message-ID: <11a8a24d-d220-4636-9939-554a8f55062c@linux.intel.com>
-Date: Wed, 12 Nov 2025 20:31:14 +0800
+	s=arc-20240116; t=1762988149; c=relaxed/simple;
+	bh=pUQ178O9L4vcmLu15xqz1pP0QPjFgXWJG1bIiO9qiww=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Fao3pl+VdVx80WloMq/LbTPOn4R9knltoJD570Dyr/YGH9b/YAsklEqtwXnszVw5c4tJ8p6O5Tk9QKHtSeDmfQ2wKZJLiY4dllcV8FZre5FeXgRFNdZCm1ag7zSUVDE/SNPlQbl+qJfNGFC7HTRpYBYlGgZE1rkOPOqLlSd7kkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=iSz6+8PY; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1762988142;
+	bh=1MAtvJW8M1OCbur8O3r7GsQ9rwRnohEuR1j1rW6F6Mw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=iSz6+8PYEiL7JpYVEz80opBZoq4rgUKg7y2CdzTVsWcxEsI4oM71ZF07+4Wg+1PXC
+	 L0XCYXsJG9UpUtzKkgj5yzWGhSf4i9/dr12JnVrsqVwqLxNnlWD8/qn0EIY8sPpSTx
+	 jdtHYQb8fyoTXMsbXQQs3IyJy3o3c61STcMe2oCTuuUKCKJD70JiEY6KESROFhBi44
+	 +vGCznFf4w0sr/h6geCDGEtDSKYG7BakNngjOWmOWKeR77C9iyqLjDaEPAe4QH99O8
+	 n4DkZxvUd7kgIVzYQTnqq1LX6JL4BrweqjNlPUgCW3/tYXgrTeqd4fTBK9j1DoEGfO
+	 8ek8L/T3CqL5A==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d6Jf56Rs9z4w23;
+	Thu, 13 Nov 2025 09:55:41 +1100 (AEDT)
+Date: Thu, 13 Nov 2025 09:55:40 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Marc Zyngier <maz@kernel.org>,
+ mrigendrachaubey <mrigendra.chaubey@gmail.com>
+Subject: linux-next: manual merge of the arm64 tree with Linus' tree
+Message-ID: <20251113095540.4a66405f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the tip tree
-To: Peter Zijlstra <peterz@infradead.org>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Kan Liang <kan.liang@linux.intel.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20251112154200.4d3671f9@canb.auug.org.au>
- <20251112093928.GD4067720@noisy.programming.kicks-ass.net>
- <20251112214515.41daf9cc@canb.auug.org.au>
- <20251112104814.GB3245006@noisy.programming.kicks-ass.net>
-Content-Language: en-US
-From: "Mi, Dapeng" <dapeng1.mi@linux.intel.com>
-In-Reply-To: <20251112104814.GB3245006@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/Kp47ZAGb.5n5nhHDi2NOVoD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/Kp47ZAGb.5n5nhHDi2NOVoD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 11/12/2025 6:48 PM, Peter Zijlstra wrote:
-> On Wed, Nov 12, 2025 at 09:45:15PM +1100, Stephen Rothwell wrote:
->> Hi Peter,
->>
->> On Wed, 12 Nov 2025 10:39:28 +0100 Peter Zijlstra <peterz@infradead.org> wrote:
->>> It appears you're way faster than the build robots :/
->> I was hoping people would put their code through the robots (or some
->> local unit testing) before publishing it in their linux-next included
->> branches ... ;-)
-> I do, but sometimes they just take forever :/ And clearly I don't do
-> i386 builds myself.
+Hi all,
 
-This issue educates me. I would add i386 arch building into my BAT test list. 
+Today's linux-next merge of the arm64 tree got a conflict in:
 
+  arch/arm64/include/asm/el2_setup.h
 
+between commit:
+
+  ca88ecdce5f5 ("arm64: Revamp HCR_EL2.E2H RES1 detection")
+
+from Linus' tree and commit:
+
+  96ac403ea2b4 ("arm64: Fix typos and spelling errors in comments")
+
+from the arm64 tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/arm64/include/asm/el2_setup.h
+index 99a7c0235e6d,cb0d72401d45..000000000000
+--- a/arch/arm64/include/asm/el2_setup.h
++++ b/arch/arm64/include/asm/el2_setup.h
+@@@ -24,7 -24,11 +24,7 @@@
+  	 * ID_AA64MMFR4_EL1.E2H0 < 0. On such CPUs HCR_EL2.E2H is RES1, but it
+  	 * can reset into an UNKNOWN state and might not read as 1 until it has
+  	 * been initialized explicitly.
+- 	 * Initalize HCR_EL2.E2H so that later code can rely upon HCR_EL2.E2H
+ -	 *
+ -	 * Fruity CPUs seem to have HCR_EL2.E2H set to RAO/WI, but
+ -	 * don't advertise it (they predate this relaxation).
+ -	 *
++ 	 * Initialize HCR_EL2.E2H so that later code can rely upon HCR_EL2.E2H
+  	 * indicating whether the CPU is running in E2H mode.
+  	 */
+  	mrs_s	x1, SYS_ID_AA64MMFR4_EL1
+
+--Sig_/Kp47ZAGb.5n5nhHDi2NOVoD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkVEGwACgkQAVBC80lX
+0GzfZggAlnkaX6PVgE4zg/BFdWHwQE9W9c+Li0JqCu6WWLqpQrvFg/PG1UxEnNuS
+Xov8qTIDjahRsy4iC0GztS79g0Wg4fFfJkMta+9iZQrjwMLqjhBmwb8TVxvq41oP
+/RnCoCnKZn6BW2Xp4c9K72hjZd63N2772VVw4nWV+90+MqqD/GbLYZINgtpBmldZ
+m8UDcgftk8NnX0EY0HW99B03upoxRSYITNAUDrNG5OcDCF2BOZL7XPjAt2HAkCkM
+dQLHwfWsokIxvt5yV8Nmolm/iSh6xEFfSUbTgMu1Q97KZznApM4UprQSNLHe8t++
+cbwTZ5hPxtFeac0nkwHdojvn1L7SlQ==
+=zcGN
+-----END PGP SIGNATURE-----
+
+--Sig_/Kp47ZAGb.5n5nhHDi2NOVoD--
 

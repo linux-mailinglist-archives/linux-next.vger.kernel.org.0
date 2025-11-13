@@ -1,98 +1,152 @@
-Return-Path: <linux-next+bounces-8949-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8950-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30060C55A38
-	for <lists+linux-next@lfdr.de>; Thu, 13 Nov 2025 05:23:26 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0820DC5615B
+	for <lists+linux-next@lfdr.de>; Thu, 13 Nov 2025 08:39:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C6FD14E03D9
-	for <lists+linux-next@lfdr.de>; Thu, 13 Nov 2025 04:23:24 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A830034F667
+	for <lists+linux-next@lfdr.de>; Thu, 13 Nov 2025 07:37:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5540C2BEC2E;
-	Thu, 13 Nov 2025 04:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4431232939B;
+	Thu, 13 Nov 2025 07:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="O3xh80Kp"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="INh9kisN"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD992BE629;
-	Thu, 13 Nov 2025 04:23:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D14442A96
+	for <linux-next@vger.kernel.org>; Thu, 13 Nov 2025 07:37:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763007802; cv=none; b=ZTseamLUltojbqW9Z3hy8bhSniGxjPbuLKeiAB3Nhq7Luc1PU47LQQOHTUkAEytued7xKraPwuRsJ5jEDf7xaxSZPAkFbFeEtCqGWJ2GJx7nTtNt+3Tzb8B1AHtIKgKwYb7nFj/cSeZdjqR3OVrPw6of6gbOhn+68pYb3Vhr3Hs=
+	t=1763019447; cv=none; b=mPTD0stHNVQJk1WQ/JgepXw0UkUiF4yGbePenmhuDSW/wgeV6bg2YTCPlfqxGToKWq2dMmdBYe7xoOJ6GORl5R5sV2ABI+RLQx9asU5RW2HNr4DN2BeyynsnuceMRRdZa0W2FmE3asBul5SCi0vyTqH9FLW7ad1Fr7/v8u4nVuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763007802; c=relaxed/simple;
-	bh=Xvz+Xuc7Y+vhCg3WuET9Z7ozRM61Lmu5lT4vf+qo6G8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=R6K5K21T22IOksNAciEQtjkqcpUKKpRBfnM2tVu0KkLx4qltD8xAaXs59yHppoH/S+XDLVgQMc1gh0EdAOVjx+gXFrKqIk938WkvTzCJ+cNBA7mi8gqVomqvoYZTh+3Ddke1LER5vtAvaHflPTCuDu8dS1tv7SyaqiDsQzWMOlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=O3xh80Kp; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1763007797;
-	bh=rkSKirlfJNrKqmdM7JkvP4+6DlB0RhjRgSCJwL6W+04=;
-	h=Date:From:To:Cc:Subject:From;
-	b=O3xh80KpylT7ozWwEpv3kO3cAva0J6sa4cEGjIj/NamaHO3d4V+JJqLtWpCUJPba8
-	 Jw5fjzbj6AwPaRV0+DuONt11z0mDrHqQwICVhN89ZE8XW0siGeVIqdjuhh+LH45T6p
-	 B1ukzMJSJBr3WUJF8LIzFWFFWlgaHEWh+Lqt8plH0KQ8fNx3lVBwiD8LrNQeiLghW2
-	 Sra7pQhj3/3eG8WQxDBiEY6vsB2dkgN/UvSLWjLD2iYe7HtfzIDy89LqILRjkPz/Ld
-	 ZhzHExYMI6y9Fys28kBh9mnlFDYC8NzoV62JzbX5rtwdRF1FVXQ3sDR6iSHvg0eSCt
-	 Nl+Rc33wkRJtQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d6Rw52282z4wBD;
-	Thu, 13 Nov 2025 15:23:17 +1100 (AEDT)
-Date: Thu, 13 Nov 2025 15:23:16 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the kvm-x86 tree
-Message-ID: <20251113152316.7f7e9e50@canb.auug.org.au>
+	s=arc-20240116; t=1763019447; c=relaxed/simple;
+	bh=I/WpisZDYfQ6eCNY3xqj3kPfAZ27Pt/dd0Ntuhox6BQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UOasWE1bbk7MCGuc3ht8P5IBgdRB/x7PBFb/5JAuSpSZCMPwgNIwuPxUDpvgp992KSg7C0Prr2KfV45Y6R0B9EpeD4vIaH0DG2i2qqDjAeswmqeHIOZH70ahP+PddoYSPWHsapuujtU9uTK7lNazxSyMKZDhVYrjMc3p3pdS8+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=INh9kisN; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-64080ccf749so724993a12.2
+        for <linux-next@vger.kernel.org>; Wed, 12 Nov 2025 23:37:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1763019438; x=1763624238; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ErwKpSB7O06bd8pyRpgr/pjZeD/ktQ7vFDy/Wy+0Yk=;
+        b=INh9kisN5YK8NAnyE9AoeNpRdCEsOuXou0i8pGvKb9XQVk7FnsUsj7/B4Ma4fHD+YT
+         b0pahEBS209G2TUHRid8B4YWs5VevneZ30f9iyo2cKMXUEra6Ynq1hYrfFJlutusN0wj
+         tTqD9G0lPyJmXWoyGddl7Rwcgcegvg+ftFFl2op2agdSO4iLtFOJikV/MXZO2XdmUFRq
+         bY66pjgSFpBkAd6DSkoJsmCuGJKX/VYrVnDK9bta7odlTqoO3P5cIjl+lqo6Zcb3Qqj0
+         UU/s9w+xgCbxMCMfwxPb0Pcd+QUU4ZZlb8gYPULgQKNzOuOBlyFlxphlidhFr5av12Tp
+         YFhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763019438; x=1763624238;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4ErwKpSB7O06bd8pyRpgr/pjZeD/ktQ7vFDy/Wy+0Yk=;
+        b=mc1RDV759o2W65FbmPHuLTW1TL2HrwvelTMas5EL1izFFBV0KD0aT8qd8Iqw/kXuVD
+         ap3jTpn4CMc45sZThzmEt9RrXLA1lYpfvZy2cRidWHWnC9N4u/VxnE++TyYSZ7rUWc5A
+         xzGwhzpeSNeMTWdmLjFTJ+A7P31r+Tde3vhJ1YikykMlHnRUe6tvaDePgogdQl3Bf7g/
+         qx0ny4vqWOBVg6jqWgsu47/KqtSfnubsM/WydqUkmoUQvVm/LfvN6AY8PXZ4y7OqB+kR
+         rEMTtpmPFjCP+vixi80EdLntNmDcSzT8WExa+AvUGzGZAE9UUBgzGzLIl7XUQl0cDReh
+         IHLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVn2DmBsLeI87/lnjdgOaFB50UxxJGZOh1zFCQD5oEerOKmUfRbHhSMvEYjMJwOrRa1+AZq7VAMmJ7a@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4Hvf8aeOrfoCohUfQdfxUxdZFSK4mcTL5VVMMjQ2BvS7ti9as
+	fxIqkXRkS49BxQ4rlHROxnP9lpmYKpeuOjVmx5xN/o+5UK0uyiHYP5F8xdS+bEa+gS8=
+X-Gm-Gg: ASbGnctLA8nbOC3fE5cjq7KORlDc5/0iqdsR/Q3aZzSXyfstEK7SkGFM8rzz7RBkRdk
+	7unsGq59YV/qZKTsyrUYNjxJ93ZjMyw62UsDr3o/ub31YgfVw53o6TvY1P20i/Wjg9kNQjUlrQL
+	S5odsX8LNnOWTh+JKaXEsfbnJNCq1McNMYkR7so7B9PXinUC8n7Yr3ruRrKnm0fM/dR1hlcLSpQ
+	VFNAp1oe8iI3LPEbg55Zlv+ZJwe8vH8VQnu/u047QHP6FwncJ397QqN5R4s0KCcjfPpnDPGC69T
+	kAPQHxyIScjEBUYA7w1IWB/AOUjuL1KCnqj5MDAxrI4N4tAxSSCEK4Uz+YMM3ckSpLIkH2rOVZe
+	o51rJQU7Yj3Xoa5BrFOn2mV/8VZeUtBbZKI3dkITOkbW24Y7aSa9JrdUzy+I5FNJFn+L5UkB9Rh
+	z2z+8=
+X-Google-Smtp-Source: AGHT+IE1XubvOmCmqqWcHZQN3QCxNQ8u2ErQ5jVOLKC4ySPOfcJKtLtnzPEW0D1kRbNejdQV4zA7gg==
+X-Received: by 2002:a05:6402:40d6:b0:640:f8a7:aa25 with SMTP id 4fb4d7f45d1cf-6431a55e67fmr5271820a12.30.1763019438038;
+        Wed, 12 Nov 2025 23:37:18 -0800 (PST)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6433a4b28b0sm831174a12.30.2025.11.12.23.37.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Nov 2025 23:37:17 -0800 (PST)
+Date: Thu, 13 Nov 2025 08:37:15 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+	d-tatianin@yandex-team.ru, john.ogness@linutronix.de,
+	sfr@canb.auug.org.au, rostedt@goodmis.org, senozhatsky@chromium.org
+Subject: Re: [BUG -next] WARNING: kernel/printk/printk_ringbuffer.c:1278 at
+ get_data+0xb3/0x100
+Message-ID: <aRWKq2KNKjxbXexA@pathway.suse.cz>
+References: <a2f58837-2b29-4318-9c78-5905ab2e9d3b@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_+6ntTY=hoCvGRMjomjXjXn";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a2f58837-2b29-4318-9c78-5905ab2e9d3b@paulmck-laptop>
 
---Sig_/_+6ntTY=hoCvGRMjomjXjXn
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Paul,
 
-Hi all,
+first, thanks a lot for reporting the regression.
 
-Commit
+On Wed 2025-11-12 16:52:16, Paul E. McKenney wrote:
+> Hello!
+> 
+> Some rcutorture runs on next-20251110 hit the following error on x86:
+> 
+> WARNING: kernel/printk/printk_ringbuffer.c:1278 at get_data+0xb3/0x100, CPU#0: rcu_torture_sta/63
+> 
+> This happens in about 20-25% of the rcutorture runs, and is the
+> WARN_ON_ONCE(1) in the "else" clause of get_data().  There was no
+> rcutorture scenario that failed to reproduce this bug, so I am guessing
+> that the various .config files will not provide useful information.
+> Please see the end of this email for a representative splat, which is
+> usually rcutorture printing out something or another.  (Which, in its
+> defense, has worked just fine in the past.)
+> 
+> Bisection converged on this commit:
+> 
+> 67e1b0052f6b ("printk_ringbuffer: don't needlessly wrap data blocks around")
+> 
+> Reverting this commit suppressed (or at least hugely reduced the
+> probability of) the WARN_ON_ONCE().
+> 
+> The SRCU-T, SRCU-U, and TREE09 scenarios hit this most frequently at
+> about double the base rate, but are CONFIG_SMP=n builds.  The RUDE01
+> scenario was the most productive CONFIG_SMP=y scenario.  Reproduce as
+> follows, where "N" is the number of CPUs on your system divided by three,
+> rounded down:
+> 
+> tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 5 --configs "N*RUDE01"
+> 
+> Or if you can do CONFIG_SMP=n, the following works, where "N" is the
+> number of CPUs on your system:
+> 
+> tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 5 --configs "N*SRCU-T"
+> 
+> Or please tell me what debug I should enable on my runs.
 
-  a4551f2b4d9c ("KVM: TDX: Take MMU lock around tdh_vp_init()")
+The problem was reported by two test robots last week. It happens when
+a message fits exactly up to the last byte before the ring buffer gets
+wrapped for the first time. It is interesting that you have seen
+so frequently (in about 20-25% rcutorture runs).
 
-is missing a Signed-off-by from its committer.
+Anyway, I have pushed a fix on Monday. It is the commit
+cc3bad11de6e0d601 ("printk_ringbuffer: Fix check of
+valid data size when blk_lpos overflows"), see
+https://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git/commit/?h=for-6.19&id=cc3bad11de6e0d6012460487903e7167d3e73957
 
---=20
-Cheers,
-Stephen Rothwell
+Thanks a lot for so exhaustive report. And I am sorry that you
+probably spent a lot of time with it.
 
---Sig_/_+6ntTY=hoCvGRMjomjXjXn
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkVXTQACgkQAVBC80lX
-0GwRDgf/V/fhPWHIc9QOXDz0bj9CP52yBLO4r4kxpybrJsQjuLvHK2IzjGmVmfNe
-BGolTzkl0u/0qWOePv2m4P6O0mVtrWVSn6TwbgCrtcNWe3bb+f6yvkI1rC19A2k1
-UBIKrvbd6X8ftm34wl61nyow+65d73kSZp2meF7VGvuuAIlH54SDwpwqjknU0MwL
-n4chIVe7CIy7c2XevWNrNxTMOOxMxHoIZM8Aq4dgooD5TuY8atiZkDFXydFH4jaC
-5BiXIFbUMhOuouY1gyafginZMBCzlEpCrxrye2KKnA/QpQSNqRpFK0cOxuX8glGm
-08iSFWvOQdXT8rbd6OqGJmremJXo+w==
-=D+Jx
------END PGP SIGNATURE-----
-
---Sig_/_+6ntTY=hoCvGRMjomjXjXn--
+Best Regards,
+Petr
 

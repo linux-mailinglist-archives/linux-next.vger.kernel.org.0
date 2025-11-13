@@ -1,82 +1,82 @@
-Return-Path: <linux-next+bounces-8959-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8960-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87249C59EEA
-	for <lists+linux-next@lfdr.de>; Thu, 13 Nov 2025 21:16:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49E5DC5A257
+	for <lists+linux-next@lfdr.de>; Thu, 13 Nov 2025 22:35:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 72F164E7D2F
-	for <lists+linux-next@lfdr.de>; Thu, 13 Nov 2025 20:15:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB3EC3B5FCA
+	for <lists+linux-next@lfdr.de>; Thu, 13 Nov 2025 21:35:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38647311967;
-	Thu, 13 Nov 2025 20:14:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D00B4325728;
+	Thu, 13 Nov 2025 21:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FUFgmWBQ"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HBuvQvGu"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30E5311C30
-	for <linux-next@vger.kernel.org>; Thu, 13 Nov 2025 20:14:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD7C325715
+	for <linux-next@vger.kernel.org>; Thu, 13 Nov 2025 21:33:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763064899; cv=none; b=HIYCk9NI9vgMbPHbXNjYOpNMSJAYQrYf9SC1BigHKVJzgq6kcl5dVNpIn+EcuPMU1oTPc5TfTMMo1iH9I6wMXfpWaCNGYFQvDY3K1fO1aztWoBzq95T91zRkVogB56rBgM9ichKo0uinMGH4KwEKpLLk6XWY9ayS38dPVS1/xxI=
+	t=1763069595; cv=none; b=Ioz93n2+pyDLWroZeIl4MZuV+sGE9LkcYuRMcIWmltcLpLXF1oCGh5aIsQCZnO3Tjp9OBa0dlEachyPXyxtpyj6zmABZenbwxeefnkj55LBpgCj7bvlYzg2G9003+KQdRr1YG3SIwyA2I28R++K8A8S//SWICIQVSwRNFp16w6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763064899; c=relaxed/simple;
-	bh=Iokln6xv/zqCzNuTtOvyietZGl3Vo3v42vEE6tCkkeU=;
+	s=arc-20240116; t=1763069595; c=relaxed/simple;
+	bh=np+vk5ny2bYK/J1069dc49GCIMS8AbTomaCxcDLUlqw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=glMNk7kkazrKhj8RigPtmF4l1DbpZsm1Q6bGDEaZdgwFIETWrsb8IuQXhZ1LWPZDr5Nu+A2IyEgjdf1u2eUfmTVFenD1vlqq3cRvSwSeNODGLQ+A73m61bp+xR676MZf9+vwL3KZ1NI5/KDewaVFcv2Y5HP0JTX2rHgjgb2dihc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FUFgmWBQ; arc=none smtp.client-ip=209.85.128.50
+	 In-Reply-To:Content-Type; b=pS35TGgbaORxTYWuI6N9w+t5x53QZwrWHBj7tJsvuTXs7oXxZ7DAqKyfizMSo/6OxSWVUCOzUUJDNZt/3ssEhlzYCavg0ONvMEAD+gfCbxedrnT8yTwDPldiM3PIhqY7GvIg2z3z04hfaBMBsR4GWqXb11ExkxXxlLkeX0/2wY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HBuvQvGu; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-477563e28a3so8460085e9.1
-        for <linux-next@vger.kernel.org>; Thu, 13 Nov 2025 12:14:56 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47790b080e4so156365e9.3
+        for <linux-next@vger.kernel.org>; Thu, 13 Nov 2025 13:33:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1763064895; x=1763669695; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1763069592; x=1763674392; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=xJHquruVR9BqfKAfx53l9u+xauV84x5VK+oq8R758Ks=;
-        b=FUFgmWBQ94QeLacJrG4QOrkGh2Zu4U/2fs0/ayoIok+sZFV9nLJ3luGrHIRW4MfMLW
-         V4Fezyu/Sp2IR3mxcE3EN7hxCVNBCBrG7cfN8VMb9XkxH6CgghvOWHAAHIJ1kXd0zsQN
-         DusIIAeU0QmNFSQ6C9ft6BDqYyTvnLIDgmWzXPwmJvDBf5IoxwLCNCSSRgvevDFv+jnP
-         ZJ4PjPE/vHFtdFg7/Dlsom46dviYupMZBmRFQob/o9WA2Cxj2o2wwt72L3qajLrj+y/t
-         tYickzsR4MjXPvowI6bY1qTYVUpFaKsl30WoYrE6V4NnRVoNUIUTft9SVOF3pL3MzAI7
-         Nirw==
+        bh=82CslIJMH4NtD4yMGdoweloKRKRZzvtMoYx7Z2BxtjY=;
+        b=HBuvQvGunkab3wSma0IWz7bqvrih04nGX83rtv5boJIGIpDf54/SazYl0+v+dLS56k
+         Q+XzvFfTK7BQx3bCPwzh66IaZAsh/IW3vNbgx0Bj0tUfW7rOQL3mF8kRp5kL6myBLgIo
+         i7Yu3GxGzdjX/VOFQ0HAjDobQu0sn4ux80PO+2TI5/WT0XggxQ1lXcucK7Tw/2ttpigA
+         0pV54qLTnlU/MEg/N57R/5lYe9De44iSPWd4Ygpr6hCBE+glOUi1irR3h3fOjPgUkDhJ
+         HjHk1Mrz1N4fXg7ZiENnXwUE4OC7FPorDKL6LmWrv28jnZ5zL3MT98NqnvD/Clcih39Q
+         E9hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763064895; x=1763669695;
+        d=1e100.net; s=20230601; t=1763069592; x=1763674392;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xJHquruVR9BqfKAfx53l9u+xauV84x5VK+oq8R758Ks=;
-        b=ns7O98earn8IeWXqUXdFMYF7sE82r4m1a2JA5sGze39G9bUy0MdmjQ+ZuDVoE/fnXx
-         wEnrAA0czp7nyA50y8q7E9aDq4WVdhRqam8uVJ4UpJf4KJhg0i+UNfsOH3a+tSRMEhh7
-         vd5kRt0iWA5S3LYQ5uUcVCYiTzcd9I+nETaEf9QtBTwVaUWNzIcbs1cdyPmmOP2kF0av
-         vAVXLq1asU6RWiIhMDIdoG2S7DKXBlt3Dy8AeW0KUV5QhAmonIEd1l5z0YrbteV7BNkN
-         wIQ1xNWSgaB+WQYiGt0spjfd0NIrE5ohmCK24YXn2X1o3T7LZ7jdEs8hBSCnG8TJYotC
-         WGIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVP+aLzXoPL/8CL7lAzdgJul/6X6wjv38IIsB72sYfaZ7NxSCBt1Us8TGkqoGgbXCoQvVnyn/cilu88@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7xjgrBRjhigOz9Ah1rCb8s5BZAEzfwsoG+ze8cGX2ioOnluDi
-	leChYc0eh0kfRi/l47BA7thXEQlfLCKxaIHOWcmysJSg89Cywm3vFTuOPER19MAWS/8=
-X-Gm-Gg: ASbGnctpOzyGgkTO1LsRtFl2e2FyldDZMKGFi0JvGBcQGYjIhbLNHc7i5agh816X6fx
-	M1+PwTdBqq53J39FcEIuGU/qQqrZx+WnVuF2nVIVnYWTU4BKRoIz8EoHJCsKG3C7BEESqPtZ0HD
-	35pY69NI8NR0MNMBjMUY7D3FPGHuH6mvukqRT3kN+fCA25UpPB/RuWnSuOfHFeX9Qq4V+eC3lkx
-	4z44LWqESsm3E1nAA1JFiO6iyJa17DEOcdbAo1hyDQUl2VOsWlRHc6sdbAQ258SGoFNP6XrSYzF
-	5MdrIWzgJEsdk6gkkfvlXXGkpwsjHCnO4js6F5qcnAnkRuNTnTa5jwvBUrIyRTnDPrb0bBhO8qs
-	ajYtQ8B7ljFIDGvjuVXMCXO7b+iSh1tJfpAXR5UAOvjMnQrTu6YrzMlNh2rSTI/WjcEXBMRNMnl
-	dEx/IAKj/0C/fYD4Yd42An5VCXQ4yENB6z1IY5+fI=
-X-Google-Smtp-Source: AGHT+IGfCk32tHqCL7SYjgxFGQtRASf+D+TZF7Bkb2lJVXy8ZisKnomrNnjS9IMIOPgvGH2WkTeaRg==
-X-Received: by 2002:a05:600c:4895:b0:477:78db:19ca with SMTP id 5b1f17b1804b1-4778bcb36f7mr28759225e9.3.1763064895040;
-        Thu, 13 Nov 2025 12:14:55 -0800 (PST)
+        bh=82CslIJMH4NtD4yMGdoweloKRKRZzvtMoYx7Z2BxtjY=;
+        b=rTF05Ev/M1GRsqY0fa7oF5adwmxIrLYD4Iwd2VPzqwPxQNOjYOOSREaxiELwB2Vg4Q
+         ZMf2cZLOXtMgqmRvPrUcVxqRtXqD/ChkmFIbn5/cyrPTHfIqLvXJDChIWkd7GOxedKrS
+         iUkoTaJ+uk2741QqxK1TMhaXJENIFQaaLS/zvrlciR7hFCuU+uGLFF51jxPOeTk4YAwz
+         UmEuFFLtrvLE68IU9vJQbQEO/vAQ5MbXDWSMk7GGoYS6xy8q5aJY94GyG+v7Nk3HBpSm
+         94YCHnJC6PMF+GF10beiyx8P07YFoZ933ziq2pai4AY7bKTGT2TbxoHdszqoQGaxaOaW
+         0pOA==
+X-Forwarded-Encrypted: i=1; AJvYcCWgQno462mwtJVYmsWx9CdLgqdwzZvogrYLaQ5vEQAhwgsyQLJcWY4qH7Dx05OPoDfARkMMMX1ZR1ra@vger.kernel.org
+X-Gm-Message-State: AOJu0YzadjD7DiZtl2s0hcvZ9lLAvYGTdNU2kx1TSMdjYwKlSDQWNcHd
+	TLR8IZzFfCjTzG8M6RwMShmm9Vf9GiX2CueoJwhEWu5mYeQJF4k+iC4GRqGKCA5cAdk=
+X-Gm-Gg: ASbGncufM+Fp2zMenYsQpoH9F4gaeHZaH5+d8jNc9iDQtZOH/RTjbrLOLxyT/jF6uAo
+	dh6eEmTHEsspUi7FteiJ2d97REegWL42p90vmxTfRoZcYDyFLlgQJpRBLBRzhDdbM9HHl75g5y3
+	/08dTvrUb8gJc80hQO6uiwjCwtJzpZEfLUurlMU+antT81/2roQpYd/Z/jKI4bqV7sJ2kadEa3a
+	gerSF66YC486PxCFwwT//aCryQmwmCSK3yO2jqA+DMJ4LILt9XNPrfWOyBPhRtsD8YRcwrWHu1l
+	W2MR2pIbrFCeSxjq5tCgwP7v2Iko6eQylImSLPO7AUtd6VVZ4vWm6QLujZdKgujIDyF7pbZYzQa
+	KrYu2TBBdwRtdOnu+LRHKXMQdaD9FZM+cLS2LXZjmfcCCdhTWXd6buj8QO2+OcFua64z9D9pQ7Z
+	XQlmUl+P20TAFtTJccC+FmYofIjdPo
+X-Google-Smtp-Source: AGHT+IFL6vHCRHS9O9F/gskdlKph0HMYqCbjuv5R8XS85FM3NQvLnFi3jnD3xcwfhwTJJYI7q85SBg==
+X-Received: by 2002:a05:600c:1d19:b0:476:d494:41d2 with SMTP id 5b1f17b1804b1-4778feadf96mr8736545e9.29.1763069591541;
+        Thu, 13 Nov 2025 13:33:11 -0800 (PST)
 Received: from ?IPV6:2403:580d:fda1::299? (2403-580d-fda1--299.ip6.aussiebb.net. [2403:580d:fda1::299])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-343ea713fdfsm1990223a91.2.2025.11.13.12.14.50
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c2bf172sm35206785ad.83.2025.11.13.13.33.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Nov 2025 12:14:54 -0800 (PST)
-Message-ID: <e632b549-5898-48af-9859-10babd1a7f88@suse.com>
-Date: Fri, 14 Nov 2025 06:44:48 +1030
+        Thu, 13 Nov 2025 13:33:10 -0800 (PST)
+Message-ID: <d84d8a70-bd78-4e49-965f-150a3c231d2a@suse.com>
+Date: Fri, 14 Nov 2025 08:03:05 +1030
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -247,8 +247,6 @@ Content-Transfer-Encoding: 8bit
 > 
 >> Mostly the issue got introduced by one of the below three commits. As
 >> reverting these three, this issue is not seen.
-
-Mind to share the block size of the fs? 4K or 64K?
 >>
 >>
 >> 9299051573d9 e8ea54f86241 cd93c0aad7e3
@@ -258,8 +256,32 @@ Mind to share the block size of the fs? 4K or 64K?
 > cd93c0aad7e3 btrfs: make btrfs_repair_io_failure() handle bs > ps cases without large folios
 > 
 
-The problem looks weird, as for 64K page sized power11, there should be 
-no path involved for bs > ps cases.
+I located the problem to be the patch "btrfs: raid56: remove sector_ptr 
+structure", where I have a local fix not submitted to the mailing list.
+
+And during the recent push into for-next branch, I'm again using the 
+mailing list one, not the local fixed one, resulting 
+btrfs_raid_bio::stripe_paddrs[*] to be assigned way beyond its boundary.
+
+This makes us to randomly corrupt the memory, resulting weird results.
+
+And the fix is pretty straightforward:
+
+Bad:
+
++		rbio->stripe_paddrs[i] = page_to_phys(rbio->stripe_pages[page_index] +
++						      offset_in_page(offset));
+
+Good:
+
++		rbio->stripe_paddrs[i] = page_to_phys(rbio->stripe_pages[page_index]) +
++						      offset_in_page(offset);
+
+Since offset_in_page() is involved, it only affects subpage systems.
+
+I'll fold the fix into the offending patch.
+
+Thanks for the report, and sorry for the bug.
 
 Thanks,
 Qu

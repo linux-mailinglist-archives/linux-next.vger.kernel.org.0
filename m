@@ -1,152 +1,206 @@
-Return-Path: <linux-next+bounces-8950-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8951-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0820DC5615B
-	for <lists+linux-next@lfdr.de>; Thu, 13 Nov 2025 08:39:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E729AC563FA
+	for <lists+linux-next@lfdr.de>; Thu, 13 Nov 2025 09:24:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A830034F667
-	for <lists+linux-next@lfdr.de>; Thu, 13 Nov 2025 07:37:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB4E63B62A5
+	for <lists+linux-next@lfdr.de>; Thu, 13 Nov 2025 08:18:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4431232939B;
-	Thu, 13 Nov 2025 07:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA5F4325488;
+	Thu, 13 Nov 2025 08:16:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="INh9kisN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fzoyXe3i"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D14442A96
-	for <linux-next@vger.kernel.org>; Thu, 13 Nov 2025 07:37:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C9B2857FC;
+	Thu, 13 Nov 2025 08:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763019447; cv=none; b=mPTD0stHNVQJk1WQ/JgepXw0UkUiF4yGbePenmhuDSW/wgeV6bg2YTCPlfqxGToKWq2dMmdBYe7xoOJ6GORl5R5sV2ABI+RLQx9asU5RW2HNr4DN2BeyynsnuceMRRdZa0W2FmE3asBul5SCi0vyTqH9FLW7ad1Fr7/v8u4nVuo=
+	t=1763021769; cv=none; b=aRe6HeXHRiwXFQLheJAjqWhzZP+onk/z6tdodUwzLii6jY8ycD+MCypC7xnxrh91bCE2hbaPpnHsFKZWLv11VSbq4ohCJuA/oH7POOZkhA5ka9XM2GzjLtJNAPU5SIYqjUZo8R8X3FAMlK/aa6jtDHKk603k0MR6p6qUyKV77ig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763019447; c=relaxed/simple;
-	bh=I/WpisZDYfQ6eCNY3xqj3kPfAZ27Pt/dd0Ntuhox6BQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UOasWE1bbk7MCGuc3ht8P5IBgdRB/x7PBFb/5JAuSpSZCMPwgNIwuPxUDpvgp992KSg7C0Prr2KfV45Y6R0B9EpeD4vIaH0DG2i2qqDjAeswmqeHIOZH70ahP+PddoYSPWHsapuujtU9uTK7lNazxSyMKZDhVYrjMc3p3pdS8+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=INh9kisN; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-64080ccf749so724993a12.2
-        for <linux-next@vger.kernel.org>; Wed, 12 Nov 2025 23:37:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1763019438; x=1763624238; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ErwKpSB7O06bd8pyRpgr/pjZeD/ktQ7vFDy/Wy+0Yk=;
-        b=INh9kisN5YK8NAnyE9AoeNpRdCEsOuXou0i8pGvKb9XQVk7FnsUsj7/B4Ma4fHD+YT
-         b0pahEBS209G2TUHRid8B4YWs5VevneZ30f9iyo2cKMXUEra6Ynq1hYrfFJlutusN0wj
-         tTqD9G0lPyJmXWoyGddl7Rwcgcegvg+ftFFl2op2agdSO4iLtFOJikV/MXZO2XdmUFRq
-         bY66pjgSFpBkAd6DSkoJsmCuGJKX/VYrVnDK9bta7odlTqoO3P5cIjl+lqo6Zcb3Qqj0
-         UU/s9w+xgCbxMCMfwxPb0Pcd+QUU4ZZlb8gYPULgQKNzOuOBlyFlxphlidhFr5av12Tp
-         YFhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763019438; x=1763624238;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4ErwKpSB7O06bd8pyRpgr/pjZeD/ktQ7vFDy/Wy+0Yk=;
-        b=mc1RDV759o2W65FbmPHuLTW1TL2HrwvelTMas5EL1izFFBV0KD0aT8qd8Iqw/kXuVD
-         ap3jTpn4CMc45sZThzmEt9RrXLA1lYpfvZy2cRidWHWnC9N4u/VxnE++TyYSZ7rUWc5A
-         xzGwhzpeSNeMTWdmLjFTJ+A7P31r+Tde3vhJ1YikykMlHnRUe6tvaDePgogdQl3Bf7g/
-         qx0ny4vqWOBVg6jqWgsu47/KqtSfnubsM/WydqUkmoUQvVm/LfvN6AY8PXZ4y7OqB+kR
-         rEMTtpmPFjCP+vixi80EdLntNmDcSzT8WExa+AvUGzGZAE9UUBgzGzLIl7XUQl0cDReh
-         IHLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVn2DmBsLeI87/lnjdgOaFB50UxxJGZOh1zFCQD5oEerOKmUfRbHhSMvEYjMJwOrRa1+AZq7VAMmJ7a@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4Hvf8aeOrfoCohUfQdfxUxdZFSK4mcTL5VVMMjQ2BvS7ti9as
-	fxIqkXRkS49BxQ4rlHROxnP9lpmYKpeuOjVmx5xN/o+5UK0uyiHYP5F8xdS+bEa+gS8=
-X-Gm-Gg: ASbGnctLA8nbOC3fE5cjq7KORlDc5/0iqdsR/Q3aZzSXyfstEK7SkGFM8rzz7RBkRdk
-	7unsGq59YV/qZKTsyrUYNjxJ93ZjMyw62UsDr3o/ub31YgfVw53o6TvY1P20i/Wjg9kNQjUlrQL
-	S5odsX8LNnOWTh+JKaXEsfbnJNCq1McNMYkR7so7B9PXinUC8n7Yr3ruRrKnm0fM/dR1hlcLSpQ
-	VFNAp1oe8iI3LPEbg55Zlv+ZJwe8vH8VQnu/u047QHP6FwncJ397QqN5R4s0KCcjfPpnDPGC69T
-	kAPQHxyIScjEBUYA7w1IWB/AOUjuL1KCnqj5MDAxrI4N4tAxSSCEK4Uz+YMM3ckSpLIkH2rOVZe
-	o51rJQU7Yj3Xoa5BrFOn2mV/8VZeUtBbZKI3dkITOkbW24Y7aSa9JrdUzy+I5FNJFn+L5UkB9Rh
-	z2z+8=
-X-Google-Smtp-Source: AGHT+IE1XubvOmCmqqWcHZQN3QCxNQ8u2ErQ5jVOLKC4ySPOfcJKtLtnzPEW0D1kRbNejdQV4zA7gg==
-X-Received: by 2002:a05:6402:40d6:b0:640:f8a7:aa25 with SMTP id 4fb4d7f45d1cf-6431a55e67fmr5271820a12.30.1763019438038;
-        Wed, 12 Nov 2025 23:37:18 -0800 (PST)
-Received: from pathway.suse.cz ([176.114.240.130])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6433a4b28b0sm831174a12.30.2025.11.12.23.37.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Nov 2025 23:37:17 -0800 (PST)
-Date: Thu, 13 Nov 2025 08:37:15 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-	d-tatianin@yandex-team.ru, john.ogness@linutronix.de,
-	sfr@canb.auug.org.au, rostedt@goodmis.org, senozhatsky@chromium.org
-Subject: Re: [BUG -next] WARNING: kernel/printk/printk_ringbuffer.c:1278 at
- get_data+0xb3/0x100
-Message-ID: <aRWKq2KNKjxbXexA@pathway.suse.cz>
-References: <a2f58837-2b29-4318-9c78-5905ab2e9d3b@paulmck-laptop>
+	s=arc-20240116; t=1763021769; c=relaxed/simple;
+	bh=xHII4kaV5Ac0Nsi6t6sb1osgqOjFd+XeNQg+bEWMCdI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rdxYZapZUX8kvrchCLepP1AdW4M+6L0EMIRMFtN5Huc1DCXeg7q5cUYaPqbY8V9+TNl8raJLC8W4AZzpd3dfXc/EFm64V5JfkFJMDnql6C1jfQNSCMg8V4C1J87KDjEaEuOLDXV8ZGtjgdb6sttLqjZGW19zjKcQj16M4s8yrpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fzoyXe3i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4A66C113D0;
+	Thu, 13 Nov 2025 08:16:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763021769;
+	bh=xHII4kaV5Ac0Nsi6t6sb1osgqOjFd+XeNQg+bEWMCdI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=fzoyXe3ideJkqXzUmB3mi3TPLsYLArz+SLJnjsgDNqdcRbLwKHR0AiemKwsIRazDk
+	 XjK3NdCRijaQo1e99GUl1HnNDG/WJzMF0PHjumnI0g3loUyrNMV+by0ZXm+RehxSLe
+	 ywb3TTwkB8LqrDJ5aGJKxsfYs1XqEl2OSjzSfQKeFruxRzqjcyYWWejAKYKriZQclH
+	 O2Fy+FrswG0WKHdGl7H4+8A+uoYIlUv9OfVM/ycShEol7+3tBoy2PeBFvRXHAxebfC
+	 rTRoFWumwoSCuDzxP+t44dMpIQof1RUgKW7LtDRBiqKE4SjECfDo6hNmYI8PWeEg7+
+	 4KFL+jov8/xlg==
+Date: Thu, 13 Nov 2025 09:16:04 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Jonathan Corbet <corbet@lwn.net>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Jason Wang <jasowang@redhat.com>, "Michael S.
+ Tsirkin" <mst@redhat.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of Linus' tree
+Message-ID: <20251113091604.0a02f3bc@foz.lan>
+In-Reply-To: <20251113125537.0d08e5ce@canb.auug.org.au>
+References: <20251113125537.0d08e5ce@canb.auug.org.au>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a2f58837-2b29-4318-9c78-5905ab2e9d3b@paulmck-laptop>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Paul,
+Em Thu, 13 Nov 2025 12:55:37 +1100
+Stephen Rothwell <sfr@canb.auug.org.au> escreveu:
 
-first, thanks a lot for reporting the regression.
+> Hi all,
+> 
+> Today's linux-next build (htmldocs) produced these warnings:
+> 
+> WARNING: /home/sfr/kernels/next/next/include/linux/virtio_config.h:174 duplicate section name 'Return'
+> WARNING: /home/sfr/kernels/next/next/include/linux/virtio_config.h:184 duplicate section name 'Return'
+> WARNING: /home/sfr/kernels/next/next/include/linux/virtio_config.h:190 duplicate section name 'Return'
+> 
+> Introduced by commit
+> 
+>   bee8c7c24b73 ("virtio: introduce map ops in virtio core")
+> 
+> but is probably a bug in our scripts as those lines above have "Returns:"
+> in them, not "Return:".
 
-On Wed 2025-11-12 16:52:16, Paul E. McKenney wrote:
-> Hello!
-> 
-> Some rcutorture runs on next-20251110 hit the following error on x86:
-> 
-> WARNING: kernel/printk/printk_ringbuffer.c:1278 at get_data+0xb3/0x100, CPU#0: rcu_torture_sta/63
-> 
-> This happens in about 20-25% of the rcutorture runs, and is the
-> WARN_ON_ONCE(1) in the "else" clause of get_data().  There was no
-> rcutorture scenario that failed to reproduce this bug, so I am guessing
-> that the various .config files will not provide useful information.
-> Please see the end of this email for a representative splat, which is
-> usually rcutorture printing out something or another.  (Which, in its
-> defense, has worked just fine in the past.)
-> 
-> Bisection converged on this commit:
-> 
-> 67e1b0052f6b ("printk_ringbuffer: don't needlessly wrap data blocks around")
-> 
-> Reverting this commit suppressed (or at least hugely reduced the
-> probability of) the WARN_ON_ONCE().
-> 
-> The SRCU-T, SRCU-U, and TREE09 scenarios hit this most frequently at
-> about double the base rate, but are CONFIG_SMP=n builds.  The RUDE01
-> scenario was the most productive CONFIG_SMP=y scenario.  Reproduce as
-> follows, where "N" is the number of CPUs on your system divided by three,
-> rounded down:
-> 
-> tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 5 --configs "N*RUDE01"
-> 
-> Or if you can do CONFIG_SMP=n, the following works, where "N" is the
-> number of CPUs on your system:
-> 
-> tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration 5 --configs "N*SRCU-T"
-> 
-> Or please tell me what debug I should enable on my runs.
+It is not a mistake. What happens is that, when kernel-doc detects
+something like:
 
-The problem was reported by two test robots last week. It happens when
-a message fits exactly up to the last byte before the ring buffer gets
-wrapped for the first time. It is interesting that you have seen
-so frequently (in about 20-25% rcutorture runs).
+	/**
+...
+	 * return: something
+...
+	 *    returns: else
+...
+	 */
 
-Anyway, I have pushed a fix on Monday. It is the commit
-cc3bad11de6e0d601 ("printk_ringbuffer: Fix check of
-valid data size when blk_lpos overflows"), see
-https://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git/commit/?h=for-6.19&id=cc3bad11de6e0d6012460487903e7167d3e73957
+we have a duplicated section. The regular expression that pick sections
+is:
 
-Thanks a lot for so exhaustive report. And I am sorry that you
-probably spent a lot of time with it.
+	known_section_names = 'description|context|returns?|notes?|examples?'
+	known_sections = KernRe(known_section_names, flags = re.I)
+	doc_sect = doc_com + \
+	    KernRe(r'\s*(@[.\w]+|@\.\.\.|' + known_section_names + r')\s*:([^:].*)?$',
+	           flags=re.I, cache=False)
 
-Best Regards,
-Petr
+So, basically, it seeks, inside a kernel-doc comment, in case-insensitive
+mode, for:
+
+	"\sreturns?:"
+
+In this specific case, virtio_map_ops is using this pattern multiple
+times:
+
+	/**
+	 * struct virtio_map_ops - operations for mapping buffer for a virtio device
+	 * Note: For transport that has its own mapping logic it must
+	 * implements all of the operations
+	 * @map_page: map a buffer to the device
+	 *      map: metadata for performing mapping
+	 *      page: the page that will be mapped by the device
+	 *      offset: the offset in the page for a buffer
+	 *      size: the buffer size
+	 *      dir: mapping direction
+	 *      attrs: mapping attributes
+	 *      Returns: the mapped address
+(first occurrence)
+	...
+	 * @alloc: alloc a coherent buffer mapping
+	 *      map: metadata for performing mapping
+	 *      size: the size of the buffer
+	 *      map_handle: the mapping address to sync
+	 *      gfp: allocation flag (GFP_XXX)
+	 *      Returns: virtual address of the allocated buffer
+(second occurrence, others follow)
+
+As result, it strips "returns" from members output:
+
+	  **Members**
+
+	  ``map_page``
+	    map a buffer to the device
+	    map: metadata for performing mapping
+	    page: the page that will be mapped by the device
+	    offset: the offset in the page for a buffer
+	    size: the buffer size
+	    dir: mapping direction
+	    attrs: mapping attributes
+
+	  ``unmap_page``
+	...
+
+
+And creates a return section with each returns: appended:
+
+	**Return**
+
+	the mapped address
+
+	virtual address of the allocated buffer
+
+	whether the buffer needs synchronization
+
+	the maximum buffer size that can be mapped
+
+which is not what it is expected. Such behavior is there since the Perl
+version (and the warning), but a patch for the old version disabled
+such warning by default (probably because it was too verbose on that
+time).
+
+Btw, if you see struct virtio_config_ops, there instead of "Returns: foo"
+they use "Returns foo", which produces the desired output:
+
+	  **Members**
+...
+	  ``generation``
+	    config generation counter (optional)
+	    vdev: the virtio_device
+	    Returns the config generation counter
+
+
+So, probably the quickest fix would be do to:
+
+	sed s,Returns:,Returns, -i include/linux/virtio_config.h
+
+> These have turned up now since a bug was fixed that was repressing a
+> lot of warnings.
+
+The change actually disabled the warning-suppression logic that
+was ported from the Perl script, where a lot of real problems at the
+kernel-doc markup were ignored. E.g. those command line arguments:
+
+  -Wreturn, --wreturn   Warns about the lack of a return markup on functions.
+  -Wshort-desc, -Wshort-description, --wshort-desc
+                        Warns if initial short description is missing
+  -Wcontents-before-sections, --wcontents-before-sections
+                        
+                        Warns if there are contents before sections (deprecated).
+                        
+                        This option is kept just for backward-compatibility, but it does nothing,
+                        neither here nor at the original Perl script.
+  -Wall, --wall         Enable all types of warnings
+
+are now ignored, so it outputs as if -Wall was passed to it.
+
+
+Thanks,
+Mauro
 

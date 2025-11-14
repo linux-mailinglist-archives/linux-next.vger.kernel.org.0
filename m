@@ -1,97 +1,130 @@
-Return-Path: <linux-next+bounces-9002-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9003-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02917C5E797
-	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 18:13:07 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB3C7C5E9A8
+	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 18:37:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7FD284E344C
-	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 16:48:18 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0B99A3A7A10
+	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 17:01:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D37A629D277;
-	Fri, 14 Nov 2025 16:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50C80335573;
+	Fri, 14 Nov 2025 17:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hyNMLD1e"
 X-Original-To: linux-next@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E37329BDA3;
-	Fri, 14 Nov 2025 16:48:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A6629BDB5;
+	Fri, 14 Nov 2025 17:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763138896; cv=none; b=slsDx+9F4KEaKlnh6Rq5xQl2p9HuvIl8FAfDe5tIkj6uoyyMmFWQVD8WPbpR1683XAVOSzSOSbFo9AJbm60U1kT7DJh+6gGA+Fw4k6nJPkRd5UdJ3QcpF0GRuYntoYmr/z27oehUZy1HkzvHYAWrrvsOVRTcOb6YdTzqtFqCIrY=
+	t=1763139622; cv=none; b=DNGDK5+z7ZpfvUoKEDNP7M3V6+SApRW3jVJBYl+jPxuqg/7yMntj0yF20+Ms4vQ+ycv2kwp/v9zvCHyReWfU2LWgLXRk7Kohc6l/noUeV+gt+GlAgAnp34p+KA9nOipiUBqy7SHnP722QQIy79Iq5bBAAryAztFSawUDXm9I0nM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763138896; c=relaxed/simple;
-	bh=jKrPpZT7K7mt9HrKXWU/xwzb3abT3cHlYys8j776MyM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=R9sW2izc3V8AnPm3GG62gyUkHJQ1JJyFrygV4dD25T2oJD7qjZv+HiHON/gsYux5mjiwYd5XteNXmW3Pmgv2vm06P18WxJumEHFbIPyd6teCMtpuCJcaSrFG5zmdt9PeIItoc/gxAeazPfr8Z1lXJI890pFfqJpBoyoTjT98tgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf03.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id 53802140460;
-	Fri, 14 Nov 2025 16:48:12 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf03.hostedemail.com (Postfix) with ESMTPA id E3D4060011;
-	Fri, 14 Nov 2025 16:48:09 +0000 (UTC)
-Date: Fri, 14 Nov 2025 11:48:28 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Linux Kernel Mailing
- List <linux-kernel@vger.kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, "Paul E. McKenney"
- <paulmck@kernel.org>, Frederic Weisbecker <frederic@kernel.org>, Neeraj
- Upadhyay <neeraj.upadhyay@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
- Uladzislau Rezki <urezki@gmail.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>
+	s=arc-20240116; t=1763139622; c=relaxed/simple;
+	bh=RI7RnzJxd1EyytXc2hGVyv+OF7EnntAM3FplD+utQJs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BIXbtvP5dvlf81Q8FPFixHKl4Qcjejdc4jiothUTfCjNe0SKifJbcEYY57wi03IVSJNYHtSH67R3TBViiues/kjEG6SPeK4e05UB2QgCXfu5CqaNHpXLt8O6cBSdQKe6HuiN6y/1Qu1rfzMSmrN25LzOQlkUBr+QdQhhEoVN7vA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hyNMLD1e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F15BCC4CEF5;
+	Fri, 14 Nov 2025 17:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763139622;
+	bh=RI7RnzJxd1EyytXc2hGVyv+OF7EnntAM3FplD+utQJs=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=hyNMLD1e2iG8ZUKj5JzG4bVQNRw/Nmwu+f1OH846bFV/2tX8a3S+hNjYhDVDg7KTL
+	 YBNk4A+MQzozytTQrtHHwO9l0kwtzoQ+rbfFZW2z8IIiZaulS3RaUWoe70wVRg9jMl
+	 oiaCh93IVYqBwcfiy8CXqFCheV0hScHCJ9aZITIUOmoStt4HtYVc4ipaQo/3//NRYD
+	 uzERV97VZ4//qWkuyw9/IDc46xMpEO9RO68wfUK18zyKG6f3gjQJq+MOjlTrbX6I2L
+	 QcwwfFuxTssd90hNuqPqL9x5m+s7UoYo0+lRAkOYwios0jUetNjtcFcZv+ZWPLBFGK
+	 u1sqAMZ1SK5sA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 72AA4CE0CA7; Fri, 14 Nov 2025 09:00:21 -0800 (PST)
+Date: Fri, 14 Nov 2025 09:00:21 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	yonghong.song@linux.dev
 Subject: Re: linux-next: manual merge of the rcu tree with the ftrace tree
-Message-ID: <20251114114828.5b7d4fe8@gandalf.local.home>
-In-Reply-To: <20251114163330.pi9Nm3Vb@linutronix.de>
+Message-ID: <348528a9-7e1a-4aa7-8219-5cad81969137@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 References: <20251114135226.64831207@canb.auug.org.au>
-	<20251114074255.3e535084@gandalf.local.home>
-	<20251114133532.mmdi2dca@linutronix.de>
-	<20251114104633.0721bdbe@gandalf.local.home>
-	<20251114160017.CrDJHi5w@linutronix.de>
-	<20251114112202.08e1e3c1@gandalf.local.home>
-	<20251114163330.pi9Nm3Vb@linutronix.de>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+ <20251114074255.3e535084@gandalf.local.home>
+ <20251114133532.mmdi2dca@linutronix.de>
+ <20251114104633.0721bdbe@gandalf.local.home>
+ <20251114160017.CrDJHi5w@linutronix.de>
+ <20251114112202.08e1e3c1@gandalf.local.home>
+ <20251114163330.pi9Nm3Vb@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: wagfcy79yb3kozpdu3ho9qd1ft88owcj
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: E3D4060011
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19juJDZEknEeH/hCqqQ6vPOpjPO82RI3Ds=
-X-HE-Tag: 1763138889-811349
-X-HE-Meta: U2FsdGVkX1+6SS+iv+bD49cftDH7Hp4byRjInHwJfWEXv0XJ8eKDFGGrkday5QAHL393+JXjR/BQcIElcXuwttyTJdXIN9f0dKjbo8xzkmzCC0lXaHVflZ6Zu4dI79j60ldQtZZJJzZJF25vDx5rxnqv3ZSCZ9ZkzcIcqElKI275IK8nOiqAQlBOgNSTtSMHCAwuYZyXKCtVu/bQf0Qca8g+CYFk8blWLokBgsjzUl5XqdGJ+sTJ9X7rJjr+4BrfwPi0rA7S1qPIYouq7nu2IhdZXBezZieLVpw1WPxBEvqpnLI4h25V/7dQO7GHocUw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251114163330.pi9Nm3Vb@linutronix.de>
 
-On Fri, 14 Nov 2025 17:33:30 +0100
-Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
-
+On Fri, Nov 14, 2025 at 05:33:30PM +0100, Sebastian Andrzej Siewior wrote:
+> On 2025-11-14 11:22:02 [-0500], Steven Rostedt wrote:
+> > It's to match this code:
+> > 
+> > --- a/include/linux/tracepoint.h
+> > +++ b/include/linux/tracepoint.h
+> > @@ -100,6 +100,25 @@ void for_each_tracepoint_in_module(struct module *mod,
+> >  }
+> >  #endif /* CONFIG_MODULES */
+> >  
+> > +/*
+> > + * BPF programs can attach to the tracepoint callbacks. But if the
+> > + * callbacks are called with preemption disabled, the BPF programs
+> > + * can cause quite a bit of latency. When PREEMPT_RT is enabled,
+> > + * instead of disabling preemption, use srcu_fast_notrace() for
+> > + * synchronization. As BPF programs that are attached to tracepoints
+> > + * expect to stay on the same CPU, also disable migration.
+> > + */
+> > +#ifdef CONFIG_PREEMPT_RT
+> > +extern struct srcu_struct tracepoint_srcu;
+> > +# define tracepoint_sync() synchronize_srcu(&tracepoint_srcu);
+> > +# define tracepoint_guard()                            \
+> > +       guard(srcu_fast_notrace)(&tracepoint_srcu);     \
+> > +       guard(migrate)()
+> > +#else
+> > +# define tracepoint_sync() synchronize_rcu();
+> > +# define tracepoint_guard() guard(preempt_notrace)()
+> > +#endif
+> > +
+> > 
 > > Where in PREEMPT_RT we do not disable preemption around the tracepoint
-> > callback, but in non RT we do. Instead it uses a srcu and migrate disable.  
+> > callback, but in non RT we do. Instead it uses a srcu and migrate disable.
 > 
 > I appreciate the effort. I really do. But why can't we have SRCU on both
 > configs?
 
-I don't know. Is there more overhead with disabling migration than
-disabling preemption?
+Due to performance concerns for non-RT kernels and workloads, where we
+really need preemption disabled.
 
-> 
 > Also why does tracepoint_guard() need to disable migration? The BPF
 > program already disables migrations (see for instance
 > bpf_prog_run_array()).
-
-We also would need to audit all tracepoint callbacks, as there may be some
-assumptions about staying on the same CPU.
-
 > This is true for RT and !RT. So there is no need to do it here.
-> 
+
+The addition of migration disabling was in response to failures, which
+this fixed.  Or at least greatly reduced the probability of!  Let's see...
+That migrate_disable() has been there since 2022, so the failures were
+happening despite it.  Adding Yonghong on CC for his perspective.
+
 > > The migrate_disable in the syscall tracepoint (which gets called by the
 > > system call version that doesn't disable migration, even in RT), needs to
 > > disable migration so that the accounting that happens in:
@@ -99,7 +132,7 @@ assumptions about staying on the same CPU.
 > >   trace_event_buffer_reserve()
 > > 
 > > matches what happens when that function gets called by a normal tracepoint
-> > callback.  
+> > callback.
 > 
 > buh. But this is something. If we know that the call chain does not
 > disable migration, couldn't we just use a different function? I mean we
@@ -107,55 +140,7 @@ assumptions about staying on the same CPU.
 > for migrate_disable(), too? 
 > Just in case we need it and can not avoid it, see above.
 
-I thought about that too. It would then create two different
-trace_event_buffer_reserve():
+On this, I must defer to the tracing experts.  ;-)
 
-static __always_inline void *event_buffer_reserve(struct trace_event_buffer *fbuffer,
-						  struct trace_event_file *trace_file,
-						  unsigned long len, bool dec)
-{
-	struct trace_event_call *event_call = trace_file->event_call;
-
-	if ((trace_file->flags & EVENT_FILE_FL_PID_FILTER) &&
-	    trace_event_ignore_this_pid(trace_file))
-		return NULL;
-
-	/*
-	 * If CONFIG_PREEMPTION is enabled, then the tracepoint itself disables
-	 * preemption (adding one to the preempt_count). Since we are
-	 * interested in the preempt_count at the time the tracepoint was
-	 * hit, we need to subtract one to offset the increment.
-	 */
-	fbuffer->trace_ctx = dec ? tracing_gen_ctx_dec() : tracing_gen_ctx();
-	fbuffer->trace_file = trace_file;
-
-	fbuffer->event =
-		trace_event_buffer_lock_reserve(&fbuffer->buffer, trace_file,
-						event_call->event.type, len,
-						fbuffer->trace_ctx);
-	if (!fbuffer->event)
-		return NULL;
-
-	fbuffer->regs = NULL;
-	fbuffer->entry = ring_buffer_event_data(fbuffer->event);
-	return fbuffer->entry;
-}
-
-void *trace_event_buffer_reserve(struct trace_event_buffer *fbuffer,
-				 struct trace_event_file *trace_file,
-				 unsigned long len)
-{
-	return event_buffer_reserve(fbuffer, trace_file, len, true);
-}
-
-void *trace_syscall_event_buffer_reserve(struct trace_event_buffer *fbuffer,
-					 struct trace_event_file *trace_file,
-					 unsigned long len)
-{
-	return event_buffer_reserve(fbuffer, trace_file, len, false);
-}
-
-Hmm
-
--- Steve
+							Thanx, Paul
 

@@ -1,132 +1,121 @@
-Return-Path: <linux-next+bounces-9006-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9007-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1E91C5E7E4
-	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 18:16:43 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95B7EC5E827
+	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 18:19:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 499A85054B4
-	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 17:07:52 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E176C364257
+	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 17:11:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 483CA33D6C9;
-	Fri, 14 Nov 2025 17:06:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB7BE31618B;
+	Fri, 14 Nov 2025 17:10:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M3UaO39b"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IRXec6Vq";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0FlAKrsT"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C9C33D6C3;
-	Fri, 14 Nov 2025 17:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7C32DCC01;
+	Fri, 14 Nov 2025 17:10:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763139991; cv=none; b=HtYUmV7c0sHBfhGsLFrN/C2R18ddA4g6F981uQFHotpvYMb7Tryq8faa6pEKs6P+yLm+lTkyYleFhEri9EsY3Cp06N5802K1RviT8/r4cP/xWlf1wOb3xsz12/1TfOVfdqS4HpAlo+RA12Mbr8W1JVuuVNMnKZEglda/ycCTwU8=
+	t=1763140256; cv=none; b=BV2G+4rHnU8kcc9jUsvGNu0O4NqdQNN5HKJt/VG1fpqAkbq/Xaup9vi8d4qY1GshFfwU/FiT5Cxcq8bILw7WuQ1+ZOpk/s0HczNyjY1wTbVglTn8REzM2PWQx1Z1ZlZBmca2ang1NnrLpRZzBk45h8MBy/V8EH2sU51OO2UY6Yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763139991; c=relaxed/simple;
-	bh=n7xtwL7oFhrqzAk/fEWM3tu5e+yezPJ4Mkk4f8m1+qY=;
+	s=arc-20240116; t=1763140256; c=relaxed/simple;
+	bh=m5GfGUjp/NaIEZZN9TVu9Np2aTof8KE9zBpvnW7D/fM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WKxslBcjFPnM3brC53xbwQYu5As2BkM68peIJaoI6hcV41T6mUZxHbIIdztvT8Lg6lTQq6+44ZVnC+zHuwJhl97HBFNEp+wHp/eK90D12rwrFYwB278pSMU3axEUIp0RsyUHe3FNQBtig8tBqiNUzJ8LTVh/Dgml3SmpfRNpCQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M3UaO39b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73CD9C2BCB1;
-	Fri, 14 Nov 2025 17:06:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763139990;
-	bh=n7xtwL7oFhrqzAk/fEWM3tu5e+yezPJ4Mkk4f8m1+qY=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=M3UaO39bK5XKsksOoeFJycHGfhecjqYVQEjOmySUis6cI/YUD8OkzKK0WNKcl8xzR
-	 gf8kd47WWI86mXMZD1FEacWgf9gSn5OLlyI3XRUXABPBlgu6bdr5SySt2EKT8tQjRo
-	 y1nOk+xux5I/oFkv5lCOWgadCwkzIdsW7eBjtKUdsXPQaAHpFmaBkuEkBSJJqsGtTp
-	 FS+ITqAZe3oNXS/bd1XpI+gixPkvuYt9BHADpAsxaYpmzU6ZC+8sbRmMLClszgHAQz
-	 UWuZcQzBPHomXYLaPjOSBUdDnuQ/93OAsvXZB4iKVQQVsZA7D96dgxgGT3kC6npCoC
-	 LLDtzVZJeE+Bg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id B313BCE0CA7; Fri, 14 Nov 2025 09:06:29 -0800 (PST)
-Date: Fri, 14 Nov 2025 09:06:29 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Frederic Weisbecker <frederic@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=aUGnWwnEWhg6LpE74lpyfZkep+EszYhJ6/zLA/v7NLavbKmHlKb3zW07uJPGXAbUIO2JZvXz9sOFyCc/cIoY+vHksr/8tqy8PFS2O4iiQ7gqVVMzd2WL7BUTJ+jsxSm+lUbDxb1wkAh64GDWDgmBU0AksDlxePynCFK6tvVyFSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IRXec6Vq; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0FlAKrsT; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Fri, 14 Nov 2025 18:10:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1763140253;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=d9IbbCj+qZNHmW3YvVyylFctsMd/4r25fLG8w0iX54E=;
+	b=IRXec6Vq/mfeckCKSJrscUqX69u2+3pympjK+6s7g8QzyFp2z93qDtiBXADjjtVUWqeAi8
+	2QmPftWuwwDQZ6CsVw1QkV533iGvUuAWS+ldBS837tGETi25Xi96OmFgZqLc2XdMwU1TKW
+	QKM90ZEL0Y+hF2UP86BA6mDIATT88f1QEmV3wceOcxq24IzreMjUs/7+PJ9tUx28y7gBOp
+	1FJTwGobUwiaA149ZVMZ8PNbo4m3W9tAyZ6L6HMDcBfMskTWxNargCFXFYU5qAXeW7PR2a
+	nEVOkVKmkffJw359zgDFzqLfCqfCynYEdXjW8/FZb/Eqb4J2d21Lxs84ZVmhvw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1763140253;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=d9IbbCj+qZNHmW3YvVyylFctsMd/4r25fLG8w0iX54E=;
+	b=0FlAKrsTf/AKA8OJ349pKyKnULT8dR0g7vpySvGamOJC1D4v8oSploV+3XvvHZdIlSYbc8
+	g2+N2pxbIK82XZDQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: "Paul E. McKenney" <paulmck@kernel.org>
 Cc: Steven Rostedt <rostedt@goodmis.org>,
 	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Frederic Weisbecker <frederic@kernel.org>,
 	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
 	Boqun Feng <boqun.feng@gmail.com>,
 	Uladzislau Rezki <urezki@gmail.com>,
 	Masami Hiramatsu <mhiramat@kernel.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+	yonghong.song@linux.dev
 Subject: Re: linux-next: manual merge of the rcu tree with the ftrace tree
-Message-ID: <054ceff1-87b7-4729-8589-b7dd22887bc1@paulmck-laptop>
-Reply-To: paulmck@kernel.org
+Message-ID: <20251114171052.gJRc-2A3@linutronix.de>
 References: <20251114135226.64831207@canb.auug.org.au>
  <20251114074255.3e535084@gandalf.local.home>
- <aRdBVFSmgvPWuY2k@localhost.localdomain>
+ <20251114133532.mmdi2dca@linutronix.de>
+ <20251114104633.0721bdbe@gandalf.local.home>
+ <20251114160017.CrDJHi5w@linutronix.de>
+ <20251114112202.08e1e3c1@gandalf.local.home>
+ <20251114163330.pi9Nm3Vb@linutronix.de>
+ <348528a9-7e1a-4aa7-8219-5cad81969137@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aRdBVFSmgvPWuY2k@localhost.localdomain>
+In-Reply-To: <348528a9-7e1a-4aa7-8219-5cad81969137@paulmck-laptop>
 
-On Fri, Nov 14, 2025 at 03:48:52PM +0100, Frederic Weisbecker wrote:
-> Le Fri, Nov 14, 2025 at 07:42:55AM -0500, Steven Rostedt a écrit :
-> > On Fri, 14 Nov 2025 13:52:26 +1100
-> > Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On 2025-11-14 09:00:21 [-0800], Paul E. McKenney wrote:
+> > > Where in PREEMPT_RT we do not disable preemption around the tracepoint
+> > > callback, but in non RT we do. Instead it uses a srcu and migrate disable.
 > > 
-> > > Hi all,
-> > > 
-> > > Today's linux-next merge of the rcu tree got a conflict in:
-> > > 
-> > >   kernel/trace/trace_syscalls.c
-> > > 
-> > > between commit:
-> > > 
-> > >   a544d9a66bdf ("tracing: Have syscall trace events read user space string")
-> > > 
-> > > from the ftrace tree and commit:
-> > > 
-> > >   35587dbc58dd ("tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_CALL() with SRCU-fast")
-> > > 
-> > > from the rcu tree.
-> > > 
-> > > I fixed it up (Maybe - see below) and can carry the fix as necessary. This
-> > > is now fixed as far as linux-next is concerned, but any non trivial
-> > > conflicts should be mentioned to your upstream maintainer when your tree
-> > > is submitted for merging.  You may also want to consider cooperating
-> > > with the maintainer of the conflicting tree to minimise any particularly
-> > > complex conflicts.
-> > 
-> > Thanks for the update.
-> > 
-> > > 
-> > 
-> > > diff --cc kernel/trace/trace_syscalls.c
-> > > index e96d0063cbcf,3f699b198c56..000000000000
-> > > --- a/kernel/trace/trace_syscalls.c
-> > > +++ b/kernel/trace/trace_syscalls.c
-> > > @@@ -878,6 -322,8 +890,7 @@@ static void ftrace_syscall_enter(void *
-> > >   	 * buffer and per-cpu data require preemption to be disabled.
-> > >   	 */
-> > >   	might_fault();
-> > > + 	preempt_rt_guard();
-> > >  -	guard(preempt_notrace)();
-> > 
-> > My code made it so that preemption is not needed here but is moved later
-> > down for the logic that does the reading of user space data.
-> > 
-> > Note, it must have preemption disabled for all configs (including RT).
-> > Otherwise, the data it has can get corrupted.
-> > 
-> > Paul, can you change it so that you *do not* touch this file?
+> > I appreciate the effort. I really do. But why can't we have SRCU on both
+> > configs?
 > 
-> Ok, I've zapped the commit for now until we sort this out.
+> Due to performance concerns for non-RT kernels and workloads, where we
+> really need preemption disabled.
 
-Thank you, Frederic, and I guess putting this in -next did indeed find
-some problems, so that is good?  ;-)
+This means srcu_read_lock_notrace() is much more overhead compared to
+rcu_read_lock_sched_notrace()?
+I am a bit afraid of different bugs here and there.
 
-							Thanx, Paul
+> > Also why does tracepoint_guard() need to disable migration? The BPF
+> > program already disables migrations (see for instance
+> > bpf_prog_run_array()).
+> > This is true for RT and !RT. So there is no need to do it here.
+> 
+> The addition of migration disabling was in response to failures, which
+> this fixed.  Or at least greatly reduced the probability of!  Let's see...
+> That migrate_disable() has been there since 2022, so the failures were
+> happening despite it.  Adding Yonghong on CC for his perspective.
+
+Okay. In general I would prefer that we know why we do it. BPF had
+preempt_disable() which was turned into migrate_disable() for RT reasons
+since remaining on the same CPU was enough and preempt_disable() was the
+only way to enforce it at the time.
+And I think Linus requested migrate_disable() to work regardless of RT
+which PeterZ made happen (for different reasons, not BPF related).
+
+> 							Thanx, Paul
+
+Sebastian
 

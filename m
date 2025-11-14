@@ -1,111 +1,142 @@
-Return-Path: <linux-next+bounces-9000-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9001-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9C61C5E936
-	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 18:29:47 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C852C5E754
+	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 18:10:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A46A5365642
-	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 16:31:34 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 632614EFC56
+	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 16:40:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0DDC334394;
-	Fri, 14 Nov 2025 16:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 719B52222B6;
+	Fri, 14 Nov 2025 16:40:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="47IBFwWJ"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FXN2S5t2";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="b6mRnAh1"
 X-Original-To: linux-next@vger.kernel.org
-Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D7033344C;
-	Fri, 14 Nov 2025 16:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32A427FD7D;
+	Fri, 14 Nov 2025 16:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763137886; cv=none; b=G6Eq0wIsdUtGpxpnM1k2EthPEuMFg5t8iif7AI08gpwx/Rt27O3gVLK62QjudEs47B/8tLWtDl0o8rP3p/4Aqt90u0tNRW4JyC5YF+qBKiaYAvFlxGGLLQmd8A3TI/Rx52ZqJe0RTog3J4xLMWyZQrXEWXkz8wXyYcwCCrDsYc8=
+	t=1763138442; cv=none; b=NGdKFbGCGT/hvL8ooV3eZs58jWGYKSDYxuuJZA0WlwHkGr+XoUgt0Xz5A2ypLTTQkh1BFxMV8z5UaysW4GUZ9JrqPEBCeJFTMctN0sxYFCjy1pEE9uBndayS3Us/amB5NJJdxwPMkAvgrFsMxbBVxGn25lH0rAgIVGOzlkSbPnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763137886; c=relaxed/simple;
-	bh=IFf96Mw+Sjz5uzkjhnIMYwOOJwAteREOcb5p0rdmw6o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CpKoxGHtRBjvf05wchXviED1TN9CptEbdumXur5NGyMSdI1X8ikCqpJNX8bBdh5cGsv8e431W6IziDMi2pWlNRqak9Spn4HsUAQjxP21j64CyatpEq3rai7nWHOxTYZZiAJKLuq1yZIsqfo0hodcm6Urlqcfvi0QNE3OHcpJL/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=47IBFwWJ; arc=none smtp.client-ip=199.89.3.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 004.mia.mailroute.net (Postfix) with ESMTP id 4d7N1f4VvzzlyWrk;
-	Fri, 14 Nov 2025 16:31:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1763137877; x=1765729878; bh=932jDlajDhnvWNTi4EWN2Ppi
-	ZZ29q1hNdkvoJCH1S4Y=; b=47IBFwWJ3hMH9plv2Jn6MgHIufYdv+juLDUoGnb8
-	LmvYawKizjz5PjZuLNcGxS2jxXMTPf6oLGRsQrT6zG32Z6v/xECwp1hXhDYT1anR
-	AC/Y4iTrLHGEi5WMymVlWr2cDTfJ58ELOHL8n7GyUsUBX2yOp6bpE8qW8mGakL9+
-	V85wrE5zSwV9vdNTgvdet8Itat8t5p8IvRFcfd6DKDVPi44Q9fwuxU9BcUiqVlzA
-	aLFGUK32qEya0CKL6xEi7Wfldr6OUrYwjOObdvA2PqKOXjHRf7Wt9b+H+yCDVCfu
-	W2JX5AYAIwzCCVMtKVwbkGqovvcKKqablM+SfYUjKGJkSw==
-X-Virus-Scanned: by MailRoute
-Received: from 004.mia.mailroute.net ([127.0.0.1])
- by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id Pp74NixD5SDc; Fri, 14 Nov 2025 16:31:17 +0000 (UTC)
-Received: from [100.119.48.131] (unknown [104.135.180.219])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4d7N1b1YRzzm2JZn;
-	Fri, 14 Nov 2025 16:31:14 +0000 (UTC)
-Message-ID: <5e080129-7c4e-4a0c-9c48-ad7f33262638@acm.org>
-Date: Fri, 14 Nov 2025 08:31:12 -0800
+	s=arc-20240116; t=1763138442; c=relaxed/simple;
+	bh=xWdU+C9Vi7LpqUOlVjOCR/QCa3uryqsbclqFRVYt9rs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hX8nYDuiYfCZ5/Pk4CihzN+9CeFxtDHZecfTgEjHVFn4SedPwzEj2Erm2pAuEXBUUFXXHYvZz05i2o9Xtz5eoZtQUdrKm03j+5y/hf3yvujL3VwWPM4Lp8Ic+hnbOw/Qh8Nsy7lE7EXkR1jG2o2bJtgfioJhk5QKaP//Cr/g0R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FXN2S5t2; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=b6mRnAh1; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Fri, 14 Nov 2025 17:33:30 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1763138011;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7k/rP30VSoFhhG+Mqop8cyqyhBI6R6u04HLdAy0fFvE=;
+	b=FXN2S5t2iP3A3SbmFqn38AmAJ4+AUAoCL4JTLJLpFaSF4O13Kbc9zLMgwtEaYZT6Zuy5DN
+	S10L6nftVB+VpE09XNgommHSSbUNZvA4ZGaughHAQw8D7xPoLvU0GieV0yqq6JhZNHRgaL
+	eFxvnwaAEKzULk4ZOYL0ujo1y4uk3EX1K8CJqQ0Z6HJ3frIuDZ3LXCiGSa2fJeX9VvADCv
+	3MW9Xa2KPzAq8dDg5/R+TSumuzlMqCY0YtpPF5bFDUecxxzfgwtDPprSsL/kBGCviri3kR
+	67Wq8YbLfD5XBvEuNguRBJx3HpxZc99RUxvAgTAFoE4vPCGBcLjcgsjhbjvANg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1763138011;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7k/rP30VSoFhhG+Mqop8cyqyhBI6R6u04HLdAy0fFvE=;
+	b=b6mRnAh1eXbA6mDJLZnBS1TfSN4A8t9VHTIpGYhFRWbFUm4LJq7V13etr8pU3YsfCrjDhF
+	g8RnxSgU85/gqhBQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the rcu tree with the ftrace tree
+Message-ID: <20251114163330.pi9Nm3Vb@linutronix.de>
+References: <20251114135226.64831207@canb.auug.org.au>
+ <20251114074255.3e535084@gandalf.local.home>
+ <20251114133532.mmdi2dca@linutronix.de>
+ <20251114104633.0721bdbe@gandalf.local.home>
+ <20251114160017.CrDJHi5w@linutronix.de>
+ <20251114112202.08e1e3c1@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: manual merge of the scsi-mkp tree with Linus' tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20251114143636.607c0bdd@canb.auug.org.au>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20251114143636.607c0bdd@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251114112202.08e1e3c1@gandalf.local.home>
 
-On 11/13/25 7:36 PM, Stephen Rothwell wrote:
-> Hi all,
+On 2025-11-14 11:22:02 [-0500], Steven Rostedt wrote:
+> It's to match this code:
 > 
-> Today's linux-next merge of the scsi-mkp tree got a conflict in:
+> --- a/include/linux/tracepoint.h
+> +++ b/include/linux/tracepoint.h
+> @@ -100,6 +100,25 @@ void for_each_tracepoint_in_module(struct module *mod,
+>  }
+>  #endif /* CONFIG_MODULES */
+>  
+> +/*
+> + * BPF programs can attach to the tracepoint callbacks. But if the
+> + * callbacks are called with preemption disabled, the BPF programs
+> + * can cause quite a bit of latency. When PREEMPT_RT is enabled,
+> + * instead of disabling preemption, use srcu_fast_notrace() for
+> + * synchronization. As BPF programs that are attached to tracepoints
+> + * expect to stay on the same CPU, also disable migration.
+> + */
+> +#ifdef CONFIG_PREEMPT_RT
+> +extern struct srcu_struct tracepoint_srcu;
+> +# define tracepoint_sync() synchronize_srcu(&tracepoint_srcu);
+> +# define tracepoint_guard()                            \
+> +       guard(srcu_fast_notrace)(&tracepoint_srcu);     \
+> +       guard(migrate)()
+> +#else
+> +# define tracepoint_sync() synchronize_rcu();
+> +# define tracepoint_guard() guard(preempt_notrace)()
+> +#endif
+> +
 > 
->    drivers/ufs/core/ufshcd.c
-> 
-> between commit:
-> 
->    c74dc8ab47c1 ("scsi: ufs: core: Fix a race condition related to the "hid" attribute group")
-> 
-> from Linus' tree and commit:
-> 
->    f46b9a595fa9 ("scsi: ufs: core: Allocate the SCSI host earlier")
-> 
-> from the scsi-mkp tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> Where in PREEMPT_RT we do not disable preemption around the tracepoint
+> callback, but in non RT we do. Instead it uses a srcu and migrate disable.
 
-Thanks Stephen for having resolved this merge conflict. The conflict
-resolution looks good to me.
+I appreciate the effort. I really do. But why can't we have SRCU on both
+configs?
 
-Thanks,
+Also why does tracepoint_guard() need to disable migration? The BPF
+program already disables migrations (see for instance
+bpf_prog_run_array()).
+This is true for RT and !RT. So there is no need to do it here.
 
-Bart.
+> The migrate_disable in the syscall tracepoint (which gets called by the
+> system call version that doesn't disable migration, even in RT), needs to
+> disable migration so that the accounting that happens in:
+> 
+>   trace_event_buffer_reserve()
+> 
+> matches what happens when that function gets called by a normal tracepoint
+> callback.
 
+buh. But this is something. If we know that the call chain does not
+disable migration, couldn't we just use a different function? I mean we
+have tracing_gen_ctx_dec() and tracing_gen_ctx)(). Wouldn't this work
+for migrate_disable(), too? 
+Just in case we need it and can not avoid it, see above.
+
+> -- Steve
+
+Sebastian
 

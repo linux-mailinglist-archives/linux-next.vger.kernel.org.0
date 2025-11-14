@@ -1,118 +1,168 @@
-Return-Path: <linux-next+bounces-8973-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8974-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41FD3C5AEB8
-	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 02:31:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6252C5AFAF
+	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 03:13:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A988934B10B
-	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 01:31:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1EA23AF613
+	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 02:13:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 008CF264602;
-	Fri, 14 Nov 2025 01:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 933C626F2AD;
+	Fri, 14 Nov 2025 02:13:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="en9WjO+4"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="gNO0BJ+Z"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C754A95E;
-	Fri, 14 Nov 2025 01:30:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05CA4221578;
+	Fri, 14 Nov 2025 02:13:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763083841; cv=none; b=Cv4dk2eK9pacVKAl2zfJ+WXm/otZhs8m33X7PUdPG7aJiHCP7TGcptCu6c1DElIa9OTD+eYL6WGfBeCgwKHNTvOuEfsT925PfHlB683kjREVJvPaY/92TyK/UwAAMbQNt5wcbdWmd+ugIpzhWpZ7yBxLS+oFNpMXQFCElLq6t/Q=
+	t=1763086387; cv=none; b=sj/GX4OySNaz+N9rrHTZabbLITXolxdjAOwkbU8gcQ3OEd1TuBWMmr1auNhkLRi0PiwnQ6Ug7ft/d5WT8DHzPtsrqqCkFoDgZZnAKmELl9jzDcGsidYKs4q9xCFC/dZ1aCR9ihSwAcS2/2eakoYzS+KhjN32lqcG9bHN0g7YhsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763083841; c=relaxed/simple;
-	bh=7pXrh0awXTgqsSbDw+s+OUFTwEkJ2/6QBsgqA14Pn2c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Ap5aShP/10xoF8rMNSz7soAWiL2lXrrsc93FasU5YsVvIAewgOv4odzfTPHdaGKsRD42E58+uaiBHmZ+vOf8xtCKfRfcmiy0hPb1FZcEKK2Z7qZj1rXStNVfKQHL7vt79Jqr7jNoHGlvrE6OrWbDK8kDSrJazsZYxLT3H0nguyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=en9WjO+4; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1763086387; c=relaxed/simple;
+	bh=Sz7m4pr2UrYin1rvD4BhZlZWNk6D3ipJfQpxNwlUGSg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=pdknOdqXI3DcK6aHRiLZFDLH5EOp+rqP09IZdNvgPuSp724NzNFLbWKvLJEAWmDVcbq3JctYSZZIPfnSvpvsC9Nd51SXWvsAp47XbNnCjW5WhWhf9r0N95vLRNJRKZS/FRrzxoduS29XWVoeggl5NIILjAEcrk4tYGsG0NIZn4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=gNO0BJ+Z; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1763083832;
-	bh=HM4y12GwXcq/Chrwxhz0HM39maEyoAX3yOpUfxmSexA=;
+	s=202503; t=1763086381;
+	bh=Qk6v2ec3iCNSrghOCoVvl96dmDEyyJpElKquk5ihSUw=;
 	h=Date:From:To:Cc:Subject:From;
-	b=en9WjO+4tE8I8aiEgocG4gNsT0848j7arp2yxMZxbGlLxwf62RB3KEhYuHqKYWOer
-	 yP3BV3zIavK0SpkjCubGHzQqLgMK1e6YGkB8tpj1qqn9FDhB21g6t8Fd7S+QnOqYJI
-	 oxSZQ+fv8gG3YQd9Qki8J2Et+TxSNU5lb+F9xvMpMPKwmJp1lYbyMaxmdAQ5NyLHGA
-	 WSYwXlA3VH7Zz7NtTKu9cD8goxlnv0I8EUJu1vYKRIYWyzO/RCx+KvP0YwWfloaBSu
-	 uOJT2IWH35rd+qmB7fBBSVfp33IpUope9NfOsGbNgBEzjMg7oATkbI5jY2P3bDb8zd
-	 iCVVF7LY5u7vg==
+	b=gNO0BJ+ZHopEW7mQ1wboS9JPdgRyXzDWy6vyX1wBvnHrvNWgDaUUw54iW+XiaYkSl
+	 mgsMG2NCrJmZInq7myAEMegZThdRUBvjEoPBBEm/oHBKiS0W2+WBywcrb99/cnvYTW
+	 XZAfgiGkNNSZay+DBUqq05v0xI+xqb2Gu8EMsTVfJI8RGENs+AduYzHwL+/xA2mWwm
+	 o6q5UZzz7ndxj7iMeS0BwPhLxkkg5/7atgN6IGiOONGexANE/EujnkB3TI71aAMP29
+	 lb2YR2hOOacfd6sz07izQ6s4Y+WsKrjGz+jGxVSJmgoXASmK6Sihzb378/jsCEoECD
+	 cskhMSV54QQ0Q==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d702J4Pjdz4wCB;
-	Fri, 14 Nov 2025 12:30:32 +1100 (AEDT)
-Date: Fri, 14 Nov 2025 12:30:31 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d70zK0cDwz4wCv;
+	Fri, 14 Nov 2025 13:13:01 +1100 (AEDT)
+Date: Fri, 14 Nov 2025 13:13:00 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Colin Cross <ccross@android.com>, Thierry Reding <treding@nvidia.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tegra tree
-Message-ID: <20251114123031.136e7429@canb.auug.org.au>
+To: Bjorn Helgaas <bhelgaas@google.com>, Lorenzo Pieralisi
+ <lpieralisi@kernel.org>, Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?=
+ <kwilczynski@kernel.org>
+Cc: Ilpo =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Lucas De Marchi <lucas.demarchi@intel.com>
+Subject: linux-next: manual merge of the pci tree with Linus' tree
+Message-ID: <20251114131300.21a5c6da@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/k1H0n8dj7=Inc=gnjuRknFF";
+Content-Type: multipart/signed; boundary="Sig_/QRJTF=0oc=x.AptOBtn4aAx";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/k1H0n8dj7=Inc=gnjuRknFF
+--Sig_/QRJTF=0oc=x.AptOBtn4aAx
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the tegra tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the pci tree got a conflict in:
 
-drivers/iommu/amd/init.c: In function 'amd_iommu_disable':
-drivers/iommu/amd/init.c:3505:9: error: too few arguments to function 'amd_=
-iommu_suspend'
- 3505 |         amd_iommu_suspend();
-      |         ^~~~~~~~~~~~~~~~~
-drivers/iommu/amd/init.c:3041:12: note: declared here
- 3041 | static int amd_iommu_suspend(void *data)
-      |            ^~~~~~~~~~~~~~~~~
-drivers/iommu/amd/init.c: In function 'amd_iommu_reenable':
-drivers/iommu/amd/init.c:3510:9: error: too few arguments to function 'amd_=
-iommu_resume'
- 3510 |         amd_iommu_resume();
-      |         ^~~~~~~~~~~~~~~~
-drivers/iommu/amd/init.c:3027:13: note: declared here
- 3027 | static void amd_iommu_resume(void *data)
-      |             ^~~~~~~~~~~~~~~~
+  drivers/gpu/drm/xe/xe_vram.c
 
-Caused by commit
+between commit:
 
-  19debadfa11b ("syscore: Pass context data to callbacks")
+  d30203739be7 ("drm/xe: Move rebar to be done earlier")
 
-I have used the tegra tree from next-20251113 for today.
+from Linus' tree and commits:
+
+  73cd7ee85e78 ("PCI: Fix restoring BARs on BAR resize rollback path")
+  348df5b30822 ("drm/xe: Remove driver side BAR release before resize")
+  af63e94f01d7 ("drm/xe/vram: Use PCI rebar helpers in resize_vram_bar()")
+
+from the pci tree.
+
+I fixed it up (but I am not happy with the result - see below) and can
+carry the fix as necessary. This is now fixed as far as linux-next is
+concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/k1H0n8dj7=Inc=gnjuRknFF
+diff --cc drivers/gpu/drm/xe/xe_vram.c
+index 652df7a5f4f6,10f8a73e190b..000000000000
+--- a/drivers/gpu/drm/xe/xe_vram.c
++++ b/drivers/gpu/drm/xe/xe_vram.c
+@@@ -24,39 -24,14 +24,37 @@@
+  #include "xe_vram.h"
+  #include "xe_vram_types.h"
+ =20
+- #define BAR_SIZE_SHIFT 20
+-=20
+ -static void
+ -_resize_bar(struct xe_device *xe, int resno, resource_size_t size)
+ +/*
+ + * Release all the BARs that could influence/block LMEMBAR resizing, i.e.
+ + * assigned IORESOURCE_MEM_64 BARs
+ + */
+ +static void release_bars(struct pci_dev *pdev)
+ +{
+ +	struct resource *res;
+ +	int i;
+ +
+ +	pci_dev_for_each_resource(pdev, res, i) {
+ +		/* Resource already un-assigned, do not reset it */
+ +		if (!res->parent)
+ +			continue;
+ +
+ +		/* No need to release unrelated BARs */
+ +		if (!(res->flags & IORESOURCE_MEM_64))
+ +			continue;
+ +
+ +		pci_release_resource(pdev, i);
+ +	}
+ +}
+ +
+ +static void resize_bar(struct xe_device *xe, int resno, resource_size_t s=
+ize)
+  {
+  	struct pci_dev *pdev =3D to_pci_dev(xe->drm.dev);
+  	int bar_size =3D pci_rebar_bytes_to_size(size);
+  	int ret;
+ =20
+ +	release_bars(pdev);
+ +
+- 	ret =3D pci_resize_resource(pdev, resno, bar_size);
++ 	ret =3D pci_resize_resource(pdev, resno, bar_size, 0);
+  	if (ret) {
+  		drm_info(&xe->drm, "Failed to resize BAR%d to %dM (%pe). Consider enabl=
+ing 'Resizable BAR' support in your BIOS\n",
+  			 resno, 1 << bar_size, ERR_PTR(ret));
+
+--Sig_/QRJTF=0oc=x.AptOBtn4aAx
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkWhjcACgkQAVBC80lX
-0GxaAQf/ehLUKSq+UU2ns3LCR8LiLhhPDCUjBa9SGhKOEqHZlTM06269iHF3g78Z
-x+hfJdbkSPlY/pa5LAOFVhfihTDlnAQrt3nUJq4zwNA++hHBLZ8VU7ZMxrXbLu97
-1L9z7jiNWu7D1estcAT4BeZoO+2fQgAaGwo3upda0wxRRRcNz5Hk3J0vJ+Zz4+a6
-5/zQlTFadxsuJh25ET8bspBhUzTqHgxnU6uPfvNIPCU56DsrGV1+GO3MMSFk+ohi
-EKBogzq9pAqEpfXLRHsVGm8HSEeDc4bCYrOa4KpJ15ztx/EGlv4ifmSegA3Ms8Fa
-BFiatQEnycO9KO0fPjeBI3bgQgfclA==
-=k682
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkWkCwACgkQAVBC80lX
+0GyxwwgAoG4leciFsdXu6ZFiFoPkJa+Uuyvn2G2P1Py0H5uRUfbQ5OL6Hpm456RV
+CHAOVAwGPddMkemlKuT0ufdGl0fWa4NazaGhbj29GCtpoZb28pfutfDso/a8vBS+
+FWzmnVblwEu0qCTQA41PnTnwEEyEJ9KEQv1UIgR9ig+IjG4dRPBLuoZnFdw81Jmm
+jircMBH6LVYSHh49iJ6hOeohX5k08UHR4lhPHPtM8pzjaRLbl1RmGfGD/uoNt8do
+c5TgK7h8XhTynvPYWwuyJsnRhRWdHqEczrAf72LdRAGPTzHUcuSZQmwkUfLCxXqa
+FFQK78CNjrKNGZlQogYeHNx6xYqlvA==
+=yjOJ
 -----END PGP SIGNATURE-----
 
---Sig_/k1H0n8dj7=Inc=gnjuRknFF--
+--Sig_/QRJTF=0oc=x.AptOBtn4aAx--
 

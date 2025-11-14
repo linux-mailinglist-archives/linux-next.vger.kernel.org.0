@@ -1,69 +1,70 @@
-Return-Path: <linux-next+bounces-8982-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-8983-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 061DFC5B52D
-	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 05:34:03 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A00EC5B55F
+	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 05:39:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBD7B3AC43D
-	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 04:33:59 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0AA984E3382
+	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 04:39:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56BB2877C3;
-	Fri, 14 Nov 2025 04:33:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C6927F005;
+	Fri, 14 Nov 2025 04:39:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="WIoJjmL2"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="DxnZ44xo"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D257E0E4;
-	Fri, 14 Nov 2025 04:33:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734E9202F65;
+	Fri, 14 Nov 2025 04:39:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763094835; cv=none; b=mY6mmfehWCAeVFHvp0crQjKwiM5gwMIBy1rlfH7v8qwdQ2PbilLBWQAW4QSNaw98fbv6x63/DV/acBTT8Reugq8M1R6JeaX/qkY34gHgiIp7RGZqzhYfJv5Vf/aXal8TULpGqVb/D1Ev73zMXyZyKxDmVU2aNBHsp8JSkMqYM0s=
+	t=1763095166; cv=none; b=FZssjwXazzPYqAVds7yE67CqCVmm5CS0DCAmY7JUf6/eFZdUrsK6jHXzOxXYz7FX0zH81PkdGe0qBc1Tb7fK4I5zMJ0VlxauYA5FaiH63A0XGQhYxJqmujCv2wAySQwX9eXHZr+my1k0D//In9+TVULvAIVwxIlW9ifK6c0m1pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763094835; c=relaxed/simple;
-	bh=uLPwwPfpkczoRSRykX7c8+2r539J1XhFHuFR5VH21jU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SUpAoJTHSFnyzTzGOWFT1/IA7XbPMb2WGpK5hc1y+t3Q+O4KfJfAgqHvg4tTNI5iLNk5QzS97mt0irktpEo8RaBxIc0nKfa2GVnf/haO35NXcD1sPqSJSznlCfgdiOVqEkjOSNw9rA5qC0vwg/1ZPhcEJ6gwUkxicvJMbZR92Js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=WIoJjmL2; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1763095166; c=relaxed/simple;
+	bh=Z7HhVhxXUwSGx06KciMx6ffX2vKR/HnwwO8RCaYrvO4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=eN34s8VAiCMpDujB9qMNs46bYj9y5C5Lo3f709wDYCYKZwr+x4nu48PgsA/RealqPxG3lWea2rqD+kfRU8+cq8SOYsVctzQ5I9kEzabCrHTKyqijSGepVYOjgjY0aeP4LV2LW2UIduRiKGZqwglU4hiMf68M69/qmXzVC5w05Mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=DxnZ44xo; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1763094828;
-	bh=sf3ILPzAZ7TwKtNlPtc03LGWWBa1RWqCUedC+aFLctE=;
+	s=202503; t=1763095161;
+	bh=Bd6xK/dT94mWv06soekeP4+OiU/ylRQoNxPuNNhej6w=;
 	h=Date:From:To:Cc:Subject:From;
-	b=WIoJjmL2Z9WOVWzBbjU30uZsFRgDWuIrGvIoM3O+CRPdOXENEYvm6AXjOv91VeRY4
-	 /SSgExfV+c98uN+Q1cBLLKcuxvFqvxbur8lr2uIRdcbQlNEwvc8QatvRsR7YALPvaW
-	 090PaSLn6jHhB31UCp60inMrt8ChMGBWJsNMzDz9qRNgvKVZAk4Ank9g6JEXy66DkS
-	 YhoSmWHUjxwV39gTTkBqPCpuqrUZQdlMEWyftwn8ivZXH4loT4+HH/zCpnQDEq6tBK
-	 v4mj9pqaKCP1kABd6sHH/8MNk4eMIInbXC6/8xMzXwiZ1y43OpRejSVjwupSjIaWa8
-	 C+OxtU7ISFnOg==
+	b=DxnZ44xo8PQFW588DXtgK5/w2Ioo8MMkHnYl3zLKGX6JD5YvWlFXy/nB8+YRJUh0C
+	 vJG467VlDRoWJ4nmKUV8g+vnaYsI/lC4Z1i///epUQgc7bHYNF1ukHjtLmEiKTY34Q
+	 a0w7T8VCcFYppKhpAxVMIiwRFLc/P0tvUrxijt7Ugd5UuQOTdR/8daFWw/7jpEac08
+	 4GfDZLLovtn4fLJX15ET5k1IsFGJUGNTE7ab3kJhFaaAu+Xfr0WIGH6JmvemBPEKAL
+	 D2wlgwCx9daxDe3wz1Qckz6xIY6PdXA1w5+pp1zQrRsZoyjDQ8IE7rJFvXGWllP/Qu
+	 BQ8v9fU6ErW9A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d745m27R1z4w9V;
-	Fri, 14 Nov 2025 15:33:48 +1100 (AEDT)
-Date: Fri, 14 Nov 2025 15:33:47 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d74D93Bqtz4wCB;
+	Fri, 14 Nov 2025 15:39:21 +1100 (AEDT)
+Date: Fri, 14 Nov 2025 15:39:20 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
-Cc: Dinh Nguyen <dinguyen@kernel.org>, Mahesh Rao <mahesh.rao@altera.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
+Cc: Dinh Nguyen <dinguyen@kernel.org>, Khairul Anuar Romli
+ <khairul.anuar.romli@altera.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
 Subject: linux-next: build warnings after merge of the char-misc tree
-Message-ID: <20251114153347.16001109@canb.auug.org.au>
+Message-ID: <20251114153920.1c5df700@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZmUr2.aiYZJglp4HXHLwoCk";
+Content-Type: multipart/signed; boundary="Sig_/_8cw61cWJrvqELDhxv92TQ7";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/ZmUr2.aiYZJglp4HXHLwoCk
+--Sig_/_8cw61cWJrvqELDhxv92TQ7
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -72,41 +73,43 @@ Hi all,
 After merging the char-misc tree, today's linux-next build (htmldocs)
 produced these warnings:
 
-WARNING: drivers/firmware/stratix10-svc.c:58 This comment starts with '/**'=
-, but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.=
-rst
- * Total number of transaction IDs, which is a combination of
-WARNING: drivers/firmware/stratix10-svc.c:302 This comment starts with '/**=
-', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc=
-.rst
- * svc_mem_lock protects access to the svc_data_mem list for
+WARNING: include/linux/firmware/intel/stratix10-svc-client.h:22 This commen=
+t starts with '/**', but isn't a kernel-doc comment. Refer Documentation/do=
+c-guide/kernel-doc.rst
+ * Status of the sent command, in bit number
+WARNING: include/linux/firmware/intel/stratix10-svc-client.h:184 Enum value=
+ 'COMMAND_HWMON_READTEMP' not described in enum 'stratix10_svc_command_code'
+WARNING: include/linux/firmware/intel/stratix10-svc-client.h:184 Enum value=
+ 'COMMAND_HWMON_READVOLT' not described in enum 'stratix10_svc_command_code'
+WARNING: include/linux/firmware/intel/stratix10-svc-client.h:307 function p=
+arameter 'cb_arg' not described in 'async_callback_t'
 
 Introduced by commits
 
   bcb9f4f07061 ("firmware: stratix10-svc: Add support for async communicati=
 on")
-  85f96cbbbc67 ("firmware: stratix10-svc: Add mutex in stratix10 memory man=
-agement")
+  4f49088c1625 ("firmware: stratix10-svc: Add definition for voltage and te=
+mperature sensor")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ZmUr2.aiYZJglp4HXHLwoCk
+--Sig_/_8cw61cWJrvqELDhxv92TQ7
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkWsSsACgkQAVBC80lX
-0GxW7gf/bDODqP0ZafljYmluoihUHutV5TVXSSP+Z1jd2Sn+OFR1y1JprOgcHGTt
-LFpf3aVAZER3ToRKYE2FC3M2w76beNP2OROVhDHVwfSAi80KjAVyZT56CGQIbRkX
-y9rSFkxTb7cZIbzVojHUs3MpsMM+iWFfiO57AbEuYAMPJOkiSO+BdGowzj7elYCV
-PH6zmADuDSjuHdQSvM/smdlhCoOrydvSINBHDfCEF7kD5fbhP14IDztKMo77uyVE
-EOpP4bix+MTZxELtXw1bkGLOzEiRhIA7l80tk7/AVpNaEvfpsa/GDXTrg2/VHdYF
-QB0bQmumd5lmKEG8BMUQV3krPS/u1g==
-=iyn/
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkWsngACgkQAVBC80lX
+0GzM0gf/ffTPZ5rLWv/9UBhlIKScEej6mj6OIquu1MyWlOJ+MATVXHNkgTvbKpIP
+aOFyqh70zycufBw9yZOUPPvMmOdo8uimYHGy23uNHZvRO5TC1pJL/pnAXCRjp8h+
+m/a/2Z3Egm//NW1u2SlL8TgUN1F9Q4DYlo+wMrDMXJfIOxA7SyBOFkiFM+D5/w86
+SLQ1F1V3QqEHrFM/yLHTMRj0hilBDU/fnufdzavIbkag+riUeyITHfqi78L4Rkwd
+Tr2dFDVOjjlzsMV29CaneNYl3z9zi/LMVNtYF6Ru2pNrZYAvj2sDs9LByL0cTqP2
+8sURV/HduJQ2XBboHYBYSpuz6l28aw==
+=bdZ4
 -----END PGP SIGNATURE-----
 
---Sig_/ZmUr2.aiYZJglp4HXHLwoCk--
+--Sig_/_8cw61cWJrvqELDhxv92TQ7--
 

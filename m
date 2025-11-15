@@ -1,104 +1,230 @@
-Return-Path: <linux-next+bounces-9017-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9018-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3D4BC5F3AD
-	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 21:25:39 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA7E3C5FE5B
+	for <lists+linux-next@lfdr.de>; Sat, 15 Nov 2025 03:30:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3B143B04EC
-	for <lists+linux-next@lfdr.de>; Fri, 14 Nov 2025 20:23:07 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5420E4E06A3
+	for <lists+linux-next@lfdr.de>; Sat, 15 Nov 2025 02:30:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 149B62DAFBB;
-	Fri, 14 Nov 2025 20:23:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D40A81BC4E;
+	Sat, 15 Nov 2025 02:30:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="N3QIraez"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="Dyt1OSX0"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74B028D84F;
-	Fri, 14 Nov 2025 20:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A209C14A60C
+	for <linux-next@vger.kernel.org>; Sat, 15 Nov 2025 02:30:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763151783; cv=none; b=L4MgIs6P6U99XS5oOd7Wmqed+C/F5wGFNhWuZK/1U6EGyTgKXYw5TBk3qzh+r+gpJwq8l/nSz6eT6oHdFhyEFUEKmhodu2QEnAeWOKeEc+txqLP09FLwggSHL+W8At6QNiMqp41WI3fbw8L/fa76i2GgS8eozFq9QPsdxJxZ4c4=
+	t=1763173825; cv=none; b=h8M2ltnPk9sG/xBaKknj3mat9sDX//HMNvVwa/cXJW1pAHoNzs3Jvpo8ZmgHvMFqzgF0qx6dtNX9NaJ7rmVe/ys4iztSvVzvc9H94H0o03gS2n2pU5F8cBGBi2U9T2va6tJsniMl7C5sSy2X1DxbElkXZZDic237pEl7rw0ZtKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763151783; c=relaxed/simple;
-	bh=z4BIQ7UCIYDy9ynwPy8QsOWLKnqpntzIsn1N1xhXWG0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pDmUjTd4pxKREjY6yOcR+EzfO1RYALPx1/XNAyzEbah2LKIPdXCOyJxT2t8JVyfGyJb9AVqJUzQi301qZxKoMYlaxQ1a8RRnHRGch9pDprYSsNSqu5adnEkUzyVAYa2zTpgI/3P7Js+yie7vtbUwtFn/pE75UEC0eL3aeiviyZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=N3QIraez; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=WJlzaYMpncBD56Nd+MKMUklRLSShbHhp52G0B8eKEQw=; b=N3QIraezlhLUZRZyxZ0Cx8QjAN
-	g6rQYSx0W/nuwOZzflNRi2ykO4GkdKRTKF6wktximRTeHJ8Px3AxqtWPqZZspfHEBKNCtdrzXaH4k
-	cCAp9cxFvTjVWFGSsPIfd1/c08rn53ZNZ+FBup6XVRK671OPJNKUzcJXLLyh2cCDqbT0rI2NnFOeY
-	IfWQIHp7KkdQGwSeopRC+g3T39FdjhA4UroFOJwZIxZ1CU0O8nf/qfq9n02NEY2bTCFvYvl8vKvQd
-	oB/652+0u6P6cTcJQ/+ghan4i78HXbZj8MGbRsjF0q78SEPahurLQZFs5I/7hxmCRWLwZ4zQ6j+s/
-	HySdwYTg==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vK0Jv-0000000D4vH-32FZ;
-	Fri, 14 Nov 2025 20:22:59 +0000
-Message-ID: <4d585735-58c8-46a0-97b0-8dd15ac9825c@infradead.org>
-Date: Fri, 14 Nov 2025 12:22:57 -0800
+	s=arc-20240116; t=1763173825; c=relaxed/simple;
+	bh=6y9CzTVpkyq9H2ekjgY2Kuf2bDqkb5cxg3lTlFLYE6o=;
+	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=IcpKhe7Vwury5JYxzQJ1zX0cR7VIPdqcoqU92FEyuYaDXG9ql40rUu6XthjCjxvLw4IFf0MylAoXJXMzf8iJkqSisCTPDpF5T/6kjKf8lSNCt4b2hxbdauGWgVD3Vn2Wvyi+VvI/82Am7mjuCtnFwhYBnZmU1WuLb/0nwtVR/E0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=Dyt1OSX0; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7b9c17dd591so1920776b3a.3
+        for <linux-next@vger.kernel.org>; Fri, 14 Nov 2025 18:30:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1763173823; x=1763778623; darn=vger.kernel.org;
+        h=message-id:date:reply-to:cc:to:from:subject
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EZMPM3Qbe7sJu51Y5+cYuOXpdv4/PC4PJviYQBvT1OE=;
+        b=Dyt1OSX0QW/CsggbfUlWom+VGOklzx7fYbtkXlnmLw5YilqT/zzFrBO8eI8iwuFA78
+         hi1AUr5KqysDZxMlSfdz5NVcCXZOXqk7qLQvK8mJKQG9hzAocdq624HzG1gby7V3Mg9t
+         FsEkV6raWrdQ9yGSGmGMw/NJf4Vkauy1V9Fwa1grMqrcgssRPtYF23DLgVHo+Ghlqcpv
+         c8ztUaitjRtJ4RnOjgV6JLCgm9R1in87M2GRqkcZGAInCtqvY+B0bhbLUV7jCMHsbXNM
+         ZusApfsBNM07V5CRqYbu7sIuseRdS8aNTfVx2XG5aVQqFalLJl+NDpdqvWSODsLRTt7t
+         HBtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763173823; x=1763778623;
+        h=message-id:date:reply-to:cc:to:from:subject
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EZMPM3Qbe7sJu51Y5+cYuOXpdv4/PC4PJviYQBvT1OE=;
+        b=md/11IlgJFC211XOm/lSZ8nEAyBgO3paWSOOHoM6ORVB7CJN/nSG7SJyV4FryXahgW
+         7lJWE7EXiaQeHQuc7vSummV0l/AKKs2EKvgf5yLgiQPEeZS171uUeXBeSmVAQyLJQLE8
+         o5FSs6ygSy7jk71EajuczRowIY32CIXRD2rUblA6Nzwc44kgqFH5bIIBB8A1r8qRoTQo
+         Cb9ny/haIawLQtiiVfm74NaLbYRDSA4W6dvPPAjJsk1o0SZ9FXJxysFIHaijSKO6czSD
+         B9IytgExEvcq0VUnBk6bqVZaubX8uTAexBCx7A5pgrcWGS9CB2z/E6+Equ1nlsFuQKbz
+         5JPw==
+X-Gm-Message-State: AOJu0YwjetC1/mQcTWKU+O9c7W2PahXlMmVTEUcFvD9wLZlsxLsvC2+D
+	LfScsz0LuUHBla/pIHV4tlG5EtZ+icbPj1aiK3v0Xl1STQLC8NYEGYHc+xVgl6U5RfM=
+X-Gm-Gg: ASbGnctCBfkOaT8Rsabc8My0CR2CMVNcM85RoktC23oqx+Awjgua2RhiGBe9LxiE8EQ
+	wLTmcA3EUxYiIcIUB8uZIgRvf9D37PyEKH3VctLm0ENKX/M96DgCVKyed6EtePGW9owXJQAWUTT
+	z6nXpouRLKujxwrlTns3yKX7Q6TYpfiASfeHKYKe4L7PlIEmc2hf9BUAbyd9hlAvdpQFTV04a/X
+	YMMcnt92ykN/IS9zwpNM1/ik+BJ/pscraUXwWcNNO9v4tise8B7GuVelVz7ygnp1awszc4mWO8J
+	4qkNblfpwV2tp6v9lUzEuEgsVqZ2hsMH4mUgOgd9p3fCTZwLGJbcvSAivXnwGjngQ32lfpyU0E1
+	dJ+8eAryAjsHHHoHmMC5rUFoWUhYHmMm4IVCcPDxRZZALEa+BQuP2sNcwKpy6eEwzy+/RqokLCu
+	F3VrUJ
+X-Google-Smtp-Source: AGHT+IGmZTtjo1fbbihDuSKxalI6W7jTLEgRQcZuIU/W8k2ds/Ao1ieh/igX1f+aDIsSHWOadrwRVw==
+X-Received: by 2002:a05:701b:2601:b0:11a:6136:1f8d with SMTP id a92af1059eb24-11b411ff15cmr1549902c88.22.1763173822620;
+        Fri, 14 Nov 2025 18:30:22 -0800 (PST)
+Received: from f771fd7c9232 ([20.38.40.137])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11b86afe12esm3909092c88.6.2025.11.14.18.30.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Nov 2025 18:30:21 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Tree for Nov 14 (htmldocs: Return)
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Documentation <linux-doc@vger.kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <20251114163332.53dfe4cd@canb.auug.org.au>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20251114163332.53dfe4cd@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: [STATUS] next/master - 0f2995693867bfb26197b117cd55624ddc57582f
+From: KernelCI bot <bot@kernelci.org>
+To: kernelci-results@groups.io
+Cc: linux-next@vger.kernel.org
+Reply-To: kernelci@lists.linux.dev
+Date: Sat, 15 Nov 2025 02:30:21 -0000
+Message-ID: <176317382115.770.18263574155514261638@f771fd7c9232>
 
 
 
-On 11/13/25 9:33 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20251113:
-> 
-
-I think that all of these are false positives:
-
-WARNING: drivers/pci/msi/api.c:102 duplicate section name 'Return'
-WARNING: mm/damon/core.c:1356 duplicate section name 'Return'
-WARNING: drivers/gpu/drm/drm_atomic_helper.c:3458 duplicate section name 'Return'
-WARNING: drivers/gpu/drm/drm_atomic_helper.c:3622 duplicate section name 'Return'
-WARNING: drivers/gpu/drm/drm_of.c:382 duplicate section name 'Return'
-WARNING: drivers/gpu/drm/drm_of.c:432 duplicate section name 'Return'
-WARNING: drivers/gpu/drm/drm_gem.c:850 duplicate section name 'Return'
-WARNING: include/uapi/drm/i915_drm.h:2403 duplicate section name 'Return'
-WARNING: include/uapi/drm/i915_drm.h:2403 duplicate section name 'Return'
 
 
-Some things are just messy:
-WARNING: include/linux/w1.h:115 duplicate section name 'Return'
-WARNING: include/linux/w1.h:115 duplicate section name 'Return'
+Hello,
+
+Status summary for next/master
+
+Dashboard:
+https://d.kernelci.org/c/next/master/0f2995693867bfb26197b117cd55624ddc57582f/
+
+giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+branch: master
+commit hash: 0f2995693867bfb26197b117cd55624ddc57582f
+origin: maestro
+test start time: 2025-11-14 06:09:50.737000+00:00
+
+Builds:	   45 ✅    9 ❌    0 ⚠️
+Boots: 	  147 ✅    8 ❌    0 ⚠️
+Tests: 	12095 ✅ 5566 ❌ 4591 ⚠️
+
+### POSSIBLE REGRESSIONS
+    
+Hardware: imx6dl-udoo
+  > Config: multi_v7_defconfig
+    - Architecture/compiler: arm/gcc-12
+      - kselftest.alsa.alsa_mixer-test_event_spurious_fslimx6qudooac9_3
+      last run: https://d.kernelci.org/test/maestro:6916cf762fd2377ea99f0628
+      history:  > ✅  > ❌  > ❌  > ❌  > ❌  
+            
+      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_10
+      last run: https://d.kernelci.org/test/maestro:6916cf762fd2377ea99f0637
+      history:  > ✅  > ❌  > ❌  > ❌  > ❌  
+            
 
 
-It appears that looking for "Return[s]:" applies to structs (maybe to
-everything?). Is that fixable (without rewriting the entire parser)?
-(i915_drm.h above is also a warning about a struct.)
+### FIXED REGRESSIONS
+    
+Hardware: imx6dl-udoo
+  > Config: multi_v7_defconfig
+    - Architecture/compiler: arm/gcc-12
+      - kselftest.alsa.alsa_mixer-test_event_spurious_fslimx6qudooac9_2
+      last run: https://d.kernelci.org/test/maestro:6916cf762fd2377ea99f05d6
+      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
+            
+      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_9
+      last run: https://d.kernelci.org/test/maestro:6916cf762fd2377ea99f0630
+      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
+            
+Hardware: meson-g12b-a311d-khadas-vim3
+  > Config: defconfig+preempt_rt
+    - Architecture/compiler: arm64/gcc-12
+      - rt-tests.rt-migrate-test
+      last run: https://d.kernelci.org/test/maestro:6916d01f2fd2377ea99f09a2
+      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
+            
+      - rt-tests.rt-migrate-test.rt-migrate-test
+      last run: https://d.kernelci.org/test/maestro:6916d0d62fd2377ea99f0c78
+      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
+            
+Hardware: acer-chromebox-cxi4-puff
+  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
+    - Architecture/compiler: x86_64/gcc-12
+      - kselftest.cpufreq.suspend
+      last run: https://d.kernelci.org/test/maestro:6916cd292fd2377ea99ed8e8
+      history:  > ❌  > ❌  > ✅  > ✅  > ✅  
+            
+      - kselftest.cpufreq.suspend.cpufreq_main_sh
+      last run: https://d.kernelci.org/test/maestro:6916ce812fd2377ea99ee76f
+      history:  > ❌  > ❌  > ✅  > ✅  > ✅  
+            
 
 
--- 
-~Randy
+### UNSTABLE TESTS
+    
+Hardware: imx6dl-udoo
+  > Config: multi_v7_defconfig
+    - Architecture/compiler: arm/gcc-12
+      - kselftest.alsa.alsa_mixer-test_name_fslimx6qudooac9_22
+      last run: https://d.kernelci.org/test/maestro:6916cf762fd2377ea99f05ff
+      history:  > ❌  > ✅  > ✅  > ✅  > ❌  
+            
+Hardware: acer-chromebox-cxi4-puff
+  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
+    - Architecture/compiler: x86_64/gcc-12
+      - kselftest.cpufreq
+      last run: https://d.kernelci.org/test/maestro:6916cd1a2fd2377ea99ed84e
+      history:  > ✅  > ✅  > ✅  > ❌  > ✅  
+            
+      - kselftest.cpufreq.cpufreq_main_sh
+      last run: https://d.kernelci.org/test/maestro:6916cdf82fd2377ea99eda91
+      history:  > ✅  > ✅  > ✅  > ❌  > ✅  
+            
+Hardware: acer-cbv514-1h-34uz-brya
+  > Config: defconfig+preempt_rt+x86-board
+    - Architecture/compiler: x86_64/gcc-12
+      - rt-tests.rt-migrate-test
+      last run: https://d.kernelci.org/test/maestro:6916d9fd2fd2377ea99f4485
+      history:  > ✅  > ❌  > ✅  > ✅  > ✅  
+            
+      - rt-tests.rt-migrate-test.rt-migrate-test
+      last run: https://d.kernelci.org/test/maestro:6916daca2fd2377ea99f4f30
+      history:  > ✅  > ❌  > ✅  > ✅  > ✅  
+            
+Hardware: acer-chromebox-cxi5-brask
+  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
+    - Architecture/compiler: x86_64/gcc-12
+      - kselftest.cpufreq.hibernate
+      last run: https://d.kernelci.org/test/maestro:6916cd222fd2377ea99ed89e
+      history:  > ✅  > ✅  > ❌  > ✅  > ✅  
+            
+      - kselftest.cpufreq.hibernate.cpufreq_main_sh
+      last run: https://d.kernelci.org/test/maestro:6916cedd2fd2377ea99ef1c4
+      history:  > ✅  > ✅  > ❌  > ✅  > ✅  
+            
+Hardware: dell-latitude-5400-8665U-sarien
+  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
+    - Architecture/compiler: x86_64/gcc-12
+      - kselftest.cpufreq.suspend
+      last run: https://d.kernelci.org/test/maestro:6916cd2b2fd2377ea99ed906
+      history:  > ✅  > ✅  > ❌  > ✅  > ✅  
+            
+      - kselftest.cpufreq.suspend.cpufreq_main_sh
+      last run: https://d.kernelci.org/test/maestro:6916ce8c2fd2377ea99ee794
+      history:  > ✅  > ✅  > ❌  > ✅  > ✅  
+            
 
+
+
+This branch has 9 pre-existing build issues. See details in the dashboard.
+
+Sent every day if there were changes in the past 24 hours.
+Legend: ✅ PASS   ❌ FAIL  ⚠️ INCONCLUSIVE
+
+--
+This is an experimental report format. Please send feedback in!
+Talk to us at kernelci@lists.linux.dev
+
+Made with love by the KernelCI team - https://kernelci.org
 

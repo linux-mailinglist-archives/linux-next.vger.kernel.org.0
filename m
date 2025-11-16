@@ -1,263 +1,177 @@
-Return-Path: <linux-next+bounces-9028-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9029-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08758C61E7B
-	for <lists+linux-next@lfdr.de>; Sun, 16 Nov 2025 23:23:31 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id E09D6C61E9F
+	for <lists+linux-next@lfdr.de>; Sun, 16 Nov 2025 23:36:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 10700348AD3
-	for <lists+linux-next@lfdr.de>; Sun, 16 Nov 2025 22:23:22 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7C4934E4C67
+	for <lists+linux-next@lfdr.de>; Sun, 16 Nov 2025 22:36:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A54152AE78;
-	Sun, 16 Nov 2025 22:23:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3ED130B519;
+	Sun, 16 Nov 2025 22:36:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V1Jh/CxO"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="SELfGjwS"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7636A2405E3;
-	Sun, 16 Nov 2025 22:23:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE9BF2FB62A;
+	Sun, 16 Nov 2025 22:36:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763331797; cv=none; b=OrM3k0gE1Ae3LqSLUEM+kAhP7Q7+daZLF83WgkfMdNJXIweol33SPBbLcGdYhGWwWwRFT/XQDIMhcP9t45QW7i45HCUXcHEtPvHt9AW48d+eiUpnFqQoXXABgG0fkQzmjh4da2JkHKId1AJ9vK8Y1CoKKdmPA1BUJulHXnJMTsc=
+	t=1763332581; cv=none; b=lO1+sOqlOkKw8TFjmbS0liuEcgPkCGkzzCFDoCWj2FPW28FX1ho06rCfnH3PnZSsvUOJ1G7P4w9IuxrNNoe+3MgTFXQPlSvTMlJfxF8FV+3y3ZVYi6zaN014manobJ3GDTTfTlHVDTVQ7MYnHFkXOEj6gqr6xqWCWL5UvHYwALg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763331797; c=relaxed/simple;
-	bh=XlzeOCvOWLNa4jw2oxTYtZ923m87dRvIAmYzj4g/6J8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UtI/GhikHOyixF+9nwQ+wLDPAwkh7RFjOJdY3iYUa+ReenNBNbZ0pL/pRNwreyERqvRyiZ0TT650tny2T2jKIVPoUz+Z9vaUpSRN4dr0wGT2cuo/JxtQGvuBqABD12dgjddXpKeENiC8wf25cqYQwJG0n6U2qj3T8x8KN29rj60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V1Jh/CxO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90D04C113D0;
-	Sun, 16 Nov 2025 22:23:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763331797;
-	bh=XlzeOCvOWLNa4jw2oxTYtZ923m87dRvIAmYzj4g/6J8=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=V1Jh/CxOizq8EMdx2dFV+hPSkzkX3a76xC9sujRwfxeZ8wlRcxPxmiKzOa2JaMvJL
-	 yqEpt36aUiNK2mnDR6NTbDNXJpnfaDbsV+N8NVxF6+M+NGun9LuAVFTwPnenC/U99z
-	 TQV27VmEHVNRp+SPe66kC2DGgW+awjriT2OdqHz9DPLjfsZXiPtzR8wTEybII/1a1f
-	 D7QLxsGk60gSTtvfQMlulBF7cXBdUMeuexB4WqggO6ROUMYQbfXGOoQOrXvvKiYmDy
-	 lA/TmbQPe2g1obIxMxj1pYZ24r7/SOSeyDo/bCP/mMfrf0+AK8zdbQg6Cg+BjYl/FH
-	 OSPpJrJUV7aOw==
-Message-ID: <612b7e64af3872fde837740404888a03a2c7b6a0.camel@kernel.org>
-Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
-From: Jeff Layton <jlayton@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Christian Brauner
-	 <brauner@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Date: Sun, 16 Nov 2025 17:23:15 -0500
-In-Reply-To: <20251117084326.42c935b0@canb.auug.org.au>
-References: <20251117084326.42c935b0@canb.auug.org.au>
-Autocrypt: addr=jlayton@kernel.org; prefer-encrypt=mutual;
- keydata=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
- QZIQXVeAA+smfTT0tDrisj1U5x6ZB9b3nBg65kc=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+	s=arc-20240116; t=1763332581; c=relaxed/simple;
+	bh=Im0LYRejsEhWed1ri23qJJ/IDE5Bd8fKFHvShWSL5gs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=WXerJoBu9HVnS0GuW8QOHYvyP42Lkj7mIBwTs/vydlPw2gqYwqBmV6FEnc6WTZiKe0gqmenyzuQYvnjj2i4NXEV+BjykceddZ1OWcI90sKiWJw5HU0HXqpvkbW1EF9uQr2Ejxb3D4GQXtj4PRSoGPuFQjYee72h7m1z2/LF2le0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=SELfGjwS; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1763332575;
+	bh=yHEPIWaDPdsA9fCxSqL5EKf7SETmx1Dnv8V9ay8bW5c=;
+	h=Date:From:To:Cc:Subject:From;
+	b=SELfGjwSEr1FZ9cDWK0OtHhOZOgwb2sjVAfm4XIq0aNW7AMmoFzaU6mkYgI94K/Y5
+	 WDf48yIsKjs4wbEeLWJZCcvtTIMy0ZF17aWgwYw4v0nrLuv3zMmg6PKpaQYgRSlhNd
+	 HGg3aJj0Cm6NHQlC7mIwAzYg2nW9dnyjIUkFUwtuRdN/v+2UZX0OSelTTpSgVYXgfv
+	 r5gtFFvd6fwXBNYYy54MjPnnhH/XccQAKPAI0QKDnLovkG3K4ToOWNPsyZ5kqjJ7Nu
+	 e0yXLXhhWJmp3JBAdwwhXUJM2AaOJGLxclScVUBmxtISI02ruXcj/dvX0wNX+U5hxi
+	 Cp+m4EzUKEoBw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4d8m1q2vpMz4w1j;
+	Mon, 17 Nov 2025 09:36:15 +1100 (AEDT)
+Date: Mon, 17 Nov 2025 09:36:14 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Pasha Tatashin <pasha.tatashin@soleen.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, "Mike Rapoport (Microsoft)"
+ <rppt@kernel.org>, Pratyush Yadav <pratyush@kernel.org>
+Subject: linux-next: build failure after merge of the mm-nonmm-unstable tree
+Message-ID: <20251117093614.1490d048@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/BVxKPWLZbLGaigTWYJoKZKH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Mon, 2025-11-17 at 08:43 +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> After merging the vfs-brauner tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> In file included from samples/check-exec/inc.c:16:
-> usr/include/linux/fcntl.h:88:9: error: unknown type name 'uint32_t'
->    88 |         uint32_t        d_flags;        /* Must be 0 */
->       |         ^~~~~~~~
-> usr/include/linux/fcntl.h:7:1: note: 'uint32_t' is defined in header '<st=
-dint.h>'; this is probably fixable by adding '#include <stdint.h>'
->     6 | #include <linux/openat2.h>
->   +++ |+#include <stdint.h>
->     7 |=20
-> usr/include/linux/fcntl.h:89:9: error: unknown type name 'uint16_t'
->    89 |         uint16_t        d_type;         /* F_RDLCK, F_WRLCK, F_UN=
-LCK */
->       |         ^~~~~~~~
-> usr/include/linux/fcntl.h:89:9: note: 'uint16_t' is defined in header '<s=
-tdint.h>'; this is probably fixable by adding '#include <stdint.h>'
-> usr/include/linux/fcntl.h:90:9: error: unknown type name 'uint16_t'
->    90 |         uint16_t        __pad;          /* Must be 0 */
->       |         ^~~~~~~~
-> usr/include/linux/fcntl.h:90:9: note: 'uint16_t' is defined in header '<s=
-tdint.h>'; this is probably fixable by adding '#include <stdint.h>'
-> In file included from samples/vfs/test-statx.c:23:
-> usr/include/linux/fcntl.h:88:9: error: unknown type name 'uint32_t'
->    88 |         uint32_t        d_flags;        /* Must be 0 */
->       |         ^~~~~~~~
-> usr/include/linux/fcntl.h:7:1: note: 'uint32_t' is defined in header '<st=
-dint.h>'; this is probably fixable by adding '#include <stdint.h>'
->     6 | #include <linux/openat2.h>
->   +++ |+#include <stdint.h>
->     7 |=20
-> usr/include/linux/fcntl.h:89:9: error: unknown type name 'uint16_t'
->    89 |         uint16_t        d_type;         /* F_RDLCK, F_WRLCK, F_UN=
-LCK */
->       |         ^~~~~~~~
-> usr/include/linux/fcntl.h:89:9: note: 'uint16_t' is defined in header '<s=
-tdint.h>'; this is probably fixable by adding '#include <stdint.h>'
-> usr/include/linux/fcntl.h:90:9: error: unknown type name 'uint16_t'
->    90 |         uint16_t        __pad;          /* Must be 0 */
->       |         ^~~~~~~~
-> usr/include/linux/fcntl.h:90:9: note: 'uint16_t' is defined in header '<s=
-tdint.h>'; this is probably fixable by adding '#include <stdint.h>'
-> In file included from usr/include/linux/watch_queue.h:6,
->                  from samples/watch_queue/watch_test.c:19:
-> usr/include/linux/fcntl.h:88:9: error: unknown type name 'uint32_t'
->    88 |         uint32_t        d_flags;        /* Must be 0 */
->       |         ^~~~~~~~
-> usr/include/linux/fcntl.h:7:1: note: 'uint32_t' is defined in header '<st=
-dint.h>'; this is probably fixable by adding '#include <stdint.h>'
->     6 | #include <linux/openat2.h>
->   +++ |+#include <stdint.h>
->     7 |=20
-> usr/include/linux/fcntl.h:89:9: error: unknown type name 'uint16_t'
->    89 |         uint16_t        d_type;         /* F_RDLCK, F_WRLCK, F_UN=
-LCK */
->       |         ^~~~~~~~
-> usr/include/linux/fcntl.h:89:9: note: 'uint16_t' is defined in header '<s=
-tdint.h>'; this is probably fixable by adding '#include <stdint.h>'
-> usr/include/linux/fcntl.h:90:9: error: unknown type name 'uint16_t'
->    90 |         uint16_t        __pad;          /* Must be 0 */
->       |         ^~~~~~~~
-> usr/include/linux/fcntl.h:90:9: note: 'uint16_t' is defined in header '<s=
-tdint.h>'; this is probably fixable by adding '#include <stdint.h>'
-> In file included from ./usr/include/linux/eventfd.h:5,
->                  from <command-line>:
-> usr/include/linux/fcntl.h:88:9: error: unknown type name 'uint32_t'
->    88 |         uint32_t        d_flags;        /* Must be 0 */
->       |         ^~~~~~~~
-> usr/include/linux/fcntl.h:89:9: error: unknown type name 'uint16_t'
->    89 |         uint16_t        d_type;         /* F_RDLCK, F_WRLCK, F_UN=
-LCK */
->       |         ^~~~~~~~
-> usr/include/linux/fcntl.h:90:9: error: unknown type name 'uint16_t'
->    90 |         uint16_t        __pad;          /* Must be 0 */
->       |         ^~~~~~~~
->=20
-> Caused by commit
->=20
->   1602bad16d7d ("vfs: expose delegation support to userland")
->=20
-> I have used the vfs-brauner tree from next-20251114 for today.
+--Sig_/BVxKPWLZbLGaigTWYJoKZKH
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Stephen. This patch should fix it.
+Hi all,
 
-Christian, you can either fold this into 1602bad16d7d, or I can send it
-separately. Let me know which you prefer.
+After merging the mm-nonmm-unstable tree, today's linux-next build
+(powerpc ppc64_defconfig) failed like this:
 
-Thanks,
+In file included from drivers/of/fdt.c:28:
+include/linux/kexec_handover.h:99:7: warning: no previous prototype for 'kh=
+o_alloc_preserve' [-Wmissing-prototypes]
+   99 | void *kho_alloc_preserve(size_t size)
+      |       ^~~~~~~~~~~~~~~~~~
+include/linux/kexec_handover.h:104:6: warning: no previous prototype for 'k=
+ho_unpreserve_free' [-Wmissing-prototypes]
+  104 | void kho_unpreserve_free(void *mem) { }
+      |      ^~~~~~~~~~~~~~~~~~~
+include/linux/kexec_handover.h:105:6: warning: no previous prototype for 'k=
+ho_restore_free' [-Wmissing-prototypes]
+  105 | void kho_restore_free(void *mem) { }
+      |      ^~~~~~~~~~~~~~~~
+In file included from mm/mm_init.c:34:
+include/linux/kexec_handover.h:99:7: warning: no previous prototype for 'kh=
+o_alloc_preserve' [-Wmissing-prototypes]
+   99 | void *kho_alloc_preserve(size_t size)
+      |       ^~~~~~~~~~~~~~~~~~
+include/linux/kexec_handover.h:104:6: warning: no previous prototype for 'k=
+ho_unpreserve_free' [-Wmissing-prototypes]
+  104 | void kho_unpreserve_free(void *mem) { }
+      |      ^~~~~~~~~~~~~~~~~~~
+include/linux/kexec_handover.h:105:6: warning: no previous prototype for 'k=
+ho_restore_free' [-Wmissing-prototypes]
+  105 | void kho_restore_free(void *mem) { }
+      |      ^~~~~~~~~~~~~~~~
+ld: drivers/of/fdt.o: in function `kho_alloc_preserve':
+fdt.c:(.text+0x9c0): multiple definition of `kho_alloc_preserve'; mm/mm_ini=
+t.o:mm_init.c:(.text+0x230): first defined here
+ld: drivers/of/fdt.o: in function `kho_unpreserve_free':
+fdt.c:(.text+0x9d0): multiple definition of `kho_unpreserve_free'; mm/mm_in=
+it.o:mm_init.c:(.text+0x240): first defined here
+ld: drivers/of/fdt.o: in function `kho_restore_free':
+fdt.c:(.text+0x9e0): multiple definition of `kho_restore_free'; mm/mm_init.=
+o:mm_init.c:(.text+0x250): first defined here
 
-----------------8<----------------------
+Caused by commit
 
-vfs: add needed headers for new struct delegation definition
+  722b2ce4a04f ("kho: introduce high-level memory allocation API")
 
-The definition of struct delegation uses stdint.h integer types. Add the
-necessary headers to ensure that always works.
+I have applied the following fix patch for today:
 
-Fixes: 1602bad16d7d ("vfs: expose delegation support to userland")
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 17 Nov 2025 09:29:44 +1100
+Subject: [PATCH] fix up for "kho: introduce high-level memory allocation AP=
+I"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- include/uapi/linux/fcntl.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ include/linux/kexec_handover.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
-index 008fac15e573..5e277fd955aa 100644
---- a/include/uapi/linux/fcntl.h
-+++ b/include/uapi/linux/fcntl.h
-@@ -4,6 +4,11 @@
+diff --git a/include/linux/kexec_handover.h b/include/linux/kexec_handover.h
+index 6dd0dcdf0ec1..5f7b9de97e8d 100644
+--- a/include/linux/kexec_handover.h
++++ b/include/linux/kexec_handover.h
+@@ -96,13 +96,13 @@ static inline int kho_preserve_vmalloc(void *ptr,
 =20
- #include <asm/fcntl.h>
- #include <linux/openat2.h>
-+#ifdef __KERNEL__
-+#include <linux/types.h>
-+#else
-+#include <stdint.h>
-+#endif
+ static inline void kho_unpreserve_vmalloc(struct kho_vmalloc *preservation=
+) { }
 =20
- #define F_SETLEASE	(F_LINUX_SPECIFIC_BASE + 0)
- #define F_GETLEASE	(F_LINUX_SPECIFIC_BASE + 1)
+-void *kho_alloc_preserve(size_t size)
++static inline void *kho_alloc_preserve(size_t size)
+ {
+ 	return ERR_PTR(-EOPNOTSUPP);
+ }
+=20
+-void kho_unpreserve_free(void *mem) { }
+-void kho_restore_free(void *mem) { }
++static inline void kho_unpreserve_free(void *mem) { }
++static inline void kho_restore_free(void *mem) { }
+=20
+ static inline struct folio *kho_restore_folio(phys_addr_t phys)
+ {
 --=20
 2.51.1
 
+As a review nitpicks on that commit:  please do not do unrelated
+formatting changes.  Also, there was not real reason for moving the
+types.h include.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/BVxKPWLZbLGaigTWYJoKZKH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkaUd4ACgkQAVBC80lX
+0Gz7oQf9G6sWYKDORhv04We7O4RwQ2+Tq+ge7TOUTEDluW3vc5TH6Di2ot5MjEMF
+aFEygLv9GBCPbijxnIrmYgYwUTaxvVz6DaRVbudAIhQBZrz8XSClv8Cdvonl2KRM
+OSE8akDOgTKJXV7vVrPH6rjBmvelsCSF69uUiVCJQfcwRrK6anz7tbVz+/9+gK/2
+ECkqJuHw+pRTqFoLs8ovDDJHnTPnsxoOUc+JjbbC37N1JwvzzI651hWH11EdkDZp
+ustIdI6rJ30uW1KG0JNR4DAgJSxDHZY6Xokr1DKO4bPPzNq2PNla43mpRnaSiVdg
+i0zJCemWB96fg1h+4KZ6t/UHnZld2A==
+=UVh3
+-----END PGP SIGNATURE-----
+
+--Sig_/BVxKPWLZbLGaigTWYJoKZKH--
 

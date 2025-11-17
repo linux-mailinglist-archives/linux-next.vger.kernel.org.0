@@ -1,211 +1,280 @@
-Return-Path: <linux-next+bounces-9054-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9055-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 034A2C6511F
-	for <lists+linux-next@lfdr.de>; Mon, 17 Nov 2025 17:15:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AF3FC6533F
+	for <lists+linux-next@lfdr.de>; Mon, 17 Nov 2025 17:41:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3DC5E4E1D87
-	for <lists+linux-next@lfdr.de>; Mon, 17 Nov 2025 16:12:16 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id C07C22909A
+	for <lists+linux-next@lfdr.de>; Mon, 17 Nov 2025 16:41:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44AFFAD2C;
-	Mon, 17 Nov 2025 16:12:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8863F2DF149;
+	Mon, 17 Nov 2025 16:40:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ppsY0kCS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sEirt7fR"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 222CB1D61BC
-	for <linux-next@vger.kernel.org>; Mon, 17 Nov 2025 16:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634342DF126
+	for <linux-next@vger.kernel.org>; Mon, 17 Nov 2025 16:40:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763395933; cv=none; b=P19455y2aBXR2qsM77oiBJAi4xD0NyyC+Uq68r1McaiKVN7SN70RSuGzNuKi2IPhJshDYlI5qy3hWkcmEHmxJY+l3dNIRzKF4iASz7T1HvGYeBYUpZruVFPImJh1K5goVUfaDenH6BlRdE1ft4P0WMcvxA8YEfWthMnk7JNL8j0=
+	t=1763397657; cv=none; b=h4pPLl6gej5bb7oxZG75yw6yXoOtSumlDMuVcDF5myF8roe8ZGXb0Tjk1z+45FJBg+0yTEdWxokg6tNldGK9ni4ulw/qrvm51IzyZtgnSWPbNnuEdlmAZHlbkfsTTyK0QK/xld2WgfJF3wgz9qKKElGnxxh9ccZTaJecqsvcXSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763395933; c=relaxed/simple;
-	bh=JphX4K+smX1gz2AfiIymsTfIAN6EG8L9o7S5ttB6jLI=;
+	s=arc-20240116; t=1763397657; c=relaxed/simple;
+	bh=qFBERkr6XCzbgs30TCa6vv7SrJ1+JY/phMy7Yqy9Fgw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y8FrfBwk+3ItWgNJvrY92e3OkfbErpPlHx+V9ols2GUZaDLY4a9iTK7jgQgD0NJaHpjPjgZBySOIVYh1+Or4Km1DDTo1zM3UzAj6c65OHBghOksAqpKjH4OPDiZoLYKB5S8aJTKctBwOSmWNsh4c+eesZe3FySqxzlQCJFMQgfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ppsY0kCS; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-477a2ab455fso12162355e9.3
-        for <linux-next@vger.kernel.org>; Mon, 17 Nov 2025 08:12:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763395929; x=1764000729; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JpCwR2FcL/sZw0I8xZgpJsW4WpJvYR7GKT+ewaoLXCA=;
-        b=ppsY0kCS7aM0VojoDrh5iPKV+ZDLfJg9r5tMVwqZHV5Lk5EkwNFnmtd4jeMK0dsFWJ
-         CYjfqLaaRKDhVU6MS/lmqsBFE1KwZ6uQHgXSjuePNUQQexPqDaSMsE9HREG1C1wMb40P
-         +CDYrMnt6UPz4p25wGvxOCQP4dNtgvkUUFz6Q2GP2WGc2SW+9/tqyPjE6xwepJqavjhq
-         nOy0KFfscWbGVRcjZC3V+eE4J5R1OIlj3lCDYfyRwaEGSOwA1uj2sfB3RC7BqKU+bv0x
-         u4emkOQ9W3vblPOZBvn2Ux8B7DqkjHpRCe19f7MWzW+94+aVICCFFQMljmbPfb/fNvCk
-         xKiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763395929; x=1764000729;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=JpCwR2FcL/sZw0I8xZgpJsW4WpJvYR7GKT+ewaoLXCA=;
-        b=kqQtQ1F+sWfoSXgsP+2pv2AEeEY2MHFVW1nAjRXTR+EP3Hpc+ErN6XdvppGJ4JSM14
-         8id6v6BRlLEebKd2vzn7NFh5lQEgqXerPQTFvXIQqH1BrSO0VhaeH7Gtx9DYNjBojZMf
-         vtIMUzRoLcS7xhTI9ddJJbDLy9DRzD/11UM1ilrZVL+5djwFNrH1Df/eF7eMYpNSgmaN
-         qeiw3V5eoa4rRUIJ5/vO5scBJ/fDSU/j7vODcQjzb1z5Qo/UEIL1sujbvdRg9c+BdMVf
-         cUAOVUlIc5xGruhxfXigdqvHiM6JRZ0VTsCevwbau7AzZlzWvu7nEUbQs1cnfWbFZVO3
-         /AyA==
-X-Forwarded-Encrypted: i=1; AJvYcCXSR06d0gCIDTzjVlh1HIMVNmgRSvK84hY+t1GTH5wXhdLHas9eIMCcTvkAm2q9sXPsZhkB3xl6HHyE@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6caIh3TCyIehP94OYJ3s0P6BpKcze/9UMTJ8YEy83FtXkN1HO
-	FP6mBzSa0z1a2uQ51w8GjvHDNW9u0/iSdEZUw0qInKSKt4spUIqMDKXmpOm06CRvheXsUQTb46o
-	dTNVafbILQ/wxkL1kM3303hSjrlwBsAH1f1oq2bU7
-X-Gm-Gg: ASbGnctRTqCae6NAcdtwLNnN4kznUPIJbg1BU+p3esCZ9tNbq5fgkaib1Hrlz3wzcoO
-	OlVfWF4KKbj++kNGnFS4qQP5k/eNM4ZI/722CnEfc4Db92Y9Viv8wU1uWeRL7sHFSyypVtSsyCz
-	MjKsO2HOBUopR5SuhEWrSIeMlW/OxaaIcxEJCYdViQxzuMhNY044sQd+gpMC0i1IdVzoJTZoy0J
-	2XydO+SQP331w3CiNfoAa12dyr6+Z3Z+kHtdrXTyd9u2W4x8IZRehSys43CfZcuJ2/ZjCh5rEIg
-	pTmtFDw=
-X-Google-Smtp-Source: AGHT+IHiXxdwbSSb5jiBnnGiuawqMUuz3QMhi8ad9bTiJZIB7m4UlNPL7KQefIm6QwkBjZ6Rb5OvANxRqCpDWO7Skz4=
-X-Received: by 2002:a05:600c:c4a2:b0:477:c37:2ea7 with SMTP id
- 5b1f17b1804b1-4778fe9ac28mr112638175e9.21.1763395929201; Mon, 17 Nov 2025
- 08:12:09 -0800 (PST)
+	 To:Cc:Content-Type; b=XwwWAxuZtB8otej0ksjKrp5wdH97V7LUDDxk8UDuv73lT227EgHMmIZ93Vzv+K3F2mHNe3JBQ/cd7sMdb4OcTOg5K1H2Qsp+htwNmv+LwyVQCmGgbZxh0cVtcYgOV8rUW95m+clRfvXv3gAHEjJa7bD2dR7xMgmnGMJPhfIh6As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sEirt7fR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EC2CC19423
+	for <linux-next@vger.kernel.org>; Mon, 17 Nov 2025 16:40:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763397657;
+	bh=qFBERkr6XCzbgs30TCa6vv7SrJ1+JY/phMy7Yqy9Fgw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=sEirt7fRgMQzHLQOJVKKOtpaX4AfhC3Qw4zFy8NT4hayHHTX3VycbahZUSTT+Uksa
+	 El4RokPZ+NqucGyc5w8a9AwbGJhGlUEl3aYd/J6rDidesXG7N1E2Fz2exEvLNv/LX5
+	 rclYSqE5WNkkA1pd6md8IDOBrheXPsAUwLmpBZ+QbJmUQwraH+5Xh+AstQgIqD5w5r
+	 08mSPeaXXtHylfg9FVM3esD9ku2pnKCPtKfUz0SUIkpQ62bTtUmVjEWAsBdC8rqfFZ
+	 yz3C9vOPivwkNYBKwF8+NODaU4ed1MHHarKje6bE/iosWy+jew9Lg1FxNb5RqoyZ3r
+	 da88YMeR7Ygmw==
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-65752954c43so528997eaf.0
+        for <linux-next@vger.kernel.org>; Mon, 17 Nov 2025 08:40:57 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW5lGVMFjFdlUEoKPWFv/0h/84lVJRRkr6qO8l2XoHN3pDcV7IDd7SSjcILFlu3Ruk8ItecRRimV0wu@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDF134Nl8sRGZACsS53JxhIBm2FOurPlzA9ezXtEgdI9lpd+B6
+	2YLi02Camwa8RTk+2oD8rHEBZW3r+CsmXNjqSrK6KyGN8uLELk8eZ6Lb11/bGQynIhawzqIpEJf
+	uuIdg8AzMHRkrUC4UqOqtAaL+BFHGy48=
+X-Google-Smtp-Source: AGHT+IGjCWbn/4FxO34zdxvGK3Y3GbN7eVWlyB6JGLKZtagEgAHMOED+tQm3XlhpXo5RD10S3aH49KLxc7cj6yFMPVc=
+X-Received: by 2002:a05:6808:f92:b0:450:c6af:7c10 with SMTP id
+ 5614622812f47-450c6af806emr1873953b6e.22.1763397656218; Mon, 17 Nov 2025
+ 08:40:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251117190417.44f20ddd@canb.auug.org.au> <aRs2WATn4sdUePUb@google.com>
- <CAJ-ks9mTZZj2B=r3Xx8T8gvqPtGLL2bpFOfa9Qh49bi5xSahbQ@mail.gmail.com>
-In-Reply-To: <CAJ-ks9mTZZj2B=r3Xx8T8gvqPtGLL2bpFOfa9Qh49bi5xSahbQ@mail.gmail.com>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Mon, 17 Nov 2025 17:11:55 +0100
-X-Gm-Features: AWmQ_blJbg_WI4pS3JxWM25le64gHx0bh2FTa7CuTIv_0jfVratYI8KQINyWfw4
-Message-ID: <CAH5fLgiFjTBhgYEsCR4R=W8xS8_99E5+F5g0y-gq3Bz_rY1++w@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the rust tree
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Miguel Ojeda <ojeda@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Alistair Popple <apopple@nvidia.com>, John Hubbard <jhubbard@nvidia.com>, 
-	Alexandre Courbot <acourbot@nvidia.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20251006120944.7880-1-spasswolf@web.de> <8edcc464-c467-4e83-a93b-19b92a2cf193@kernel.org>
+ <4903e7c36adf377bcca289dbd3528055dc6cfb32.camel@web.de> <4a8302a0-209f-446a-9825-36cb267c1718@kernel.org>
+ <25f36fa7-d1d6-4b81-a42f-64c445d6f065@amd.com> <1853e2af7f70cf726df278137b6d2d89d9d9dc82.camel@web.de>
+ <f18bafacbd8316c9623658e2935f8fc3b276af64.camel@web.de> <26bf82303f661cdd34e4e8c16997e33eb21d1ee4.camel@web.de>
+ <635b6cb19b5969bed7432dfd1cd651124e63aebb.camel@web.de> <18e472a0489ee5337465d5dc26685cebaf7c4f8d.camel@web.de>
+ <3772b8f5-6d1a-403e-ad27-99a711e78902@kernel.org> <0cb75fae3a9cdb8dd82ca82348f4df919d34844d.camel@web.de>
+ <ab51bd58919a31107caf8f8753804cb2dbfa791d.camel@web.de> <0719d985-1c09-4039-84c1-8736a1ca5e2d@amd.com>
+ <3f790ee59129e5e49dd875526cb308cc4d97b99d.camel@web.de>
+In-Reply-To: <3f790ee59129e5e49dd875526cb308cc4d97b99d.camel@web.de>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 17 Nov 2025 17:40:42 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iRaYBU+1S4rqYR7D6XC+rfQ2+0hgbodweV5JsFr8EEnQ@mail.gmail.com>
+X-Gm-Features: AWmQ_bnrmhRSb2LuOTi4e1V5BT19T5ADZ3jCjDcsm02Z7jYTS2wZtzBMLa2Fgv0
+Message-ID: <CAJZ5v0iRaYBU+1S4rqYR7D6XC+rfQ2+0hgbodweV5JsFr8EEnQ@mail.gmail.com>
+Subject: Re: Crash during resume of pcie bridge due to infinite loop in ACPICA
+To: Bert Karwatzki <spasswolf@web.de>
+Cc: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	"Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-next@vger.kernel.org, regressions@lists.linux.dev, 
+	linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, acpica-devel@lists.linux.dev, 
+	Robert Moore <robert.moore@intel.com>, Saket Dumbre <saket.dumbre@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 17, 2025 at 4:37=E2=80=AFPM Tamir Duberstein <tamird@gmail.com>=
- wrote:
->
-> On Mon, Nov 17, 2025 at 9:51=E2=80=AFAM Alice Ryhl <aliceryhl@google.com>=
- wrote:
-> >
-> > On Mon, Nov 17, 2025 at 07:04:17PM +1100, Stephen Rothwell wrote:
-> > > Hi all,
-> > >
-> > > After merging the rust tree, today's linux-next build (x86_64
-> > > allmodconfig) failed like this:
-> > >
-> > > error[E0277]: `Chipset` doesn't implement `core::fmt::Display`
-> > >    --> drivers/gpu/nova-core/gpu.rs:233:13
-> > >     |
-> > > 233 |             self.chipset,
-> > >     |             ^^^^^^^^^^^^ `Chipset` cannot be formatted with the=
- default formatter
-> > >     |
-> > >     =3D help: the trait `core::fmt::Display` is not implemented for `=
-Chipset`
-> > >     =3D note: in format strings you may be able to use `{:?}` (or {:#=
-?} for pretty-print) instead
-> > >     =3D note: this error originates in the macro `$crate::format_args=
-` which comes from the expansion of the macro `write` (in Nightly builds, r=
-un with -Z macro-backtrace for more info)
-> > >
-> > > error[E0277]: `Revision` doesn't implement `core::fmt::Display`
-> > >    --> drivers/gpu/nova-core/gpu.rs:235:13
-> > >     |
-> > > 235 |             self.revision
-> > >     |             ^^^^^^^^^^^^^ `Revision` cannot be formatted with t=
-he default formatter
-> > >     |
-> > >     =3D help: the trait `core::fmt::Display` is not implemented for `=
-Revision`
-> > >     =3D note: in format strings you may be able to use `{:?}` (or {:#=
-?} for pretty-print) instead
-> > >     =3D note: this error originates in the macro `$crate::format_args=
-` which comes from the expansion of the macro `write` (in Nightly builds, r=
-un with -Z macro-backtrace for more info)
-> > >
-> > > error[E0277]: the trait bound `MsgFunction: kernel::fmt::Display` is =
-not satisfied
-> > >    --> drivers/gpu/nova-core/gsp/cmdq.rs:532:9
-> > >     |
-> > > 532 | /         dev_dbg!(
-> > > 533 | |             &self.dev,
-> > > 534 | |             "GSP RPC: send: seq# {}, function=3D{}, length=3D=
-0x{:x}\n",
-> > >     | |                                               -- required by =
-a bound introduced by this call
-> > > 535 | |             self.seq,
-> > > 536 | |             M::FUNCTION,
-> > > 537 | |             dst.header.length(),
-> > > 538 | |         );
-> > >     | |_________^ the trait `kernel::fmt::Display` is not implemented=
- for `MsgFunction`
-> > >     |
-> > >     =3D help: the following other types implement trait `kernel::fmt:=
-:Display`:
-> > >               &T
-> > >               Arc<T>
-> > >               Arguments<'_>
-> > >               BStr
-> > >               Box<T, A>
-> > >               CStr
-> > >               Chipset
-> > >               Class
-> > >             and 22 others
-> > >     =3D note: required for `kernel::fmt::Adapter<&MsgFunction>` to im=
-plement `core::fmt::Display`
-> > > note: required by a bound in `core::fmt::rt::Argument::<'_>::new_disp=
-lay`
-> > >    --> /usr/lib/rustlib/src/rust/library/core/src/fmt/rt.rs:113:27
-> > >     |
-> > > 113 |     pub fn new_display<T: Display>(x: &T) -> Argument<'_> {
-> > >     |                           ^^^^^^^ required by this bound in `Ar=
-gument::<'_>::new_display`
-> > >     =3D note: this error originates in the macro `::core::format_args=
-` which comes from the expansion of the macro `dev_dbg` (in Nightly builds,=
- run with -Z macro-backtrace for more info)
-> > >
-> > > error: aborting due to 3 previous errors
-> > >
-> > > For more information about this error, try `rustc --explain E0277`.
-> > >
-> > > Caused by commit
-> > >
-> > >   c5cf01ba8dfe ("rust: support formatting of foreign types")
-> > >
-> > > (I think) interacting with commits
-> > >
-> > >   38b7cc448a5b ("gpu: nova-core: implement Display for Spec")
-> > >   75f6b1de8133 ("gpu: nova-core: gsp: Add GSP command queue bindings =
-and handling")
-> > >
-> > > from the drm-rust tree.
-> >
-> > I applied a patch to drm-rust-next that makes this error go away.
-> >
-> > Alice
->
-> Thanks for taking care of this!
->
-> Alexandre: the correct thing to do going forward is never to use
-> `core::fmt`; instead always use `kernel::fmt`.
++Saket
 
-Here's the fix I applied:
-https://lore.kernel.org/all/20251117-nova-fmt-rust-v1-1-651ca28cd98f@google=
-.com/
+On Sun, Nov 16, 2025 at 10:09=E2=80=AFPM Bert Karwatzki <spasswolf@web.de> =
+wrote:
+>
+> Am Montag, dem 10.11.2025 um 14:33 +0100 schrieb Christian K=C3=B6nig:
+> > Hi Bert,
+> >
+> > well sorry to say that but from your dumps it looks more and more like =
+you just have faulty HW.
+> >
+> > An SMU response of 0xFFFFFFFF means that the device has spontaneously f=
+allen of the bus while trying to resume it.
+> >
+> > My educated guess is that this is caused by a faulty power management, =
+but basically it could be anything.
+> >
+> > Regards,
+> > Christian.
+>
+> I think there may be more than one error here. The loss of the GPU (with =
+SMU respone log message) may be caused
+> by faulty hardware but does not cause "the" crash (i.e. the crash which s=
+howed no log messages and was so hard
+> one of my nvme devices was missing temporarily afterward, and which cause=
+d me to investigate this in the first place ...).
+>
+> As bisection of the crash is impossible I went back to inserting printk()=
+s into acpi_power_transition() and the
+> functions called by it. To reduce log spam I created _debug suffixed copi=
+es of the original functions.
+> The code is found here in branch amdgpu_suspend_resume:
+> https://gitlab.freedesktop.org/spasswolf/linux-stable/-/commits/amdgpu_su=
+spend_resume?ref_type=3Dheads
+> (Should I post the debug patches to the list?)
+>
+> The last two commits finally cleared up what happens (but I've yet to fin=
+d out why this happens).
+>
+> 6.14.0-debug-00014-g2e933c56f3b6        booted 20:17, 15.11.2025 crashed =
+0:50, 16.11.2025
+>                                         (~4.5h, 518 GPP0 events, 393 GPU =
+resumes)
+>
+> The interesting part of the instrumented code is this:
+>
+> acpi_status acpi_ps_parse_aml_debug(struct acpi_walk_state *walk_state)
+> {
+>         [...]
+>         printk(KERN_INFO "%s: before walk loop\n", __func__);
+>         while (walk_state) {
+>                 if (ACPI_SUCCESS(status)) {
+>                         /*
+>                          * The parse_loop executes AML until the method t=
+erminates
+>                          * or calls another method.
+>                          */
+>                         status =3D acpi_ps_parse_loop(walk_state);
+>                 }
+>         [...]
+>         }
+>         printk(KERN_INFO "%s: after walk loop\n", __func__);
+>         [...]
+> }
+>
+> This gives the following message in netconsole
+> 1. No crash:
+> 2025-11-16T00:50:35.634745+01:00 10.0.0.1 6,21514,16419759755,-,caller=3D=
+T59901;acpi_ps_execute_method_debug 329
+> 2025-11-16T00:50:35.634745+01:00 10.0.0.1 6,21515,16419759781,-,caller=3D=
+T59901;acpi_ps_parse_aml_debug: before walk loop
+> 2025-11-16T00:50:35.921210+01:00 10.0.0.1 6,21516,16420046219,-,caller=3D=
+T59901;acpi_ps_parse_aml_debug: after walk loop
+> 2025-11-16T00:50:35.921210+01:00 10.0.0.1 6,21517,16420046231,-,caller=3D=
+T59901;acpi_ps_execute_method_debug 331
+> 2025-11-16T00:50:35.921210+01:00 10.0.0.1 6,21518,16420046235,-,caller=3D=
+T59901;acpi_ns_evaluate_debug 475 METHOD
+> 2025-11-16T00:50:35.921210+01:00 10.0.0.1 6,21519,16420046240,-,caller=3D=
+T59901;acpi_evaluate_object_debug 255
+> 2025-11-16T00:50:35.921210+01:00 10.0.0.1 6,21520,16420046244,-,caller=3D=
+T59901;__acpi_power_on_debug 369
+> 2025-11-16T00:50:35.921210+01:00 10.0.0.1 6,21521,16420046248,-,caller=3D=
+T59901;acpi_power_on_unlocked_debug 446
+> 2025-11-16T00:50:35.921210+01:00 10.0.0.1 6,21522,16420046251,-,caller=3D=
+T59901;acpi_power_on_debug 471
+> 2025-11-16T00:50:35.921210+01:00 10.0.0.1 6,21523,16420046255,-,caller=3D=
+T59901;acpi_power_on_list_debug 642: result =3D 0
+> Resume successful, normal messages from resuming GPU follow.
+>
+> 2. Crash:
+> 2025-11-16T00:50:46.483555+01:00 10.0.0.1 6,21566,16430609060,-,caller=3D=
+T59702;acpi_ps_execute_method_debug 329
+> 2025-11-16T00:50:46.483555+01:00 10.0.0.1 6,21567,16430609083,-,caller=3D=
+T59702;acpi_ps_parse_aml_debug: before walk loop
+> No more messages via netconsole due to crash.
+>
+> So here we can already say that the main loop in acpi_ps_parse_aml_debug(=
+) is not finishing properly.
+>
+> The next step is to put monitoring inside the loop:
+>
+> 6.14.0-debug-00015-gc09fd8dd0492        booted 12:09, 16.11.2025 crashed =
+19:55, 16.11.2025
+>                                         (~8h, 1539 GPP0 events, 587 GPU r=
+esumes) "infinite" walk loop
+>
+> The interesting part of the instrumented code is this:
+>
+> acpi_status acpi_ps_parse_aml_debug(struct acpi_walk_state *walk_state)
+> {
+>         [...]
+>         printk(KERN_INFO "%s: before walk loop\n", __func__);
+>         while (walk_state) {
+>                 if (ACPI_SUCCESS(status)) {
+>                         /*
+>                          * The parse_loop executes AML until the method t=
+erminates
+>                          * or calls another method.
+>                          */
+>                         printk(KERN_INFO "%s: before parse loop\n", __fun=
+c__);
+>                         status =3D acpi_ps_parse_loop(walk_state);
+>                         printk(KERN_INFO "%s: after parse loop\n", __func=
+__);
+>                 }
+>         [...]
+>         }
+>         printk(KERN_INFO "%s: after walk loop\n", __func__);
+>         [...]
+> }
+>
+> This gives the following message in netconsole
+> 1. No crash:
+> 2025-11-16T19:55:54.203765+01:00 localhost 6,5479352,28054924877,-,caller=
+=3DT5967;acpi_ps_execute_method_debug 329
+> 2025-11-16T19:55:54.203765+01:00 localhost 6,5479353,28054924889,-,caller=
+=3DT5967;acpi_ps_parse_aml_debug: before walk loop
+> The next two lines are repeated 1500-1700 times (it varies a little ...):
+> 2025-11-16T19:55:54.203765+01:00 localhost 6,5479354,28054924894,-,caller=
+=3DT5967;acpi_ps_parse_aml_debug: before parse loop
+> 2025-11-16T19:55:54.203765+01:00 localhost 6,5479355,28054924908,-,caller=
+=3DT5967;acpi_ps_parse_aml_debug: after parse loop
+>
+> 2025-11-16T19:55:54.498216+01:00 localhost 6,5482288,28055219778,-,caller=
+=3DT5967;acpi_ps_parse_aml_debug: after walk loop
+> 2025-11-16T19:55:54.498216+01:00 localhost 6,5482289,28055219782,-,caller=
+=3DT5967;acpi_ps_execute_method_debug 331
+> 2025-11-16T19:55:54.498233+01:00 localhost 6,5482290,28055219786,-,caller=
+=3DT5967;acpi_ns_evaluate_debug 475 METHOD
+> 2025-11-16T19:55:54.498233+01:00 localhost 6,5482291,28055219791,-,caller=
+=3DT5967;acpi_evaluate_object_debug 255
+> 2025-11-16T19:55:54.498233+01:00 localhost 6,5482292,28055219795,-,caller=
+=3DT5967;__acpi_power_on_debug 369
+> 2025-11-16T19:55:54.498247+01:00 localhost 6,5482293,28055219799,-,caller=
+=3DT5967;acpi_power_on_unlocked_debug 446
+> 2025-11-16T19:55:54.498247+01:00 localhost 6,5482294,28055219802,-,caller=
+=3DT5967;acpi_power_on_debug 471
+> 2025-11-16T19:55:54.498247+01:00 localhost 6,5482295,28055219806,-,caller=
+=3DT5967;acpi_power_on_list_debug 642: result =3D 0
+> Resume successful, normal messages from resuming GPU follow.
+>
+> 2. Crash:
+> 2025-11-16T19:56:24.213495+01:00 localhost 6,5483042,28084932950,-,caller=
+=3DT5967;acpi_ps_execute_method_debug 329
+> 2025-11-16T19:56:24.213495+01:00 localhost 6,5483043,28084932965,-,caller=
+=3DT5967;acpi_ps_parse_aml_debug: before walk loop
+> The next two lines are repeated more than 30000 times, then the transmiti=
+on stops due to the crash:
+> 2025-11-16T19:56:24.213495+01:00 localhost 6,5483044,28084932971,-,caller=
+=3DT5967;acpi_ps_parse_aml_debug: before parse loop
+> 2025-11-16T19:56:24.213495+01:00 localhost 6,5483045,28084932991,-,caller=
+=3DT5967;acpi_ps_parse_aml_debug: after parse loop
+> No more messages via netconsole due to crash.
+>
+> So there is some kind of infinite recursion happening inside the loop in =
+acpi_ps_parse_aml(). Even if there is some kind
+> of error in the hardware this shouldn't happen, I think.
+>
+> This bug is present in every kernel version I've tested so far, that is 6=
+.12.x, 6.13.x, 6.14.x,
+> 6.15.x, 6.16.x, 6.17.x (here I only tested the release candidates). 6.18 =
+has not been tested, yet.
+>
+> To get to this result took several months of 24/7 test runs, I hope resol=
+ving this will
+> be faster.
 
-I had to use write_fmt(fmt!(...)) instead of the write!(...) macro.
+Well, what you have found appears to be an issue in the AML bytecode
+interpreter which may be one of two things: (1) a bug in the
+interpreter itself or (2) a bytecode issue that causes the interpreter
+to crash (eventually) and the latter is quite a bit more likely.
 
-Alice
+I'd suggest opening a new issue at
+https://github.com/acpica/acpica/issues and attaching the acpidump
+output from the affected system, to start with.
 

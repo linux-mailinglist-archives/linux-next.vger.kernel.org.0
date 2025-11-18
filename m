@@ -1,149 +1,148 @@
-Return-Path: <linux-next+bounces-9073-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9074-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id B12B6C681F7
-	for <lists+linux-next@lfdr.de>; Tue, 18 Nov 2025 09:07:45 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB778C698A4
+	for <lists+linux-next@lfdr.de>; Tue, 18 Nov 2025 14:08:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C21B23462FF
-	for <lists+linux-next@lfdr.de>; Tue, 18 Nov 2025 08:02:40 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B8C124F24B2
+	for <lists+linux-next@lfdr.de>; Tue, 18 Nov 2025 13:05:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE5B22DFF04;
-	Tue, 18 Nov 2025 08:02:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 554BF306D3D;
+	Tue, 18 Nov 2025 13:05:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MOsD3t3q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B9IZiJSd"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3352D46DD;
-	Tue, 18 Nov 2025 08:02:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ADE32FFDEC;
+	Tue, 18 Nov 2025 13:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763452956; cv=none; b=iogxTnjZovB7exhd8pkmd3nK91mFkAVUDFzFYzKk7S6KZd+3p1UOb0PizaxWPZKI2mLOpFea/ZyvK4dYG/A/a2cbndaePMgt9RKGaA9dwJB3GajXcSWZKzXbfwkzpYs7DaFJSRoLAiEgHHpQn+7CcgCzGECgdPpmsVqtevEp1nM=
+	t=1763471107; cv=none; b=u3KBzeUhVuQxp5Nsd1uiUs+wh3Qvw2byAk8kjGhvZhNtkA9SfTv7Rc6bwwP69FN7RF5TztRTRJArFuDW8kdQywFhXajRjdl5p/a9jUX6mUh5XemaiYd8ZkcuydNAVSP6upJ5uo29dKQTzVILdjjIDA7wWcpk2xLw7GZJY8L8XJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763452956; c=relaxed/simple;
-	bh=Q6bFOnhq9NWylKybWK6vGSIGqH6vYwGhfhS+LX0VLx4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=lbZP6b4xHj3WAh1lDqICgGKmOTwm07gSngBPBCjLJ55RBGjdGWYCxiaaEwSPsbDuRlRZRzLx0toENUkMo4LJ3t+CrzzS4BNIGJqnYZCevOsKqfzPZ98pKSLezQECNq25u+i8Vwk9e/P43fXeCUOztu+NMTwxt6xQctUsd3XmjBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MOsD3t3q; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AHKgKSb000525;
-	Tue, 18 Nov 2025 08:02:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=ryf7Mh
-	F/i0lsWOB5R0WjJ9ezYU0j/DrJ5rtmwrfocFw=; b=MOsD3t3qtzVaArxFTZvAI9
-	gc8OmP1u6rZFtjaKUs+Kal9lwUOc3/oahXBAdicka5mFLVFDZnGiZQbKWbBF3yxv
-	oSbOG10DdETa+vj9qPnE7HDq0qix0rkJ+wWfEv0tzQO/8gXkN3rCmqqpH4vh1/dE
-	cJ/MvdDu7EnpzgBmjVuXD4WXtzb8vWVBdqomGyJwom49mSDIocwdb9O34AYJ6PS1
-	SSB8e2HtXDQkDxl/fBf6LxGVnwt+Ir/t0WPvE9fLTAkSUFUq5raxkK+SAUwWOkvM
-	s4MGQf+IzBgnFTqo+hVvdVb7v9z0PLZipKCi7+m+2E4VbkA2NQgjTwPqNaMdDwkA
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejjtsfe5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Nov 2025 08:02:23 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AI4RqPF017326;
-	Tue, 18 Nov 2025 08:02:22 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4af6j1hrn6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Nov 2025 08:02:22 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AI82LjE58786134
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 18 Nov 2025 08:02:21 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7A98F58123;
-	Tue, 18 Nov 2025 08:02:21 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BD29E58124;
-	Tue, 18 Nov 2025 08:02:20 +0000 (GMT)
-Received: from [9.155.203.176] (unknown [9.155.203.176])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTPS;
-	Tue, 18 Nov 2025 08:02:20 +0000 (GMT)
-Message-ID: <19cda4f5-a201-4133-9ef6-ee5bf44b0f8a@linux.ibm.com>
-Date: Tue, 18 Nov 2025 09:02:19 +0100
+	s=arc-20240116; t=1763471107; c=relaxed/simple;
+	bh=VKX8ltzch9Q5vZ1SWMb61T9KplseCWx1MK4WpjDisR8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sFFZ0Ie+vZ7QQLOEVFSoxqJF5Y4Byqm+TBquii1DeQR2ivYs+Aoi1nIailwLvTOVV2jWk869A3vvwb7sMEuIild2c6T5UUsvk3oJPScfbnp662xNKuQa2S15YbqkkofBfby4tMK/Fcgcc6KTCx3ncHwcd7hnwdZShK0ZCdEufsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B9IZiJSd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BDE2C4CEF5;
+	Tue, 18 Nov 2025 13:05:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763471106;
+	bh=VKX8ltzch9Q5vZ1SWMb61T9KplseCWx1MK4WpjDisR8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=B9IZiJSde4vWexhGKkOxOLtTfI+3hb9b0yfsxZAaeviomAT+VbLuCz8malOXBxJ8h
+	 Akd3Ernkt23PanuJXSfq+ynZY7hViKzBhBK19QUvTZZmnx8URiAflMIsRY+COUMRe8
+	 kxnjNs6CX0XhI+0+I6HXPIsaKVMzUTk3i4A+3P2yPbPkQyD7PfbJoe/F13NJYfhomX
+	 qx/NMjdHBTmjms4uiE8FJvuL7JvgRHHJm5LCLQyOcOU/iC3jgNjPIbK8aHamDFSssV
+	 9IbqifOOp/8yMySexxOoesO8QHureQN7moYrJDLfMGxlkYZrvNeDL6+FsnPjzzTv2r
+	 6M1XoXzeDs+GA==
+Date: Tue, 18 Nov 2025 14:05:03 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: linux-next: manual merge of the rcu tree with the ftrace tree
+Message-ID: <aRxu_ycww5U9qxJR@localhost.localdomain>
+References: <20251114135226.64831207@canb.auug.org.au>
+ <20251114074255.3e535084@gandalf.local.home>
+ <aRdBVFSmgvPWuY2k@localhost.localdomain>
+ <054ceff1-87b7-4729-8589-b7dd22887bc1@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: samples/bpf build error: no member named 'ns_id' in
- struct ns_common
-From: Mikhail Zaslonko <zaslonko@linux.ibm.com>
-To: bpf@vger.kernel.org
-Cc: linux-next@vger.kernel.org, Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Christian Brauner <brauner@kernel.org>
-References: <9a8eaa37-698d-41ff-a6f8-287b685d7f78@linux.ibm.com>
-Content-Language: en-US
-In-Reply-To: <9a8eaa37-698d-41ff-a6f8-287b685d7f78@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: i0kgmCPdGQvbqJWNifTKbkL7XL7Lzq8X
-X-Proofpoint-ORIG-GUID: i0kgmCPdGQvbqJWNifTKbkL7XL7Lzq8X
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfX0ycPIv9Nqy0p
- 2/KbnDV6roN+mnHFulkVXlzgEIbdM+jqBAT0EV0/koD9iMkW/usUIgICFMBA8O1n4Shmp7YfN3Q
- JTHcrikfmzmY0z5eBCHxPWyBYKIC5qYnIpW9FqiKLkDmg1UauNOC/KF0kYER5YWJsv2uoEsprAi
- v5UnZMOuD1bnn0dbFjZ2RPEJgsMl8N1gdxXli6wAVPk3NjvraCa6TX2TG9iWTrwz18uh1vgI0p0
- ntVUSxdNK4lsOMt6l3iWDhidoU+UePRbdWGVAftUnHfpi4ZOOAc0aF86jafqOFq9xyEdGQodRb4
- /3Johu1ieHvey0+NjSrBdYe2uR/0dpSNReMkHSlR/OzZDl+PDDrwZ4a5BFHRMrBDGZ2pWbWaGk7
- WrZ3YulucGuVUFvBlB0qGpgG6n/teA==
-X-Authority-Analysis: v=2.4 cv=SvOdKfO0 c=1 sm=1 tr=0 ts=691c280f cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=qbmNozvd1ZgaVv0vuk0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=HhbK4dLum7pmb74im6QT:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-17_04,2025-11-13_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 clxscore=1015
- suspectscore=0 phishscore=0 adultscore=0 bulkscore=0 impostorscore=0
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510240000
- definitions=main-2511150032
+In-Reply-To: <054ceff1-87b7-4729-8589-b7dd22887bc1@paulmck-laptop>
 
+Le Fri, Nov 14, 2025 at 09:06:29AM -0800, Paul E. McKenney a écrit :
+> On Fri, Nov 14, 2025 at 03:48:52PM +0100, Frederic Weisbecker wrote:
+> > Le Fri, Nov 14, 2025 at 07:42:55AM -0500, Steven Rostedt a écrit :
+> > > On Fri, 14 Nov 2025 13:52:26 +1100
+> > > Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > 
+> > > > Hi all,
+> > > > 
+> > > > Today's linux-next merge of the rcu tree got a conflict in:
+> > > > 
+> > > >   kernel/trace/trace_syscalls.c
+> > > > 
+> > > > between commit:
+> > > > 
+> > > >   a544d9a66bdf ("tracing: Have syscall trace events read user space string")
+> > > > 
+> > > > from the ftrace tree and commit:
+> > > > 
+> > > >   35587dbc58dd ("tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_CALL() with SRCU-fast")
+> > > > 
+> > > > from the rcu tree.
+> > > > 
+> > > > I fixed it up (Maybe - see below) and can carry the fix as necessary. This
+> > > > is now fixed as far as linux-next is concerned, but any non trivial
+> > > > conflicts should be mentioned to your upstream maintainer when your tree
+> > > > is submitted for merging.  You may also want to consider cooperating
+> > > > with the maintainer of the conflicting tree to minimise any particularly
+> > > > complex conflicts.
+> > > 
+> > > Thanks for the update.
+> > > 
+> > > > 
+> > > 
+> > > > diff --cc kernel/trace/trace_syscalls.c
+> > > > index e96d0063cbcf,3f699b198c56..000000000000
+> > > > --- a/kernel/trace/trace_syscalls.c
+> > > > +++ b/kernel/trace/trace_syscalls.c
+> > > > @@@ -878,6 -322,8 +890,7 @@@ static void ftrace_syscall_enter(void *
+> > > >   	 * buffer and per-cpu data require preemption to be disabled.
+> > > >   	 */
+> > > >   	might_fault();
+> > > > + 	preempt_rt_guard();
+> > > >  -	guard(preempt_notrace)();
+> > > 
+> > > My code made it so that preemption is not needed here but is moved later
+> > > down for the logic that does the reading of user space data.
+> > > 
+> > > Note, it must have preemption disabled for all configs (including RT).
+> > > Otherwise, the data it has can get corrupted.
+> > > 
+> > > Paul, can you change it so that you *do not* touch this file?
+> > 
+> > Ok, I've zapped the commit for now until we sort this out.
+> 
+> Thank you, Frederic, and I guess putting this in -next did indeed find
+> some problems, so that is good?  ;-)
 
+Indeed, mission accomplished ;-)
 
-On 11/17/2025 10:19 PM, Mikhail Zaslonko wrote:
-> Hi,
-> 
-> Iâ€™m observing build errors in samples/bpf on linux-next.
-> 
->   - linux-next snapshot: next-20251117 
->   - Architecture: s390x
->   - Compiler: clang version 20.1.8
-> 
-> Numerous errors of the following type:
-> 
-> In file included from lathist_kern.c:9:
-> In file included from /root/linux-next/include/linux/ptrace.h:10:
-> In file included from /root/linux-next/include/linux/pid_namespace.h:11:
-> /root/linux-next/include/linux/ns_common.h:25:23: error: no member named 'ns_id' in 'struct ns_common'
->    25 |         VFS_WARN_ON_ONCE(ns->ns_id == 0);
->       |                          ~~  ^
-> 
-> Appears to be a mismatch between kernel headers and bpf. 
-> On next-20251111 no errors of this type took place.
-> 
-> I figured out the following patch series is likely the cause:
-> https://lore.kernel.org/all/20251109-namespace-6-19-fixes-v1-0-ae8a4ad5a3b3@kernel.org/
+Steve proposed here to actually restore the patch:
 
-Sorry, wrong link. Here is the related patch-series:
-https://lore.kernel.org/all/20251110-work-namespace-nstree-fixes-v1-0-e8a9264e0fb9@kernel.org/
+    https://lore.kernel.org/lkml/20251114110136.3d36deca@gandalf.local.home/
 
-> 
-> Thanks,
-> Mikhail Zaslonko
+But later said the reverse:
 
+    https://lore.kernel.org/lkml/20251114121141.5e40428d@gandalf.local.home/
+
+So for now I'm still keeping it outside -next. I hope it is not a necessary
+change in your srcu series?
+
+Thanks.
+
+-- 
+Frederic Weisbecker
+SUSE Labs
 

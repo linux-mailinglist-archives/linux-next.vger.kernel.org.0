@@ -1,230 +1,240 @@
-Return-Path: <linux-next+bounces-9068-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9069-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ACACC6749A
-	for <lists+linux-next@lfdr.de>; Tue, 18 Nov 2025 05:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 66D8AC67C12
+	for <lists+linux-next@lfdr.de>; Tue, 18 Nov 2025 07:40:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4FAEB4E1B56
-	for <lists+linux-next@lfdr.de>; Tue, 18 Nov 2025 04:42:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0FC174E069F
+	for <lists+linux-next@lfdr.de>; Tue, 18 Nov 2025 06:40:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 684F7296BBB;
-	Tue, 18 Nov 2025 04:42:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 828292EA15B;
+	Tue, 18 Nov 2025 06:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ilLhvtZI"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BXSvqwPW"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A765629E10C;
-	Tue, 18 Nov 2025 04:42:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63932BE646;
+	Tue, 18 Nov 2025 06:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763440936; cv=none; b=hYYW1uIAwbYityfRpwXeNhHNP3V67HOTb8WlOctf++mSRBb+Ra7Y7Nhb3K+1iSLlw5Zuxwb6Weo0tgi9026vwtEF/lgYOhA2S5jP3NVmX0IBat/7TE/PeApqizYOG8No7FmrG5w0ZXB6h++99Lwu5zWFEpl/WS5YMhwczQMXuTI=
+	t=1763448033; cv=none; b=CMaen8Gj56NhunFMmvQrhUiuFc2fa0VieAQJbIAQWKAloRevimCLRGcnNlTQ0Soc3KOHchEZyel4GdauOaNZS4kTNa1+Q3w0de7r0goT0w0JZQ5iQK/+NARbOgHJ+tHqV7ejPnnhafw1QWoblPeBCOLvDY6jvQbskRkp8JADLAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763440936; c=relaxed/simple;
-	bh=2sLWAmGCVEjs6fFb/t61jUqvCI8T1tt1YSiC1qRJNoA=;
-	h=MIME-Version:Date:From:To:Cc:Subject:Message-ID:Content-Type; b=Aemft4/CU4+XTcr6EKefHA9CgmhOgKoaocduHRVxF+TG7yghP8KaM2xvbDsz5W1eGg7PdoXzQ32XvTFAqD0mYNpSMuy4kL7UZ54V9R/39ZUv2LhtqvCWqOA3WE7e6kf2rNDap4zK4N2jE4cQFaForpLpDV/evCqOBafQM0r2ucs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ilLhvtZI; arc=none smtp.client-ip=148.163.158.5
+	s=arc-20240116; t=1763448033; c=relaxed/simple;
+	bh=gzeBotJ6D4UJpKOtjG9nVvjzEHHWVz0SO+ju7Krs2yE=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=IZREkM3yEvjraXh8mrEbwAkXVYjlD6R0Vaye5N/IrL+2ikbfC2MDkA0OsHYL71UXscXZE7Fhep4qsxVHVY7aTMmDxjAmYWTfJH5Qg5Uc+l3kT35MYtk5ha6auZ6L8AOkhjftJX0F5o71SLTQhNNwJ/sUz+DrILr/Zg0PHJgJDCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BXSvqwPW; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AHFV2qd019708;
-	Tue, 18 Nov 2025 04:42:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pp1; bh=nRFhvq2Uz4NA8JO4R785yYCp5GN2
-	GZ3XDrcXeOP+C1o=; b=ilLhvtZI3yN55Daa9evGhhYcZHd8smX7BqL9S8hrQFYk
-	7S74jOfi73w/cZt6ag53f0emBsWk0Q+QKvU940ky8orkhGrjRYH81ZKa/naHgJhs
-	SDTH1WUItX5quVYkbDv0SWNC52krgUiWATcLeMxrhev/7TeR3UaiK4CDS17YffQT
-	QJRuab4UDdvfZSzkCz78y/Tb6sLLkqW30f3aaqISHgo3/2a/xP9kRcO4/0ka+G1k
-	rO4TbfHK/yK06VQMm9m3qHLf3B4k4KCwHzycrwX6MQ036JO+5irmfssTrV+JZ+b6
-	xYZpiFVyS37O8vm7LVVbU8tWVbgTkvdAtXVsAZxKfw==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejgwruyf-1
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AI53bM6027087;
+	Tue, 18 Nov 2025 06:40:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pp1; bh=9IlkI1y1WEwhFaVvRpdmQND2wvhz
+	A4JwHQLoOjbhsCA=; b=BXSvqwPWJQwlZ1VG3ab+Yu22A2o+CW1qK4GXE68U4Wiz
+	/Ty5RplEXFtCSJvhgRb709VFgLBy78mu5auVvpgrQGW9QWBgKvrQvnqCYg80pimF
+	zLtRPcpmPZuNNdDRedrOtHRwrsMqbfO2Fd5GwADzlpNeWOh15cOeuym/de8jsVwn
+	Tjzc27Rxh47oUAgbnBVdkH0u1BWtbuRLn4BNuGE1c27Ajk2dqLqHkrQDScJhxVuZ
+	4rP055FoOgnaEqSB+3ijkdvelJyb4KM0dDmxUW1Jq8IKefoWwS5YZzabZnH51CFJ
+	ntaVWfHZ/ecLImnQztRFbIfB0thpShek5m5GiHjL8g==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejk9scpb-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Nov 2025 04:42:05 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AI1NdLC010419;
-	Tue, 18 Nov 2025 04:42:04 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4af3us1gfd-1
+	Tue, 18 Nov 2025 06:40:15 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AI32Jqh005137;
+	Tue, 18 Nov 2025 06:40:14 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4af5bk1qpn-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 18 Nov 2025 04:42:04 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AI4fn2A27132500
+	Tue, 18 Nov 2025 06:40:13 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AI6eCQg11076298
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 18 Nov 2025 04:41:49 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 79EA158055;
-	Tue, 18 Nov 2025 04:42:03 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E606F5804B;
-	Tue, 18 Nov 2025 04:42:02 +0000 (GMT)
-Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 18 Nov 2025 04:42:02 +0000 (GMT)
+	Tue, 18 Nov 2025 06:40:12 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 550C558061;
+	Tue, 18 Nov 2025 06:40:12 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 842D858059;
+	Tue, 18 Nov 2025 06:40:09 +0000 (GMT)
+Received: from [9.98.109.80] (unknown [9.98.109.80])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 18 Nov 2025 06:40:09 +0000 (GMT)
+Message-ID: <5ef3eb20-d1db-41d0-83cf-4a78439e4a3c@linux.ibm.com>
+Date: Tue, 18 Nov 2025 12:10:07 +0530
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 18 Nov 2025 10:12:02 +0530
-From: Misbah Anjum N <misanjum@linux.ibm.com>
-To: linux-next@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [REGRESSION] [next-20251117] ppc64le: WARNING in vmalloc_fix_flags
- with __GFP_ACCOUNT in BPF/seccomp path
-Message-ID: <dbe42ce9543dbc3af95f95d6a6d9540b@linux.ibm.com>
-X-Sender: misanjum@linux.ibm.com
-Organization: IBM
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: LKML <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Ingo Molnar <mingo@kernel.org>,
+        Shrikanth Hegde <sshegde@linux.ibm.com>
+From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Subject: [linux-next20251118] BUG: Kernel NULL pointer dereference
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: dl3jukZaATzcvyZbsrEt5xz6YXoakvzG
-X-Authority-Analysis: v=2.4 cv=YqwChoYX c=1 sm=1 tr=0 ts=691bf91d cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=kj9zAlcOel0A:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VnNF1IyMAAAA:8 a=eDBbsAWTgkdve4Kpa_YA:9 a=CjuIK1q_8ugA:10
- a=HhbK4dLum7pmb74im6QT:22 a=cPQSjfK2_nFv0Q5t_7PE:22 a=pHzHmUro8NiASowvMSCR:22
- a=Ew2E2A-JSTLzCXPT_086:22
-X-Proofpoint-ORIG-GUID: dl3jukZaATzcvyZbsrEt5xz6YXoakvzG
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfX64yia7Fiuaql
- EWJIRt/dqFz0YVbI7vJiUa7wAgeZLr0WJY7g5gdDJ15f7doSh2PF/L84JjWRv6W8kb6aIhkbjNT
- FOO8ZE4aschFbZA4vUUa/O9eXQFyw2L7Fh9QhlgrB8Y5p3C4yNeA9mxNd96HJnZzd0jDnl4gPCZ
- l1A0waUMoy0PplYoy3uF7oJaypN8+2k7tCOA0TtG7ZbHNIS9wM7b/128BcRoY1VlHKuALmGvqzj
- qag7OQ9vN0Xszg92OjJL0OW46pexRdBvl0jGdaWz3TUMtoNq29rbC+ljfr72laOCS7nUfyF+FlA
- gzCu8i1p56UiY1TRoe9rtxzHLAnHl4w9GamC5VHRWnr50Std5j8jaaj04k78kN4PYlwwmJh7kwP
- p/1AcUkQg6wyi1mQMuR6rhb7j1UQ1A==
+X-Proofpoint-GUID: gigNVgdsrhRWfJHKnCYP1lmyKx1WPT9d
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfX5jxGJyEghP0n
+ JTKrQJBkFV8+3tX5bXTt/+46ToUGj8zNSKQicZkiNczUedY2EcO3iOAFlYc8hys6srcvY0ySqOv
+ B3ZLddv64SxfJSrCjjg87qKmo7CLfawFYkCqTb9FFezT5pxM8GcTumepcblSv4MB52Tkrofn0wc
+ rSQSrxw/O51HgjIQZzG51BaPnQvHvf3boxuYyKjGPKRSKG7LBQLyH0f+pyXsnerj79eKbr8m3Xi
+ sRxC0O2HcICqkIW6G4pJPYev1f2wni9RlYqkiPj+tldhVf709cSc9FClksdJ3XgKccXO5LlRW6N
+ I7dQTXdtr+/QPixOdJuAP5k0D6UKQaTa73sJJGyYZkjlgf8PN7r58gAW+K8iM2tCFLX9Qy5Bfjr
+ g/UDHWgltXwoEtxD7qamdrxls55jVg==
+X-Proofpoint-ORIG-GUID: gigNVgdsrhRWfJHKnCYP1lmyKx1WPT9d
+X-Authority-Analysis: v=2.4 cv=XtL3+FF9 c=1 sm=1 tr=0 ts=691c14cf cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VnNF1IyMAAAA:8 a=r7MKod_UI1lkIC2NXqAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-11-17_04,2025-11-13_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 malwarescore=0
- clxscore=1011 adultscore=0 bulkscore=0 phishscore=0 spamscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2510240000
- definitions=main-2511150032
+ clxscore=1015 spamscore=0 bulkscore=0 priorityscore=1501 impostorscore=0
+ adultscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511150032
 
-Hi,
+Greetings!!
 
-I'm reporting a regression in linux-next that was introduced between 
-20251114 and 20251117.
 
-Regression Info:
-- Working: 6.18.0-rc5-next-20251114
-- Broken: 6.18.0-rc6-next-20251117
+IBM CI has reported a boot crash while booting with linux-next2025118 
+kernel.
 
-Environment:
-- IBM Power11 pSeries (ppc64le)
-- Fedora43 Distro
 
-Issue:
-WARNING: mm/vmalloc.c:3937 at vmalloc_fix_flags+0x6c/0xa0
-"Unexpected gfp: 0x400000 (__GFP_ACCOUNT). Fixing up to gfp: 0xdc0 
-(GFP_KERNEL|__GFP_ZERO). Fix your code!"
+Traces:
 
-Call Trace:
-[  523.921345] Unexpected gfp: 0x400000 (__GFP_ACCOUNT). Fixing up to 
-gfp: 0xdc0 (GFP_KERNEL|__GFP_ZERO). Fix your code!
-[  523.921356] WARNING: mm/vmalloc.c:3937 at 
-vmalloc_fix_flags+0x6c/0xa0, CPU#69: (ostnamed)/6500
-[  523.921365] Modules linked in: rpcrdma rdma_cm iw_cm ib_cm ib_core 
-kvm_hv kvm bonding rfkill binfmt_misc pseries_rng vmx_crypto nfsd 
-auth_rpcgss drm nfs_acl lockd grace loop drm_panel_orientation_quirks 
-vsock_loopback vmw_vsock_virtio_transport_common vsock zram ext4 crc16 
-mbcache jbd2 sr_mod sd_mod cdrom ibmvscsi ibmveth scsi_transport_srp 
-btrfs blake2b libblake2b xor raid6_pq zstd_compress sunrpc dm_mirror 
-dm_region_hash dm_log be2iscsi bnx2i cnic uio cxgb4i cxgb4 tls libcxgbi 
-libcxgb qla4xxx iscsi_boot_sysfs iscsi_tcp libiscsi_tcp libiscsi 
-scsi_transport_iscsi i2c_dev dm_multipath fuse dm_mod nfnetlink
-[  523.921485] CPU: 69 UID: 0 PID: 6500 Comm: (ostnamed) Kdump: loaded 
-Tainted: G        W           6.18.0-rc6-next-20251117 #1 VOLUNTARY
-[  523.921504] Tainted: [W]=WARN
-[  523.921511] Hardware name: IBM,9824-42A Power11 (architected) 
-0x820200 0xf000007 of:IBM,FW1110.00 (RB1110_082) hv:phyp pSeries
-[  523.921523] NIP:  c00000000063f8fc LR: c00000000063f8f8 CTR: 
-00000000005d7e44
-[  523.921537] REGS: c0000001ad0f78e0 TRAP: 0700   Tainted: G        W   
-          (6.18.0-rc6-next-20251117)
-[  523.921544] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 
-2824222f  XER: 0000000a
-[  523.921564] CFAR: c00000000023225c IRQMASK: 0
-[  523.921564] GPR00: c00000000063f8f8 c0000001ad0f7b80 c0000000017f8100 
-0000000000000069
-[  523.921564] GPR04: 00000000ffff7fff c0000001ad0f7970 00000027f9c50000 
+
+[    0.116026] audit: type=2000 audit(1763602256.110:1): 
+state=initialized audit_enabled=0 res=1
+[    0.116282] thermal_sys: Registered thermal governor 'fair_share'
+[    0.116284] thermal_sys: Registered thermal governor 'step_wise'
+[    0.120228] BUG: Kernel NULL pointer dereference at 0x00000000
+[    0.120236] Faulting instruction address: 0xc0000000002b08a4
+[    0.120241] Oops: Kernel access of bad area, sig: 11 [#3]
+[    0.120245] LE PAGE_SIZE=64K MMU=Hash  SMP NR_CPUS=8192 NUMA pSeries
+[    0.120252] Modules linked in:
+[    0.120257] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Tainted: G   D      
+        6.18.0-rc6-next-20251118 #1 VOLUNTARY
+[    0.120265] Tainted: [D]=DIE
+[    0.120268] Hardware name: IBM,8375-42A POWER9 (architected) 0x4e0202 
+0xf000005 of:IBM,FW950.80 (VL950_131) hv:phyp pSeries
+[    0.120273] NIP:  c0000000002b08a4 LR: c0000000002b04a4 CTR: 
+0000000000000000
+[    0.120278] REGS: c0000009fffffaa0 TRAP: 0380   Tainted: G D          
+     (6.18.0-rc6-next-20251118)
+[    0.120284] MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 
+48002828  XER: 20040006
+[    0.120296] CFAR: c0000000002b04bc IRQMASK: 0
+[    0.120296] GPR00: c0000000002b04a4 c0000009fffffd40 c000000001e58100 
 0000000000000001
-[  523.921564] GPR08: 0000000000000027 0000000000000000 0000000000000000 
-0000000000000003
-[  523.921564] GPR12: c0000000028fe748 c0000027fde3c300 0000000000000000 
-0000000000000000
-[  523.921564] GPR16: 0000000000000000 0000000000000000 0000000000000000 
-0000000000000000
-[  523.921564] GPR20: 0000000000000000 0000000000000000 0000000000000000 
-0000000000000000
-[  523.921564] GPR24: c000000001711608 0000000000000000 0000000000000000 
-c0000001270c7858
-[  523.921564] GPR28: 0000000000000000 0000000000000dc0 0000000000010000 
-0000000000400000
-[  523.921626] NIP [c00000000063f8fc] vmalloc_fix_flags+0x6c/0xa0
-[  523.921631] LR [c00000000063f8f8] vmalloc_fix_flags+0x68/0xa0
-[  523.921636] Call Trace:
-[  523.921639] [c0000001ad0f7b80] [c00000000063f8f8] 
-vmalloc_fix_flags+0x68/0xa0 (unreliable)
-[  523.921646] [c0000001ad0f7c00] [c00000000064a7a0] 
-__vmalloc_noprof+0x90/0xa0
-[  523.921653] [c0000001ad0f7c80] [c0000000004addf4] 
-bpf_prog_alloc_no_stats+0x54/0x270
-[  523.921660] [c0000001ad0f7cd0] [c0000000004ae03c] 
-bpf_prog_alloc+0x2c/0x130
-[  523.921665] [c0000001ad0f7d10] [c000000000f39d24] 
-bpf_prog_create_from_user+0x74/0x180
-[  523.921673] [c0000001ad0f7d80] [c0000000003f2400] 
-seccomp_set_mode_filter+0x1e0/0x790
-[  523.921690] [c0000001ad0f7e10] [c000000000033758] 
-system_call_exception+0x128/0x310
-[  523.921701] [c0000001ad0f7e50] [c00000000000d05c] 
-system_call_vectored_common+0x15c/0x2ec
-[  523.921716] ---- interrupt: 3000 at 0x7fffa8750d3c
-[  523.921725] NIP:  00007fffa8750d3c LR: 00007fffa8750d3c CTR: 
-0000000000000000
-[  523.921737] REGS: c0000001ad0f7e80 TRAP: 3000   Tainted: G        W   
-          (6.18.0-rc6-next-20251117)
-[  523.921750] MSR:  800000000280f033 
-<SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 44244224  XER: 00000000
-[  523.921775] IRQMASK: 0
-[  523.921775] GPR00: 0000000000000166 00007fffeec77650 00007fffa8837c00 
+[    0.120296] GPR04: c000000002d68100 0000000000000007 0000000000000000 
 0000000000000001
-[  523.921775] GPR04: 0000000000000000 00000001524c2af0 0000000000000000 
+[    0.120296] GPR08: c000000005331e78 0000000000000400 c000000002d68100 
 0000000000000000
-[  523.921775] GPR08: 0000000040000000 0000000000000000 0000000000000000 
+[    0.120296] GPR12: 0000000000000000 c000000002f90000 0000000000000000 
+c0000009fffffe94
+[    0.120296] GPR16: 0000000000000000 c000000002cadb00 0000000000000000 
+c000000003675e00
+[    0.120296] GPR20: 0000000000000000 0000000000000000 0000000000000001 
+00000000ffff8add
+[    0.120296] GPR24: 0000000000000001 c00000000cacaa00 c000000002c72b00 
 0000000000000000
-[  523.921775] GPR12: 0000000000000000 00007fffa9571520 00007fffeec77a90 
-000000013fa85300
-[  523.921775] GPR16: 0000000000000001 0000000000000000 000000013fa8a610 
-0000000000000093
-[  523.921775] GPR20: 000000007fff0000 000000013face248 0000000152102d28 
-000000007ffffffe
-[  523.921775] GPR24: 0000000000050026 0000000000050001 0000000000000092 
-00000001524c4e30
-[  523.921775] GPR28: 000000013fae0088 00000000c0000015 0000000000000000 
-00000001524c4e30
-[  523.921835] NIP [00007fffa8750d3c] 0x7fffa8750d3c
-[  523.921841] LR [00007fffa8750d3c] 0x7fffa8750d3c
-[  523.921850] ---- interrupt: 3000
-[  523.921857] Code: 79440020 79260020 38e1006c 38a10074 9101006c 
-e90d0c78 f9010078 39000000 91410074 9121006c 4bbf2885 60000000 
-<0fe00000> e9410078 e92d0c78 7d4a4a79
-[  523.921882] ---[ end trace 0000000000000000 ]---
+[    0.120296] GPR28: c0000009fffffdb8 0000000000000000 c0000009e941b800 
+c0000009e941b800
+[    0.120353] NIP [c0000000002b08a4] sched_balance_rq+0x504/0x8b0
+[    0.120361] LR [c0000000002b04a4] sched_balance_rq+0x104/0x8b0
+[    0.120367] Call Trace:
+[    0.120370] [c0000009fffffd40] [c0000000002b04a4] 
+sched_balance_rq+0x104/0x8b0 (unreliable)
+[    0.120379] [c0000009fffffe60] [c0000000002b1928] 
+sched_balance_domains+0x298/0x3f0
+[    0.120386] [c0000009ffffff00] [c00000000023d8d8] 
+handle_softirqs+0x138/0x400
+[    0.120394] [c0000009ffffffe0] [c000000000017da8] 
+do_softirq_own_stack+0x38/0x50
+[    0.120402] [c000000002c2fa20] [c00000000023cfe8] 
+__irq_exit_rcu+0x198/0x1c0
+[    0.120408] [c000000002c2fa50] [c00000000023e0ec] irq_exit+0x1c/0x40
+[    0.120415] [c000000002c2fa70] [c00000000002a7e8] 
+timer_interrupt+0x178/0x310
+[    0.120421] [c000000002c2fad0] [c000000000009ffc] 
+decrementer_common_virt+0x28c/0x290
+[    0.120428] ---- interrupt: 900 at plpar_hcall_norets_notrace+0x18/0x2c
+[    0.120435] NIP:  c0000000001ba998 LR: c0000000001c2584 CTR: 
+0000000000000000
+[    0.120440] REGS: c000000002c2fb00 TRAP: 0900   Tainted: G D          
+     (6.18.0-rc6-next-20251118)
+[    0.120445] MSR:  8000000002009033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 
+22000222  XER: 20040006
+[    0.120457] CFAR: 0000000000000000 IRQMASK: 0
+[    0.120457] GPR00: 0000000000000000 c000000002c2fda0 c000000001e58100 
+0000000000000000
+[    0.120457] GPR04: 000000000000ffff 0000000000000000 0000000000000000 
+0000000000000000
+[    0.120457] GPR08: 0000000000000000 0000000000000000 80000000791afc00 
+ffffffffffffffff
+[    0.120457] GPR12: 0000000000000000 c000000002f90000 0000000000000000 
+0000000000000000
+[    0.120457] GPR16: 0000000000000000 0000000000000000 0000000000000000 
+0000000000000000
+[    0.120457] GPR20: 0000000000c00000 0000000000000008 0000000000000000 
+0000000000000000
+[    0.120457] GPR24: 0000000000000000 c000000000000000 c00000000a6e0000 
+000000000bde2ca0
+[    0.120457] GPR28: c000000002cad140 c0000000022418e0 c0000000022418e8 
+c0000000022418e0
+[    0.120513] NIP [c0000000001ba998] plpar_hcall_norets_notrace+0x18/0x2c
+[    0.120519] LR [c0000000001c2584] pseries_lpar_idle.part.0+0x74/0x160
+[    0.120524] ---- interrupt: 900
+[    0.120527] [c000000002c2fda0] [c000000a0036d500] 0xc000000a0036d500 
+(unreliable)
+[    0.120534] [c000000002c2fe20] [c0000000000214ac] 
+arch_cpu_idle+0x4c/0x110
+[    0.120541] [c000000002c2fe40] [c0000000013a0ca0] 
+default_idle_call+0x50/0x140
+[    0.120547] [c000000002c2fe60] [c0000000002bb6ec] 
+cpuidle_idle_call+0x1ac/0x240
+[    0.120554] [c000000002c2feb0] [c0000000002bb878] do_idle+0xf8/0x1a0
+[    0.120560] [c000000002c2fef0] [c0000000002bbba4] 
+cpu_startup_entry+0x44/0x50
+[    0.120566] [c000000002c2ff20] [c0000000000113ac] rest_init+0xec/0xf0
+[    0.120572] [c000000002c2ff50] [c0000000020054c0] do_initcalls+0x0/0x18c
+[    0.120580] [c000000002c2ffe0] [c00000000000ea9c] 
+start_here_common+0x1c/0x20
+[    0.120586] Code: eac1ffb0 eb21ffc8 eb41ffd0 eb81ffe0 ebc1fff0 
+ebe1fff8 7c0803a6 4e800020 38c00000 3d4200f1 38e00001 3c8200f1 
+<81260000> 394a1438 7d2807b4 7ca05028
+[    0.120605] ---[ end trace 0000000000000000 ]---
+[    0.120610]
+[    1.113513] Kernel panic - not syncing: Fatal exception
+[    1.122739] Rebooting in 10 seconds..
 
 
-Reported-by: Misbah Anjum N <misanjum@linux.ibm.com>
+
+If you happen to fix this issue, please add below tag.
+
+
+Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+
 
 Regards,
-Misbah Anjum N
+
+Venkat.
+
+
 

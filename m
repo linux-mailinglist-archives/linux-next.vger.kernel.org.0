@@ -1,174 +1,172 @@
-Return-Path: <linux-next+bounces-9091-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9092-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86D58C71745
-	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 00:37:50 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC0A9C7176A
+	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 00:48:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6918F4E01D6
-	for <lists+linux-next@lfdr.de>; Wed, 19 Nov 2025 23:37:49 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 0EB1E29036
+	for <lists+linux-next@lfdr.de>; Wed, 19 Nov 2025 23:48:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 941DE2F7469;
-	Wed, 19 Nov 2025 23:37:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D78B288C0E;
+	Wed, 19 Nov 2025 23:48:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="WGACwg1m"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Zpcwt6Hw"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6F82F6939;
-	Wed, 19 Nov 2025 23:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C13827D782;
+	Wed, 19 Nov 2025 23:48:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763595463; cv=none; b=QYQ7RvMZSyeS7u2HPyAFkjieHqWzGf77lM7qie9/XDoeVUEWErL0olEw7zlNcbkbrqMlo72bsi7hU+JXJv/ZEu9okNIN679hn6smXIaAph8ndAN5usAzJMiN9az1DlhY9E5WSbyoYqU63feBNLHPSHT/9N5xlRx0kfXjbPix4vw=
+	t=1763596106; cv=none; b=SLZOLXklxYGXNCB+Z8z2X/28aEIerGlSuHT5EgHhGd4sBc63Bbk02fL+PeyPSR/aqaQvc97flWf9YxMRg5Ieqz1FLBnOoqa6JPK8efKCCK5f4J4FBegpDN882bSGnuPOSXIp9iVkVOs7mEuciJPcCHDnUYPTlsBXhNO4pYjv87s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763595463; c=relaxed/simple;
-	bh=PPUMvmeyRbyatz72wFCdb+wsBeEEr8NRsUnqay2cEGM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=DN2yHfhqE8KrXplu/kJzwv2mA8QYth+kIhfrO7HjXlPNWfixHewVOanIg6Tqbt8reLjr89wWungi6UeupXgK6MmQ+lLlg/jnRocU5KLezfLf2p21Z7fkQqhPPq08z8+/UT9VkniDgm6MQWOZj6IbVSCiwRMrEVE7w2skjd/+BUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=WGACwg1m; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1763595458;
-	bh=WHRPOG8mWSclxP4E4Ocy0wDwRXSzOye2DoymlK/dEVY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=WGACwg1mGyeR9WVSD6ADm5o9ZIq3uqT6WJvs1OaLrVBihu1EKZCR1D/VhgU0ZAKeP
-	 5o2osZqjVRs4jTo+p0DbeiGbViaV2iId68oU/Mi3FjYuLMldzSAw7utGWA+/yPwf8l
-	 +Ue5lu9e6hHaU+MIHjD0Mu4TI0vFsw4RNu4hY3DKUmKLq2oYNmtIh3rf9wkhnB2TKk
-	 aapfS1GVt2KZL+kPhM73K7w2/Ja1f82vBL5O0rRkZgfCpYpf5pFFQNHCa6JaCmTVfC
-	 YbeZwDWb6h1wyb1FxRJBcogsujtvPnjrLSir4TKxcaascYABnk5Sple6oS7HNG97bu
-	 PT2v6jU/SgWdA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dBdFF6W9Pz4w9Z;
-	Thu, 20 Nov 2025 10:37:37 +1100 (AEDT)
-Date: Thu, 20 Nov 2025 10:37:37 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Conor Dooley <Conor.Dooley@microchip.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
-Cc: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, Himanshu Chauhan
- <hchauhan@ventanamicro.com>, Linux Kernel Mailing List
+	s=arc-20240116; t=1763596106; c=relaxed/simple;
+	bh=kcB10xuwy6prgtlJYijHvQZ0dP+Kci0qMXEkPYZrtX4=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=siOdxauyaUSWFW+SjQBxyncuSAu1CRjnsvgLGzDzIsJhJxB4q2M8lDOmhC48kA5YR1IZK1y8NAD/2Q6uSwFrNbcBYWY6uHpTStllxQes/0jRmS9NZlykUXnwj2qGvF1Y6SurbX15igl22xDKvBBRmt4hSJa+ZvaGurkk2iaGsE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Zpcwt6Hw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 690BBC4CEF5;
+	Wed, 19 Nov 2025 23:48:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1763596105;
+	bh=kcB10xuwy6prgtlJYijHvQZ0dP+Kci0qMXEkPYZrtX4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Zpcwt6Hw9ujzySz+pCN0W1LaT5CxFTORS5yljGKV2NMHAdF/CNAIOrNzfRSP05Rth
+	 nF6ADBSzpAB+dkbk9qQkmJmVWCeYpYxrabHmzHNjJNGoQNuHCaMrrCyD6Aw3iaUa0W
+	 HbpRMRrJRi6fvSSbh6J2lSfdTqENjUqXKCjBci3c=
+Date: Wed, 19 Nov 2025 15:48:24 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Eric Dumazet <edumazet@google.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Paul Walmsley <pjw@kernel.org>
-Subject: linux-next: manual merge of the riscv-soc tree with the risc-v tree
-Message-ID: <20251120103737.5349662e@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Wedson
+ Almeida Filho <wedsonaf@gmail.com>, Alice Ryhl <aliceryhl@google.com>
+Subject: Re: linux-next: build failure after merge of the mm-nonmm-unstable
+ tree
+Message-Id: <20251119154824.339bfbeb47d149b041f15550@linux-foundation.org>
+In-Reply-To: <20251120101440.0f41ca9b@canb.auug.org.au>
+References: <20251117102310.58ecfdb4@canb.auug.org.au>
+	<20251120101440.0f41ca9b@canb.auug.org.au>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TmPX1swXnCBICULKvoDG7pH";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/TmPX1swXnCBICULKvoDG7pH
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 
-Hi all,
+On Thu, 20 Nov 2025 10:14:40 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Today's linux-next merge of the riscv-soc tree got a conflict in:
+> Hi all,
+> 
+> On Mon, 17 Nov 2025 10:23:10 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > After merging the mm-nonmm-unstable tree, today's linux-next build
+> > (x86_64 allmodconfig) failed like this:
+> > 
+> > error[E0425]: cannot find function `rb_first` in crate `bindings`
+> >    --> rust/kernel/rbtree.rs:209:42  
+> >     |
+> > 209 |                 next: unsafe { bindings::rb_first(&self.root) },
+> >     |                                          ^^^^^^^^ not found in `bindings`
+> > 
+> > error[E0425]: cannot find function `rb_first` in crate `bindings`
+> >    --> rust/kernel/rbtree.rs:224:42  
+> >     |
+> > 224 |                 next: unsafe { bindings::rb_first(from_mut(&mut self.root)) },
+> >     |                                          ^^^^^^^^ not found in `bindings`
+> > 
+> > error[E0425]: cannot find function `rb_first` in crate `bindings`
+> >    --> rust/kernel/rbtree.rs:249:42  
+> >     |
+> > 249 |         let current = unsafe { bindings::rb_first(root) };
+> >     |                                          ^^^^^^^^ not found in `bindings`
+> > 
+> > error[E0425]: cannot find function `rb_last` in crate `bindings`
+> >      --> rust/kernel/rbtree.rs:264:42  
+> >       |
+> > 264   |         let current = unsafe { bindings::rb_last(root) };
+> >       |                                          ^^^^^^^ help: a function with a similar name exists: `sg_last`
+> >       |
+> >      ::: rust/bindings/bindings_generated.rs:90155:5
+> >       |
+> > 90155 |     pub fn sg_last(s: *mut scatterlist, arg1: ffi::c_uint) -> *mut scatterlist;
+> >       |     --------------------------------------------------------------------------- similarly named function `sg_last` defined here
+> > 
+> > error: aborting due to 4 previous errors
+> > 
+> > For more information about this error, try `rustc --explain E0425`.
+> > 
+> > Caused by commit
+> > 
+> >   84aa8c5fc414 ("rbtree: inline rb_first()")
+> > 
+> > I have reverted that commit and the following one for today.
+> 
+> I am still reverting those commits.
 
-  MAINTAINERS
+Thanks, I'll disable them for now.
 
-between commit:
+Alice, can you please help us with a fix?  Simple patch follows:
 
-  5ffe60d26107 ("drivers: firmware: add riscv SSE support")
 
-from the risc-v tree and commits:
 
-  66c6ceb41ed3 ("MAINTAINERS: rename Microchip RISC-V entry")
-  12cbb612fa1e ("MAINTAINERS: Setup support for Anlogic DR1V90 SoC tree")
+--- a/include/linux/rbtree.h~rbtree-inline-rb_first
++++ a/include/linux/rbtree.h
+@@ -43,7 +43,21 @@ extern void rb_erase(struct rb_node *, s
+ /* Find logical next and previous nodes in a tree */
+ extern struct rb_node *rb_next(const struct rb_node *);
+ extern struct rb_node *rb_prev(const struct rb_node *);
+-extern struct rb_node *rb_first(const struct rb_root *);
++
++/*
++ * This function returns the first node (in sort order) of the tree.
++ */
++static inline struct rb_node *rb_first(const struct rb_root *root)
++{
++	struct rb_node	*n;
++
++	n = root->rb_node;
++	if (!n)
++		return NULL;
++	while (n->rb_left)
++		n = n->rb_left;
++	return n;
++}
+ extern struct rb_node *rb_last(const struct rb_root *);
+ 
+ /* Postorder iteration - always visit the parent after its children */
+--- a/lib/rbtree.c~rbtree-inline-rb_first
++++ a/lib/rbtree.c
+@@ -460,22 +460,6 @@ void __rb_insert_augmented(struct rb_nod
+ }
+ EXPORT_SYMBOL(__rb_insert_augmented);
+ 
+-/*
+- * This function returns the first node (in sort order) of the tree.
+- */
+-struct rb_node *rb_first(const struct rb_root *root)
+-{
+-	struct rb_node	*n;
+-
+-	n = root->rb_node;
+-	if (!n)
+-		return NULL;
+-	while (n->rb_left)
+-		n = n->rb_left;
+-	return n;
+-}
+-EXPORT_SYMBOL(rb_first);
+-
+ struct rb_node *rb_last(const struct rb_root *root)
+ {
+ 	struct rb_node	*n;
+_
 
-from the riscv-soc tree.
-
-Please keep the MAINTAINERS entries sorted ...
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc MAINTAINERS
-index 6e1aa69db0e1,867030aef2f5..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -22124,6 -22055,6 +22124,14 @@@ F:	Documentation/devicetree/bindings/ri
-  F:	Documentation/devicetree/bindings/timer/andestech,plmt0.yaml
-  F:	arch/riscv/boot/dts/andes/
- =20
-++RISC-V ANLOGIC SoC SUPPORT
-++M:	Conor Dooley <conor@kernel.org>
-++T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
-++L:	linux-riscv@lists.infradead.org
-++S:	Odd Fixes
-++F:	Documentation/devicetree/bindings/riscv/anlogic.yaml
-++F:	arch/riscv/boot/dts/anlogic/
-++
-  RISC-V ARCHITECTURE
-  M:	Paul Walmsley <pjw@kernel.org>
-  M:	Palmer Dabbelt <palmer@dabbelt.com>
-@@@ -22139,6 -22070,6 +22147,13 @@@ F:	arch/riscv
-  N:	riscv
-  K:	riscv
- =20
-++RISC-V FIRMWARE DRIVERS
-++M:	Conor Dooley <conor@kernel.org>
-++L:	linux-riscv@lists.infradead.org
-++S:	Maintained
-++T:	git git://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git
-++F:	drivers/firmware/riscv/*
-++
-  RISC-V IOMMU
-  M:	Tomasz Jeznach <tjeznach@rivosinc.com>
-  L:	iommu@lists.linux.dev
-@@@ -22148,14 -22079,15 +22163,7 @@@ T:	git git://git.kernel.org/pub/scm/lin
-  F:	Documentation/devicetree/bindings/iommu/riscv,iommu.yaml
-  F:	drivers/iommu/riscv/
- =20
-- RISC-V FIRMWARE DRIVERS
- -RISC-V ANLOGIC SoC SUPPORT
---M:	Conor Dooley <conor@kernel.org>
- -T:	git https://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git/
---L:	linux-riscv@lists.infradead.org
-- S:	Maintained
-- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/conor/linux.git
-- F:	drivers/firmware/riscv/*
- -S:	Odd Fixes
- -F:	Documentation/devicetree/bindings/riscv/anlogic.yaml
- -F:	arch/riscv/boot/dts/anlogic/
---
-- RISC-V MICROCHIP FPGA SUPPORT
-+ RISC-V MICROCHIP SUPPORT
-  M:	Conor Dooley <conor.dooley@microchip.com>
-  M:	Daire McNamara <daire.mcnamara@microchip.com>
-  L:	linux-riscv@lists.infradead.org
-
---Sig_/TmPX1swXnCBICULKvoDG7pH
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkeVMEACgkQAVBC80lX
-0GzG/AgAoTMF1MwvKw6NmyjTd5oIXUoBNlsO3ddVFm2Gx3NvP0inD4pb/WXYhHI5
-cm4JyobgV/02ecpt3WywuvZUs6lpWcEOEFY1kRJScUEX6xev2HV0iDnOEOJPWrFo
-zZZOV04PXTBcqmhGUachson2sHodMoI0cJn9Cyl4AlK9u8pSyg1KcdU9xYb9pgEn
-jrEPdAi9dgqw58DogML2nvsklHznbX+UBcPvcXHz7hNBpultcprRiBitjo0BLJKf
-JiyDrtVs2YGhDEj6Lf3BI2bt4fc1neBwb5wvkTBHe34Pwj3UndQIObktpeF5zZhQ
-8sa7z+z1QEi1jMV/6Lv5VulL7yxImw==
-=lEsn
------END PGP SIGNATURE-----
-
---Sig_/TmPX1swXnCBICULKvoDG7pH--
 

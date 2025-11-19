@@ -1,191 +1,148 @@
-Return-Path: <linux-next+bounces-9089-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9090-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id E378FC7170C
-	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 00:25:44 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5287BC71712
+	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 00:29:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8569234C69D
-	for <lists+linux-next@lfdr.de>; Wed, 19 Nov 2025 23:25:44 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C52BC3445EE
+	for <lists+linux-next@lfdr.de>; Wed, 19 Nov 2025 23:29:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E68B2D9491;
-	Wed, 19 Nov 2025 23:25:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00036302741;
+	Wed, 19 Nov 2025 23:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Qa4DPc0r"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BEBx37vY"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4C720C490;
-	Wed, 19 Nov 2025 23:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C494728C5B1;
+	Wed, 19 Nov 2025 23:29:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763594739; cv=none; b=nQWeVJengNeB6FgdAu+0bTZRVj3+Y1q1RFgTNkfvLJiHS9E47/gQSKoNVO/XTRk2OpvV3ZUUe+R8xOTWF9TEXSH1+qiTmrgnqItd1lsSFJ5vzD64ivsfnHNivOZI4kXGcY2A0ZHpMm0Scr+Na6BK4SF7o/DtURFaf4EmmbwqDZk=
+	t=1763594971; cv=none; b=f0/q9zQUc4US19rTrXkyeZyfZJNnnwwIK9hCe7v0eQLfX/hJiH9tflvhPYXWhMx7zg7cyFNcLiA2cpSm9sdrAZQEwhB3zD9rao9TdJZSlqLoS1wVEYzKTJoqtL9bE4vJ/a+h6ce5giUvqin4cvhc/tqE2CWQiS4CKIT4JLZU3Us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763594739; c=relaxed/simple;
-	bh=DFIeZIa782n9Q5TKOnc2+e/e32nLQOJJIpELR9MfjJE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=CZImmZtju5xBP628sReU5ZxDgjvMjpHD7hle+o0UmcVDp5zWrZVlcxQ6E+033PMFDb+bx1xSdQk+DRbOQVDE0a/pStB9BX7DO3ooq/Abv8jH8pa8fwPbjfKxpbVYo27370sUZyyZhHgDRi4WnkMKgWoJ48H0tvLsW1mTlmdVgeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Qa4DPc0r; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1763594971; c=relaxed/simple;
+	bh=Q26kMBl8DMSmjakbRe7heqYpud8kbDok11WXnyf1K6g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=fTNbB/y0Gw+86T+oq5BiMatiQKIBMZIMXzmwCnt2cqFZZ3TzlJn4K89lZE4RfuB3JX/Gqd4o76yQ60SLUxGNLlTXLRZ0autkY6G5lD3vetTMtkCd3tUCvPoyNeQREFxOpL42RarHo7QtIqkjEyyDYzDK/TCzBFc9FZfITXcwVSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BEBx37vY; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1763594733;
-	bh=hkzH5xQEZzNqsvogeKCjGHElmw4p1N8xQl9Oe4YxIPM=;
+	s=202503; t=1763594967;
+	bh=+Nq0v6u21LoSwB10BMaL1lSIY4AyCafM7+g+42+UlFA=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Qa4DPc0rsC6y6NcGYNpb9aDED2WOwNs8oZAxk5wjWTI9luMuoXwZbPN/VxtigL0+X
-	 a8nl1un73mWU1tDlYlKTKPJNaWTy+LNMv2O/bZJBhvJb2MaWPe9ZHwRur+dFL+Q+/2
-	 ZmkL5T9eECD8qQ3Ct8Aoo0EIgGrdzGCRynUi4WBKtWY9QwVonQTWB0N7Bot6W7ccWN
-	 ftHpIH7+wf+h2B5mwiszQbhJf8ugWR5l3Zc6yjXZFoFEAbFGdBZUrHbrPr/WsL1QoG
-	 SGbR3iDGSRW9CV76b7JgZoAG2IrTPWvsD81tsMJ5y5GzDnymnNc8FauWwg7AZovAN+
-	 6tOXSj6rg//Ew==
+	b=BEBx37vYos0cwjlME6Rf/GTZ72DbWWN2PbTTHCnTMQF7GR9XREG/IldX6lL1ESnv9
+	 DhrUry8fkGX9jqArmqaQNOjlA+P0PEfSw8fxPhbtQ8gN6TJ5S5Ww9xFRhFeZCezgRN
+	 OHrtFXuqun7v1qge/EW1h67xOQloP9mKkU7Dmif31GcyW8JrefbjlBlPBAMw9OUW6q
+	 TGgIv3ls11UlQ+FcoaNByT5VWAxH3rivmvN9MsQPLSDz9jT67bi4gIPU/ddp7LxliC
+	 Vu2/ulSC+Qg8Clb2uxWFNDOYkL6/9ibyeSdej3FekWcwm+Bb7VjFeNyc/xTBzg0XxX
+	 Bu5tr9trdwtiQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dBczK0jRwz4w9q;
-	Thu, 20 Nov 2025 10:25:32 +1100 (AEDT)
-Date: Thu, 20 Nov 2025 10:25:32 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dBd3p3k8Hz4w9Z;
+	Thu, 20 Nov 2025 10:29:26 +1100 (AEDT)
+Date: Thu, 20 Nov 2025 10:29:25 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
- <will@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Huang Ying <ying.huang@linux.alibaba.com>, Linux Kernel Mailing List
+To: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>,
+ Drew Fustini <fustini@kernel.org>, Joel Stanley <joel@jms.id.au>
+Cc: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, Drew Fustini
+ <dfustini@oss.tenstorrent.com>, Himanshu Chauhan
+ <hchauhan@ventanamicro.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Subject: linux-next: manual merge of the arm64 tree with the mm-unstable
+ <linux-next@vger.kernel.org>, Paul Walmsley <pjw@kernel.org>
+Subject: linux-next: manual merge of the risc-v tree with the tenstorrent-dt
  tree
-Message-ID: <20251120102532.670ba5b6@canb.auug.org.au>
+Message-ID: <20251120102925.57ab2fe7@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mS7XCyIyb9SbM5KbiGOfC_F";
+Content-Type: multipart/signed; boundary="Sig_/OMpK2FDEr/6WtGC_m+yWhcD";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/mS7XCyIyb9SbM5KbiGOfC_F
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/OMpK2FDEr/6WtGC_m+yWhcD
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the arm64 tree got a conflict in:
+Today's linux-next merge of the risc-v tree got a conflict in:
 
-  mm/memory.c
+  MAINTAINERS
 
-between commit:
+between commits:
 
-  b08b123ead1a ("mm: avoid unnecessary use of is_swap_pmd()")
+  4de28f1edcfb ("dt-bindings: riscv: Add Tenstorrent Blackhole compatible")
+  8e88602e99a7 ("riscv: dts: Add Tenstorrent Blackhole SoC PCIe cards")
 
-from the mm-unstable tree and commit:
+from the tenstorrent-dt tree and commit:
 
-  79301c7d605a ("mm: add spurious fault fixing support for huge pmd")
+  5ffe60d26107 ("drivers: firmware: add riscv SSE support")
 
-from the arm64 tree.
+from the risc-v tree.
 
-I fixed it up (I think - see below) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc mm/memory.c
-index 50b93b45b174,6e5a08c4fd2e..000000000000
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@@ -6342,40 -6314,37 +6369,43 @@@ retry_pud
-  	if (pmd_none(*vmf.pmd) &&
-  	    thp_vma_allowable_order(vma, vm_flags, TVA_PAGEFAULT, PMD_ORDER)) {
-  		ret =3D create_huge_pmd(&vmf);
- -		if (!(ret & VM_FAULT_FALLBACK))
- +		if (ret & VM_FAULT_FALLBACK)
- +			goto fallback;
- +		else
-  			return ret;
- -	} else {
- -		vmf.orig_pmd =3D pmdp_get_lockless(vmf.pmd);
- +	}
+diff --cc MAINTAINERS
+index 079c43e56dc6,0e3e9d8ab5b4..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -22227,15 -22195,14 +22234,23 @@@ F:	arch/riscv/boot/dts/spacemit
+  N:	spacemit
+  K:	spacemit
  =20
- -		if (unlikely(is_swap_pmd(vmf.orig_pmd))) {
- -			VM_BUG_ON(thp_migration_supported() &&
- -					  !is_pmd_migration_entry(vmf.orig_pmd));
- -			if (is_pmd_migration_entry(vmf.orig_pmd))
- -				pmd_migration_entry_wait(mm, vmf.pmd);
- +	vmf.orig_pmd =3D pmdp_get_lockless(vmf.pmd);
- +	if (pmd_none(vmf.orig_pmd))
- +		goto fallback;
++ RISC-V SSE DRIVER
++ M:	Cl=C3=A9ment L=C3=A9ger <cleger@rivosinc.com>
++ R:	Himanshu Chauhan <himanshu@thechauhan.dev>
++ L:	linux-riscv@lists.infradead.org
++ S:	Maintained
++ F:	drivers/firmware/riscv/riscv_sse.c
++ F:	include/linux/riscv_sse.h
++=20
+ +RISC-V TENSTORRENT SoC SUPPORT
+ +M:	Drew Fustini <dfustini@oss.tenstorrent.com>
+ +M:	Joel Stanley <jms@oss.tenstorrent.com>
+ +L:	linux-riscv@lists.infradead.org
+ +S:	Maintained
+ +T:	git https://github.com/tenstorrent/linux.git
+ +F:	Documentation/devicetree/bindings/riscv/tenstorrent.yaml
+ +F:	arch/riscv/boot/dts/tenstorrent/
  +
- +	if (unlikely(!pmd_present(vmf.orig_pmd))) {
- +		if (pmd_is_device_private_entry(vmf.orig_pmd))
- +			return do_huge_pmd_device_private(&vmf);
- +
- +		if (pmd_is_migration_entry(vmf.orig_pmd))
- +			pmd_migration_entry_wait(mm, vmf.pmd);
- +		return 0;
- +	}
- +	if (pmd_trans_huge(vmf.orig_pmd)) {
- +		if (pmd_protnone(vmf.orig_pmd) && vma_is_accessible(vma))
- +			return do_huge_pmd_numa_page(&vmf);
- +
- +		if ((flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) &&
- +		    !pmd_write(vmf.orig_pmd)) {
- +			ret =3D wp_huge_pmd(&vmf);
- +			if (!(ret & VM_FAULT_FALLBACK))
- +				return ret;
- +		} else {
-- 			huge_pmd_set_accessed(&vmf);
-++			vmf.ptl =3D pmd_lock(mm, vmf.pmd);
-++			if (!huge_pmd_set_accessed(&vmf))
-++				fix_spurious_fault(&vmf, PGTABLE_LEVEL_PMD);
-++			spin_unlock(vmf.ptl);
-  			return 0;
-  		}
- -		if (pmd_trans_huge(vmf.orig_pmd)) {
- -			if (pmd_protnone(vmf.orig_pmd) && vma_is_accessible(vma))
- -				return do_huge_pmd_numa_page(&vmf);
- -
- -			if ((flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) &&
- -			    !pmd_write(vmf.orig_pmd)) {
- -				ret =3D wp_huge_pmd(&vmf);
- -				if (!(ret & VM_FAULT_FALLBACK))
- -					return ret;
- -			} else {
- -				vmf.ptl =3D pmd_lock(mm, vmf.pmd);
- -				if (!huge_pmd_set_accessed(&vmf))
- -					fix_spurious_fault(&vmf, PGTABLE_LEVEL_PMD);
- -				spin_unlock(vmf.ptl);
- -				return 0;
- -			}
- -		}
-  	}
- =20
- +fallback:
-  	return handle_pte_fault(&vmf);
-  }
- =20
+  RISC-V THEAD SoC SUPPORT
+  M:	Drew Fustini <fustini@kernel.org>
+  M:	Guo Ren <guoren@kernel.org>
 
---Sig_/mS7XCyIyb9SbM5KbiGOfC_F
+--Sig_/OMpK2FDEr/6WtGC_m+yWhcD
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkeUewACgkQAVBC80lX
-0GyUoggAnlnkd30LO6VRWOMcPPMDn8URyznWL5KwWn+eT/VpEG2U8CNSl50V29MV
-6NGWyfKHWb0rV7Y5xnSoxxqQRb0FZKXCDw8puNM/EXS2x2Hw+HL7RFjWj/x7sX8W
-kglNHO686U5nk734keiIeq51MOnH3Cn5TtDvrVPpbqI9i3NcjI4FvbNknffalN7r
-h+tD7AmFizdSpF3Rxdvf9yWcVCyVr1f2f67X/7rbE0mL1EBYD1dYoL6M0fnmKOBj
-OF5oD1x0VzW0kWYU6KRaAdebI2geVCfQj3W3JGPguCCciyw32qlkIUCn+gwWBYCE
-5nVy2KsTR5QpBoIY3Ujb2rYSWmyfWg==
-=x2aF
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkeUtYACgkQAVBC80lX
+0Gw+yAgAo3RCWiCepk2sVa2lpU9CbFcV0YbVBOtcjmQboBBZe1rqz4D2QKZIurdj
+XYWpuuCZVuNwTSB42qeq7wTftzUYWO4tvo3n0zUQ29yVkbaDh8E9FIg8ctNiFKfG
+Q/4O1jQgXAm+w/HaUkvFbfc7ge2OJ5lqUaTzLYEME5/kzpZObbQQ+AmdJ7oVyfZz
+g8EEjwJtaRWteNDKw1ND4JYONXasdkqSkZng2SCHMjiuL58Bn4A7z1ea9NUWKEem
+yg900iKKD8SChTiKQtHBPc26dCwcmR0spMSvyXTXjpVzTMGaOEzke5b9/KgyNg63
+Pp4b711jYEzXjGDHJ/jjdx4d3ZoNwA==
+=xnUO
 -----END PGP SIGNATURE-----
 
---Sig_/mS7XCyIyb9SbM5KbiGOfC_F--
+--Sig_/OMpK2FDEr/6WtGC_m+yWhcD--
 

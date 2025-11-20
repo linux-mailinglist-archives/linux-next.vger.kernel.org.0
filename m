@@ -1,69 +1,70 @@
-Return-Path: <linux-next+bounces-9116-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9117-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F722C765F7
-	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 22:28:31 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2816DC7661B
+	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 22:34:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EE1D23597CB
-	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 21:27:48 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0686134E047
+	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 21:33:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 585FF3002C5;
-	Thu, 20 Nov 2025 21:27:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 739FB253958;
+	Thu, 20 Nov 2025 21:33:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="mVQJsG8d"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="JVZqNn+Z"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C1602517AA;
-	Thu, 20 Nov 2025 21:27:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E95C239E8B;
+	Thu, 20 Nov 2025 21:33:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763674061; cv=none; b=W/ooORmA5L3pyX838JFTuCY1rY43ZShIu9khAOgZrdecUVF6iVFkwVdntGnpBWSeI5pYtkTSc39xCWGfiFEo6wd076basCBNWyRAmyddDLGGf1GdbZxqBliXW2n4HcBSOzOKJtlGxonPTnHJMPVVb+Y2keoVV3YdTSwL2GSonQQ=
+	t=1763674418; cv=none; b=SfqVgIhJcoBHtiDzDHoPxxxvWK0cHUFBfEjm56m+xNwx3C3OBmYV9kC/IezCCMPk7h3HvHMsVVVD/SEmIH8wcV60G0ilXruY6/slWtSVX90hwakV4ro17VVEhUz/gwfDc44sKuC6P9TD1DGVcT8nogMjEU2+ISeOqVGMjV7O6/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763674061; c=relaxed/simple;
-	bh=dEzEiQTdDPNqMf6UN7Zyf932qvLKNDUvqjgI25IvvBo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ExAvWMI0HB3nocmvCU9mHw3HB/fuJsWso6HofquYEjyb55ivV2MSboMM/TH6ZLTvojUObDyhrZsJlPf5vwJCV1uOc3oZt2r/eqRLkOLntqRx2UykhcLUPazzqW8zLLKz+6dRMQfmgQ8CjuVVdoiNIShHbuGg73hRec6a/X9HLik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=mVQJsG8d; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1763674418; c=relaxed/simple;
+	bh=SGkyXAHdrmtxL37OM50hnpsyVT90aYH62YIQ2CZnqzY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dEZhtn63NzF4wVt2k2I0sZnHoVXzU9/iE6mU1Bt56akjLpZKH8Yv4nI3H60FFgigVJJICYZIU0xeWcq1f0Kg4kP1FrsNOO7urbzS7hvL0YOwMbO1IgfHew7+zQX5+OdjeJs5HoH53KTl+ipsY7hLDWP3FfUFRyAQccVcaUtJWhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=JVZqNn+Z; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1763674052;
-	bh=XsI47zv+rR7QbPzwnw9zQrvFUcu8TzBmwyfagbG4cSY=;
+	s=202503; t=1763674414;
+	bh=VHA1p3obql0TmlED0EsfBAcnYjWT3/+5obAI9kW+KzE=;
 	h=Date:From:To:Cc:Subject:From;
-	b=mVQJsG8d3RgeGCjEs5CRkD/SsfnEYcyVmwXmaiU5LmjZT7xdxp+7yIFrEcCIfRReb
-	 ZIatJK5Z125DMzMihxouCER1VyOCj//W7wj5WaRhzpmTwdEEl0i1oA5CC8/gOUdNrM
-	 lvyTGTyZmRfvkPu5BUj8XA3nxVliXM3/b+bLZyo7Q29Rl4fH8tgYVvjRZ5kr+fwZ/S
-	 5hhjYkV8wMYWUI8xJL0CjrJ09cOaN2xHvb/nQds9E8Cyomqaf4AKuQ7SgwOxdLFakG
-	 6BwqWlnB4O1PFylCvEeov1g2ek1ttXQRh+6GYBb2EiQR+0lMMQe/WtyoQ0iPw9321O
-	 BqCqo6wVzErzw==
+	b=JVZqNn+Z8EUCReVrPsnP5PGqGv8tBtZAAe5jxjCI5lZr9kF/qeTL4YGG+DyIZoYk9
+	 kK+6SAbN5yRve1nhwVtu0dFKtN/cnHFKxk98FmS/22YE9ZFNFnS2j/eT91om1TbIQZ
+	 NkaSnBZ/Ouwji9v9i2yeEXn4ERu2ZFVJJ/keR9d87ElJrVm1e40ncYRlSx1m0Bb+Oa
+	 5Nji06ZOc+9pxXmWALUwUaCLejmzQZukcAcu+fycJvxzNZNCBBkxdnc/qepmmqQ2Hv
+	 S812zxcls8YjGpJLoQil3svndqms0wpu0tNaSeRdQ0i5l0cx+OGjdsf2UAZTs4ptvo
+	 fmkkf5pD0ta+Q==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dCBJh0YWfz4wGZ;
-	Fri, 21 Nov 2025 08:27:31 +1100 (AEDT)
-Date: Fri, 21 Nov 2025 08:27:31 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dCBRd4Lc5z4wGZ;
+	Fri, 21 Nov 2025 08:33:33 +1100 (AEDT)
+Date: Fri, 21 Nov 2025 08:33:33 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Al Viro <viro@ZenIV.linux.org.uk>, Christian Brauner
  <brauner@kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, NeilBrown <neil@brown.name>
+ Mailing List <linux-next@vger.kernel.org>, Mateusz Guzik
+ <mjguzik@gmail.com>
 Subject: linux-next: manual merge of the vfs tree with the vfs-brauner tree
-Message-ID: <20251121082731.0e39ee5d@canb.auug.org.au>
+Message-ID: <20251121083333.48687f3e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9tUdd4Do6h.=jwYp/CjP4La";
+Content-Type: multipart/signed; boundary="Sig_/L6Kk52Eh+tr3VsVzMSt+aMJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/9tUdd4Do6h.=jwYp/CjP4La
+--Sig_/L6Kk52Eh+tr3VsVzMSt+aMJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -71,15 +72,17 @@ Hi all,
 
 Today's linux-next merge of the vfs tree got a conflict in:
 
-  Documentation/filesystems/porting.rst
+  fs/dcache.c
 
-between commit:
+between commits:
 
-  fe497f0759e0 ("VFS: change vfs_mkdir() to unlock on failure.")
+  31e332b911fc ("fs: add missing fences to I_NEW handling")
+  b4dbfd8653b3 ("Coccinelle-based conversion to use ->i_state accessors")
+  1e3c3784221a ("fs: rework I_NEW handling to operate without fences")
 
 from the vfs-brauner tree and commit:
 
-  fc45aee66223 ("get rid of kill_litter_super()")
+  bacdf1d70bbe ("primitives for maintaining persisitency")
 
 from the vfs tree.
 
@@ -94,45 +97,46 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/filesystems/porting.rst
-index d33429294252,4921b3b0662a..000000000000
---- a/Documentation/filesystems/porting.rst
-+++ b/Documentation/filesystems/porting.rst
-@@@ -1314,11 -1314,5 +1314,18 @@@ instead
- =20
-  **mandatory**
- =20
- +vfs_mkdir() now returns a dentry - the one returned by ->mkdir().  If
- +that dentry is different from the dentry passed in, including if it is
- +an IS_ERR() dentry pointer, the original dentry is dput().
- +
- +When vfs_mkdir() returns an error, and so both dputs() the original
- +dentry and doesn't provide a replacement, it also unlocks the parent.
- +Consequently the return value from vfs_mkdir() can be passed to
- +end_creating() and the parent will be unlocked precisely when necessary.
-++
-++---
-++
-++**mandatory**
-++
-+ kill_litter_super() is gone; convert to DCACHE_PERSISTENT use (as all
-+ in-tree filesystems have done).
+diff --cc fs/dcache.c
+index 3204cc55b566,824d620bb563..000000000000
+--- a/fs/dcache.c
++++ b/fs/dcache.c
+@@@ -1986,9 -2012,17 +2019,11 @@@ void d_instantiate_new(struct dentry *e
+  	lockdep_annotate_inode_mutex_key(inode);
+  	security_d_instantiate(entry, inode);
+  	spin_lock(&inode->i_lock);
++ 	spin_lock(&entry->d_lock);
+  	__d_instantiate(entry, inode);
++ 	spin_unlock(&entry->d_lock);
+ -	WARN_ON(!(inode->i_state & I_NEW));
+ -	inode->i_state &=3D ~I_NEW & ~I_CREATING;
+ -	/*
+ -	 * Pairs with the barrier in prepare_to_wait_event() to make sure
+ -	 * ___wait_var_event() either sees the bit cleared or
+ -	 * waitqueue_active() check in wake_up_var() sees the waiter.
+ -	 */
+ -	smp_mb();
+ +	WARN_ON(!(inode_state_read(inode) & I_NEW));
+ +	inode_state_clear(inode, I_NEW | I_CREATING);
+  	inode_wake_up_bit(inode, __I_NEW);
+  	spin_unlock(&inode->i_lock);
+  }
 
---Sig_/9tUdd4Do6h.=jwYp/CjP4La
+--Sig_/L6Kk52Eh+tr3VsVzMSt+aMJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkfh8MACgkQAVBC80lX
-0GyavAf8CY2w+4O1xoC6bOef9XSYQPe0Du754nP+ZYWZR2BXXs1AkSduskeMtSJc
-GBruV2PIfSoBsWa0FyoQqOfXZWbp2B54wwo10gBdp0oIRmbFH+8LPnSm34g2IEuE
-rsqJdS6WpCT/XoSugb8x7at8CvIvvj43SlRq9qlp/3ANW/xKbp+1Ba9hMDiqvcAt
-5fwbkQyLdgZmovOikwSBzmOf+rAn3Jx28EywJcfk8VQWANdYxvRyI+AndJuTvNAk
-gwz4y+sRu92+f2rcVCbQxw27eoxOTK9rX4+vGLjwnoJbJAmQakUQ9JtgrIdI0SOC
-0mCpc0KQDmHMDUNZFTv6s4WX7ZjnyA==
-=A+yW
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkfiS0ACgkQAVBC80lX
+0GzYpwf9ELxrbyzVcCLzrlDVprqjY9ipVEINQzZA9ZJTkaOxMyl48KMJ3vbgv6U8
+MpXbCB0PErfA3Q9CHIAZw2RqmYfrNWbbgVJDFZOTmpEzeAvBtFKhCcrEUdjMlLZD
+o/wqXjrlRNw9I1VEcf190SbK3Y5+e2XgMA8jJGRtgvzz5bRWeI0xMvjbHMssbVl8
+ja5OaYbaTIHhDy0Wv50nBpmnFbNAXxAZ4r+gi/ZtK2IWGV4y/8axCPMWZAisHiGd
+86CgWgBMTWsShN3IWhiMCbVSGoI3jfgSkT1byBC53p9DG58phdkx6jnAuuGg/CJ5
+HfwDa5W7IsUXWtM37OhSt2RCdUiMMQ==
+=J4tw
 -----END PGP SIGNATURE-----
 
---Sig_/9tUdd4Do6h.=jwYp/CjP4La--
+--Sig_/L6Kk52Eh+tr3VsVzMSt+aMJ--
 

@@ -1,91 +1,94 @@
-Return-Path: <linux-next+bounces-9099-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9100-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4E90C72222
-	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 05:08:59 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0A46C7235B
+	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 05:47:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E34CB4E3D44
-	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 04:08:46 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id A7B4F2A866
+	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 04:47:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 439CB296BA5;
-	Thu, 20 Nov 2025 04:08:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADE372F3C22;
+	Thu, 20 Nov 2025 04:46:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="X/SHo4uP"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="meH7gzRD"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4D732D1905;
-	Thu, 20 Nov 2025 04:08:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 144222F25F6;
+	Thu, 20 Nov 2025 04:46:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763611722; cv=none; b=dZ1GdILPOIKnBXCJ5KhQUjND9m5s/NyG3kxR4B7TssPk8OpsL3EHTp499T3vSX8dVfVDSc9WC9kpxvvDsUkRZMdEBXR1gxVh/z7DDAGEjg+WEaMiecBrsu+EzN8MKAlZGI9eolOBy8SYDbWA1447e8cl8hhA55z/fHwCOG91yCo=
+	t=1763613995; cv=none; b=QTVuwChfuvetEXtU9N9+5k4i5ROHAY5uf2btewTneCl3gmrETUi9SysMFeocRH/mHO5X8D2W8EVBC/Xu0jLkBHSn6g/I8o7mmdglNL/xsFppDSY/lVSeK7sLn4GNJYPoaF/u3OOAG30t33UqeqLGUXNLHwr2S0mrB645WwjovM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763611722; c=relaxed/simple;
-	bh=vUm7Z5xGJ4sf70/sgLuPXWfTZQyiyisL7aOopmPqHag=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=PP/opGFEnLv6BtJGojZpQnH0yrVXCgQiKa+ePFGf5VFi1pihgRnRrLBfDfK85kUCFx9w9rRqlF1Fe+ldQjvy/ZChSjKqEnqkzmC3pUcftYHH7SlYviJP3u1ygX6UDoeODKpV3qGEcQNJuR+MSIO4L/XMu6aXCflpggCDYuBjUTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=X/SHo4uP; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1763613995; c=relaxed/simple;
+	bh=bI7EhZCqV3UGiZjfRqCJT8iIhAP0m7nbN1o2e0d+X8o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=H9XG9+xQ7G78VgexeeIiPIYubCd9kUtfZXc7orSXVwio6aLzUOvNUjHM26B8gRsBvQrhxT646hCMS1UoKHw1W/TqguHLEdafpJW5lLM5qdiu5e8Yzp5YiDmy5zeG8q2oFT+d2mAUssJ4s58242nQyXflVInt5fcCjgOa3t4eSfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=meH7gzRD; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1763611718;
-	bh=rIRHM2K4J3lqi6g8639o3SQNcGySvbqWqHL5y3AqYE4=;
+	s=202503; t=1763613989;
+	bh=n+DbeTkObdUBL9WKzXG+O1Aq68R3htk9vv2Z8InJAAQ=;
 	h=Date:From:To:Cc:Subject:From;
-	b=X/SHo4uPXmH8rYAiGJ6CbbBXOZ3265lNLnylDCYzAIEUT9XBJHVYGYfT2dco4sgAR
-	 dVfTvzUMBx5mc/hfD8BeH+UbS47E81lUifcMvgC3J6140wV947nW7hPnxoveZutilj
-	 IssXNUmPmR1z5CpgB5pJvqg0t42O1NNXm15Guost6+ud62/h6N8imusy9wH4TiFB6f
-	 sB9WZRbWBlBIkLfPnX1wCA9oS6IHz9uS+n3T75nRO5SteAXxriOIFQ2hasIdOxlxjx
-	 0B+v0m7UDUKyyPcleHLfA28IZl0MbxLiYGx4O6mNfRdRF7QjLFMMwmg3kXL+dUH601
-	 ojv54WkxYiU6Q==
+	b=meH7gzRDZk+qwkAUq5uc7h3nnVGTPcJLxOdJlOejMaok+7B1LwsX+O3bp2awFcqoH
+	 GICCKSIxj9sL6oFsZNU/y9v2EH1GiCUYUuQH7Byct9lZK+OMzCOqpIwIANTYvE3Maa
+	 aFajhB80HtiwBJY4LUxfKqw9KUcfbJeHbCdlZQv+887q1iUKBkFiHJ6l4GcU5BHOcf
+	 7mbLeeI1ukJ2oML15W4K/cVWljE9gWeaecE9PRyl08hGKq9N/dAP55J5UaIFe3hGGT
+	 AjlptgTYqVDUwKhL5Kx329d9jxYHHQ1XJUbWa5HvQa9+y3VG5oj8ZVRAX5Rn8XZRe8
+	 2Cwc0xSHU8v5A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dBlFx6f5Pz4wCp;
-	Thu, 20 Nov 2025 15:08:37 +1100 (AEDT)
-Date: Thu, 20 Nov 2025 15:08:37 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dBm5d2Plwz4wH7;
+	Thu, 20 Nov 2025 15:46:29 +1100 (AEDT)
+Date: Thu, 20 Nov 2025 15:46:28 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Kevin Hilman <khilman@baylibre.com>, Neil Armstrong
- <neil.armstrong@linaro.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Xianwei Zhao
- <xianwei.zhao@amlogic.com>
-Subject: linux-next: manual merge of the tip tree with the amlogic tree
-Message-ID: <20251120150837.49a76ba4@canb.auug.org.au>
+To: Sean Christopherson <seanjc@google.com>, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>, Elena Reshetova
+ <elena.reshetova@intel.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Naveen N Rao <naveen@kernel.org>
+Subject: linux-next: manual merge of the kvm-x86 tree with the tip tree
+Message-ID: <20251120154628.4811293d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dXxxDrcw5Br5QuYgwU_d+su";
+Content-Type: multipart/signed; boundary="Sig_/XVvWHxhTNDN2+xK/xzVSHhP";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/dXxxDrcw5Br5QuYgwU_d+su
+--Sig_/XVvWHxhTNDN2+xK/xzVSHhP
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+Today's linux-next merge of the kvm-x86 tree got a conflict in:
 
-  arch/arm64/boot/dts/amlogic/amlogic-s7d.dtsi
+  arch/x86/include/asm/cpufeatures.h
 
 between commit:
 
-  e490b52477b8 ("arm64: dts: amlogic: s7d: add ao secure node")
+  6ffdb49101f0 ("x86/cpufeatures: Add X86_FEATURE_SGX_EUPDATESVN feature fl=
+ag")
 
-from the amlogic tree and commit:
+from the tip tree and commits:
 
-  1d787348123b ("arm64: dts: amlogic: Add gpio_intc node for Amlogic S7D So=
-Cs")
+  5d0316e25def ("x86/cpufeatures: Add X86_FEATURE_X2AVIC_EXT")
+  f6106d41ec84 ("x86/bugs: Use an x86 feature to track the MMIO Stale Data =
+mitigation")
+  9c6bbdaab7e6 ("Merge branch 'svm'")
 
-from the tip tree.
+from the kvm-x86 tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -98,50 +101,48 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/arm64/boot/dts/amlogic/amlogic-s7d.dtsi
-index e60167af0390,5ef16820b574..000000000000
---- a/arch/arm64/boot/dts/amlogic/amlogic-s7d.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/amlogic-s7d.dtsi
-@@@ -195,13 -185,15 +195,23 @@@
-  				};
-  			};
+diff --cc arch/x86/include/asm/cpufeatures.h
+index b6472e252491,646d2a77a2e2..000000000000
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@@ -503,7 -500,12 +504,13 @@@
+  #define X86_FEATURE_IBPB_EXIT_TO_USER	(21*32+14) /* Use IBPB on exit-to-u=
+serspace, see VMSCAPE bug */
+  #define X86_FEATURE_ABMC		(21*32+15) /* Assignable Bandwidth Monitoring C=
+ounters */
+  #define X86_FEATURE_MSR_IMM		(21*32+16) /* MSR immediate form instruction=
+s */
+ -#define X86_FEATURE_X2AVIC_EXT		(21*32+17) /* AMD SVM x2AVIC support for =
+4k vCPUs */
+ -#define X86_FEATURE_CLEAR_CPU_BUF_VM_MMIO (21*32+18) /*
+ +#define X86_FEATURE_SGX_EUPDATESVN	(21*32+17) /* Support for ENCLS[EUPDAT=
+ESVN] instruction */
+++#define X86_FEATURE_X2AVIC_EXT		(21*32+18) /* AMD SVM x2AVIC support for =
+4k vCPUs */
+++#define X86_FEATURE_CLEAR_CPU_BUF_VM_MMIO (21*32+19) /*
++ 						      * Clear CPU buffers before VM-Enter if the vCPU
++ 						      * can access host MMIO (ignored for all intents
++ 						      * and purposes if CLEAR_CPU_BUF_VM is set).
++ 						      */
  =20
-+ 			gpio_intc: interrupt-controller@4080 {
-+ 				compatible =3D "amlogic,s7d-gpio-intc",
-+ 					     "amlogic,meson-gpio-intc";
-+ 				reg =3D <0x0 0x4080 0x0 0x20>;
-+ 				interrupt-controller;
-+ 				#interrupt-cells =3D <2>;
-+ 				amlogic,channel-interrupts =3D
-+ 					<10 11 12 13 14 15 16 17 18 19 20 21>;
-+ 			};
-++
- +			ao-secure@10220 {
- +				compatible =3D "amlogic,s7d-ao-secure",
- +					     "amlogic,meson-gx-ao-secure",
- +					     "syscon";
- +				reg =3D <0x0 0x10220 0x0 0x140>;
- +				amlogic,has-chip-id;
- +			};
-  		};
-  	};
-  };
+  /*
+   * BUG word(s)
 
---Sig_/dXxxDrcw5Br5QuYgwU_d+su
+--Sig_/XVvWHxhTNDN2+xK/xzVSHhP
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkelEUACgkQAVBC80lX
-0Gyerwf/ZR9idZHeFEZyFt7YKXb7Rk9NSdheL7TQnOn/9q/LPTmG6mNhL4bbPqJ3
-nzvNxnJZPP18WqyVtA49TJH40CXO1oM7OJo8Znvk7bCFzpm4PJASpFJZyhisuP4B
-QlMifBGUdXERdMSiCtgzhDZYEe3D038D94JJiZj8ogD/D8WCrCRdAbghgrpWS32J
-JMZKnf5PeOyhc9luouF/jDUJwY6YisdaFVc+C8yrKPt5192z2oBiaro209w3BhCs
-+s6q/RaYqJ3JbidyxuGSBGQUV9JCayhqSQyzYS2XCbG1ekAJYXjbMgVddKBGff7l
-XJsMyXpfl5B3Dxy8Z2kYN1HVhSUmBQ==
-=w8Rq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkenSQACgkQAVBC80lX
+0GwnTgf9HVMIOuCz0ITokRQ2JkArm2To/3krHr+n2vfOcuKObSQ5WEKLLXCj4K+W
+yiLNwUQ5aGWr9u8HdFMBLxlPY0JRgui0GlIEApQ4jSilTaE3dAa81Zu8QwxcGDr5
+lYM+SGqAbD66vuZCqPc6Wg3FhhroR5i9kkFnLruVXozwnUyRFVtxULyB6nc0zuaX
+/CA+PWafbhPmIK6HGRMNTzoNeJ/pxzAOOM8fnE+Q2ma9I9oszB+WmsgtWoAleQyl
+T6zDArRrcu+NW6arZoWmmfWiZ2Tn8/n3lgDob/faCwE+4AhSttDzaOC7pBcSVqiF
+ada+sMBad84pDW5ENsLiEk12+wPNdg==
+=DHp9
 -----END PGP SIGNATURE-----
 
---Sig_/dXxxDrcw5Br5QuYgwU_d+su--
+--Sig_/XVvWHxhTNDN2+xK/xzVSHhP--
 

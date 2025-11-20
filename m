@@ -1,95 +1,146 @@
-Return-Path: <linux-next+bounces-9107-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9108-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3281C72FEB
-	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 09:58:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3313FC7312D
+	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 10:15:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5880E357FAA
-	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 08:55:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 9D7232A573
+	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 09:15:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197E21A4F3C;
-	Thu, 20 Nov 2025 08:55:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF0D7303CB2;
+	Thu, 20 Nov 2025 09:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hb7mbqA5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iaYarxW/"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E513D78F54;
-	Thu, 20 Nov 2025 08:55:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346AE2F066A
+	for <linux-next@vger.kernel.org>; Thu, 20 Nov 2025 09:15:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763628942; cv=none; b=ow+YaBzT36QbRce6PlFNHhU5VdIG0kj3Sv8+SZgk2E42CeZuOs6Q+e3RRyniVw1x9Y8UcGkHdau1E7WttTFKkMezhYxTdfKsv0o3ZaTs9jB5pJGfZIb6AShP/iHbWyVPoPuhlFKGhn7kno5lH2GSlQeX87uMxf9E0yqj1DqEsJ4=
+	t=1763630128; cv=none; b=EdcoWf+77shSjFu99RrGj8o0hJ3DpZ5rDRRiETkDMMh86QlRtr0YACQzxVcH4Ud35wrUz15CVXgzik9Vtddi/ISdynlgkB6Y/W54Z+Guijx6n5cniZwQocQiPBbTcfwje27DiduWMeHcqhrqEHXOI8NK9tsURGNt9YtCNSuV4uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763628942; c=relaxed/simple;
-	bh=AkM6xJMDRnf3ThMPknXOcWuEiew/kHlyo3QWaw+4KFs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fauiMKoqkIZvY5opftkAKy4yDiLgo1ffvYTnWXmvYG9gS7WHzfHwBlIjvY4EKJtMqMCU3fW/oKIK5qGVJKW80mu5nMiOZhPqX/aJx4Vp9Dsz7bjdpFrPE/LAfEt/byQvsgeLVScOWBZ8icaQUbXRwMyeK1YX8Zsz6vQIkhB2gTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hb7mbqA5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB71AC4CEF1;
-	Thu, 20 Nov 2025 08:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763628941;
-	bh=AkM6xJMDRnf3ThMPknXOcWuEiew/kHlyo3QWaw+4KFs=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hb7mbqA5tTVMAO2puG4QvUBI1uIL6QTK8tfs0Vn7z50IIAaMJzHhZHh3UuG2wtxll
-	 0cWv1qOqVijJYyDaZRNI0XNY431v33+NXg6ls0clCNExvydAU49pMR3nFekKaLSsgn
-	 VaAJYQ91LbbvgEy8gHmQCT5aXPP5vdW+IGDWUNt+r+3ox8/3CF67m6MDEVSD4WKI11
-	 QDOGzVL0iteIPYf+Hv2nkhGwnvj6p309+p9s9ziDb03GH1Tm7XzUwZgxm6Na5YtD4d
-	 MLdJ8duKb/SbzuMsy8FrinRcIE8m1Ozub5gHuaR2iBKUo5OVgiAc0z/ycgyzkC3PEG
-	 ipMZTWGXwqPNw==
-From: Miguel Ojeda <ojeda@kernel.org>
-To: akpm@linux-foundation.org
-Cc: aliceryhl@google.com,
-	edumazet@google.com,
-	linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org,
-	ojeda@kernel.org,
-	sfr@canb.auug.org.au,
-	wedsonaf@gmail.com
-Subject: Re: linux-next: build failure after merge of the mm-nonmm-unstable tree
-Date: Thu, 20 Nov 2025 09:55:18 +0100
-Message-ID: <20251120085518.1463498-1-ojeda@kernel.org>
-In-Reply-To: <20251119154824.339bfbeb47d149b041f15550@linux-foundation.org>
-References: <20251119154824.339bfbeb47d149b041f15550@linux-foundation.org>
+	s=arc-20240116; t=1763630128; c=relaxed/simple;
+	bh=TLzvaRNHZXYH9DPSXKmLYT5tfZKuDD7qZm5TgE8Vw4U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M4RWchZCZNQWZT81SeZxUnEE6eoaC7i9f1ZrvQWhePoQfcUuGNFhsyYgDIj0EVGxlH3KbeBhQHff0r66Xo/Gh69dO8sd3YESNPBKXD4IHL42oBPryyVxQz4/qlAS5fCIX/xDVafBKQsLJOkqJNMCtIZZcD5q1ur5hEB2zYpKgVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iaYarxW/; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-bd5cf88d165so26075a12.1
+        for <linux-next@vger.kernel.org>; Thu, 20 Nov 2025 01:15:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763630125; x=1764234925; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/8dBJvYD2wIMt4h1SWnzk2W9xsRTPxrVkLsHVBvVwN8=;
+        b=iaYarxW/nH/q8LEvDFwlpsKcSnixylSYhX/R54ePaqVtUKCBEomybnBLRIQ6e0xwsO
+         2Z18jKM+QRPvXAoO5XrLl8NNhXnOOJ+byoB7Ju4JGtS9wDAbLLX7zGCcMnEJFQTweVji
+         9rzJSlb3JtDnjYtYt5hlZ1uSRN1+hMRWutUYZN+BvHNu0nyeD3u+WCvHapvZePQREGjE
+         BEoxAApkWI9HQURXwxn8ITqfnzoyiC934Nr5Sv0n5CLd+NTRO23b23fEMKT3f89+F5/p
+         2a/F1ZlAtGRTfhMQM3uxW55BpYeffajWOpBRVF1rGUFKGrsAQTFYZ0g3PsaljMSKRAlS
+         st6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763630125; x=1764234925;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/8dBJvYD2wIMt4h1SWnzk2W9xsRTPxrVkLsHVBvVwN8=;
+        b=AWNxAjaFtlbf7Ary/7r1DXhvFCR5G+OdBENhZWlMTLJ6XK8PZ2wggORG41jjoHLbwH
+         xhravC8lUXE6yX+SiUxd/EEcb9hVCgyDDhjLbgBV9YTZZDrxTpTa2+rlDGcKUhxwCeM8
+         YxH9IuxfOSdIURmgML7SKKj6J18h3BYm5/qdjOQQDOJUxJhmEbfa/YqxBvMZVUR+RjyZ
+         mTwwEZNwDjkhkp3p8dgABMjQ3bT3aQCxr6jqABg76NGsCtRD2R17l3XG8Jy+qhugD3ZK
+         4/TNVmKuR5SidupVeTdxbgGWHTH7q6Gtvrg2BHHwajed0sN7RDs5FhbZrSAAciopUwWf
+         8UTg==
+X-Forwarded-Encrypted: i=1; AJvYcCU2TsjMV1I2z+Af7dPwCv7scDJKfSAEEwUmEHYdFl6f3QsDuFn5to69mWRtuC8HZVXhekVb9fba2ERw@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfNBw/0pXdpwZKxQnH9AuLAPpRLNynvtiMPfmNNZLPXRyBN00/
+	gmsWS4wbG2ON6yQARa5BWqvC5Tijaql7cp7sgkqHTSqtQIJ18nt5Ezzm+AewGcPDI+pY0zWd2S9
+	sgKYPb2RDFpN+fhYa1ETJxbz6uy3dqYg=
+X-Gm-Gg: ASbGnctTaqv1n8Rw24fMHAFGY9fL2xETPQi4efdWeq+N5EXnoOK8kyRmy4UiF6nB8w/
+	/tszmPp3OcmmsUqeZuJFuoYUSfqhdjRdAlXsa7WlK0BjYfrOHs6UnjZkTfdMXPJ3JjPHF+ur+mP
+	D1wQ4PkBx2iyGCpnE13SWwWHQzJ31sJrniuYTKqgLopmAkcjOfpp152TEUe5C0TB68WaaiLPWMG
+	7HsuebbqDRJeK5BPC+Yqpn5lciolvvNVTo9eBGIjqakYNYbPX6XGM9NHzqp86OQPmaAEkIsKtUP
+	K/2mXQVeECB4iMo6/vqLVzeFU+sFZwiEHY7VVyUuhw4TXFJdpfwWO4lXBdUnyJlSRJgahlrgnZL
+	/Cy8/KKM228PwjA==
+X-Google-Smtp-Source: AGHT+IHxtnWGYsm3LFZRczC9zdV1e3SVuSzqd5lCkRCtCSwSHSKCUy+mu2VyX3bSoeSnixHqgQjf0c+qJNqElhf3Sas=
+X-Received: by 2002:a05:7301:608a:b0:2a4:3592:8623 with SMTP id
+ 5a478bee46e88-2a6fd00454dmr966928eec.1.1763630124979; Thu, 20 Nov 2025
+ 01:15:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251120181111.65ce75a0@canb.auug.org.au>
+In-Reply-To: <20251120181111.65ce75a0@canb.auug.org.au>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 20 Nov 2025 10:15:12 +0100
+X-Gm-Features: AWmQ_bmx27fy-6GltfjUArDrYggtl_znIUPsOrpU7bqfecOHmOPCKoWR3rYCaWc
+Message-ID: <CANiq72mW=zMbt2W2Omn4PnMDDJfqz3tDtrneMOFz2ysQ34T8zg@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the rust tree with the driver-core tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Igor Korotin <igor.korotin.linux@gmail.com>, 
+	Tamir Duberstein <tamird@gmail.com>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Greg KH <greg@kroah.com>, Danilo Krummrich <dakr@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 19 Nov 2025 15:48:24 -0800 Andrew Morton <akpm@linux-foundation.org> wrote:
+On Thu, Nov 20, 2025 at 8:11=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
 >
-> Thanks, I'll disable them for now.
->
-> Alice, can you please help us with a fix?  Simple patch follows:
+> I have applied the following (hack) merge resolution for today.
 
-Something like this should work (I would suggest adding each helper into
-the right commit that performs each move to the header):
+Thanks a lot Stephen for taking the time to do that instead of dropping it.
 
-diff --git a/rust/helpers/rbtree.c b/rust/helpers/rbtree.c
-index 6d404b84a9b5..2a0eabbb4160 100644
---- a/rust/helpers/rbtree.c
-+++ b/rust/helpers/rbtree.c
-@@ -7,3 +7,13 @@ void rust_helper_rb_link_node(struct rb_node *node, struct rb_node *parent,
- {
-        rb_link_node(node, parent, rb_link);
- }
-+
-+struct rb_node *rust_helper_rb_first(const struct rb_root *root)
-+{
-+       return rb_first(root);
-+}
-+
-+struct rb_node *rust_helper_rb_last(const struct rb_root *root)
-+{
-+       return rb_last(root);
-+}
+We should be able to do the same as Tamir did in commit 657403637f7d
+("rust: acpi: use `core::ffi::CStr` method names"), i.e. move the
+build assert below to then be able to use `len()` instead:
+
+diff --git a/rust/kernel/i2c.rs b/rust/kernel/i2c.rs
+index aea1b44d189b..f67c355c988e 100644
+--- a/rust/kernel/i2c.rs
++++ b/rust/kernel/i2c.rs
+@@ -43,11 +43,8 @@ impl DeviceId {
+     /// Create a new device id from an I2C 'id' string.
+     #[inline(always)]
+     pub const fn new(id: &'static CStr) -> Self {
+-        build_assert!(
+-            id.len_with_nul() <=3D Self::I2C_NAME_SIZE,
+-            "ID exceeds 20 bytes"
+-        );
+-        let src =3D id.as_bytes_with_nul();
++        let src =3D id.to_bytes_with_nul();
++        build_assert!(src.len() <=3D Self::I2C_NAME_SIZE, "ID exceeds 20 b=
+ytes");
+         let mut i2c: bindings::i2c_device_id =3D pin_init::zeroed();
+         let mut i =3D 0;
+         while i < src.len() {
+@@ -433,11 +430,8 @@ impl I2cBoardInfo {
+     /// Create a new [`I2cBoardInfo`] for a kernel driver.
+     #[inline(always)]
+     pub const fn new(type_: &'static CStr, addr: u16) -> Self {
+-        build_assert!(
+-            type_.len_with_nul() <=3D Self::I2C_TYPE_SIZE,
+-            "Type exceeds 20 bytes"
+-        );
+-        let src =3D type_.as_bytes_with_nul();
++        let src =3D type_.to_bytes_with_nul();
++        build_assert!(src.len() <=3D Self::I2C_TYPE_SIZE, "Type exceeds
+20 bytes");
+         let mut i2c_board_info: bindings::i2c_board_info =3D pin_init::zer=
+oed();
+         let mut i: usize =3D 0;
+         while i < src.len() {
+
+Igor/Tamir?
 
 Cheers,
 Miguel

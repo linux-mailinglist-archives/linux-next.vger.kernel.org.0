@@ -1,70 +1,69 @@
-Return-Path: <linux-next+bounces-9117-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9118-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2816DC7661B
-	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 22:34:30 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 834E3C76666
+	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 22:42:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0686134E047
-	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 21:33:45 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E2B57346CC8
+	for <lists+linux-next@lfdr.de>; Thu, 20 Nov 2025 21:42:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 739FB253958;
-	Thu, 20 Nov 2025 21:33:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5918030B501;
+	Thu, 20 Nov 2025 21:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="JVZqNn+Z"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="J0UzNTtO"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E95C239E8B;
-	Thu, 20 Nov 2025 21:33:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FDF63081C5;
+	Thu, 20 Nov 2025 21:42:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763674418; cv=none; b=SfqVgIhJcoBHtiDzDHoPxxxvWK0cHUFBfEjm56m+xNwx3C3OBmYV9kC/IezCCMPk7h3HvHMsVVVD/SEmIH8wcV60G0ilXruY6/slWtSVX90hwakV4ro17VVEhUz/gwfDc44sKuC6P9TD1DGVcT8nogMjEU2+ISeOqVGMjV7O6/Y=
+	t=1763674938; cv=none; b=j9KDEvMfUBmv/gaCr46KiNqTzQc04erRkuQQKRq9q/dczQ1T4RmtV4IaNz6oUbtjIwboiah3v5pK3rnaneHoBmXgRizicHrjTpw7RoEItLVjsVpx6/yPEF77+4lkJGmHS0r/QTVdwNbMqqQUqR2UkX3C+xA6qobwNGI8ogCjoF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763674418; c=relaxed/simple;
-	bh=SGkyXAHdrmtxL37OM50hnpsyVT90aYH62YIQ2CZnqzY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dEZhtn63NzF4wVt2k2I0sZnHoVXzU9/iE6mU1Bt56akjLpZKH8Yv4nI3H60FFgigVJJICYZIU0xeWcq1f0Kg4kP1FrsNOO7urbzS7hvL0YOwMbO1IgfHew7+zQX5+OdjeJs5HoH53KTl+ipsY7hLDWP3FfUFRyAQccVcaUtJWhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=JVZqNn+Z; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1763674938; c=relaxed/simple;
+	bh=ZdbkOTCXUDMKJP1z7WdKlho64x+EpIeW4VI+k/zyB7I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lTwngRNWzIOld6QFH68GVViH9kBXjx6RmUca3+KaVdcYBXWjCq5qyqqDaQavSkF2hPLhpuAidu7zkpETUSZYr2VFYbfyyjXydRq/waUBr0NQrWtYhIZ5OWPn5lsEMeMvKW3FD/L1NVsDtzUklRocOxtFn/Wr0TAAoiQXiWJSP7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=J0UzNTtO; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1763674414;
-	bh=VHA1p3obql0TmlED0EsfBAcnYjWT3/+5obAI9kW+KzE=;
+	s=202503; t=1763674932;
+	bh=rvVAICVmpmFB4br5kDPEcV8KTjT3Z7UkhgBQ7mTYzpE=;
 	h=Date:From:To:Cc:Subject:From;
-	b=JVZqNn+Z8EUCReVrPsnP5PGqGv8tBtZAAe5jxjCI5lZr9kF/qeTL4YGG+DyIZoYk9
-	 kK+6SAbN5yRve1nhwVtu0dFKtN/cnHFKxk98FmS/22YE9ZFNFnS2j/eT91om1TbIQZ
-	 NkaSnBZ/Ouwji9v9i2yeEXn4ERu2ZFVJJ/keR9d87ElJrVm1e40ncYRlSx1m0Bb+Oa
-	 5Nji06ZOc+9pxXmWALUwUaCLejmzQZukcAcu+fycJvxzNZNCBBkxdnc/qepmmqQ2Hv
-	 S812zxcls8YjGpJLoQil3svndqms0wpu0tNaSeRdQ0i5l0cx+OGjdsf2UAZTs4ptvo
-	 fmkkf5pD0ta+Q==
+	b=J0UzNTtOktQGNz+PXW2Re/7odXIfUH51QoDaldS1Ma55NPJcf6iB0/+e4wXiffFH7
+	 eYOJG2yyuSPtMhoJdRmVLOoF5A63q/OsCTMMc3A9pxE487bBBlJ4WWoVITkKzYlmdi
+	 p6LO7CgJs6Cu6LchCXhCGuxkq02WstSdizLojSopKh1nRROMOIuP3/K2hyn3fddAI/
+	 1pjV9ixc6YzIBHg6PQ2FFziCmn2Yrbt3XTkSmCZmj7ULg4TNxh50+Z10mNiWF4GYY8
+	 +yyLLuJS6T28lUbgaDVVRXCzq2SZ4wPGNKe9KTVdIwlVcK30/Rclai5+cltcCM0M5N
+	 mNdkB8fzjUrXg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dCBRd4Lc5z4wGZ;
-	Fri, 21 Nov 2025 08:33:33 +1100 (AEDT)
-Date: Fri, 21 Nov 2025 08:33:33 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dCBdc37Cqz4wM8;
+	Fri, 21 Nov 2025 08:42:12 +1100 (AEDT)
+Date: Fri, 21 Nov 2025 08:42:11 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
 To: Al Viro <viro@ZenIV.linux.org.uk>, Christian Brauner
  <brauner@kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Mateusz Guzik
- <mjguzik@gmail.com>
+ Mailing List <linux-next@vger.kernel.org>, NeilBrown <neil@brown.name>
 Subject: linux-next: manual merge of the vfs tree with the vfs-brauner tree
-Message-ID: <20251121083333.48687f3e@canb.auug.org.au>
+Message-ID: <20251121084211.7accff09@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/L6Kk52Eh+tr3VsVzMSt+aMJ";
+Content-Type: multipart/signed; boundary="Sig_/vg.HhIsQrm3Nv5XgLd=lD0z";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/L6Kk52Eh+tr3VsVzMSt+aMJ
+--Sig_/vg.HhIsQrm3Nv5XgLd=lD0z
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -72,17 +71,17 @@ Hi all,
 
 Today's linux-next merge of the vfs tree got a conflict in:
 
-  fs/dcache.c
+  fs/debugfs/inode.c
 
-between commits:
+between commit:
 
-  31e332b911fc ("fs: add missing fences to I_NEW handling")
-  b4dbfd8653b3 ("Coccinelle-based conversion to use ->i_state accessors")
-  1e3c3784221a ("fs: rework I_NEW handling to operate without fences")
+  8b45b9a88233 ("debugfs: rename end_creating() to debugfs_end_creating()")
 
-from the vfs-brauner tree and commit:
+from the vfs-brauner tree and commits:
 
-  bacdf1d70bbe ("primitives for maintaining persisitency")
+  ebb54484c3df ("convert debugfs")
+  0703b36e4e1c ("debugfs: remove duplicate checks in callers of start_creat=
+ing()")
 
 from the vfs tree.
 
@@ -97,46 +96,100 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/dcache.c
-index 3204cc55b566,824d620bb563..000000000000
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@@ -1986,9 -2012,17 +2019,11 @@@ void d_instantiate_new(struct dentry *e
-  	lockdep_annotate_inode_mutex_key(inode);
-  	security_d_instantiate(entry, inode);
-  	spin_lock(&inode->i_lock);
-+ 	spin_lock(&entry->d_lock);
-  	__d_instantiate(entry, inode);
-+ 	spin_unlock(&entry->d_lock);
- -	WARN_ON(!(inode->i_state & I_NEW));
- -	inode->i_state &=3D ~I_NEW & ~I_CREATING;
- -	/*
- -	 * Pairs with the barrier in prepare_to_wait_event() to make sure
- -	 * ___wait_var_event() either sees the bit cleared or
- -	 * waitqueue_active() check in wake_up_var() sees the waiter.
- -	 */
- -	smp_mb();
- +	WARN_ON(!(inode_state_read(inode) & I_NEW));
- +	inode_state_clear(inode, I_NEW | I_CREATING);
-  	inode_wake_up_bit(inode, __I_NEW);
-  	spin_unlock(&inode->i_lock);
+diff --cc fs/debugfs/inode.c
+index 532bd7c46baf,25a554331ac4..000000000000
+--- a/fs/debugfs/inode.c
++++ b/fs/debugfs/inode.c
+@@@ -403,18 -403,17 +403,17 @@@ static struct dentry *debugfs_start_cre
+  	return dentry;
   }
+ =20
+ -static struct dentry *failed_creating(struct dentry *dentry)
+ +static struct dentry *debugfs_failed_creating(struct dentry *dentry)
+  {
+- 	inode_unlock(d_inode(dentry->d_parent));
+- 	dput(dentry);
++ 	simple_done_creating(dentry);
+  	simple_release_fs(&debugfs_mount, &debugfs_mount_count);
+  	return ERR_PTR(-ENOMEM);
+  }
+ =20
+ -static struct dentry *end_creating(struct dentry *dentry)
+ +static struct dentry *debugfs_end_creating(struct dentry *dentry)
+  {
+- 	inode_unlock(d_inode(dentry->d_parent));
+- 	return dentry;
++ 	simple_done_creating(dentry);
++ 	return dentry; // borrowed
+  }
+ =20
+  static struct dentry *__debugfs_create_file(const char *name, umode_t mod=
+e,
+@@@ -456,9 -450,9 +450,9 @@@
+  	DEBUGFS_I(inode)->raw =3D real_fops;
+  	DEBUGFS_I(inode)->aux =3D (void *)aux;
+ =20
+- 	d_instantiate(dentry, inode);
++ 	d_make_persistent(dentry, inode);
+  	fsnotify_create(d_inode(dentry->d_parent), dentry);
+ -	return end_creating(dentry);
+ +	return debugfs_end_creating(dentry);
+  }
+ =20
+  struct dentry *debugfs_create_file_full(const char *name, umode_t mode,
+@@@ -602,10 -591,10 +591,10 @@@ struct dentry *debugfs_create_dir(cons
+ =20
+  	/* directory inodes start off with i_nlink =3D=3D 2 (for "." entry) */
+  	inc_nlink(inode);
+- 	d_instantiate(dentry, inode);
++ 	d_make_persistent(dentry, inode);
+  	inc_nlink(d_inode(dentry->d_parent));
+  	fsnotify_mkdir(d_inode(dentry->d_parent), dentry);
+ -	return end_creating(dentry);
+ +	return debugfs_end_creating(dentry);
+  }
+  EXPORT_SYMBOL_GPL(debugfs_create_dir);
+ =20
+@@@ -649,10 -633,10 +633,10 @@@ struct dentry *debugfs_create_automount
+  	DEBUGFS_I(inode)->automount =3D f;
+  	/* directory inodes start off with i_nlink =3D=3D 2 (for "." entry) */
+  	inc_nlink(inode);
+- 	d_instantiate(dentry, inode);
++ 	d_make_persistent(dentry, inode);
+  	inc_nlink(d_inode(dentry->d_parent));
+  	fsnotify_mkdir(d_inode(dentry->d_parent), dentry);
+ -	return end_creating(dentry);
+ +	return debugfs_end_creating(dentry);
+  }
+  EXPORT_SYMBOL(debugfs_create_automount);
+ =20
+@@@ -704,8 -688,8 +688,8 @@@ struct dentry *debugfs_create_symlink(c
+  	inode->i_mode =3D S_IFLNK | S_IRWXUGO;
+  	inode->i_op =3D &debugfs_symlink_inode_operations;
+  	inode->i_link =3D link;
+- 	d_instantiate(dentry, inode);
++ 	d_make_persistent(dentry, inode);
+ -	return end_creating(dentry);
+ +	return debugfs_end_creating(dentry);
+  }
+  EXPORT_SYMBOL_GPL(debugfs_create_symlink);
+ =20
 
---Sig_/L6Kk52Eh+tr3VsVzMSt+aMJ
+--Sig_/vg.HhIsQrm3Nv5XgLd=lD0z
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkfiS0ACgkQAVBC80lX
-0GzYpwf9ELxrbyzVcCLzrlDVprqjY9ipVEINQzZA9ZJTkaOxMyl48KMJ3vbgv6U8
-MpXbCB0PErfA3Q9CHIAZw2RqmYfrNWbbgVJDFZOTmpEzeAvBtFKhCcrEUdjMlLZD
-o/wqXjrlRNw9I1VEcf190SbK3Y5+e2XgMA8jJGRtgvzz5bRWeI0xMvjbHMssbVl8
-ja5OaYbaTIHhDy0Wv50nBpmnFbNAXxAZ4r+gi/ZtK2IWGV4y/8axCPMWZAisHiGd
-86CgWgBMTWsShN3IWhiMCbVSGoI3jfgSkT1byBC53p9DG58phdkx6jnAuuGg/CJ5
-HfwDa5W7IsUXWtM37OhSt2RCdUiMMQ==
-=J4tw
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkfizMACgkQAVBC80lX
+0GzaIwf/SJRqe4xXVu0CV+p2KlTjM7OVvV6rVs9seGiUSHa8ZJffWhPsOKLGeSxm
+aEsLsrYESTPcyB8+Gs2TSlP4qHC+RB8xpi5qH4oDcFJqUZ3DVlHVD5FKAkMaKTVS
+aFJx6VRhQ1Awanzkx2pWMpcV9xwLtE7ZPPGoctyZ+ihpuKMxU1FSoUovjvfoegXG
+0IfsLwKGZrsTdMzO6s4ci94ZOCf1RJKR7XZLkpUU5NsyhJkjOKM2VP3+6senbz0L
+0Tu72eq6Rx4dboAywIEUP8m9V+8YJy2rAse/RLy/y11MF+j9KjOH/zkzZd8qASFj
+5VqOpMcOqGX+ORyL04RrHNjGFKdiCA==
+=b2Xb
 -----END PGP SIGNATURE-----
 
---Sig_/L6Kk52Eh+tr3VsVzMSt+aMJ--
+--Sig_/vg.HhIsQrm3Nv5XgLd=lD0z--
 

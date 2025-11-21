@@ -1,156 +1,168 @@
-Return-Path: <linux-next+bounces-9139-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9140-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id F32E8C78128
-	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 10:14:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40121C7813D
+	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 10:15:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id ACAA0343328
-	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 09:13:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 041A431EAE
+	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 09:15:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7CA4340DBC;
-	Fri, 21 Nov 2025 09:13:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A642D2BD11;
+	Fri, 21 Nov 2025 09:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="b/mCefx+";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="h6txGwdV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IHO5cKFh"
 X-Original-To: linux-next@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20E433F8D3
-	for <linux-next@vger.kernel.org>; Fri, 21 Nov 2025 09:12:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44CF32309BE
+	for <linux-next@vger.kernel.org>; Fri, 21 Nov 2025 09:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763716380; cv=none; b=FFae3BOQkgtA1bYvFET7GaDbGAZVNE9Y9gr1onsjIxUs9gg/pHJbL9FVJ2/xT5vcZw5YvKO+NNfeta4jz4q2pAs8bJw7Buuhoek5ARyDOxmDYU/fyv6N99a3RberI8C3jVeFJwu3RVpsw9P0mj+88ILeArOax6qDTYy1AB887n0=
+	t=1763716544; cv=none; b=uBBhFghDExk2EByQCSEXpXWiaCvXapU7k1ZMvW+5X5ChkVFSrLz+taOwopK5IlUuachQZAhvvnKX5E2+HCp4OsleW19FUoOfcGRogw0cBXtzdUFiICDw4IEoUB0jk8Ioum6RFNjkeRPEOHUncOuChCIyT6ReY4zA9hJhnfUy0hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763716380; c=relaxed/simple;
-	bh=rGSPxq3DrRWn0/5xsegD0tE1qbLCrNgosbyUr0L7ubs=;
+	s=arc-20240116; t=1763716544; c=relaxed/simple;
+	bh=QaD00ch2Xm21nSmLRtDru6YG2xz2fbIJHvefSp7Fa2A=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Mptnv4h1ROqjXju+tX9SRc4Lk9fcaYYQFSzlc0KsLXaSu6DQuUVraX6b3JJcnllZsTkXhNhMUbhjxetWPw5UH27PfEdpLS2a7jiOxYMLWD6qcjT2ppZorR0gAeBGCQtCyfyrdbYrndWv1uzTjGKdsq9Tx6kEOo8hWAvgKRQiYXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=b/mCefx+; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=h6txGwdV; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763716377;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EzgtvaE+SO5BfvxrNxU1DUGjb9OqbwlHycPyy7M3GBc=;
-	b=b/mCefx+k7tf8Tt3zBzfBDN2AbCJJGhNJqA/jQoVjcUAchJgazj2Z5qZPnfJBmHG6m2l+y
-	ZeD3+4lQIU+sDolCY0Ggid7l0qIxsysvgvEj6teUyhmRKwGqSicqGnBMriXZbjKdZ+86gz
-	ELPQXePUmJfLocHbtMd9Rku4HDchkWw=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-5-VOMJ45koPvuf1YCiF2Bbjw-1; Fri, 21 Nov 2025 04:12:55 -0500
-X-MC-Unique: VOMJ45koPvuf1YCiF2Bbjw-1
-X-Mimecast-MFC-AGG-ID: VOMJ45koPvuf1YCiF2Bbjw_1763716374
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-b76778e621cso21843866b.1
-        for <linux-next@vger.kernel.org>; Fri, 21 Nov 2025 01:12:54 -0800 (PST)
+	 To:Cc:Content-Type; b=fuXPYmgZdpBFyuan29EQyWU21hFaItne2/WhdYPsEdzhjNQszSD8iEFrlC1RKGA10JVnjpGlqdYongctM8qeCwnPfwf2AF3qPMfMaOO3BPX5m34nZTNvYnKsvl2I51IUhadVCKx4TYAxCIjKffBV6dCWIpeH9hCRmmIXhfab1eY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IHO5cKFh; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b713c7096f9so290129966b.3
+        for <linux-next@vger.kernel.org>; Fri, 21 Nov 2025 01:15:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1763716374; x=1764321174; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EzgtvaE+SO5BfvxrNxU1DUGjb9OqbwlHycPyy7M3GBc=;
-        b=h6txGwdVvcOl7CgQhPoinNUfRuSnNfMRCIGiydtsmEHhrzMweVSur/96HSq543o8MQ
-         xJJnufGavKmdJo3lGSdirXhDkZX11HGYCQJobD0+KGneXKYdsFXDy5Deo71yozFnVYzz
-         YiffNuMMYuOlC/KVRzFcPOfpvlVS+3J6E2YjDSF5NXhqboLa+wrAC28Cm3rfwVTq/AUy
-         k7hWRqaP2BXDBNB+QcyvcfLOUeTTaTXqA224qiN9l1Dxc97hnlP6z9iWRX8HZ8oQ3ZVM
-         xM5Ul6ySI2NCBd26dN9yWPFGJ1dRcAj//F4OSGMUrSJZ5sz9+2byADYeaUlgULzHjBkS
-         JtSg==
+        d=linaro.org; s=google; t=1763716540; x=1764321340; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IsCJj238uLsCT1LMa3YI8Doktc/kYSD45gyn3f/32w4=;
+        b=IHO5cKFhJ2vaiAQ17tNvnqZslMDfJOuVBnpRwx+YYk2/f8QJDK0MK9ZHcxnjT4onSn
+         L4ohHzWgAu+8iGUu40h+1yoMrkd6Lb+YCMX+9ptgKZFHN5swKGb/oszannVNh/RRZXoj
+         ETVi2qhxxLlRfdUIclobaQv/tDTrEsCYNEXpDl7zWwqSlTZRecieCBm2GOd1ikRGnFPu
+         Y5uXWgoiL1b6WTIzX2qTuhQO5HXJ7R9EnqvNHknxJFQchgyqwilHJ8CrXIn8GRtOFG/n
+         wVDTWGM72g3teogBUHr9tc7adNEQ8YfarTWzuAJIpRBoerregykWVN0tSavlgwF+nU+1
+         16Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763716374; x=1764321174;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EzgtvaE+SO5BfvxrNxU1DUGjb9OqbwlHycPyy7M3GBc=;
-        b=KVSfx2Sa3yzlRZFbC6VJTBWoYhT7Bddnkq/mou7ojt7e/4m0voK8C83LlzOoAOPgLf
-         6lo7ozp+txCDmpEP4l2teJsexOlPyNwIez37o/jMdg4AHO+xAUtw1o3m/svz7vbmg/GL
-         +MMDrzCIDJf0KRBxlb3recEolg74MmaTD0lthizO3Ifn1JPvkRBMo6RPmp7CG4sCbRYm
-         Lz3MYaGImLlii0sOabc9BZmigVvvSO3Wae39MB9EbqZvo1EUqKmj2vdKyCIbKuz8/xJ9
-         iuOvXJF1ouSNBB8nQiRKjs5LCn70DXgVITd6w7w2/MVa4G6WoG3SB5mYlU6gOoRjlHM/
-         xojQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUg1PBGqFqnoICkLh+IP2qcYE9+QC76DQEqusiZpZ/OPjho4MdHWRUWRjlGUf0LAaWXgcZuLZ0YziuL@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqG4XR+dYqHVBJ3HErJA73EneDg4AFrWjs1qg/RWnH/wls01L6
-	Nobf8N1LStnPh9A9C8o4wXVa0DnK/5cyqlTlHKMVdq6hscG3gBQGGLINcxcwEqLVlSC5rPywZtb
-	JlEmEwh55X/1KUgX3EOx54U9sVjBLIRf2gUue5gwl/Otbs+64eSO5wc7ru9U/mQ0BsWsx+J1afH
-	E7VlhD0dkIRANjewnDhuPf8blK9hD9pxKp9HYTzQ==
-X-Gm-Gg: ASbGncutSl5XCM9HzlUG48UVzfLP6YXqM94K/5huOMAOZ2FTHgLnt0oFNDf+qIZwGzD
-	MENixNd2dPe1dqFFiQEigpYOQ2vDO0ZU7nHmS9woMMt9T2GuC8LLb6gRyzVGi4A+gUC2kEfdyAf
-	tYFX2oBgc5aXFnoeOvRAfl6cTAMPPhCj6Lym9+HHyqLU+Ius0zyAo9WE7vLfkbTCxYcjhxPf4/p
-	ezUSvIyF5eCUFEZvfj4CamF
-X-Received: by 2002:a17:907:2d29:b0:b07:e258:4629 with SMTP id a640c23a62f3a-b7657285447mr647708066b.16.1763716373648;
-        Fri, 21 Nov 2025 01:12:53 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGV7952xCf1inAA7sdtz7W0hNAWcmDEpuF2cK4Z1eRszTmTJwE8XibTN28hk6Tt7czNGoeV4Yg12AC9GPZfKRA=
-X-Received: by 2002:a17:907:2d29:b0:b07:e258:4629 with SMTP id
- a640c23a62f3a-b7657285447mr647704666b.16.1763716373205; Fri, 21 Nov 2025
- 01:12:53 -0800 (PST)
+        d=1e100.net; s=20230601; t=1763716540; x=1764321340;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IsCJj238uLsCT1LMa3YI8Doktc/kYSD45gyn3f/32w4=;
+        b=NTlY5/yE4SULvg/uTKM9M+avr6+Qgnfn68WlY42IWocD0kqfsHah9bpePQ6gyiWcaJ
+         1+clpAiAt6x8xj64MC491C35im5M4zyFcWCDzeIBCcwi/6kllyXIcBw2UTQLHwbuY6iI
+         6mTF9+sZjpSU3L9f0ALaizW+6tj0Xc3/VFId+YgLTkPPRA2Zbs8VO3XzcB8GeXD1TjX9
+         2wNyEbUjbpH3bNA8kom1YKbCPr/xGRaZZBQgrPpu/i4iXJaR7dWoZHcwvLMnALPXFRLq
+         0yulWJ32koJCXnnPNyBEYkdXzpS3vMKUEeGMqAI1kjzs9ESwV8/3bG/kprXB61l4Uenk
+         xoDg==
+X-Forwarded-Encrypted: i=1; AJvYcCX+bAXFCnFKlhq4essXpIRF7Z3e9I/p/Alr/yB+xkozSOsgoeZVS4RmZRxaTHLrRH8Tmm/kG4ECD61C@vger.kernel.org
+X-Gm-Message-State: AOJu0YwL+TWtZcSxFNJ4KwGhnGoc8tSugHrhGUhlaPrIKLTCSmouc2lF
+	XGn0Iiq0iTY23/XH2MbTmwep183C6Q4mbZgFixAS5prRRZ9DOpFzFP82LCD8boSvUx1T/ndBpwh
+	I/YvjCGLAxXGdkfpWI2oGyTPwKN5TNyMakkloUyQ7AA==
+X-Gm-Gg: ASbGncvGOJ4UxU6eIT8H1/PrH8UkgmiYNmhsiUXHmd6vi2siJ0dwyVJMhz+wb6G1wF4
+	uDseg0UsWwg6hAcBNr8TafAPZIVYz7Qh9hsrjWz+uJce9DLqAFuNmxdkMCssKRiNdItV3b5x9Hx
+	yyzC3TA9HuiO3eTjFhpCDAx/9GuScicMCQiXOfEg8kk0bEp2EPkikSFDtA0eww+kSL3/xoea4+t
+	hH/s0UuYj4SoM9pMJ3W5x0zBRd3s/aQXsOspfA8Y9mWaSHtOPC8NKI/aVfrzTnFuwc835/gyu0J
+	sQgX7rM8ivEg/dNuBRBfrMkfO94=
+X-Google-Smtp-Source: AGHT+IGKOu5/oklHXBGkous8j5S+i/SRdtuxResfZBaYf14jRrrrYmCio3MQgI2OzH23c35Z//q8Yyyq7K7WtZEPzpw=
+X-Received: by 2002:a17:906:c144:b0:b73:572d:3aff with SMTP id
+ a640c23a62f3a-b767170ca03mr146641066b.35.1763716540240; Fri, 21 Nov 2025
+ 01:15:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251121105209.656f0e88@canb.auug.org.au>
-In-Reply-To: <20251121105209.656f0e88@canb.auug.org.au>
-From: Tomas Glozar <tglozar@redhat.com>
-Date: Fri, 21 Nov 2025 10:12:42 +0100
-X-Gm-Features: AWmQ_bkxwO7E0TjyCGZHAcr44vqjQQUTDeTAlB5gXWZ3_u04-UhgYgdkaSlbj-U
-Message-ID: <CAP4=nvT-Jd_X30unpdkS0+C=kYLmFRoWjLjhprFQW2YMiq=2bA@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the ftrace tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+References: <20251121111534.7cdbfe5c@canb.auug.org.au> <20251121145042.3cef6e7a@canb.auug.org.au>
+ <64a9b0f21ec290cb9af5887e8ae46b90ce34edc2.camel@pengutronix.de>
+In-Reply-To: <64a9b0f21ec290cb9af5887e8ae46b90ce34edc2.camel@pengutronix.de>
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date: Fri, 21 Nov 2025 10:15:29 +0100
+X-Gm-Features: AWmQ_blpiQkYkpG5BjrciII0sTux92wiU1ni4DIebbY54xG5yaAIarh6wRU9qPg
+Message-ID: <CACMJSeuE9-t+wK3WY96oO9zJA0vv=vrtW+VFKtuKTrxXeT=mKg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the reset tree
+To: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
 	Linux Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-p=C3=A1 21. 11. 2025 v 1:00 odes=C3=ADlatel Stephen Rothwell
-<sfr@canb.auug.org.au> napsal:
+On Fri, 21 Nov 2025 at 09:22, Philipp Zabel <p.zabel@pengutronix.de> wrote:
 >
-> Hi all,
+> > >
+> > > Caused by commit
+> > >
+> > >   d7cdbbc93c56 ("software node: allow referencing firmware nodes")
+> > >
+> > > I have used the reset tree from next-20251120 for today.
+> >
+> > This same commit is also in the gpio-brgl tree, so I have used that
+> > tree from next-20251120 as well.
 >
-> In commit
+> Commit d7cdbbc93c56 ("software node: allow referencing firmware nodes")
+> renames the 'node' field in software_node_ref_args to 'swnode', so the
+> trivial build fix would be:
 >
->   f45a0cb29720 ("rtla/tests: Fix osnoise test calling timerlat")
+> ----------8<----------
+> diff --git a/drivers/platform/x86/intel/chtwc_int33fe.c b/drivers/platform/x86/intel/chtwc_int33fe.c
+> index 29e8b5432f4c..96400dec0baf 100644
+> --- a/drivers/platform/x86/intel/chtwc_int33fe.c
+> +++ b/drivers/platform/x86/intel/chtwc_int33fe.c
+> @@ -77,7 +77,7 @@ static const struct software_node max17047_node = {
+>   * software node.
+>   */
+>  static struct software_node_ref_args fusb302_mux_refs[] = {
+> -       { .node = NULL },
+> +       { .swnode = NULL },
+>  };
 >
-> Fixes tag
+>  static const struct property_entry fusb302_properties[] = {
+> @@ -190,9 +190,9 @@ static void cht_int33fe_remove_nodes(struct cht_int33fe_data *data)
+>  {
+>         software_node_unregister_node_group(node_group);
 >
->   Fixes: 05b7e10687c ("tools/rtla: Add remaining support for osnoise acti=
-ons")
+> -       if (fusb302_mux_refs[0].node) {
+> -               fwnode_handle_put(software_node_fwnode(fusb302_mux_refs[0].node));
+> -               fusb302_mux_refs[0].node = NULL;
+> +       if (fusb302_mux_refs[0].swnode) {
+> +               fwnode_handle_put(software_node_fwnode(fusb302_mux_refs[0].swnode));
+> +               fusb302_mux_refs[0].swnode = NULL;
+>         }
 >
-> has these problem(s):
+>         if (data->dp) {
+> @@ -222,7 +222,7 @@ static int cht_int33fe_add_nodes(struct cht_int33fe_data *data)
+>          * rely on software_node_register_node_group() to use the original
+>          * instance of properties instead of copying them.
+>          */
+> -       fusb302_mux_refs[0].node = mux_ref_node;
+> +       fusb302_mux_refs[0].swnode = mux_ref_node;
 >
->   - SHA1 should be at least 12 digits long
+>         ret = software_node_register_node_group(node_group);
+>         if (ret)
 >
->  ...
+> ---------->8----------
+>
+> I assume it was expected that drivers don't modify contents of struct
+> software_node_ref_args directly, but rather assign them with
+> SOFTWARE_NODE_REFERENCE(), so maybe this is not the correct fix?
+>
 
-Oops! Apparently, I forgot to use checkpatch on the patchset:
+Yeah, driver definitely should not be doing that.
 
-$ scripts/checkpatch.pl /tmp/test.patch
-WARNING: Please use correct Fixes: style 'Fixes: <12+ chars of sha1>
-("<title line>")' - ie: 'Fixes: 05b7e10687c6 ("tools/rtla: Add
-remaining support for osnoise actions"
-)'
-#75:
-Fixes: 05b7e10687c ("tools/rtla: Add remaining support for osnoise actions"=
-)
+The comment in this file:
 
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
->
+/*
+ * We are not using inline property here because those are constant,
+ * and we need to adjust this one at runtime to point to real
+ * software node.
+ */
 
-Ah, good to know! My setup is fine, the issue was that I have not used
-git log --oneline, but regular git log, and counted the characters by
-myself.
+Indicates something's wrong. It looks like it's waiting for a software
+node called "intel-xhci-usb-sw" to appear in the system (as in: get
+registered as a firmware node). This is clearly an abuse of the whole
+concept. I'll try to figure out a way to improve it.
 
-Thank you for catching this.
-
-Tomas
-
+Bart
 

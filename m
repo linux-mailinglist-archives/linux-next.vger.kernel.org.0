@@ -1,142 +1,173 @@
-Return-Path: <linux-next+bounces-9123-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9124-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 131FCC76DDE
-	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 02:35:28 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73EA8C76FB1
+	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 03:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 5A4092B6BE
-	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 01:35:23 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5BB7735610D
+	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 02:09:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AE3620C001;
-	Fri, 21 Nov 2025 01:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F7BF277013;
+	Fri, 21 Nov 2025 02:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dTtH+23C"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="JsFrKWxK"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F366165F1A;
-	Fri, 21 Nov 2025 01:35:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13BC621ABAA;
+	Fri, 21 Nov 2025 02:07:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763688916; cv=none; b=lVRwdw0yGIPSN0RNeNWa88Y/yhw6bU/LywszTH94UL+tFjoE2wfF0B/riCYmGzEXV/yBEXBKTo3fACTBzzBnnTzRz3p8K6xutT6zHWEqPoYQPgGWKhjn0KdkeEaDUpczdjnqjHQb1PGm3k1lCqrLu/4G3jGBJ8v0Z6S7JEKaSWA=
+	t=1763690865; cv=none; b=koz4Bdj2uIJn7Cp6ItV6/CeEE0zz9dedajGN0oEsLOzKNmEKawZbssgYI9lmzRiTCECffYqD9S1YvotT8sNnhfvKOkEk+3KDAr9hxlJmVGWYo5Ps9QsloNeLcT6N6Y8u0E2l8uoQiFsqfZrK/YTX3fWfH9J/mbpDp7wQjXUldIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763688916; c=relaxed/simple;
-	bh=kS2ofSOhGmMFYH9zGR2qGRKe/MsORwCEovyiu8LJB1Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=bq/Y6fogahHepxsbptiqK0Orn+ARoZ6Cg5L1tUGMEKvPbTAYpERM6+Ghzej01M/uKKioJANSb0d6xysCkNhWbeN7pnaKgPiJg9RDve5xd/hXtLvW52axPSJbuYSIWI51tqWhLfagW6Xk9EmvyvK8WNKjMFgqQ+YQ/XzuOmi7zm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dTtH+23C; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1763690865; c=relaxed/simple;
+	bh=5vnpSUxT88/Iecs2/Of74JYgFZXDuOBqlfqHJkkfDUk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dB4We47QPkdt963xKjvt4a1r9UUOFWSG1yOJIcuN1FvXQEblLRLWNLkjrbJjYXS1zua1Ir65xdJsp/SR+uOJQNgtcZ4jxughg6Wc7XfC7jGGxyEZdV004cq5MHNbseC+cA1Zr2MvVjXwaN8F7vtA6bi5KMq8aoQ85cX9SsA38QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=JsFrKWxK; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1763688911;
-	bh=If92lfRPzD0LhlgpaDS36W/p/KyiBxB2kOQa1cbeLnc=;
+	s=202503; t=1763690859;
+	bh=Xg51qNBPp0e5NCqrTc8DZPwTWZr6V6FZ18bltBDuiXo=;
 	h=Date:From:To:Cc:Subject:From;
-	b=dTtH+23CcUY9BjfBwr/pk/7/dDvHydOrJUlAoJv/OCGw/ZgtKthEOcGfRyPHoagyu
-	 fCQIy1E/EyORkmf0WbU8XZr06S9G504nXLvLM4IM26KZr/sAPLZiiHGAw4h4mTy3wX
-	 DNrY6Zvp9u5sH0wclWR0kLsoknL1lFEsLHptgQp+lsNXw5qfZiEgbdGDynwK8nWKZ0
-	 aTpCfhJ+RrRi82I3esCsQUQh5Tasi7zKQbafDivPaUv2qMqLRXKU8EA8J9aS7d85LI
-	 qnTtV3nuQFjlzBE8iHXtFEQjC9ObAbuTWQfxReSOzYQCvjKDtyAHyTsEfdvf4mGU6P
-	 GIQZBbO44kb6Q==
+	b=JsFrKWxKDO4NaJsNo+3hNF2b9HOg2+WjwgfBgE4+JCu2z7ERY/oP/nhqxS/CZxyCo
+	 mT8jwGpm3L7dc8eb41DEfBMpycopEZ6PH25M6LWl61VPoA2Mxsz2tccnAHpdff/vh1
+	 +1e1bfb0bSyzyl4bV0J9+j6Wf7H+FW7iWRhPpoWPqJJ6e3pZTNzYr6C6/gXZ83v/JD
+	 cWXLFUbrX78DOfjBxPMZk/6pbHjB1vgRPxIJGRuef3fjPg19UTXmkqXyFsVb8mme6G
+	 KzwXpMoAHWyBdCfIa3h0EHYNQxop+686ftRnsHPeIoarv02bzsH2ms1f3bs4lcc9Dk
+	 OmbRgshbaHcFg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dCHpQ3fxNz4wH7;
-	Fri, 21 Nov 2025 12:35:10 +1100 (AEDT)
-Date: Fri, 21 Nov 2025 12:35:09 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dCJWs0tp8z4w0L;
+	Fri, 21 Nov 2025 13:07:37 +1100 (AEDT)
+Date: Fri, 21 Nov 2025 13:07:36 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>, Gopi Krishna Menon
- <krishnagopi487@gmail.com>, Ivan Pravdin <ipravdin.official@gmail.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Tomas Glozar
- <tglozar@redhat.com>
-Subject: linux-next: manual merge of the ftrace tree with the jc_docs tree
-Message-ID: <20251121123509.5f07d818@canb.auug.org.au>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the tip tree with the arm64 tree
+Message-ID: <20251121130736.465b826d@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oUJmY=U_LfvX8ULOlsIFo.q";
+Content-Type: multipart/signed; boundary="Sig_/c3F3HlhMLklncLNHjbKf885";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/oUJmY=U_LfvX8ULOlsIFo.q
+--Sig_/c3F3HlhMLklncLNHjbKf885
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the ftrace tree got a conflict in:
+After merging the tip tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-  Documentation/tools/rtla/common_options.txt
+drivers/firmware/efi/efi.c:78:10: error: 'struct mm_struct' has no member n=
+amed 'cpus_allowed_lock'
+   78 |         .cpus_allowed_lock      =3D __RAW_SPIN_LOCK_UNLOCKED(efi_mm=
+.cpus_allowed_lock),
+      |          ^~~~~~~~~~~~~~~~~
+In file included from include/linux/spinlock_types.h:12,
+                 from include/linux/mutex.h:16,
+                 from include/linux/kernfs.h:11,
+                 from include/linux/sysfs.h:16,
+                 from include/linux/kobject.h:20,
+                 from drivers/firmware/efi/efi.c:17:
+include/linux/spinlock_types_raw.h:69:9: warning: excess elements in struct=
+ initializer
+   69 |         (raw_spinlock_t) __RAW_SPIN_LOCK_INITIALIZER(lockname)
+      |         ^
+drivers/firmware/efi/efi.c:78:35: note: in expansion of macro '__RAW_SPIN_L=
+OCK_UNLOCKED'
+   78 |         .cpus_allowed_lock      =3D __RAW_SPIN_LOCK_UNLOCKED(efi_mm=
+.cpus_allowed_lock),
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/spinlock_types_raw.h:69:9: note: (near initialization for 'ef=
+i_mm')
+   69 |         (raw_spinlock_t) __RAW_SPIN_LOCK_INITIALIZER(lockname)
+      |         ^
+drivers/firmware/efi/efi.c:78:35: note: in expansion of macro '__RAW_SPIN_L=
+OCK_UNLOCKED'
+   78 |         .cpus_allowed_lock      =3D __RAW_SPIN_LOCK_UNLOCKED(efi_mm=
+.cpus_allowed_lock),
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~~~
 
-between commits:
+Caused by commit
 
-  96b546c241b1 ("Documentation/rtla: rename common_xxx.rst files to common_=
-xxx.txt")
-  198fcc7cb832 ("Documentation/rtla: Mention default priority")
+  8cea569ca785 ("sched/mmcid: Use proper data structures")
 
-from the jc_docs tree and commit:
+interatcing with commit
 
-  90241d14a726 ("rtla: Fix -C/--cgroup interface")
+  40374d308e4e ("efi: Add missing static initializer for efi_mm::cpus_allow=
+ed_lock")
 
-from the ftrace tree.
+from the arm64 tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have applied the following merge resolution patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 21 Nov 2025 12:57:10 +1100
+Subject: [PATCH] fix up for "sched/mmcid: Use proper data structures"
+
+interacting with commit
+
+  40374d308e4e ("efi: Add missing static initializer for efi_mm::cpus_allow=
+ed_lock")
+
+from the arm64 tree.
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/firmware/efi/efi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+index fc407d891348..a9070d00b833 100644
+--- a/drivers/firmware/efi/efi.c
++++ b/drivers/firmware/efi/efi.c
+@@ -75,7 +75,7 @@ struct mm_struct efi_mm =3D {
+ 	.mmlist			=3D LIST_HEAD_INIT(efi_mm.mmlist),
+ 	.cpu_bitmap		=3D { [BITS_TO_LONGS(NR_CPUS)] =3D 0},
+ #ifdef CONFIG_SCHED_MM_CID
+-	.cpus_allowed_lock	=3D __RAW_SPIN_LOCK_UNLOCKED(efi_mm.cpus_allowed_lock),
++	.mm_cid.lock		=3D __RAW_SPIN_LOCK_UNLOCKED(efi_mm.mm_cid.lock),
+ #endif
+ };
+=20
+--=20
+2.51.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/tools/rtla/common_options.txt
-index 1c4f3e663cf5,edc8e850f5d0..000000000000
---- a/Documentation/tools/rtla/common_options.txt
-+++ b/Documentation/tools/rtla/common_options.txt
-@@@ -46,9 -42,7 +46,9 @@@
-          - *f:prio* - use SCHED_FIFO with *prio*;
-          - *d:runtime[us|ms|s]:period[us|ms|s]* - use SCHED_DEADLINE with =
-*runtime* and *period* in nanoseconds.
- =20
- +        If not set, tracer threads keep their default priority. For rtla =
-user threads, it is set to SCHED_FIFO with priority 95. For kernel threads,=
- see *osnoise* and *timerlat* tracer documentation for the running kernel v=
-ersion.
- +
-- **-C**, **--cgroup**\[*=3Dcgroup*]
-+ **-C**, **--cgroup** \[*cgroup*]
- =20
-          Set a *cgroup* to the tracer's threads. If the **-C** option is p=
-assed without arguments, the tracer's thread will inherit **rtla**'s *cgrou=
-p*. Otherwise, the threads will be placed on the *cgroup* passed to the opt=
-ion.
- =20
-
---Sig_/oUJmY=U_LfvX8ULOlsIFo.q
+--Sig_/c3F3HlhMLklncLNHjbKf885
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkfwc0ACgkQAVBC80lX
-0GxCtAf/bNfGOmHtYYbemSdofxiVc070/vmGIcTRDrGcUW+Ct9QfwDbAQClXvsxV
-fCkkngIIlk3ykjt2QKTK3/qAnvP3wARL/ySLLZSrFg0aVgLweCO1P+7oqadVlCZk
-QphA4hIeVsXZLrpqlaC3gUJuV1IOHnrsURDwz2+8gKZxdb9+SlM3b/Fvrgwm1J2s
-cOb6Y8DecbKY4LGRYtLiNqpfn3yPjOEksNjRQ52VryA2bz0318IDe2ORaBNge4MU
-7EORbtnRC7MjzvTEIhU4gTCfPxASzT8lmqfEMpEGm23n1j/bsVN4b/1jD4o9S860
-vsCYnV2OB3Jh+jBAsDD2azk/phMmOw==
-=S8au
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkfyWgACgkQAVBC80lX
+0GyRggf/fIprK7qdy615k0Scgg7/Kj6SNfjpIpwp6AjBQQjRKVMlC8UMEO3ohwFm
+0JNVQ5QRGgdCr3VBkZfli74OkwX5vtsoOg5iEWXjah7CnBTKptpIC6evoI+WJs6n
+Lygxr06AbUKfZ5qqdf0QaK43rtWU0E6UGNhavIfWL9kpqVSaG3K88EkZqdvVvcLV
+xk6x1EUvmc9T6cc9FVYbQbQQBExW3GekHvrBaVOpAjlKyisiI25ccuBFce65dJyH
+jVw6e+X23W90tW4mP9dCeRCkbLZHamjA+oyiID8BLwpcjjIhfBwf0kgWbZzNnrqE
+InSwC4iWAGPkpSle8Le2V9uhHcNEgA==
+=zSzk
 -----END PGP SIGNATURE-----
 
---Sig_/oUJmY=U_LfvX8ULOlsIFo.q--
+--Sig_/c3F3HlhMLklncLNHjbKf885--
 

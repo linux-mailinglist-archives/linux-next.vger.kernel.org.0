@@ -1,114 +1,150 @@
-Return-Path: <linux-next+bounces-9126-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9127-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C8F4C770F3
-	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 03:49:16 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60388C771D8
+	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 04:08:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 388E14E2C5C
-	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 02:49:15 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 76D642C267
+	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 03:07:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 512952D9481;
-	Fri, 21 Nov 2025 02:49:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D216229D297;
+	Fri, 21 Nov 2025 03:07:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fEyH3ZWm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JXcfFus0"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB672D5936;
-	Fri, 21 Nov 2025 02:49:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 539EB2144D7
+	for <linux-next@vger.kernel.org>; Fri, 21 Nov 2025 03:07:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763693341; cv=none; b=jJ4LKRfmPzt0IUq8giwHi42/A0uj9amsM9rzUalfGGjFPI7WJdvif8u9V5tdhnykWaCNgLP+elrM9WSzlVZ7LZely3zrYK5DXtq1c3rmPbAyuxJiOk2MauGpGVe6zWXy9zYmAEGeZPtx54r2WgNTogBhnZsAyOv6MbPMNnvsMA8=
+	t=1763694469; cv=none; b=GgXoPXTGkb+oZN4EPmhSvs5PUzVfMAdmot+pFdDU9arh0tdXIkDyUd5bJb10DWBskGCzRxu5o/P3ZCjHLJ90AjkoUCgmkfLVl1BFopuFZIzlPbNqXXkHokGHdTRnE+ryhbt06nKHOslxME2be2WK/+fmqNEZyZh66bmSt8qKqFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763693341; c=relaxed/simple;
-	bh=rYCe1ng9GN8lAKrRsQFaHSoA6O7M1MA4Zq+l9DnN4lk=;
+	s=arc-20240116; t=1763694469; c=relaxed/simple;
+	bh=ouc9DyZfHR8CBmxjRzRgGlstcKTfEeGmlEkYUxmO7eg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bidfALAD2HoHT9tjXdM92FScDo0oCjuOQMek/bdHTG8P/Y0e2bJ/2iV5l52hre81eo5OPyO9z9vgWZ6HVmDyEqWfM3k1Pxhgv/RHAKcs08fJMd0ZSGXonogKqoSm0/sAcbXQgIh7Y67DAQ1v7d8Jo51QeR+OeNCiDE5EiFecKmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fEyH3ZWm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB70C4CEF1;
-	Fri, 21 Nov 2025 02:49:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763693340;
-	bh=rYCe1ng9GN8lAKrRsQFaHSoA6O7M1MA4Zq+l9DnN4lk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fEyH3ZWm+fsM6eRzbdK97zUu9tGNnECbv/u/cmG5V7+7VnhQXsSVn/y3OqDaBZGsY
-	 ZzundhyXBblDJdPMckISY11zL4RbGMdpKp3rMbh/39JxLIAY4IVB13PVjrM7+YD1PB
-	 sA7yEbRHw/ASyP/j2eUKOkUU6nE0NvbnCPPbHCOwtBaBnZJoHytKTNS9YAnp6pYlmM
-	 DTzt7QM9Sld5kgvdCKPdc9OfSUyw+HI6KpPOUODTt3yiXxtNreUzUD1az3bZY2cTGj
-	 UKbBX61r/wfiv/f8VxhRK3pztDNdu4Z3C98fxif90vz+NodQtweK7NCk/I0TQaiq3D
-	 xtlrzsxdzzX+Q==
-Date: Fri, 21 Nov 2025 02:48:58 +0000
-From: Eric Biggers <ebiggers@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: David Howells <dhowells@redhat.com>, Mark Brown <broonie@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	linux-crypto@vger.kernel.org, keyrings@vger.kernel.org,
-	linux-modules@vger.kernel.org, linux-next@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: Pick up keys-pqc branch for linux-next?
-Message-ID: <20251121024858.GF3078357@google.com>
-References: <20251117145606.2155773-1-dhowells@redhat.com>
- <2157243.1763392923@warthog.procyon.org.uk>
- <20251117171126.GD1584@sol>
- <20251120205341.7e28927b@canb.auug.org.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ppOgPRu6qvlAL9EU1lLDFdhk8rIFpwUYW2zAnsTg8IirSP7bRLSQXKCdTs1ho9bFQAtNo1RyFvbbidg2fYOQfsCH023ww71XMgyrPFFI9yAbM1gipdLn0kChyQSMo4NaPHwOzufl6lLEdPPY8XfTljEoEjuX6vBtLnyrD2yzi/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JXcfFus0; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7b9a98b751eso1286027b3a.1
+        for <linux-next@vger.kernel.org>; Thu, 20 Nov 2025 19:07:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763694468; x=1764299268; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KyR5Zx5ppucL82U3ohqQwuuO/leGQvAUXunzNNi66yU=;
+        b=JXcfFus0UCdHUcVBlyBUDIcVoyg2uhV2/ScTZj/77XtUNoxUGivUn3L7SoSAUAZKDC
+         rbD58sdlk2mCQ5KbpJwV0A95z/zbJ0lWgKSLYUUdvAFsUNFBe42l60ag53Wf4JsBKJjY
+         zFhQWKa/8IoTuNCvl8umCUpZLVU3QnA1WGWNrNm6u+zvnBSGtFj+13j+nunyKMIorqnU
+         jbMaY9LnNlXxPa0hFWNqPYHiKEjGayZzeTDtgADolkYUl4sNP11NSoFJKJbVsJl1dcFB
+         QYkr759Ye/W+m/ZoV46ZqCo+1i8Wm0oUz7YtFfc3wdoRj38qIf6+l5PcE4eG4IKQLT/Y
+         9twg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763694468; x=1764299268;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KyR5Zx5ppucL82U3ohqQwuuO/leGQvAUXunzNNi66yU=;
+        b=qXVZ83KQIje00xL6WUklF0ey8j61GlgcAJcA1cBeDsprSjCRNLI/T00ZBCIEaeSMmH
+         vAKqXdm5HPJNhtPuTkZI7c3BQV98JiANISgYNZB8jPf6Fo9qVQ/9vj3SqtPlyrr27fZa
+         Y4qOqgXnlT75+oIhpWPCKjN6nC9u+THqQxyvKNncTyWQ+b75aLDdJgrg0J5oY/O42WCn
+         HDK7fuMkM5AJfI41/somXizS04G4pwo2NAhgf7gvjmO1EfAcfoa/a24rvxUlG7HVbg2Z
+         c9y2eub7U6JWlFBhwT6aqHRgeMJ1mfVxQQdtib/GBMyErEFpRTHhYndUoMGPi9o63ix+
+         R3sg==
+X-Forwarded-Encrypted: i=1; AJvYcCWsbcqc+pIDgQAm6K/bkUXJoYjD8Pg1695M2b5ilCuKaA6Q5mGjz/MSK1Zr1u6TsShCjR0LT9rR2gtb@vger.kernel.org
+X-Gm-Message-State: AOJu0YwADPxmUTM9uqBqdU2LHPTuSz+evfPgGRlupdK7t5Di/DXzkBs6
+	Q5IDsx5yO1J3QZfwZvQ93gdwpJN6jBiOAQQIKqeSbjYncA3JuLyllNBL
+X-Gm-Gg: ASbGncufsOceAKx56A0qZxlC/9wD85Pux1n5WUgls2x+7iFsY4Nih97KwaE2SD2xocQ
+	y1WYeMF4z+0DR3erwrcQi8n/L7YDHSRf0IuuGqafPmGFxFOLoIBYzMtQN2+YVAZYclBVRE4oLT3
+	/qGH5MgaKB/lCSYPEQGzZUACx+0Y0QN8u8ImAc4ANA3zVzcv4YXVyz4xaky1+i4Ah2Yy19z1MCT
+	rj6+XrVEObeQsdQSRfDlWPT/uRKZ+JDTKn+VOyhjiUKL8Wt67GVxqI16CaDvw7NwJl2FRuNwXXn
+	SFpJ4nPigJqGRHrdcv6LEGOESfnceQLEgHPPAJCXgjf4CYDgcoNAwLwFeXcYjyeYdeaTmfTfgbU
+	936kyOWnG0bAHgqB1K4GkiliaPGd9wQa9jEbnRu0S72vxclCMgy2YDiqeFpdnZs2xCu6684fn7r
+	9AME850iTNKpw=
+X-Google-Smtp-Source: AGHT+IFFp+DerL6QKvtBpxYcQ5uT+85IawSKcy7N3QekebF2gqFwa6uvNKj33pLKXt+TvDIkr7WjSg==
+X-Received: by 2002:a05:6a20:7284:b0:35d:5d40:6d71 with SMTP id adf61e73a8af0-3614eb40630mr1178719637.8.1763694467510;
+        Thu, 20 Nov 2025 19:07:47 -0800 (PST)
+Received: from archie.me ([210.87.74.117])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bd75dfed8f6sm3905398a12.2.2025.11.20.19.07.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Nov 2025 19:07:46 -0800 (PST)
+Received: by archie.me (Postfix, from userid 1000)
+	id 7A23F44D00F3; Fri, 21 Nov 2025 10:07:43 +0700 (WIB)
+Date: Fri, 21 Nov 2025 10:07:43 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: Gopi Krishna Menon <krishnagopi487@gmail.com>,
+	Ivan Pravdin <ipravdin.official@gmail.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Tomas Glozar <tglozar@redhat.com>
+Subject: Re: linux-next: manual merge of the ftrace tree with the jc_docs tree
+Message-ID: <aR_Xf1qyNMnxXebl@archie.me>
+References: <20251121123509.5f07d818@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="n0Xx5hvW24oxy0X2"
 Content-Disposition: inline
-In-Reply-To: <20251120205341.7e28927b@canb.auug.org.au>
+In-Reply-To: <20251121123509.5f07d818@canb.auug.org.au>
 
-On Thu, Nov 20, 2025 at 08:53:41PM +1100, Stephen Rothwell wrote:
-> Hi David,
-> 
-> On Mon, 17 Nov 2025 09:11:26 -0800 Eric Biggers <ebiggers@kernel.org> wrote:
-> >
-> > On Mon, Nov 17, 2025 at 03:22:03PM +0000, David Howells wrote:
-> > > 
-> > > Can you pick up my keys-pqc branch for linux-next please?  It can be found at:
-> > > 
-> > > 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/
-> > > 	keys-pqc
-> > > 
-> > > Note that it's based on Eric Bigger's libcrypto/lbcrypto-next branch which I
-> > > believe you already have in order to get SHA-3/SHAKE support.
-> > 
-> > I don't really see the point yet, since this isn't going to be ready for
-> > the next merge window anyway.
-> 
-> Yeah, if it is not going into the next merge window, then I don't want
-> it until after that merge window closes, OK?
 
-Makes sense to me.  David, with
-https://lore.kernel.org/r/20251120003653.335863-2-ebiggers@kernel.org
-we're getting closer, but it's still too late for 6.19.  We need proper
-tests to be added at the same time as the ML-DSA implementation itself.
-The higher-level parts such as crypto/asymmetric_keys/ need review too.
-Also, lib/crypto/ changes should go through the libcrypto tree.
+--n0Xx5hvW24oxy0X2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-wycheproof has negative test vectors for ML-DSA edge cases.  We maybe
-could borrow those.  Note that ML-DSA keys and signatures are very
-large, which results in huge files for the test vectors.  I'd also like
-to keep the size down, but we might not have much choice there.
+On Fri, Nov 21, 2025 at 12:35:09PM +1100, Stephen Rothwell wrote:
+> diff --cc Documentation/tools/rtla/common_options.txt
+> index 1c4f3e663cf5,edc8e850f5d0..000000000000
+> --- a/Documentation/tools/rtla/common_options.txt
+> +++ b/Documentation/tools/rtla/common_options.txt
+> @@@ -46,9 -42,7 +46,9 @@@
+>           - *f:prio* - use SCHED_FIFO with *prio*;
+>           - *d:runtime[us|ms|s]:period[us|ms|s]* - use SCHED_DEADLINE wit=
+h *runtime* and *period* in nanoseconds.
+>  =20
+>  +        If not set, tracer threads keep their default priority. For rtl=
+a user threads, it is set to SCHED_FIFO with priority 95. For kernel thread=
+s, see *osnoise* and *timerlat* tracer documentation for the running kernel=
+ version.
+>  +
+> - **-C**, **--cgroup**\[*=3Dcgroup*]
+> + **-C**, **--cgroup** \[*cgroup*]
+>  =20
+>           Set a *cgroup* to the tracer's threads. If the **-C** option is=
+ passed without arguments, the tracer's thread will inherit **rtla**'s *cgr=
+oup*. Otherwise, the threads will be placed on the *cgroup* passed to the o=
+ption.
+>  =20
 
-I'm also working to get another crypto-oriented developer, who doesn't
-normally work on the Linux kernel, to review my ML-DSA code.  (I don't
-think I was going to have any chance at getting anyone to look at the
-original 4800-line submission, but with the 600-line one it's feasible.)
+The resolution LGTM, thanks!
 
-It's also worth noting that this is ML-DSA, not ML-KEM.  The
-cryptographic community generally views upgrading to quantum-resistant
-key encapsulation (e.g. ML-KEM) as more urgent than upgrading to
-quantum-resistant signatures (e.g. ML-DSA).  I assume you have a reason
-why you want the signatures.  That's fine, and I'm okay with ML-DSA
-support being added.  But we shouldn't rush it in.
+--=20
+An old man doll... just what I always wanted! - Clara
 
-- Eric
+--n0Xx5hvW24oxy0X2
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaR/XeQAKCRD2uYlJVVFO
+o3hHAQCaQg8asSwx/iy02C49KRQSqv2jC1Ro6lcStxCmg21jFgEAxbAmvEFDzbMc
+3BMDHKHLeA6+kGe2whg/wgUwV8z4Xgo=
+=y1qK
+-----END PGP SIGNATURE-----
+
+--n0Xx5hvW24oxy0X2--
 

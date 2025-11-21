@@ -1,168 +1,169 @@
-Return-Path: <linux-next+bounces-9140-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9141-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40121C7813D
-	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 10:15:46 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF3E6C78345
+	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 10:41:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id 041A431EAE
-	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 09:15:45 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id F2F14348BA
+	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 09:29:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A642D2BD11;
-	Fri, 21 Nov 2025 09:15:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47C7B33C519;
+	Fri, 21 Nov 2025 09:28:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IHO5cKFh"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="V4eMIJel"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44CF32309BE
-	for <linux-next@vger.kernel.org>; Fri, 21 Nov 2025 09:15:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2762FF65A;
+	Fri, 21 Nov 2025 09:28:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763716544; cv=none; b=uBBhFghDExk2EByQCSEXpXWiaCvXapU7k1ZMvW+5X5ChkVFSrLz+taOwopK5IlUuachQZAhvvnKX5E2+HCp4OsleW19FUoOfcGRogw0cBXtzdUFiICDw4IEoUB0jk8Ioum6RFNjkeRPEOHUncOuChCIyT6ReY4zA9hJhnfUy0hg=
+	t=1763717324; cv=none; b=mGaEo5i2THKx4mWJ63i6mjomzcSwUJOGXlddomuENjRUxYyr7TVNB3IancPvWPm08tB/HSbqywxiVbijDyRZBOx3zBFz6n7pZqiaXkgI2XKfTcwOjttozydsocEoZvsYjfQAb6CWpFmIJz1hQE+pWnMP2ZcH1/w272bcRAogeAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763716544; c=relaxed/simple;
-	bh=QaD00ch2Xm21nSmLRtDru6YG2xz2fbIJHvefSp7Fa2A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fuXPYmgZdpBFyuan29EQyWU21hFaItne2/WhdYPsEdzhjNQszSD8iEFrlC1RKGA10JVnjpGlqdYongctM8qeCwnPfwf2AF3qPMfMaOO3BPX5m34nZTNvYnKsvl2I51IUhadVCKx4TYAxCIjKffBV6dCWIpeH9hCRmmIXhfab1eY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IHO5cKFh; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b713c7096f9so290129966b.3
-        for <linux-next@vger.kernel.org>; Fri, 21 Nov 2025 01:15:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763716540; x=1764321340; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IsCJj238uLsCT1LMa3YI8Doktc/kYSD45gyn3f/32w4=;
-        b=IHO5cKFhJ2vaiAQ17tNvnqZslMDfJOuVBnpRwx+YYk2/f8QJDK0MK9ZHcxnjT4onSn
-         L4ohHzWgAu+8iGUu40h+1yoMrkd6Lb+YCMX+9ptgKZFHN5swKGb/oszannVNh/RRZXoj
-         ETVi2qhxxLlRfdUIclobaQv/tDTrEsCYNEXpDl7zWwqSlTZRecieCBm2GOd1ikRGnFPu
-         Y5uXWgoiL1b6WTIzX2qTuhQO5HXJ7R9EnqvNHknxJFQchgyqwilHJ8CrXIn8GRtOFG/n
-         wVDTWGM72g3teogBUHr9tc7adNEQ8YfarTWzuAJIpRBoerregykWVN0tSavlgwF+nU+1
-         16Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763716540; x=1764321340;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IsCJj238uLsCT1LMa3YI8Doktc/kYSD45gyn3f/32w4=;
-        b=NTlY5/yE4SULvg/uTKM9M+avr6+Qgnfn68WlY42IWocD0kqfsHah9bpePQ6gyiWcaJ
-         1+clpAiAt6x8xj64MC491C35im5M4zyFcWCDzeIBCcwi/6kllyXIcBw2UTQLHwbuY6iI
-         6mTF9+sZjpSU3L9f0ALaizW+6tj0Xc3/VFId+YgLTkPPRA2Zbs8VO3XzcB8GeXD1TjX9
-         2wNyEbUjbpH3bNA8kom1YKbCPr/xGRaZZBQgrPpu/i4iXJaR7dWoZHcwvLMnALPXFRLq
-         0yulWJ32koJCXnnPNyBEYkdXzpS3vMKUEeGMqAI1kjzs9ESwV8/3bG/kprXB61l4Uenk
-         xoDg==
-X-Forwarded-Encrypted: i=1; AJvYcCX+bAXFCnFKlhq4essXpIRF7Z3e9I/p/Alr/yB+xkozSOsgoeZVS4RmZRxaTHLrRH8Tmm/kG4ECD61C@vger.kernel.org
-X-Gm-Message-State: AOJu0YwL+TWtZcSxFNJ4KwGhnGoc8tSugHrhGUhlaPrIKLTCSmouc2lF
-	XGn0Iiq0iTY23/XH2MbTmwep183C6Q4mbZgFixAS5prRRZ9DOpFzFP82LCD8boSvUx1T/ndBpwh
-	I/YvjCGLAxXGdkfpWI2oGyTPwKN5TNyMakkloUyQ7AA==
-X-Gm-Gg: ASbGncvGOJ4UxU6eIT8H1/PrH8UkgmiYNmhsiUXHmd6vi2siJ0dwyVJMhz+wb6G1wF4
-	uDseg0UsWwg6hAcBNr8TafAPZIVYz7Qh9hsrjWz+uJce9DLqAFuNmxdkMCssKRiNdItV3b5x9Hx
-	yyzC3TA9HuiO3eTjFhpCDAx/9GuScicMCQiXOfEg8kk0bEp2EPkikSFDtA0eww+kSL3/xoea4+t
-	hH/s0UuYj4SoM9pMJ3W5x0zBRd3s/aQXsOspfA8Y9mWaSHtOPC8NKI/aVfrzTnFuwc835/gyu0J
-	sQgX7rM8ivEg/dNuBRBfrMkfO94=
-X-Google-Smtp-Source: AGHT+IGKOu5/oklHXBGkous8j5S+i/SRdtuxResfZBaYf14jRrrrYmCio3MQgI2OzH23c35Z//q8Yyyq7K7WtZEPzpw=
-X-Received: by 2002:a17:906:c144:b0:b73:572d:3aff with SMTP id
- a640c23a62f3a-b767170ca03mr146641066b.35.1763716540240; Fri, 21 Nov 2025
- 01:15:40 -0800 (PST)
+	s=arc-20240116; t=1763717324; c=relaxed/simple;
+	bh=w5gYlmjOqwmvTygVPG8hHEvpc/zeixSQANvrQCTE4lM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hBGBxjct3QXD00d3DG7pif8znDgc4EMZUFgwzUNFLGYAF9jIX4KUW2fzBVlBLhxz05mijUS8dkbd29N1gsVWDW+86Ci2kFqPqoNdEbq0ECrmZqm6iFfmDUaFcTH2NzPKzW4S/Xlz7tZ4S6CowsvfO/GHw3HviVVKsxgflpgNLFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=V4eMIJel; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5AKKKiNa029273;
+	Fri, 21 Nov 2025 09:28:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=EhSUAU
+	lMIvpbrUrgGZDe/jq20Q/qHTXwFlX2OjFb+lc=; b=V4eMIJelrCofX7xW62TbB0
+	wigv5Nf63AqC7zB9hTdotbnQVdlHmyjeXHMzR0P6TFcKN/IohE8kxd9OuZ4fYPEY
+	9cTpSm1vV2RZP/c79de+REngo0HszRfUUvqJe0FY95Wr2WKVHQjbVh8t7NXEHNTE
+	dlYMneri8eO+plC6pWOcsghk7VkwPxdsZsMjb9ZekfY7tIfofgy0u4LdF+nIkn2W
+	IsdOKbIphsByB+N2fQQn0lfBj6ORb3833p/1+k9TbJUt71OBZvZMm4D6bHMkI8TC
+	v17Gd2z0/Jfl8RIB+EZkLJ9PpAlTvTb0YEVhT4LbbEnlaUVx0Ew5YphSiGc7rSaQ
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4aejk1u47u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Nov 2025 09:28:33 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 5AL83JjF022434;
+	Fri, 21 Nov 2025 09:28:32 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4af4unbdcd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Nov 2025 09:28:32 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 5AL9SUGU44433800
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 21 Nov 2025 09:28:30 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B0FEF2004B;
+	Fri, 21 Nov 2025 09:28:30 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 83A8220043;
+	Fri, 21 Nov 2025 09:28:30 +0000 (GMT)
+Received: from [9.111.64.93] (unknown [9.111.64.93])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 21 Nov 2025 09:28:30 +0000 (GMT)
+Message-ID: <7fa3e596-aece-4375-a934-37e7d5bcc42b@linux.ibm.com>
+Date: Fri, 21 Nov 2025 10:28:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251121111534.7cdbfe5c@canb.auug.org.au> <20251121145042.3cef6e7a@canb.auug.org.au>
- <64a9b0f21ec290cb9af5887e8ae46b90ce34edc2.camel@pengutronix.de>
-In-Reply-To: <64a9b0f21ec290cb9af5887e8ae46b90ce34edc2.camel@pengutronix.de>
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date: Fri, 21 Nov 2025 10:15:29 +0100
-X-Gm-Features: AWmQ_blpiQkYkpG5BjrciII0sTux92wiU1ni4DIebbY54xG5yaAIarh6wRU9qPg
-Message-ID: <CACMJSeuE9-t+wK3WY96oO9zJA0vv=vrtW+VFKtuKTrxXeT=mKg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the reset tree
-To: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: build warning after merge of the kvms390 tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20251121160144.02cb92b3@canb.auug.org.au>
+Content-Language: en-US
+From: Janosch Frank <frankja@linux.ibm.com>
+Autocrypt: addr=frankja@linux.ibm.com; keydata=
+ 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
+In-Reply-To: <20251121160144.02cb92b3@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=C/nkCAP+ c=1 sm=1 tr=0 ts=692030c2 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RpLHbfq6vesqKiXEA7gA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: WhQATpUJbE9Fqu7vI3fm1evcgiWNpraZ
+X-Proofpoint-ORIG-GUID: WhQATpUJbE9Fqu7vI3fm1evcgiWNpraZ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE1MDAzMiBTYWx0ZWRfX3vOOO5sdxTnW
+ MW6ohAqQNxHCetpretm1rYpRmERAO+7kkL/95/YjtxYOMN67P9XtcW1Kgj4bSOjXKIlp/W1nRSp
+ bpiNn5DEneKfj3hz8BMXoL1/7wTjcZHYPY+JzuJ+tttJc6+bJEGNFBNMKjOv2iereYKE1C6RbFZ
+ Wx1FiAH3UYVA7P7ndk7iCKtba25eGiVsYs+eAqJrXHLCwK77uRh9wu4JIl9xSr/m0YPtPYAq5py
+ Z5V1zmjnsl9PmYFwcEFAai3Qt7w/tkPuN8LYCsvHWapyoq13sFCBv1QiWDsyfA2kfhylqwuveZL
+ vjaWshQSBo6TfepwDoid40LqnhPKzmQPKvTXzutJF7sz6M/g51o89V1fkLS21vSKymxCXhNNG21
+ MtzAq3F6Qdnk2AwQ7wR9hWrdgLoXxA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-21_02,2025-11-20_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 priorityscore=1501 spamscore=0 impostorscore=0 bulkscore=0
+ malwarescore=0 suspectscore=0 clxscore=1011 lowpriorityscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510240000 definitions=main-2511150032
 
-On Fri, 21 Nov 2025 at 09:22, Philipp Zabel <p.zabel@pengutronix.de> wrote:
->
-> > >
-> > > Caused by commit
-> > >
-> > >   d7cdbbc93c56 ("software node: allow referencing firmware nodes")
-> > >
-> > > I have used the reset tree from next-20251120 for today.
-> >
-> > This same commit is also in the gpio-brgl tree, so I have used that
-> > tree from next-20251120 as well.
->
-> Commit d7cdbbc93c56 ("software node: allow referencing firmware nodes")
-> renames the 'node' field in software_node_ref_args to 'swnode', so the
-> trivial build fix would be:
->
-> ----------8<----------
-> diff --git a/drivers/platform/x86/intel/chtwc_int33fe.c b/drivers/platform/x86/intel/chtwc_int33fe.c
-> index 29e8b5432f4c..96400dec0baf 100644
-> --- a/drivers/platform/x86/intel/chtwc_int33fe.c
-> +++ b/drivers/platform/x86/intel/chtwc_int33fe.c
-> @@ -77,7 +77,7 @@ static const struct software_node max17047_node = {
->   * software node.
->   */
->  static struct software_node_ref_args fusb302_mux_refs[] = {
-> -       { .node = NULL },
-> +       { .swnode = NULL },
->  };
->
->  static const struct property_entry fusb302_properties[] = {
-> @@ -190,9 +190,9 @@ static void cht_int33fe_remove_nodes(struct cht_int33fe_data *data)
->  {
->         software_node_unregister_node_group(node_group);
->
-> -       if (fusb302_mux_refs[0].node) {
-> -               fwnode_handle_put(software_node_fwnode(fusb302_mux_refs[0].node));
-> -               fusb302_mux_refs[0].node = NULL;
-> +       if (fusb302_mux_refs[0].swnode) {
-> +               fwnode_handle_put(software_node_fwnode(fusb302_mux_refs[0].swnode));
-> +               fusb302_mux_refs[0].swnode = NULL;
->         }
->
->         if (data->dp) {
-> @@ -222,7 +222,7 @@ static int cht_int33fe_add_nodes(struct cht_int33fe_data *data)
->          * rely on software_node_register_node_group() to use the original
->          * instance of properties instead of copying them.
->          */
-> -       fusb302_mux_refs[0].node = mux_ref_node;
-> +       fusb302_mux_refs[0].swnode = mux_ref_node;
->
->         ret = software_node_register_node_group(node_group);
->         if (ret)
->
-> ---------->8----------
->
-> I assume it was expected that drivers don't modify contents of struct
-> software_node_ref_args directly, but rather assign them with
-> SOFTWARE_NODE_REFERENCE(), so maybe this is not the correct fix?
->
+On 11/21/25 06:01, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the kvms390 tree, today's linux-next build (htmldocs)
+> produced this warning:
+> 
+> Documentation/virt/kvm/api.rst:8754: WARNING: Title underline too short.
+> 
+> 7.46 KVM_CAP_S390_USER_OPEREXEC
+> ---------------------------- [docutils]
 
-Yeah, driver definitely should not be doing that.
-
-The comment in this file:
-
-/*
- * We are not using inline property here because those are constant,
- * and we need to adjust this one at runtime to point to real
- * software node.
- */
-
-Indicates something's wrong. It looks like it's waiting for a software
-node called "intel-xhci-usb-sw" to appear in the system (as in: get
-registered as a firmware node). This is clearly an abuse of the whole
-concept. I'll try to figure out a way to improve it.
-
-Bart
+That is indeed too short.
+Thanks for the info, I've fixed it up.
 

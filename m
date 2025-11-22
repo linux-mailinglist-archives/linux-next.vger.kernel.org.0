@@ -1,154 +1,266 @@
-Return-Path: <linux-next+bounces-9153-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9154-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 901E4C7C6D4
-	for <lists+linux-next@lfdr.de>; Sat, 22 Nov 2025 05:50:31 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 232BAC7C990
+	for <lists+linux-next@lfdr.de>; Sat, 22 Nov 2025 08:37:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 61A7934E3AB
-	for <lists+linux-next@lfdr.de>; Sat, 22 Nov 2025 04:50:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 726294E274E
+	for <lists+linux-next@lfdr.de>; Sat, 22 Nov 2025 07:37:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6796121ABD7;
-	Sat, 22 Nov 2025 04:50:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D208B255E26;
+	Sat, 22 Nov 2025 07:37:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lhFZwLB+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A041624C0
-	for <linux-next@vger.kernel.org>; Sat, 22 Nov 2025 04:50:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E9D1E3DCD;
+	Sat, 22 Nov 2025 07:37:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763787024; cv=none; b=r5kdeQR2WWP52NBdXz+D2fBXJPBRtvRIYrBoRThjB+qfQIALx/MB+DBhCGtCqf+4AtUxKfn26nOT2hEWcenUK0MfpViS0FYT/raskvaemhmi0Uzu/XMw24qB0k9BdelaDEN3SJh1hEjEmMZ+tJrTCsbCmJVrOrTTRcpV/8cI8q8=
+	t=1763797030; cv=none; b=AMT/mge1ia0Luez4ymxY8IfzMBoWbs9lPPlKOMamGs5OUDs6HkZP+7BLbYYXCsiJLhbhTqxmnIlBkgUSy+e7wCyPkqeZLDqaK0TWQNNQpYgWEvL6+0oBT94KaiFp+fe4N7EQxzPX7hT99SKlYc+RmevwTPOlLw/3YptkTUsrCqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763787024; c=relaxed/simple;
-	bh=aZhF8nWhBEcpq4QDyNkJ8KSvofb+bHw7SF5aWtdyKjQ=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=C7zdwa4YfPsVQrtB7dXThxCMq3JGbGqUaeIjAiGKVO8UpiyheVk+1SpWN4PamX2KWmT63T9sy9isOCMpyzI3BxosecPQEXxJd5dhTVVFcpkR5tCB4uXwBFU4kJHmpSW9QCq6PN0lTDAQ/8yY/trkx7VzOc/CyDWbdIAHi1o8fzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-4330f62ef60so25141115ab.0
-        for <linux-next@vger.kernel.org>; Fri, 21 Nov 2025 20:50:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763787022; x=1764391822;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X9gO6e312mGCmC0HQWhrOUvHJzaaStscRS2wI5F6Ck8=;
-        b=KmSWgKqR/6hYsRpv9sPE5VAsS7ajUdq78uI7D2r/6zAebGENgOEM1UYQnrWyT8nu9m
-         mvvAYiHlDoDHZYMHwCAKu7ZtE+5ZIoILtgxmz9G5Wo4ISJHRKSoaSLsU9CBf1SdIDE2a
-         cGztKY+AaBJ19w3FgpozFiEK/nWAGizm3Ntg1dRdCS4M9FBb2h5tiFCBb8CzDSdSbMjp
-         S7GxWFAbkBbSNh38ZUJqS5Q+ALjHui1vvpkiOIizrISN2mqGX2QJnOwjGLIHOf6eHWd3
-         Z8ImL6delpHBd1PBNtWIj4qVGiIZRg+KaRPcboZ249CxcLmO785ciFXZpJhx2N+zqDms
-         G4fw==
-X-Forwarded-Encrypted: i=1; AJvYcCXmaW7RRMka28ZDX+ThEPFhGgSQeQuD10l7OpWR7H2T9rWGH0KFOO8glz8A5vdazujCy4EA/zz7MhS8@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4OwMU+ozglRxo8l6rkwOtkiv9RFzi+gsCDcmBj0R6NGjAROXO
-	rRoNOslDgdZE3CdRaRIW2oaPHbrkODgTMxHvlm+GWqX9snu/s6pLcDQFTeZzyoWr7MHuoWNloZZ
-	rXeU87YYlRmlDqr/wuKb0IIhaJfX7tWjWEeYungFbR4ptEySexUGzNV/jflk=
-X-Google-Smtp-Source: AGHT+IH8IRcu4U2ZEaCqvQruAqa9VgNJMgcydnXn4kMj4jKKUOElmrlmWFnrFm98+m6lmEVyuAf4nADVMRUscCpCtwIZWwhTZ3so
+	s=arc-20240116; t=1763797030; c=relaxed/simple;
+	bh=sfg1Un1mkaO/0/N60aaT1M21zeLLBHzsMhZogU1r/uo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LccjGfO6D3g+HkFuQvLophDWUF8k8dW/ddS8ZZPzI8HXGm7DDtYhmJc4fzoThsywXTU4F9V3u22gprVDdZ0jJ4iNcW7zz//YP8YeGhC7o+FCnhZub8cj21MVEyuJUHPyeK7uTjZmprMz6DD+XFPpUkysP2sy0TdPjI7YBZfgYjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lhFZwLB+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF08FC4CEF5;
+	Sat, 22 Nov 2025 07:37:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763797030;
+	bh=sfg1Un1mkaO/0/N60aaT1M21zeLLBHzsMhZogU1r/uo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lhFZwLB+vLPHQzHbc39J70kTBcSPsULYoOx4nQyECpwcA0C4KS+6MYVjDpPsWsBTA
+	 iMQl6ahNIq9hc0DNA25rG9+upSXGwpO0f8lWSTqNmSB1bjQ3+b1kgcjVAq/GoAqple
+	 odMWZJFfR2WxBnbmb3DoWxlCW0+xeZBr6e6I5sUqF9iFMvjG9A3ccSk8A1HoOnTrhi
+	 7jXE9fINsC3Pdc6mcO32tQ0rfIQNtRdynUaHa4DlWXQm0FcjbP93fQaV7oKKqadHOl
+	 P5y3b2boszJhYFrjaADcAiBJ8m2HG61Mzin7bp0kpp3/iOY9GKm7qP2EgfKU/ZPidT
+	 X4KkHakdxcWqw==
+Date: Sat, 22 Nov 2025 00:37:05 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Waiman Long <llong@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
+Subject: Re: linux-next: boot warning from the final tree
+Message-ID: <20251122073705.GA3552610@ax162>
+References: <20251117202214.4f710f02@canb.auug.org.au>
+ <20251121215819.GA1374726@ax162>
+ <aSDoquGlA55Ge100@tardis.local>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2162:b0:433:30e0:6f68 with SMTP id
- e9e14a558f8ab-435b8eb45c3mr39556895ab.24.1763787021745; Fri, 21 Nov 2025
- 20:50:21 -0800 (PST)
-Date: Fri, 21 Nov 2025 20:50:21 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6921410d.a70a0220.d98e3.0053.GAE@google.com>
-Subject: [syzbot] [bpf?] linux-next test error: WARNING: kmalloc bug in bpf_prog_alloc_no_stats
-From: syzbot <syzbot+48df175b68984f0d4198@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-next@vger.kernel.org, 
-	martin.lau@linux.dev, sdf@fomichev.me, sfr@canb.auug.org.au, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aSDoquGlA55Ge100@tardis.local>
 
-Hello,
+On Fri, Nov 21, 2025 at 02:33:14PM -0800, Boqun Feng wrote:
+> On Fri, Nov 21, 2025 at 02:58:19PM -0700, Nathan Chancellor wrote:
+> > On Mon, Nov 17, 2025 at 08:22:14PM +1100, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > Today's linux-next qemu boot (powerpc pseries_le_defconfig) produced
+> > > this warning:
+> > > 
+> > >   ftrace: allocating 48915 entries in 288 pages
+> > >   ftrace: allocated 287 pages with 6 groups
+> > >   ------------[ cut here ]------------
+> > >   DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+> > >   WARNING: kernel/locking/mutex.c:156 at mutex_lock+0xcc/0x100, CPU#0: swapper/0/0
+> > >   Modules linked in:
+> > >   CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.18.0-rc6-09359-g921087e37218 #1 VOLUNTARY 
+> > >   Hardware name: IBM pSeries (emulated by qemu) POWER9 (architected) 0x4e1202 0xf000005 of:SLOF,HEAD hv:linux,kvm pSeries
+> > >   NIP:  c00000000148041c LR: c000000001480418 CTR: 0000000000000000
+> > >   REGS: c000000002957a10 TRAP: 0700   Not tainted  (6.18.0-rc6-09359-g921087e37218)
+> > >   MSR:  8000000002021033 <SF,VEC,ME,IR,DR,RI,LE>  CR: 24022240  XER: 00000000
+> > >   CFAR: c00000000021123c IRQMASK: 3 
+> > >   GPR00: c000000001480418 c000000002957cb0 c000000001a3a100 0000000000000028 
+> > >   GPR04: 00000000ffffe04a c0000000026abe88 0000000000000001 000000000000004b 
+> > >   GPR08: c0000000026abd28 0000000000000000 0000000000000000 0000000044022240 
+> > >   GPR12: 0000000000000000 c000000002ae9000 0000000000000000 0000000001bff430 
+> > >   GPR16: 000000007e68f070 c00000007f79c480 c000000002969160 c000000002a0f5d8 
+> > >   GPR20: c0000000026a1138 c0000000026a1120 0000000000000000 c0000000019541b8 
+> > >   GPR24: c00000000218a480 c00000000296e1d0 000000007d612000 c00000000380be10 
+> > >   GPR28: c00000000380be20 c00000000380be00 c000000002640100 c00000000380be20 
+> > >   NIP [c00000000148041c] mutex_lock+0xcc/0x100
+> > >   LR [c000000001480418] mutex_lock+0xc8/0x100
+> > >   Call Trace:
+> > >   [c000000002957cb0] [c000000001480418] mutex_lock+0xc8/0x100 (unreliable)
+> > >   [c000000002957d20] [c00000000024a60c] alloc_workqueue_noprof+0x38c/0x8ec
+> > >   [c000000002957e00] [c00000000203018c] workqueue_init_early+0x4d8/0x6ec
+> > >   [c000000002957f30] [c000000002004448] start_kernel+0x74c/0xa4c
+> > >   [c000000002957fe0] [c00000000000e99c] start_here_common+0x1c/0x20
+> > >   Code: 4182ffb4 3d2200f3 392971e4 81290000 2c090000 4082ffa0 3c82ffe0 3c62ffe0 3884bfe0 3863bf68 4ad90d45 60000000 <0fe00000> 4bffff80 60000000 60000000 
+> > >   ---[ end trace 0000000000000000 ]---
+> > >   rcu: Hierarchical RCU implementation.
+> > > 
+> > > I have no idea what caused this.
+> > 
+> > I noticed this warning in my QEMU boot tests as well and bisected it
+> > down to commit 3572e2edc7b6 ("locking/mutex: Redo __mutex_init()").
+> > 
+> >   $ make -skj"$(nproc)" ARCH=powerpc CROSS_COMPILE=powerpc64-linux- clean ppc64le_guest_defconfig zImage.epapr
+> > 
+> >   $ curl -LSs https://github.com/ClangBuiltLinux/boot-utils/releases/download/20241120-044434/ppc64le-rootfs.cpio.zst | zstd -d >rootfs.cpio
+> > 
+> >   $ qemu-system-ppc64 \
+> >       -display none \
+> >       -nodefaults \
+> >       -device ipmi-bmc-sim,id=bmc0 \
+> >       -device isa-ipmi-bt,bmc=bmc0,irq=10 \
+> >       -machine powernv \
+> >       -kernel arch/powerpc/boot/zImage.epapr \
+> >       -initrd rootfs.cpio \
+> >       -m 2G \
+> >       -serial mon:stdio
+> >   ...
+> >   [    0.000000][    T0] Linux version 6.18.0-rc2-00016-g3572e2edc7b6 (nathan@ax162) (powerpc64-linux-gcc (GCC) 15.2.0, GNU ld (GNU Binutils) 2.45) #1 SMP Fri Nov 21 13:55:26 MST 2025
+> >   ...
+> >   [    0.000000][    T0] ------------[ cut here ]------------
+> >   [    0.000000][    T0] DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+> >   [    0.000000][    T0] WARNING: CPU: 0 PID: 0 at kernel/locking/mutex.c:156 mutex_lock+0xd4/0x100
+> >   [    0.000000][    T0] Modules linked in:
+> >   [    0.000000][    T0] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.18.0-rc2-00016-g3572e2edc7b6 #1 VOLUNTARY
+> >   [    0.000000][    T0] Hardware name: IBM PowerNV (emulated by qemu) POWER10 0x801200 opal:v7.1-106-g785a5e307 PowerNV
+> >   [    0.000000][    T0] NIP:  c0000000014b2974 LR: c0000000014b2970 CTR: 0000000000000000
+> >   [    0.000000][    T0] REGS: c0000000029979f0 TRAP: 0700   Not tainted  (6.18.0-rc2-00016-g3572e2edc7b6)
+> >   [    0.000000][    T0] MSR:  9000000002021033 <SF,HV,VEC,ME,IR,DR,RI,LE>  CR: 24000220  XER: 00000000
+> >   [    0.000000][    T0] CFAR: c00000000021ed7c IRQMASK: 3
+> >   [    0.000000][    T0] GPR00: c0000000014b2970 c000000002997c90 c000000001a78100 0000000000000028
+> >   [    0.000000][    T0] GPR04: 00000000ffffe04a c0000000026ed958 0000000000000001 000000000000004b
+> >   [    0.000000][    T0] GPR08: c0000000026ed7f0 0000000000000000 0000000000000000 0000000044000220
+> >   [    0.000000][    T0] GPR12: c0000000026ed880 c000000002ba0000 0000000000000018 0000000000000000
+> >   [    0.000000][    T0] GPR16: 0000000000000000 c0000000026e2b88 c0000000026e2ba0 c00000007be5a400
+> >   [    0.000000][    T0] GPR20: c0000000029ed0e0 c000000002aaf7e0 0000000000000000 c0000000019911b8
+> >   [    0.000000][    T0] GPR24: c0000000021ca400 c0000000029f2150 0000000079c90000 c000000003081410
+> >   [    0.000000][    T0] GPR28: c000000003081420 c000000003081400 c0000000021cce98 c000000003081420
+> >   [    0.000000][    T0] NIP [c0000000014b2974] mutex_lock+0xd4/0x100
+> >   [    0.000000][    T0] LR [c0000000014b2970] mutex_lock+0xd0/0x100
+> >   [    0.000000][    T0] Call Trace:
+> >   [    0.000000][    T0] [c000000002997c90] [c0000000014b2970] mutex_lock+0xd0/0x100 (unreliable)
+> >   [    0.000000][    T0] [c000000002997d10] [c000000000258ddc] alloc_workqueue_noprof+0x44c/0x8c8
+> >   [    0.000000][    T0] [c000000002997df0] [c00000000203080c] workqueue_init_early+0x4e4/0x700
+> >   [    0.000000][    T0] [c000000002997f30] [c000000002004388] start_kernel+0x638/0x938
+> >   [    0.000000][    T0] [c000000002997fe0] [c00000000000e99c] start_here_common+0x1c/0x20
+> >   [    0.000000][    T0] Code: 4182ffa8 3d2200f8 3929d134 81290000 2c090000 4082ff94 3c82ffde 3c62ffde 38846d98 38636d20 4ad6c32d 60000000 <0fe00000> e9410068 4bffff70 38210080
+> >   [    0.000000][    T0] ---[ end trace 0000000000000000 ]---
+> >   ...
+> > 
+> > At the parent change, there is no warning.
+> > 
+> 
+> Thank you both, seems we missed the case where LOCKDEP=n but
+> DEBUG_MUTEXES=y, I feel like the following should be the correct fix.
 
-syzbot found the following issue on:
+Yeah, that appears to resolve it for me and I do not see any other
+warnings in my tests.
 
-HEAD commit:    187dac290bfd Add linux-next specific files for 20251118
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=13803212580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f3aa05e175a53177
-dashboard link: https://syzkaller.appspot.com/bug?extid=48df175b68984f0d4198
-compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5c9f9e2c17d9/disk-187dac29.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/abf1aa794deb/vmlinux-187dac29.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3e5ce6fc9bfd/bzImage-187dac29.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+48df175b68984f0d4198@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-Unexpected gfp: 0x400000 (__GFP_ACCOUNT). Fixing up to gfp: 0xdc0 (GFP_KERNEL|__GFP_ZERO). Fix your code!
-WARNING: mm/vmalloc.c:3938 at vmalloc_fix_flags+0x9c/0xe0 mm/vmalloc.c:3937, CPU#1: syz-executor/6175
-Modules linked in:
-CPU: 1 UID: 0 PID: 6175 Comm: syz-executor Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
-RIP: 0010:vmalloc_fix_flags+0x9c/0xe0 mm/vmalloc.c:3937
-Code: 81 e6 1f 52 ee ff 89 74 24 30 81 e3 e0 ad 11 00 89 5c 24 20 90 48 c7 c7 e0 db 96 8b 4c 89 fa 89 d9 4d 89 f0 e8 75 8d 6c ff 90 <0f> 0b 90 90 8b 44 24 20 48 c7 04 24 0e 36 e0 45 4b c7 04 2c 00 00
-RSP: 0018:ffffc90005107b00 EFLAGS: 00010246
-RAX: 9deb18dd39b86e00 RBX: 0000000000000dc0 RCX: ffff888079fadb80
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000002
-RBP: ffffc90005107b98 R08: 0000000000000003 R09: 0000000000000004
-R10: dffffc0000000000 R11: fffffbfff1c3a708 R12: 1ffff92000a20f60
-R13: dffffc0000000000 R14: ffffc90005107b20 R15: ffffc90005107b30
-FS:  000055557fbce500(0000) GS:ffff888125b74000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f171365c470 CR3: 0000000076216000 CR4: 00000000003526f0
-Call Trace:
- <TASK>
- __vmalloc_noprof+0xf2/0x120 mm/vmalloc.c:4124
- bpf_prog_alloc_no_stats+0x4a/0x4d0 kernel/bpf/core.c:106
- bpf_prog_alloc+0x3c/0x1a0 kernel/bpf/core.c:153
- bpf_prog_create_from_user+0xa7/0x440 net/core/filter.c:1443
- seccomp_prepare_filter kernel/seccomp.c:701 [inline]
- seccomp_prepare_user_filter kernel/seccomp.c:738 [inline]
- seccomp_set_mode_filter kernel/seccomp.c:1990 [inline]
- do_seccomp+0x7b1/0xd90 kernel/seccomp.c:2110
- __do_sys_prctl kernel/sys.c:2610 [inline]
- __se_sys_prctl+0xc3c/0x1830 kernel/sys.c:2518
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xfa/0xfa0 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f1713790b0d
-Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 18 00 00 00 48 89 44 24 08 48 8d 44 24 20 48 89 44 24 10 b8 9d 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 1b 48 8b 54 24 18 64 48 2b 14 25 28 00 00 00
-RSP: 002b:00007fffcecd72f0 EFLAGS: 00000246 ORIG_RAX: 000000000000009d
-RAX: ffffffffffffffda RBX: 00007f171382cf80 RCX: 00007f1713790b0d
-RDX: 00007fffcecd7350 RSI: 0000000000000002 RDI: 0000000000000016
-RBP: 00007fffcecd7360 R08: 0000000000000006 R09: 0000000000000071
-R10: 0000000000000071 R11: 0000000000000246 R12: 000000000000006d
-R13: 00007fffcecd7788 R14: 00007fffcecd7a08 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+> ------------->8
+> Subject: [PATCH] locking/mutex: Initialize mutex::magic even when LOCKDEP=n
+> 
+> When DEBUG_MUTEXES=y and LOCKDEP=n, mutex_lock() still checks on
+> ->magic, hence debug_mutex_init() should be called in
+> mutex_init_generic() as well. While we are at it, decouple LOCKDEP
+> logic from debug_mutex_init(), because in this way debug_mutex_init()
+> only needs one parameter, and we now have mutex_init_lockep() for
+> LOCKDEP=y scenarios.
+> 
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Closes: https://lore.kernel.org/lkml/20251117202214.4f710f02@canb.auug.org.au/
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Closes: https://lore.kernel.org/lkml/20251121215819.GA1374726@ax162/
+> Fixes: 3572e2edc7b6 ("locking/mutex: Redo __mutex_init()")
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> ---
+>  kernel/locking/mutex-debug.c | 10 +---------
+>  kernel/locking/mutex.c       |  8 +++++++-
+>  kernel/locking/mutex.h       |  5 ++---
+>  3 files changed, 10 insertions(+), 13 deletions(-)
+> 
+> diff --git a/kernel/locking/mutex-debug.c b/kernel/locking/mutex-debug.c
+> index 949103fd8e9b..2c6b02d4699b 100644
+> --- a/kernel/locking/mutex-debug.c
+> +++ b/kernel/locking/mutex-debug.c
+> @@ -78,16 +78,8 @@ void debug_mutex_unlock(struct mutex *lock)
+>  	}
+>  }
+>  
+> -void debug_mutex_init(struct mutex *lock, const char *name,
+> -		      struct lock_class_key *key)
+> +void debug_mutex_init(struct mutex *lock)
+>  {
+> -#ifdef CONFIG_DEBUG_LOCK_ALLOC
+> -	/*
+> -	 * Make sure we are not reinitializing a held lock:
+> -	 */
+> -	debug_check_no_locks_freed((void *)lock, sizeof(*lock));
+> -	lockdep_init_map_wait(&lock->dep_map, name, key, 0, LD_WAIT_SLEEP);
+> -#endif
+>  	lock->magic = lock;
+>  }
+>  
+> diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+> index f3bb352a368d..2a1d165b3167 100644
+> --- a/kernel/locking/mutex.c
+> +++ b/kernel/locking/mutex.c
+> @@ -51,6 +51,7 @@ static void __mutex_init_generic(struct mutex *lock)
+>  #ifdef CONFIG_MUTEX_SPIN_ON_OWNER
+>  	osq_lock_init(&lock->osq);
+>  #endif
+> +	debug_mutex_init(lock);
+>  }
+>  
+>  static inline struct task_struct *__owner_task(unsigned long owner)
+> @@ -173,7 +174,12 @@ static __always_inline bool __mutex_unlock_fast(struct mutex *lock)
+>  void mutex_init_lockep(struct mutex *lock, const char *name, struct lock_class_key *key)
+>  {
+>  	__mutex_init_generic(lock);
+> -	debug_mutex_init(lock, name, key);
+> +
+> +	/*
+> +	 * Make sure we are not reinitializing a held lock:
+> +	 */
+> +	debug_check_no_locks_freed((void *)lock, sizeof(*lock));
+> +	lockdep_init_map_wait(&lock->dep_map, name, key, 0, LD_WAIT_SLEEP);
+>  }
+>  EXPORT_SYMBOL(mutex_init_lockep);
+>  #endif /* !CONFIG_DEBUG_LOCK_ALLOC */
+> diff --git a/kernel/locking/mutex.h b/kernel/locking/mutex.h
+> index 2e8080a9bee3..9ad4da8cea00 100644
+> --- a/kernel/locking/mutex.h
+> +++ b/kernel/locking/mutex.h
+> @@ -59,8 +59,7 @@ extern void debug_mutex_add_waiter(struct mutex *lock,
+>  extern void debug_mutex_remove_waiter(struct mutex *lock, struct mutex_waiter *waiter,
+>  				      struct task_struct *task);
+>  extern void debug_mutex_unlock(struct mutex *lock);
+> -extern void debug_mutex_init(struct mutex *lock, const char *name,
+> -			     struct lock_class_key *key);
+> +extern void debug_mutex_init(struct mutex *lock);
+>  #else /* CONFIG_DEBUG_MUTEXES */
+>  # define debug_mutex_lock_common(lock, waiter)		do { } while (0)
+>  # define debug_mutex_wake_waiter(lock, waiter)		do { } while (0)
+> @@ -68,6 +67,6 @@ extern void debug_mutex_init(struct mutex *lock, const char *name,
+>  # define debug_mutex_add_waiter(lock, waiter, ti)	do { } while (0)
+>  # define debug_mutex_remove_waiter(lock, waiter, ti)	do { } while (0)
+>  # define debug_mutex_unlock(lock)			do { } while (0)
+> -# define debug_mutex_init(lock, name, key)		do { } while (0)
+> +# define debug_mutex_init(lock)				do { } while (0)
+>  #endif /* !CONFIG_DEBUG_MUTEXES */
+>  #endif /* CONFIG_PREEMPT_RT */
+> -- 
+> 2.50.1 (Apple Git-155)
+> 
 

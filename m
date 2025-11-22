@@ -1,142 +1,121 @@
-Return-Path: <linux-next+bounces-9151-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9152-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C49C7C037
-	for <lists+linux-next@lfdr.de>; Sat, 22 Nov 2025 01:30:06 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15F1DC7C51D
+	for <lists+linux-next@lfdr.de>; Sat, 22 Nov 2025 04:46:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F3AFF35BC49
-	for <lists+linux-next@lfdr.de>; Sat, 22 Nov 2025 00:30:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0F4054E14E6
+	for <lists+linux-next@lfdr.de>; Sat, 22 Nov 2025 03:46:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBFD1E8331;
-	Sat, 22 Nov 2025 00:29:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B78D42AA9;
+	Sat, 22 Nov 2025 03:46:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="W3Hp+HO+"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tVoIRY2w"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269E91D618E;
-	Sat, 22 Nov 2025 00:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A1DC21348;
+	Sat, 22 Nov 2025 03:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763771399; cv=none; b=TFAfhOf/6a2fo6uhR8XSS41BIDXVmwdjAVzBDfHD5hXsJoUbSnyZVaLXR0M0bWbQF1yM22Q+db1qOjM++QSWwrnvMCpVeMQhUPHtY7WdJm8We7ypHowEVQK7DpBUNivhhRO3/AIn1X4AD6vUZo3rSRGy533Z7kOAFEvbRxGTlsY=
+	t=1763783191; cv=none; b=Rd4FspCEIYvNoXonj4/sLs+JFAzRxobV4iiZx1UQeEMz9xDT/8qDoZRUmdssUmgCkVy3IwlEMTI6FterKiHFt3mQ28NJO+l9C4kUIuI1COoOFX+iMm8jHP14Nrk1A7KorkHCGqOrMVvN8OK9E0lY5WPmrKb1MtL3W3t6xf71He4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763771399; c=relaxed/simple;
-	bh=MgwtlOsVI8jNzh2lG2XBT/N2pQ9Cs4az9nEtW49Rfiw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GGf+58VKTqDxQbV5cNHTg9hYdZkWWD7F8FcETjyWM2R3hxjezsvG3SGYORXnZ+d+tgEuduOJji7YAjnOKtx00Goz3urtA6DDXOdLyxN5oamU/W164IbhvsmwvhHgrC8dWblUbE9Z3L/QMMdCXM4kZKCmjYR9XpcFuif0b4gyXLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=W3Hp+HO+; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=Yru/Aj0uKUE7zBjBvHyFS3l3XpwZvOAEFYXN5H1BHT0=; b=W3Hp+HO+J5KKzMOJzv7V0AwKcE
-	ZtX1UlevJyc1AQW3vKCEiJ3RerQUREHboFpGCN1iwZk49rXaRM+m/K/+cpQY2+AvkB2NQp2hoO9sG
-	GvQ3bpdnFAWy2vl9yIQQ4eS5poW7Pn7VDR2pF5V/SUUj+CdDUQiIKJ2Bb3InhDhbTffWyRhm+IZt1
-	sm13yF780EK3/bavwbuEXH6U2Xz8885WTwl/X1MLDadfDHi1OpMrzHsLZE1cwgpGZG9/iNGnWkp1P
-	2EkFgli9c6sV+bC9Io49glg7uRKx81aVTC21ZIi76bA+4K4Kx4wbhAMVSHKtgN7A1FVJc4jpyi4x4
-	z/3NocHA==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vMbVd-000000096HN-1PYc;
-	Sat, 22 Nov 2025 00:29:49 +0000
-Message-ID: <1022b551-ad51-4eed-bd75-a5865bd8d466@infradead.org>
-Date: Fri, 21 Nov 2025 16:29:48 -0800
+	s=arc-20240116; t=1763783191; c=relaxed/simple;
+	bh=1PWlpAxv9qHCUg0Lg+xjbR8jZhun3jTGIb0Fa9LsBX8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=KbPBvsxZ6ZnIRJgZege9hTP2mLOvcW45LMshEAWcASdDFNslfvXS3tT+B1l9wLHAL7iysT/2DfYGTasF/7ORSH8i9HAYnPz0Ve8somGmqVSkGNBHkQvrc9N0nLcvlqbgNrq32hcfLRe//pOTL9ZbV2OPNTVClAxEcC3iWHaLNkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tVoIRY2w; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1763783182;
+	bh=wNOkLSzojhQ1ZFLrlyHfJzdv169QnCIrn+vZOSuHhWo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=tVoIRY2wNZz7o9pEZyakifAKu9S0iCA8glZJD+XtCG1YcJgLZ+/dUVCngOwWG2NBQ
+	 ejFvYOdPzrARz7lmJWjp/5fDvHyjzCF/pxzCZAUg8rfoIA1tvvp+RcVH7HGHZnHfSE
+	 Nj+Kbxa5lveGBZMbSs9xKbvbrCd3CnOr8ei1lg1ks58kq48poEsotzqEFJePTu9v7y
+	 U6gAYsLGwzf8r1StFgt5gDrounJzwlOQu1Tw/uNCEOmQPocKxOJxDrtoOkOYxYkSIT
+	 RXOTzv4AYAMda03lG/ERFyguCSUZId4GYHhnD7wibEdfdGyuASfYf1eC8WApYVnaLc
+	 9ux+0KP4AqoFg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dCygK2RL1z4w93;
+	Sat, 22 Nov 2025 14:46:21 +1100 (AEDT)
+Date: Sat, 22 Nov 2025 14:46:19 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Matt Coster <matt.coster@imgtec.com>
+Cc: Frank Binns <frank.binns@imgtec.com>, Alessio Belle
+ <alessio.belle@imgtec.com>, Alexandru Dadu <alexandru.dadu@imgtec.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
+ <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
+ <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+ <linux-next@vger.kernel.org>
+Subject: Re: [PATCH v2] drm/imagination: Document pvr_device.power member
+Message-ID: <20251122144619.73fa991d@canb.auug.org.au>
+In-Reply-To: <20251121-device-power-doc-fix-v2-1-3417779f36c7@imgtec.com>
+References: <20251121-device-power-doc-fix-v2-1-3417779f36c7@imgtec.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] drm/imagination: Document pvr_device.power member
-To: Matt Coster <matt.coster@imgtec.com>, Frank Binns
- <frank.binns@imgtec.com>, Alessio Belle <alessio.belle@imgtec.com>,
- Alexandru Dadu <alexandru.dadu@imgtec.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, dri-devel@lists.freedesktop.org,
- linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-References: <20251121-device-power-doc-fix-v2-1-3417779f36c7@imgtec.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20251121-device-power-doc-fix-v2-1-3417779f36c7@imgtec.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/Cm/GPoMjwyc8_m+4cR7fODW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/Cm/GPoMjwyc8_m+4cR7fODW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi Matt,
 
-On 11/21/25 7:20 AM, Matt Coster wrote:
-> Automated testing caught this missing doc comment; add something suitable
-> (and useful).
-> 
-> Fixes: 330e76d31697 ("drm/imagination: Add power domain control")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Closes: https://lore.kernel.org/r/20251106152448.453b53ad@canb.auug.org.au/
-> Signed-off-by: Matt Coster <matt.coster@imgtec.com>
-> ---
+On Fri, 21 Nov 2025 15:20:31 +0000 Matt Coster <matt.coster@imgtec.com> wro=
+te:
+>
 > Based on the build target indicated in the report, I tried (and failed)
 > to reproduce the reported warning using:
-> 
->    make W=1 htmldocs
-> 
+>=20
+>    make W=3D1 htmldocs
+>=20
 > I was, however, able to get the reported warning (and verify that this
 > patch clears it) using:
-> 
+>=20
 >    scripts/kernel-doc -none drivers/gpu/drm/imagination/pvr_device.h
-> 
+>=20
 > Does anyone have any ideas why my invocation of htmldocs didn't seem to
 > have the same effect? Is it just simply that the relevant doc comment
 > isn't pulled into any of the rst docs; in which case how did the
 > linux-next build catch this warning?
 
-Hi Matt,
-I get the warnings when I run "make W=1 htmldocs" on the linux-next tree.
-Are you using mainline (or close to it)? If so, it could be a difference in
-scripts/kernel-doc.
+I just do "make htmldocs" on the final linux-next tree each day, so I
+have no idea what makes a difference, sorry.
 
-The patch looks good. Thanks.
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+--=20
+Cheers,
+Stephen Rothwell
 
-> Changes in v2:
-> - Add a proper commit description.
-> - Link to v1: https://lore.kernel.org/r/20251106-device-power-doc-fix-v1-1-76d9841c8084@imgtec.com
-> ---
->  drivers/gpu/drm/imagination/pvr_device.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/imagination/pvr_device.h b/drivers/gpu/drm/imagination/pvr_device.h
-> index ab8f56ae15df..ec53ff275541 100644
-> --- a/drivers/gpu/drm/imagination/pvr_device.h
-> +++ b/drivers/gpu/drm/imagination/pvr_device.h
-> @@ -146,6 +146,14 @@ struct pvr_device {
->  	 */
->  	struct clk *mem_clk;
->  
-> +	/**
-> +	 * @power: Optional power domain devices.
-> +	 *
-> +	 * On platforms with more than one power domain for the GPU, they are
-> +	 * stored here in @domain_devs, along with links between them in
-> +	 * @domain_links. The size of @domain_devs is given by @domain_count,
-> +	 * while the size of @domain_links is (2 * @domain_count) - 1.
-> +	 */
->  	struct pvr_device_power {
->  		struct device **domain_devs;
->  		struct device_link **domain_links;
-> 
-> ---
-> base-commit: cead55e24cf9e092890cf51c0548eccd7569defa
-> change-id: 20251106-device-power-doc-fix-ba1a5d753b6f
-> 
-> 
+--Sig_/Cm/GPoMjwyc8_m+4cR7fODW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-~Randy
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkhMgsACgkQAVBC80lX
+0Gy2Vgf3et90wX9wzyf8/OHK4kFQbn0dqj9uWfZr8X7qKrJXo1N2B4RIF2izCDHo
+I1W0TrbQS4BVlMggKbiYuy9cmYDUmhCPPC5KCyf0XM39+sbEjV0dzzM3OU1yifyy
+kwiE7QesfVsCt4a4JIRiWLErnHjQICxcPcxMzIQirPYNHezHYC9LqA3emLBU7WCR
+haLhQYNRUQJ+gZugT9xAoSiRUiRchymH4YEUvfiIrgaF1DG1pwx3SbUz135YnZIW
+9UXba+CrVLwVgk5iOJUVw4ZA1v1ei26S9ysJFriJpNrSGiO+hZb0WmcSmFvwjj1u
+Xzax5hXklXMAQUUws/fTZp4qHhAg
+=hEPY
+-----END PGP SIGNATURE-----
+
+--Sig_/Cm/GPoMjwyc8_m+4cR7fODW--
 

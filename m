@@ -1,334 +1,142 @@
-Return-Path: <linux-next+bounces-9150-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9151-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCDA8C7BDE3
-	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 23:33:46 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46C49C7C037
+	for <lists+linux-next@lfdr.de>; Sat, 22 Nov 2025 01:30:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD9403A835F
-	for <lists+linux-next@lfdr.de>; Fri, 21 Nov 2025 22:33:21 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F3AFF35BC49
+	for <lists+linux-next@lfdr.de>; Sat, 22 Nov 2025 00:30:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C322C15AE;
-	Fri, 21 Nov 2025 22:33:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBFD1E8331;
+	Sat, 22 Nov 2025 00:29:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mq3a6zX7"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="W3Hp+HO+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7239D2E8B84
-	for <linux-next@vger.kernel.org>; Fri, 21 Nov 2025 22:33:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269E91D618E;
+	Sat, 22 Nov 2025 00:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763764400; cv=none; b=QrfMn8MDUvPtTUrH5C9w7My+quH+4l3pogl6nYOyaRqND8+PzL5sQV/Fs1U+cs6K7EGutgrsYiR7Nq5BNP9aMhV2E1n+n/cE2pNkhVLFIozXmXkbK8LW+oJlljGjIVidIKwqlToPHsot9mbjyg5/+zJrCl3wQHLJWQMYlKm7jEg=
+	t=1763771399; cv=none; b=TFAfhOf/6a2fo6uhR8XSS41BIDXVmwdjAVzBDfHD5hXsJoUbSnyZVaLXR0M0bWbQF1yM22Q+db1qOjM++QSWwrnvMCpVeMQhUPHtY7WdJm8We7ypHowEVQK7DpBUNivhhRO3/AIn1X4AD6vUZo3rSRGy533Z7kOAFEvbRxGTlsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763764400; c=relaxed/simple;
-	bh=oowUxpo8Z2sE48KafeZqmWZ/LjcnKAAK61cxaAHNG6o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JEq+3Tc5G0xjIrJqM2o8y+ApPls4i9UTN82N990lTMT3EYbLAwVpQ0vCh3TXIl/1/EO7RCU//IhwDtIMGAL3xXGte3yY4bXXuIirhobR63yM/f4n2TjHh17aMKySl+VIPu39VX+1bTkjFMrwBEFIOMaWOfUx3/7UtPFlH4gkxpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mq3a6zX7; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-4eda6a8cc12so25665221cf.0
-        for <linux-next@vger.kernel.org>; Fri, 21 Nov 2025 14:33:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763764397; x=1764369197; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TMZlpfY8I0HrP0ciLhA/rh2zqgKZy2Jt9ixY4CcJE7I=;
-        b=mq3a6zX7zoR6mrpmVy/Siv2kohcqDYm8pZWmZVPAKmYE6mbLFd2zGYE5opjGgbHBWo
-         yrnRhird12gDSuA3TZKcwn2q66L4Nh62RhzSOTICFRnqnVvJD4arQQRfn+DOJqJB06uK
-         X0Hzo00uN+Vi0wYLUGxKOFsBHUduCoMyoR9nWiUmSkN5HC7I5dsUarUWcXkPZSi3QnuM
-         eEkup3VBbR5xvVt1YPPaKQUuUDuZYShavz9TAixfxInp2O4Iwd7xQ2PQYjdcipVpDN//
-         2Cug6PuC8aurcq+VQl8hY3+C2g9SeJdMRQWMWaasd3mzXBjhJgd1X2X01vmILS+PUNhK
-         JIHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763764397; x=1764369197;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=TMZlpfY8I0HrP0ciLhA/rh2zqgKZy2Jt9ixY4CcJE7I=;
-        b=lRc/Ma4oZJFM/puUBLTv947MqJTI5ewXarNlK8sAw+DgFLCCoUxuTCdYdAgxto4zMX
-         yGoGIW6HUzk6OEk4II0NpZGt5xsmZ9ajnxnqNLTt81lJ583s536kynuDv3vkQxi6gNnD
-         bv6gHdz4sELh5hERVMNf3e6L+YAzeHoaFhHmysTKRKWnK7qkH7FWitPxNd15LIgLM2hi
-         7AjQafdrK/4A3spi5p4ZgSsGLwv3nZMVidKkdkNz9mQL97P+ISj3Ebn989uleKaoZsQ1
-         kLWZFirXSYc5Xz0QkBsu6G+2pgro4nnCj8Ha3kXsa35RDPJSL6wJ34Sx2qUw/JXgenhX
-         NV4A==
-X-Forwarded-Encrypted: i=1; AJvYcCVDSgW6DErlgOU+dd6LVMyEHpC780jRKpu3WsWcsN7aSoaNsAqUbQ4uCP37iiwZaY7oOIRZaD1/HAHf@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLUIhuxZNGKO0thW7laqeRw/rnWv6M7jKerDP2zE6dkqXnT1cl
-	NdUkP7zmPtMOFZx2tB6xFxqsJo5Gi7YFJSo8D4TbZY9tYMsM10JE3UCk
-X-Gm-Gg: ASbGncu/YdQX+UuTJO4k9756ZzhRvqJmDqhv6xvZiJo5151cRD+qfsk1Sxiq939SjaQ
-	CYIS2EvzsIyviYZypGZG8HQ5wWnKtbTpOzGafKMXhwDDSYlv809hvEWGg1yFmKGEvpM4p7MSA/8
-	YYHzKaF7joLeo2fidBislE//5ZnwiUk/wP9HRSyNcZ+vZOwhucS5M7xhEZ+U2ZaelbeYczdcRQA
-	dGuLwZ+Sn791+rgPZQ5mOpt/hLwylyRWHav2YqoonZNf/SRga9PxX0Vp5Tb9ysGSBNrGTUb2iSj
-	wd7jpmLypL/NNQ+nsS7o5VMaKwuQiFaxV/7ak1ctutifXqTJc4ssxRrCq8HkPmSRmRIzf2RxbCS
-	jRWpB6hjMj1aXweycVR3Gqs+vp7S52+ZMUJSm7rfk5QHrf0G7WDyuq158d0hFxB00HumBY9bw5M
-	uBud8PqwG7C7YUroAPCNi/T8fZEQeijoxXgnhsLSC2Woy/mDBOPqSKN65OELBc6WDx0C3szrscJ
-	e9Vhm6jl0U9fBg=
-X-Google-Smtp-Source: AGHT+IHyQi7mbkfC7GjWwW3yCDXaLJ6WCU1Gi59b/Vgz+tJ/4Ue0Uqm+6o16/Psbu/3xj9TbQoOUSA==
-X-Received: by 2002:ac8:5f12:0:b0:4e8:b4d1:ece2 with SMTP id d75a77b69052e-4ee58854b96mr58309351cf.18.1763764397191;
-        Fri, 21 Nov 2025 14:33:17 -0800 (PST)
-Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4ee48d53aaesm43076091cf.8.2025.11.21.14.33.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Nov 2025 14:33:16 -0800 (PST)
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 2447DF40076;
-	Fri, 21 Nov 2025 17:33:16 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Fri, 21 Nov 2025 17:33:16 -0500
-X-ME-Sender: <xms:q-ggaR_iF5ZVBj9lF6NpRYSSSPDiMcckvYTn4aPOaYbJmo1irEpr2w>
-    <xme:q-ggaRiMGHF4UU5p4BtjSsqS_NtSwgnlisuqSEiFc43rW3n_1z0_wx3DbXaI5p1oR
-    Z4V5dOrpQJcpmacNRJNVALdyiOy2PELVoV-vV4kokHG5Ffts40i>
-X-ME-Received: <xmr:q-ggaaZvwvON_FODkrOsqeS8VduRKN4F3mil5DzSMrpUmcQCf5dMuLU296rMRijE2SL7LnECRpPMJFGOfkmsKAAGA0BKUETB>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvfeduudejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
-    gvrhhnpeetgedujeejudehveekteetfeefhfffheetgfeugfetffekieetiedtudehgfff
-    gfenucffohhmrghinhepghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhm
-    vghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekhe
-    ehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghm
-    vgdpnhgspghrtghpthhtohepuddupdhmohguvgepshhmthhpohhuthdprhgtphhtthhope
-    hnrghthhgrnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhfrhestggrnhgsrdgr
-    uhhughdrohhrghdrrghupdhrtghpthhtohepsghighgvrghshieslhhinhhuthhrohhnih
-    igrdguvgdprhgtphhtthhopegrkhhpmheslhhinhhugidqfhhouhhnuggrthhiohhnrdho
-    rhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrd
-    horhhgpdhrtghpthhtoheplhhinhhugidqnhgvgihtsehvghgvrhdrkhgvrhhnvghlrdho
-    rhhgpdhrtghpthhtoheplhhlohhnghesrhgvughhrghtrdgtohhmpdhrtghpthhtohepph
-    gvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepmhhinhhgoheskhgv
-    rhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:rOggae_qzo2t13cls6lLA3gXhQK6Bf2B-gJoxuJzs80rC5kMCjfRtA>
-    <xmx:rOggaUNYC2VVK43Yy-py9QuUYGcuD-Uwh4XkeMu6jmGyNpZckvu9fw>
-    <xmx:rOggaTGY49nWZime6iWYLQoLadDqtCipJ7FdAXid5IfAaicoq7HyRg>
-    <xmx:rOggaazgaNXg0vasiqxKUsVeG3JjwmegqxDpDUjyC1g043Za560K9A>
-    <xmx:rOggacqvfLAHPhFQ1XxbXtvYPDnNvhdFgfr_zyC3ZaJnR0NPqduzX0-f>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 21 Nov 2025 17:33:15 -0500 (EST)
-Date: Fri, 21 Nov 2025 14:33:14 -0800
-From: Boqun Feng <boqun.feng@gmail.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Waiman Long <llong@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
-Subject: Re: linux-next: boot warning from the final tree
-Message-ID: <aSDoquGlA55Ge100@tardis.local>
-References: <20251117202214.4f710f02@canb.auug.org.au>
- <20251121215819.GA1374726@ax162>
+	s=arc-20240116; t=1763771399; c=relaxed/simple;
+	bh=MgwtlOsVI8jNzh2lG2XBT/N2pQ9Cs4az9nEtW49Rfiw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GGf+58VKTqDxQbV5cNHTg9hYdZkWWD7F8FcETjyWM2R3hxjezsvG3SGYORXnZ+d+tgEuduOJji7YAjnOKtx00Goz3urtA6DDXOdLyxN5oamU/W164IbhvsmwvhHgrC8dWblUbE9Z3L/QMMdCXM4kZKCmjYR9XpcFuif0b4gyXLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=W3Hp+HO+; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=Yru/Aj0uKUE7zBjBvHyFS3l3XpwZvOAEFYXN5H1BHT0=; b=W3Hp+HO+J5KKzMOJzv7V0AwKcE
+	ZtX1UlevJyc1AQW3vKCEiJ3RerQUREHboFpGCN1iwZk49rXaRM+m/K/+cpQY2+AvkB2NQp2hoO9sG
+	GvQ3bpdnFAWy2vl9yIQQ4eS5poW7Pn7VDR2pF5V/SUUj+CdDUQiIKJ2Bb3InhDhbTffWyRhm+IZt1
+	sm13yF780EK3/bavwbuEXH6U2Xz8885WTwl/X1MLDadfDHi1OpMrzHsLZE1cwgpGZG9/iNGnWkp1P
+	2EkFgli9c6sV+bC9Io49glg7uRKx81aVTC21ZIi76bA+4K4Kx4wbhAMVSHKtgN7A1FVJc4jpyi4x4
+	z/3NocHA==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vMbVd-000000096HN-1PYc;
+	Sat, 22 Nov 2025 00:29:49 +0000
+Message-ID: <1022b551-ad51-4eed-bd75-a5865bd8d466@infradead.org>
+Date: Fri, 21 Nov 2025 16:29:48 -0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251121215819.GA1374726@ax162>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] drm/imagination: Document pvr_device.power member
+To: Matt Coster <matt.coster@imgtec.com>, Frank Binns
+ <frank.binns@imgtec.com>, Alessio Belle <alessio.belle@imgtec.com>,
+ Alexandru Dadu <alexandru.dadu@imgtec.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>, dri-devel@lists.freedesktop.org,
+ linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+References: <20251121-device-power-doc-fix-v2-1-3417779f36c7@imgtec.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20251121-device-power-doc-fix-v2-1-3417779f36c7@imgtec.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 21, 2025 at 02:58:19PM -0700, Nathan Chancellor wrote:
-> On Mon, Nov 17, 2025 at 08:22:14PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Today's linux-next qemu boot (powerpc pseries_le_defconfig) produced
-> > this warning:
-> > 
-> >   ftrace: allocating 48915 entries in 288 pages
-> >   ftrace: allocated 287 pages with 6 groups
-> >   ------------[ cut here ]------------
-> >   DEBUG_LOCKS_WARN_ON(lock->magic != lock)
-> >   WARNING: kernel/locking/mutex.c:156 at mutex_lock+0xcc/0x100, CPU#0: swapper/0/0
-> >   Modules linked in:
-> >   CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.18.0-rc6-09359-g921087e37218 #1 VOLUNTARY 
-> >   Hardware name: IBM pSeries (emulated by qemu) POWER9 (architected) 0x4e1202 0xf000005 of:SLOF,HEAD hv:linux,kvm pSeries
-> >   NIP:  c00000000148041c LR: c000000001480418 CTR: 0000000000000000
-> >   REGS: c000000002957a10 TRAP: 0700   Not tainted  (6.18.0-rc6-09359-g921087e37218)
-> >   MSR:  8000000002021033 <SF,VEC,ME,IR,DR,RI,LE>  CR: 24022240  XER: 00000000
-> >   CFAR: c00000000021123c IRQMASK: 3 
-> >   GPR00: c000000001480418 c000000002957cb0 c000000001a3a100 0000000000000028 
-> >   GPR04: 00000000ffffe04a c0000000026abe88 0000000000000001 000000000000004b 
-> >   GPR08: c0000000026abd28 0000000000000000 0000000000000000 0000000044022240 
-> >   GPR12: 0000000000000000 c000000002ae9000 0000000000000000 0000000001bff430 
-> >   GPR16: 000000007e68f070 c00000007f79c480 c000000002969160 c000000002a0f5d8 
-> >   GPR20: c0000000026a1138 c0000000026a1120 0000000000000000 c0000000019541b8 
-> >   GPR24: c00000000218a480 c00000000296e1d0 000000007d612000 c00000000380be10 
-> >   GPR28: c00000000380be20 c00000000380be00 c000000002640100 c00000000380be20 
-> >   NIP [c00000000148041c] mutex_lock+0xcc/0x100
-> >   LR [c000000001480418] mutex_lock+0xc8/0x100
-> >   Call Trace:
-> >   [c000000002957cb0] [c000000001480418] mutex_lock+0xc8/0x100 (unreliable)
-> >   [c000000002957d20] [c00000000024a60c] alloc_workqueue_noprof+0x38c/0x8ec
-> >   [c000000002957e00] [c00000000203018c] workqueue_init_early+0x4d8/0x6ec
-> >   [c000000002957f30] [c000000002004448] start_kernel+0x74c/0xa4c
-> >   [c000000002957fe0] [c00000000000e99c] start_here_common+0x1c/0x20
-> >   Code: 4182ffb4 3d2200f3 392971e4 81290000 2c090000 4082ffa0 3c82ffe0 3c62ffe0 3884bfe0 3863bf68 4ad90d45 60000000 <0fe00000> 4bffff80 60000000 60000000 
-> >   ---[ end trace 0000000000000000 ]---
-> >   rcu: Hierarchical RCU implementation.
-> > 
-> > I have no idea what caused this.
+
+
+On 11/21/25 7:20 AM, Matt Coster wrote:
+> Automated testing caught this missing doc comment; add something suitable
+> (and useful).
 > 
-> I noticed this warning in my QEMU boot tests as well and bisected it
-> down to commit 3572e2edc7b6 ("locking/mutex: Redo __mutex_init()").
+> Fixes: 330e76d31697 ("drm/imagination: Add power domain control")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Closes: https://lore.kernel.org/r/20251106152448.453b53ad@canb.auug.org.au/
+> Signed-off-by: Matt Coster <matt.coster@imgtec.com>
+> ---
+> Based on the build target indicated in the report, I tried (and failed)
+> to reproduce the reported warning using:
 > 
->   $ make -skj"$(nproc)" ARCH=powerpc CROSS_COMPILE=powerpc64-linux- clean ppc64le_guest_defconfig zImage.epapr
+>    make W=1 htmldocs
 > 
->   $ curl -LSs https://github.com/ClangBuiltLinux/boot-utils/releases/download/20241120-044434/ppc64le-rootfs.cpio.zst | zstd -d >rootfs.cpio
+> I was, however, able to get the reported warning (and verify that this
+> patch clears it) using:
 > 
->   $ qemu-system-ppc64 \
->       -display none \
->       -nodefaults \
->       -device ipmi-bmc-sim,id=bmc0 \
->       -device isa-ipmi-bt,bmc=bmc0,irq=10 \
->       -machine powernv \
->       -kernel arch/powerpc/boot/zImage.epapr \
->       -initrd rootfs.cpio \
->       -m 2G \
->       -serial mon:stdio
->   ...
->   [    0.000000][    T0] Linux version 6.18.0-rc2-00016-g3572e2edc7b6 (nathan@ax162) (powerpc64-linux-gcc (GCC) 15.2.0, GNU ld (GNU Binutils) 2.45) #1 SMP Fri Nov 21 13:55:26 MST 2025
->   ...
->   [    0.000000][    T0] ------------[ cut here ]------------
->   [    0.000000][    T0] DEBUG_LOCKS_WARN_ON(lock->magic != lock)
->   [    0.000000][    T0] WARNING: CPU: 0 PID: 0 at kernel/locking/mutex.c:156 mutex_lock+0xd4/0x100
->   [    0.000000][    T0] Modules linked in:
->   [    0.000000][    T0] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.18.0-rc2-00016-g3572e2edc7b6 #1 VOLUNTARY
->   [    0.000000][    T0] Hardware name: IBM PowerNV (emulated by qemu) POWER10 0x801200 opal:v7.1-106-g785a5e307 PowerNV
->   [    0.000000][    T0] NIP:  c0000000014b2974 LR: c0000000014b2970 CTR: 0000000000000000
->   [    0.000000][    T0] REGS: c0000000029979f0 TRAP: 0700   Not tainted  (6.18.0-rc2-00016-g3572e2edc7b6)
->   [    0.000000][    T0] MSR:  9000000002021033 <SF,HV,VEC,ME,IR,DR,RI,LE>  CR: 24000220  XER: 00000000
->   [    0.000000][    T0] CFAR: c00000000021ed7c IRQMASK: 3
->   [    0.000000][    T0] GPR00: c0000000014b2970 c000000002997c90 c000000001a78100 0000000000000028
->   [    0.000000][    T0] GPR04: 00000000ffffe04a c0000000026ed958 0000000000000001 000000000000004b
->   [    0.000000][    T0] GPR08: c0000000026ed7f0 0000000000000000 0000000000000000 0000000044000220
->   [    0.000000][    T0] GPR12: c0000000026ed880 c000000002ba0000 0000000000000018 0000000000000000
->   [    0.000000][    T0] GPR16: 0000000000000000 c0000000026e2b88 c0000000026e2ba0 c00000007be5a400
->   [    0.000000][    T0] GPR20: c0000000029ed0e0 c000000002aaf7e0 0000000000000000 c0000000019911b8
->   [    0.000000][    T0] GPR24: c0000000021ca400 c0000000029f2150 0000000079c90000 c000000003081410
->   [    0.000000][    T0] GPR28: c000000003081420 c000000003081400 c0000000021cce98 c000000003081420
->   [    0.000000][    T0] NIP [c0000000014b2974] mutex_lock+0xd4/0x100
->   [    0.000000][    T0] LR [c0000000014b2970] mutex_lock+0xd0/0x100
->   [    0.000000][    T0] Call Trace:
->   [    0.000000][    T0] [c000000002997c90] [c0000000014b2970] mutex_lock+0xd0/0x100 (unreliable)
->   [    0.000000][    T0] [c000000002997d10] [c000000000258ddc] alloc_workqueue_noprof+0x44c/0x8c8
->   [    0.000000][    T0] [c000000002997df0] [c00000000203080c] workqueue_init_early+0x4e4/0x700
->   [    0.000000][    T0] [c000000002997f30] [c000000002004388] start_kernel+0x638/0x938
->   [    0.000000][    T0] [c000000002997fe0] [c00000000000e99c] start_here_common+0x1c/0x20
->   [    0.000000][    T0] Code: 4182ffa8 3d2200f8 3929d134 81290000 2c090000 4082ff94 3c82ffde 3c62ffde 38846d98 38636d20 4ad6c32d 60000000 <0fe00000> e9410068 4bffff70 38210080
->   [    0.000000][    T0] ---[ end trace 0000000000000000 ]---
->   ...
+>    scripts/kernel-doc -none drivers/gpu/drm/imagination/pvr_device.h
 > 
-> At the parent change, there is no warning.
+> Does anyone have any ideas why my invocation of htmldocs didn't seem to
+> have the same effect? Is it just simply that the relevant doc comment
+> isn't pulled into any of the rst docs; in which case how did the
+> linux-next build catch this warning?
+
+Hi Matt,
+I get the warnings when I run "make W=1 htmldocs" on the linux-next tree.
+Are you using mainline (or close to it)? If so, it could be a difference in
+scripts/kernel-doc.
+
+The patch looks good. Thanks.
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+
+> Changes in v2:
+> - Add a proper commit description.
+> - Link to v1: https://lore.kernel.org/r/20251106-device-power-doc-fix-v1-1-76d9841c8084@imgtec.com
+> ---
+>  drivers/gpu/drm/imagination/pvr_device.h | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/imagination/pvr_device.h b/drivers/gpu/drm/imagination/pvr_device.h
+> index ab8f56ae15df..ec53ff275541 100644
+> --- a/drivers/gpu/drm/imagination/pvr_device.h
+> +++ b/drivers/gpu/drm/imagination/pvr_device.h
+> @@ -146,6 +146,14 @@ struct pvr_device {
+>  	 */
+>  	struct clk *mem_clk;
+>  
+> +	/**
+> +	 * @power: Optional power domain devices.
+> +	 *
+> +	 * On platforms with more than one power domain for the GPU, they are
+> +	 * stored here in @domain_devs, along with links between them in
+> +	 * @domain_links. The size of @domain_devs is given by @domain_count,
+> +	 * while the size of @domain_links is (2 * @domain_count) - 1.
+> +	 */
+>  	struct pvr_device_power {
+>  		struct device **domain_devs;
+>  		struct device_link **domain_links;
+> 
+> ---
+> base-commit: cead55e24cf9e092890cf51c0548eccd7569defa
+> change-id: 20251106-device-power-doc-fix-ba1a5d753b6f
+> 
 > 
 
-Thank you both, seems we missed the case where LOCKDEP=n but
-DEBUG_MUTEXES=y, I feel like the following should be the correct fix.
-
-Regards,
-Boqun
-
-------------->8
-Subject: [PATCH] locking/mutex: Initialize mutex::magic even when LOCKDEP=n
-
-When DEBUG_MUTEXES=y and LOCKDEP=n, mutex_lock() still checks on
-->magic, hence debug_mutex_init() should be called in
-mutex_init_generic() as well. While we are at it, decouple LOCKDEP
-logic from debug_mutex_init(), because in this way debug_mutex_init()
-only needs one parameter, and we now have mutex_init_lockep() for
-LOCKDEP=y scenarios.
-
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Closes: https://lore.kernel.org/lkml/20251117202214.4f710f02@canb.auug.org.au/
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Closes: https://lore.kernel.org/lkml/20251121215819.GA1374726@ax162/
-Fixes: 3572e2edc7b6 ("locking/mutex: Redo __mutex_init()")
-Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
----
- kernel/locking/mutex-debug.c | 10 +---------
- kernel/locking/mutex.c       |  8 +++++++-
- kernel/locking/mutex.h       |  5 ++---
- 3 files changed, 10 insertions(+), 13 deletions(-)
-
-diff --git a/kernel/locking/mutex-debug.c b/kernel/locking/mutex-debug.c
-index 949103fd8e9b..2c6b02d4699b 100644
---- a/kernel/locking/mutex-debug.c
-+++ b/kernel/locking/mutex-debug.c
-@@ -78,16 +78,8 @@ void debug_mutex_unlock(struct mutex *lock)
- 	}
- }
- 
--void debug_mutex_init(struct mutex *lock, const char *name,
--		      struct lock_class_key *key)
-+void debug_mutex_init(struct mutex *lock)
- {
--#ifdef CONFIG_DEBUG_LOCK_ALLOC
--	/*
--	 * Make sure we are not reinitializing a held lock:
--	 */
--	debug_check_no_locks_freed((void *)lock, sizeof(*lock));
--	lockdep_init_map_wait(&lock->dep_map, name, key, 0, LD_WAIT_SLEEP);
--#endif
- 	lock->magic = lock;
- }
- 
-diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-index f3bb352a368d..2a1d165b3167 100644
---- a/kernel/locking/mutex.c
-+++ b/kernel/locking/mutex.c
-@@ -51,6 +51,7 @@ static void __mutex_init_generic(struct mutex *lock)
- #ifdef CONFIG_MUTEX_SPIN_ON_OWNER
- 	osq_lock_init(&lock->osq);
- #endif
-+	debug_mutex_init(lock);
- }
- 
- static inline struct task_struct *__owner_task(unsigned long owner)
-@@ -173,7 +174,12 @@ static __always_inline bool __mutex_unlock_fast(struct mutex *lock)
- void mutex_init_lockep(struct mutex *lock, const char *name, struct lock_class_key *key)
- {
- 	__mutex_init_generic(lock);
--	debug_mutex_init(lock, name, key);
-+
-+	/*
-+	 * Make sure we are not reinitializing a held lock:
-+	 */
-+	debug_check_no_locks_freed((void *)lock, sizeof(*lock));
-+	lockdep_init_map_wait(&lock->dep_map, name, key, 0, LD_WAIT_SLEEP);
- }
- EXPORT_SYMBOL(mutex_init_lockep);
- #endif /* !CONFIG_DEBUG_LOCK_ALLOC */
-diff --git a/kernel/locking/mutex.h b/kernel/locking/mutex.h
-index 2e8080a9bee3..9ad4da8cea00 100644
---- a/kernel/locking/mutex.h
-+++ b/kernel/locking/mutex.h
-@@ -59,8 +59,7 @@ extern void debug_mutex_add_waiter(struct mutex *lock,
- extern void debug_mutex_remove_waiter(struct mutex *lock, struct mutex_waiter *waiter,
- 				      struct task_struct *task);
- extern void debug_mutex_unlock(struct mutex *lock);
--extern void debug_mutex_init(struct mutex *lock, const char *name,
--			     struct lock_class_key *key);
-+extern void debug_mutex_init(struct mutex *lock);
- #else /* CONFIG_DEBUG_MUTEXES */
- # define debug_mutex_lock_common(lock, waiter)		do { } while (0)
- # define debug_mutex_wake_waiter(lock, waiter)		do { } while (0)
-@@ -68,6 +67,6 @@ extern void debug_mutex_init(struct mutex *lock, const char *name,
- # define debug_mutex_add_waiter(lock, waiter, ti)	do { } while (0)
- # define debug_mutex_remove_waiter(lock, waiter, ti)	do { } while (0)
- # define debug_mutex_unlock(lock)			do { } while (0)
--# define debug_mutex_init(lock, name, key)		do { } while (0)
-+# define debug_mutex_init(lock)				do { } while (0)
- #endif /* !CONFIG_DEBUG_MUTEXES */
- #endif /* CONFIG_PREEMPT_RT */
 -- 
-2.50.1 (Apple Git-155)
-
+~Randy
 

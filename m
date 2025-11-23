@@ -1,120 +1,109 @@
-Return-Path: <linux-next+bounces-9156-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9157-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7303EC7E447
-	for <lists+linux-next@lfdr.de>; Sun, 23 Nov 2025 17:39:25 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C08D8C7E7F3
+	for <lists+linux-next@lfdr.de>; Sun, 23 Nov 2025 22:53:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30E2E3A7B93
-	for <lists+linux-next@lfdr.de>; Sun, 23 Nov 2025 16:39:24 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 985EE4E080B
+	for <lists+linux-next@lfdr.de>; Sun, 23 Nov 2025 21:53:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 937E82066F7;
-	Sun, 23 Nov 2025 16:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A377D26ED4D;
+	Sun, 23 Nov 2025 21:53:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ri62dhWC"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="U+vViSzD"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B60B12DDA1
-	for <linux-next@vger.kernel.org>; Sun, 23 Nov 2025 16:39:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E43F12517AC;
+	Sun, 23 Nov 2025 21:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763915961; cv=none; b=U8tt3hLuWGafiyWldEw9zrMpuNTRZZ0W5smdB2ZbrmFW3refUaYKzX0FfsbHyvVJRrrXpYRJALTFfk/d2HtToCvcSToWKfBWSNZvu1EeeULjCKWd3ug16TxmPM1v2bHMfY4XubP6ak+RIT3S49vcgn87KTwNPeEffzFW4eSLAgI=
+	t=1763934800; cv=none; b=Qk9iHGX8cCriSL3DFIW19pY93UjnOKXEMjtBXTRWeoHYvMpdkYddGoarXAdq0MtWB6a6S2KPNSQRjZ/hp8aj1kB/lBgtYSvUJlNCy2iOGatyJkzKPKqLdJvDEm3ZSyn4gBBo84ATHzwymY0vwULsY176/Snn5NALckUTeIkjSB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763915961; c=relaxed/simple;
-	bh=Yto0JfPMyFhwkyIzlvWFHVypIK+QNFIHz0wUi1GlYY0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BWyB5RafkJGwkjHIQFe35TL5hSb0sszBQw97B5PrDdPZ0ieUkdy4dkqL3PlGLQJSk1nq3jDHTW8mZRk5bI4OoMLX84QTMN0ZYFT55YTCWqpbcoBa3I1IiMYPDmuStupeSzMdNnIh6koVFCl6RZ5iEado6HYef9TR92KW/Hn1BlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ri62dhWC; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-bc07266d011so101972a12.1
-        for <linux-next@vger.kernel.org>; Sun, 23 Nov 2025 08:39:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763915959; x=1764520759; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7dbqLePcPBSRLomrj9NiM34uYj5x7cLmIFg/bDccrSA=;
-        b=Ri62dhWCvLmHmjdyL2B8NC83kathTEzoNhTcW3ZvuHWiesmeWaIzJd588IGx4OvcTc
-         As3c+RjGAr7gqo11tRgnPOdiQV7dcJwvhC+IcahWPiAE9po9A7VCKjvMSNYqZ019nGne
-         YjIvmznDfiTTKxLCfSnwMYM7ifu5Uf/968vRQMCrn1UucFPrRtBOcy+zrmFQiz6BkDdc
-         lVncXfpGCz5Y8W9Kxh/GY1yDh5b+Y79go53xIqe927Aj972hlOwiYWiHDNCgJT0WE+8R
-         aK7BXGGbXVDl/FFC9+0+Prr9bfXXvigNXslBv0FPslYFUhlpjqrT9Ii7Z5ljfJ07eOQr
-         uHAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763915959; x=1764520759;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7dbqLePcPBSRLomrj9NiM34uYj5x7cLmIFg/bDccrSA=;
-        b=dGDvwliASAUWr/ZEH2tXdjslz17k+U+hcMd4UhK9Gvs5maRvz7d/1xZDEH1fNkXjjK
-         zoiNQ2qeQtJSnb1n9wZaQK/u2bd81PuKxVGXzl28GmcZ86o/hYbhxSGmfIJDS1YOxwLF
-         PsHjzmCwXc8WtIPkQ66NHBRWmxLi15plXKkLRc9/eo/lDs16D6eNd06g8ax3OQZnofOh
-         USDmDBKtZlakaKQPffayCnSZe4LJ3WniOHn5EUN4uc+PLFyt8xLOlqdF6EI4I4nBqvNo
-         dmsGi7SVyXzAVusbrh6myMfzN8ITvmA/F8KSjIsRvSwFhl/EPauz2o2/flZv1x4vYPbh
-         7YXg==
-X-Forwarded-Encrypted: i=1; AJvYcCXVULh0Aob+f+4X+QnGH7m8XFaU2P4ZF2p0adZrILhMc/jAzTDhcXZgRwp/Xjf/zzJVebzRMybnaz/y@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxo+oLBeCvz+7lQYaia/0dGCnjWlOSm9IGYz+VIRGdGWeq9xf50
-	O/trGhOIrR7md+u8u3hhPlt28JrJ+lx5SY0FkplCrDIUWoVBEA56bBPOpHK+ABynOsDKaueI2NO
-	zdULs5ttzuLMlyw/64EqoImqVxodlgg4=
-X-Gm-Gg: ASbGnctIsptF1iITqcoPLKa9mDLYto4JTu82B0Qc4VzRotvVyHn+RUPlRCFFa4uTxHr
-	sXGWl8HS5ssQXDCR1ePLqtM5vS940VVgfLPTy0R814GAZVg9qUGbDl5fVIGCCJCUKMeKWwxK/Su
-	w+2c7wCbVNH+LDwm3lsNhTO26W9LFvmWY7knWqTGcUdhs6RvfAN0u8qojOJfkluEx35kNm4j3sT
-	aStSnZ4G/BD3HR3JqF+qFUqsn7ZO8gHhNRV+UVxpt8kgSlReudbPRRNWBKu8Z/uI7qsEulQFa3k
-	sF2p/2yMbqY3oXEI38CfZsDZZjU16M0Riua9/c0nz/W7HarEphuRQovoLm00ei8DtAq17NkWglC
-	mRhebIZFUnVCYHWZVohtYY0LD
-X-Google-Smtp-Source: AGHT+IFRobeWTpAeddwQ9tNfBbWy8Sdm6sy3VI+FzDR3R3+l7nfnke3R2hRmzQcNjwt7ZhqusRtSerTGis27yMTAPkg=
-X-Received: by 2002:a05:7300:ac82:b0:2a4:3593:2c0a with SMTP id
- 5a478bee46e88-2a724c02369mr5042366eec.3.1763915959278; Sun, 23 Nov 2025
- 08:39:19 -0800 (PST)
+	s=arc-20240116; t=1763934800; c=relaxed/simple;
+	bh=QvM5KIq5AIaOJgFOEufch2hLQ+Orl1ZS8LblxANt5PA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=nFRBg1NQcIv8+YlCNRkVaR/0Xkn8G6Djw0Crair3v5SyLQirwFf6UuZtYjR9d35YodOaLbV+/8pP8bF1JQ1S7w9vj3vYHqDl7YXcCMk12NomQrxncobMmZjAy8kdoMfqE1/Nv+EwIUphXqlxSM/ullUVg1V97TMmkJQ4M/SQkXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=U+vViSzD; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1763934788;
+	bh=hQd9l0BaFrmtYA2hIsLPFHIPWChtTNt9IEdyybVkQfM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=U+vViSzDr36fEhcXmYR96c2MolvoQ7qqMiFt16omzvtHZRcuVSqXBRJK4+ffsa8Ac
+	 BlLQsfIPUUc+zb/UTxPYR0g/pJCyXWXHZ5TMI/UkGeaU0eqsYtGtEIbwdv11kvhVSC
+	 7joQkMZOvZlz7glb54RcU1cx3/kbVW89rV+Xdlw0VE1cptMUkDhuJYGSj0/M0B0V4W
+	 nZE0ApYNHegS4K56kyG9sOFcLAeNiWJqLAIQpLytbnpSut/wzC6zGUDtu9bvyB572P
+	 ynsRT+eAowFSRsc3KGIWeiJCzfAkZJ9HeOvQHLtR+xRaEXOS4A2MMGwsn7c9PM4ge5
+	 Ew27BIsT8B/PQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dF2kr10XQz4w93;
+	Mon, 24 Nov 2025 08:53:07 +1100 (AEDT)
+Date: Mon, 24 Nov 2025 08:53:07 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Petr Mladek <pmladek@suse.com>
+Cc: John Ogness <john.ogness@linutronix.de>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the printk tree
+Message-ID: <20251124085307.30709037@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251120181111.65ce75a0@canb.auug.org.au> <CANiq72mW=zMbt2W2Omn4PnMDDJfqz3tDtrneMOFz2ysQ34T8zg@mail.gmail.com>
- <CAJ-ks9=LxO8zTy7rQCiXrZGuwwN5d0gqVkQVE_S2QZnXTdu-Ug@mail.gmail.com>
- <20251121153906.1d306ad1@canb.auug.org.au> <CAJ-ks9k1=BLFCfjVrMqQ5u_ak6+g=HtQ6_TP4ZtazPhk0Z76YA@mail.gmail.com>
- <CANiq72kxj-7VjYp2i2VFU5qoRd6OJKPfajZAg+HMX148DU5zqw@mail.gmail.com> <2025112100-outpour-nearly-b7a8@gregkh>
-In-Reply-To: <2025112100-outpour-nearly-b7a8@gregkh>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 23 Nov 2025 17:39:06 +0100
-X-Gm-Features: AWmQ_bnEN8KGh7Coj4unmBGCJR4EeBpk76_dKeSHvI8Ra5CEYmt9AdLePiUD1vI
-Message-ID: <CANiq72=nS5BVC8zq4tufVWQJt-ZKN9=aSvq1VKxCGOvpuVs6ZA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the rust tree with the driver-core tree
-To: Greg KH <greg@kroah.com>, Danilo Krummrich <dakr@kernel.org>
-Cc: Tamir Duberstein <tamird@gmail.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Igor Korotin <igor.korotin.linux@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/2Gy8nbtNbvtsqkm0Pz/lY5d";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/2Gy8nbtNbvtsqkm0Pz/lY5d
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 21, 2025 at 5:07=E2=80=AFPM Greg KH <greg@kroah.com> wrote:
->
-> I'll take a patch, thanks!
+Hi all,
 
-and
+In commit
 
-On Fri, Nov 21, 2025 at 8:21=E2=80=AFPM Danilo Krummrich <dakr@kernel.org> =
-wrote:
->
-> Yes, a patch would be great -- thanks for providing the conflict resoluti=
-on!
+  863eb2c656b4 ("printk: Avoid irq_work for printk_deferred() on suspend")
 
-Done:
+Fixes tag
 
-    https://lore.kernel.org/rust-for-linux/20251123163536.1771801-1-ojeda@k=
-ernel.org/
+  Fixes: 26873eb26c45 ("printk: Avoid scheduling irq_work on suspend")
 
-I noticed Stephen's resolution can remove an import too.
+has these problem(s):
 
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 26873e3e7f0c ("printk: Avoid scheduling irq_work on suspend")
+
+--=20
 Cheers,
-Miguel
+Stephen Rothwell
+
+--Sig_/2Gy8nbtNbvtsqkm0Pz/lY5d
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkjgkMACgkQAVBC80lX
+0GyRFAf/atnw6qQZDR8LTR3CUnSJ/A0tw2OQ4vtFEHDFLU7giipacU3BqVPoamSR
+L0lIevFKayO1eJWQ+LEUsAgg2b5tIGb+vHxev/R5eu6vDr/KvBnbZljQEVqhDbJK
+JBlqjWyQeeGS66xhb+HrrzwAbVL0FlhMBjDlXktnVnfmVvksg7ki9ndSL58sUYh1
+uuBY2cKRRdfjOycs1YkHU1b0AIG2Xu65b2JNTcvSmcr6uAF3vd/K7L5GCiro9lBa
+4UMpdKmPPhp33/f4WIwiNgiyjGln6jb9rds4sIY0nfKPg29MmULBBxBlHtoIWI9j
+a3o9SKUFXRm9sUdJ9LrNHdtHcb8p1g==
+=9sAr
+-----END PGP SIGNATURE-----
+
+--Sig_/2Gy8nbtNbvtsqkm0Pz/lY5d--
 

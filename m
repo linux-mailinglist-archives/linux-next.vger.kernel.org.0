@@ -1,106 +1,97 @@
-Return-Path: <linux-next+bounces-9190-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9191-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61F6BC81F53
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 18:45:07 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D181C8248A
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 20:22:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 516814E459E
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 17:45:06 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8A89934A0A5
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 19:21:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBC1F2C1584;
-	Mon, 24 Nov 2025 17:45:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60FD62DEA94;
+	Mon, 24 Nov 2025 19:19:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="3XlZRRVh"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="a6mvdVM9"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476B323C4FA;
-	Mon, 24 Nov 2025 17:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814C72D63F6;
+	Mon, 24 Nov 2025 19:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764006304; cv=none; b=EmDvcbogtfppyAnbazuvbSI9+8EjlN5ZmJqlaUt+lZDTjfPFGHhm1xtlCeViI6V8OoGYbDsTSb2aOTRkjZvBK/M3HOXDo9srsCbsaLcsiBzddv37uEDtkdTXer7mxsD6uWUq/GLk+n9pTVIddntV7qPWlezlY73cigKiuEr7Lr4=
+	t=1764011956; cv=none; b=dIba8dQJVGKXV1OkircM6RbTNwcSKt8FZeLWPp1wo556RuJFeMlbWzDXNKbVW0Ql8132RRxYrb0AcR9JQzxcEUwMhOX1vIqEbO1npcE1vtNoYOq1tk70G/I45j4Ski77CEp4m9q68mdA4HpuPAY7OaTJ7mS/vdBEY8Ex5Vh38JA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764006304; c=relaxed/simple;
-	bh=b+EZW0Cor7ZLJzAtKT2cBjxS5mp15VgngrgSiPVWais=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WQLKNNpk9yZ8pFX52Xafg5kpMlA/91l0n+bfkLa+k9CpULB6LBJ4FvN3UXNY5BTEKqZUXG4OUPZ8luOvRUWgcN4fBWCdY9ifskdMcgoy4qc6ZaAOrQsSMRc98/Qpcs4tS8Q2KnEwk6uN6P0GqtaaP4p/qsQQVt7Rpe40vbmJxhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=3XlZRRVh; arc=none smtp.client-ip=198.137.202.133
+	s=arc-20240116; t=1764011956; c=relaxed/simple;
+	bh=U3BZ7eT5FQCD+gT8TPoxtkCdop+tmEAqyWplI/mco0U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U51PCiagBeNgiP2kpZ9ztlkWkKgOlVtVnQVuknclLYSZzKpW+UMuOCw4/zLvDlWQz7D1bvWZycsGyI9oEDihacU7dV/bfDyCGDky63XDVNUP0S6lp0nZI47IrDlJOYTsFhnaoqYfpsATl/44mVAFHCd80Mf4Z02ECSRBEy1CInA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=a6mvdVM9; arc=none smtp.client-ip=90.155.50.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=Uve/A3SMrG1dh4BfIQpFPuLmp0G1hcZBPqM7kiQcXoU=; b=3XlZRRVh+Xe8eI1wZ9C10f5hCU
-	3sBy1s4yyc9v6Gskbon8tdFAgnC+8B3X6GtFyuqL7Cqc8VvQ6krGEylsGy6hqYQ/E8Wb63lSggPI7
-	ixvtnrD6Esql3AKwOHEvlPyow84IwMV/C5HkpJAOIzNWY8j6pc2n8Va2SW/YIac6pYnCHk+vkDrlR
-	1tWZTh3KYFjHJ8eukKtIRGbNhZCKTfd+KATnWxc6lkpZoVis4nbI77+5UVyb56bCFWdjoTXTMxu+X
-	MYeoGpiRHsvvXNEgL+1+LgHISGauI5BlLqBK1I5csyy+7bemCN5JoVuEVcFTl7GZsxYneo33+Rx57
-	HcxpzySw==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vNacT-0000000C7qo-3bcH;
-	Mon, 24 Nov 2025 17:44:57 +0000
-Message-ID: <55134c91-00c4-4a5b-a897-1c12d297671c@infradead.org>
-Date: Mon, 24 Nov 2025 09:44:57 -0800
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=CNa9srSIcY5r3Il/+ILNAkNK75nUaMyNXbkFg6SLZHU=; b=a6mvdVM94zjrf6m8bEJPcIVfMs
+	Q82C/zpTrLz7lQF9TN3qSMOCalQ2o6Dx16C7G+X9VR48fhrRICWD1HxKQYqdTGeT59WE0ZIXxbO5k
+	HWrOpoU4JSU9REtUFC5R/YFCKzXDwN7SQ1zoxKi0h+2qJpxtDp9gsdEIKeNc6yegEXtxX2N7gll1L
+	Rovt/QXgsPG5npKsNh3qyEj+YqR5LncE73qDK9xSknNZ4kSxYMrJGHsjrGq2zKZwkCR+y0rwgIFrc
+	SlkfEAhounLJ1xC/MCTbyLuB0goh6/9uMyhrxDB+KDP0ub6X+RrXC3918tKgOGt5ZDQdaWCOHvsEo
+	BqFFSR/A==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vNc5Y-00000007Pk8-1vHo;
+	Mon, 24 Nov 2025 19:19:04 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 5E2A53002A6; Mon, 24 Nov 2025 20:19:03 +0100 (CET)
+Date: Mon, 24 Nov 2025 20:19:03 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	ojeda@kernel.org, Danilo Krummrich <dakr@kernel.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	nouveau@lists.freedesktop.org, Alice Ryhl <aliceryhl@google.com>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20251124191903.GM4068168@noisy.programming.kicks-ass.net>
+References: <20251124231644.38d0303b@canb.auug.org.au>
+ <20251124123249.GP4067720@noisy.programming.kicks-ass.net>
+ <aSRlFB9PoOcZVmvt@tardis.local>
+ <20251124144714.GT3245006@noisy.programming.kicks-ass.net>
+ <20251124144923.GK4068168@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: build failure after merge of the tip tree
-To: Peter Zijlstra <peterz@infradead.org>,
- Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>, ojeda@kernel.org,
- boqun.feng@gmail.com
-References: <20251124231644.38d0303b@canb.auug.org.au>
- <20251124123249.GP4067720@noisy.programming.kicks-ass.net>
- <20251125010351.05b0b2d7@canb.auug.org.au>
- <20251124143537.GS3245006@noisy.programming.kicks-ass.net>
- <CANiq72kdCJS9ZDX+6B3pecAbfMqpt2XCqOfQfoKWgLaT9DtMpg@mail.gmail.com>
- <20251124145323.GR4067720@noisy.programming.kicks-ass.net>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20251124145323.GR4067720@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251124144923.GK4068168@noisy.programming.kicks-ass.net>
 
+On Mon, Nov 24, 2025 at 03:49:23PM +0100, Peter Zijlstra wrote:
 
+> This... ok now lets see wtf the actual problem is.
 
-On 11/24/25 6:53 AM, Peter Zijlstra wrote:
-> On Mon, Nov 24, 2025 at 03:48:12PM +0100, Miguel Ojeda wrote:
->> On Mon, Nov 24, 2025 at 3:35 PM Peter Zijlstra <peterz@infradead.org> wrote:
->>>
->>> At some point in the past... I just did again, and updated the relevant
->>> packages and rustavailable is still green, but allmodconfig is still not
->>> giving me rust.
->>>
->>> I'm on Debian Testing.
->>
->> There are several `depends on` for `CONFIG_RUST` as Boqun mentions, so
->> it is likely one of those is blocking you.
->>
->> The easiest way to know which one it is is to check what `menuconfig`
->> computes about the requirements (searching with the `/` command).
-> 
-> Yeah, that output is so long it scrolls out of the right side of the
-> screen and it really isn't nice to read with all the negations.
-> 
+This cures it. I'll go rebase that tree.
 
-I've always found xconfig better for seeing dependencies. Of course, that
-also adds a few build requirements.
-
--- 
-~Randy
-
+diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
+index a3dd6805b574..d0a96ff5c02c 100644
+--- a/arch/x86/include/asm/bug.h
++++ b/arch/x86/include/asm/bug.h
+@@ -104,7 +104,7 @@ do {									\
+ 
+ #define ARCH_WARN_ASM(file, line, flags, size)				\
+ 	"1:\t " ASM_UD2 "\n"						\
+-	_BUG_FLAGS_ASM("NULL", file, line, flags, size, "")
++	_BUG_FLAGS_ASM("0", file, line, flags, size, "")
+ 
+ #else
+ 
 

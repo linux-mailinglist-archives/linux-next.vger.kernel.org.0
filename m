@@ -1,104 +1,93 @@
-Return-Path: <linux-next+bounces-9174-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9175-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17C9BC806FA
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 13:20:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E95F5C80799
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 13:33:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 04409348DB8
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 12:17:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A74C03A27C4
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 12:32:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 077122FDC52;
-	Mon, 24 Nov 2025 12:17:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2B001E834E;
+	Mon, 24 Nov 2025 12:32:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LbWOYqI7"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="n1SAoFY5"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B781E2FD69E;
-	Mon, 24 Nov 2025 12:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB70218EB0;
+	Mon, 24 Nov 2025 12:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763986634; cv=none; b=tCYA5UGORstJ4jMym9DnAFeIQcG5FDGGdvt1QEKCVgObM4+FbTURmQpKglRviPiz8rXoYoyCWAy2R258Z8Q41bdpHw/u8tHznwTICF671ksRI0RHe2wPTMgb83Ef/pdObDoHhjS0W140DIx62P/X6+yn38qR3hkbfrYuS5EIUPk=
+	t=1763987576; cv=none; b=T4nXbJvJ/YSFjTyZEokEDkPqU7pERwE1E2Z2WE7vAC2/ZKnGKGdG9D1b2PScPTbuOjgn9yIEcbYxYo6A5BfhPoMpSnis3Qt2HyVhiq9TPyfsEUpJlAi1S2NQn7pTpTF7tYVKyq6bS1I85f/87wCXk9xYkNZ2oqR+rUi8l3W62ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763986634; c=relaxed/simple;
-	bh=KocH8L2CA+THxJcd46M/ejaRVVYt0WGSxqpR7jatHpE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Y+KqrKkB1SWo8R1MnjVqXv7GfSbz8VIQZaxVNF/38P/bbA2MQgULz+B2GoJLGN1Ier6KpNAELOpaaTnPLqb2bncecmD0y0aoC7sPvrhfOQ6qY3jAGESM2JVH61wWzFtffvuy6kFuDV5jcqUsAs1NHtKnqrKx0E7rdJdQbKgOVBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LbWOYqI7; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1763986625;
-	bh=httVC0uX2JdNZc3Lb8ggCSKtqxQthKjI+9bA7mTCDFg=;
-	h=Date:From:To:Cc:Subject:From;
-	b=LbWOYqI7Yel+Pb0sZQKE9NiZE0Aa5YIETLojMTzwm0mihQO9e9y1lpisZXQOg1/Hv
-	 Gw8ur4fBzV4ELlO8/meDUWfNBAeD8VAXdzZUMRDAKCFssyZEjflL6nmyr+n161lz3q
-	 tjrYgzdMtlT6+9MiXUJLr6BtL2CWN5pinYVmzMtph3H6+vwH3TPGIBoGsZUC+lL7IN
-	 bZLWiFupH9LGPyV91IGHmET1qY4onPaxpTZ+J3bRSD8PRt8ncclAdPTJzcHGCrfcUH
-	 AOoXT0LWwB26QvM4snP9T8l+7JJBS1+Uygqt2RLkyrblyuzzH1OVcdTuhg9qrX7kCg
-	 EyWNIeDlh4XVg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dFPvj0jfgz4w1j;
-	Mon, 24 Nov 2025 23:17:05 +1100 (AEDT)
-Date: Mon, 24 Nov 2025 23:16:44 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tip tree
-Message-ID: <20251124231644.38d0303b@canb.auug.org.au>
+	s=arc-20240116; t=1763987576; c=relaxed/simple;
+	bh=awgAJavHOQ0+gv0VJv/Dpe9I33aTOIItQxdp4Ay4QNQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L1dkRSkZ9op+eOBnIFmwor4TxmYnrOnze7SiYe6NQ+HuD4PN5kMweOz4nE8O4pQvHzPnws158YfEsX3VNSTekW299CcOQQqsXR8N1mFslUlQA5nWc918ZgV1KhmmWJpiRvI1AldZjOgPNAU1VH300jU4lYWChNjMvDm1Dt7dAgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=n1SAoFY5; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=awgAJavHOQ0+gv0VJv/Dpe9I33aTOIItQxdp4Ay4QNQ=; b=n1SAoFY5LE7NY+epMrlq/prIue
+	r7hef6GpuoF+B+YMYjFU6UeKvrWUGClr/2ic2W2CJfzhJcAF9rR2t/5ydZwr8IKt7Ksn50/HS5AG2
+	jyeBOeTtKkYOpo9pnJ6E715N3Uwq8adX0S62LEc3ayeh0qFjXZuiCakxwOAXnWUzCAqNDvZXNPvQp
+	MFHFGOW7enCVcqK27e3jZFXAkModoE3fnhxdyMyvYDId8HYm3+jaq5iQAE7t4bIg66sY8XpIPEtOw
+	fBLyUcMgx8n9rEOAmCo4puzMoKlh5sUW9wgbk+10fOdg8Xqx48ToVO08HslmN3DbKr+NYT0oqhUav
+	YmellBCg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vNUsp-00000003eVN-2Uzg;
+	Mon, 24 Nov 2025 11:37:27 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id C348C3002E3; Mon, 24 Nov 2025 13:32:49 +0100 (CET)
+Date: Mon, 24 Nov 2025 13:32:49 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	ojeda@kernel.org, boqun.feng@gmail.com
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20251124123249.GP4067720@noisy.programming.kicks-ass.net>
+References: <20251124231644.38d0303b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BXhgrn5=dv6C79km7rv/SjU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/BXhgrn5=dv6C79km7rv/SjU
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20251124231644.38d0303b@canb.auug.org.au>
 
-Hi all,
+On Mon, Nov 24, 2025 at 11:16:44PM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+>=20
+> ERROR: modpost: "NULL" [drivers/gpu/nova-core/nova_core.ko] undefined!
+>=20
 
-After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Rust :/
 
-ERROR: modpost: "NULL" [drivers/gpu/nova-core/nova_core.ko] undefined!
+So I have:
 
-Caused by commit
+$ make O=3Dtmp-build LLVM=3D-22 allmodconfig
+$ make O=3Dtmp-build LLVM=3D-22 rustavailable
+Rust is available!
+$ grep -e CONFIG_RUST=3D -e CONFIG_NOVA=3D tmp-build/.config
+$
 
-  c5d913fabb57 ("x86/bug: Add BUG_FORMAT basics")
+Help ?!?
 
-I have used the tip tree from next-20251121 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/BXhgrn5=dv6C79km7rv/SjU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkkTKwACgkQAVBC80lX
-0Gwh6gf+PBhl8QiaCVA6E8H/IySJ48ohNfB+ritxfAxEvhvzwmBE7JHmuU9ThEfq
-yndN3AsqM4wVs1dkXh0SUxsm2DaINKrVmiCF9LJdSy3qQD5G4tY2AcWq/44hkykS
-hO1it640ZVER1eZWW39QFQWX+ci4sLvPB3Qdt/hfC/BVsQMM244yYElUj2hZdRUM
-cFCOGie5ceAbj2m7Z9gzGv96d6Wbeuf1fI2NVQfTvvd1WUQ6V+8poMRgjuiIs7hz
-yZ+Nv5JZOtxB7JBhZvI9uIZqpEEbcdOf+HBYPSbMOInlIJtq9XvnlywJQuyUI+eC
-PA25ED/5vnbOyDlH2AtpxiYhLYwnDw==
-=HIGy
------END PGP SIGNATURE-----
-
---Sig_/BXhgrn5=dv6C79km7rv/SjU--
 

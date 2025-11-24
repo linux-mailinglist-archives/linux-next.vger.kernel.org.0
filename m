@@ -1,90 +1,126 @@
-Return-Path: <linux-next+bounces-9170-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9171-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1D43C7F3C3
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 08:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A29D1C7F3FD
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 08:50:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 603CF3A5822
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 07:45:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E34843A59CB
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 07:50:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B7494086A;
-	Mon, 24 Nov 2025 07:45:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DAFA254AFF;
+	Mon, 24 Nov 2025 07:50:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="j9uXMS11";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CE+D/T9V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GAD3uzhr"
 X-Original-To: linux-next@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABA536D4E6;
-	Mon, 24 Nov 2025 07:45:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E961B27472;
+	Mon, 24 Nov 2025 07:50:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763970333; cv=none; b=Swb8zMUaOBa+wnSDy5w8unIJjC06mz3rqPYg7viLdKAXoJ4NWniwbzKbDBUikJYZXIzcDGsfRZ9RDZd3z4+HI9fMKkR1jdRj52ji3zbisxjU9OXeOSlVozikBdztwORrYEzHewOg3XLAMGSky/1qj4HjuuvS30wyf+XNCgRLl7s=
+	t=1763970604; cv=none; b=JByJMtRah/oRRlj81ow81KyXoV3apeD+sfA9svWn09k6KYAQOUWHzptb9p4fW8QvmFMs96dW6wmzuAY48N2BCwKZqSSJciE66vSimQzzzH5KKyOyYj3CSfDRYUb0h4notBZCWfSUoDduEqxF2dbhY7LJci1Cn5Z7TJHZ2iYjRyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763970333; c=relaxed/simple;
-	bh=xOr5L6VEesmsQRESRBn79SwacI8aAHVPk6PoG7sJR0k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G7dq8kcWOeenf8H0gBy/no1CQuBRikqQUxHdjl3OFR38HBWJ9beAg5YUktTkiVgna678ah8SbuB5HyWwNoC8S7wHfKFcrkjGUhRfkQKHnEKAXp2dpXhW/enJIl1cKXbX3reS3Rq+jc+7DJumQkG7GBXrR7rO3LenMQtkyVkE7wY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=j9uXMS11; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=CE+D/T9V; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Mon, 24 Nov 2025 08:45:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1763970329;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xOr5L6VEesmsQRESRBn79SwacI8aAHVPk6PoG7sJR0k=;
-	b=j9uXMS11BlbbTyHHE9Dd/RHW6VNxOUpo8tEDB+zitmN6NT1ZY9LGQTKBSIEEGQrE6Cq3qg
-	K1CNXq1I1qGdCcV9fFLAf78G1rPkvbqTuGVCzlvGaKx6xDmibyb3pvI5PB9R2L3vwjz6eq
-	NcKCx/Mn0w4OPHEbLaSHCk38zQdBhGo1+ZzPFjNvMwbEE6Rv5gRw+8cW2mghF9IzBVPlc0
-	loDSYdc/PQAsoxac8I/3EDxV6ir27pmLt2bXmfTrtyaFApN94pjD4CtxpVU4LOXiSv/QKR
-	8x5YevpChb5F3LDhXfWwgItHCbBhwmYgbOBhH/uJuMROr85cEo5S0tZy1eCsqg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1763970329;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xOr5L6VEesmsQRESRBn79SwacI8aAHVPk6PoG7sJR0k=;
-	b=CE+D/T9VZfTlntLXOHNxOaMplNKZmEifNQEfR9BTZuzJct7SxCi6XEX8CgDUWalhW9i2IQ
-	YIYPi4D821tepMCA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Waiman Long <llong@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@kernel.org>, Will Deacon <will@kernel.org>
-Subject: Re: linux-next: boot warning from the final tree
-Message-ID: <20251124074528.qgPObFb-@linutronix.de>
-References: <20251117202214.4f710f02@canb.auug.org.au>
- <20251121215819.GA1374726@ax162>
- <aSDoquGlA55Ge100@tardis.local>
+	s=arc-20240116; t=1763970604; c=relaxed/simple;
+	bh=KABm2DVqKO27Id5/uV0UFwNWUvZYC3fd6Ekc3hp8LRs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r5L1pA5PcKdevGcxYHcTHH9bv+AA4mai1g95ksAWqQEFwktJk3y7K5KrGEHk0E8Xa5sO+ovfrqbDCHstEjpTGymOYppK8qzTnvzRXQhVZJ8DI6Jkg8H4Ks4hXvNitcyinXToqgtBAHa1zzkLkKbta2+Bf4E6j6Bzy+9UBKTpfhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GAD3uzhr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33493C4CEF1;
+	Mon, 24 Nov 2025 07:50:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763970601;
+	bh=KABm2DVqKO27Id5/uV0UFwNWUvZYC3fd6Ekc3hp8LRs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=GAD3uzhreW+AWmQ2T5+IwakHdheOOcAT1oAAwWMRRp02aRWpRuYaNx7tUnEUErjTG
+	 ta7gxa+kQJUWCSECZe4Ua9H4B9REUkztAP9ZcY7vKZyJP4PFG/rO/aR7IAQhfnyC/h
+	 5FFA9mU/XrSUpIF12jcxV8W88iCQ0WpowjdO8KXU7xMeOJSfUl6YdCzopq30G4wsnU
+	 w3zxiK7JloxvNMzx3EGiX15qyOguh58lr6hBhYumwcIETh1YC1uOYisUI42LWePLN/
+	 Fjey6cWIWzd/nEYcgFuZ52PRYvUGp0XZgE3egAKt2bnwr6hI1Fadr/OrRrXxCkQri4
+	 Uopsioa1sIYBw==
+Message-ID: <69dc1405-9acb-4b3e-b354-8725b05b39ea@kernel.org>
+Date: Mon, 24 Nov 2025 08:49:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aSDoquGlA55Ge100@tardis.local>
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: duplicate patch in the samsung-krzk tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Arnd Bergmann <arnd@arndb.de>
+Cc: ARM <linux-arm-kernel@lists.infradead.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20251124120913.76374412@canb.auug.org.au>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251124120913.76374412@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 2025-11-21 14:33:14 [-0800], Boqun Feng wrote:
-> Thank you both, seems we missed the case where LOCKDEP=n but
-> DEBUG_MUTEXES=y, I feel like the following should be the correct fix.
+On 24/11/2025 02:09, Stephen Rothwell wrote:
+> Hi all,
+> 
+> The following commit is also in the arm-soc tree as a different commit
+> (but the same patch):
+> 
+>   2e646b21df4c ("arm64: defconfig: enable Exynos ACPM clocks")
+> 
+> This is commit
+> 
+>   38c8787f1b81 ("arm64: defconfig: enable Exynos ACPM clocks")
+> 
+> in the arm-soc tree.
 
-Thank you.
+Thanks, that's expected. I dropped mine now.
 
-> Regards,
-> Boqun
-
-Sebastian
+Best regards,
+Krzysztof
 

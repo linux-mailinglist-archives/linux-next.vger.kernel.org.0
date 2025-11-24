@@ -1,93 +1,254 @@
-Return-Path: <linux-next+bounces-9175-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9176-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E95F5C80799
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 13:33:00 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B63C3C80A2E
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 14:02:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A74C03A27C4
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 12:32:59 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5DECC4E283F
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 13:02:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2B001E834E;
-	Mon, 24 Nov 2025 12:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A3E3302766;
+	Mon, 24 Nov 2025 13:02:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="n1SAoFY5"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="b7gfKzuo"
 X-Original-To: linux-next@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB70218EB0;
-	Mon, 24 Nov 2025 12:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7638F2FC88B;
+	Mon, 24 Nov 2025 13:01:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763987576; cv=none; b=T4nXbJvJ/YSFjTyZEokEDkPqU7pERwE1E2Z2WE7vAC2/ZKnGKGdG9D1b2PScPTbuOjgn9yIEcbYxYo6A5BfhPoMpSnis3Qt2HyVhiq9TPyfsEUpJlAi1S2NQn7pTpTF7tYVKyq6bS1I85f/87wCXk9xYkNZ2oqR+rUi8l3W62ac=
+	t=1763989325; cv=none; b=Vb4gT/Bz/TUMCu/TXo/RgWlkPON3S24r8sZXWr8UI+MuuCU4qkA/eWGguk9iVQ073E8gJ/FRRTnZy1gqgnoJxH2LTT2wm/vLIpZz4M2krG8fA+N4NWtlG21MbkKSI6n+KgVPgPwu7TmltQ7ywHE0SeMrA9SgYNbmLyT/n6zOJKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763987576; c=relaxed/simple;
-	bh=awgAJavHOQ0+gv0VJv/Dpe9I33aTOIItQxdp4Ay4QNQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L1dkRSkZ9op+eOBnIFmwor4TxmYnrOnze7SiYe6NQ+HuD4PN5kMweOz4nE8O4pQvHzPnws158YfEsX3VNSTekW299CcOQQqsXR8N1mFslUlQA5nWc918ZgV1KhmmWJpiRvI1AldZjOgPNAU1VH300jU4lYWChNjMvDm1Dt7dAgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=n1SAoFY5; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=awgAJavHOQ0+gv0VJv/Dpe9I33aTOIItQxdp4Ay4QNQ=; b=n1SAoFY5LE7NY+epMrlq/prIue
-	r7hef6GpuoF+B+YMYjFU6UeKvrWUGClr/2ic2W2CJfzhJcAF9rR2t/5ydZwr8IKt7Ksn50/HS5AG2
-	jyeBOeTtKkYOpo9pnJ6E715N3Uwq8adX0S62LEc3ayeh0qFjXZuiCakxwOAXnWUzCAqNDvZXNPvQp
-	MFHFGOW7enCVcqK27e3jZFXAkModoE3fnhxdyMyvYDId8HYm3+jaq5iQAE7t4bIg66sY8XpIPEtOw
-	fBLyUcMgx8n9rEOAmCo4puzMoKlh5sUW9wgbk+10fOdg8Xqx48ToVO08HslmN3DbKr+NYT0oqhUav
-	YmellBCg==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vNUsp-00000003eVN-2Uzg;
-	Mon, 24 Nov 2025 11:37:27 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id C348C3002E3; Mon, 24 Nov 2025 13:32:49 +0100 (CET)
-Date: Mon, 24 Nov 2025 13:32:49 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	ojeda@kernel.org, boqun.feng@gmail.com
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20251124123249.GP4067720@noisy.programming.kicks-ass.net>
-References: <20251124231644.38d0303b@canb.auug.org.au>
+	s=arc-20240116; t=1763989325; c=relaxed/simple;
+	bh=wlR8QLAdbC9QaRFhbEBlnCQ9htolh0I8LEDKXLPyM4o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Jw32pA3JQWhMIIt8PgrzrUVWSmyZqGKYBJCbVpH19bNK3T7leGsjXEOuBUfvIX97q3mYBKJpZJdUd36YnD/eQR4ltUVlnBGXkORSlOf5ahpLMNELHz0w/tDsRHSiSPxTRBcM8IT9kd19TvDv3UadFqIS7adSxuqoF0AXpE/cw4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=b7gfKzuo; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1763989315;
+	bh=u6UXAk5VZCjPAVSRrVbWr/3ztRGborJIApr1elBT5PE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=b7gfKzuoLrnItWAXl/gQXVOXiEVxUEdRUMroUBowuIaXrpEIrtVu7/B1688+s+3CE
+	 xdNwocVc5pSn3SoN/HmgxT/CK6ytRw1HGbUJ/oD8IIAdxZR6H4dPhCjpqYxPXg+teP
+	 MfEYYpEsFDSFHU5887hsH0JFAB/YDDUVOV5XI+CISBuMaY5Kpj8HCDXNNsdvqQFJKk
+	 T0KDUEJ+MnDUlIp++Z3yVzrK8DXD0GYVsqsDXO39JmeSgLuL86NbxAPrZm66gaDQT8
+	 3Dxz4OD2yV3i8iZUvRBceGF24DKckzkdI8A13o2vilZjo3rHOV2FJ+f7tvfHIDVvHs
+	 NwiTWFFY1d69w==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dFQvP0QHbz4w2R;
+	Tue, 25 Nov 2025 00:01:52 +1100 (AEDT)
+Date: Tue, 25 Nov 2025 00:01:51 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Alex Williamson <alex@shazbot.org>, Dave Airlie <airlied@redhat.com>
+Cc: Andi Shyti <andi.shyti@linux.intel.com>, Jason Gunthorpe
+ <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Cavitt
+ <jonathan.cavitt@intel.com>, DRI <dri-devel@lists.freedesktop.org>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the vfio tree with the drm tree
+Message-ID: <20251125000151.23372279@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/signed; boundary="Sig_/1rFUMRySHJGSinYlKIZ1Z.h";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/1rFUMRySHJGSinYlKIZ1Z.h
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20251124231644.38d0303b@canb.auug.org.au>
 
-On Mon, Nov 24, 2025 at 11:16:44PM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
->=20
-> ERROR: modpost: "NULL" [drivers/gpu/nova-core/nova_core.ko] undefined!
->=20
+Hi all,
 
-Rust :/
+Today's linux-next merge of the vfio tree got a conflict in:
 
-So I have:
+  drivers/gpu/drm/i915/gvt/kvmgt.c
 
-$ make O=3Dtmp-build LLVM=3D-22 allmodconfig
-$ make O=3Dtmp-build LLVM=3D-22 rustavailable
-Rust is available!
-$ grep -e CONFIG_RUST=3D -e CONFIG_NOVA=3D tmp-build/.config
-$
+between commit:
 
-Help ?!?
+  69b4d367fff6 ("drm/i915/gvt: Simplify case switch in intel_vgpu_ioctl")
 
+from the drm tree and commits:
+
+  e664067b6035 ("vfio/gvt: Provide a get_region_info op")
+  93165757c023 ("vfio/gvt: Convert to get_region_info_caps")
+
+from the vfio tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/i915/gvt/kvmgt.c
+index bbeba0d3fca8,96d23717684f..000000000000
+--- a/drivers/gpu/drm/i915/gvt/kvmgt.c
++++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
+@@@ -1141,6 -1140,126 +1141,121 @@@ static int intel_vgpu_set_irqs(struct i
+  	return func(vgpu, index, start, count, flags, data);
+  }
+ =20
++ static int intel_vgpu_ioctl_get_region_info(struct vfio_device *vfio_dev,
++ 					    struct vfio_region_info *info,
++ 					    struct vfio_info_cap *caps)
++ {
++ 	struct vfio_region_info_cap_sparse_mmap *sparse =3D NULL;
++ 	struct intel_vgpu *vgpu =3D vfio_dev_to_vgpu(vfio_dev);
++ 	int nr_areas =3D 1;
++ 	int cap_type_id;
++ 	unsigned int i;
++ 	int ret;
++=20
++ 	switch (info->index) {
++ 	case VFIO_PCI_CONFIG_REGION_INDEX:
++ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
++ 		info->size =3D vgpu->gvt->device_info.cfg_space_size;
++ 		info->flags =3D VFIO_REGION_INFO_FLAG_READ |
++ 			      VFIO_REGION_INFO_FLAG_WRITE;
++ 		break;
++ 	case VFIO_PCI_BAR0_REGION_INDEX:
++ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
++ 		info->size =3D vgpu->cfg_space.bar[info->index].size;
++ 		if (!info->size) {
++ 			info->flags =3D 0;
++ 			break;
++ 		}
++=20
++ 		info->flags =3D VFIO_REGION_INFO_FLAG_READ |
++ 			      VFIO_REGION_INFO_FLAG_WRITE;
++ 		break;
++ 	case VFIO_PCI_BAR1_REGION_INDEX:
++ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
++ 		info->size =3D 0;
++ 		info->flags =3D 0;
++ 		break;
++ 	case VFIO_PCI_BAR2_REGION_INDEX:
++ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
++ 		info->flags =3D VFIO_REGION_INFO_FLAG_CAPS |
++ 			      VFIO_REGION_INFO_FLAG_MMAP |
++ 			      VFIO_REGION_INFO_FLAG_READ |
++ 			      VFIO_REGION_INFO_FLAG_WRITE;
++ 		info->size =3D gvt_aperture_sz(vgpu->gvt);
++=20
++ 		sparse =3D kzalloc(struct_size(sparse, areas, nr_areas),
++ 				 GFP_KERNEL);
++ 		if (!sparse)
++ 			return -ENOMEM;
++=20
++ 		sparse->header.id =3D VFIO_REGION_INFO_CAP_SPARSE_MMAP;
++ 		sparse->header.version =3D 1;
++ 		sparse->nr_areas =3D nr_areas;
++ 		cap_type_id =3D VFIO_REGION_INFO_CAP_SPARSE_MMAP;
++ 		sparse->areas[0].offset =3D
++ 			PAGE_ALIGN(vgpu_aperture_offset(vgpu));
++ 		sparse->areas[0].size =3D vgpu_aperture_sz(vgpu);
++ 		break;
++=20
++ 	case VFIO_PCI_BAR3_REGION_INDEX ... VFIO_PCI_BAR5_REGION_INDEX:
++ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
++ 		info->size =3D 0;
++ 		info->flags =3D 0;
++=20
++ 		gvt_dbg_core("get region info bar:%d\n", info->index);
++ 		break;
++=20
++ 	case VFIO_PCI_ROM_REGION_INDEX:
++ 	case VFIO_PCI_VGA_REGION_INDEX:
++ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
++ 		info->size =3D 0;
++ 		info->flags =3D 0;
++=20
++ 		gvt_dbg_core("get region info index:%d\n", info->index);
++ 		break;
++ 	default: {
++ 		struct vfio_region_info_cap_type cap_type =3D {
++ 			.header.id =3D VFIO_REGION_INFO_CAP_TYPE,
++ 			.header.version =3D 1
++ 		};
++=20
++ 		if (info->index >=3D VFIO_PCI_NUM_REGIONS + vgpu->num_regions)
++ 			return -EINVAL;
++ 		info->index =3D array_index_nospec(
++ 			info->index, VFIO_PCI_NUM_REGIONS + vgpu->num_regions);
++=20
++ 		i =3D info->index - VFIO_PCI_NUM_REGIONS;
++=20
++ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
++ 		info->size =3D vgpu->region[i].size;
++ 		info->flags =3D vgpu->region[i].flags;
++=20
++ 		cap_type.type =3D vgpu->region[i].type;
++ 		cap_type.subtype =3D vgpu->region[i].subtype;
++=20
++ 		ret =3D vfio_info_add_capability(caps, &cap_type.header,
++ 					       sizeof(cap_type));
++ 		if (ret)
++ 			return ret;
++ 	}
++ 	}
++=20
++ 	if ((info->flags & VFIO_REGION_INFO_FLAG_CAPS) && sparse) {
+ -		switch (cap_type_id) {
+ -		case VFIO_REGION_INFO_CAP_SPARSE_MMAP:
+++		ret =3D -EINVAL;
+++		if (cap_type_id =3D=3D VFIO_REGION_INFO_CAP_SPARSE_MMAP)
++ 			ret =3D vfio_info_add_capability(
++ 				caps, &sparse->header,
++ 				struct_size(sparse, areas, sparse->nr_areas));
+ -			if (ret) {
+ -				kfree(sparse);
+ -				return ret;
+ -			}
+ -			break;
+ -		default:
+++		if (ret) {
++ 			kfree(sparse);
+ -			return -EINVAL;
+++			return ret;
++ 		}
++ 	}
++=20
++ 	kfree(sparse);
++ 	return 0;
++ }
++=20
+  static long intel_vgpu_ioctl(struct vfio_device *vfio_dev, unsigned int c=
+md,
+  			     unsigned long arg)
+  {
+
+--Sig_/1rFUMRySHJGSinYlKIZ1Z.h
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkkVz8ACgkQAVBC80lX
+0Gz1TAgAoEZIJ5/IeK8p9hifiStZ/jh/3iKPaCybV2k/AT+AFIe0ll+AmTTXEMXr
+NnIyGgut00oyPURAkHwtfI/HfjCBtaiv96ZDufMC2ECFPpyt0qiBNUbufxvGfic3
+ABtpkPepAEt9r7pInhm8rZMVXM6EvR3tVhBjlKkrYHhe8rL1Esexz9KPI3FFr2QW
+m0S+hcZhDY+9Sp5//kVLoN76ei+0FtSxqJVID2lXYS83tTCKD79Icxc1PRyjrmP9
+inPBCDps1MpB4j7oqmQN5WfsESovTQmKlH4yGHg+1QzG/ckWumKtg6zsK/dZ5r6i
+w/iUjfPLvlSD+8pG/C7cczeRmqKozA==
+=DXnF
+-----END PGP SIGNATURE-----
+
+--Sig_/1rFUMRySHJGSinYlKIZ1Z.h--
 

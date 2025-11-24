@@ -1,254 +1,168 @@
-Return-Path: <linux-next+bounces-9176-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9177-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id B63C3C80A2E
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 14:02:08 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EE49C80E55
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 15:01:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5DECC4E283F
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 13:02:07 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C3827341603
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 14:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A3E3302766;
-	Mon, 24 Nov 2025 13:02:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 640A730CDAE;
+	Mon, 24 Nov 2025 14:01:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="b7gfKzuo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ST+2BDSo"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7638F2FC88B;
-	Mon, 24 Nov 2025 13:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C2930E0EB
+	for <linux-next@vger.kernel.org>; Mon, 24 Nov 2025 14:01:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763989325; cv=none; b=Vb4gT/Bz/TUMCu/TXo/RgWlkPON3S24r8sZXWr8UI+MuuCU4qkA/eWGguk9iVQ073E8gJ/FRRTnZy1gqgnoJxH2LTT2wm/vLIpZz4M2krG8fA+N4NWtlG21MbkKSI6n+KgVPgPwu7TmltQ7ywHE0SeMrA9SgYNbmLyT/n6zOJKw=
+	t=1763992867; cv=none; b=SqPMVRUpQujlY/98R35fXLfz3dg48ceRpiIewTw5PwpGI8v6lAQibBEXy/ARVRT+7MBQ4rY9G+6hmOLhl16nP3w6hwMlABUqvuvpGOSRkyS7ZsKjXRkGk5VfPB5nxdTLhnGQ52jH4PzW7xofBw3VaLdBZv4Q10wlNeifUi6ps+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763989325; c=relaxed/simple;
-	bh=wlR8QLAdbC9QaRFhbEBlnCQ9htolh0I8LEDKXLPyM4o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Jw32pA3JQWhMIIt8PgrzrUVWSmyZqGKYBJCbVpH19bNK3T7leGsjXEOuBUfvIX97q3mYBKJpZJdUd36YnD/eQR4ltUVlnBGXkORSlOf5ahpLMNELHz0w/tDsRHSiSPxTRBcM8IT9kd19TvDv3UadFqIS7adSxuqoF0AXpE/cw4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=b7gfKzuo; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1763989315;
-	bh=u6UXAk5VZCjPAVSRrVbWr/3ztRGborJIApr1elBT5PE=;
-	h=Date:From:To:Cc:Subject:From;
-	b=b7gfKzuoLrnItWAXl/gQXVOXiEVxUEdRUMroUBowuIaXrpEIrtVu7/B1688+s+3CE
-	 xdNwocVc5pSn3SoN/HmgxT/CK6ytRw1HGbUJ/oD8IIAdxZR6H4dPhCjpqYxPXg+teP
-	 MfEYYpEsFDSFHU5887hsH0JFAB/YDDUVOV5XI+CISBuMaY5Kpj8HCDXNNsdvqQFJKk
-	 T0KDUEJ+MnDUlIp++Z3yVzrK8DXD0GYVsqsDXO39JmeSgLuL86NbxAPrZm66gaDQT8
-	 3Dxz4OD2yV3i8iZUvRBceGF24DKckzkdI8A13o2vilZjo3rHOV2FJ+f7tvfHIDVvHs
-	 NwiTWFFY1d69w==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dFQvP0QHbz4w2R;
-	Tue, 25 Nov 2025 00:01:52 +1100 (AEDT)
-Date: Tue, 25 Nov 2025 00:01:51 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alex Williamson <alex@shazbot.org>, Dave Airlie <airlied@redhat.com>
-Cc: Andi Shyti <andi.shyti@linux.intel.com>, Jason Gunthorpe
- <jgg@nvidia.com>, Jason Gunthorpe <jgg@ziepe.ca>, Jonathan Cavitt
- <jonathan.cavitt@intel.com>, DRI <dri-devel@lists.freedesktop.org>, Linux
- Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfio tree with the drm tree
-Message-ID: <20251125000151.23372279@canb.auug.org.au>
+	s=arc-20240116; t=1763992867; c=relaxed/simple;
+	bh=qsEkqJ2S5oPr2U1UTuFh60iN9pLOhGAzk92E0AvVXqY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T1aQz6/UmUN5zAlgKQJ+F7kde0vMjefD677TdXAZ/qxb0fqwZaPCsaA3EMpvHTbBpAg94kitpc26qp/t+D7hWpk4HNM4hwv1PUuxsAsc7LYPbQ22OEK1e4rkUVZKKF3/y1nHbL5lCGq9gmob1VrberJNgvtGx/d22BBbDqAa+qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ST+2BDSo; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4ee1fca7a16so37221911cf.3
+        for <linux-next@vger.kernel.org>; Mon, 24 Nov 2025 06:01:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763992864; x=1764597664; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K/jxlDz9BAO9kydkpl4fCic8ClBRjihhesEG6s01glE=;
+        b=ST+2BDSod1e63IV/v7+MPy5LQiJz/dbfLJYRrppaMd26bgwm6p1HvKsDUHdYiKAb2B
+         NCpv0TySmhv2N3WgkauFTnPsLEwRqIkvhlpaeQi8FYkEiCufCxE6yLjF70PsvhnBsReI
+         IBMRdtbH+Vr7lekCdxztCt0Q11Atp6/Z8ZFF0yRQJnmViTsYxtpM7YjvIj5a1ZBGY2oK
+         tShN3+fkI3m7fp8vVwCS4K5jlvFgRoeHpNeqAjjoq1Z94b8zhLJf10BktZEYGTzuTM6x
+         GaKrYaJ9KMq1E03KEf1QI0Y2tT5mftj6oPgb8ywH7H1ykhTLJqUpyC63klcSbqAK9mk4
+         KYnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763992864; x=1764597664;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=K/jxlDz9BAO9kydkpl4fCic8ClBRjihhesEG6s01glE=;
+        b=TGLxno4jfAAiXWdTx0QOoG1vQlU4+2DpxAmfloJUyxMa5Hw4I6wEx2s2PAAveQpaZR
+         9aC4Q+syBracfUXtpR44e2OAsYmNPSuoh6fV/Dsva1BageaNBh60UEvv7waOxqoyWAzv
+         EF+BfJTQopmX54ZoVHcLNSrfwqP8uNJ0QJ2KGyPdZ0r4aKm1k6h/39+zGIWT9boPkNO2
+         C2CFiSCtIfQIGhaB7gOBuAXcbI9NulE/A1utCHBZrVagxpljPtOZX3eEwGzB83SbtSrk
+         v7c233Xd436A87aZ0YYeIi/4WP8brEx3qtf9iNPOA738iUS0qLf6LqvRrCg5zTF38lJJ
+         J+0g==
+X-Forwarded-Encrypted: i=1; AJvYcCU4oOdluEgx4ZEX3PWgufF4LsVaGYB1TLXNN3GlzfXDmddcGoNSfQsgweCAbSNtBS8OfEgXd/9bQIwP@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN0cIP3msCoGEkeX+Nk5FZ1oGAvLdYzyzomC7dOzHZWb1vwlIS
+	X8iJ4+ih5Fsx1OUH1+lVo+y+lt3BhT73lHKxwN7IGKorkd/qUbSe3Ee8
+X-Gm-Gg: ASbGncufo+BuT6jFedwUX3bVNbz5+PCLBOez4srw5XKnsGsZi7WKJcmD1WBNkh6Ri+p
+	A8J7wafuPMQaMiUgWxCS4YkEHSSkSaSphv8lCjeqR2ddnRWbZS5Tv6zHhJBNwp2Kn4b/XHJg2Sl
+	ykun1QmakhAsj61NCjRgQD/6+z0MPxUg78f2KjsDrqGtvddgx2QX52Ucec47jn/t/+CMT9572ad
+	8uhzuGhGsPvTkhqQ15tLOIXoifPQFj4Wvvs6gKF8TgNm/JB2dM2TCZAv1wf6vDeFNFZLIqLs9xj
+	QYpniCN2+7v/drEYc0+UqgyxpxkEDAqxl40EuTUk7mBOIqvgLara3fe6FU5qweg6hVY92FearZ7
+	dK3zSBunzoWbh3KKNDe0CNaVvmZOUnWSRVi/1UqV7yGldGDAwqAGNn3OzdG24BjFbDHX6Za7TVz
+	cDjnJvPiclmAcJpt9zSWN1oEUgQ7+7NApoBz0VCwoZ61HOA1xfkKxz3dO1Ao9JQrrrvUjcjvIdw
+	idgXE4AKi8l8EU=
+X-Google-Smtp-Source: AGHT+IFrrXhu6AJfyliU/Xzg3MThXEUzI8ZAPUU7ipyQF52eo/ZMchMrcbXBykYYxmEfwQPHrKxvsQ==
+X-Received: by 2002:a05:622a:89:b0:4ee:1f5b:73c3 with SMTP id d75a77b69052e-4ee588b5258mr166800441cf.60.1763992855573;
+        Mon, 24 Nov 2025 06:00:55 -0800 (PST)
+Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4ee4cbc3c81sm78152051cf.16.2025.11.24.06.00.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Nov 2025 06:00:55 -0800 (PST)
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 5A591F4006B;
+	Mon, 24 Nov 2025 09:00:54 -0500 (EST)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-02.internal (MEProxy); Mon, 24 Nov 2025 09:00:54 -0500
+X-ME-Sender: <xms:FmUkaRi8XRZ7NjmS5aeRh4-Jm1Pfv8hgGzNPpz_5YeA1tYOE41UXfw>
+    <xme:FmUkabPthiPCpHANWDH3BhuF6r9lJNXRf9zF_XsmtbzvH7P9H9FR0QMQ1JEuawC6f
+    pbd79UfL_3nWTVMtqoFU5nrQDfdHYmtxS7eAe_n2tBGNKaIO8i6kQ>
+X-ME-Received: <xmr:FmUkaUePcNTfbNXU_ioiV3mYYPKLFXpFLx5lT86L_rAH17KxgRIBvxosI6S6qcNHjRZ87CsubsdzQrh4lHfN1ufZAFu1_DiT>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvfeekjeelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueevieduffei
+    vdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
+    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
+    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
+    gvrdhnrghmvgdpnhgspghrtghpthhtohepudefpdhmohguvgepshhmthhpohhuthdprhgt
+    phhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehsfh
+    hrsegtrghnsgdrrghuuhhgrdhorhhgrdgruhdprhgtphhtthhopehtghhlgieslhhinhhu
+    thhrohhnihigrdguvgdprhgtphhtthhopehmihhnghhosehkvghrnhgvlhdrohhrghdprh
+    gtphhtthhopehhphgrseiihihtohhrrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgv
+    rhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqnh
+    gvgihtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepohhjvggurgeskhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtohepuggrkhhrsehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:FmUkaVwKOdqs2hd1c5mVJwNjIzEk-ZJZjGbua1gEney0XsqYgUup6Q>
+    <xmx:FmUkaZ2k42CgQZqenqRYQSlyFeJ03Aygp_PdeG-WqjDRQMnSmlNuog>
+    <xmx:FmUkacekbu74JBnu_PLPfiu5XuLSGuPZCk5dY7M85Eo5cWCmkWTMWA>
+    <xmx:FmUkaeWDVqlM3N7_rjUHHvB9Lm6nW8m9EwwnRZn-ig3h0D8kxtoCpw>
+    <xmx:FmUkaU_7pojGQ_Cqb4E_n5iaqsuoY7-Os-7iD2I-3WKtSqb9HUGHKYB7>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 24 Nov 2025 09:00:53 -0500 (EST)
+Date: Mon, 24 Nov 2025 06:00:52 -0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	ojeda@kernel.org, Danilo Krummrich <dakr@kernel.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	nouveau@lists.freedesktop.org, Alice Ryhl <aliceryhl@google.com>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <aSRlFB9PoOcZVmvt@tardis.local>
+References: <20251124231644.38d0303b@canb.auug.org.au>
+ <20251124123249.GP4067720@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1rFUMRySHJGSinYlKIZ1Z.h";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251124123249.GP4067720@noisy.programming.kicks-ass.net>
 
---Sig_/1rFUMRySHJGSinYlKIZ1Z.h
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Nov 24, 2025 at 01:32:49PM +0100, Peter Zijlstra wrote:
+> On Mon, Nov 24, 2025 at 11:16:44PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+> > failed like this:
+> > 
+> > ERROR: modpost: "NULL" [drivers/gpu/nova-core/nova_core.ko] undefined!
+> > 
+> 
+> Rust :/
+> 
+> So I have:
+> 
+> $ make O=tmp-build LLVM=-22 allmodconfig
+> $ make O=tmp-build LLVM=-22 rustavailable
+> Rust is available!
+> $ grep -e CONFIG_RUST= -e CONFIG_NOVA= tmp-build/.config
+> $
+> 
+> Help ?!?
+> 
 
-Hi all,
+[CC nova]
 
-Today's linux-next merge of the vfio tree got a conflict in:
+On my system it seems that RANDSTRUCT=y prevents the enabling of RUST,
+but I'm sure Danilo and Alexandre have better ideas about how to enable
+nova-core.
 
-  drivers/gpu/drm/i915/gvt/kvmgt.c
-
-between commit:
-
-  69b4d367fff6 ("drm/i915/gvt: Simplify case switch in intel_vgpu_ioctl")
-
-from the drm tree and commits:
-
-  e664067b6035 ("vfio/gvt: Provide a get_region_info op")
-  93165757c023 ("vfio/gvt: Convert to get_region_info_caps")
-
-from the vfio tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/i915/gvt/kvmgt.c
-index bbeba0d3fca8,96d23717684f..000000000000
---- a/drivers/gpu/drm/i915/gvt/kvmgt.c
-+++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
-@@@ -1141,6 -1140,126 +1141,121 @@@ static int intel_vgpu_set_irqs(struct i
-  	return func(vgpu, index, start, count, flags, data);
-  }
- =20
-+ static int intel_vgpu_ioctl_get_region_info(struct vfio_device *vfio_dev,
-+ 					    struct vfio_region_info *info,
-+ 					    struct vfio_info_cap *caps)
-+ {
-+ 	struct vfio_region_info_cap_sparse_mmap *sparse =3D NULL;
-+ 	struct intel_vgpu *vgpu =3D vfio_dev_to_vgpu(vfio_dev);
-+ 	int nr_areas =3D 1;
-+ 	int cap_type_id;
-+ 	unsigned int i;
-+ 	int ret;
-+=20
-+ 	switch (info->index) {
-+ 	case VFIO_PCI_CONFIG_REGION_INDEX:
-+ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
-+ 		info->size =3D vgpu->gvt->device_info.cfg_space_size;
-+ 		info->flags =3D VFIO_REGION_INFO_FLAG_READ |
-+ 			      VFIO_REGION_INFO_FLAG_WRITE;
-+ 		break;
-+ 	case VFIO_PCI_BAR0_REGION_INDEX:
-+ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
-+ 		info->size =3D vgpu->cfg_space.bar[info->index].size;
-+ 		if (!info->size) {
-+ 			info->flags =3D 0;
-+ 			break;
-+ 		}
-+=20
-+ 		info->flags =3D VFIO_REGION_INFO_FLAG_READ |
-+ 			      VFIO_REGION_INFO_FLAG_WRITE;
-+ 		break;
-+ 	case VFIO_PCI_BAR1_REGION_INDEX:
-+ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
-+ 		info->size =3D 0;
-+ 		info->flags =3D 0;
-+ 		break;
-+ 	case VFIO_PCI_BAR2_REGION_INDEX:
-+ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
-+ 		info->flags =3D VFIO_REGION_INFO_FLAG_CAPS |
-+ 			      VFIO_REGION_INFO_FLAG_MMAP |
-+ 			      VFIO_REGION_INFO_FLAG_READ |
-+ 			      VFIO_REGION_INFO_FLAG_WRITE;
-+ 		info->size =3D gvt_aperture_sz(vgpu->gvt);
-+=20
-+ 		sparse =3D kzalloc(struct_size(sparse, areas, nr_areas),
-+ 				 GFP_KERNEL);
-+ 		if (!sparse)
-+ 			return -ENOMEM;
-+=20
-+ 		sparse->header.id =3D VFIO_REGION_INFO_CAP_SPARSE_MMAP;
-+ 		sparse->header.version =3D 1;
-+ 		sparse->nr_areas =3D nr_areas;
-+ 		cap_type_id =3D VFIO_REGION_INFO_CAP_SPARSE_MMAP;
-+ 		sparse->areas[0].offset =3D
-+ 			PAGE_ALIGN(vgpu_aperture_offset(vgpu));
-+ 		sparse->areas[0].size =3D vgpu_aperture_sz(vgpu);
-+ 		break;
-+=20
-+ 	case VFIO_PCI_BAR3_REGION_INDEX ... VFIO_PCI_BAR5_REGION_INDEX:
-+ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
-+ 		info->size =3D 0;
-+ 		info->flags =3D 0;
-+=20
-+ 		gvt_dbg_core("get region info bar:%d\n", info->index);
-+ 		break;
-+=20
-+ 	case VFIO_PCI_ROM_REGION_INDEX:
-+ 	case VFIO_PCI_VGA_REGION_INDEX:
-+ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
-+ 		info->size =3D 0;
-+ 		info->flags =3D 0;
-+=20
-+ 		gvt_dbg_core("get region info index:%d\n", info->index);
-+ 		break;
-+ 	default: {
-+ 		struct vfio_region_info_cap_type cap_type =3D {
-+ 			.header.id =3D VFIO_REGION_INFO_CAP_TYPE,
-+ 			.header.version =3D 1
-+ 		};
-+=20
-+ 		if (info->index >=3D VFIO_PCI_NUM_REGIONS + vgpu->num_regions)
-+ 			return -EINVAL;
-+ 		info->index =3D array_index_nospec(
-+ 			info->index, VFIO_PCI_NUM_REGIONS + vgpu->num_regions);
-+=20
-+ 		i =3D info->index - VFIO_PCI_NUM_REGIONS;
-+=20
-+ 		info->offset =3D VFIO_PCI_INDEX_TO_OFFSET(info->index);
-+ 		info->size =3D vgpu->region[i].size;
-+ 		info->flags =3D vgpu->region[i].flags;
-+=20
-+ 		cap_type.type =3D vgpu->region[i].type;
-+ 		cap_type.subtype =3D vgpu->region[i].subtype;
-+=20
-+ 		ret =3D vfio_info_add_capability(caps, &cap_type.header,
-+ 					       sizeof(cap_type));
-+ 		if (ret)
-+ 			return ret;
-+ 	}
-+ 	}
-+=20
-+ 	if ((info->flags & VFIO_REGION_INFO_FLAG_CAPS) && sparse) {
- -		switch (cap_type_id) {
- -		case VFIO_REGION_INFO_CAP_SPARSE_MMAP:
-++		ret =3D -EINVAL;
-++		if (cap_type_id =3D=3D VFIO_REGION_INFO_CAP_SPARSE_MMAP)
-+ 			ret =3D vfio_info_add_capability(
-+ 				caps, &sparse->header,
-+ 				struct_size(sparse, areas, sparse->nr_areas));
- -			if (ret) {
- -				kfree(sparse);
- -				return ret;
- -			}
- -			break;
- -		default:
-++		if (ret) {
-+ 			kfree(sparse);
- -			return -EINVAL;
-++			return ret;
-+ 		}
-+ 	}
-+=20
-+ 	kfree(sparse);
-+ 	return 0;
-+ }
-+=20
-  static long intel_vgpu_ioctl(struct vfio_device *vfio_dev, unsigned int c=
-md,
-  			     unsigned long arg)
-  {
-
---Sig_/1rFUMRySHJGSinYlKIZ1Z.h
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkkVz8ACgkQAVBC80lX
-0Gz1TAgAoEZIJ5/IeK8p9hifiStZ/jh/3iKPaCybV2k/AT+AFIe0ll+AmTTXEMXr
-NnIyGgut00oyPURAkHwtfI/HfjCBtaiv96ZDufMC2ECFPpyt0qiBNUbufxvGfic3
-ABtpkPepAEt9r7pInhm8rZMVXM6EvR3tVhBjlKkrYHhe8rL1Esexz9KPI3FFr2QW
-m0S+hcZhDY+9Sp5//kVLoN76ei+0FtSxqJVID2lXYS83tTCKD79Icxc1PRyjrmP9
-inPBCDps1MpB4j7oqmQN5WfsESovTQmKlH4yGHg+1QzG/ckWumKtg6zsK/dZ5r6i
-w/iUjfPLvlSD+8pG/C7cczeRmqKozA==
-=DXnF
------END PGP SIGNATURE-----
-
---Sig_/1rFUMRySHJGSinYlKIZ1Z.h--
+Regards,
+Boqun
 

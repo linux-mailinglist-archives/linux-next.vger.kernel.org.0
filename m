@@ -1,175 +1,105 @@
-Return-Path: <linux-next+bounces-9188-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9189-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE31BC8132D
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 15:59:12 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98889C81981
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 17:35:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 505B63A1D7F
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 14:59:11 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 31357348A62
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 16:33:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1ACB30DEDC;
-	Mon, 24 Nov 2025 14:59:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEC7727F72C;
+	Mon, 24 Nov 2025 16:33:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="hjjE+21C"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="mEZk2m9X"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBCD30DD08
-	for <linux-next@vger.kernel.org>; Mon, 24 Nov 2025 14:59:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD00298987;
+	Mon, 24 Nov 2025 16:33:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763996347; cv=none; b=X+ymSHvnDRYejV2QW/pTRD9OwqrguHhcs4F+fsJ6XTqvq0wgQBiWF71KWaamcoSA5JSgOlfxd3ABBpy9Gt8XBDiNEaf/0gMwaCaBBvJdqUH2hRRaJe2mIkuuZsXwzAXTO338BwDd+ItFzYYsDqopUTt2rNqP9urjBxIQc9UEnfE=
+	t=1764002005; cv=none; b=YGJXgvU9mLg/cBbngqXPxddE9zEgigANAUMnAnvef/4nvGLSORZGLuFeSxw3Oz/N+xPpX8uUVxHVwkAEdt/s1cwhSy3nwZnEyKVlEYhAxM+x0h0dbC5+J0gIvMp31L3UfYBiiSQVph9F3vf/fibw6eH5DhcTD3gfl7mw/rCcuUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763996347; c=relaxed/simple;
-	bh=EYCo3wbfHfmFQa02o2RM6yKpAm+wUjGxK4y/z4rDtRQ=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=sUp+aKLLeeg3UOPPNvEcxr7yeNGG2bpRN5SM7s49nJsgiOiVuKdzlBPkxiaSbGYYvmfuLLFSLdTiZMDtPp3sC9FjMkJCGTwrn6YNxtUk48AgtScw/O2GhMJIpTmNavAbp6Fdi9lw3YY5Y2rSoJWlO6CSVDe7CXdVeMKEGCurjb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=hjjE+21C; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7b8bbf16b71so5216033b3a.2
-        for <linux-next@vger.kernel.org>; Mon, 24 Nov 2025 06:59:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1763996344; x=1764601144; darn=vger.kernel.org;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dv6QicMlocvWNqzZyLpAtw1qAxWRLCWMymXPN2jh/1g=;
-        b=hjjE+21CLovmfHmeZQbQnyFH6YerpD+7Qjzysv1uMVO5Xb5S5WVTiwi6K6a9TekaIu
-         ChnruSeQMcMytHBPQfwmxItdILzocB/o42bU+irfPYi3ABHn7KXZjCWgpJHz015Ms+lv
-         ZxC4KKVT40N5X+hypemYcsLssVEb2+ZXHOJXKbfjpVx/CHArW9EOl5npi7/nefE7S7/N
-         271VWz/mpQr8goMm+NIMH1YhB70SiBgLnO8bABRzTgAFuNyjMA8DQYgp7HCHWkYFVpms
-         TCKfyyXmkVOv2OmyEgHU1HhSA92FSfA9eiQTMBZ3pdVs4j/BPcR/fl+uAvHmf953WFjq
-         bpkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763996344; x=1764601144;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dv6QicMlocvWNqzZyLpAtw1qAxWRLCWMymXPN2jh/1g=;
-        b=SoC2FjlG0kuVnoh1PZgIm1ykn+k7+TlkhgMybChgg6n3ZvX2Hx1sgBoWx42iZ2SFU6
-         ykyMmTQj1sx/aG1MRgcIZibrRymyAwXWyo+/C6aEu1nLsAy5ZJBm3Nwp0gS5E+COcybX
-         F77K4ca3evu/X2UBeULkGJt73dVJxonPuAH+85GLtRLLxkaMcWXGkN1A3Le1BhbIWJTL
-         93mW3VDnK07ztF4/oXsTL/8UWE297UyEW66AoKBWETIgTFr/4yF58rL7qD6Ib05qz90a
-         ZUMPkV5jJFQWlFvyD7cVzSEDxELYHvmLo7X8FxY5v52fTu35/HpeWft7hjJaaQacjaxv
-         Hngw==
-X-Forwarded-Encrypted: i=1; AJvYcCU/8aMckj2loIGiY21AbxpjvTUG7v4wnY4ZEeLXa+b9Ndu2WAWz1hobdrDU8xqdrbNiW21ZFAR7WxFf@vger.kernel.org
-X-Gm-Message-State: AOJu0YwB4jFCat09Ni5yyYMXZPu1iHs+soWktKKHwsaTpjBP0qKaW82i
-	Fnj6+WuddEx3Ivg4qwbd8+4bw+6zVogR7bCMfdv/ex0RajKL2pg9QIv9J4JNiF+msNIRqTIEdkG
-	3nVg9
-X-Gm-Gg: ASbGncu4i5mxmnVptahsMxohrIQAkvwsHC4PzrWl/SItgGt1iuoAWM/iW6HVwKAeVLi
-	ElMHMo2cE+y+e1pUni465eBghrnu4V/ukK+/OTZYpk3NmyiktFyljtxwbVfrRKhlI62RubjXD7G
-	m3MNiaiqdk+PvgYppYFYYmJodNoA1M/6shAXcjnoHo6r0jn9+iF+WUzPUZlph5CJ5R6gWCIDwZ6
-	dfQbyRxKCKqPytPqSHTz7AX60ti2I1lvBox+2pTt9kO7TT+c2KURBSWMzw07BM1LtmhfubASUuU
-	QpzNFfH6rh838Houhya+bYfJyUGFIztx2sJ7fGkerjCnmc2u4UDEeMN0+EfSDK+LUcDKwkQkOoB
-	q4JkXLYN8yfUC1uHSyE/BcL66m2IeAjVtwA87RiwTyljTuQ1geG/1zYEVYQXt8TRUOIgv0MHyxs
-	BDmNi5
-X-Google-Smtp-Source: AGHT+IEcD1trdqbQc69BpMtP07XzKrL5FxEsJvdGMtrXzOAwZdyZ5P6FgeXOFwPwpZPHzq6sPYhugg==
-X-Received: by 2002:a05:7022:301:b0:119:e569:fba0 with SMTP id a92af1059eb24-11c9d717b91mr6102020c88.15.1763996344103;
-        Mon, 24 Nov 2025 06:59:04 -0800 (PST)
-Received: from f771fd7c9232 ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11c93e3e945sm68165405c88.6.2025.11.24.06.59.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Nov 2025 06:59:03 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1764002005; c=relaxed/simple;
+	bh=Sp/8dRv3VqURk7PzQ1HmDpoA4qyuMLLu2tGBpREpYmo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LQPaKRWJtSx/DnCLfiv+YoB91gKPHHW1k9OOT2cm+y5K5akGpdvH//jXUxO3/2BxDJJzpyxNKJNjg3DzeSthz/Hv+gBsYTdk/wALlWUEqw2A/siso/LNzn/bvDG7lP7PQr4di2RchtuR+PA8N/psK6pwebvB8s8PT9AVTZsqCJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=mEZk2m9X; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=tL+39OnwTLvrAWvrGLglm04jsHHrgdlmkveq7RkWEdU=; b=mEZk2m9X1XDOzI4SKbvJ/c5atn
+	QXMRhnKkDWLYeIuQ13Z6fXRwrBM+V5Dnf0JuEfVGpf0SdRcob61LNH15NWSNEd4Zsb5gruwpGQRIa
+	7vOWKUBElof77Gm7UsUv98B1W4SIRGtBJOhdX0iOTf5aVnasmKH5HcWtnF5l0dYcw0zMek0PwIvc+
+	647knoV4nzZ9Ha52DL4zCYHCQxIjKRLuZFUdl0BioQmunBMv32pcnJHi8AU3joDadkZNwZtZftTov
+	oxZdH3phQ06JvuNAuvb3Sq+twFImsNLh42OWeL3alFfKhp/CFMWSIIjATImcy/+IkWBwDHVK1yB+t
+	NHbOaBKg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vNZV6-00000007EXl-3fUN;
+	Mon, 24 Nov 2025 16:33:16 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id A75393002A6; Mon, 24 Nov 2025 17:33:15 +0100 (CET)
+Date: Mon, 24 Nov 2025 17:33:15 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	ojeda@kernel.org, Danilo Krummrich <dakr@kernel.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	nouveau@lists.freedesktop.org, Alice Ryhl <aliceryhl@google.com>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20251124163315.GL4068168@noisy.programming.kicks-ass.net>
+References: <20251124231644.38d0303b@canb.auug.org.au>
+ <20251124123249.GP4067720@noisy.programming.kicks-ass.net>
+ <aSRlFB9PoOcZVmvt@tardis.local>
+ <20251124144714.GT3245006@noisy.programming.kicks-ass.net>
+ <CANiq72kN_QjYSCdzs9UCx2sHdR9Q2g_7_h-ZZ2y0qLZjhUxX6g@mail.gmail.com>
+ <20251124145544.GU3245006@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: [REGRESSION] next/master: (build) in vmlinux.unstripped
- (scripts/Makefile.vmlinux:72) [logspec:kbuil...
-From: KernelCI bot <bot@kernelci.org>
-To: kernelci-results@groups.io
-Cc: regressions@lists.linux.dev, gus@collabora.com, linux-next@vger.kernel.org
-Reply-To: kernelci@lists.linux.dev
-Date: Mon, 24 Nov 2025 14:59:03 -0000
-Message-ID: <176399634273.129.10917573478902375918@f771fd7c9232>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251124145544.GU3245006@noisy.programming.kicks-ass.net>
 
+On Mon, Nov 24, 2025 at 03:55:44PM +0100, Peter Zijlstra wrote:
+> On Mon, Nov 24, 2025 at 03:51:46PM +0100, Miguel Ojeda wrote:
+> > On Mon, Nov 24, 2025 at 3:47 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > By the way, I have had this patch around for RANDSTRUCT a long time:
+> > 
+> >     https://lore.kernel.org/rust-for-linux/20241119185747.862544-1-ojeda@kernel.org/
+> > 
+> > More than glad if someone confirms it works for them...
+> 
+> /me mumbles something about using clang to inject C IR into the Rust
+> thing and kicking bindgen to the curb :-)
 
+FWIW it might be relatively simple to abuse precompiled headers for
+this. Generate the pch files using clang and the normal linux build
+flags, then let rust do something like:
 
+  unsafe extern "C" include "header.h.pch"
 
+or whatever fits the syntax best -- some day I'll get around to learning
+this thing.
 
-Hello,
-
-New build issue found on next/master:
-
----
- in vmlinux.unstripped (scripts/Makefile.vmlinux:72) [logspec:kbuild,kbuild.compiler.linker_error]
----
-
-- dashboard: https://d.kernelci.org/i/maestro:c00f35c84d5655a6e8aec309bdb4a82398243097
-- giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-- commit HEAD:  422f3140bbcb657e1b86c484296972ab76f6d1ff
-- tags: next-20251124
-
-
-Log excerpt:
-=====================================================
-  LD      .tmp_vmlinux1
-aarch64-linux-gnu-ld: Unexpected GOT/PLT entries detected!
-aarch64-linux-gnu-ld: Unexpected run-time procedure linkages detected!
-aarch64-linux-gnu-ld: drivers/gpu/drm/panel/panel-visionox-rm69299.o: in function `visionox_rm69299_create_backlight':
-/tmp/kci/linux/drivers/gpu/drm/panel/panel-visionox-rm69299.c:343:(.text+0x4b0): undefined reference to `devm_backlight_device_register'
-
-=====================================================
-
-
-# Builds where the incident occurred:
-
-## defconfig+arm64-chromebook+CONFIG_ARM64_16K_PAGES=y on (arm64):
-- compiler: gcc-14
-- config: https://files.kernelci.org/kbuild-gcc-14-arm64-16k_pages-6924699cf5b8743b1f5eec35/.config
-- dashboard: https://d.kernelci.org/build/maestro:6924699cf5b8743b1f5eec35
-
-## defconfig+arm64-chromebook+CONFIG_ARM64_64K_PAGES=y on (arm64):
-- compiler: gcc-14
-- config: https://files.kernelci.org/kbuild-gcc-14-arm64-64k_pages-692469a0f5b8743b1f5eec38/.config
-- dashboard: https://d.kernelci.org/build/maestro:692469a0f5b8743b1f5eec38
-
-## defconfig+arm64-chromebook+CONFIG_CPU_BIG_ENDIAN=y on (arm64):
-- compiler: gcc-14
-- config: https://files.kernelci.org/kbuild-gcc-14-arm64-big_endian-692469a4f5b8743b1f5eec3b/.config
-- dashboard: https://d.kernelci.org/build/maestro:692469a4f5b8743b1f5eec3b
-
-## defconfig+arm64-chromebook+CONFIG_CPU_BIG_ENDIAN=y+debug+kselftest+tinyconfig on (arm64):
-- compiler: gcc-14
-- config: https://files.kernelci.org/kbuild-gcc-14-arm64-mainline-big_endian-692469bdf5b8743b1f5eec52/.config
-- dashboard: https://d.kernelci.org/build/maestro:692469bdf5b8743b1f5eec52
-
-## defconfig+arm64-chromebook+CONFIG_RANDOMIZE_BASE=y on (arm64):
-- compiler: gcc-14
-- config: https://files.kernelci.org/kbuild-gcc-14-arm64-randomize-692469a8f5b8743b1f5eec3f/.config
-- dashboard: https://d.kernelci.org/build/maestro:692469a8f5b8743b1f5eec3f
-
-## defconfig+arm64-chromebook+kcidebug+lab-setup on (arm64):
-- compiler: gcc-14
-- config: https://files.kernelci.org/kbuild-gcc-14-arm64-chromebook-kcidebug-692469b4f5b8743b1f5eec4c/.config
-- dashboard: https://d.kernelci.org/build/maestro:692469b4f5b8743b1f5eec4c
-
-## defconfig+arm64-chromebook+preempt_rt on (arm64):
-- compiler: gcc-14
-- config: https://files.kernelci.org/kbuild-gcc-14-arm64-preempt_rt_chromebook-692469c5f5b8743b1f5eec58/.config
-- dashboard: https://d.kernelci.org/build/maestro:692469c5f5b8743b1f5eec58
-
-## defconfig+lab-setup+arm64-chromebook+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y on (arm64):
-- compiler: gcc-14
-- config: https://files.kernelci.org/kbuild-gcc-14-arm64-chromebook-69246a08f5b8743b1f5eecb6/.config
-- dashboard: https://d.kernelci.org/build/maestro:69246a08f5b8743b1f5eecb6
-
-
-#kernelci issue maestro:c00f35c84d5655a6e8aec309bdb4a82398243097
-
-Reported-by: kernelci.org bot <bot@kernelci.org>
-
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
+That way you can fairly trivially inject AST/IR from another language --
+including all the inline functions and inline asm bits.
 

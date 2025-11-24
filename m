@@ -1,126 +1,89 @@
-Return-Path: <linux-next+bounces-9171-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9172-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A29D1C7F3FD
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 08:50:16 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3877C7F4F8
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 09:00:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E34843A59CB
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 07:50:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D2A7C4E3D87
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 08:00:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DAFA254AFF;
-	Mon, 24 Nov 2025 07:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A60B120CCCA;
+	Mon, 24 Nov 2025 08:00:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GAD3uzhr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YQ+TGQUO"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E961B27472;
-	Mon, 24 Nov 2025 07:50:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF0D1E98E6;
+	Mon, 24 Nov 2025 08:00:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763970604; cv=none; b=JByJMtRah/oRRlj81ow81KyXoV3apeD+sfA9svWn09k6KYAQOUWHzptb9p4fW8QvmFMs96dW6wmzuAY48N2BCwKZqSSJciE66vSimQzzzH5KKyOyYj3CSfDRYUb0h4notBZCWfSUoDduEqxF2dbhY7LJci1Cn5Z7TJHZ2iYjRyk=
+	t=1763971244; cv=none; b=UrPhK2vZe8T8DlpJAajmNEV0tThCAOPsQdSWBeEX933dy7uaj7chmh8eqz3ebAAtk/k8fSOGiim14zRvB1uHY8010GMUj+k6szKS/RLYmwrgpEZ1DzHQZD6thHw3ap7V3XUva+LnSBYx2s8JiQcncIIsitt7V7A0Qzo+Q+sBpNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763970604; c=relaxed/simple;
-	bh=KABm2DVqKO27Id5/uV0UFwNWUvZYC3fd6Ekc3hp8LRs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r5L1pA5PcKdevGcxYHcTHH9bv+AA4mai1g95ksAWqQEFwktJk3y7K5KrGEHk0E8Xa5sO+ovfrqbDCHstEjpTGymOYppK8qzTnvzRXQhVZJ8DI6Jkg8H4Ks4hXvNitcyinXToqgtBAHa1zzkLkKbta2+Bf4E6j6Bzy+9UBKTpfhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GAD3uzhr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33493C4CEF1;
-	Mon, 24 Nov 2025 07:50:00 +0000 (UTC)
+	s=arc-20240116; t=1763971244; c=relaxed/simple;
+	bh=66NzDg7nq++tCrVWQ16veeu/pmGmXcIk0agFM1bNDk4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BmM5apvfFv3LkCbfc8IJWYMiSXX7iUofDD9qsM41D7AV6qGICDE3itTda8dr0ScuWp/EZ/QrwClx69TcCyhGTZ2ncDi6v4wfqKSPiYeNHejVsjYCwkgGK8+a0le4jqOrZ+ga+IJc4l5nONTIklzM3WoVwsDYL+2SMVZ30hwiJOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YQ+TGQUO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64F57C116D0;
+	Mon, 24 Nov 2025 08:00:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763970601;
-	bh=KABm2DVqKO27Id5/uV0UFwNWUvZYC3fd6Ekc3hp8LRs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=GAD3uzhreW+AWmQ2T5+IwakHdheOOcAT1oAAwWMRRp02aRWpRuYaNx7tUnEUErjTG
-	 ta7gxa+kQJUWCSECZe4Ua9H4B9REUkztAP9ZcY7vKZyJP4PFG/rO/aR7IAQhfnyC/h
-	 5FFA9mU/XrSUpIF12jcxV8W88iCQ0WpowjdO8KXU7xMeOJSfUl6YdCzopq30G4wsnU
-	 w3zxiK7JloxvNMzx3EGiX15qyOguh58lr6hBhYumwcIETh1YC1uOYisUI42LWePLN/
-	 Fjey6cWIWzd/nEYcgFuZ52PRYvUGp0XZgE3egAKt2bnwr6hI1Fadr/OrRrXxCkQri4
-	 Uopsioa1sIYBw==
-Message-ID: <69dc1405-9acb-4b3e-b354-8725b05b39ea@kernel.org>
-Date: Mon, 24 Nov 2025 08:49:58 +0100
+	s=k20201202; t=1763971244;
+	bh=66NzDg7nq++tCrVWQ16veeu/pmGmXcIk0agFM1bNDk4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YQ+TGQUO7Hw/jF+5SEtjXt6A5P85a0ZP3osEx/RblXKU+6X8yMV4u6Mv187snT1C2
+	 XTONPNKFz4x04BWCYupWfO3dtvI1p5RWarLtwF0vpk7WC7aTYe6Fc9z2tC9UxfIUPd
+	 J2qaNqqYYUmdVRzf2JjR3eSmvSXb8uGZsL8LNJ/7uuL2uNoKEOS7XX3TAiw6HQcXDQ
+	 lNoPzT032KqN68dg7r766hw0pmKtfPNrMBunQYk/LvuV44xi5WRAyGVgYEJEoyPwLh
+	 KZUMxzMzhNFrkcZ+yZGbIkXHAKGKm7tQ4oPGp2xygWOMoUec0ln46V1RMEt9amnMUd
+	 Udp5I2qnEPXiA==
+Date: Mon, 24 Nov 2025 10:00:38 +0200
+From: Leon Romanovsky <leon@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Jason Gunthorpe <jgg@nvidia.com>,
+	Siva Reddy Kallam <siva.kallam@broadcom.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the rdma tree
+Message-ID: <20251124080038.GE16619@unreal>
+References: <20251124140146.784d6305@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: duplicate patch in the samsung-krzk tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>, Arnd Bergmann <arnd@arndb.de>
-Cc: ARM <linux-arm-kernel@lists.infradead.org>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20251124120913.76374412@canb.auug.org.au>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251124120913.76374412@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251124140146.784d6305@canb.auug.org.au>
 
-On 24/11/2025 02:09, Stephen Rothwell wrote:
+On Mon, Nov 24, 2025 at 02:01:46PM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> The following commit is also in the arm-soc tree as a different commit
-> (but the same patch):
+> After merging the rdma tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 > 
->   2e646b21df4c ("arm64: defconfig: enable Exynos ACPM clocks")
+> drivers/infiniband/hw/bng_re/bng_dev.c:19:13: error: 'version' defined but not used [-Werror=unused-variable]
+>    19 | static char version[] =
+>       |             ^~~~~~~
+> cc1: all warnings being treated as errors
 > 
-> This is commit
+> Caused by commit
 > 
->   38c8787f1b81 ("arm64: defconfig: enable Exynos ACPM clocks")
-> 
-> in the arm-soc tree.
+>   e873663e5f05 ("RDMA/bng_re: Add Auxiliary interface")
 
-Thanks, that's expected. I dropped mine now.
+Thanks, I fixed it.
 
-Best regards,
-Krzysztof
+> 
+> I have used the rdma tree from next-20251121 for today.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+
+
 

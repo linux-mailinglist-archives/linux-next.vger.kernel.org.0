@@ -1,133 +1,124 @@
-Return-Path: <linux-next+bounces-9183-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9184-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 836E3C81270
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 15:51:54 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 405C5C812AC
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 15:54:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA0D33A9A44
-	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 14:50:03 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 242EC4E5D48
+	for <lists+linux-next@lfdr.de>; Mon, 24 Nov 2025 14:52:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A9A28C862;
-	Mon, 24 Nov 2025 14:49:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D366284689;
+	Mon, 24 Nov 2025 14:52:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="TzKctMUe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FiwPjOuc"
 X-Original-To: linux-next@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E1228726A;
-	Mon, 24 Nov 2025 14:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDC9726F2AD
+	for <linux-next@vger.kernel.org>; Mon, 24 Nov 2025 14:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763995770; cv=none; b=bgZgQ1J7JxAkD2mpAmsOGXMVqmjSy6njZPFPV+GObOq5pkSho6ABeynv+V80KTLgDbs9ttLxidPEfo3wxYHrfd9sFPv83MwJ66gGpVbr6AAyJd7mIVpxK0NkSadHiqIIZ9Qw+0n89fkYvBYaZTYzTjhlpEbss6l+ZRsG4klNs1A=
+	t=1763995921; cv=none; b=uEC2lhkUJppukZ/Kc1TimK523YzLaEh+mYdu6KFdYzXZVY9LLAVfzCYhhjTDZ49EvokYo8UJbCIrOr8zUaceriip92ALdLeBysc+Q0b7t55V1RXWjaMAEUk+O0P4Oo3L4bwCG9vswiYYNS+ndi/Wzojkmn+qMfGXieQCN+5tjzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763995770; c=relaxed/simple;
-	bh=eYVozzDJl+VlYa+0Xgx12ibrXMDoIH+H55EfKIIHcFU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IUiugDvXoyqE3UKOO2cFyFptliCXZMgrIXt8ZVxnOZTtxlyjnGF7Vz5hvDRmaVMM8oV4TZXJUBbNaL0Dss/Vo5DOHym3WdE+ctUmBojs3EqnD8fkWwBJw8niC1SGVcGz4vcCqEiQlUxdVM6GAsGBsQQTe+4usnhiWb0AuRo8WdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=TzKctMUe; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=T6qo3JM9edKF9yotTrqC4KSWMlApaFYSQyRMCU7A0QQ=; b=TzKctMUePuak9AjKx6VCue/cUf
-	NGK3H/RvKt7isPtkb8XB163+z/iiJ28CRVy1LxLAqSONdk0XyC4/2jadqhXmJ8ExM6Y10IcKePMDb
-	nDi9cMY3LdUjnPrc32RaCOaMOeBkXrjGCWkzywRBpqhLnRJkscEWbZUqwGL7MkUUlNB/Cz6TJCtGL
-	4ZwbXiKaAhZOMbrr3xoo2UPDUVfQZxSNtJN/Zg8la2nnYw/SjWQpRFehAc/g+owRbIiQemlCwlRTW
-	FUftrTTwZPlLFZHRRYC+dS1wBy7VmZOdtOJojQB+vi/fw3+IVJYvfE7XwL3amum/RzF4lZuJxSuJk
-	dp/f/e/A==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vNX0y-00000003u95-2jhQ;
-	Mon, 24 Nov 2025 13:54:00 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 84766300230; Mon, 24 Nov 2025 15:49:23 +0100 (CET)
-Date: Mon, 24 Nov 2025 15:49:23 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Boqun Feng <boqun.feng@gmail.com>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	ojeda@kernel.org, Danilo Krummrich <dakr@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	nouveau@lists.freedesktop.org, Alice Ryhl <aliceryhl@google.com>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20251124144923.GK4068168@noisy.programming.kicks-ass.net>
-References: <20251124231644.38d0303b@canb.auug.org.au>
- <20251124123249.GP4067720@noisy.programming.kicks-ass.net>
- <aSRlFB9PoOcZVmvt@tardis.local>
- <20251124144714.GT3245006@noisy.programming.kicks-ass.net>
+	s=arc-20240116; t=1763995921; c=relaxed/simple;
+	bh=jWkOSrLf5i1nUdThhjrA/mY70eee/RSjQZIa4bF2EDc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Dz+v0g/ZObG4GdIM9/CJnKfL+y/ryz2uD6a0Xic8LScKyRplbBDjKiw+/mmTCVGR9D4eYxb8bOxXNSyaEJiM5ok9FA3FYsjHZ3qjpA4AgZNSw9wjCJ9fUGbMazWVYVB0XXFHGVt0+ZxEz970tx2uxnSpS+cZZ8AMSC66EhUK0+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FiwPjOuc; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-bc0dd142007so48829a12.2
+        for <linux-next@vger.kernel.org>; Mon, 24 Nov 2025 06:51:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763995919; x=1764600719; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/cuXBv9WUJm6Kko0g9y8Xk9WBvYZvMR/dgMEJPiZVyU=;
+        b=FiwPjOucY9yWVy//mUEV6DUB+R0pxzi8pg3SFiu0+Y7RoowA1BP9FPFb/WGAgQVA8u
+         xJZTZdR3UWpPzRRGg0fHVtC+2diHMxe5TnzGb+B9uLv+upUIBiNyvUCYFxUsIxhqGGV3
+         mHuFWbhMYdVsgjyk+LWc4PbEi+9si8CoAmcD7ew9Gv7lS16PB1yJIRuycoeHEYbMXkes
+         lsEO3XkNrHj42H9d5tQmEF7/AGxkhJqoCcXAyALccQzyLA1SQ96kr6wln55PcwJIYIsw
+         moRHxXrn7X4zdkSV9D2hR+Rn0ET+C2Byj/ksllxAFNZfKqO2upA2whNfAOVcPunLzGmj
+         uPiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763995919; x=1764600719;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/cuXBv9WUJm6Kko0g9y8Xk9WBvYZvMR/dgMEJPiZVyU=;
+        b=IvouiqS6HgQDC/ci+Zd/xzqPUuDXZJCuzsVLtvlEsd2sziLS7xxdowPRc0bFwpk8vg
+         ss0u1jQLm0g5pIdlhVBK+6KnmMNJr22YJN6+H5YCfZvG0lE6AbfcUM6UkhNF/1WPkMdH
+         Agf7g6uNL2pGelq1ODZq1uC1wuw6y+/Cb7e3qpAZVnqeVznHoqo3stlSiWGZ0gQVsv3l
+         6O5asXDvvlbz5fFxtxKOsqys+1VDmTcGZnUwWD+yJyLH6n050vjOIBe1x8pTxKbJKOwC
+         OYkvxlcH04pQAm6JJEmzWdUjTIoDwm5aEjZ+FEIdimwLIIus0Kccrh2Mbi+6YX5QpI2s
+         J6ow==
+X-Forwarded-Encrypted: i=1; AJvYcCUIr7h4HZqgeyHQKKNeuDKVwlTbyp+5odxrmQyNgPGt2RTBLbtJODUeMUHt6msvZThmOXa3Lxrhdag2@vger.kernel.org
+X-Gm-Message-State: AOJu0YxL0mGOLow6lHr4WTJoNCdFrnkDFDQvpfCCobzk7L3CLLT/HaUA
+	7z+dRULL1iTs92yY+1iXPuak0d8X5cEsZ9/0oyn67U2YDEgsFyG6KJYMROyI79/OOM/KK9lpvxk
+	427jQUbOLekVdwDs6cLqtJ6ezkRE+QD8=
+X-Gm-Gg: ASbGncvgIYqimWKjOtV+7DYEKOQTrEoXWtkm37f+9HWaM8aWzJqq3XVUhpNWnIjf08B
+	Up9UCm3Oe77PvLwmnSY7SXoRaHXQP/26RH7c5cDPzllM4yD2XLGAGPeZKSxck/JAdiI67FDMmuL
+	WXgc/dGu49ck+VrgfC292AhSsbaL7qxWsMn4TEAzThHaosdqE6F/C59Zsr/j7ND/11+c1Zi4nBV
+	zt3qf5P6hvbUIt8IMAJx2cOZavlDXYlWLx/cDQdwUm8kwirOBkkBtXeLVHrYne6liDb6dbTfFSj
+	esrxEYCxp1r45tDYItwzK2Qfp6+Yip7xZou2UrkAnyP1a/u8yvq2GgCI7G5DFEUpX/aMAG6sQWj
+	TSmwRCPtYQhmgMA==
+X-Google-Smtp-Source: AGHT+IHPUoZtQP0D4LXyIGxGGt4feAJlxaU/xnzf58w7DLQtCNJmBFAVlgka05hrCrIG2fNw6s735Cx7RdDtbzh+p78=
+X-Received: by 2002:a05:7300:ac82:b0:2a4:3593:2c0a with SMTP id
+ 5a478bee46e88-2a724c02369mr6966770eec.3.1763995918927; Mon, 24 Nov 2025
+ 06:51:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20251124231644.38d0303b@canb.auug.org.au> <20251124123249.GP4067720@noisy.programming.kicks-ass.net>
+ <aSRlFB9PoOcZVmvt@tardis.local> <20251124144714.GT3245006@noisy.programming.kicks-ass.net>
 In-Reply-To: <20251124144714.GT3245006@noisy.programming.kicks-ass.net>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 24 Nov 2025 15:51:46 +0100
+X-Gm-Features: AWmQ_bkcTjev6aW2ygRL9xeP9TP5FKOyn61229OF8XBDxgWHkq8wbcdDoBOjJiU
+Message-ID: <CANiq72kN_QjYSCdzs9UCx2sHdR9Q2g_7_h-ZZ2y0qLZjhUxX6g@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the tip tree
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>, ojeda@kernel.org, 
+	Danilo Krummrich <dakr@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, nouveau@lists.freedesktop.org, 
+	Alice Ryhl <aliceryhl@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 24, 2025 at 03:47:14PM +0100, Peter Zijlstra wrote:
-> On Mon, Nov 24, 2025 at 06:00:52AM -0800, Boqun Feng wrote:
-> > On Mon, Nov 24, 2025 at 01:32:49PM +0100, Peter Zijlstra wrote:
-> > > On Mon, Nov 24, 2025 at 11:16:44PM +1100, Stephen Rothwell wrote:
-> > > > Hi all,
-> > > > 
-> > > > After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> > > > failed like this:
-> > > > 
-> > > > ERROR: modpost: "NULL" [drivers/gpu/nova-core/nova_core.ko] undefined!
-> > > > 
-> > > 
-> > > Rust :/
-> > > 
-> > > So I have:
-> > > 
-> > > $ make O=tmp-build LLVM=-22 allmodconfig
-> > > $ make O=tmp-build LLVM=-22 rustavailable
-> > > Rust is available!
-> > > $ grep -e CONFIG_RUST= -e CONFIG_NOVA= tmp-build/.config
-> > > $
-> > > 
-> > > Help ?!?
-> > > 
-> > 
-> > [CC nova]
-> > 
-> > On my system it seems that RANDSTRUCT=y prevents the enabling of RUST,
-> > but I'm sure Danilo and Alexandre have better ideas about how to enable
-> > nova-core.
-> 
-> Ah, indeed, RANDSTRUCT seems to be messing things up. I tried disabling
-> that, but then I need to manually enable random crap to get Nova happy
-> and menuconfig isn't very nice.
-> 
+On Mon, Nov 24, 2025 at 3:47=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
+>
 > I really don't think rustavailable is doing a good job here. Strictly
 > speaking yes, its available, but figuring out why things don't work is a
 > giant pain in the arse.
-> 
+
+I guess `rusttoolchainavailable` would have been a better name, i.e.
+it is only about the toolchain, not about the kernel config
+requirements:
+
+  rustavailable   - Checks whether the Rust toolchain is
+                    available and, if not, explains why.
+
 > Now, lets see if frobbing Kconfig to disqualify RANDSTRUCT will let
 > allmodconfig work better.
 
-This... ok now lets see wtf the actual problem is.
+By the way, I have had this patch around for RANDSTRUCT a long time:
 
-diff --git a/security/Kconfig.hardening b/security/Kconfig.hardening
-index 86f8768c63d4..4a5890796ac2 100644
---- a/security/Kconfig.hardening
-+++ b/security/Kconfig.hardening
-@@ -282,6 +282,7 @@ config CC_HAS_RANDSTRUCT
- 	# Randstruct was first added in Clang 15, but it isn't safe to use until
- 	# Clang 16 due to https://github.com/llvm/llvm-project/issues/60349
- 	depends on !CC_IS_CLANG || CLANG_VERSION >= 160000
-+	depends on BROKEN
- 
- choice
- 	prompt "Randomize layout of sensitive kernel structures"
+    https://lore.kernel.org/rust-for-linux/20241119185747.862544-1-ojeda@ke=
+rnel.org/
+
+More than glad if someone confirms it works for them...
+
+Cheers,
+Miguel
 

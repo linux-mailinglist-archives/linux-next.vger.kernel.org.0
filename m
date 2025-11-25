@@ -1,135 +1,148 @@
-Return-Path: <linux-next+bounces-9216-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9217-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 280D7C86D89
-	for <lists+linux-next@lfdr.de>; Tue, 25 Nov 2025 20:46:53 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01187C87611
+	for <lists+linux-next@lfdr.de>; Tue, 25 Nov 2025 23:45:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C79B6351DC9
-	for <lists+linux-next@lfdr.de>; Tue, 25 Nov 2025 19:46:52 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B577B4E6C7C
+	for <lists+linux-next@lfdr.de>; Tue, 25 Nov 2025 22:45:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 710C8333439;
-	Tue, 25 Nov 2025 19:46:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32E7D1DF75B;
+	Tue, 25 Nov 2025 22:45:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gx7b6fVI"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kIHrQiZa"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D13023183F
-	for <linux-next@vger.kernel.org>; Tue, 25 Nov 2025 19:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B212EDD72;
+	Tue, 25 Nov 2025 22:45:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764100008; cv=none; b=bH362QBoBixLZoqjTG7/3SZkam0IZik/4UKIyF3D+9QZ0Y6pOnXMvtsHZW98jWYf6wv2ACGZKe5K5Y50+WmR4F6H6GmHK2rhNpl6cKcxZ171NxPT8jd/FsO3O7DuWTgvDIAkgCupWyvwgIMiMdo87BeV/IiVqFaRfcJuDzrh3tQ=
+	t=1764110726; cv=none; b=pGn3EwRAACtAyXDU8mwWK/tSTpeDA244Aqo2VqsmehMb+UjfjP8tIFgibLrOwwBdFCKjiujstABpq2f+vZydotIel10zYoaS1H0D5oT2SaOjKREvFCVJm5NNEua4Kp73lmEjpawopFVQbKmjg1ahU7JoelelEIU92VYoEhH2sCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764100008; c=relaxed/simple;
-	bh=yvrl0wOjR+XSH5uRR3LWNSF0SaBkf3JIyH+0olitB1Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KFx84hh7fLKbd8S38QbI/qdgZfYpDyjTAf1hBH6pMuPPpwJD7lPSr4uqWDtNY05q/VHOXl9iAT5I3z2INFa2CiH+ehz6Cr3fVblQ9Xf560FAmAE4hFEPB61cpxaacMB7QS/Vpydkj15q1qC5Vjfyt5k+xIQPoq/mxaGvKe8FOHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gx7b6fVI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F09B5C4CEF1
-	for <linux-next@vger.kernel.org>; Tue, 25 Nov 2025 19:46:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764100008;
-	bh=yvrl0wOjR+XSH5uRR3LWNSF0SaBkf3JIyH+0olitB1Q=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Gx7b6fVIqOl4LtYkUHQfgWaRe3aaZTA/qrAlds132jXu590WaSwd4CWT+XoaKmYah
-	 BJV1g6TgMaCNdqZ5WlqDZQsoGT2lobf1Wr/nacgWPXX4xJWGuVHVEZWx5HtpDhf6cU
-	 aHMBURi2qnZVQ6mk5/NXLPbd52K4ZbORQJg85yOd0QP1O1f2ukOwgw52OuT6/zGtIG
-	 eqd8DsC7k7bYIbIIXmhJ/OKzUK7KhoQUj3vMe4I0809E2j8/2AWXpXW9KPFAjK11/4
-	 RY17sDV9GNjitBDBsaVWZeppeyrpkWBJ9B1V5ja3VWMyzMn3y6yuxnytboqZ6vRXkm
-	 kIivrQSB2rjbg==
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7c75178c05fso1518914a34.0
-        for <linux-next@vger.kernel.org>; Tue, 25 Nov 2025 11:46:47 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXzHYhn2HsHbBZnmsij64jgdpap6c6zb9iYhpQxC9p5XH7uNgZRIZX9VgMBxTKqDGxiQuKV5czHL+rn@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4YYzvfm+di3k1aTZCrE/a6ojf7e5q2te9cgqwq0bTHSPeYOKA
-	yER4cvsPmvg2XY621F91D9oYLAIGVOQ3CvG8jfOkZpTBT9QS+MJ2Q13LxeTgKCPuMQnVkA14OmX
-	kXkwwwfoRQ+3BaHnUcDhdmeiBM7Qimr0=
-X-Google-Smtp-Source: AGHT+IFGMFIfq2+kvnTPZJazL4Yeg+8WQgSO/dFZk40t4JEEBh6K8WyxoehpLBTypvtAqzSsfFAhpjmr/CS3BpOKo/A=
-X-Received: by 2002:a05:6830:4424:b0:7c7:6348:594a with SMTP id
- 46e09a7af769-7c798ac9963mr8031111a34.7.1764100007330; Tue, 25 Nov 2025
- 11:46:47 -0800 (PST)
+	s=arc-20240116; t=1764110726; c=relaxed/simple;
+	bh=J9PBdVp5Wv4X3H+2Y+oPsgds+PErgXBsT5eKYhjg3fM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=pimWHbYTfhfEq5K3Ie7pq3p9x7lGb+j6HWYJqHQS0tQXbLxcxbB2x5V2/yI2ts4kDSEM8jO9H7TyfAu4bSz360hzWGRBp+ME7Tdjj6Lh+7I6NXgA6OAVUQ/hvJ+OFzfazCVAJCJsGO6fxWihKdLgGeQsGFKSQpDFGCwYvdRRx78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=kIHrQiZa; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1764110715;
+	bh=eksKHdOuLUxEaSCZSa3Yy26LV0Sk/VcK0aODv8ehgYo=;
+	h=Date:From:To:Cc:Subject:From;
+	b=kIHrQiZanUsmzChCYawVsUgciFwE5e/p1WqtnwXukSWhS4w2zSZ+O9bPkZK8m57yA
+	 nuzu4dHKilgEhb/nKaJCekMjgaZigWa7zM7jgJvSdoaKlv+DnLj6y2ISJa0+/qzkJ5
+	 HIokRsaItbWjPtzFRqq6/Yx/3tF+3n4Z4kDJzZUQOZOYdja7NAQh95sUHZKTsSC/T7
+	 xVItKYouK3Fl3Fb6vRyPTHKPbfZY8AkIbXdkb48+iOvveHMtynxe44hf12BT+bbVqq
+	 vhBrXC/w8Y5A20L8Kax7RWcwQ7j3o76cgsxnByLHp6b3kAtLwuKZctMGSeAKxAODjh
+	 hlKdhHKgkz0xQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dGHp11Z6qz4w1g;
+	Wed, 26 Nov 2025 09:45:13 +1100 (AEDT)
+Date: Wed, 26 Nov 2025 09:45:11 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>,
+ Arnd Bergmann <arnd@arndb.de>
+Cc: =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, Drew Fustini
+ <dfustini@oss.tenstorrent.com>, Himanshu Chauhan
+ <hchauhan@ventanamicro.com>, Lukas Bulwahn <lukas.bulwahn@redhat.com>, Paul
+ Walmsley <pjw@kernel.org>, ARM <linux-arm-kernel@lists.infradead.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the risc-v tree with the arm-soc tree
+Message-ID: <20251126094511.07bdf834@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251006120944.7880-1-spasswolf@web.de> <8edcc464-c467-4e83-a93b-19b92a2cf193@kernel.org>
- <4903e7c36adf377bcca289dbd3528055dc6cfb32.camel@web.de> <4a8302a0-209f-446a-9825-36cb267c1718@kernel.org>
- <25f36fa7-d1d6-4b81-a42f-64c445d6f065@amd.com> <1853e2af7f70cf726df278137b6d2d89d9d9dc82.camel@web.de>
- <f18bafacbd8316c9623658e2935f8fc3b276af64.camel@web.de> <26bf82303f661cdd34e4e8c16997e33eb21d1ee4.camel@web.de>
- <635b6cb19b5969bed7432dfd1cd651124e63aebb.camel@web.de> <18e472a0489ee5337465d5dc26685cebaf7c4f8d.camel@web.de>
- <3772b8f5-6d1a-403e-ad27-99a711e78902@kernel.org> <0cb75fae3a9cdb8dd82ca82348f4df919d34844d.camel@web.de>
- <ab51bd58919a31107caf8f8753804cb2dbfa791d.camel@web.de> <0719d985-1c09-4039-84c1-8736a1ca5e2d@amd.com>
- <3f790ee59129e5e49dd875526cb308cc4d97b99d.camel@web.de> <CAJZ5v0iRaYBU+1S4rqYR7D6XC+rfQ2+0hgbodweV5JsFr8EEnQ@mail.gmail.com>
- <b1fadb15d1869bde81315be7488c50dbbc9f7dbd.camel@web.de>
-In-Reply-To: <b1fadb15d1869bde81315be7488c50dbbc9f7dbd.camel@web.de>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 25 Nov 2025 20:46:36 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iAJN4eTdp9S=CKbMnVn78R7UnBKbLjBTdRhHebE0i7dA@mail.gmail.com>
-X-Gm-Features: AWmQ_bmiY3C3Fd0jUd8YOkwb-S7v2_w9pN95wDBnISKEEEKCJJwUosvxEK3SrZI
-Message-ID: <CAJZ5v0iAJN4eTdp9S=CKbMnVn78R7UnBKbLjBTdRhHebE0i7dA@mail.gmail.com>
-Subject: Re: Crash during resume of pcie bridge due to infinite loop in ACPICA
-To: Bert Karwatzki <spasswolf@web.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	"Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-next@vger.kernel.org, regressions@lists.linux.dev, 
-	linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, acpica-devel@lists.linux.dev, 
-	Robert Moore <robert.moore@intel.com>, Saket Dumbre <saket.dumbre@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/.XwE.T2DMYxV6T2GESnyxjg";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/.XwE.T2DMYxV6T2GESnyxjg
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 24, 2025 at 11:34=E2=80=AFPM Bert Karwatzki <spasswolf@web.de> =
-wrote:
->
-> Am Montag, dem 17.11.2025 um 17:40 +0100 schrieb Rafael J. Wysocki:
-> >
-> > Well, what you have found appears to be an issue in the AML bytecode
-> > interpreter which may be one of two things: (1) a bug in the
-> > interpreter itself or (2) a bytecode issue that causes the interpreter
-> > to crash (eventually) and the latter is quite a bit more likely.
-> >
-> > I'd suggest opening a new issue at
-> > https://github.com/acpica/acpica/issues and attaching the acpidump
-> > output from the affected system, to start with.
->
-> I've reported the bug to ACPICA github:
-> https://github.com/acpica/acpica/issues/1060
+Hi all,
 
-I've seen your report, thanks for filing it.
+Today's linux-next merge of the risc-v tree got a conflict in:
 
-> There's no "infinite" loop, but a loop running for 5051 (0x13BB) iteratio=
-n until its timeout
-> counter reaches Zero (most likely because the hardware is unresponsive). =
-Soon (only a
-> handfull of iterations in the walk loop in acpi_ps_parse_aml()) the crash=
- happens. I think
-> the crash actually occurs inside acpi_ps_parse_loop(), so I wouldn't rule=
- out an interpreter
-> bug just yet.
->  The crash also always happens (if it happens ...) in the 30592th iterati=
-on of the walk loop,
-> so I'm now monitoring the internal of acpi_ps_parse_loop() only in this i=
-teration of the walk
-> loop. (I've tried to monitor the parse loop before, but that only led to =
-excessive memory
-> consumption and an activated OOM killer). The debugging code can be found=
- here:
-> https://gitlab.freedesktop.org/spasswolf/linux-stable/-/commits/amdgpu_su=
-spend_resume?ref_type=3Dheads
->
-> So far I've had no crash with this.
+  MAINTAINERS
 
-What may be happening, but this is just a theory, is that the
-interpreter aborts the evaluation of a method due to an internal
-timeout, essentially the control_state->control.loop_timeout check in
-acpi_ds_exec_end_control_op() and that leads to a subsequent hard
-failure like a deadlock.
+between commit:
 
-This may be tested by increasing the ACPI_MAX_LOOP_TIMEOUT value, but
-I'm not sure it's practical to try that.
+  4de28f1edcfb ("dt-bindings: riscv: Add Tenstorrent Blackhole compatible")
+
+from the arm-soc tree and commits:
+
+  e0ce62cfe3a9 ("drivers: firmware: add riscv SSE support")
+  832fd6c2e55c ("MAINTAINERS: refer to intended files in RISC-V SSE DRIVER")
+
+from the risc-v tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index aacd4a754dab,6fa1048c248a..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -22247,15 -22195,14 +22254,23 @@@ F:	arch/riscv/boot/dts/spacemit
+  N:	spacemit
+  K:	spacemit
+ =20
++ RISC-V SSE DRIVER
++ M:	Cl=C3=A9ment L=C3=A9ger <cleger@rivosinc.com>
++ R:	Himanshu Chauhan <himanshu@thechauhan.dev>
++ L:	linux-riscv@lists.infradead.org
++ S:	Maintained
++ F:	drivers/firmware/riscv/riscv_sbi_sse.c
++ F:	include/linux/riscv_sbi_sse.h
++=20
+ +RISC-V TENSTORRENT SoC SUPPORT
+ +M:	Drew Fustini <dfustini@oss.tenstorrent.com>
+ +M:	Joel Stanley <jms@oss.tenstorrent.com>
+ +L:	linux-riscv@lists.infradead.org
+ +S:	Maintained
+ +T:	git https://github.com/tenstorrent/linux.git
+ +F:	Documentation/devicetree/bindings/riscv/tenstorrent.yaml
+ +F:	arch/riscv/boot/dts/tenstorrent/
+ +
+  RISC-V THEAD SoC SUPPORT
+  M:	Drew Fustini <fustini@kernel.org>
+  M:	Guo Ren <guoren@kernel.org>
+
+--Sig_/.XwE.T2DMYxV6T2GESnyxjg
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkmMXcACgkQAVBC80lX
+0GzpGQgAhK/qILso2Esrem1e40pmdu5h8IUjXCSlwm9rK5r73iC7GVdk1g5LPZBR
+NBRKPeF/eLkMGEIP/mb2pqa0ibSs/ST+41cLJl5OA7FMgWkBPLBfq+lXRKrArsft
+t8QcF1zSQkhN0tRJ5IkWFpcac/i05mw33nQx8u60ee6gK6Wc2MyqxiG5icw47lfH
+DLy5kNfs28CcQDdtm1xTtvp3AZfXVHgYaESvA4T0bC7niKSiqKMaKrDO3PH3N/G1
+He6nu3KV63skp2uHbNnqmjhkMfOLKWEvNseCix9tZO90jjV2PLZFAsLVRDIQxrwa
+wdXTxX/IQ7hs0UUiqnUAJFDppfvSiA==
+=+TU5
+-----END PGP SIGNATURE-----
+
+--Sig_/.XwE.T2DMYxV6T2GESnyxjg--
 

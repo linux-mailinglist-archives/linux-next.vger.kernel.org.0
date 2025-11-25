@@ -1,96 +1,89 @@
-Return-Path: <linux-next+bounces-9198-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9199-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9237FC835E4
-	for <lists+linux-next@lfdr.de>; Tue, 25 Nov 2025 06:00:05 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2B1DC83614
+	for <lists+linux-next@lfdr.de>; Tue, 25 Nov 2025 06:15:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F13B93AEDD3
-	for <lists+linux-next@lfdr.de>; Tue, 25 Nov 2025 05:00:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8D5534E059D
+	for <lists+linux-next@lfdr.de>; Tue, 25 Nov 2025 05:15:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1200021D3EA;
-	Tue, 25 Nov 2025 05:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37D5421ADB7;
+	Tue, 25 Nov 2025 05:15:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="M0KQYGzX"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ITUWrZ3e"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7346D125A9;
-	Tue, 25 Nov 2025 04:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE941DF25C;
+	Tue, 25 Nov 2025 05:15:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764046800; cv=none; b=TzUnFArbwSzFboe5yxck4Cs34wi/pbHyVz5SO4DGCr4DFWZGy/qlHMJVUL3D9yJyeiZ8xTAQmcluGtY2cc0OltG6ncMWZbqCKa1+OG/RqhJxFUT0z6QAAEKkImRmncTQ88bsx//m3Nby0x6FP6HuazKt+8tnzX/19+UzkjQjsz8=
+	t=1764047725; cv=none; b=sUwnepTKdKPR6xO60q0MRNYwshZWW5tGQuwXmfxtprZfRdthBKTwo0IUCwejeoVvMESvIiQ5NmcwUI35SPlUucD7HBQOH0ZQRouFCahm+X6V24nFLSDN5+X+mh1idFKOlLm+Q1UDi1wFcywkgZ6mH9rXfhQnQND6E2jIyesIbJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764046800; c=relaxed/simple;
-	bh=OhuxDEoUW6xVt24AbD/cF9OipxHXT+qGAAd4GLuelao=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=X8EXIkB+0aoucL8ZOVHfXWz2Dg6B9jT2uF+DIS/agcYCGIwpvoW7jbHsl56j3OqJJXkqd51iAemOhLTVXCav7y0Rm2KiSBt0RjVc3iv6fKUVDDEndMPUGOTYmpEyliMMo1DURZLK8c11Wv+TC28CJgoUhOs2mpFhzmKpq/WLlrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=M0KQYGzX; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1764047725; c=relaxed/simple;
+	bh=7WI9YGAFBiDhBREYK5Ns7bEFDa3hqB0d0sGekj6TdUg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=pN2gJSLUZxpA5AJVBZN26nIKcRistoEbQY6lgFqtwNQTdRAhN6ZamiioebgYzORAtdj+gaQ6hEluKGv4yK3ITL2fBVtrnBZXmzzpukuIFOMlSkh7mqd8KLMxlmbB2pw2g9C35098/TaFnosW2XI++8T3JjLB1sOUrnlcfxng1Z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ITUWrZ3e; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1764046795;
-	bh=AVvDb7lLX/MV5XPcvVDrRuo2BkqDdluBwQgxVFt7ynI=;
+	s=202503; t=1764047719;
+	bh=wHv3igoB3K8m80v9c9JjClPAu+idtsquoiuYMb/OXlQ=;
 	h=Date:From:To:Cc:Subject:From;
-	b=M0KQYGzXu+ifJNwKBLVHpMQIqaqJ9m7zW1+b/dE0i1ihEbkCHXo76wi5Ev5oTD7IJ
-	 Lmg+/8ccg1uA50SCH1RbjeBrly2mEFsJPRCv2/NddTUu7JxhKvwXVVSd5JdgKCfQk7
-	 GhoZcCtFUtaAZvpYb6WLTiO4ZafmGrneY4x0kzkv+rmZUU6a/VcjfEMfaE0jmJushL
-	 UGqvJ44NlsCzeaIE1rvYFXCbBQJQaVpiK7IkG+gDNT6bHJ151Iy4HT1UHHyUmQqkY3
-	 N0TlpVRZ++gzmJ8I2TvhGVdtGvX2TH8SaIfujSSUwm+IIP8F7Tb7/zABOW9MCeYBJb
-	 o/VD6Y5z+sp/Q==
+	b=ITUWrZ3eNCnPI5umq2mqJey7NzS3NR964Dj+hWxBnPhlCu3RHYte7gi19KGcSv/av
+	 +5B3fMKeFJgfJKQjEnDAWvTWTrButi5c5QRw8Z01EQprLVEMq4z1QH416sCO2C+LPi
+	 0nz85gCnMdkjClK/a7XvurIcWXBIlEWvY8TgDG1qtq2gI70H8Mhp1Rg3m1NrpXMVVg
+	 cNm/gEhxRbL7r9gD2gJpNk0qdUf+6+mkTzSfpV3iN7yvhpeT13ZfHJRXedbyRIlrHE
+	 zzPFA3/HVwypr1uja8F7fKk6uQx928wF6mA6XOBkrDrcJ5DfnpK/d42JJ3EWHEa03K
+	 3EBvNc9+f4WWw==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dFr8n6lcMz4w1g;
-	Tue, 25 Nov 2025 15:59:53 +1100 (AEDT)
-Date: Tue, 25 Nov 2025 15:59:53 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dFrVb1W26z4w8x;
+	Tue, 25 Nov 2025 16:15:19 +1100 (AEDT)
+Date: Tue, 25 Nov 2025 16:15:18 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Sean Christopherson <seanjc@google.com>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Babu Moger <babu.moger@amd.com>, "Borislav Petkov (AMD)" <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, Elena Reshetova
- <elena.reshetova@intel.com>, Linux Kernel Mailing List
+To: Tejun Heo <tj@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo
+ Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra
+ <peterz@infradead.org>
+Cc: Gabriele Monaco <gmonaco@redhat.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, "Naveen N Rao (AMD)" <naveen@kernel.org>
-Subject: linux-next: manual merge of the kvm-x86 tree with the tip tree
-Message-ID: <20251125155953.01b486f2@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Waiman Long <longman@redhat.com>
+Subject: linux-next: manual merge of the cgroup tree with the tip tree
+Message-ID: <20251125161518.3d40b57f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Pr1Q4e/t_c+K8gV/YTJaXZ9";
+Content-Type: multipart/signed; boundary="Sig_/R.h79A7ntew3K2VJj+wRiDn";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/Pr1Q4e/t_c+K8gV/YTJaXZ9
+--Sig_/R.h79A7ntew3K2VJj+wRiDn
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm-x86 tree got a conflict in:
+Today's linux-next merge of the cgroup tree got a conflict in:
 
-  arch/x86/include/asm/cpufeatures.h
+  kernel/cgroup/cpuset.c
 
-between commits:
+between commit:
 
-  6ffdb49101f0 ("x86/cpufeatures: Add X86_FEATURE_SGX_EUPDATESVN feature fl=
-ag")
-  3767def18f4c ("x86/cpufeatures: Add support for L3 Smart Data Cache Injec=
-tion Allocation Enforcement")
+  7dec062cfcf2 ("timers/migration: Exclude isolated cpus from hierarchy")
 
-from the tip tree and commits:
+from the tip tree and commit:
 
-  5d0316e25def ("x86/cpufeatures: Add X86_FEATURE_X2AVIC_EXT")
-  f6106d41ec84 ("x86/bugs: Use an x86 feature to track the MMIO Stale Data =
-mitigation")
+  be04e96ba911 ("cgroup/cpuset: Globally track isolated_cpus update")
 
-from the kvm-x86 tree.
+from the cgroup tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -103,51 +96,48 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/x86/include/asm/cpufeatures.h
-index d90ce601917c,646d2a77a2e2..000000000000
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@@ -503,9 -500,12 +504,15 @@@
-  #define X86_FEATURE_IBPB_EXIT_TO_USER	(21*32+14) /* Use IBPB on exit-to-u=
-serspace, see VMSCAPE bug */
-  #define X86_FEATURE_ABMC		(21*32+15) /* Assignable Bandwidth Monitoring C=
-ounters */
-  #define X86_FEATURE_MSR_IMM		(21*32+16) /* MSR immediate form instruction=
-s */
- -#define X86_FEATURE_X2AVIC_EXT		(21*32+17) /* AMD SVM x2AVIC support for =
-4k vCPUs */
- -#define X86_FEATURE_CLEAR_CPU_BUF_VM_MMIO (21*32+18) /*
- +#define X86_FEATURE_SGX_EUPDATESVN	(21*32+17) /* Support for ENCLS[EUPDAT=
-ESVN] instruction */
- +
- +#define X86_FEATURE_SDCIAE		(21*32+18) /* L3 Smart Data Cache Injection A=
-llocation Enforcement */
-++#define X86_FEATURE_X2AVIC_EXT		(21*32+19) /* AMD SVM x2AVIC support for =
-4k vCPUs */
-++#define X86_FEATURE_CLEAR_CPU_BUF_VM_MMIO (21*32+20) /*
-+ 						      * Clear CPU buffers before VM-Enter if the vCPU
-+ 						      * can access host MMIO (ignored for all intents
-+ 						      * and purposes if CLEAR_CPU_BUF_VM is set).
-+ 						      */
+diff --cc kernel/cgroup/cpuset.c
+index 72891976475c,1e3aadc09d3a..000000000000
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@@ -1397,16 -1477,14 +1477,18 @@@ static void update_isolation_cpumasks(v
+  {
+  	int ret;
  =20
-  /*
-   * BUG word(s)
+- 	lockdep_assert_cpus_held();
+-=20
+- 	if (!isolcpus_updated)
++ 	if (!isolated_cpus_updating)
+  		return;
+ =20
++ 	lockdep_assert_cpus_held();
++=20
+  	ret =3D workqueue_unbound_exclude_cpumask(isolated_cpus);
+  	WARN_ON_ONCE(ret < 0);
+ +
+ +	ret =3D tmigr_isolated_exclude_cpumask(isolated_cpus);
+ +	WARN_ON_ONCE(ret < 0);
+++
++ 	isolated_cpus_updating =3D false;
+  }
+ =20
+  /**
 
---Sig_/Pr1Q4e/t_c+K8gV/YTJaXZ9
+--Sig_/R.h79A7ntew3K2VJj+wRiDn
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmklN8kACgkQAVBC80lX
-0GwKvQgAgLupKHO+vyDoojl+JTgc1I7nd+MY59m1DpCjJvkHpS4kukRRl8jXarjC
-qbiESASDBh6oUVrHtu70CbYCT1Iw5O2mFk7YItNckfTfeGTTcp4GHOMIMPcwNbWf
-WZCjZZFHF3F6V60WctB4/gQb8LLq9Yp4gOPFYpOYY1JYz5MPM5HJnSHcPzMFm30a
-XIPHts+YozQNw8BE7E1173H96ANcwnHiwbGUvE78r1fBGnhX0xocK2G//kSUR1vJ
-x1hY58aL/0ryRmhqDtAgR/BgeMAln0n9vB7OOsayAQrZ0Kz0DAvkxqTN8bgXzbpJ
-Dv2cRt+DFYj2dQUyAdSlbMqO9fvRFQ==
-=knFf
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmklO2YACgkQAVBC80lX
+0GxjFQf/RUg8cE6DUFXQH513hTC91E5+K4xpYc92M0HRtiATfOKGat5AYQ+MwVyh
+hYMKxrc45Z5VKA08m+ULImKJU9xA5t4810zmpbzTKxWGpf/3DA1IEWK+ZZiIKSxZ
+Rulz7rJE2gp1vMqHe4JpWbbvOeF6naMfzHZaGWZ63xW0bPoM1oJ4LB9qfaOEgeR4
+Bvol3P5IGkD3rf1aXCoYvycI230+2L4SrrUIym89ckGal46hykG96mWmaw+yMvkm
+ssGnq5T0lytAo0YsBy08EqYAA7rb9Bh7X8LDgLoUthKscirB4wTHrQlm0AR3+LCV
+naq0tXVdGUrW+tf+YsnZ5aC/JAYHwg==
+=Dat9
 -----END PGP SIGNATURE-----
 
---Sig_/Pr1Q4e/t_c+K8gV/YTJaXZ9--
+--Sig_/R.h79A7ntew3K2VJj+wRiDn--
 

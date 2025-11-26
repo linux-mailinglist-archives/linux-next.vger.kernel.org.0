@@ -1,146 +1,156 @@
-Return-Path: <linux-next+bounces-9224-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9225-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C446C892FC
-	for <lists+linux-next@lfdr.de>; Wed, 26 Nov 2025 11:07:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2F8CC89F47
+	for <lists+linux-next@lfdr.de>; Wed, 26 Nov 2025 14:13:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7586C34F6C2
-	for <lists+linux-next@lfdr.de>; Wed, 26 Nov 2025 10:07:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39F963AAC92
+	for <lists+linux-next@lfdr.de>; Wed, 26 Nov 2025 13:13:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C10A26ED4A;
-	Wed, 26 Nov 2025 10:07:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47FA12765D4;
+	Wed, 26 Nov 2025 13:13:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kBoV8OVQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l8a+ha1e"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58FF32F7ADC
-	for <linux-next@vger.kernel.org>; Wed, 26 Nov 2025 10:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2359E27602C
+	for <linux-next@vger.kernel.org>; Wed, 26 Nov 2025 13:13:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764151674; cv=none; b=aYR0qBDXHBZT1KNPzQmQiAg7JGh3xwS3BuWlU3ucHK7w7olVxJTj+lrVUHvqOU9jiLoPcCTTee7UegcAtAb7gGDjWU/msOvcS8u2G/NgeMZNaDNXFn18yl4IOiIm/DK5VOvLuTsabW3qTV7jk+wVKWfdZ4G0XVxvUyXEMErAhQo=
+	t=1764162798; cv=none; b=V8nh5qdvEagPByFaZqFgcpVcTTjY9ZDzmPzWo+DCaGi3uC4AF/4Dl40gMy3846jGbPvIptKmubeQXLvRbTVqxCO0xK45tjrn4/ZfTVE5+/OaWntdOTCzYNfIU96jl75r6BxoaMgoYuHdsW/lbiqaSDZ368YwUrv7iyFAhfgMlFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764151674; c=relaxed/simple;
-	bh=3WagWW5Hbvd9BaJJPfrHVO7PG85B9vBBzjegpadUMwU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fifXaNMTRPIr5TD7UkmTqAlMt2aL6Cx3uvehmQrOYENIIGiA7VeKUF5OE5jAOrX6fi2zgyBo981TbV28RasgYTUN/gntI+KFXaAshOLwMuBAA41XFgh+K8WeqJUg6DJIUxD2enmTv7RmVdVMHKyFRDxe2av/cPAc7hQfx/a6i7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kBoV8OVQ; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-7b75e366866so3046615b3a.2
-        for <linux-next@vger.kernel.org>; Wed, 26 Nov 2025 02:07:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764151672; x=1764756472; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D5RBG4tougj0XhISMfRcMcPAsB5cx2PlFcKKBI/jTmg=;
-        b=kBoV8OVQm6fstueChVOjjqdXU899i5Iz7YDAmuxxZ9jH5NV+OflssMU5mVuNviSHxt
-         7lE7+Cwam3xUvYMP7KAAeUxyHDaqYZYzRXtwIsvbKIdtoCvJxAtkKL07hTQgk7Mem0pr
-         igaxZX3aWvXLZcd1+4b+YzNGPu2yWYOpQJoBa48XAD0ZMUxGn8+Qqz4IBhGCkz4f9cOh
-         XHZ3ewi6qRLRJVWmO+k0fdzHUVfbEHR8Tqdf2E0a/tM8n/ZL8y5FNQv8S+jJECeKFi8J
-         LB1it8VwE4gkPBaW3V4rxM/58CQ4BUFLiHpXFmKYtL+glD1mQE4AgMYoAWbcM7BKaQdu
-         4jmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764151672; x=1764756472;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D5RBG4tougj0XhISMfRcMcPAsB5cx2PlFcKKBI/jTmg=;
-        b=Exwao0SDqKPTSa5ygXlQ1Rrk49ih8iGcC0W6DJSVAZvhcxNABql2T+y/AYAMAdAd2r
-         FIIivD9HQtGxBW9ks20Trz/si5QPaC1UAGm9MUPbuZJmjiA1qgscGTOz9FyNK3TAKf5d
-         2QI62yo9i0xfdSrLA32fN1IMvyVXwo5cV+NkCE19UogYBPccsW3rzsnP8BWTcgpA1juE
-         LSpUQidOYb4QSAgItnGqObks2KZwWrt4KXKXI1jQ2M/YubeLAYk8TYWwKm/E9MNAIEMj
-         qBakFhhpyn1MUJtWpHP1MdRparaKLSnqtUt7DlPA8ykIrgjEg/X4E8ZPJUSkw0LkGkWl
-         EX3A==
-X-Forwarded-Encrypted: i=1; AJvYcCXVBNUVfQ0unapP5Nu7U+FUZN+qyj+GmFNwDaeUa0h51bKUn9ADEXFleNhdw22ZggcZZT0G2Pni5Hb0@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBf3m0iPUsKrIWg1t02HcMCxa39oG7+Gt0+dp8SCzVdNtgytaZ
-	s90wCmUQE/nqdDwsXBP74OYrmlRieN/FBrOXgC2MHxsl5bUs76ZRWtcf
-X-Gm-Gg: ASbGncsXEnM/tKTQ/xaxlGj97FlBQ1vXh9HRHeGbqM8hhfX/WnBRJUTICKtO/FMnZ8d
-	pFKtKMs26m9/IlPzkWGRlTczaSXh/yK60qwNK/fkkKraCYFXliRkMfawyZyqQspNfGshbXLgF69
-	mp5O0mZ76k+kKbEPjala1KIU2L5gAH9OEP6Imo5go5npjgggSo2A0diVH1B0D4YWfuynMH/Q66U
-	hvD1oKUBnVHuB2V+uvlnlRF6bVWqy0ry+92jN+A4sNguR9CFP7W3C1Q7U8iBlQqg/e7IuSwXEl/
-	fLCCAA+Fziao1zivRHuSBNVVehlwBznSRnLMXf0ucrrHnZVBisLyxr6sLPNc/8ri6s2tqPrK19l
-	hLFkly6ry7Rbx7+hGNfnC1vmsTPcEbZVCsOuKzIrc3o9WPulwuXUBFZH96FdPWbSrvCWiMoyb6I
-	Y+iEGxLgG6QKm+hw==
-X-Google-Smtp-Source: AGHT+IFRTuczlH2/yxOabhpWAHgWQIuoH/cix5GuSxIlIIYSGfB6/C3FvDUMDLWDGmWk8TvSBRfD8g==
-X-Received: by 2002:a05:6a20:9148:b0:334:9b5d:3876 with SMTP id adf61e73a8af0-3637daaf589mr7081618637.4.1764151672545;
-        Wed, 26 Nov 2025 02:07:52 -0800 (PST)
-Received: from localhost ([103.70.166.143])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7c3f0867558sm20959917b3a.46.2025.11.26.02.07.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 02:07:51 -0800 (PST)
-Date: Wed, 26 Nov 2025 15:37:49 +0530
-From: Gopi Krishna Menon <krishnagopi487@gmail.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Ivan Pravdin <ipravdin.official@gmail.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List <linux-next@vger.kernel.org>, 
-	Tomas Glozar <tglozar@redhat.com>
-Subject: Re: linux-next: manual merge of the ftrace tree with the jc_docs tree
-Message-ID: <qqfm7m4szknc5vxfngm7mhbxilai26wsaujttzvbqj4t53qfpe@yqx4jcruk2dw>
-References: <20251121123509.5f07d818@canb.auug.org.au>
+	s=arc-20240116; t=1764162798; c=relaxed/simple;
+	bh=kQM5qsnL//ZJkZMh9tLs3eLdFe/nlMcmYnI0k3VYMm0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UFp2mnAC+d/8gj37+Zga1Hv1sCDOk4pMJMkLmYEATQ/V3pg+Wi677jKwPXNL1PSbhstpzgYio69Ntg3G3gVOzHMHruBh0Td/nYrWwGbClJndgy1+O0WWE7MMWvLNvrmyxuMZE1UzVTCEsBvDfqhgL6t4oKIm3em34JErN4HV0gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l8a+ha1e; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B20CC2BCB4
+	for <linux-next@vger.kernel.org>; Wed, 26 Nov 2025 13:13:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764162796;
+	bh=kQM5qsnL//ZJkZMh9tLs3eLdFe/nlMcmYnI0k3VYMm0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=l8a+ha1eeH2yA0oILirGauWCC6U7Jx/JoOk7ADTxriXNhASuwUmLlWiCs5kYNm4Op
+	 6XNxrEostauqV/8PQcpVLuQCwEhH1uTFPcnmxqy5jBQ+psmfrEgpVU8TniZmioQ3st
+	 MEPwMoPS7TOoV3EUwGm5UAUebojwpX7G6ITzQx0FWjPc2s4uXXmu1FOrgnNbVA4ReK
+	 8srbPfocSbBdiOKPAJCRWnSbsIwIkDXhPBsRupFGoI/BZqXvYDjSMCB2rr62X1l0hE
+	 VeMzXT+KTl6+IMeAh5tiMOIBT3chQIqCrZzcBwzT49zz341nTDd3LN0ZEz7UwkwA/l
+	 mpqDX1V4Dpt+A==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-59431f57bf6so7157799e87.3
+        for <linux-next@vger.kernel.org>; Wed, 26 Nov 2025 05:13:16 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVl7UhDJsw55x41ommsgeUoCa2VAHJ2kCvBhsxhWcLjKcohIbHGws49u2Xcr23glWOF6nOGph6HNSV/@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYYhrNceZ2pKw39JMUSyv/BinSq+qtc7m0c/a4bjBPyQyBl4pH
+	94PsDv8dpESHDrnkQ1YjpCzKEb0L0z7gEF7vvp4pEBsQE+Y+mjniCWejC4hp2O6Exgbk1cI1PIe
+	BuyrGcz+8JKHg+H/VqBVI1Dq5lp03fUbW42+/ekWHIA==
+X-Google-Smtp-Source: AGHT+IGnxfuv/w8mMVX2aB+rHOQLgECwTUIQeAqwasXlnyq5xKWyJzJsqDqtuQCV9ee/0edID7j/VfV2gMgsRG40dFc=
+X-Received: by 2002:a05:6512:3a82:b0:594:282d:f40c with SMTP id
+ 2adb3069b0e04-596b5277be8mr2625488e87.31.1764162795120; Wed, 26 Nov 2025
+ 05:13:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251121123509.5f07d818@canb.auug.org.au>
+References: <20231127051414.3783108-1-victor.liu@nxp.com> <20231127051414.3783108-2-victor.liu@nxp.com>
+ <v6rthnruba5xaxazsn4jsptn6catso5qwuyf5xxbf4ml25b6eo@snttjo7oqlod> <2023112739-willing-sighing-6bdd@gregkh>
+In-Reply-To: <2023112739-willing-sighing-6bdd@gregkh>
+From: Bartosz Golaszewski <brgl@kernel.org>
+Date: Wed, 26 Nov 2025 14:13:03 +0100
+X-Gmail-Original-Message-ID: <CAMRc=Mc3T1u1sa0P+78dfhtoyBPc+9zsJ5sGP=ZLR+S=h16vZg@mail.gmail.com>
+X-Gm-Features: AWmQ_bnz6SpAZkE0enjhk9B-isNCGLXdzB_nbMX-AJzZrxJLh-qpR4CJt3SMChk
+Message-ID: <CAMRc=Mc3T1u1sa0P+78dfhtoyBPc+9zsJ5sGP=ZLR+S=h16vZg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] driver core: Export device_is_dependent() to modules
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Maxime Ripard <mripard@kernel.org>, rafael@kernel.org, linux-kernel@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-next@vger.kernel.org, 
+	sfr@canb.auug.org.au, andrzej.hajda@intel.com, neil.armstrong@linaro.org, 
+	rfoss@kernel.org, Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se, 
+	jernej.skrabec@gmail.com, maarten.lankhorst@linux.intel.com, 
+	tzimmermann@suse.de, airlied@gmail.com, daniel@ffwll.ch, 
+	angelogioacchino.delregno@collabora.com, ulf.hansson@linaro.org, 
+	linus.walleij@linaro.org, Liu Ying <victor.liu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 21, 2025 at 12:35:09PM +1100, Stephen Rothwell wrote:
+On Mon, Nov 27, 2023 at 7:21=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Mon, Nov 27, 2023 at 05:38:13PM +0100, Maxime Ripard wrote:
+> > Greg, Rafael,
+> >
+> > On Mon, Nov 27, 2023 at 01:14:13PM +0800, Liu Ying wrote:
+> > > Export device_is_dependent() since the drm_kms_helper module is start=
+ing
+> > > to use it.
+> > >
+> > > Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> > > ---
+> > > v2:
+> > > * Newly introduced as needed by patch 2.
+> > >
+> > >  drivers/base/core.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/drivers/base/core.c b/drivers/base/core.c
+> > > index 67ba592afc77..bfd2bf0364b7 100644
+> > > --- a/drivers/base/core.c
+> > > +++ b/drivers/base/core.c
+> > > @@ -328,6 +328,7 @@ int device_is_dependent(struct device *dev, void =
+*target)
+> > >     }
+> > >     return ret;
+> > >  }
+> > > +EXPORT_SYMBOL_GPL(device_is_dependent);
+> >
+> > So, a committer just applied this to drm-misc-fixes without your
+> > approval. Could you ack it? If you don't want to, we'll fix it.
+>
+> Wait, why exactly is this needed?  Nothing outside of the driver core
+> should be needing this function, it shouldn't be public at all (I missed
+> that before.)
+>
 
-> Hi all,
-> 
-> Today's linux-next merge of the ftrace tree got a conflict in:
-> 
->   Documentation/tools/rtla/common_options.txt
-> 
-> between commits:
-> 
->   96b546c241b1 ("Documentation/rtla: rename common_xxx.rst files to common_xxx.txt")
->   198fcc7cb832 ("Documentation/rtla: Mention default priority")
-> 
-> from the jc_docs tree and commit:
-> 
->   90241d14a726 ("rtla: Fix -C/--cgroup interface")
-> 
-> from the ftrace tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc Documentation/tools/rtla/common_options.txt
-> index 1c4f3e663cf5,edc8e850f5d0..000000000000
-> --- a/Documentation/tools/rtla/common_options.txt
-> +++ b/Documentation/tools/rtla/common_options.txt
-> @@@ -46,9 -42,7 +46,9 @@@
->           - *f:prio* - use SCHED_FIFO with *prio*;
->           - *d:runtime[us|ms|s]:period[us|ms|s]* - use SCHED_DEADLINE with *runtime* and *period* in nanoseconds.
->   
->  +        If not set, tracer threads keep their default priority. For rtla user threads, it is set to SCHED_FIFO with priority 95. For kernel threads, see *osnoise* and *timerlat* tracer documentation for the running kernel version.
->  +
-> - **-C**, **--cgroup**\[*=cgroup*]
-> + **-C**, **--cgroup** \[*cgroup*]
->   
->           Set a *cgroup* to the tracer's threads. If the **-C** option is passed without arguments, the tracer's thread will inherit **rtla**'s *cgroup*. Otherwise, the threads will be placed on the *cgroup* passed to the option.
->   
+Hi Greg!
 
+Sorry for reviving this old thread but I stumbled upon it when looking
+for information on whether anyone ever tried to export
+device_is_dependent() before.
 
-LGTM, thanks
-Gopi Krishna Menon
+I have a use-case where I think I need to check if two devices are
+linked with a device link. I assume you'll prove me wrong. :)
+
+The reset-gpio driver is a reset control driver that mediates sharing
+a reset GPIO (defined as a standardized reference fwnode property
+"reset-gpios") among multiple users. reset-gpio auxiliary devices are
+instantiated from reset core when it detects a consumer trying to get
+a reset-control handle but there's no "resets" reference on the
+consumer's fwnode, only "reset-gpios".
+
+It makes sense for reset core to create a device link between the
+auxiliary reset-gpio device (the supplier) and the reset consumer
+because this link is not described in firmware - only the link between
+the consumer AND the GPIO controller.
+
+Now in order to make gpiolib-shared.c code (generic support for shared
+GPIOs) happy, I need to handle the side effects of interacting with
+reset-gpio which does a similar thing. To that end, I need to know if
+given GPIO controller is a supplier of the consumer described in
+firmware OR the auxiliary reset device which is only described with
+software nodes.
+
+The logical thing to do would be to use "device_is_dependent()" but
+this thread makes me think that won't fly.
+
+What should I do? What's the "correct" way of checking if two devices
+are linked? I assume that fiddling with the supplier/consumer lists in
+struct device is not it.
+
+Thanks,
+Bartosz
 

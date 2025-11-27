@@ -1,135 +1,126 @@
-Return-Path: <linux-next+bounces-9242-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9243-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9F27C8CF69
-	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 07:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DB65C8D545
+	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 09:25:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CD9A84E36D8
-	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 06:53:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 055F14E4EDA
+	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 08:25:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97C3027FD40;
-	Thu, 27 Nov 2025 06:52:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 509903233FA;
+	Thu, 27 Nov 2025 08:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="Wvxy4zc3";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PpyQLGP1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H2dc9ML+"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D11D27A130;
-	Thu, 27 Nov 2025 06:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C77B3115B8
+	for <linux-next@vger.kernel.org>; Thu, 27 Nov 2025 08:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764226379; cv=none; b=F6Hj/r/se75hWPYqMbloUWM8voZwHFI4qcwU4rsQL1PgZS4ZJomUfTfpw64rsozYNNpu7QRnvjIUamwoaeAoPc132vT+tSHoCqBQXpJY/mkvXnvlkmN8TyKY2Aq5lVkj/ZsHLQXnclEamZsYonBmmvXCEMToSWTjfK6N98Bi4P4=
+	t=1764231922; cv=none; b=mHabD7ZVb5XGX4syk0lkR05oe49ZOuT9AKY3VEhadWNn2g5OSyUfrnIvj0NIAdU/Of1v9GHO7Ls571He+oHTdw4523ofqa1908u1NVwFHgQG7D0icaoqD548UUMb0I3phg9BOLhzwb/FU70m7GfGQy3zkXdNBfnLG8kvvia0ET4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764226379; c=relaxed/simple;
-	bh=pL7fbjgFOZo8MHudwY6DV3CSSbahW8sLfudIRsrotWg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WqkLSHZs9xVeY2pR3SdFDtovx9WR3YqjAAEMSNBDX4WPDJHuy8YL2GGJLI4fSbLMtukelhdlpoxQzTpBLIr/7WCBWUWmZYg4/O8K/IUvkqTHzpk/3rteOCaiB5mm1ESBX4cQIh42LqrIolIKGTyQ0LYmZ/S5sIUEqhifrEN9qWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=Wvxy4zc3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PpyQLGP1; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfout.stl.internal (Postfix) with ESMTP id 0D97C1D00163;
-	Thu, 27 Nov 2025 01:52:56 -0500 (EST)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-05.internal (MEProxy); Thu, 27 Nov 2025 01:52:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1764226375; x=1764312775; bh=s0yVjlp+dM
-	fUp1R/BlZ4uF56MWWHMvflTyf65/dXHvw=; b=Wvxy4zc3O23ChdHu49No3EIaHw
-	gOjZaTHV1rq3pP2QZnQocTzVekLNTctRFkS5adAa8nd7MQK7rx9DF40CqAQ140+q
-	o1AhHc3W9SPBXgHEwiFltdKg6Fh37ufYzgu34SA/LwhN2/g2+xcyPnjC8PH+m6Gm
-	2oUUjEgUZE3P8iajV+tud6UVasEaM96EL0pqnYQblmIDwW8RcFKIoTHmrPsbf8Xo
-	BbNO4jQLLfPmnexq4ztq8AlciFqU296mQbLSI9MNB+04lLhRx+hNDL4yPDRfU3E2
-	7pwCL12IYM85798ezplIsJSFDeRgv85PC58tR/za51Pprm9xrceIKw9ePMQA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1764226375; x=1764312775; bh=s0yVjlp+dMfUp1R/BlZ4uF56MWWHMvflTyf
-	65/dXHvw=; b=PpyQLGP1rRlZkUyBc8ZYmiR2/SYGWidWjRmfrQuiWNy8NsL0D3d
-	BKNqzY7xNwUxBEzurSYKSZZkl7w4ULmedRj45OsGjCStMwmCrsMtWYBDzr2SJbIn
-	yl1+sU/hdmm4UWxzMOD3a8Nkbegj8QOXInRR5fbUi7b9jhVSnq6LV18vCeT0Ouh6
-	4guU0FkhMcxghG6Q5y9ar1x3e+RQhBU2Qd/n4BeuONaft2H8mlSuZ31BKBNe9I5h
-	oSSWJ5wyQVMCfqWuOW1S1zDMdJYcv7QvVaFzi4mU35PMSMpDX1ZKmgFfn/WTn7wK
-	z4iGwoK4U60xp6gDr9wMEw5hw486Apr3Xhg==
-X-ME-Sender: <xms:R_UnacX406oH5mE-3jZWW5NofjPrvD0NfrsQwsn9Zw-5V9RbHuKOSg>
-    <xme:R_UnaW9oyKtjBSa43VpDKJHuiiSfAAvO-PoyZ7sh2GybkfNqvRtXKhZB7AduWs-RY
-    dSRQGAvO0wrawIf8CsKbkLbjDWLuRmzob9V51qlqhDhHoRAzA>
-X-ME-Received: <xmr:R_UnacpSbDfRwnUdmJ8GvEdCWTFPRwEv4qR6PBW5pNS84NIVNx0iG04dg6_Gb-ph3C-ShVhVfSYyA6FED1sqQdlxVlfwssPctqvx2w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvgeeiheeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvdevvd
-    eljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhsthgv
-    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
-    gtohhmpdhnsggprhgtphhtthhopedutddpmhhouggvpehsmhhtphhouhhtpdhrtghpthht
-    ohepshhfrhestggrnhgsrdgruhhughdrohhrghdrrghupdhrtghpthhtohepihhlphhord
-    hjrghrvhhinhgvnheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehjihhr
-    ihhslhgrsgihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnh
-    gvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhnvgig
-    thesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:R_UnaZJbJs_D1DuSy0AbQYZ9nPMvl6TxofZKPMxejUtBKUtxVACzCA>
-    <xmx:R_UnafMzHEn7L8rCKzOkU86DtRy4waXFXF6LWkTvfwZBDFAgNVpPSQ>
-    <xmx:R_UnaWq8XCMLk1nsR0RjLCmkCwCR6V7phDAsQ6ofohzM6QDc4OJnrQ>
-    <xmx:R_UnaSJYaXddlBlv7lzolm8bt-u8TZ4G_NosfZfMhC92IN8zQ29t2Q>
-    <xmx:R_UnaVNBgJKDU4O9Hp21Bj4oxQZAq0010g90oSQIePgTf1OVLK-dHpAP>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 27 Nov 2025 01:52:54 -0500 (EST)
-Date: Thu, 27 Nov 2025 07:52:50 +0100
-From: Greg KH <greg@kroah.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the tty tree with the tty.current
- tree
-Message-ID: <2025112740-marbling-deem-9037@gregkh>
-References: <20251127120921.3c398213@canb.auug.org.au>
+	s=arc-20240116; t=1764231922; c=relaxed/simple;
+	bh=3U85539l+3uB7FOy0W5vMeo+zHSWVvCH26/xzacIYpY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OtIjt/cCaWQFbsVJG1wo/pEF7XGXlQ04CH7FWMj13CkQU0v7YGrqeaebH4SjEDoXtWKlOFMvLH9a2xb4PaQqzPNOTBKvK5Yf1hB9NUJHhUXufnLunSVSxiv85xnpLI6nqvdv9F+o9cIgVN3ZDyzrdDIVNZE8f6+pOvGum9W7QBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H2dc9ML+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C43C4CEF8
+	for <linux-next@vger.kernel.org>; Thu, 27 Nov 2025 08:25:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764231921;
+	bh=3U85539l+3uB7FOy0W5vMeo+zHSWVvCH26/xzacIYpY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=H2dc9ML+ybnnMsVKjeVxIHwGRHwBBvguZ7P1uLwnIdj3QpSI9O3tvxcmcRoWG1C7L
+	 J4xJh2NhlE5V3/otX13nwC3bFMZEGXUhGP1aKCs9O3f6LZpzfLYT2fpVkOTh4jm2Q7
+	 1M/iViybdU9tqIQo1fvkrGIkWIcrY8GIuflL0y5JL8cNbFGeF8Y/CWv42Q6Ja7oxrq
+	 DOXsb19huUhTCmtBByOz0ULGLS4nmBOgUW9IEIRyNdzwa09Nc8OeDKUcEBRllTG/aG
+	 ItdNul8NmART6KgFIfMRVVu9byf6urvuAzap1s7az3W0NZxeJRFr05IoRCjBGQw/R+
+	 sBwapzAPdUn8g==
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-596a055b1b8so697505e87.0
+        for <linux-next@vger.kernel.org>; Thu, 27 Nov 2025 00:25:21 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWzC3+7IWMfIPEZUu+J9Hrv7jjZNBnLnDGPdqmwNjiayTjd/Nr9b3Bep40MiLp6imthFEqZOIZvWQ2+@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCHKvlOKUdG8joIOhXVSvFiDH2+QY6l1pMIDoBctyZ+aPWLuw7
+	CXp/BSuJ2YPU4u2TLTk7Y6Xy/DuvEHTXw6RY/Ofn+wFFLNXZNJovCrycOSVf+LRvUZZ4f3LTbG9
+	uhawpw87pFfqnuii7F47JHAd7kF4DzNvWOX0wr3OFKA==
+X-Google-Smtp-Source: AGHT+IFiZJ41PrNdJxrbSJ1Ikf75ypz/ySOoMyOlETpm+fCVdem7mca+LwPsl17ZxPBmjtIqv/OXZt+PQgxYF12JjdY=
+X-Received: by 2002:a05:6512:3188:b0:595:7e9c:cdfa with SMTP id
+ 2adb3069b0e04-596a3eb5e25mr9229032e87.6.1764231920286; Thu, 27 Nov 2025
+ 00:25:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251127120921.3c398213@canb.auug.org.au>
+References: <20251127104558.31eeb5bd@canb.auug.org.au>
+In-Reply-To: <20251127104558.31eeb5bd@canb.auug.org.au>
+From: Bartosz Golaszewski <brgl@kernel.org>
+Date: Thu, 27 Nov 2025 09:25:08 +0100
+X-Gmail-Original-Message-ID: <CAMRc=MdS7QV0G=zFUJ3fMitQDwmEGM1xH7jCMydicpBaEraVCA@mail.gmail.com>
+X-Gm-Features: AWmQ_bn2bjn0iRwL5SD5OyGqGlFMjShSR_mg47cYyu3oWa-b9DS1AYEVZTsqKTE
+Message-ID: <CAMRc=MdS7QV0G=zFUJ3fMitQDwmEGM1xH7jCMydicpBaEraVCA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the pci tree with Linus' tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Bjorn Helgaas <bhelgaas@google.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 27, 2025 at 12:09:21PM +1100, Stephen Rothwell wrote:
+On Thu, Nov 27, 2025 at 12:46=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.or=
+g.au> wrote:
+>
 > Hi all,
-> 
-> Today's linux-next merge of the tty tree got a conflict in:
-> 
->   drivers/tty/serial/8250/8250_rsa.c
-> 
+>
+> Today's linux-next merge of the pci tree got a conflict in:
+>
+>   MAINTAINERS
+>
 > between commit:
-> 
->   2bf95a9bcb50 ("serial: 8250: Fix 8250_rsa symbol loop")
-> 
-> from the tty.current tree and commit:
-> 
->   37d55c92e9db ("serial: drop SERIAL_8250_DEPRECATED_OPTIONS")
-> 
-> from the tty tree.
-> 
+>
+>   2b6d546ba83e ("MAINTAINERS: update my email address")
+>
+> from Linus' tree and commit:
+>
+>   010515bd2d47 ("MAINTAINERS: Add Manivannan Sadhasivam as PCI/pwrctl mai=
+ntainer")
+>
+> from the pci tree.
+>
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
 > conflicts should be mentioned to your upstream maintainer when your tree
 > is submitted for merging.  You may also want to consider cooperating
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc MAINTAINERS
+> index 2fcbda2fdca1,c61750164ba9..000000000000
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@@ -19955,7 -19886,8 +19971,8 @@@ F:   drivers/pci/p2pdma.
+>   F:    include/linux/pci-p2pdma.h
+>
+>   PCI POWER CONTROL
+>  -M:    Bartosz Golaszewski <brgl@bgdev.pl>
+>  +M:    Bartosz Golaszewski <brgl@kernel.org>
+> + M:    Manivannan Sadhasivam <mani@kernel.org>
+>   L:    linux-pci@vger.kernel.org
+>   S:    Maintained
+>   T:    git git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
 
-Looks good to me, thanks!
+Looks good, thanks!
 
-greg k-h
+Bart
 

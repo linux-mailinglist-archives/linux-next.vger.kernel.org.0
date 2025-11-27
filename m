@@ -1,107 +1,156 @@
-Return-Path: <linux-next+bounces-9247-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9248-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96323C8E5E5
-	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 14:03:00 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C1A9C8E6CF
+	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 14:20:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 264AF3AB641
-	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 13:02:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AC9DA4E8461
+	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 13:19:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5FFA23507E;
-	Thu, 27 Nov 2025 13:02:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 405BD2405E1;
+	Thu, 27 Nov 2025 13:19:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e9rG5FCz"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="cfFNHFQP"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A094C21CC79
-	for <linux-next@vger.kernel.org>; Thu, 27 Nov 2025 13:02:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20EEE1D63F7
+	for <linux-next@vger.kernel.org>; Thu, 27 Nov 2025 13:19:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764248568; cv=none; b=Rji0HbzlNhUZimzadFtJl7ttSkVge3OgTr0HLlTH3sNwbCHIDWty/mtNnnyrWXQN/ftKpFibpDGSStnyLdx5gSlQ4sGKeLIavlE20LMZH/s9JTkduEMFPcML+s6vRqn2XFX7liL1IcUl1hc9cLKKQF1W28NMakbsJV5efqPpy+o=
+	t=1764249565; cv=none; b=qAzfn/X2mdSjm6GnziA5kPKZx2LlqyVBqlSRnE+0d1XTdyVqcYPUiQLP1RfNXo3VwXe1dFwSV8v/OfTgHXdvs8CHMjWX01sFivUb7aUIxV2koVcb6MJPqvgWjhILXWq/EpVkYfFmC3eVYRf+0GAfhC+aSGv9Xn9HMSMn5kojcJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764248568; c=relaxed/simple;
-	bh=TWnBamyatpX5Wm4Si3Pw4KH/18jBLNasjONqwMRmbEs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R5uZ8+c5kCnGyqNwN3PpiDCoYVbrZCqQb2yvowxjJxP0DRpWfFT2pL1kpNrqmo3i4srJxFWFNOq1vTbJb+l6WNF8AUpjAcss2DtKic5Tf6lClazCkVcZTRQzaxdmqzvoMq82MmlIDSIflJhrJG2QZ9PczkHxnS9gFRMXQMuiGKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e9rG5FCz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E7DBC4AF0C
-	for <linux-next@vger.kernel.org>; Thu, 27 Nov 2025 13:02:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764248568;
-	bh=TWnBamyatpX5Wm4Si3Pw4KH/18jBLNasjONqwMRmbEs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=e9rG5FCz0iQPqCdN7QK+GlKOL5Q1EJfYtArB6Lser82tbh7ORLZ2xgNk2HvupFdmU
-	 pedOTvkpvl5LYAQiNsyG0EW2RV64vyqk8co4ymmLzdW+CQfGArouOXlx4G419zz03X
-	 NthhEHTYibZ2hMMmfU/gEHNbOEaolXTZP717OoQJ6Op6kJmOcjdhbBaj+1Zv75DCXM
-	 LFQLt5CzNnToWEPgQkzNklmQ0gW0jqrN7gWte8ahEHTTXSJnwaKWyRaD36ObUxzD72
-	 DWzc8Mj/LBxn2Y4wupWwHJ5OUrfxxC6We/f5oX/Ry4Rma8+y0BDA5kegrz8I2YyDbI
-	 QqCTcZJMCVxsw==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6574de1cda1so323110eaf.3
-        for <linux-next@vger.kernel.org>; Thu, 27 Nov 2025 05:02:48 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUp148F7pmHwUR1MfqubQGTMgW0zKZQ+hcXZVxEK0djx4AaEHm7w7rxKb1IHsjNN75NK67iZ6XJBF1w@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4a+5UOs3l1Rpobh8ihgBWAWf9bZtBKeC+ffUGiP/VvqcCQ+Cd
-	KCAin1ngdhdvdvin6nFq8PNO8zVuwsrbeJF+hfjJ3bu6d48A0FA0hrtihBkC94Buis+GvlnNFtw
-	wLwlOCMf5wqS8WGzNyTbBlmG2XToXcQE=
-X-Google-Smtp-Source: AGHT+IF0w8otX0piRWgtFUFTOXoFjGj4D4MrWIyFNoPn3zzu9Fi9GBR6iCbgBOJGxJT9TxwBRjX6B6nUfkBdUXdfRHg=
-X-Received: by 2002:a05:6820:2005:b0:657:71ec:5450 with SMTP id
- 006d021491bc7-657bdab6274mr3608090eaf.2.1764248567718; Thu, 27 Nov 2025
- 05:02:47 -0800 (PST)
+	s=arc-20240116; t=1764249565; c=relaxed/simple;
+	bh=rOfibwxWRf32Ma++nSfe0PWaLNWAUAJOabr3s2oK5js=;
+	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MLzIK29g3qnoVAstGT+ZsipEJI3PIWTJtloBmJ6pvLtcyDdU5HrCvNTeIdhBUWNEePNi54fwEkF0xxvP/bS4s6PKsX8oo7bq0Azr6hYM71GHHd9HCEBVwCrd6ACh2Qlw/liY5EnXLDZj8Rv7Q7Vf1195zOTvadAT//4EIhLJ0LQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=cfFNHFQP; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-594285c6509so1039076e87.0
+        for <linux-next@vger.kernel.org>; Thu, 27 Nov 2025 05:19:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1764249561; x=1764854361; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qa5rSgxsMBgNnzr8BR11LLdhDyhOIcF98vMIluiI9sA=;
+        b=cfFNHFQPIvCt73IYyw74bciZu5JrKqm0TvO7uBwOscWMyGyCeFlzfR7cJkfT8Bh8t5
+         W+SjEXGTiDwuF2r6FGv226rgWPFFjB2Thp3RUb4AHOnRZ6Cjw20ZPmU30eRgUAKh9tki
+         dvvH70Z5CSZRrq8UGthsly/twVOXCyrF7JOWryOsT4Bb9CenXXi6vG3TyynK5qnDsiae
+         4jGso07MdrnjgTYTSHG6MnobRCBSSP2qKXC8UVUYAsSRyHEgyQxL2IVwn/zVuTor3Vhl
+         4PuTyTI+SHO9xrQxpxCqSwaV5RmXhzUHrO3QrYFIhm4Zf7w6ScTSulVzjXISHMpLvAnj
+         80Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764249561; x=1764854361;
+        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qa5rSgxsMBgNnzr8BR11LLdhDyhOIcF98vMIluiI9sA=;
+        b=mUIqbbo7aMn2coZw95Wo8uV5buo7OTv6il4/Su1OE/w4FAOQ7XmBL5YoCABmx5k+3E
+         9wx/fj2u6dwibd5GBMTtioGjjfiClFRsyxACQElSdMBFyxgBAp14QVHD21YJn/Hzf8xi
+         nPx/P+R5DUVzN68rRDjtX9ePlVLIEht8sfrMhdBnZl6D6xp9yu/1UNS1NzXmh4UOYNoY
+         m+UibNezoxy2O07T3gq1jsSSOYflHrFq/SNNLEC+UeVrKKQNvgWC72WzcIY0f6wXMQyM
+         epfKS3F8WcnMfukmBYLN9Ofn1WncEQytm8CgdT3F8kiIcqm6PHmQlBNaTY0Pe8df9Jqy
+         1yng==
+X-Forwarded-Encrypted: i=1; AJvYcCUANIiEtMWs+J8Hgc0mz1lSplO/23hQ7C0rQ52Wbnfq/oGtxbb4Ar0Wi+2GPq0LuAmf+RC2S8s210Jk@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxrnr0uuWekMEJfXvVv2ixlno9zcJ8tqQUkZxQ/GWPix5S3qgeF
+	QZwteCXAywXWP/KxNoc+93/Jn2HDbfZC0LsMebAlENWyoXwgvUPDn/zY+1hRyh6QVu4XNp4FJYF
+	L8PhFxMiGXNSfzBNiSQhO5Lgeikd9lWYKZt5+pG5iZA==
+X-Gm-Gg: ASbGncuDh8vFRoms277Hi6yS/YT3Xiyz3uJ4SQ5lRCxCCgdQ6E53VkA1XKdPIy+YDRw
+	SoQN4Sb4pTQns9Q7dpDnc+sv85g2yTgiIqaIBs5Fkoeo9/juzmV/CmUu9tHskmKIXuoUK5jwtaQ
+	/VB7sGSowV9wbVlube9ua8v7lctP085A9SsjeZF5C69mpORYPLyGRCvhISgIiOp1nsJrmXmeAa8
+	HdXb4tqRPxd2bVyVPKB6nRZsFwtqzACTCmFRfFd01oVLvvGkqnSr9vnSZIlKi/BdqJw4VEUHA8i
+	lsp+tBeQaqIxoD0kzzeXhUbLICw=
+X-Google-Smtp-Source: AGHT+IFv4GnkzKuW5eP3thzxCRyJsfT/CIvGgglFh+tmFfX0OqQYKRle07uF9vIrb6qOFN7GsZbNvxi1KoK9iGxUlqI=
+X-Received: by 2002:a05:6512:238e:b0:595:9dbc:2ed0 with SMTP id
+ 2adb3069b0e04-596a3ea6664mr9117003e87.4.1764249561056; Thu, 27 Nov 2025
+ 05:19:21 -0800 (PST)
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 27 Nov 2025 05:19:19 -0800
+Received: from 969154062570 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 27 Nov 2025 05:19:19 -0800
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+In-Reply-To: <2025112705-registrar-drivable-2341@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251006120944.7880-1-spasswolf@web.de> <8edcc464-c467-4e83-a93b-19b92a2cf193@kernel.org>
- <4903e7c36adf377bcca289dbd3528055dc6cfb32.camel@web.de> <4a8302a0-209f-446a-9825-36cb267c1718@kernel.org>
- <25f36fa7-d1d6-4b81-a42f-64c445d6f065@amd.com> <1853e2af7f70cf726df278137b6d2d89d9d9dc82.camel@web.de>
- <f18bafacbd8316c9623658e2935f8fc3b276af64.camel@web.de> <26bf82303f661cdd34e4e8c16997e33eb21d1ee4.camel@web.de>
- <635b6cb19b5969bed7432dfd1cd651124e63aebb.camel@web.de> <18e472a0489ee5337465d5dc26685cebaf7c4f8d.camel@web.de>
- <3772b8f5-6d1a-403e-ad27-99a711e78902@kernel.org> <0cb75fae3a9cdb8dd82ca82348f4df919d34844d.camel@web.de>
- <ab51bd58919a31107caf8f8753804cb2dbfa791d.camel@web.de> <0719d985-1c09-4039-84c1-8736a1ca5e2d@amd.com>
- <3f790ee59129e5e49dd875526cb308cc4d97b99d.camel@web.de> <CAJZ5v0iRaYBU+1S4rqYR7D6XC+rfQ2+0hgbodweV5JsFr8EEnQ@mail.gmail.com>
- <b1fadb15d1869bde81315be7488c50dbbc9f7dbd.camel@web.de> <CAJZ5v0iAJN4eTdp9S=CKbMnVn78R7UnBKbLjBTdRhHebE0i7dA@mail.gmail.com>
- <8273a7755f90a3e41782f1d820dd9f0c22be78b7.camel@web.de>
-In-Reply-To: <8273a7755f90a3e41782f1d820dd9f0c22be78b7.camel@web.de>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 27 Nov 2025 14:02:36 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0i2T7HpV4jN6NJk=ruBvjecPRU2PyuYf0_TSPQU6FZ5rg@mail.gmail.com>
-X-Gm-Features: AWmQ_blFrD4CZdWtZD3fIxcPns9D2aAYhSHAPFzKpLN-7_95YhHfLdxhVqKxrFk
-Message-ID: <CAJZ5v0i2T7HpV4jN6NJk=ruBvjecPRU2PyuYf0_TSPQU6FZ5rg@mail.gmail.com>
-Subject: Re: Crash during resume of pcie bridge due to infinite loop in ACPICA
-To: Bert Karwatzki <spasswolf@web.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	"Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-next@vger.kernel.org, regressions@lists.linux.dev, 
-	linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, acpica-devel@lists.linux.dev, 
-	Robert Moore <robert.moore@intel.com>, Saket Dumbre <saket.dumbre@intel.com>
+References: <20231127051414.3783108-1-victor.liu@nxp.com> <20231127051414.3783108-2-victor.liu@nxp.com>
+ <v6rthnruba5xaxazsn4jsptn6catso5qwuyf5xxbf4ml25b6eo@snttjo7oqlod>
+ <2023112739-willing-sighing-6bdd@gregkh> <CAMRc=Mc3T1u1sa0P+78dfhtoyBPc+9zsJ5sGP=ZLR+S=h16vZg@mail.gmail.com>
+ <2025112705-registrar-drivable-2341@gregkh>
+Date: Thu, 27 Nov 2025 05:19:19 -0800
+X-Gm-Features: AWmQ_bnopX1NwnmSAB4rxhi5_XdHwE8aFqWlc4JptCLwfFW0D9DDoUsJLxqpKZ4
+Message-ID: <CAMRc=Meb0-Q7UCPhbfQ+pLybS2Jp=QpwxXGXNfQ+Ti64okoqYw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] driver core: Export device_is_dependent() to modules
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Bartosz Golaszewski <brgl@kernel.org>, Maxime Ripard <mripard@kernel.org>, rafael@kernel.org, 
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-next@vger.kernel.org, sfr@canb.auug.org.au, andrzej.hajda@intel.com, 
+	neil.armstrong@linaro.org, rfoss@kernel.org, 
+	Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se, jernej.skrabec@gmail.com, 
+	maarten.lankhorst@linux.intel.com, tzimmermann@suse.de, airlied@gmail.com, 
+	daniel@ffwll.ch, angelogioacchino.delregno@collabora.com, 
+	ulf.hansson@linaro.org, linus.walleij@linaro.org, 
+	Liu Ying <victor.liu@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 27, 2025 at 1:08=E2=80=AFAM Bert Karwatzki <spasswolf@web.de> w=
-rote:
+On Thu, 27 Nov 2025 09:29:03 +0100, Greg KH <gregkh@linuxfoundation.org> said:
+> On Wed, Nov 26, 2025 at 02:13:03PM +0100, Bartosz Golaszewski wrote:
+>> The logical thing to do would be to use "device_is_dependent()" but
+>> this thread makes me think that won't fly.
+>>
+>> What should I do? What's the "correct" way of checking if two devices
+>> are linked? I assume that fiddling with the supplier/consumer lists in
+>> struct device is not it.
 >
-> Am Dienstag, dem 25.11.2025 um 20:46 +0100 schrieb Rafael J. Wysocki:
-> >
-> >
-> > What may be happening, but this is just a theory, is that the
-> > interpreter aborts the evaluation of a method due to an internal
-> > timeout, essentially the control_state->control.loop_timeout check in
-> > acpi_ds_exec_end_control_op() and that leads to a subsequent hard
-> > failure like a deadlock.
-> >
-> > This may be tested by increasing the ACPI_MAX_LOOP_TIMEOUT value, but
-> > I'm not sure it's practical to try that.
+> fiddling with those lists is what device_is_dependent() does, but no,
+> you really don't want to be doing that either manually or by calling
+> this function.
 >
-> I don't think this the case here because ACPI_MAX_LOOP_TIMEOUT defaults t=
-o
-> 30s and the walk loop until the crash only lasts ~2s.
+> Who is creating this "link"?  Can't that caller tell the gpio core this
+> relationship at the same time as you are wanting to keep track of it
+> too?
+>
 
-I see, thanks!
+The link would be created in reset core.
+
+Let's consider the following:
+
+GPIO Consumer A ---> reset-gpio ---> |
+                                     | GPIO Controller pin X
+GPIO Consumer B -------------------> |
+
+The GPIO core will scan the device tree and realize that A and B share the
+same pin. The reset-gpio device is not described in firmware, it will be
+created only when A requests a reset control. When it, on behalf of consumer A,
+requests pin X, GPIO core can not associate the link between consumer A and
+pin X with the link between reset-gpio and pin X because there's no such
+reference in firmware nodes between consumer A and reset-gpio. To GPIO, these
+are two separate references to the same pin. Only reset core knows about A
+being the consumer of reset-gpio.
+
+We could add a function in reset like:
+
+  struct device *reset_gpio_to_reset_device(struct device *dev);
+
+which would return the actual consumer of pin X for a device we identified as
+reset-gpio (for instance: with device_is_compatible(dev, "reset-gpio")) but
+that would be adding a symbol for a corner case and a single user and for
+which the relevant information already exists and could easily be retrieved
+from existing device links.
+
+I hope that explains it better.
+
+To answer your question: the caller can't tell GPIO about this relationship,
+GPIO would have to ask reset about it but having a dedicated symbol for this
+doesn't really sound like the best approach.
+
+Bartosz
 

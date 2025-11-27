@@ -1,126 +1,155 @@
-Return-Path: <linux-next+bounces-9243-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9244-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DB65C8D545
-	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 09:25:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 449DEC8D582
+	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 09:29:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 055F14E4EDA
-	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 08:25:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 042F73A7617
+	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 08:29:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 509903233FA;
-	Thu, 27 Nov 2025 08:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B46A531CA6A;
+	Thu, 27 Nov 2025 08:29:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H2dc9ML+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DNf7Cktt"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C77B3115B8
-	for <linux-next@vger.kernel.org>; Thu, 27 Nov 2025 08:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75BE82D9EC4;
+	Thu, 27 Nov 2025 08:29:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764231922; cv=none; b=mHabD7ZVb5XGX4syk0lkR05oe49ZOuT9AKY3VEhadWNn2g5OSyUfrnIvj0NIAdU/Of1v9GHO7Ls571He+oHTdw4523ofqa1908u1NVwFHgQG7D0icaoqD548UUMb0I3phg9BOLhzwb/FU70m7GfGQy3zkXdNBfnLG8kvvia0ET4=
+	t=1764232146; cv=none; b=bfmVQPxaNrRA94GtVJxOSe45d8Qg1VjbS9eNh9Wnf0NzieE/IcdQ1PiFyhvooFJ+2rX7jROsY5l0fhipBL9r8bla5y6bvU79p1UKi9I/rNeBlgAqVZQMQQcu6u1h/zcAgUiloO/Bf9AsXugdRInl0AHWhp/dlf8yWJ25voMMbKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764231922; c=relaxed/simple;
-	bh=3U85539l+3uB7FOy0W5vMeo+zHSWVvCH26/xzacIYpY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OtIjt/cCaWQFbsVJG1wo/pEF7XGXlQ04CH7FWMj13CkQU0v7YGrqeaebH4SjEDoXtWKlOFMvLH9a2xb4PaQqzPNOTBKvK5Yf1hB9NUJHhUXufnLunSVSxiv85xnpLI6nqvdv9F+o9cIgVN3ZDyzrdDIVNZE8f6+pOvGum9W7QBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H2dc9ML+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C43C4CEF8
-	for <linux-next@vger.kernel.org>; Thu, 27 Nov 2025 08:25:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764231921;
-	bh=3U85539l+3uB7FOy0W5vMeo+zHSWVvCH26/xzacIYpY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=H2dc9ML+ybnnMsVKjeVxIHwGRHwBBvguZ7P1uLwnIdj3QpSI9O3tvxcmcRoWG1C7L
-	 J4xJh2NhlE5V3/otX13nwC3bFMZEGXUhGP1aKCs9O3f6LZpzfLYT2fpVkOTh4jm2Q7
-	 1M/iViybdU9tqIQo1fvkrGIkWIcrY8GIuflL0y5JL8cNbFGeF8Y/CWv42Q6Ja7oxrq
-	 DOXsb19huUhTCmtBByOz0ULGLS4nmBOgUW9IEIRyNdzwa09Nc8OeDKUcEBRllTG/aG
-	 ItdNul8NmART6KgFIfMRVVu9byf6urvuAzap1s7az3W0NZxeJRFr05IoRCjBGQw/R+
-	 sBwapzAPdUn8g==
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-596a055b1b8so697505e87.0
-        for <linux-next@vger.kernel.org>; Thu, 27 Nov 2025 00:25:21 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWzC3+7IWMfIPEZUu+J9Hrv7jjZNBnLnDGPdqmwNjiayTjd/Nr9b3Bep40MiLp6imthFEqZOIZvWQ2+@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCHKvlOKUdG8joIOhXVSvFiDH2+QY6l1pMIDoBctyZ+aPWLuw7
-	CXp/BSuJ2YPU4u2TLTk7Y6Xy/DuvEHTXw6RY/Ofn+wFFLNXZNJovCrycOSVf+LRvUZZ4f3LTbG9
-	uhawpw87pFfqnuii7F47JHAd7kF4DzNvWOX0wr3OFKA==
-X-Google-Smtp-Source: AGHT+IFiZJ41PrNdJxrbSJ1Ikf75ypz/ySOoMyOlETpm+fCVdem7mca+LwPsl17ZxPBmjtIqv/OXZt+PQgxYF12JjdY=
-X-Received: by 2002:a05:6512:3188:b0:595:7e9c:cdfa with SMTP id
- 2adb3069b0e04-596a3eb5e25mr9229032e87.6.1764231920286; Thu, 27 Nov 2025
- 00:25:20 -0800 (PST)
+	s=arc-20240116; t=1764232146; c=relaxed/simple;
+	bh=XDnWZhwF6hdUw7X2NJWegncDTsqHc35sPqTdiJCgnNw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uNZeOrNAYNnwE0s0RnZp8DYKINwRRVS61bd+4q6psxnWO05pYbFrvKp8T539MnbwMQiHRnZR/l9ooMa/L0Kr78fTvO+mSeew0PZIcjEIFHqlKHmKi9tZKBD1YzKXBjWqzreJsOg4/skfRVaDgXI/ruDte5pcvv1eWbxQ3bp7mHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DNf7Cktt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7367EC4CEF8;
+	Thu, 27 Nov 2025 08:29:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1764232146;
+	bh=XDnWZhwF6hdUw7X2NJWegncDTsqHc35sPqTdiJCgnNw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DNf7CkttM4EX943jsl5GYEMrVDlUwh6xGdPDTxKBybn27mqbl1d0eo/NLieribjim
+	 etOjbk4jD39bR0lwIE5pCx7TIJw2supCY8CL7KQmRoFYMA64onRtxPc9Hlr+tRiN2M
+	 UGFa287MVgB5DJovcfzJdN9AzSpNVwYWFD4En9IQ=
+Date: Thu, 27 Nov 2025 09:29:03 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Bartosz Golaszewski <brgl@kernel.org>
+Cc: Maxime Ripard <mripard@kernel.org>, rafael@kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+	andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+	rfoss@kernel.org, Laurent.pinchart@ideasonboard.com,
+	jonas@kwiboo.se, jernej.skrabec@gmail.com,
+	maarten.lankhorst@linux.intel.com, tzimmermann@suse.de,
+	airlied@gmail.com, daniel@ffwll.ch,
+	angelogioacchino.delregno@collabora.com, ulf.hansson@linaro.org,
+	linus.walleij@linaro.org, Liu Ying <victor.liu@nxp.com>
+Subject: Re: [PATCH v2 1/2] driver core: Export device_is_dependent() to
+ modules
+Message-ID: <2025112705-registrar-drivable-2341@gregkh>
+References: <20231127051414.3783108-1-victor.liu@nxp.com>
+ <20231127051414.3783108-2-victor.liu@nxp.com>
+ <v6rthnruba5xaxazsn4jsptn6catso5qwuyf5xxbf4ml25b6eo@snttjo7oqlod>
+ <2023112739-willing-sighing-6bdd@gregkh>
+ <CAMRc=Mc3T1u1sa0P+78dfhtoyBPc+9zsJ5sGP=ZLR+S=h16vZg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251127104558.31eeb5bd@canb.auug.org.au>
-In-Reply-To: <20251127104558.31eeb5bd@canb.auug.org.au>
-From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Thu, 27 Nov 2025 09:25:08 +0100
-X-Gmail-Original-Message-ID: <CAMRc=MdS7QV0G=zFUJ3fMitQDwmEGM1xH7jCMydicpBaEraVCA@mail.gmail.com>
-X-Gm-Features: AWmQ_bn2bjn0iRwL5SD5OyGqGlFMjShSR_mg47cYyu3oWa-b9DS1AYEVZTsqKTE
-Message-ID: <CAMRc=MdS7QV0G=zFUJ3fMitQDwmEGM1xH7jCMydicpBaEraVCA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pci tree with Linus' tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMRc=Mc3T1u1sa0P+78dfhtoyBPc+9zsJ5sGP=ZLR+S=h16vZg@mail.gmail.com>
 
-On Thu, Nov 27, 2025 at 12:46=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.or=
-g.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the pci tree got a conflict in:
->
->   MAINTAINERS
->
-> between commit:
->
->   2b6d546ba83e ("MAINTAINERS: update my email address")
->
-> from Linus' tree and commit:
->
->   010515bd2d47 ("MAINTAINERS: Add Manivannan Sadhasivam as PCI/pwrctl mai=
-ntainer")
->
-> from the pci tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> --
-> Cheers,
-> Stephen Rothwell
->
-> diff --cc MAINTAINERS
-> index 2fcbda2fdca1,c61750164ba9..000000000000
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@@ -19955,7 -19886,8 +19971,8 @@@ F:   drivers/pci/p2pdma.
->   F:    include/linux/pci-p2pdma.h
->
->   PCI POWER CONTROL
->  -M:    Bartosz Golaszewski <brgl@bgdev.pl>
->  +M:    Bartosz Golaszewski <brgl@kernel.org>
-> + M:    Manivannan Sadhasivam <mani@kernel.org>
->   L:    linux-pci@vger.kernel.org
->   S:    Maintained
->   T:    git git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
+On Wed, Nov 26, 2025 at 02:13:03PM +0100, Bartosz Golaszewski wrote:
+> On Mon, Nov 27, 2023 at 7:21 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Nov 27, 2023 at 05:38:13PM +0100, Maxime Ripard wrote:
+> > > Greg, Rafael,
+> > >
+> > > On Mon, Nov 27, 2023 at 01:14:13PM +0800, Liu Ying wrote:
+> > > > Export device_is_dependent() since the drm_kms_helper module is starting
+> > > > to use it.
+> > > >
+> > > > Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> > > > ---
+> > > > v2:
+> > > > * Newly introduced as needed by patch 2.
+> > > >
+> > > >  drivers/base/core.c | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > >
+> > > > diff --git a/drivers/base/core.c b/drivers/base/core.c
+> > > > index 67ba592afc77..bfd2bf0364b7 100644
+> > > > --- a/drivers/base/core.c
+> > > > +++ b/drivers/base/core.c
+> > > > @@ -328,6 +328,7 @@ int device_is_dependent(struct device *dev, void *target)
+> > > >     }
+> > > >     return ret;
+> > > >  }
+> > > > +EXPORT_SYMBOL_GPL(device_is_dependent);
+> > >
+> > > So, a committer just applied this to drm-misc-fixes without your
+> > > approval. Could you ack it? If you don't want to, we'll fix it.
+> >
+> > Wait, why exactly is this needed?  Nothing outside of the driver core
+> > should be needing this function, it shouldn't be public at all (I missed
+> > that before.)
+> >
+> 
+> Hi Greg!
+> 
+> Sorry for reviving this old thread but I stumbled upon it when looking
+> for information on whether anyone ever tried to export
+> device_is_dependent() before.
+> 
+> I have a use-case where I think I need to check if two devices are
+> linked with a device link. I assume you'll prove me wrong. :)
+> 
+> The reset-gpio driver is a reset control driver that mediates sharing
+> a reset GPIO (defined as a standardized reference fwnode property
+> "reset-gpios") among multiple users. reset-gpio auxiliary devices are
+> instantiated from reset core when it detects a consumer trying to get
+> a reset-control handle but there's no "resets" reference on the
+> consumer's fwnode, only "reset-gpios".
+> 
+> It makes sense for reset core to create a device link between the
+> auxiliary reset-gpio device (the supplier) and the reset consumer
+> because this link is not described in firmware - only the link between
+> the consumer AND the GPIO controller.
+> 
+> Now in order to make gpiolib-shared.c code (generic support for shared
+> GPIOs) happy, I need to handle the side effects of interacting with
+> reset-gpio which does a similar thing. To that end, I need to know if
+> given GPIO controller is a supplier of the consumer described in
+> firmware OR the auxiliary reset device which is only described with
+> software nodes.
+> 
+> The logical thing to do would be to use "device_is_dependent()" but
+> this thread makes me think that won't fly.
+> 
+> What should I do? What's the "correct" way of checking if two devices
+> are linked? I assume that fiddling with the supplier/consumer lists in
+> struct device is not it.
 
-Looks good, thanks!
+fiddling with those lists is what device_is_dependent() does, but no,
+you really don't want to be doing that either manually or by calling
+this function.
 
-Bart
+Who is creating this "link"?  Can't that caller tell the gpio core this
+relationship at the same time as you are wanting to keep track of it
+too?
+
+thanks,
+
+greg k-h
 

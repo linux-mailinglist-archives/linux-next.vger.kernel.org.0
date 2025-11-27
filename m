@@ -1,135 +1,108 @@
-Return-Path: <linux-next+bounces-9235-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9236-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48067C8C824
-	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 02:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 61E21C8CA23
+	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 03:06:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1B0E84E1516
-	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 01:13:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D10094E200A
+	for <lists+linux-next@lfdr.de>; Thu, 27 Nov 2025 02:06:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F609299943;
-	Thu, 27 Nov 2025 01:13:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A490241691;
+	Thu, 27 Nov 2025 02:06:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="iEhpYPBj"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="giJOydaz"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F621E86E;
-	Thu, 27 Nov 2025 01:13:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA832405ED;
+	Thu, 27 Nov 2025 02:06:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764206028; cv=none; b=guJEl28Be/vCj1G0TV1CRRfXTXNrAhIUhoOzyIl5bQ+lD4MWoryOD/WC7YWQTEtbdJ2mtdTMGIT7wh/8ee5qEsvZhVViTv7zLKlb2kcv1T0nBoICCHRqexPomMBkokEXdWQODUcQXMPtqISWKoY2ugDo7/6JfqUwotHesGVYsto=
+	t=1764209193; cv=none; b=qRWZglj9cj9auecSEO6T/r3eyCFmgWswR7m5Hi4/KFSW6KzO3OpI4yYyTEBv+HLgzq2i8rE9AsCPOSR9ZnMQ8iFP/+Aii7Ppa7Xh3Vjf+XyrBT7RbNCIK9aw+35oiI3/gZyZl4bweMDNTfaMs/s0B2aE2cqUxyfuYIgIibqU+Cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764206028; c=relaxed/simple;
-	bh=3Go8W+FRpagvnbPKGhZiuzWmGfy3P7LGXs4hMHdUvJI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=npKKO9GrrEK+sdlZVC3nUmoY4amQmfwMNnqn5x0PEXsh5odDz7fC/KModiCxfuPr0Rbi0H3L4gHG9wmBTe8pvRFwo5WKhwGySECJ84qVlAkkHOn9ttHar3J2+msVS54SCiivPf+EzoN3pXHU3Mv10/grW4eRHUz5NCpMM6LVEDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=iEhpYPBj; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1764209193; c=relaxed/simple;
+	bh=JCIrQSSrQdwP5raAQNqq6rSvyX6wiOXaXpFNHV0Og0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=eWIc7GoXp1dOOSrABl2p5SfRI3LvoMJtBhbp/8nLNTu7n5bDFPiyh3B68JTKPACMveMkKxs/DAhjFJNGGQxBA3Qk3HqSiX3rfeO7RUeyWncd95JlVGkU/rVT6tJcfcNJLhoLGTkZbEKaAQblSrdYjP+o8pSzMQtCjVEC2ELoleY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=giJOydaz; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1764206024;
-	bh=nX2o9BF4YyzFWt7O8RdA4AmRi3oSOFOhjU9ybn4SBls=;
+	s=202503; t=1764209184;
+	bh=uOiD1sDtaE9WtvJodj/HSuvTCZW0WFkMQbcDvlMzGFM=;
 	h=Date:From:To:Cc:Subject:From;
-	b=iEhpYPBjDoo4T/d8PnHqG5LiZaOmOb6XPi1NmmG8F/xUdbl+1GPvKFjozvzW+q+ya
-	 tOoy+cbBL2Dmuuwu6oUOLK99c9OHorsrzWGztFEB7VJNlHqT75fsSK3Y1eLr7EXF7B
-	 8AkMeWhAhpH3RNydIq53OvE6BHas+FFIMiIKPS2ZizPtY/iuj5Ko70THyg6os1Rfqk
-	 Wzh0shGE43iLOxPZhqSQ/wYeNdtCzzM0Xe6hMxb/bjvUcbvHmdyL2ADAGEQMu7hqaa
-	 RZ5AvFSziOidKVi2agnfUMC8Rj/+BIHlRkqlwK/ySKD5MSJrleSAKeI2oUtaiiE7k3
-	 mnph9nPgqsfmQ==
+	b=giJOydaz0oQKKPXnfoezAE0NoBRd2nsDtyRnNdG2cjNh8nrfOncem72i+9E10h0on
+	 rNBN5o9c4Azl1XfAWqz0wXIt4GbQD2k9rMH6sVXXfpuSc5wr8BELK+jNHeaF9dtzw0
+	 9QBce920l9tL1lpyLIGMOgK0zm9On05b9eLhSdJEKx4bVq2M5TDjLCVEp2lf2tZDai
+	 6g5PooYntvbM/Qmhmj/zbrR1+szvOaFjxNnt/duE5oOu+4RwozYmx3bQmaKCHsB4Ll
+	 ZNGi5t5UICFDazlNoQR3Q8/ybJoN5ywXHcHSYTEgWeB9dGsLBo0YrVy07qM5Ma5NAx
+	 3+IJw+rJrioag==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dGz2v55Xrz4w0H;
-	Thu, 27 Nov 2025 12:13:43 +1100 (AEDT)
-Date: Thu, 27 Nov 2025 12:13:42 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dH0Ch4XNbz4wD1;
+	Thu, 27 Nov 2025 13:06:24 +1100 (AEDT)
+Date: Thu, 27 Nov 2025 13:06:24 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alex Williamson <alex@shazbot.org>, Marek Szyprowski
- <m.szyprowski@samsung.com>
-Cc: Leon Romanovsky <leon@kernel.org>, Leon Romanovsky <leonro@nvidia.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Pranjal Shrivastava
- <praan@google.com>
-Subject: linux-next: manual merge of the vfio tree with the
- dma-mapping-fixes tree
-Message-ID: <20251127121342.73a2fa9f@canb.auug.org.au>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Alexey Skidanov <alexey.skidanov@intel.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warning in Linus' tree
+Message-ID: <20251127130624.563597e3@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/I6+gQfYH8qLkMw5xmPvUeR9";
+Content-Type: multipart/signed; boundary="Sig_/S2hwAa7t9gvtT8DnM3r9g2f";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/I6+gQfYH8qLkMw5xmPvUeR9
+--Sig_/S2hwAa7t9gvtT8DnM3r9g2f
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the vfio tree got a conflict in:
+In Linus' tree, today's linux-next build (htmldocs) produced this
+warning:
 
-  kernel/dma/direct.c
+WARNING: /home/sfr/kernels/next/next/include/linux/genalloc.h:52 function p=
+arameter 'start_addr' not described in 'genpool_algo_t'
 
-between commit:
+Introduced by commit
 
-  d0d08f4bd7f6 ("dma-direct: Fix missing sg_dma_len assignment in P2PDMA bu=
-s mappings")
+  52fbf1134d47 ("lib/genalloc.c: fix allocation of aligned buffer from non-=
+aligned chunk")
 
-from the dma-mapping-fixes tree and commit:
-
-  d4504262f745 ("PCI/P2PDMA: Simplify bus address mapping API")
-
-from the vfio tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+This has been exposed recently after a bug was fixed that caused some
+warnings to not be reported.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc kernel/dma/direct.c
-index f973e7e73c90,d8b3dfc598b2..000000000000
---- a/kernel/dma/direct.c
-+++ b/kernel/dma/direct.c
-@@@ -479,9 -479,8 +479,9 @@@ int dma_direct_map_sg(struct device *de
-  			}
-  			break;
-  		case PCI_P2PDMA_MAP_BUS_ADDR:
-- 			sg->dma_address =3D pci_p2pdma_bus_addr_map(&p2pdma_state,
-- 					sg_phys(sg));
-+ 			sg->dma_address =3D pci_p2pdma_bus_addr_map(
-+ 				p2pdma_state.mem, sg_phys(sg));
- +			sg_dma_len(sg) =3D sg->length;
-  			sg_dma_mark_bus_address(sg);
-  			continue;
-  		default:
-
---Sig_/I6+gQfYH8qLkMw5xmPvUeR9
+--Sig_/S2hwAa7t9gvtT8DnM3r9g2f
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmknpcYACgkQAVBC80lX
-0Gw32wgAiCf8L6wPSQwUSXg/PUQonhuvTqWFi7BZ8UZJ6K1xP8Xf19bhqhm+6Gg6
-v7jv1PQq8UxjtQzvExng85uzuon2iay3Yx+YEDtHoIA1gMEZIGVP4t/IkaPyKWpZ
-4eR9fTlow0rnb0zQOIOMKpJjSZmW9jCJFMs/v2gwNzeH7TjOJJfp5FgK+cIlBQVa
-RI+CNjbjGgHmpeWctBFd/jC886icOzrniNNSsWnpENmKbUxXwJgRK/Zv0iPORAmQ
-iOwJzW8lkg7tzP2Ba/TT/9dbDCRj8NoC+AEMi04IQYbgNgduFuGLk99f9Paqdvg6
-Bpa4AYVt7MrPrdZZ7xP/JX9Cd/QWyg==
-=oOwi
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmknsiAACgkQAVBC80lX
+0GwvdggAgzqx2dBeqErlrYtgxCUmt2uZJIg6eX3QnG4Q8r78WR404OOHPttTN+oG
+H5dk9KJpOBwKtlY8kaOBpeOzVvfVEPh6IAwb0MO38U7PCU5yq+BZyvvfkhYWUyJz
+diwHA3q9FpUnwOk8mGClkoXWl1+ugC3Ojc/+JE3uVeO59vepAvXfzXEIY1NuJ4+y
+HextU28wzJq8D8CiB+0NxAqLE6sQ8Q57/4kC0DAwKH066FXD3hx8q9S9qkFGFuz1
+2JcurIT70rt3nW0CoWG5G2IyLDoJMV/ZEffXqSeXO0xQoDcO9MfI6O1HthqPGYhp
+2S9S0rlQApzKoI2/uEOr85s0ZS81FA==
+=UdEM
 -----END PGP SIGNATURE-----
 
---Sig_/I6+gQfYH8qLkMw5xmPvUeR9--
+--Sig_/S2hwAa7t9gvtT8DnM3r9g2f--
 

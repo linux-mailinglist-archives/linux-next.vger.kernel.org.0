@@ -1,144 +1,97 @@
-Return-Path: <linux-next+bounces-9258-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9259-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA867C911EA
-	for <lists+linux-next@lfdr.de>; Fri, 28 Nov 2025 09:17:21 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0622C91794
+	for <lists+linux-next@lfdr.de>; Fri, 28 Nov 2025 10:37:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E27A3A846C
-	for <lists+linux-next@lfdr.de>; Fri, 28 Nov 2025 08:17:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BF1A94E7A2F
+	for <lists+linux-next@lfdr.de>; Fri, 28 Nov 2025 09:37:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A19A2652BD;
-	Fri, 28 Nov 2025 08:17:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5DA23043A9;
+	Fri, 28 Nov 2025 09:36:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pSfjNpiF"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="XfUIvDIJ"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3EBB3595B;
-	Fri, 28 Nov 2025 08:17:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183CA303A39;
+	Fri, 28 Nov 2025 09:36:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764317838; cv=none; b=L05qNbRPvZMW7zWeSyssKYO+A6GuDx3haBf5FCqc5KkI5A5SfHMG9wshonjfiS786QsgWkL4ilSy4xL+c9PCkAX4Zxx72uKhjJEWeqS7MesHS4q9lPkdQgdfyHPCvH5orpJirTuwXPu+QcCdMRkC2GcrDqAZ5OFwFWvu8xYlHlo=
+	t=1764322574; cv=none; b=bnir8Fxr8UFsLwn1xUd67wIrAQh7jwtmM/kr1sBpgCFtccU1LRFM6jsAQpTmO7UEq6vYYS7FcuPpCfPnI9StBuJ8RB3gmNZsP5wsd+4Us1Npil+150/mrbqM4Rmrf3qZUrdB0o0R1d/cdMAH5eMv8WNB5UJ7xoj8wV97mJj8obs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764317838; c=relaxed/simple;
-	bh=qCPp2bt0Adx6F96Aw0tqQmDkZCzgni1lPQhP0/bx3xE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=sLtnJ43qJyFdMss3QRpEWp729+GFNQJizLYXky8yZ7aLYhxhyG+S9KPr0mvquIiv9E+gK2HSECMQQKH4BTXVXIGJdHJYKc2Ydr8btoKbV1J3E9pi54M0hw+f1dcZZW6hjIH8dTW9ROWO5chPTQwIZKQPB9YzCAnLh8l9Rnjr3wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pSfjNpiF; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 0919E1A1DF5;
-	Fri, 28 Nov 2025 08:17:13 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C1B3760706;
-	Fri, 28 Nov 2025 08:17:12 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5FBBC102F08B5;
-	Fri, 28 Nov 2025 09:17:09 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764317832; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=1vkL616mrZYDsuY8dXY71Z/u/MtgI837xSGeILt67vA=;
-	b=pSfjNpiFpbT5jZ0d1ZeF5HG9yAux3FFUE8I98rvxmU6gVYRiU7G1cWTH1ursJq+1it23y5
-	abhPzVzJClN8AsfRvB39FPWgRUjdsWZcSwXq1Q0eDTzYTmMRncNoFaTA447blzfcuPP8lO
-	AGUc83MDnvqi0K6RkAUAbrILm5xX6gbhSZc9AoVjPQEOqNaujc9A/K/yf0EuXGhUnOCUzr
-	bi2s2wAlZedWhKNkhm7+Ma4TMMmFAFubRIM6Scv+N73zUDXskmX+KFnUc/M7gIw6cB/mx1
-	cW5QfQjeSn+2EXHphb2gREwZcnjyUqCBHJaj1UJtqqQSP+nuaF4DkLO/B7EVHA==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>,  Yury Norov
- <yury.norov@gmail.com>,  Boris Brezillon <boris.brezillon@collabora.com>,
-  Richard Genoud <richard.genoud@bootlin.com>,  Geert Uytterhoeven
- <geert+renesas@glider.be>,  Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>,  Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the bitmap tree
-In-Reply-To: <CAMuHMdWpiTwp=mH8uj71NqzWctWUQymT3BqwSRTCO7xOa3bbWQ@mail.gmail.com>
-	(Geert Uytterhoeven's message of "Tue, 25 Nov 2025 09:05:48 +0100")
-References: <20251125182442.49ddb53a@canb.auug.org.au>
-	<CAMuHMdWpiTwp=mH8uj71NqzWctWUQymT3BqwSRTCO7xOa3bbWQ@mail.gmail.com>
-User-Agent: mu4e 1.12.7; emacs 30.2
-Date: Fri, 28 Nov 2025 09:17:08 +0100
-Message-ID: <87pl92sha3.fsf@bootlin.com>
+	s=arc-20240116; t=1764322574; c=relaxed/simple;
+	bh=xdkkJR5FzgvH0L8/QScmrJTBJuyTIe/eb9PaAg4bK+w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=C7uVq/adoHRdRR8OeDZ2Xccjwm56gpKToo4uMB/+6Z3SSsoMN8K5xC7wgkNWX3clq+II2g5RzQkEvPe3tn9YZV+ftYK2b9dLZyS9WGJMFtg1EXrZVHY3hpHf1k2ugWPJNczqrk+fVFgUwLQylt7LPnALbwEpevVlXSS5b5ALDi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=XfUIvDIJ; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=KG0/81abyQ8PEDhyWdNyMUeaC9IBrmOXtaPyU2w0gxo=; b=XfUIvDIJ/MfScvk/ovWWE5Wm74
+	O9NyQj4HhuFSOVdOCuATXRHSxoFehVzOs9n56Cb9LWEVe+h/zXZQ+6cOBg1LrcueQOEyKeMJkqCV5
+	ZGfHcrP5Zu0OPUHHj9Knd3GPwcmvtgzsklFkItE4mA6EcA1gQarzwuGIAgfAhsGLifDy8j6wQno/W
+	7OGFffoHmDTLC+NMPzyk+ZYYnFGXr5C3sn6zJcKGKGYoDJG6ludorr7L2m7c6IguGcFYTCTdCZ3xE
+	8aXyrDZTga7jgPfxFmcuf1WlW0NWex0L01X0+SoGxrlalN6VqzX3qrTDw48ZuxVbJqRizJBp2UOmj
+	NZ2lcxcg==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vOuta-0000000D0u4-2orZ;
+	Fri, 28 Nov 2025 09:36:06 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 39471300230; Fri, 28 Nov 2025 10:36:06 +0100 (CET)
+Date: Fri, 28 Nov 2025 10:36:06 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Boqun Feng <boqun.feng@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+	akpm@linux-foundation.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Waiman Long <longman@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [PATCH] locking/mutex: Initialize mutex::magic even when
+ LOCKDEP=n
+Message-ID: <20251128093606.GF3245006@noisy.programming.kicks-ass.net>
+References: <aSDoquGlA55Ge100@tardis.local>
+ <20251125145425.68319-1-boqun.feng@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251125145425.68319-1-boqun.feng@gmail.com>
 
-Hello,
+On Tue, Nov 25, 2025 at 06:54:21AM -0800, Boqun Feng wrote:
+> When DEBUG_MUTEXES=y and LOCKDEP=n, mutex_lock() still checks on
+> ->magic, hence debug_mutex_init() should be called in
+> mutex_init_generic() as well. While we are at it, decouple LOCKDEP
+> logic from debug_mutex_init(), because in this way debug_mutex_init()
+> only needs one parameter, and we now have mutex_init_lockep() for
+> LOCKDEP=y scenarios.
+> 
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Closes: https://lore.kernel.org/lkml/20251117202214.4f710f02@canb.auug.org.au/
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Closes: https://lore.kernel.org/lkml/20251121215819.GA1374726@ax162/
+> Fixes: 3572e2edc7b6 ("locking/mutex: Redo __mutex_init()")
+> Reviewed-by: Waiman Long <longman@redhat.com>
+> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> ---
+> Peter,
+> 
+> Feel free to fold it into commit 3572e2edc7b6 ("locking/mutex: Redo
+> __mutex_init()"), just resend it properly so it won't fall off your
+> radar ;-)
 
->> Caused by commit
->>
->>   c1c6ab80b25c ("bitfield: Add non-constant field_{prep,get}() helpers")
->>
->> interacting with commits
->>
->>   d21b4338159f ("mtd: rawnand: sunxi: introduce ecc_mode_mask in sunxi_n=
-fc_caps")
->>   6fc2619af1eb ("mtd: rawnand: sunxi: rework pattern found registers")
->>
->> from the nand tree.
->>
->> I have applied the following hack for today.
->>
->> From: Stephen Rothwell <sfr@canb.auug.org.au>
->> Date: Tue, 25 Nov 2025 17:47:46 +1100
->> Subject: [PATCH] fix up for "bitfield: Add non-constant field_{prep,get}=
-()
->>  helpers"
->>
->> interacting with commits
->>
->>   d21b4338159f ("mtd: rawnand: sunxi: introduce ecc_mode_mask in sunxi_n=
-fc_caps")
->>   6fc2619af1eb ("mtd: rawnand: sunxi: rework pattern found registers")
->>
->> from the nand tree.
->>
->> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
->> ---
->>  drivers/mtd/nand/raw/sunxi_nand.c | 12 ++++++------
->>  1 file changed, 6 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/mtd/nand/raw/sunxi_nand.c b/drivers/mtd/nand/raw/su=
-nxi_nand.c
->> index 031ab651c5a8..b940eb5cf79a 100644
->> --- a/drivers/mtd/nand/raw/sunxi_nand.c
->> +++ b/drivers/mtd/nand/raw/sunxi_nand.c
->> @@ -30,8 +30,8 @@
->>  #include <linux/reset.h>
->>
->>  /* non compile-time field get/prep */
->> -#define field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask) - 1))
->> -#define field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (_mask))
->> +#define sunxi_field_get(_mask, _reg) (((_reg) & (_mask)) >> (ffs(_mask)=
- - 1))
->> +#define sunxi_field_prep(_mask, _val) (((_val) << (ffs(_mask) - 1)) & (=
-_mask))
->
-> See "[PATCH -next v6 11/26] mtd: rawnand: sunxi: #undef
-> field_{get,prep}() before local definition"[1] and follow-up
-> "[PATCH -next v6 24/26] mtd: rawnand: sunxi: Convert to common
-> field_{get,prep}() helpers"[2].
-> The former unfortunately didn't make it into the nand tree yet...
->
-> [1]
-> https://lore.kernel.org/all/703d7eec56074148daed4ea45b637f8a83f15305.1762=
-435376.git.geert+renesas@glider.be
-
-I've had some issues since a distribution update, but I've taken the patch
-locally and prepared my branch for the merge window, I cannot push to
-the MTD repository right now but it will be done tonight.
-
-Thanks,
-Miqu=C3=A8l
+Clearly I've been suffering too much mail again :/ Let me go frob stuff.
 

@@ -1,91 +1,90 @@
-Return-Path: <linux-next+bounces-9275-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9276-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44413C95573
-	for <lists+linux-next@lfdr.de>; Sun, 30 Nov 2025 23:34:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C39DC95602
+	for <lists+linux-next@lfdr.de>; Mon, 01 Dec 2025 00:10:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E2FC8341753
-	for <lists+linux-next@lfdr.de>; Sun, 30 Nov 2025 22:33:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B2253A1E00
+	for <lists+linux-next@lfdr.de>; Sun, 30 Nov 2025 23:10:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A2E2417F0;
-	Sun, 30 Nov 2025 22:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6517D2E2DF4;
+	Sun, 30 Nov 2025 23:10:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="L7wR2Ldr"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jcKH5ldB"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390EC1B142D;
-	Sun, 30 Nov 2025 22:33:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2C52405ED;
+	Sun, 30 Nov 2025 23:10:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764542034; cv=none; b=NXCreQae48NPGQQ25btrfQ8xrxkVfdmkMbvQLUI2SpkkBFCRpckjWd9jBYDGw8Rr7vTvm4xNHJseIEnUB02oxoCOxZKSVvYEWnF25Zkwin8k5fTvF3XzvOX4agatClRcWEIc6ctKEULmdMM/sl5ZK3nOfp4nO7W+tQ8KeviCG9s=
+	t=1764544254; cv=none; b=DweUcAYY4jVBoW1VnoqcNYzRsfTTm0I/cBgMfxtHajX5z3ubbDp0gO0ZtkdoeiH/nUiuXfYFlNMbS16AngQbah7us4BI4f0bhYzI16ba9jD9PYf7BzW8rW3gbAcjLxDsW4UXQmBldme3xBA/iFV5RdrKQl6uWvcVNYFnec9LVXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764542034; c=relaxed/simple;
-	bh=aI2Fjh0EuTgp06sWFPtjxV496etyQtSHdlELtSsfuUg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Z/QL8+11B3Ld4Y90kVEAFXMhN2EG8X4ZejvSBXYUpMmwoRn5luQ9DRMqrheZ/5/B3VMO+nDeAgVhTsKzmHF82x4fFD/Cy4lSuWpvsmi0rDbylEyiHhYR42q6Pkcwmau6tWg3bbaNfQr5jBppYCelcaC53gzyO8R1MRM588rQiyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=L7wR2Ldr; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1764544254; c=relaxed/simple;
+	bh=gbp0vzhonCf2HsuDm1wqGIgjHh5RgGy5U3hJrdRNY34=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ZYI+fCxykhwaGIp4MtUKCS9g6mJ2K776BkeF/5GV51v7zKyLDSFBQoO7moMbKqEarPU+33HGpQqqpSsAGm1jS52pGopGu8UVsSTEZnI7GE08NCFDjoqLb2Vi8Gg/07sEMhKVwfHRMCVfexjf2vVJzcjQdmL4vOI7tEouvT9TqvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=jcKH5ldB; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1764542026;
-	bh=cYbQRbqRxs7AFwZkYvZ2Rbg+w/wWCE2C0/Vz0z8ZdW8=;
+	s=202503; t=1764544247;
+	bh=kAvPHcAWlYeAiD/kugr1WYfE5MlanbGIQz2+pwawAfU=;
 	h=Date:From:To:Cc:Subject:From;
-	b=L7wR2LdrqrFm62drylRcdgxkzu/nWZWppsHI3WT7ZUqVKI/ih7rT+9MrGsZxmxkTU
-	 JX7DxdOy4bHFkHcNIKE/KA2/remMcHEbxTdV4d5ti4evAjYGyO8qSZbKZXj5G2eY2v
-	 PF37bQVQWnKQ/iHpmOxiya2vE6Yp27rU9DMnCH5NQZ0vrAlVWxrmGOkDmbqKXROEtA
-	 /ooTL4lmu2HMupq2qq2T8I3bGBHn7b8G//IlPS3NZW56cnFvDoC71yG3BY76f6PAEt
-	 WxfYwsxBb6VcfLzCSpxwKlMbHR1iciUqM5ysYySRRxPwHHQYyZgcgk4zk9IlGJu3iD
-	 +FAzvJnIrBmEg==
+	b=jcKH5ldBeUkBMIc2IpPYeHZe4ES37ack+NLpOl2o+pzq6X3KGUbMyxokRHElT53ch
+	 CJcFd+4e7NocaerFU9A4wiwVgtY/K1oMvzsbu5oYt36ek/80JHXZ7Pyzc4HGb0B3lZ
+	 xhgWJK03DMPMLehHXS2sfVrBcpGeDU1HVs4PEUyEEgiGTyuQQo8RvYqdWEJ0SMfygW
+	 9+rr8y3A36jP2TvXbUDpUXj9sHCNgbklFnlz0+va/ras7ab0jjheN1o/nVtUdK/q+B
+	 llmAu92LQ2TDUEk2HVKCMLuEpLxzLn1cd7WcAsNRZUodN65ft0gzc19tCWQbckVPwR
+	 vyF5M5uby5WYg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dKMJT0YCtz4wCm;
-	Mon, 01 Dec 2025 09:33:44 +1100 (AEDT)
-Date: Mon, 1 Dec 2025 09:33:43 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dKN7C3cXWz4w2R;
+	Mon, 01 Dec 2025 10:10:47 +1100 (AEDT)
+Date: Mon, 1 Dec 2025 10:10:46 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Alexei
- Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>
-Cc: Menglong Dong <dongml2@chinatelecom.cn>, Menglong Dong
- <menglong8.dong@gmail.com>, bpf <bpf@vger.kernel.org>, Networking
- <netdev@vger.kernel.org>, Linux Kernel Mailing List
+To: Alex Williamson <alex@shazbot.org>, Andrew Morton
+ <akpm@linux-foundation.org>
+Cc: Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>, David Matlack
+ <dmatlack@google.com>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the ftrace tree with the bpf-next tree
-Message-ID: <20251201093343.63ef2596@canb.auug.org.au>
+Subject: linux-next: manual merge of the vfio tree with the mm-nonmm-stable
+ tree
+Message-ID: <20251201101046.009b0919@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iS7vxE.ekFe8CJNQF9TLIBJ";
+Content-Type: multipart/signed; boundary="Sig_/M2HRHot_.+auMAJEmMNVIwW";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/iS7vxE.ekFe8CJNQF9TLIBJ
+--Sig_/M2HRHot_.+auMAJEmMNVIwW
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the ftrace tree got a conflict in:
+Today's linux-next merge of the vfio tree got a conflict in:
 
-  kernel/trace/Kconfig
+  tools/testing/selftests/vfio/lib/vfio_pci_device.c
 
 between commit:
 
-  25e4e3565d45 ("ftrace: Introduce FTRACE_OPS_FL_JMP")
+  e6fbd1759c9e ("selftests: complete kselftest include centralization")
 
-from the bpf-next tree and commit:
+from the mm-nonmm-stable tree and commit:
 
-  f93a7d0caccd ("ftrace: Allow tracing of some of the tracing code")
+  657d241e695f ("vfio: selftests: Rename vfio_util.h to libvfio.h")
 
-from the ftrace tree.
+from the vfio tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -98,53 +97,37 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc kernel/trace/Kconfig
-index 4661b9e606e0,e1214b9dc990..000000000000
---- a/kernel/trace/Kconfig
-+++ b/kernel/trace/Kconfig
-@@@ -336,12 -330,20 +336,26 @@@ config DYNAMIC_FTRACE_WITH_ARG
-  	depends on DYNAMIC_FTRACE
-  	depends on HAVE_DYNAMIC_FTRACE_WITH_ARGS
+diff --cc tools/testing/selftests/vfio/lib/vfio_pci_device.c
+index 4628beb62453,13fdb4b0b10f..000000000000
+--- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
++++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+@@@ -19,8 -19,8 +19,8 @@@
+  #include <linux/types.h>
+  #include <linux/vfio.h>
  =20
- +config DYNAMIC_FTRACE_WITH_JMP
- +	def_bool y
- +	depends on DYNAMIC_FTRACE
- +	depends on DYNAMIC_FTRACE_WITH_DIRECT_CALLS
- +	depends on HAVE_DYNAMIC_FTRACE_WITH_JMP
- +
-+ config FUNCTION_SELF_TRACING
-+ 	bool "Function trace tracing code"
-+ 	depends on FUNCTION_TRACER
-+ 	help
-+ 	  Normally all the tracing code is set to notrace, where the function
-+ 	  tracer will ignore all the tracing functions. Sometimes it is useful
-+ 	  for debugging to trace some of the tracing infratructure itself.
-+ 	  Enable this to allow some of the tracing infrastructure to be traced
-+ 	  by the function tracer. Note, this will likely add noise to function
-+ 	  tracing if events and other tracing features are enabled along with
-+ 	  function tracing.
-+=20
-+ 	  If unsure, say N.
-+=20
-  config FPROBE
-  	bool "Kernel Function Probe (fprobe)"
-  	depends on HAVE_FUNCTION_GRAPH_FREGS && HAVE_FTRACE_GRAPH_FUNC
+ -#include "../../../kselftest.h"
+ +#include "kselftest.h"
+- #include <vfio_util.h>
++ #include <libvfio.h>
+ =20
+  #define PCI_SYSFS_PATH	"/sys/bus/pci/devices"
+ =20
 
---Sig_/iS7vxE.ekFe8CJNQF9TLIBJ
+--Sig_/M2HRHot_.+auMAJEmMNVIwW
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmksxkcACgkQAVBC80lX
-0GzsYAf/bC8k6CqMic4MYcWrv09d9J/PUzka+bJsjsucLZcdt0WGgZ6Tb02IRJUE
-J17ihYlGocqjaIXM82xmGgRfceqLmnjcS81N43bMlxGmjHeho7SsgTtELTZPuWpC
-Bywr5095cb6O2QhJrGx1qZ/rRCb5DyzemH0CvcrLouTW+zUA2+mVE9jUj/u7J9CD
-G//38nr4L0Z0/RRSGGw0EKD/Qkrx7yfXW+TqwX/BL51331vElW/nou/hhdoRcFR8
-PQkMamgEVisiGmFr8Ogmiy7CQfmBLKNLzhl5pF7gPxmeVI3+bQrP3+Cyi8qpd9Z0
-7TDmaZ5gTuR41Z2HzZoMk1ZKSOArGA==
-=MNus
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkszvYACgkQAVBC80lX
+0Gylwgf+POUjfJXla7/zlagVskEIfDzW63lyPpuxU7vGiu+Rbfpx6qXKDhDqfj3S
+lTMWUh4lFLY3os6yp9OAPDfn65shGtu0jmkuDxqs3H5TMOil4CaGchU+SizJf0Ni
+CH9e/R1DIzzMQFK1WELhS/0cJ0H1WNIfxTdmqeNV+a3yl6JqOc8cgxWs2rb0n9+O
+fP07o9CvmfDznRzphYPzyST3wOz3cIMdYFw8owLYDJIJe7Hd1jRlWZ5wtS9E2AAh
+HhzBycCfXdG0RsAiG8Iksc6R9e6nKX/Fn9YWM5hDxRsB8SwWPtBA2Zolr4viuNqS
+aRSGYHAwBPpFlScheiAg5oLHUPjCiQ==
+=mQ+p
 -----END PGP SIGNATURE-----
 
---Sig_/iS7vxE.ekFe8CJNQF9TLIBJ--
+--Sig_/M2HRHot_.+auMAJEmMNVIwW--
 

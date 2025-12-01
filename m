@@ -1,140 +1,126 @@
-Return-Path: <linux-next+bounces-9280-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9281-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89BB5C9577C
-	for <lists+linux-next@lfdr.de>; Mon, 01 Dec 2025 01:44:54 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDDE9C95827
+	for <lists+linux-next@lfdr.de>; Mon, 01 Dec 2025 02:37:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 29883341B54
-	for <lists+linux-next@lfdr.de>; Mon,  1 Dec 2025 00:44:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C23D24E0708
+	for <lists+linux-next@lfdr.de>; Mon,  1 Dec 2025 01:37:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEFE136D4EA;
-	Mon,  1 Dec 2025 00:44:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF993BB48;
+	Mon,  1 Dec 2025 01:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ZqSX/yzo"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="RtuMiMpD"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854963594A;
-	Mon,  1 Dec 2025 00:44:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F418D35958;
+	Mon,  1 Dec 2025 01:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764549889; cv=none; b=VjRoHYRNA9qExiD1fSxCyuvFmobAx4M3FvZefqBqkgkqjFiQ5fCT6i+hjqzV7qsGloCPbbtLqkbW9jO6urhhzOxe2XT+4+eyAhT6GBPGmMl1pkZOYivBypvkgiKT8iSBaLYdvrSCTkSXWNXcWX1KekQVvyz+9znXPxea5UJyFaM=
+	t=1764553049; cv=none; b=NQLefe1oBbKmVUsclxjMZNW+0waki07hHMEiZsoo9KCWwE9AD0x+BO8wZgvZUd2VTvNuyRMQiXfdZ5yemP7UpV96sjHdciB157EfLfn6s7gd5LEwEqp6rayxPjcqgi6spJJHsFPKytmbeYcvvyZOgQNC7qU3/2ffenxloqR6KU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764549889; c=relaxed/simple;
-	bh=rBX2Pn8c+Qe0W+jWJUUg/ZuWjTHvJLL7mIG4+nkTb2E=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=VP3/s2hhPHXdXdOmODYf/C1WAegExMEH88z6TAgB17wPmPXSWdYzw+fISkb8nqG26oF7obWU4kSceAYfN/kQvrA1i5ElpUdyUHTBEVUKny3G6jGlFqADzLF1YqtpYxK2tBoiR61J5Hre/ez9MzxUH1LvXOgl9yCi0O8mBj1uDZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ZqSX/yzo; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1764553049; c=relaxed/simple;
+	bh=27uPnPjGwiNnxX3Bh4DOOZatVfqyZf6t2LpaIVVcDxE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=fCorCtVVyFcrooqRBwsEZ2rppNNm8RcDyqnUm1VoHjsaeYdI2CR+NgGUnFgByWUHtLC8f4TarkYoqFJ2146sZvMqm1NE0rEQTOOV/vI1RFz8GsewTpsWEBG20Z1x8AX00omoNsXKqW9bB9iod2lXBKu3t1MP880oVA0mZ6V+N4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=RtuMiMpD; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1764549881;
-	bh=3YE9a46GDEqWSUZyKp0QMORc6OVU46egyL+nn8yVONo=;
+	s=202503; t=1764553043;
+	bh=6sK0GIveJ4i0r+lJK8TEe41Tp/VGtkHpHpEly1/+iE0=;
 	h=Date:From:To:Cc:Subject:From;
-	b=ZqSX/yzodhLpbOF6tCjfk2NIvUufimWtlXBYbbb+IeD/xM7R3e803T9aMgNygzVEn
-	 yG7IzjzuBa85dxAqPcNpyQYacLQ8LRXmhj9BEdrFX6ht7+CtOTCzi9MOEQpnZ9s2s4
-	 v8bHhPuhkiFM+9/ZU0vzT7Iw9zVBdae0n1hlOn/qiNqA8EJWYPE0IUEvjrJxnpRc3M
-	 1Vh6Ps14OQDt/i8VnT94NrUzCdCM3Qm8Porx8o+09UkdxhwV4VzmkSP+u+t9Vp/05K
-	 JJYWCHkw1CB1aAndJLoEyiKXMv/t4TtgiejzEfap//w9dUdvIH4aqpQcJQQT6avpTn
-	 Mau+HeaCo7rkw==
+	b=RtuMiMpDGOejuew97p8amOvp53uMcntUs3IN7gsJS0HzMgugvcMecM8IODZ1va1cf
+	 RCjI3gHlU0xKNdLRsGacpoKar7h/Gx18nhYgYQCf0iIUs+qHZ0wRjzRGX1Rx/1pMa+
+	 J3A0TajmYTEpV+net0hcgBFA8fpvUd+Rd6TS1SO3QHxW27SGYOVS6T5HC8r5SOKgbZ
+	 m/xvwUqULoPc3zRXa1uCZFrQ+0heudw2FeffZzd4LQ+2dyvL+cvhrbTPosmU2y4fwa
+	 VKxMi0Yhcjen6IjmTwCpf/VK+VbP7feQsPPWLcHO3DVBQvzNQh7pQtFA+SStHRzFXi
+	 AwAMGKolbOaVA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dKQCY2nHfz4w0Q;
-	Mon, 01 Dec 2025 11:44:41 +1100 (AEDT)
-Date: Mon, 1 Dec 2025 11:44:39 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dKRNL6vsBz4w2J;
+	Mon, 01 Dec 2025 12:37:22 +1100 (AEDT)
+Date: Mon, 1 Dec 2025 12:37:22 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Alex Williamson <alex@shazbot.org>, Andrew Morton
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton
  <akpm@linux-foundation.org>
-Cc: Ankit Agrawal <ankita@nvidia.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the vfio tree with the mm-stable tree
-Message-ID: <20251201114439.4fab07f6@canb.auug.org.au>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>, Pasha Tatashin
+ <pasha.tatashin@soleen.com>, Usama Arif <usamaarif642@gmail.com>
+Subject: linux-next: manual merge of the memblock tree with the
+ mm-nonmm-stable tree
+Message-ID: <20251201123722.19e5f034@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lwv3rXbvu3q9LsJvUX53koo";
+Content-Type: multipart/signed; boundary="Sig_/Y/WDi/99UaYnvzCaGw_RrQG";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/lwv3rXbvu3q9LsJvUX53koo
+--Sig_/Y/WDi/99UaYnvzCaGw_RrQG
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the vfio tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the memblock tree got a conflict in:
 
-drivers/vfio/pci/nvgrace-gpu/main.c: In function 'nvgrace_gpu_mmap':
-drivers/vfio/pci/nvgrace-gpu/main.c:344:17: error: 'ret' undeclared (first =
-use in this function); did you mean 'net'?
-  344 |                 ret =3D nvgrace_gpu_vfio_pci_register_pfn_range(&nv=
-dev->resmem, vma);
-      |                 ^~~
-      |                 net
-drivers/vfio/pci/nvgrace-gpu/main.c:344:17: note: each undeclared identifie=
-r is reported only once for each function it appears in
-drivers/vfio/pci/nvgrace-gpu/main.c:350:1: error: control reaches end of no=
-n-void function [-Werror=3Dreturn-type]
-  350 | }
-      | ^
-cc1: all warnings being treated as errors
+  kernel/Kconfig.kexec
 
-Caused by commit
+between commit:
 
-  9db65489b872 ("vfio/nvgrace-gpu: Add support for huge pfnmap")
+  48a1b2321d76 ("liveupdate: kho: move to kernel/liveupdate")
 
-interacting with commit
+from the mm-nonmm-stable tree and commit:
 
-  ebb9aeb980e5 ("vfio/nvgrace-gpu: register device memory for poison handli=
-ng")
+  ab65699f9add ("memblock: remove CONFIG_MEMBLOCK_KHO_SCRATCH option")
 
-from the mm-stable tree.
+from the memblock tree.
 
-I have applied the following merge resolution patch.  This is now fixed
-as far as linux-next is concerned, but any non trivial conflicts should
-be mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
+I fixed it up (I used the former version of the above file and then
+added the following merge resolution patch) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 1 Dec 2025 11:10:51 +1100
-Subject: [PATCH] fix up for "vfio/nvgrace-gpu: Add support for huge pfnmap"
+Date: Mon, 1 Dec 2025 12:33:52 +1100
+Subject: [PATCH] fix for "memblock: remove CONFIG_MEMBLOCK_KHO_SCRATCH opti=
+on"
 
 interacting with commit
 
-  ebb9aeb980e5 ("vfio/nvgrace-gpu: register device memory for poison handli=
-ng")
+  48a1b2321d76 ("liveupdate: kho: move to kernel/liveupdate")
 
-from the mm-stable tree.
+from the mm-nonmm-stable tree.
 
 Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- drivers/vfio/pci/nvgrace-gpu/main.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/liveupdate/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/vfio/pci/nvgrace-gpu/main.c b/drivers/vfio/pci/nvgrace=
--gpu/main.c
-index 4104f46fb378..c6eddb7b823a 100644
---- a/drivers/vfio/pci/nvgrace-gpu/main.c
-+++ b/drivers/vfio/pci/nvgrace-gpu/main.c
-@@ -292,6 +292,7 @@ static int nvgrace_gpu_mmap(struct vfio_device *core_vd=
-ev,
- 	struct mem_region *memregion;
- 	u64 req_len, pgoff, end;
- 	unsigned int index;
-+	int ret =3D 0;
-=20
- 	index =3D vma->vm_pgoff >> (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT);
-=20
+diff --git a/kernel/liveupdate/Kconfig b/kernel/liveupdate/Kconfig
+index 9b2515f31afb..86a58eaf433a 100644
+--- a/kernel/liveupdate/Kconfig
++++ b/kernel/liveupdate/Kconfig
+@@ -7,7 +7,6 @@ config KEXEC_HANDOVER
+ 	bool "kexec handover"
+ 	depends on ARCH_SUPPORTS_KEXEC_HANDOVER && ARCH_SUPPORTS_KEXEC_FILE
+ 	depends on !DEFERRED_STRUCT_PAGE_INIT
+-	select MEMBLOCK_KHO_SCRATCH
+ 	select KEXEC_FILE
+ 	select LIBFDT
+ 	select CMA
 --=20
 2.52.0
 
@@ -142,21 +128,21 @@ ev,
 Cheers,
 Stephen Rothwell
 
---Sig_/lwv3rXbvu3q9LsJvUX53koo
+--Sig_/Y/WDi/99UaYnvzCaGw_RrQG
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmks5PcACgkQAVBC80lX
-0Gx7MggAijlZVX/+sd4NzWsm6ZYLfKvggXTubJSfCpunVSLQW/6ZsqoS2eKuggvD
-+iI14LJj64QzOGhXtLPQ1yzNL1exCSeqV4tF3Tksd0Kh92en9AIBixOgf/GBq4aP
-HXi+QM1mlWdbLt+FgEk1llAFwb9dvODtssOCTdvcnp1C8gJLKy/DkSbInpDY3BRp
-5Rvg1QdxaGvSzOfAujKvABAwbaA/+KfUSSN1M4E0Al1kYgBdRHPyi4YW6alz2F9x
-L1Ue05HdlPPu0vlvv4Uf/VA3P3iQbz67oLey2YyCUKZrZ3Uwm5GIT+xWfJ79/oAL
-A6pRk2jzV+sEBCtlObBy95a9gMxF5w==
-=2CIq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmks8VIACgkQAVBC80lX
+0Gyd9wf/UQsEFB7m0G0qjhYCBc29Tc/y3vQW5mGi5tH23jfr736NPLhGwyPcF7KG
+/nR+CdSjBfTx5eTEiXgstCGgNUdJChEiCXrwEMb4mS3a7O6BgvWgmVcPZ14gNzNO
+ExqGhXDk0/n/QpuCW0LOFWfZJycFKWHUpidp0UKKp4Cg04h/NmENQPFT5Voh/+ZG
+56aeEspaHBAhZg1n4UN1lyc0EzOuWj24fQUfQ++2axjqd5v6+ukimGmE4HxEynTz
+fjOJFg8Ao/qiT49tNgC5xxf5o6g2XUSriqxheXjZn1iV7kecvlAe3ekRnnfczbqr
+SRpSCCpiJLj5ODqLQUvILOs0Z6b+UA==
+=xTdZ
 -----END PGP SIGNATURE-----
 
---Sig_/lwv3rXbvu3q9LsJvUX53koo--
+--Sig_/Y/WDi/99UaYnvzCaGw_RrQG--
 

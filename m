@@ -1,224 +1,237 @@
-Return-Path: <linux-next+bounces-9303-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9304-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2EEAC9B203
-	for <lists+linux-next@lfdr.de>; Tue, 02 Dec 2025 11:25:24 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18C26C9C59A
+	for <lists+linux-next@lfdr.de>; Tue, 02 Dec 2025 18:11:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6332D3410D6
-	for <lists+linux-next@lfdr.de>; Tue,  2 Dec 2025 10:25:23 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3AA7E4E3246
+	for <lists+linux-next@lfdr.de>; Tue,  2 Dec 2025 17:11:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C9EF30F93B;
-	Tue,  2 Dec 2025 10:25:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDE392BEC5F;
+	Tue,  2 Dec 2025 17:11:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qGtwm/Og"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Tfl7qh4d"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH8PR06CU001.outbound.protection.outlook.com (mail-westus3azon11012036.outbound.protection.outlook.com [40.107.209.36])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BF630F924
-	for <linux-next@vger.kernel.org>; Tue,  2 Dec 2025 10:25:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764671109; cv=none; b=cEMntcEm1gV7Y1mad2y7nuIFewr/H+1WqPZrFyWn/QKh6E9jYy1n9/Zrp2AVkDUlylWsXA4/0CwuhyiMClbDB8egDT5Xfq+V5W3Y4/qr7ZbyCBOCyXCOuacUx+Ku/uZPH3NfM+WSmthjpwHsD0gCjsyk2D3VJmI11ylr5xnLNEA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764671109; c=relaxed/simple;
-	bh=pSvE4AT6OXFfClpNe9rSToN+KDDOheGQkgrzpcEFf7U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lx0kWW4FzLJ4zw2x5KVytgFTdMcqNpDFUPEtXj1mJcITLbF7z2B8SBFQeuf5XE1omJT9JYUOE2Z95g6FSBifQNNela12aimZRp3HkA0Sju3ABuDNO3kTLxByYhgFM5o3tAA0pVPhpNzq8kH0aAgZifR2KL6DWE6gE9Pmmq3bA/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qGtwm/Og; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b77030ffad9so635247966b.0
-        for <linux-next@vger.kernel.org>; Tue, 02 Dec 2025 02:25:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764671105; x=1765275905; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9F+kG2WqkAYgELZzGbRFHTmjlUcifa4ki8f7o3ssRY8=;
-        b=qGtwm/OgrkdvcIQOmHBHVt4VySZSJ5+sedIqP5+DUw/70d8Y2TY9/GEW9o1VRKJ3At
-         pI0oOlMlYdDt4m52Zo1sUCSHPoBihyamvNzYNGTckQn2Z23m48mdnYe2izFZE1NJh9AX
-         tMsJouGXKvckqu1w5byw+I8AJBnRGDL7M1Hn0wkQs+ZiECvDe+AZKXeiYPSKivAcLLRx
-         7/3oJLmYjpNJLFskFxRWYuXSwO4NsZB0D3OhxjacioZGhnXTQKAJdlolg+ye6D1yLt47
-         LQDiWkekeZtuEk0tJ4253Gb7PtvePYOIkmvOiaXtriWSqXT7faTdqnRIXfJh1FS5kQdv
-         mEkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764671105; x=1765275905;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9F+kG2WqkAYgELZzGbRFHTmjlUcifa4ki8f7o3ssRY8=;
-        b=Cf8SdnL3VZPiVxxKUmYfY0+xmx2cXOahX+QEFqP8Bh1kxO0wuQBH41HNxxKoJzTAuu
-         Gi0yCltBxTCfW/WAlxEXGlWCWh3bMkdy1FB1PEJ80POVVO1RloQhYPx6rBglInYYlPQW
-         6xFHBPdi+9hWlkISKclFqeT8gmYKG3lfI1hetVmie6DXxFqIHrS+NuaOzKuHKGMdOgMD
-         VlC6eRV0TzbRiRCMOaduJEOnxjXx7th/7CILIt5sCq1W7V0xSe0Z40mNhNQq/w/wAeLP
-         mBXFDwhcNFZclmkrzE9UUs4bzU+7bj3Oir0IyOsYPnrsgrKn0UbA3luj3KbC/rWIfI6q
-         ilsg==
-X-Forwarded-Encrypted: i=1; AJvYcCWVFpf73mCuMJomeMNuqiB/LGDDEH8qTwT25XRam9rPDXvoGJ2Bxe/O8H0i4cBcckC/DGdnB1R3YxYG@vger.kernel.org
-X-Gm-Message-State: AOJu0YykUoGtC+aaQZQz7WPWK4j82seTFv+g4G2h3qLLW9UWFs+dUjBu
-	oPYvEbe7gwAL3ohbaJ3XrgOUAmuxX32oLwxyxFIHXBIDjwG9ykY7gNiC20GHbLj7hVcrIIOZlVp
-	zhzEjmvYOxK7dbFTfFEpkhcwspXxCjSzQIbG3GuqMU0u/DueyEWBr
-X-Gm-Gg: ASbGncuvUoWSY0QJB12XNxl23vTEnCP2oUr5pa9q1exonmtqgMn8SoT/cNPjSd6YByH
-	XIbiIpc+30jO8C/zBRsvWt1LxobnUCRmwJxE2x4wajRboMRR/U0I55eKS2d1erokAI0ijbIAEuB
-	L9XQX7xVE/RYV4VouWTUn6EepILUtMQcqrI9xXhzw5wGUxOtUByp0K1JQhbtHTWjhPybEqegSns
-	RyQGFc9YlTBBOe8Kx3EwTBYYc1zBDsK5m882I6kaV8CCOPgxGyGywrZ9AHqXRhZ/LyxbE9YU2D9
-	WekP/tqJ6EajzWlh+ohhiC4BFIiGD6TXqQ==
-X-Google-Smtp-Source: AGHT+IFeIg09WwzL5CLtleL+CNmHwhQV6vEuLIx5Fl2LU6DZGnHpNrCnyZsUrJae/DQnhwmUFLH/yStogQ2YhR3HkVY=
-X-Received: by 2002:a17:906:b208:b0:b76:bb0e:5ac9 with SMTP id
- a640c23a62f3a-b76bb0e5b20mr2495117366b.40.1764671105183; Tue, 02 Dec 2025
- 02:25:05 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FAD454774;
+	Tue,  2 Dec 2025 17:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.209.36
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764695475; cv=fail; b=khvoPFB65kHjH235z5v8+TqiGBBAYXxYiWEt+U6veq5Sr7cV1zEfB+CdTRuEAgjsJDUYuhPyObWEwpjumhkqk/3+FPFB0KrAknX0ulUZUN3hy0vXIlC15hOivtog9PrA2F6dhDGNqLKI54qzrzLnW4pagTVzEC/g8vEzHiF/WcQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764695475; c=relaxed/simple;
+	bh=GhpUYNPZ8BxX5jL4FM0X1O5vRs+VcXa2BI0UUZZjevE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=utAG4cxwmFNILIAzooVduWJkLVNYYQaLruNa6HOCRlPa9Pk1WwEUV9pDNwalZZ70Obvx+jEdC3AtCmt6n4QQZmXz2cNeL9ZABzw4jqvBIVFPv/g4/QY2LDFl3583JkvZpqf40tJUpg13IRRIBGdliiv9aulNnDko1yvPlKuwly0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Tfl7qh4d; arc=fail smtp.client-ip=40.107.209.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dJ0bTbbBwNDb2779Jfa1Lk1ukz3grDjk2olkJmm0u862jbIGSl/DcY+CV71/k/cNILFrydTsvzJ5evYjG9cnGdaKrlYuwdEvZ08ZumBTIuSVTrcNXE2M9P69zQk0UJCcWk6rCEThlXgj59JLYHcMe442R5O5SWCAftgp+oDJEU90maf+HmdwQdcLk2wBmWPJNN3/qhkHPFpkW8qNNSM3fa3Q8DQ21fTQgmixfM+x0AVzetznQCY0+vrPddESzAFf/d0Cwj+59/korLX128es9XIzRv7H/+wQgkMhOX7DamlUmTUyOslHfXqufFvRdnjBbSoI/QQwcHj9+kfGhf0VoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=C4rvz5E4rezoYV9MEHwnw+uzXwIXeComHO1X7peLEVU=;
+ b=G+dQ9fKNDHJ8N0t+mrdXivKQIk3kezBfSrkpBMc2B9ioy7fvRFFBhLUg7Hf7NCTezbwjviSkATVD22jHG4ZMjysiHcYvssXhZUEUzUv6x2KDkYwk1dXxtW2vOcK/8cQ+757cHRqU3XAlTBvCgju7fCr0CFfBqm06cOw0tdhZ+9NImsYFK/+KZ+zGx51TBRu/k0m6d/Vkw3IWD1wVYPM4uOmBZ6dIhPGiaZJ3es7L8w1mc4OxNjaD8+dAATT+3V6yTesjbZjKagVDuIO453B7a7vRWRnV6lh6xgGN4LNw+u+tEAMuwetAzIt4FMHjJyyQwHuI0Gvz8Mi00mn1ScO09A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=C4rvz5E4rezoYV9MEHwnw+uzXwIXeComHO1X7peLEVU=;
+ b=Tfl7qh4dQ0b0xruuNLOOe/OG9A55Zm8qJIeDqjRwZQJpA4GddYWDqqyClQuyWB8JwaL38jA088EawVo7Pro+sx7N+94ps7gCb+1YaoqvcUZFDY5lwXP23dTirjDyfawq3uIqwi+Cm6pFaNsLesqQPiX4lAgxDpZWmWWkbLqk9g5ISwsxpFD9r8cfbUbVGNUQNfT9vrhxkhYt7Xja2lZPucOx4zHS34K1lVfrZEEeefYraERV3VGzVCqb6LKZSjhKFNSJjtikSYVMmabk4E3wMwvW9TbrD7AfLYNC6aELU48857O8CEYZFC8+KIqpzAsX9a4DrMGzAwWYFt/xaMj5Vg==
+Received: from SA1PR12MB7199.namprd12.prod.outlook.com (2603:10b6:806:2bc::21)
+ by DS0PR12MB8456.namprd12.prod.outlook.com (2603:10b6:8:161::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Tue, 2 Dec
+ 2025 17:11:09 +0000
+Received: from SA1PR12MB7199.namprd12.prod.outlook.com
+ ([fe80::928c:89d8:e8d6:72dd]) by SA1PR12MB7199.namprd12.prod.outlook.com
+ ([fe80::928c:89d8:e8d6:72dd%6]) with mapi id 15.20.9366.012; Tue, 2 Dec 2025
+ 17:11:09 +0000
+From: Ankit Agrawal <ankita@nvidia.com>
+To: Stephen Rothwell <sfr@canb.auug.org.au>, Alex Williamson
+	<alex@shazbot.org>, Andrew Morton <akpm@linux-foundation.org>
+CC: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the vfio tree with the mm-stable tree
+Thread-Topic: linux-next: manual merge of the vfio tree with the mm-stable
+ tree
+Thread-Index: AQHcYluxR0eUHUdVhkO+e0OQMJFubbUOliq0
+Date: Tue, 2 Dec 2025 17:11:09 +0000
+Message-ID:
+ <SA1PR12MB7199828D7A0B824E1781E161B0D8A@SA1PR12MB7199.namprd12.prod.outlook.com>
+References: <20251201114439.4fab07f6@canb.auug.org.au>
+In-Reply-To: <20251201114439.4fab07f6@canb.auug.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR12MB7199:EE_|DS0PR12MB8456:EE_
+x-ms-office365-filtering-correlation-id: bce5efec-3ad0-4dfe-9468-08de31c5c996
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700021;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?g+rBPRo4kxuJMFEchTs+LtTS8VRddPgWkdVynqVpXWTMsZXhLjLJQNlF31?=
+ =?iso-8859-1?Q?iA8ESvcp/bIy4JrpI3iM9ss+YEOQJU8M9D8Cygf4yDer30k0kOOXe/F8Xc?=
+ =?iso-8859-1?Q?rPLxv0ukUsQgHuM3WGlh2HkNeGu+GSzRPAS6f6qul61XODaE0ZTEB0cKk0?=
+ =?iso-8859-1?Q?GJ76ygGo8rEDWrSeuw05/+9FMAi6KBgReX4HN4OT1FXRqAhb0UALY98Mwy?=
+ =?iso-8859-1?Q?O/2In8q5qHzgPDj+d7vA8Zmo0pTDjCptu9bqjhY6r86yiKKWl7wKsz8fGS?=
+ =?iso-8859-1?Q?f+1veFSPkOZQRJ3xB4OQTaCBHvqRS403jgEWGcBypG7YobzEdFfwjP9nA+?=
+ =?iso-8859-1?Q?su7ZpMcgt7tTMyIjr0u+QkxOmBKMYTToPSsU0CdRp5Sx3Jr2zTun5xEOxJ?=
+ =?iso-8859-1?Q?gnAZ0SKf/a/L8LXbPRrhnCOybbdUQqiOJ89DswPBG0KOOp+FA7rB72bEQg?=
+ =?iso-8859-1?Q?JzKMEpoq/Sle2QzVIi8cM+Kfk9yU5q4j2MF9qi+hmNAXm+aVQq4psN3+f6?=
+ =?iso-8859-1?Q?bv380rI3s6g70XfQrlDcQ/XEsUsM6hCdeW4C1HuXWGpMhWoZSErUplzsV4?=
+ =?iso-8859-1?Q?1zUTwIkLACn/j4seXmq6utkvs7IlGyH9/2angvrElnp+CPqg0aNT3QHUWs?=
+ =?iso-8859-1?Q?nzwS2r/mqhxtOp2ZUlIXPX6NQ9VXiKbKrArMJtLvqxB6wBGCVucbdQBr6q?=
+ =?iso-8859-1?Q?FwdR2rmVrWLcybzKeMSvUsojQS8CDy/mIzG8uFsBI/SxB3dlMxFM5h4Vgx?=
+ =?iso-8859-1?Q?8MTFwkfMKgYpcxNjJjqknbiKogVvxLoxBCqfn+jtKKOu/XSI+xaG1sfkkj?=
+ =?iso-8859-1?Q?aeVHCfGkUEMBDVIRoBSH1RDtmLG8Vd0O0UMZsnUYd7qOHQGI4C3aAc05yS?=
+ =?iso-8859-1?Q?3TdOr12EFucfC0cM4xixJASSqUr2If+Oy5C9wZmvoYBBjFeU92nl9kGdEl?=
+ =?iso-8859-1?Q?WOVNwLrN/7R95LTHOFlvpNcGxntyvk+XpYbjrvjT3uefz8VOAxhIYB+Yx8?=
+ =?iso-8859-1?Q?nYbuqHtr9urfjnbypk45Wt/vWeTMW0EhsLyAq/Culs3bDWlymmYB5qfg92?=
+ =?iso-8859-1?Q?M1QKZhx803b5eJFpz5jYpc2enTqgOsvfu3QCteQq3JMhldTS6hglTYwpB4?=
+ =?iso-8859-1?Q?lTUb1IlAjAQLM9pEcto/o+azDzy9dvukSmLtN7VmRIK3IFDeXue/PRK8Y+?=
+ =?iso-8859-1?Q?+A+6pDt3bVVnr0JUcQMb2ls0H1cygQc5Gyg/UD0k/A09XHSiY+p4eyS090?=
+ =?iso-8859-1?Q?VwOBIXl3xxrqI2QPsvBQhMgQU8i1r74lOkhMOpmMaOrDXoXQGEXa5YMvMy?=
+ =?iso-8859-1?Q?G9+Hi1RJyhlYAusDg3WUcR2gQ2xljwMn/pYRrGleH4CXplp0Tx2p4gLXJN?=
+ =?iso-8859-1?Q?dJm/L7tet91a+l4bAHTcCi/S3VMHxIe7219A+98TeoXzumTP7Qp+a0k/2r?=
+ =?iso-8859-1?Q?wY3oaczB+m7dVKSYVcutV9h1ZSTnmVpGd9YvxCMyM1eqq3sHmT2noFRaJY?=
+ =?iso-8859-1?Q?idGofl/omoZoUJ/yuLlcj8KKoq7S8yU9M9w4G3BsGLBOWG5sgbVkzXTBL+?=
+ =?iso-8859-1?Q?8ue1ajNffV5c/BmxSgjfNWGEzLzi?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR12MB7199.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?qWeXBP3DcsA/58LjvRuygVPgytipo6aP3sC5xVqadGaknpdAtub/slRbEH?=
+ =?iso-8859-1?Q?Pk4F0XYhxJ6rhuL7+RfQoWcEoGUyd/WelkPtmhy+ACL22r8SmqCROkUEY4?=
+ =?iso-8859-1?Q?feh8VaonJ4oKPLjNuUXzbo7D2sMkEWu9CJmZu65Pcoo2e5ALO8CDwrWf8/?=
+ =?iso-8859-1?Q?tRfXadoxHuTLpkC/Lv4tVIwGIg9KdjH9995WR2mIt/VqYyB3LbvzQEoiOR?=
+ =?iso-8859-1?Q?J5zDYkvVSon3ACJ1/daX+URZ0IlsP3+3OyKnwMhUJXH3ZAnFWswt6K8UZo?=
+ =?iso-8859-1?Q?1omv4WHxEeUrTcoHHEUkcaKr/74WfgY8JD8iRVPIYImAJrGc3KBOf5EGM9?=
+ =?iso-8859-1?Q?PrBU8ABZrrugni5/o/FO9zRPbpN+Ljtl+3YaA+1dQ0/j3gQoXYHtpHxT3J?=
+ =?iso-8859-1?Q?8Ws+XzXevUd8sT+f5kJh15sK2sek569jDFxkf36VwhzgYAo0uEhacHNif+?=
+ =?iso-8859-1?Q?7Mrub0kOn1AvGWMZlQdldena8Z9fKh1zQCIj5MmZHjsGVg7aYbCvX/y9G/?=
+ =?iso-8859-1?Q?ekJeuPhHTuH/J6T8D9nChdJ8DEYrjHfWnojVFIFSfnYtZcwEn1WmK+zgDD?=
+ =?iso-8859-1?Q?r+QOp6ztbp9Ch5dV1c7Hnnh88XMnf9+zw66/rJQVzI5Z+QYxzrdGsx5C3i?=
+ =?iso-8859-1?Q?VfwQCS043YJnp0+O+jnY7DdThtMAP5wniQUB8MGEaW8qS/jI8ZSNLQrpNg?=
+ =?iso-8859-1?Q?zifGPSdnK+zyJj+uKV+ezlVEo2xYNaT8aWAyAhSqsZkL6GP9Mx9JsRl04r?=
+ =?iso-8859-1?Q?eZnYF55MlDkul+MpnSbJ4FDvgFEj+73Z1BdVa3QP8w8LfzZMN5XagV0dMl?=
+ =?iso-8859-1?Q?N98p4f7cgKaY+HCsHyyhdNSgI91+37itduL7vCmZZGRnZc0Rwn6kV43nRo?=
+ =?iso-8859-1?Q?wkvP7o0mJT5I9lUL7iq7uC7Y4yDwHWZVKwJHydS5XpXEf0/99V8vpTUelk?=
+ =?iso-8859-1?Q?rSZp80lZ50MN5AEb0/pke5cRT/eXGkzyxGS0czZ7pjIE9lG7TyWEReI3gI?=
+ =?iso-8859-1?Q?DKW4obWVnoG5sE6DL11Wobayr1XeW4ATvp3tBthUcWxXqucvbvsrJeH8DR?=
+ =?iso-8859-1?Q?xGs9h4N8UKXZSFN+GqrM4paKylyj1uWD7ELXSHv7r8Urpvh8Wm2UgLv4Eb?=
+ =?iso-8859-1?Q?KRzlpdLwPc6g+S+xqyxcNTtR55XM8FxjAmL4hDrwGvFazxwx1TlsWNmnMa?=
+ =?iso-8859-1?Q?imVjdaeFXHqtGGNfKvK5SWSNYEvp7yB+yTGZEOdioMwF4FY6mlia4Rzd5L?=
+ =?iso-8859-1?Q?1Xl7scXdpIvk+qIp4pMd0OqW+Sv/4UCCvIy6pudf6IohuY6PuSOpomiCkI?=
+ =?iso-8859-1?Q?iwuHhwJmP2C0P2DufEAw/zOch6NZRHuGDo20YCtCnsBTkuA+Nd95OdG30Z?=
+ =?iso-8859-1?Q?ugfEXQEbNgg10bDfVle+z8iMm8ITtX5msH1VVX1D9xOlHVq4vYaBcsuQNb?=
+ =?iso-8859-1?Q?XpyadYmbrSAKNMGm7lvUZoaBUJeNhlZb6X1ZGjpq+32VF5GcfDqaZuFZEA?=
+ =?iso-8859-1?Q?Am8iEhhfHxPQyH3GhcK+LKn/UQD5sWO3+Y5Dp2bR4JAyQ5On1YlI5Q2IMp?=
+ =?iso-8859-1?Q?2kHgha6gdzYDTf3ewE5tjqqpyHOVgvtzxxmmvTiHbzfhGOYcfwCI7snt9w?=
+ =?iso-8859-1?Q?DpHee5Aj4GRko=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251128162928.36eec2d6@canb.auug.org.au> <63e1daf7-f9a3-463e-8a1b-e9b72581c7af@infradead.org>
- <ykmo5qv46mo7f3srblxoi2fvghz722fj7kpm77ozpflaqup6rk@ttvhbw445pgu>
- <CAKfTPtA-wir5GzU7aTywe7SZG18Aj8Z9g1wjV-Y8vKoyKF1Mkg@mail.gmail.com>
- <vb6pcyaue6pqpx626ytfr2aif4luypopywqoazjsvy4crh6zic@gfv75ar7musy>
- <CAKfTPtCKmj_dHGU-2WPsEevf7CR-isRiyM0+oftCrMy5MswE4A@mail.gmail.com> <6ulzkdgd6j35ptu5mesgtgh2xa6fwalcmkgcxr2fdjwwfvzhrf@4dtcadsl2mvm>
-In-Reply-To: <6ulzkdgd6j35ptu5mesgtgh2xa6fwalcmkgcxr2fdjwwfvzhrf@4dtcadsl2mvm>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Tue, 2 Dec 2025 11:24:53 +0100
-X-Gm-Features: AWmQ_blE1MXJMGsP4HVSDepyDYEV9gPAzgGeXgYsjEilqSbt5qtjWWttwjyQjSI
-Message-ID: <CAKfTPtABGj6Nys8J8x8Y-PvybORQUoVN0mGLS=qZ__zXqvCWPQ@mail.gmail.com>
-Subject: Re: linux-next: Tree for Nov 28 (drivers/pci/controller/dwc/pcie-nxp-s32g.o)
-To: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Randy Dunlap <rdunlap@infradead.org>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, linux-pci@vger.kernel.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>, NXP S32 Linux Team <s32@nxp.com>, 
-	"imx@lists.linux.dev" <imx@lists.linux.dev>, linux-arm-kernel@lists.infradead.org, 
-	Bjorn Helgaas <helgaas@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR12MB7199.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bce5efec-3ad0-4dfe-9468-08de31c5c996
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2025 17:11:09.3390
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aWltoGDQmaR+cP7olUqW7/P6CSA1uU6lh3XSJLcituctlHuNcwZCcMh2dI8lxm+NcjRRHm+a31uhBxk0vAs2Cg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8456
 
-On Tue, 2 Dec 2025 at 11:12, Manivannan Sadhasivam <mani@kernel.org> wrote:
->
-> On Tue, Dec 02, 2025 at 11:03:07AM +0100, Vincent Guittot wrote:
-> > On Tue, 2 Dec 2025 at 10:53, Manivannan Sadhasivam <mani@kernel.org> wr=
-ote:
-> > >
-> > > On Tue, Dec 02, 2025 at 09:54:24AM +0100, Vincent Guittot wrote:
-> > > > On Tue, 2 Dec 2025 at 05:24, Manivannan Sadhasivam <mani@kernel.org=
-> wrote:
-> > > > >
-> > > > > + Vincent
-> > > >
-> > > > Thanks for looping me in.
-> > > > >
-> > > > > On Sat, Nov 29, 2025 at 07:00:04PM -0800, Randy Dunlap wrote:
-> > > > > >
-> > > > > >
-> > > > > > On 11/27/25 9:29 PM, Stephen Rothwell wrote:
-> > > > > > > Hi all,
-> > > > > > >
-> > > > > > > Changes since 20251127:
-> > > > > > >
-> > > > > >
-> > > > > > on i386 (allmodconfig):
-> > > > > >
-> > > > > > WARNING: modpost: vmlinux: section mismatch in reference: s32g_=
-init_pcie_controller+0x2b (section: .text) -> memblock_start_of_DRAM (secti=
-on: .init.text)
-> > > >
-> > > > Are there details to reproduce the warning ? I don't have such warn=
-ing
-> > > > when compiling allmodconfig locally
-> > > >
-> > > > s32 pcie can only be built in but I may have to use
-> > > > builtin_platform_driver_probe() instead of builtin_platform_driver(=
-)
-> > > >
-> > >
-> > > The is due to calling a function belonging to the __init section from=
- non-init
-> > > function. Ideally, functions prefixed with __init like memblock_start=
-_of_DRAM()
-> > > should be called from the module init functions.
-> > >
-> > > One way to fix would be to call memblock_start_of_DRAM() in probe(), =
-and
-> > > annotate probe() with __init. Since there is no remove, you could use
-> > > builtin_platform_driver_probe().
-> > >
-> > > This also makes me wonder if we really should be using memblock_start=
-_of_DRAM()
-> > > in the driver. I know that this was suggested to you during reviews, =
-but I would
-> > > prefer to avoid it, especially due to this being the __init function.
-> >
-> > yeah, I suppose I can directly define the value in the driver has
-> > there is only one memory config for now anyway
-> >
-> > /* Boundary between peripheral space and physical memory space */
-> > #define S32G_MEMORY_BOUNDARY_ADDR 0x80000000
-> >
->
-> Ok. I fixed it up myself with below diff:
-
-Thanks !
-
-The change looks good to me
-
->
-> diff --git a/drivers/pci/controller/dwc/pcie-nxp-s32g.c b/drivers/pci/con=
-troller/dwc/pcie-nxp-s32g.c
-> index eacf0229762c..70b1dc404bbe 100644
-> --- a/drivers/pci/controller/dwc/pcie-nxp-s32g.c
-> +++ b/drivers/pci/controller/dwc/pcie-nxp-s32g.c
-> @@ -7,7 +7,6 @@
->
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
-> -#include <linux/memblock.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
->  #include <linux/of_address.h>
-> @@ -35,6 +34,9 @@
->  #define PCIE_S32G_PE0_INT_STS                  0xE8
->  #define HP_INT_STS                             BIT(6)
->
-> +/* Boundary between peripheral space and physical memory space */
-> +#define S32G_MEMORY_BOUNDARY_ADDR              0x80000000
-> +
->  struct s32g_pcie_port {
->         struct list_head list;
->         struct phy *phy;
-> @@ -99,10 +101,10 @@ static struct dw_pcie_ops s32g_pcie_ops =3D {
->  };
->
->  /* Configure the AMBA AXI Coherency Extensions (ACE) interface */
-> -static void s32g_pcie_reset_mstr_ace(struct dw_pcie *pci, u64 ddr_base_a=
-ddr)
-> +static void s32g_pcie_reset_mstr_ace(struct dw_pcie *pci)
->  {
-> -       u32 ddr_base_low =3D lower_32_bits(ddr_base_addr);
-> -       u32 ddr_base_high =3D upper_32_bits(ddr_base_addr);
-> +       u32 ddr_base_low =3D lower_32_bits(S32G_MEMORY_BOUNDARY_ADDR);
-> +       u32 ddr_base_high =3D upper_32_bits(S32G_MEMORY_BOUNDARY_ADDR);
->
->         dw_pcie_dbi_ro_wr_en(pci);
->         dw_pcie_writel_dbi(pci, COHERENCY_CONTROL_3_OFF, 0x0);
-> @@ -149,7 +151,7 @@ static int s32g_init_pcie_controller(struct dw_pcie_r=
-p *pp)
->          * Make sure we use the coherency defaults (just in case the sett=
-ings
->          * have been changed from their reset values)
->          */
-> -       s32g_pcie_reset_mstr_ace(pci, memblock_start_of_DRAM());
-> +       s32g_pcie_reset_mstr_ace(pci);
->
->         dw_pcie_dbi_ro_wr_en(pci);
->
-> - Mani
->
-> --
-> =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=A9=
-=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=AE=
-=E0=AF=8D
+> From: Stephen Rothwell <sfr@canb.auug.org.au>=0A=
+> Date: Mon, 1 Dec 2025 11:10:51 +1100=0A=
+> Subject: [PATCH] fix up for "vfio/nvgrace-gpu: Add support for huge pfnma=
+p"=0A=
+>=0A=
+> interacting with commit=0A=
+>=0A=
+>   ebb9aeb980e5 ("vfio/nvgrace-gpu: register device memory for poison hand=
+ling")=0A=
+>=0A=
+> from the mm-stable tree.=0A=
+>=0A=
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>=0A=
+> ---=0A=
+> drivers/vfio/pci/nvgrace-gpu/main.c | 1 +=0A=
+> 1 file changed, 1 insertion(+)=0A=
+>=0A=
+> diff --git a/drivers/vfio/pci/nvgrace-gpu/main.c b/drivers/vfio/pci/nvgra=
+ce-gpu/main.c=0A=
+> index 4104f46fb378..c6eddb7b823a 100644=0A=
+> --- a/drivers/vfio/pci/nvgrace-gpu/main.c=0A=
+> +++ b/drivers/vfio/pci/nvgrace-gpu/main.c=0A=
+> @@ -292,6 +292,7 @@ static int nvgrace_gpu_mmap(struct vfio_device *core_=
+vdev,=0A=
+>        struct mem_region *memregion;=0A=
+>        u64 req_len, pgoff, end;=0A=
+>        unsigned int index;=0A=
+>+       int ret =3D 0;=0A=
+>=0A=
+>        index =3D vma->vm_pgoff >> (VFIO_PCI_OFFSET_SHIFT - PAGE_SHIFT);>=
+=0A=
+>=0A=
+=0A=
+Thanks Stephen for taking a look at this and resolving the conflict.=0A=
+However, there is a different change needed that I posted below=0A=
+created over next-20251202. Let me know if you are okay with=0A=
+merging it.=0A=
+=0A=
+Thanks=0A=
+Ankit Agrawal=0A=
+=0A=
+---=0A=
+ drivers/vfio/pci/nvgrace-gpu/main.c | 9 +++++----=0A=
+ 1 file changed, 5 insertions(+), 4 deletions(-)=0A=
+=0A=
+diff --git a/drivers/vfio/pci/nvgrace-gpu/main.c b/drivers/vfio/pci/nvgrace=
+-gpu/main.c=0A=
+index c6eddb7b823a..ed0c6a63e05a 100644=0A=
+--- a/drivers/vfio/pci/nvgrace-gpu/main.c=0A=
++++ b/drivers/vfio/pci/nvgrace-gpu/main.c=0A=
+@@ -77,13 +77,14 @@ static int=0A=
+ nvgrace_gpu_vfio_pci_register_pfn_range(struct mem_region *region,=0A=
+                                         struct vm_area_struct *vma)=0A=
+ {=0A=
+-       unsigned long nr_pages;=0A=
+-       int ret =3D 0;=0A=
++       unsigned long nr_pages, base_pfn;=0A=
++       int ret;=0A=
+ =0A=
+         nr_pages =3D region->memlength >> PAGE_SHIFT;=0A=
++       base_pfn =3D PHYS_PFN(region->memphys);=0A=
+ =0A=
+-       region->pfn_address_space.node.start =3D vma->vm_pgoff;=0A=
+-       region->pfn_address_space.node.last =3D vma->vm_pgoff + nr_pages - =
+1;=0A=
++       region->pfn_address_space.node.start =3D base_pfn;=0A=
++       region->pfn_address_space.node.last =3D base_pfn + nr_pages - 1;=0A=
+         region->pfn_address_space.mapping =3D vma->vm_file->f_mapping;=0A=
+ =0A=
+         ret =3D register_pfn_address_space(&region->pfn_address_space);=0A=
+--=0A=
+2.34.1=
 

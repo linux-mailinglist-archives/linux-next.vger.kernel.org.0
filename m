@@ -1,92 +1,111 @@
-Return-Path: <linux-next+bounces-9295-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9296-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB56AC9A00E
-	for <lists+linux-next@lfdr.de>; Tue, 02 Dec 2025 05:24:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 040FDC9A016
+	for <lists+linux-next@lfdr.de>; Tue, 02 Dec 2025 05:25:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 879C134541E
-	for <lists+linux-next@lfdr.de>; Tue,  2 Dec 2025 04:24:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC05F3A383B
+	for <lists+linux-next@lfdr.de>; Tue,  2 Dec 2025 04:25:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E46E2F5332;
-	Tue,  2 Dec 2025 04:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 476C42F532F;
+	Tue,  2 Dec 2025 04:25:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RBqd57c8"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="sg4rVbZb"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0894E281369;
-	Tue,  2 Dec 2025 04:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370F0281369;
+	Tue,  2 Dec 2025 04:25:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764649470; cv=none; b=oZBvdIgJnUUO1U5oIrP2uqhx9RYo+pr9OmfTJjsbBMCMq04/dvCZI9hZko/rYUeYG8YctuqfImzwjJ6qS801wfNbfTeS2bm5YW0+Rat/IU0ARxTo17wa+xaGXvwhclyC94LFshwU8/YYLELtmfejQelgITVg5s+29jzbTiIMJbg=
+	t=1764649515; cv=none; b=MyvgmAydtWRGfduoTT7RSyfjNyjxyLpXQu233WkKp4Mni/ZxA616R/ZTQM69yp6jxY1vpIrMkz3my8jDMUFxeX3nzlKE4MqE1GyoFfx3+nxOk2+V1J7iOzRYamAtcEL0T8di99Z9s56cRxuPdeRfZTyH4w97w2u5TpxrwqeGZ8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764649470; c=relaxed/simple;
-	bh=cRg/1CaqqZPrJW4h+GCNv/Da8WjfkimOPAM7FixK0Rk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FoveRNPII+fxG/3sTMKV/h581O4ZSm9fNZqr0It+hqZ+nsFN1jMmiBEZIiybOcsxCDdaEia2WRfUkuxCRSUV6GGs6pkPGYkDrghV+XfY4lObRoXMvo/WdjqKzybBt1UVRxEadQU+kMKak3RwEF5Ua/uAMAD/wPCMN+3IRI/6YHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RBqd57c8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A7A4C4CEF1;
-	Tue,  2 Dec 2025 04:24:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764649469;
-	bh=cRg/1CaqqZPrJW4h+GCNv/Da8WjfkimOPAM7FixK0Rk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RBqd57c8AVkKeH5vatUw0RzirAcI6+nz/gAZJGANUWKWmymfiWuJH1UbJBO0hnHy4
-	 sdfid1ppnWyOuev1UqMxR736qxw+jPN/BpvsbsXHs4fnso32QuWW1zrCINxVHAqqoF
-	 yNfFsx2Ry4lLfn8aP8oaZFn3fwnbU4Et2OP90YJJkDe6D00NXGfmc54dnx2fsHQnkK
-	 zaHjhy0MSBfNafYH+EQ1XJcanzQJe5MPU2qQR5+vUJAHVKoe2UAv4idpGgywWZD8Ou
-	 qFOySg4ZwIVAn+NaHxFWvMOevkrxk2eLBTKSsowmi56KDSQci6jbODK7DfwH32rrZq
-	 f+dLhGrxKtUcw==
-Date: Tue, 2 Dec 2025 09:54:13 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Randy Dunlap <rdunlap@infradead.org>, 
-	Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, linux-pci@vger.kernel.org, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Ghennadi Procopciuc <ghennadi.procopciuc@oss.nxp.com>, 
-	NXP S32 Linux Team <s32@nxp.com>, "imx@lists.linux.dev" <imx@lists.linux.dev>, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: linux-next: Tree for Nov 28
- (drivers/pci/controller/dwc/pcie-nxp-s32g.o)
-Message-ID: <ykmo5qv46mo7f3srblxoi2fvghz722fj7kpm77ozpflaqup6rk@ttvhbw445pgu>
-References: <20251128162928.36eec2d6@canb.auug.org.au>
- <63e1daf7-f9a3-463e-8a1b-e9b72581c7af@infradead.org>
+	s=arc-20240116; t=1764649515; c=relaxed/simple;
+	bh=Qb5gvLr3PgHiD25byuE8vQn0sd28ePmIXect/gvAsRk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jthmuiCAJjLwgEf3wD5tUmWCAqqoVkRsR1OMpJZP+dnq9nOMFXZsbUNTMrcUU1CcwBsinkGYWorRQezySSeTNytHLegzZ7G311G9AuWpCkUVopTYLMTWdnW+LjmgZXsmSWwek5Kqb1+vNij+EdTLQoOsv80g/3+x9C/A5gsa5A4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=sg4rVbZb; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1764649507;
+	bh=TIbdhMr13Dv4dnTtWWCMFRAXgSyyovsP7kWycbRXtjo=;
+	h=Date:From:To:Cc:Subject:From;
+	b=sg4rVbZbBp7gyIVitzByurXHGR14WjCt9aU0hFfhNchRn+QE3rcm7cE7Ts4tgzGHF
+	 lZcGVV+YkTkG/iSb9WaOyOluk2XFxngtefx1cH4V33CND4HBRTDuc+waLkU944g/Ye
+	 fVMq29yJVsfFMc0kXne3GHqj3NFibYvXKwPy601Z9jxqX1MJrKMPlBhtyM2LANTZ/j
+	 Ca3WqbblhwwZBr7iVzxL+AVsGXa0/6m59LIfKU9TG6GqLYjm2oOlO63hra/RzyFPkX
+	 O87/EVlnc7JQbSMNKQtLn4SxxELOn94YU/Tt8N9eV7ZNtWs8MBUo57Q6qGMGM3OjsA
+	 exqlH+h8RCwAA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dL73R4yCmz4w2R;
+	Tue, 02 Dec 2025 15:25:07 +1100 (AEDT)
+Date: Tue, 2 Dec 2025 15:25:06 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Chuck Lever <chuck.lever@oracle.com>
+Cc: Mike Snitzer <snitzer@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the nfsd tree
+Message-ID: <20251202152506.7a2d2d41@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <63e1daf7-f9a3-463e-8a1b-e9b72581c7af@infradead.org>
+Content-Type: multipart/signed; boundary="Sig_/Sj=+ENWGCp.LHaFF_YRJcP=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-+ Vincent
+--Sig_/Sj=+ENWGCp.LHaFF_YRJcP=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Nov 29, 2025 at 07:00:04PM -0800, Randy Dunlap wrote:
-> 
-> 
-> On 11/27/25 9:29 PM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20251127:
-> > 
-> 
-> on i386 (allmodconfig):
-> 
-> WARNING: modpost: vmlinux: section mismatch in reference: s32g_init_pcie_controller+0x2b (section: .text) -> memblock_start_of_DRAM (section: .init.text)
-> 
-> 
-> -- 
-> ~Randy
-> 
-> 
+Hi all,
 
--- 
-மணிவண்ணன் சதாசிவம்
+After merging the nfsd tree, today's linux-next build (htmldocs) produced
+these warnings:
+
+Documentation/filesystems/nfs/nfsd-io-modes.rst:29: ERROR: Unexpected inden=
+tation. [docutils]
+Documentation/filesystems/nfs/nfsd-io-modes.rst:34: ERROR: Unexpected inden=
+tation. [docutils]
+Documentation/filesystems/nfs/nfsd-io-modes.rst:58: ERROR: Unexpected inden=
+tation. [docutils]
+Documentation/filesystems/nfs/nfsd-io-modes.rst:59: WARNING: Block quote en=
+ds without a blank line; unexpected unindent. [docutils]
+Documentation/filesystems/nfs/nfsd-io-modes.rst: WARNING: document isn't in=
+cluded in any toctree [toc.not_included]
+
+Introduced by commit
+
+  fa8d4e6784d1 ("NFSD: add Documentation/filesystems/nfs/nfsd-io-modes.rst")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Sj=+ENWGCp.LHaFF_YRJcP=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkuaiIACgkQAVBC80lX
+0GyHZAf/SMYH16ifPN5xI0chIF/sDScnTzX2tUJ4ebjqY7t1vAy1UK7Wmb8Rq3/p
+uJrJjobpYqGbsv6io5ZIBLH3cnROY1dAv5L2ErDAYAtcQTorbVMNxmSW337GQGd3
+Tn6343YysGee37WQ6+DbxCurESsQNOcMblkU2cjWkceFyub93QgayEGvLpOKqevP
+X+BjXVB3E9gL+oisgoCgrxgiCyh629yzJW7ak7RruKyj5V0ZNCYW1TkF/NgcRXzG
+/IFJOD2kJrBITb9Dt0aAv4RQcjlZamkdsFHWNpfaOD8+6+pAC2SfV7ehhv/wML62
+D05AGytRSdsq+wNZa7EDeAhNmEeuIw==
+=Dfs5
+-----END PGP SIGNATURE-----
+
+--Sig_/Sj=+ENWGCp.LHaFF_YRJcP=--
 

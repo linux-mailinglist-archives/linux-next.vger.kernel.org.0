@@ -1,94 +1,98 @@
-Return-Path: <linux-next+bounces-9313-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9314-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33BFEC9D944
-	for <lists+linux-next@lfdr.de>; Wed, 03 Dec 2025 03:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BBD2CC9D94F
+	for <lists+linux-next@lfdr.de>; Wed, 03 Dec 2025 03:35:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 21E854E06FE
-	for <lists+linux-next@lfdr.de>; Wed,  3 Dec 2025 02:34:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6E7DD4E1234
+	for <lists+linux-next@lfdr.de>; Wed,  3 Dec 2025 02:35:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D03841754;
-	Wed,  3 Dec 2025 02:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D97AA20CCCA;
+	Wed,  3 Dec 2025 02:35:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ES5dgtmo"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="N69gnGij"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB2736D507;
-	Wed,  3 Dec 2025 02:33:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8D536D507;
+	Wed,  3 Dec 2025 02:35:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764729240; cv=none; b=XjVaapU48fA0nPpK70yjVvV/v9xTCp2nZTdZ6or9X2PFov702If4FTRs3qzeAgLlt80gjJvpx5m3nSsJygbsRH4QzsjOIRDX5vo/Cb/c1LlMkmTeaGvgc9NzztDQnBuLCEtIJshA7MDi8sk1MTvtERVAPFQCQWk/7NqIEfBACrw=
+	t=1764729326; cv=none; b=N32vfik+v6HPSlPRDM+XHg0Q/kD+n8rmLbcw9gLTjryTo3QQ0ZM4X1LrL/aLEWw/+hrjR3UE2VFkauPu4pc4Khgg/9Pe9pMmSNLfzJHRGJ/o9HPuxgtH29itYIn138ty/8oD1/eVJCR2DZSx+9gqoXayVL9r0ju8h7AJ3L4oP4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764729240; c=relaxed/simple;
-	bh=/oL7FGQqesZDh0uMySKQPnedSttA27cNEf4hiKU2tjo=;
+	s=arc-20240116; t=1764729326; c=relaxed/simple;
+	bh=/N1sTSZh/utQqpEOjiTWHdbbwwhYCdldlFmtNCTihxc=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PoI2D2akFKVQg7X0EZBWo6TFvtKZ++GzURAAvsYpgngtQ6EDf4nq0GP2QLe9sSvUxWtVFpDtT5zrFklyvkb9GUsfpDb36uGFJYRMpJGHbNLFxXYVHwRkzt9XCcNI90IxpPqanPT67dFpIdMCb8nLkXXDhqG/1YZaTZwc0lji8co=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ES5dgtmo; arc=none smtp.client-ip=150.107.74.76
+	 MIME-Version:Content-Type; b=WEsP2k1yZK8+/He/o80TV0t7dm1Nyf/DnDT+hLJyQ1sthvz3mmu1KtxEdtV5egg46Z3cejHJSmNWS2lqhrXRE8M29R+PI5QMlIOVfuOIPV66VeVC3njeegh9WXfS+Zx8jbVkpvV/bOuKbRq44XyvTSek8aqWYoHJB2IozOXVaUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=N69gnGij; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1764729236;
-	bh=bVhYc5fezc+/Jt4zqXYYWQU08MvbB1c8rs56ij+Hejw=;
+	s=202503; t=1764729322;
+	bh=OpcxfvipuC6qAL1Z7PjgPVvorNrlmLKd5wXNYLxG5/E=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ES5dgtmo9cophpyBoU5fCqZAGGU2tY8UfZeCDBzRxa5f9IgyN4HkxpVmrAl+q2pyM
-	 AOsBEw/X63MNA8r2kkNrC7bteB2HhPSPaFf6Q0LObHYNJ+1fK30OwnLpEC6EOcQe5H
-	 O4ktgMip+CfJQNlYmKPF04scMjjzlYQRF63qznxzHXbkoQGo2sMLh41TMZ2nSGaEXj
-	 iF+5oPLCaC6Q+oKyVD2esHVV6TvHKWrptX1ebaYJfo3vlUxm/Didp+BDHB8WIOfw/I
-	 AdmQJDRloPmAWYd9aT2cRDJtXEpRJhkCHVsyaUKk6yC3UslBjIpI47UchiAJ2uz+Er
-	 RY2KL7zTK1zfg==
+	b=N69gnGijybexVWhdYAVW7ERecKg0lybsqUk9hDId8/hrk9AYdHnmOGv+rd1wAsQnc
+	 Ff1gF0wopYShIOuIOJylcr/7K+bpGEctlJFcvyIt2G9D40LpOXcScaRBXZLqOgyRql
+	 6RN8uSj963MXomI35k3r39nBoPpDLYDQXLmC6Melt0vClsqpgjUXHvCJjGFrJs09pX
+	 VXsqudvmSUJGGQxc6SC4kn6blz+509sSHxengLFhPMXHOVtuMDurx9cz3k4rCKcJDv
+	 WJVRF7yrKsOEC+gNc+6m31Ku2LXe+AAOxE0l0A/hcWwSMViQRxWhQi1Qp7fpOJgI5g
+	 PCORtiQ6alCXA==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dLhXg59Wlz4wBD;
-	Wed, 03 Dec 2025 13:33:55 +1100 (AEDT)
-Date: Wed, 3 Dec 2025 13:33:55 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dLhZJ6RVnz4w23;
+	Wed, 03 Dec 2025 13:35:20 +1100 (AEDT)
+Date: Wed, 3 Dec 2025 13:35:20 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Christian Brauner <brauner@kernel.org>, Linux Kernel Mailing List
+To: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Arnaud Lecomte <contact@arnaud-lcm.com>, bpf <bpf@vger.kernel.org>,
+ Networking <netdev@vger.kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, "jianyun.gao" <jianyungao89@gmail.com>
-Subject: Re: linux-next: manual merge of the vfs-brauner tree with the
- mm-stable tree
-Message-ID: <20251203133355.03bcd090@canb.auug.org.au>
-In-Reply-To: <20251125122934.36f75838@canb.auug.org.au>
-References: <20251125122934.36f75838@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the tip tree with the bpf-next tree
+Message-ID: <20251203133520.10ba2705@canb.auug.org.au>
+In-Reply-To: <20251105133159.6303b1ee@canb.auug.org.au>
+References: <20251105133159.6303b1ee@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5cyf3pmLVWr55F=4Sjh0Ozh";
+Content-Type: multipart/signed; boundary="Sig_/N/lm28FJl68ZE/B3Wqf=kUv";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/5cyf3pmLVWr55F=4Sjh0Ozh
+--Sig_/N/lm28FJl68ZE/B3Wqf=kUv
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 25 Nov 2025 12:29:34 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Wed, 5 Nov 2025 13:31:59 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
-> Today's linux-next merge of the vfs-brauner tree got a conflict in:
+> Today's linux-next merge of the tip tree got a conflict in:
 >=20
->   mm/secretmem.c
+>   kernel/bpf/stackmap.c
 >=20
 > between commit:
 >=20
->   b6c46600bfb2 ("mm: fix some typos in mm module")
+>   e17d62fedd10 ("bpf: Refactor stack map trace depth calculation into hel=
+per function")
 >=20
-> from the mm-stable tree and commit:
+> from the bpf-next tree and commit:
 >=20
->   1011f385f492 ("secretmem: convert memfd_secret() to FD_ADD()")
+>   c69993ecdd4d ("perf: Support deferred user unwind")
 >=20
-> from the vfs-brauner tree.
+> from the tip tree.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -97,45 +101,72 @@ wrote:
 > with the maintainer of the conflicting tree to minimise any particularly
 > complex conflicts.
 >=20
+> --=20
+> Cheers,
+> Stephen Rothwell
 >=20
-> diff --cc mm/secretmem.c
-> index 37f6d1097853,f0ef4e198884..000000000000
-> --- a/mm/secretmem.c
-> +++ b/mm/secretmem.c
-> @@@ -224,10 -224,7 +224,7 @@@ err_free_inode
+> diff --cc kernel/bpf/stackmap.c
+> index 2365541c81dd,8f1dacaf01fe..000000000000
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@@ -333,9 -310,12 +333,9 @@@ BPF_CALL_3(bpf_get_stackid, struct pt_r
+>   			       BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
+>   		return -EINVAL;
 >  =20
->   SYSCALL_DEFINE1(memfd_secret, unsigned int, flags)
->   {
-> - 	struct file *file;
-> - 	int fd, err;
-> -=20
->  -	/* make sure local flags do not confict with global fcntl.h */
->  +	/* make sure local flags do not conflict with global fcntl.h */
->   	BUILD_BUG_ON(SECRETMEM_FLAGS_MASK & O_CLOEXEC);
+>  -	max_depth +=3D skip;
+>  -	if (max_depth > sysctl_perf_event_max_stack)
+>  -		max_depth =3D sysctl_perf_event_max_stack;
+>  -
+>  +	max_depth =3D stack_map_calculate_max_depth(map->value_size, elem_size=
+, flags);
+>   	trace =3D get_perf_callchain(regs, kernel, user, max_depth,
+> - 				   false, false);
+> + 				   false, false, 0);
 >  =20
->   	if (!secretmem_enable || !can_set_direct_map())
+>   	if (unlikely(!trace))
+>   		/* couldn't fetch the stack trace */
+> @@@ -463,15 -446,13 +463,15 @@@ static long __bpf_get_stack(struct pt_r
+>   	if (may_fault)
+>   		rcu_read_lock(); /* need RCU for perf's callchain below */
+>  =20
+>  -	if (trace_in)
+>  +	if (trace_in) {
+>   		trace =3D trace_in;
+>  -	else if (kernel && task)
+>  +		trace->nr =3D min_t(u32, trace->nr, max_depth);
+>  +	} else if (kernel && task) {
+>   		trace =3D get_callchain_entry_for_task(task, max_depth);
+>  -	else
+>  +	} else {
+>   		trace =3D get_perf_callchain(regs, kernel, user, max_depth,
+> - 					   crosstask, false);
+> + 					   crosstask, false, 0);
+>  +	}
+>  =20
+>   	if (unlikely(!trace) || trace->nr < skip) {
+>   		if (may_fault)
 
-This is now a conflict between the mm-stable tree and Linus' tree.
+This is now a conflict between the bpf-next tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/5cyf3pmLVWr55F=4Sjh0Ozh
+--Sig_/N/lm28FJl68ZE/B3Wqf=kUv
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkvoZMACgkQAVBC80lX
-0GwC8Af/Tivdb6JLuRTqHGaI2rNo/UjBRFIVk+xuRvSmuEcwdye+mZzmtFL5QuEr
-ehOdon3wXPoE8NnUN/gCWIfMOsoZcJPZRZQIvlRXlODqLniMqVZw1xpgrIvJPhcI
-MG6Po6cSC5nrAmXQ+RL7/nX5RciVzNIaG3999WDhRedahhBg4RiO0S906rKy4YuN
-QxseW3raVEvA3chLJJDgu3MY6SW9RXkr3hPsJHNmd49eG1ZwXQmHS5LhLLFtvsv7
-gvnw27jMNJ53d0HVgKQ1nrfEURZPzEv84JhiTesgrAO72rgE0TU63rvtP6oG8Lj5
-yA5QBAoYofJ9nJr/OzIJkYyTGTvIug==
-=EM+4
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkvoegACgkQAVBC80lX
+0GwfRwf/SAPdxaT7GmlH18AOpAfzDihf1b2G8frMgXyvHR9TrI4PObUHgTUcz4IU
+gTrQJWxr0fxxGAXbPGflg7Ki+vyMSIkivrGCwny4MTs07nlUM8sNyYUR6XbmMLDY
+RyMEsMRvysfKXULcPtVtxaCzhAfTPkmdcrrnCByXWm3A6GHt95Mpaiq0j6LaNbv/
+tHiL09L0LKr93WZ2GMA5KWNfl7OoTSvCgEe0oAcikCZJMYt2/mT9w7AS7JzmrbYs
+cGMFaiQ0dZgP7rxYuvJ1pJt7HHlRJPvG72/90tx/oOK+523odRNpl21csMDhIavY
+XmV/ra8wz0WRjGYmzDbj1C03wN3YqQ==
+=Ge3i
 -----END PGP SIGNATURE-----
 
---Sig_/5cyf3pmLVWr55F=4Sjh0Ozh--
+--Sig_/N/lm28FJl68ZE/B3Wqf=kUv--
 

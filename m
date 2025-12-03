@@ -1,75 +1,65 @@
-Return-Path: <linux-next+bounces-9316-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9317-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B629C9E48B
-	for <lists+linux-next@lfdr.de>; Wed, 03 Dec 2025 09:43:07 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BCE26348AAE
-	for <lists+linux-next@lfdr.de>; Wed,  3 Dec 2025 08:43:04 +0000 (UTC)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25554CA07D3
+	for <lists+linux-next@lfdr.de>; Wed, 03 Dec 2025 18:32:36 +0100 (CET)
+Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2EC5231FE9F3
+	for <lists+linux-next@lfdr.de>; Wed,  3 Dec 2025 17:14:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A3332C21EB;
-	Wed,  3 Dec 2025 08:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1E01364051;
+	Wed,  3 Dec 2025 17:01:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kLFpOaxh"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0ufHCE+/"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8603D2D4B71;
-	Wed,  3 Dec 2025 08:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994FF2FB62A;
+	Wed,  3 Dec 2025 17:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764751368; cv=none; b=AMcVjBO52+p0zMAcSPIX5n/XlX1SjWtnL5ppo/YCF3LCPNPtUI3J58XYyU6IQ/DJhZZ8DY3CFQLHnqmi9BD02S/4V0HhnJLZd33XVprjmzofJLuTpg8cZIA6xEbHjGxzjFjC+iOjg2U6L3RTJoLoh3j1kk1akPBGT+bOQAPuYxo=
+	t=1764781307; cv=none; b=QOZlukKJc1H4VcuoFj80iYhG92C7K5LJHF45F8wGGbtdy2roLUqrVujVRJzhgKNbi9k/CGLTIYXRjgat/jE5VLjDSFtCkuj8Crtts3NrCjTh/bW/o9wzvqdBljSUlGp+JQopOhNGivmQKdoYsq8n8rqTwjitJo2KlMBr1Yx796Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764751368; c=relaxed/simple;
-	bh=VNQIhEq4N0+yfdW/wFWoSoqWWqE4ZMwf1psjP+mWg84=;
+	s=arc-20240116; t=1764781307; c=relaxed/simple;
+	bh=+MjL92ZMkrZCBW5lElh4bK2pJsKAMBF2mj6+1z5TaT4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dq12aKN/p0KMYnK/zsqZHwEt8pLtCVP+fnnccr2tbx/kAMzZ8JqGqlH2JmTC3Hp62lu9q38oxMdnv5w85/Dro23cL4vRXtRA5M5v7XhoWkeZMzYKpSUgPRvo6ANL9oMjFdkhHbG+iyovMXil62/S60LJE6V6UL1AbFsRDE6nSzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kLFpOaxh; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764751366; x=1796287366;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VNQIhEq4N0+yfdW/wFWoSoqWWqE4ZMwf1psjP+mWg84=;
-  b=kLFpOaxhRGCezld3Yf2onDyUO3V8T/p0UBn7XlDPiRRtFT4DS1BwAAaV
-   oHgtnvXdMe0IyH/nljTNnvr57speAs/0+MKcNwoqwqSaVqEbG8bYMkLAw
-   H/D3DdYxjV90kIY+V48MVb4MyVtJwQZnZdgZya3MlaIatPAfgOErl1Qkj
-   LqGJrBVKnmlUQR9DqPpoAvfEz0PR4A3TT/HfJ96VKSFzO22ZcNrvNDYy2
-   6RB97JqEDFSNQLbC4yIHkvarcuBijEGPEfxNOC+GLBk/PaGDLKXLqud4h
-   Xu4YV4l3V7dXeIGvDzdSCoZlmnstRcuVDQ3GyICBm017fhl0wSmMQgOsY
-   g==;
-X-CSE-ConnectionGUID: Qcjjw5MnRpietdqwWuo9kA==
-X-CSE-MsgGUID: H+BFAlp6Tc2VvlHuFrhdIg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="78202998"
-X-IronPort-AV: E=Sophos;i="6.20,245,1758610800"; 
-   d="scan'208";a="78202998"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 00:42:46 -0800
-X-CSE-ConnectionGUID: AVYRfivNQrGhDI3SywiiEQ==
-X-CSE-MsgGUID: 7i5Vgt3vQZS70jXLIIuOnw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,245,1758610800"; 
-   d="scan'208";a="198782188"
-Received: from vpanait-mobl.ger.corp.intel.com (HELO localhost) ([10.245.244.217])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 00:42:44 -0800
-Date: Wed, 3 Dec 2025 10:42:41 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Mark Brown <broonie@kernel.org>,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Frank Li <Frank.Li@nxp.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the regmap tree with the i3c tree
-Message-ID: <aS_4AfirzRqoxnhB@smile.fi.intel.com>
-References: <20251203133217.5b99010a@canb.auug.org.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PALTQhs1HfUPelq7l+2jxEnVh0+tWbjIjDy9AjkG+zhTJOOdTpnsrTuEEIFLii9lKtECznJXJhyJvGB2+ZsaWJFCE3F0Al/00zFA8FJGo+ROoqXagUlTTpJfabM293M7ZSyoC8yZkjkpjWfIMm0OqiaTkN99mzdwObVronvQG3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0ufHCE+/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF26BC4CEF5;
+	Wed,  3 Dec 2025 17:01:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1764781307;
+	bh=+MjL92ZMkrZCBW5lElh4bK2pJsKAMBF2mj6+1z5TaT4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=0ufHCE+/RsO4oCC/YzzBAP+ab0dKjTPYCyTPPuyTjR3DsRktPrvyMu+QTbi+CT2ik
+	 IUOU1zRTrcDtHt3sM5XSkRXb/ZDte78dV2stxyY/nwc5HueTc/husuqAYHTDKlVrad
+	 KgZymMzX2pV0MXjjRpR8KI2qdzqo68/mhLd0PFNA=
+Date: Wed, 3 Dec 2025 16:47:54 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Bartosz Golaszewski <brgl@kernel.org>,
+	Maxime Ripard <mripard@kernel.org>, rafael@kernel.org,
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+	andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+	rfoss@kernel.org, Laurent.pinchart@ideasonboard.com,
+	jonas@kwiboo.se, jernej.skrabec@gmail.com,
+	maarten.lankhorst@linux.intel.com, tzimmermann@suse.de,
+	airlied@gmail.com, daniel@ffwll.ch,
+	angelogioacchino.delregno@collabora.com, ulf.hansson@linaro.org,
+	linus.walleij@linaro.org, Liu Ying <victor.liu@nxp.com>
+Subject: Re: [PATCH v2 1/2] driver core: Export device_is_dependent() to
+ modules
+Message-ID: <2025120326-treat-unstopped-f883@gregkh>
+References: <20231127051414.3783108-1-victor.liu@nxp.com>
+ <20231127051414.3783108-2-victor.liu@nxp.com>
+ <v6rthnruba5xaxazsn4jsptn6catso5qwuyf5xxbf4ml25b6eo@snttjo7oqlod>
+ <2023112739-willing-sighing-6bdd@gregkh>
+ <CAMRc=Mc3T1u1sa0P+78dfhtoyBPc+9zsJ5sGP=ZLR+S=h16vZg@mail.gmail.com>
+ <2025112705-registrar-drivable-2341@gregkh>
+ <CAMRc=Meb0-Q7UCPhbfQ+pLybS2Jp=QpwxXGXNfQ+Ti64okoqYw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -78,39 +68,64 @@ List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251203133217.5b99010a@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <CAMRc=Meb0-Q7UCPhbfQ+pLybS2Jp=QpwxXGXNfQ+Ti64okoqYw@mail.gmail.com>
 
-On Wed, Dec 03, 2025 at 01:32:17PM +1100, Stephen Rothwell wrote:
-> Hi all,
+On Thu, Nov 27, 2025 at 05:19:19AM -0800, Bartosz Golaszewski wrote:
+> On Thu, 27 Nov 2025 09:29:03 +0100, Greg KH <gregkh@linuxfoundation.org> said:
+> > On Wed, Nov 26, 2025 at 02:13:03PM +0100, Bartosz Golaszewski wrote:
+> >> The logical thing to do would be to use "device_is_dependent()" but
+> >> this thread makes me think that won't fly.
+> >>
+> >> What should I do? What's the "correct" way of checking if two devices
+> >> are linked? I assume that fiddling with the supplier/consumer lists in
+> >> struct device is not it.
+> >
+> > fiddling with those lists is what device_is_dependent() does, but no,
+> > you really don't want to be doing that either manually or by calling
+> > this function.
+> >
+> > Who is creating this "link"?  Can't that caller tell the gpio core this
+> > relationship at the same time as you are wanting to keep track of it
+> > too?
+> >
 > 
-> Today's linux-next merge of the regmap tree got a conflict in:
+> The link would be created in reset core.
 > 
->   drivers/base/regmap/regmap-i3c.c
+> Let's consider the following:
 > 
-> between commit:
+> GPIO Consumer A ---> reset-gpio ---> |
+>                                      | GPIO Controller pin X
+> GPIO Consumer B -------------------> |
 > 
->   79c3ae7ada05 ("regmap: i3c: switch to use i3c_xfer from i3c_priv_xfer")
+> The GPIO core will scan the device tree and realize that A and B share the
+> same pin. The reset-gpio device is not described in firmware, it will be
+> created only when A requests a reset control. When it, on behalf of consumer A,
+> requests pin X, GPIO core can not associate the link between consumer A and
+> pin X with the link between reset-gpio and pin X because there's no such
+> reference in firmware nodes between consumer A and reset-gpio. To GPIO, these
+> are two separate references to the same pin. Only reset core knows about A
+> being the consumer of reset-gpio.
 > 
-> from the i3c tree and commit:
+> We could add a function in reset like:
 > 
->   af9c8092d842 ("regmap: i3c: Use ARRAY_SIZE()")
+>   struct device *reset_gpio_to_reset_device(struct device *dev);
 > 
-> from the regmap tree.
+> which would return the actual consumer of pin X for a device we identified as
+> reset-gpio (for instance: with device_is_compatible(dev, "reset-gpio")) but
+> that would be adding a symbol for a corner case and a single user and for
+> which the relevant information already exists and could easily be retrieved
+> from existing device links.
 > 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> I hope that explains it better.
 
-LGTM, thanks!
+Yes it does, thanks.
 
--- 
-With Best Regards,
-Andy Shevchenko
+> To answer your question: the caller can't tell GPIO about this relationship,
+> GPIO would have to ask reset about it but having a dedicated symbol for this
+> doesn't really sound like the best approach.
 
+Ah, ick, no it doesn't.  I really don't know what to suggest here,
+sorry.
 
+greg k-h
 

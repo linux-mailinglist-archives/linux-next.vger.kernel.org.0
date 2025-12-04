@@ -1,92 +1,108 @@
-Return-Path: <linux-next+bounces-9335-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9336-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF75CCA40AE
-	for <lists+linux-next@lfdr.de>; Thu, 04 Dec 2025 15:36:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D575CA59BE
+	for <lists+linux-next@lfdr.de>; Thu, 04 Dec 2025 23:19:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 65617313093D
-	for <lists+linux-next@lfdr.de>; Thu,  4 Dec 2025 14:29:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C11873125A22
+	for <lists+linux-next@lfdr.de>; Thu,  4 Dec 2025 22:19:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3738F342146;
-	Thu,  4 Dec 2025 14:29:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B411E330B38;
+	Thu,  4 Dec 2025 22:19:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l9R0NTZS"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="dlFnFc4p"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5E23054F2;
-	Thu,  4 Dec 2025 14:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7CA132D0E0;
+	Thu,  4 Dec 2025 22:19:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764858550; cv=none; b=MnOzXdp5OK7t7qSFrV9cQ0ZqMyr/XD/4RLJnxpsUnxncPL9aLpt9eL1yjousF/LkQdrdlXq81KHI2QeK+RoDZ6I1LwAAxG/NVjGgMXzGc2vaYy8OVpMSfvOvAA2gjI24KJFihq+3ViHPcgJK8lxkGNcB6lwYJ1iCnwo6OE8jIYA=
+	t=1764886753; cv=none; b=uUUjWxtweLFSc3xJkmKvWP/6qGXLek9vhiiIoJyLlnW4xpqmwet0fy9scMdHfD/Bdh6u/u6mN6s3YC8m42AG5iqEFYINaTcfND8eg0ORBa1Z2J5sCZerj8razmPLCEXCpl3SK3qPARaGTwDdG/G8myAcLopAh7soyif6o5F/7/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764858550; c=relaxed/simple;
-	bh=Sf7XLWB0S+LefPXoCixRYIhov1BR0IB2K8dusYgN1qs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=m5geRTRuhRMVx+jXuvOMU++7BoyxSgz3GyppK1/VosgCy5ymq6EkNpINs0pQT09nXwqsi+QMSDlR6RwtEWGL0o1tX7E6Uh2OQmf6O53oZsKTHAOG+g5ZnWaCpv9JyilfDAfp1vvuGL7dEu5KGmK7KXTVn63fA8/VTXmzpuzI2F8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l9R0NTZS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CA48C116B1;
-	Thu,  4 Dec 2025 14:29:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764858549;
-	bh=Sf7XLWB0S+LefPXoCixRYIhov1BR0IB2K8dusYgN1qs=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=l9R0NTZSufm/nOE5mVrDQqw65PkW35TBXA4WipPZ6iRKYbWoVQHRcHcZFz2UaDwfV
-	 sHiC0U2xUeW/0YnCgo6NvkjBkW1bUj+AhZTNxrZn+i89lubWgxNg2KmiASLJrjrNQ6
-	 +uImv8RnkZPgzNYK+Qb5ZWhWDDx/AZaowuiuDfHPhLlFYhxmNUY8N9e6wc+5KE16Du
-	 h/AbJ8/LvE+UJwOohmFuCg3h3AiOLaU5k8cvn34jDQ0opFpBXm0w73cI5Bw+wC5qCY
-	 6bDQgCAdXGWpRUoIN2Hxx6HA/WwuQ1amDj+RnbSnGOhm1gC8ckPdzGfqQLGayLlPwo
-	 a4V5Hoo7Mj7/Q==
-Message-ID: <6e8517751e4f41ee9233bdba52362d5a70c3d6b1.camel@kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the nfs tree
-From: Trond Myklebust <trondmy@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Anna Schumaker <anna.schumaker@oracle.com>, Mike Snitzer	
- <snitzer@kernel.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>,  Linux Next Mailing List
+	s=arc-20240116; t=1764886753; c=relaxed/simple;
+	bh=W9cJPa511Nn2O2YX1wZ+CThKOx0Uv5tDgUoQyJlohtM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=T/SYu/BwrxTHtwP4ZlDWAZEAbkdQWMJZrt2kgEHfyek2DzysfV7TQxJ1gWlGekCEcRDb/TyHvWMGwgX53QRHZzh8yb8AKUMA24Ke//j2wsP7E6bKjljwLWBNYDxYFyF+rzaCuJDIHkVI8i2AZiv+BkRJpn4YS6kyOHV1iwia1CY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=dlFnFc4p; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1764886742;
+	bh=PH5JPlCPQ4IgY1O0zlp/yJ4H3gGdj9fPqyUWA4BPm/8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=dlFnFc4po0OBBy5ZH7gPbbvjVxIYx51IkqQS/dZpN857e8hRoDEbznGmWplEqYVXx
+	 GyOHfXAX65meGJUg4GvDgm5BBIzjnh89ezehmadqxnxPCtLvq/ytp+qLfHyJ6NROYC
+	 5q4n/ugbidf9UPcR/38GkgAWS5VNcoj904lpPYJwCqkAf/lMPa0HRtO+w8GuFRdb0y
+	 8mV9ppqSwNn83zHQsrZAgpHRBAkMcfoPZh1sD/KmEtRZj7P7s5JgMuyvYFGsyJ4+NG
+	 EMR3Q4QvnuOGTteePJiWdsEz2QoQ2zVAXq0QT73Qg7ZzH/fghvBKGkOCicye1hBljU
+	 eO2a68MdvsgZw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dMpnd4pKYz4w1g;
+	Fri, 05 Dec 2025 09:19:00 +1100 (AEDT)
+Date: Fri, 5 Dec 2025 09:19:00 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Jens Axboe <axboe@kernel.dk>
+Cc: shechenglong <shechenglong@xfusion.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Date: Thu, 04 Dec 2025 09:29:07 -0500
-In-Reply-To: <20251204183644.5757c050@canb.auug.org.au>
-References: <20251204183644.5757c050@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+Subject: linux-next: Fixes tag needs some work in the block tree
+Message-ID: <20251205091900.0dbcbe4a@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/ioAPG4OhxBJpgySsv7AdMZa";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Thu, 2025-12-04 at 18:36 +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> In commit
->=20
-> =C2=A0 869b7402a7cb ("nfs/localio: fix regression due to out-of-order
-> __put_cred")
->=20
-> Fixes tag
->=20
-> =C2=A0 Fixes: 86855311c117 ("nfs/localio: add refcounting for each iocb I=
-O
-> associated with NFS pgio header")
->=20
-> has these problem(s):
->=20
-> =C2=A0 - Target SHA1 does not exist
->=20
-> Maybe you meant
->=20
-> Fixes: f2060bdc21d7 ("nfs/localio: add refcounting for each iocb IO
-> associated with NFS pgio header")
+--Sig_/ioAPG4OhxBJpgySsv7AdMZa
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks Stephen! Fixed now...
+Hi all,
+
+In commit
+
+  4ce1aeacddb0 ("block: fix comment for op_is_zone_mgmt() to include RESET_=
+ALL")
+
+Fixes tag
+
+  Fixes: 12a1c93 ("block: fix op_is_zone_mgmt() to handle REQ_OP_ZONE_RESET=
+_ALL")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
 
 --=20
-Trond Myklebust
-Linux NFS client maintainer, Hammerspace
-trondmy@kernel.org, trond.myklebust@hammerspace.com
+Cheers,
+Stephen Rothwell
+
+--Sig_/ioAPG4OhxBJpgySsv7AdMZa
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkyCNQACgkQAVBC80lX
+0GwMFggAgEJ1gRtrcdN1TyqO+omqajhNki7LwK+kW5fe9gQJUHWAzSYyWCXX1aAZ
+WALcIbCYTe8WyS1cfjtAqqbOsniEfGwskxHVmDjIja4bgKPl2x94Mr/051Cow4+k
+wLt2gh7gq1wvqH3QdJeX5P/UGzCh3C/dcwbI5GexnEmHvcDVfXj4VQGkU6WPs9r+
+v71k/q8xwUuf/krY4J9BJQLJKuwRjwnnO6UamGCHc25igWbnXWapyYIPYdyCMFZT
+SxVmWpWIvQvG5o/l/tN0P44ky9rJubcIO9P5J65ppMFCnwC3xCiM4miPV7W1d4qZ
+mNloJTeNFyOrlieOpwJqzQShNa6nTQ==
+=ZM72
+-----END PGP SIGNATURE-----
+
+--Sig_/ioAPG4OhxBJpgySsv7AdMZa--
 

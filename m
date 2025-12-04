@@ -1,176 +1,129 @@
-Return-Path: <linux-next+bounces-9321-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9322-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62952CA224A
-	for <lists+linux-next@lfdr.de>; Thu, 04 Dec 2025 03:06:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0303ECA2394
+	for <lists+linux-next@lfdr.de>; Thu, 04 Dec 2025 04:07:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CA2533024369
-	for <lists+linux-next@lfdr.de>; Thu,  4 Dec 2025 02:06:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B4674302A968
+	for <lists+linux-next@lfdr.de>; Thu,  4 Dec 2025 03:07:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA92720ADD6;
-	Thu,  4 Dec 2025 02:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB43032FA32;
+	Thu,  4 Dec 2025 03:07:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="tXwlutx0"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="BB/qJqaK"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD831E2614;
-	Thu,  4 Dec 2025 02:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346B82FF160;
+	Thu,  4 Dec 2025 03:06:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764813998; cv=none; b=X+UjEIOmy9yOH+j5ASjX+EsA8AHJG5CvfSYYMmhfH6VJAlV5YcuBpAG+bVCp41UBrXkN7EWp+elnXxt5U7mUiYcSIzcyjIrMBLO02VhtOIjNXHX8lJ5/bPIhL/MX5s+LRhkuEYZO3ILpOp9Jaoy3FwEb2JCI9wh7swz3O7/N1h4=
+	t=1764817625; cv=none; b=M2rfpESIbnPPr7utCRZ6b1CuXmtHHgWvewj4ADXGH1q+LSv2GAClQAmAK+lMj5NBev8HIbtfoZiDolPunFsBr0f6e1vIjb3E/Bbt+iIwQtfzVOkebeVAudL+T6C6C4QDP0wZNpaOABNXv3xqw4G3A/u0P8G8nvqSG429hES8/Uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764813998; c=relaxed/simple;
-	bh=k2yPGe7IVIhF4s5d8rzu7ic+UwrxSDLaGpprga4SAls=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UdTscwC+eWBTLhADdov8Vq78JrzW4urLbwMc/gNGnqi7T3WwvaievMKHkzZQl+HIzsivnengxO1TndTiElmqoSGZDsaC4N/8sHjhNmqsOK6dyrpOj40yV9XaOohtaAjqKkdtS2HmBQoNfXRY1Q2bmSNvNYiE2K84KwGHKYN1xXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=tXwlutx0; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1764817625; c=relaxed/simple;
+	bh=OzviML42/PZV4P386UodcF7hmXtQM2dda3ytwl0Ro9s=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=WatvXdkFFsbkCXmrvmEkiI/wWARq2X831dI6iNhVFZwkvjXC9bISxMPH2IxxKq+KRGPeScUY/qaMK2cVgdUAYqw0Ql4ETnxTGeM6YrmT6Uil8hcWoxeP4d2rPK6Z9HJ4sIdIu91fyczfsBb7SIyL6DL10i6PSp2aRWV5DmMhpF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=BB/qJqaK; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1764813994;
-	bh=6GEjBVoGG2IMRgYyevpdzqWZU6LsOqM8P1diyYl3BD8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=tXwlutx01ryuNc56/otgftRdPJUkqkfde/VpZEvLKSGCbLqdne1rpPKAO5oVBJEHp
-	 KJBWPnk7rkkVjNW6cGcdL7kpRykuUs4KNYkhaZb49hjk0p7lAoiCcM8QFyoAv3bJ6C
-	 0y34to6HFnuYhdskz/+HJaHPShy+pjAb25q25OeARHomXnR3lO/DUbVS6XTj2QC192
-	 f1gXo9GbFnrCabUvSTLGgIkp9ytQIyqOmQCn3rsxQm+Nh9Kd/FHKPED3P+W8tsHWYt
-	 aLiZyHX7VAFmiCHQWc6h9GfnoOYxcjCY2kN2uSw58AEWUZHtyL7uUYFsUEuCqSAGMx
-	 alyV/YYhkN1fw==
+	s=202503; t=1764817615;
+	bh=3VDbv8be7WXmqziqx3UIDm831ej/hZpH03IJPhmPaT0=;
+	h=Date:From:To:Cc:Subject:From;
+	b=BB/qJqaKvbBqZK2NrUbwN1BiB5KTOn3484/e+6JcajzmWy4qoEk8aupltwIRLDq22
+	 L1g6uH5TRE7ggIC6KMgyIVyBtJi4ZH/CjLXObn8aODqRRUQb9moxiJiEyFZZ0qVX+9
+	 5VYgxw0coNgnXF0Pi3fegWUwFkVCb4TyIXtHD7NECNtrptiyJf2vfXe22952RtcxOE
+	 o+1VdeLe0bh/5ig9z8npMntQ5TVyhaUDxlF08JXOPdfNRAsgF8LZW08FUQUxhfDp3b
+	 7yhJ/RzjXOh872H1lxZcjVT0Mhp/NY7+YAAUdSLS3NGW/U7AvMwRA3yZkLN+TTxXER
+	 ARjGAumMMnBBQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dMHtc4GWSz4wD3;
-	Thu, 04 Dec 2025 13:06:32 +1100 (AEDT)
-Date: Thu, 4 Dec 2025 13:06:32 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dMKDH3tnhz4w2J;
+	Thu, 04 Dec 2025 14:06:55 +1100 (AEDT)
+Date: Thu, 4 Dec 2025 14:06:54 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Christian Borntraeger <borntraeger@de.ibm.com>, Israel Batista
- <linux@israelbatista.dev.br>, Linux Kernel Mailing List
+To: Dave Airlie <airlied@redhat.com>
+Cc: DRI <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Sumanth Korikkar <sumanthk@linux.ibm.com>
-Subject: Re: linux-next: manual merge of the s390 tree with the mm-unstable
- tree
-Message-ID: <20251204130632.379edc9b@canb.auug.org.au>
-In-Reply-To: <20251103100750.4522060e@canb.auug.org.au>
-References: <20251103100750.4522060e@canb.auug.org.au>
+ <linux-next@vger.kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>
+Subject: linux-next: manual merge of the drm tree with Linus' tree
+Message-ID: <20251204140654.1cba1aeb@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/i6p/VcdI8_+jxJh06F/aBcy";
+Content-Type: multipart/signed; boundary="Sig_/AXumj+EMN1pf_6OiZG45q/O";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/i6p/VcdI8_+jxJh06F/aBcy
+--Sig_/AXumj+EMN1pf_6OiZG45q/O
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 3 Nov 2025 10:07:50 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Today's linux-next merge of the s390 tree got a conflict in:
->=20
->   include/linux/memory.h
->=20
-> between commit:
->=20
->   074be77d684a ("mm: convert memory block states (MEM_*) macros to enum")
->=20
-> from the mm-unstable tree and commit:
->=20
->   300709fbefd1 ("mm/memory_hotplug: Remove MEM_PREPARE_ONLINE/MEM_FINISH_=
-OFFLINE notifiers")
->=20
-> from the s390 tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
->=20
-> diff --cc include/linux/memory.h
-> index ca3eb1db6cc8,ba1515160894..000000000000
-> --- a/include/linux/memory.h
-> +++ b/include/linux/memory.h
-> @@@ -64,21 -64,9 +64,19 @@@ struct memory_group=20
->   	};
->   };
->  =20
->  +enum memory_block_state {
->  +	/* These states are exposed to userspace as text strings in sysfs */
->  +	MEM_ONLINE,		/* exposed to userspace */
->  +	MEM_GOING_OFFLINE,	/* exposed to userspace */
->  +	MEM_OFFLINE,		/* exposed to userspace */
->  +	MEM_GOING_ONLINE,
->  +	MEM_CANCEL_ONLINE,
->  +	MEM_CANCEL_OFFLINE,
-> - 	MEM_PREPARE_ONLINE,
-> - 	MEM_FINISH_OFFLINE,
->  +};
->  +
->   struct memory_block {
->   	unsigned long start_section_nr;
->  -	unsigned long state;		/* serialized by the dev->lock */
->  +	enum memory_block_state state;	/* serialized by the dev->lock */
->   	int online_type;		/* for passing data to online routine */
->   	int nid;			/* NID for this memory block */
->   	/*
-> @@@ -101,14 -89,15 +99,7 @@@ int arch_get_memory_phys_device(unsigne
->   unsigned long memory_block_size_bytes(void);
->   int set_memory_block_size_order(unsigned int order);
->  =20
->  -/* These states are exposed to userspace as text strings in sysfs */
->  -#define	MEM_ONLINE		(1<<0) /* exposed to userspace */
->  -#define	MEM_GOING_OFFLINE	(1<<1) /* exposed to userspace */
->  -#define	MEM_OFFLINE		(1<<2) /* exposed to userspace */
->  -#define	MEM_GOING_ONLINE	(1<<3)
->  -#define	MEM_CANCEL_ONLINE	(1<<4)
->  -#define	MEM_CANCEL_OFFLINE	(1<<5)
->  -
->   struct memory_notify {
-> - 	/*
-> - 	 * The altmap_start_pfn and altmap_nr_pages fields are designated for
-> - 	 * specifying the altmap range and are exclusively intended for use in
-> - 	 * MEM_PREPARE_ONLINE/MEM_FINISH_OFFLINE notifiers.
-> - 	 */
-> - 	unsigned long altmap_start_pfn;
-> - 	unsigned long altmap_nr_pages;
->   	unsigned long start_pfn;
->   	unsigned long nr_pages;
->   };
+Today's linux-next merge of the drm tree got a conflict in:
 
-This is now a conflict between the mm-stable tree and Linus' tree.
+  drivers/gpu/drm/drm_fb_helper.c
+
+between commit:
+
+  eb76d0f55535 ("drm, fbcon, vga_switcheroo: Avoid race condition in fbcon =
+setup")
+
+from Linus' tree and commit:
+
+  6915190a50e8 ("drm/client: Support emergency restore via sysrq for all cl=
+ients")
+
+from the drm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/i6p/VcdI8_+jxJh06F/aBcy
+diff --cc drivers/gpu/drm/drm_fb_helper.c
+index 0b3ee008523d,be790fc68707..000000000000
+--- a/drivers/gpu/drm/drm_fb_helper.c
++++ b/drivers/gpu/drm/drm_fb_helper.c
+@@@ -31,7 -31,8 +31,6 @@@
+ =20
+  #include <linux/console.h>
+  #include <linux/export.h>
+- #include <linux/sysrq.h>
+ -#include <linux/pci.h>
+ -#include <linux/vga_switcheroo.h>
+ =20
+  #include <drm/drm_atomic.h>
+  #include <drm/drm_drv.h>
+
+--Sig_/AXumj+EMN1pf_6OiZG45q/O
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkw7KgACgkQAVBC80lX
-0Gz3nwgAm6fNMHQ2IxDOMr6Wa8rJmZHeLb5o7hRtzxhHqikn+4ANe7i7nhI4Ppfn
-Zd6jHOB55ykDlBWqg99NYK2nd+1YQQ7Z84sJ67ML5UAqQVVnW7fi3vUxvx4j6gfT
-Qm+VbxBcq/4ubU0EN0QB2I6W32HadjMJfD7wgDjms6/yba2EuziW/phFATI/AuUP
-cxghivcULa93mArgUOoQV7LiGigYQkqvawj6VnEp4m8yF9EHO7cx+X0oN6LEkQ13
-Pc4A+yYTfxzev2aKxGUHMnUR9dlvcaij6iv3tnHSL0xf060Z//R73c08dN9Kamzc
-gEkVTdubJz1ol27NqPQM/w3EB4gwWg==
-=P/cx
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkw+s4ACgkQAVBC80lX
+0GykkAgAiuS/bCiTzN8kqRw+NJMXeQO/6QoHVyVD1x+n6Sy42jpFpv7QDfe1izps
+uQpSGD+UcSZ9CQG6tbUXA9IdiYXbvD1E+U1ftiumi1ci2IjMsJHpr6IbH6u39RQq
+OtoVvVb7Fa2oBa9c9mvok5iU5gbZlu1qZx5coObTmTGbq7Oeikzhn5C35uQ1RwY4
+Cz12bGYGG2E+GKa7/myFt9zroAy6v8M+C5+AFlghyotLj30YWvtZl2DesS9+VDfI
+myHFxRKYJKI8JKAopz5v9SQKTGfqklz3f2RzUdOhU2N21mU6wg8DKbtdfVCtvKMk
+HHtgcOD/2BeOtwDl+7BoEZctYQ4t/g==
+=Kzxx
 -----END PGP SIGNATURE-----
 
---Sig_/i6p/VcdI8_+jxJh06F/aBcy--
+--Sig_/AXumj+EMN1pf_6OiZG45q/O--
 

@@ -1,81 +1,81 @@
-Return-Path: <linux-next+bounces-9339-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9340-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0228BCA5A3A
-	for <lists+linux-next@lfdr.de>; Thu, 04 Dec 2025 23:44:39 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78FA6CA5A40
+	for <lists+linux-next@lfdr.de>; Thu, 04 Dec 2025 23:44:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8FB9E30F7E94
-	for <lists+linux-next@lfdr.de>; Thu,  4 Dec 2025 22:44:37 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 75F3930645BF
+	for <lists+linux-next@lfdr.de>; Thu,  4 Dec 2025 22:44:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F1532C94F;
-	Thu,  4 Dec 2025 22:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ED913358C9;
+	Thu,  4 Dec 2025 22:44:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="LUViUrmq"
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="LHarwpVS"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D22D2E1730
-	for <linux-next@vger.kernel.org>; Thu,  4 Dec 2025 22:44:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08E12652AF
+	for <linux-next@vger.kernel.org>; Thu,  4 Dec 2025 22:44:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764888276; cv=none; b=Kkf3P91NbJ6bQz3+qIqo3aFKRMG0qZwzU/GkwdkkHmYYQNixqSGZAvdihufiLCIn/8lUC/motUyUi+wAlyrkk52rXFMPFeOxGRxoo0ot47tAu9hppnbDapKFCrx4/5bOyKQFo48KeKSBIUryC24dUiITE9oo41BRM0poD09HQnI=
+	t=1764888293; cv=none; b=HyGgzCReLVH03jVFnhLw0FNRD5c27TgQ5sTaR/S7esLbEkgbJB0AosM6Ycl2dlPgK0C4GEFo8Ddl07RM3PAEnRiyoOYQtHVWWZvyCYrT4VC8lSxOhkgPVSzfFruEh/1Cfae1YMAxAL66QVn8M1RcwXE4kJOgwl5rlpQXJ7t6uA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764888276; c=relaxed/simple;
-	bh=bYWm1GFzUk1QgWAnsA653nNK/YCXbyDnkU+Vflu2/0U=;
+	s=arc-20240116; t=1764888293; c=relaxed/simple;
+	bh=Z2CwydMQxahvHci1WFpCRdgZXd9zjPPjtROIIpL+vPg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cVnrldhSg6TOuyBXW5ikbw+P49yFyE6e+jsuNIOZ2Z1D2M8T5Iw6rBL7YOH+22SNBKFNO631LhSyT22fvr5CkmgIpCXl4kH/HKTNUVK7qxdkXmnl3RS4ck90WrpG9xU/BZaVUAu2rMFV0bzQRMMfT/umMtRnXSmByaNCe8rs78g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=LUViUrmq; arc=none smtp.client-ip=209.85.160.52
+	 In-Reply-To:Content-Type; b=WtVFcuJfWPplRLcpKvNL4cQq4eBiGtECv2LWWlPyRcqbXn7bGQ2uCZLgX/48h2D5rAzMD19UJa2ZTLN1hcb64oqlMk5CwNva6/kJpvShSoarVGuyAL+ULln5af83atnSxm/BKLv97OCWUiZ6dozxFL+HcYtSLAF0USZDgwO7CCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=LHarwpVS; arc=none smtp.client-ip=209.85.167.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-3eae4e590a4so699258fac.1
-        for <linux-next@vger.kernel.org>; Thu, 04 Dec 2025 14:44:34 -0800 (PST)
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-450c6f5ff81so852028b6e.0
+        for <linux-next@vger.kernel.org>; Thu, 04 Dec 2025 14:44:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1764888273; x=1765493073; darn=vger.kernel.org;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1764888291; x=1765493091; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=93Q2ycDF0H/A5tkS4HU6XkHJjwsAZ47t4WJfES3tsHo=;
-        b=LUViUrmqStmVqpH2UVNoL67hguQxcrkzN8kndKrgAQcuCr6bxH5UpW+w/DKr6WSYaj
-         dNbXLy6BuX0v4O/FvZ5q9NbVKjl/ZJcFnCiWhLocVxSavHwEDEM82rqn3T9Ugj50Ap3m
-         oB52UOk9z0AvQ98oLZGVCvSQR2P0lrw9+x+sVuim2FlH92POIb/bh08D78CUHfBjGkV7
-         E8Fu4hRckR3qRBnaAiJzqsPZo7lntC491SO85/oJhszPdlYNSukZDJ0bV+862jw7+99P
-         JsXVpTd09DRclGAFcaIMe/fqIwPJUGxFLAj16zZDpB5HE55zwyeFpkBhPqUNL2JF88Ug
-         OLlg==
+        bh=Vmkx/Nq3NBvDRF1hn8gltNreOpSRjS4JcboW2dGenzk=;
+        b=LHarwpVS6lM0UDU474cLF6AsLUEDHjXAgUmV8Jk9GlWEm3n17sPn4Y33GTTai7bXx7
+         RtHWTpYybMVzqKNtEz7DEmGLAZqoH7GSguFLAZ19RbhzzL8q1u7wopReF/DD3lvWm54E
+         PVqzckp2H3X5xB1lN2GzlH0HCtgFLjpboFx64zNfVveHpdzYwYw3mRBkZU16+Bd+0WtR
+         2GYFIUwe7bPiMEminSJYW0w1hK2OgKCCWlltfYkfvgX6AXgir1COQnBvBqshtONpg3OV
+         kkVyx2ldvuwHKOnuFAivMKv8vE/BvoOOppFi6URMwM1covkRgqlkJCuzFvTcL+dU49Zy
+         ndVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764888273; x=1765493073;
+        d=1e100.net; s=20230601; t=1764888291; x=1765493091;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=93Q2ycDF0H/A5tkS4HU6XkHJjwsAZ47t4WJfES3tsHo=;
-        b=J3ia17XL2/3h8ZOlqZP1mH7VsI5Mh/2LJlzFcuqFdugMYF4ZL1UW6WUZ+cOloHjH6Z
-         xCO4HPktzGHbAqRIG5AHE3pIT2cA1fSOUKyfvO4bcla3akiqSxZGf3+C3Cy09cvQ90aV
-         RnM0IaEFFEuVbmekOZslI5TD0D/oAUu6jfkHmsWjtwKPsLHYXYGJxWjDsqq9G2KpCCbj
-         mzWTwRuh09WAxbAgv11pNBq9BO1SGVuAwimpzGIygQRUTmrbuQ84z2uTBoMEjhF/ksrM
-         0BxvLjSf5wLZ6GfySMU40HXdI7tbO/KACYzKBqolBXA9fteiSpWn+NqxeU0SHanvJyjZ
-         /mjw==
-X-Forwarded-Encrypted: i=1; AJvYcCWl5B9DL8dJmuoU6jRdno/4hTxSTcCyP65VMKHAB4ktYBnXy91ztmOp5/qzuHUAYf3K0Yd3jYQW1Hhj@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+SNeGKsIDLw5PJIrjTvfHubgEmQppnCzPEPlvWu9AainQSeB2
-	NJN0G7HIhMZnjGLPSXHYezDX5Qsgksw3S/EosdcRjRQWLJABhKTBqlXfVO1OQo2o1/RgStywZfh
-	sasiwVcs=
-X-Gm-Gg: ASbGncvCBnJVXSpdfFXNMFu9oBCjq3LJ36i/lrPCmIH30QT9ds7vvplgdmSv9P1oroy
-	ZB4XkX5j2uIPyboIQdXFCXGd6zPxBiNjdrJ29fDwDox4jLbf0CHie71QDDyT/pVfd2wBAvigeqe
-	wppZ3Ohp4+Tlz27ciisS016wNZUi2M/meA02yff2ac6RHLHWetNXv48xfm3yEGWX0HmRq5t9bI8
-	cRqW8ggQ7dC91Gk8vWSLywRQPl+cNYuaVxuvTWO9YmutrcvCt/6huqAHSTuKcOW4Tj/yu63fTAQ
-	j9VTl/O+x4suWICV5G/xJB8KCtnkBnA0bRXXxmnIW+QHLNnl2u6lx3JpREo+9F/p1tVXweB1I9c
-	uPDOqsqwHUZX0vLGSw5J5uS/G0HJXBTaYOuByNmX4QjkBZewVL+RS5iVC+GPUvx74nRtczNB6fM
-	YHoKikj+m2
-X-Google-Smtp-Source: AGHT+IEgBNMtqrKvQCP8Ex/ODbIIpN4uazCSRtzQ2bx4zWlnWAy7eytkf11z3e5mjibz2fTyBcTpQg==
-X-Received: by 2002:a05:6808:1df5:b0:450:b1a9:e7a3 with SMTP id 5614622812f47-4536e52e723mr3314111b6e.42.1764888273385;
-        Thu, 04 Dec 2025 14:44:33 -0800 (PST)
+        bh=Vmkx/Nq3NBvDRF1hn8gltNreOpSRjS4JcboW2dGenzk=;
+        b=c0JOzVLrwrM8L7iD1YArMOzxsb/gvNuqUR+PLa38jmwgBXb+5o7Gt9xxRk97m9UEbs
+         gevFUvAVETFZwMvBKtR7hV/g55KCbUJmM0pYnjlzuSmZ0nz+n5s6heg87FqQhZNkv4YN
+         YX4RZDpzklAA+4UUP7HZgZPrB6P9RJvLHXFbmXkw2rCk6TtP2i5+M6iRQCTW8qRKoSiu
+         VCNMy8/JPmqWVHFjv0WmIc+NkoTovmpwdD+CEmdyTeXFWla8jFOYpHuXJacN0p/D10DN
+         SatyubANARBiyCIkj6s84k+tstKtv+21y+y7w+qAvLe4e0tc8hJczhMM0emsyKMG7Gb2
+         PF7A==
+X-Forwarded-Encrypted: i=1; AJvYcCVWKDITmL6OVF6/ocUWFZ7tOs7uv8W3aMPxL38m6ndMX/51Kp6ya9FavvrV83eWaR0age0N+/UtHEex@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzs0WixDu4CSLJRC3UNbImHd3OGTrhSboVOmMcvNlrvYAFlvsLs
+	em4oUFFWHoAh+6gF6w6iCtGcXwNHSdnMTwa0k8n/ncIiTsQhUB0IVlr0Hqy1lLR4GvMaUym6ly7
+	m4Q7IhMQ=
+X-Gm-Gg: ASbGnctswLPTSKr3QFRvaGT07u64KIfQcqBb+sfkTDYt/ipCq0MtqwBD+X0ea1lmUpq
+	xpjqxJ3q+AyAO9+QPXmxEb8wPTEyo/C4ikGdKrC9KVu9jl90yXJCytpbNn6QTdPkviv5qr7foOL
+	HsVAS0/fVhkcscQq3gp917R6GvRNG7b3TuD0xgGRMtZz/wwhRATth0/ZsU6/jy87zBV05WcfC1v
+	GBVVr0CwanvmQ/R9QJJm4oSV4hNKGJYD0GvPp7JrhcwXBWEyQUhgeKa2hcJNx9uIGg9dpjvMumq
+	Gohk0qd0fvtAcpejaWWJMKIGeQn5LtjD/3V0fhBF2RK3og+qNNjeHh2M3sIF+Kg6dlT6MvdHm5W
+	gvk3Hm75J+qfvB7LDO7lZkjhsOvb0ibP3HiLpu+I4fXFmPKadTfk7xJgqZu01apDQr/HEgmkoYj
+	Q9Po5FYDKn
+X-Google-Smtp-Source: AGHT+IEEFzK1MAGTl4brvee9XDCFzuOR+BFWLfT2iVU05EsMmsDUW5zdUm/2dLSq3NOeNA78D7G+wQ==
+X-Received: by 2002:a05:6808:528e:b0:44d:aa31:d929 with SMTP id 5614622812f47-45378e937b6mr2997245b6e.20.1764888290735;
+        Thu, 04 Dec 2025 14:44:50 -0800 (PST)
 Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-453800cb61esm1290825b6e.14.2025.12.04.14.44.32
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-453800cc734sm1368222b6e.11.2025.12.04.14.44.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Dec 2025 14:44:32 -0800 (PST)
-Message-ID: <22d2c50f-2011-453a-a7f0-8cd59a6b3043@kernel.dk>
-Date: Thu, 4 Dec 2025 15:44:32 -0700
+        Thu, 04 Dec 2025 14:44:50 -0800 (PST)
+Message-ID: <a699a3aa-50b8-4258-ba71-d28c6abc9f7c@kernel.dk>
+Date: Thu, 4 Dec 2025 15:44:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -83,37 +83,31 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: Fixes tag needs some work in the block tree
+Subject: Re: linux-next: Signed-off-by missing for commits in the block tree
 To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: shechenglong <shechenglong@xfusion.com>,
+Cc: Keith Busch <kbusch@kernel.org>,
  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
  Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20251205091900.0dbcbe4a@canb.auug.org.au>
+References: <20251205092150.0e64adb3@canb.auug.org.au>
 Content-Language: en-US
 From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20251205091900.0dbcbe4a@canb.auug.org.au>
+In-Reply-To: <20251205092150.0e64adb3@canb.auug.org.au>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/4/25 3:19 PM, Stephen Rothwell wrote:
+On 12/4/25 3:21 PM, Stephen Rothwell wrote:
 > Hi all,
 > 
-> In commit
+> Commits
 > 
->   4ce1aeacddb0 ("block: fix comment for op_is_zone_mgmt() to include RESET_ALL")
+>   d3132d5a1720 ("nvmet-fc: use pr_* print macros instead of dev_*")
+>   facf78e89270 ("nvmet-fcloop: remove unused lsdir member.")
+>   d4a3dc77e6d6 ("nvmet-fcloop: check all request and response have been processed")
+>   92ee1738dd50 ("nvme-fc: check all request and response have been processed")
 > 
-> Fixes tag
-> 
->   Fixes: 12a1c93 ("block: fix op_is_zone_mgmt() to handle REQ_OP_ZONE_RESET_ALL")
-> 
-> has these problem(s):
-> 
->   - SHA1 should be at least 12 digits long
->     This can be fixed for the future by setting core.abbrev to 12 (or
->     more) or (for git v2.11 or later) just making sure it is not set
->     (or set to "auto").
+> are missing a Signed-off-by from their committer.
 
-Since we'll re-do the nvme merge, I'll just fix this one up in the process.
+Oops yes - keith is redoing it, I'll re-pull when that's done.
 
 -- 
 Jens Axboe

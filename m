@@ -1,105 +1,143 @@
-Return-Path: <linux-next+bounces-9354-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9355-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id E777ECA600E
-	for <lists+linux-next@lfdr.de>; Fri, 05 Dec 2025 04:26:53 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3842CA6035
+	for <lists+linux-next@lfdr.de>; Fri, 05 Dec 2025 04:33:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 5FB9F30153AD
-	for <lists+linux-next@lfdr.de>; Fri,  5 Dec 2025 03:26:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7FD803197A8E
+	for <lists+linux-next@lfdr.de>; Fri,  5 Dec 2025 03:33:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C516F269CE6;
-	Fri,  5 Dec 2025 03:26:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A5CB18DB1E;
+	Fri,  5 Dec 2025 03:33:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R3a/n3wJ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ZlZ3YrCV"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62C0A221FCF
-	for <linux-next@vger.kernel.org>; Fri,  5 Dec 2025 03:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93861398FAE;
+	Fri,  5 Dec 2025 03:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764905210; cv=none; b=d/18yMc+++OGClpequFqO/88f3jHdCYyleXD4s0/t9Xp00AnpMpITU6sKvSdzYhZfTkaIs/Qj1SGM4laSV/RfGaXFFK9WtVBkB1b9ZS1PDiUQLx9CNhIr0mZGosUSlj9Tk0jhqzfbDPRMMPH938cZuomcF/P4YsxVKYltwpNVd0=
+	t=1764905591; cv=none; b=lVC7wovJqcFz6UWuEA0C0qYh1wHyrygVKkwWcktH9kmbz18PTM4Ge6vsgMga1fEsHs0+R2ySxPuBEF4zWyQNmeoPi4GJE6KZc0qJ/bKpSOheUs4PPNc5NxRLEXzwnrjzPis4+/Ah8PzQw0hSQ+Jt2LdwBLZjuG4lgS7UbTCA6Mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764905210; c=relaxed/simple;
-	bh=7sqEYBl5OwSigQFytOOFh6Rw1vI2i/CRGiWdPEbY2ZA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VGXgSiq0UFlvt+M4lsniNY1/NKcpfMcZ8UwY7Kg8q7O5ZDEcH2dc7wiSXid9n854VYIOV3qHKbNHJiu5T+xhjCKI9ARHzJGqjOt36SUW1FQHRgX5mylGLMMwHjKaI02ize5FzdAxF0e9b/6MOLOogbGRFriI6G1+jLETDmtveiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R3a/n3wJ; arc=none smtp.client-ip=209.85.215.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b9a2e3c4afcso152744a12.1
-        for <linux-next@vger.kernel.org>; Thu, 04 Dec 2025 19:26:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764905208; x=1765510008; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7sqEYBl5OwSigQFytOOFh6Rw1vI2i/CRGiWdPEbY2ZA=;
-        b=R3a/n3wJDcM2+z5O10lhYNpBojtd0oXgvRHrtgRWspj99UoMG7MzwUfSY7BQkLJETt
-         ACrFh//nZSqGPL9snkvw+em0BZlOqQNhodJf3KtQqxv1FOGx/vLmzgJ/yIVLjNOlXPLV
-         WC3wEdlfAmSZFPUqjlMdTwigOabT2foQqHOIHBq1ogmNxQBAy/CaTqJlbbPFt6pZeeqg
-         zF5Tq/dNpDSIlb5KLs/1ydjHk4m2AJa1OzZSaeXghtAu41CwcZaczEfDxyDDo6q1ilZa
-         ZLtVjFJPixWsiKK6GhOM3AXE18i4Uy5GUhqyKvUnJC5PsMtHyTb6Mj6VWRIVpMRvP1nS
-         48gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764905208; x=1765510008;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7sqEYBl5OwSigQFytOOFh6Rw1vI2i/CRGiWdPEbY2ZA=;
-        b=cVIrCKLdQNPnUA5knfDNnJn4KmxSjvZo4EchrOVmU0YSOmuPaV/UWh75ws8iHoFfqS
-         NtF3TUI1N6MbUZnFnDMlPaR45K3zVqQGdTGA1F4uxHaL24o+wMAplyuUAqi46Gs1HYUC
-         9hLcBu8jAk6uwD7Ljmd4KixAz6M8pTfvYx4htnL0PX/T5bezPmbWkV056ie+fn5xBQL9
-         ho5qkv4Yjfpv0MKugOhdBUb35660gkxFP2j22oePfqA5JQzcAYVg+R8shmdh0IjqVhcp
-         4fwOM535DZTAwyUuSmYgZbqaSrETewgUh7s69bSZhFG+YcmdXzWtIhK2JI5xSZ9vcDkl
-         2P+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWUX6rjZfSPnqlIUILNHs8I7MYQbp1XjdRo9TB4R3hxiQ57vkHBfRht1XkdNYPQDqCjJhEqDRlIt6qA@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQOgIAdO0qUKTxNr9bD16Cpts39YFXrKLc8ATq7Fl0gIdf+8jp
-	0c3JT3AH3cy4yUnmp3VabbQZ1mFG7jv3F9rWqsMOG3FgzfcTCuxWJY0glo0Lok+n+I2uPmaEjsT
-	0Js6/H23yKVNMkIBbcrk1ALFq/U9tHnE=
-X-Gm-Gg: ASbGncsI04le2W7sqI9/4SyE99kjIqrwi5TI4FB6RDXE1XDDA0/guY57VLD3MriFOgS
-	M1YqxlfxQ62kFU+pqrRvSI5HVDimQ3zSptRKkUWEXvuLOk7H1ycKgx8ltHQuHNaePEXRvKwZu5b
-	qViXIzRkL7Svz0rgjmzXAOXEx/LjHB0nvVFRn3/54LYIDyzaL2zrpyHOXPDE8l6947Wr8EKSw9n
-	EUQJCWO9vG27FbWqOPpR1aSJYxdhfMHcBXRzSDrwUn8B+BFx1T3eTiff+JhbjAtSKT7sdPi3KK6
-	/8ssuM4YCr7Hzj9NUcmonikBcvffY4NmvESc39dWdaB5FoOmDLhoCuB1L4cLR0MrKnMrPSMExta
-	LOcD0QOdYddJgbA==
-X-Google-Smtp-Source: AGHT+IFU4F1G2MKunwpFkfDWbRwNovZKSEKl1MTEY6OPDxaIauU7cNCjSVN1Ev/qzaSl+ElyQ2UNhuKsvzwkoUGgpGs=
-X-Received: by 2002:a05:7301:e0d:b0:2a4:3593:5fc8 with SMTP id
- 5a478bee46e88-2ab97ca970amr3589283eec.2.1764905208475; Thu, 04 Dec 2025
- 19:26:48 -0800 (PST)
+	s=arc-20240116; t=1764905591; c=relaxed/simple;
+	bh=kppJNINLZDybwdPJJix2Spjz4ARjO65ou5VBoD21taY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=mBQqafH5MLMsmNBQT+v4GttjKcDP4VzV9/0NU6aGsTmJmCvEFdk7ULy6wKavNjd+uJWZ6lxU82XBKXyt15LVrUYFcbEf8o2lrG8B5MlV1127gm+TJihGW9Xi5d24iDPYLZIYajcXjqeJeQ8F5cAabxUC46qYoG8Kvr/lKMROuhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ZlZ3YrCV; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1764905585;
+	bh=YkaaugAtprD3XoHOg9uTkF3Aq7dcDn/XTFmpc3lupXo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ZlZ3YrCV875+axqSxM8x+2Rx15cvF8sE8Tv/kd5V5G/EtbRHREjzDgWwEHY7Ad55H
+	 7tnCjXLgv5RfnYQySIW26RlP50ZYX3uE29/f8GNr4uQZkmLjr+xnnemyzf36tqgsRR
+	 vbOVWl8kH9TIMFc+J+VH6BlGwslMhujpZCqUvXGgd4tObZTFYxic0gTRUCfuUBTkW6
+	 lyPaSgsTWBBGmpLqcXzHu4yqxX8boNRwuwv8xmK6eFmBua92ooOlPeXNUgqkgG6K9+
+	 E8AKjrGlZeNl9c5pcOBiepYzvHTKaesokpRemuC91FBFh2yvsKcv46BtS4AFIhh0fg
+	 rrIL3mONWReYQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dMxm00tV4z4wGX;
+	Fri, 05 Dec 2025 14:33:04 +1100 (AEDT)
+Date: Fri, 5 Dec 2025 14:33:03 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <ukleinek@kernel.org>
+Cc: "Danilo Krummrich" <dakr@kernel.org>, "Michal Wilczynski"
+ <m.wilczynski@samsung.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Daniel
+ Almeida" <daniel.almeida@collabora.com>, "Peter Colberg"
+ <pcolberg@redhat.com>, "Lyude Paul" <lyude@redhat.com>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Linux Kernel Mailing List"
+ <linux-kernel@vger.kernel.org>, "Linux Next Mailing List"
+ <linux-next@vger.kernel.org>, "Alice Ryhl" <aliceryhl@google.com>, "Viresh
+ Kumar" <viresh.kumar@linaro.org>, "Alexandre Courbot"
+ <acourbot@nvidia.com>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Subject: Re: linux-next: build failure after merge of the pwm tree
+Message-ID: <20251205143303.696dd64f@canb.auug.org.au>
+In-Reply-To: <20251028125142.01a32039@canb.auug.org.au>
+References: <20251027125148.7f7d8ed6@canb.auug.org.au>
+	<22fl35khmbf6ufyjzbfvxor7b6nohqakqovjoya3v4mmlenz5c@6wbdednrd2pb>
+	<DDT05KLECH04.37PKIHQQ4K3MX@kernel.org>
+	<20251028125142.01a32039@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251205142031.7404c49d@canb.auug.org.au>
-In-Reply-To: <20251205142031.7404c49d@canb.auug.org.au>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 5 Dec 2025 04:26:36 +0100
-X-Gm-Features: AWmQ_bm-CwrcfQF2CzSHGLQfSjHTHHpL1TpOBk4HM-i2_Yh99QFC_gxKoooaBvM
-Message-ID: <CANiq72kZ-sHRmzOeiPh6gAk8mEfsSWN0N9PyY=Th2Yd9+ratdA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the driver-core tree with Linus' tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Greg KH <greg@kroah.com>, Danilo Krummrich <dakr@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Tamir Duberstein <tamird@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/Ko4yq+X8sdLejEw9AknKUp5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/Ko4yq+X8sdLejEw9AknKUp5
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 5, 2025 at 4:20=E2=80=AFAM Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote:
+Hi all,
+
+On Tue, 28 Oct 2025 12:51:42 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> I fixed it up (see below) and can carry the fix as necessary. This
+> On Mon, 27 Oct 2025 10:38:05 +0100 "Danilo Krummrich" <dakr@kernel.org> w=
+rote:
+> >
+> > On Mon Oct 27, 2025 at 9:11 AM CET, Uwe Kleine-K=C3=B6nig wrote: =20
+> > > Translating the changes that commit does to
+> > > drivers/gpu/drm/nova/driver.rs for drivers/pwm/pwm_th1520.rs results =
+in:
+> > >
+> > > diff --git a/drivers/pwm/pwm_th1520.rs b/drivers/pwm/pwm_th1520.rs
+> > > index 0ad38b78be85..dd554574adc8 100644
+> > > --- a/drivers/pwm/pwm_th1520.rs
+> > > +++ b/drivers/pwm/pwm_th1520.rs
+> > > @@ -328,7 +328,7 @@ impl platform::Driver for Th1520PwmPlatformDriver=
+ {
+> > >      fn probe(
+> > >          pdev: &platform::Device<Core>,
+> > >          _id_info: Option<&Self::IdInfo>,
+> > > -    ) -> Result<Pin<KBox<Self>>> {
+> > > +    ) -> impl PinInit<Self, Error> {
+> > >          let dev =3D pdev.as_ref();
+> > >          let request =3D pdev.io_request_by_index(0).ok_or(ENODEV)?;
+> > > =20
+> > > @@ -365,7 +365,7 @@ fn probe(
+> > > =20
+> > >          pwm::Registration::register(dev, chip)?;
+> > > =20
+> > > -        Ok(KBox::new(Th1520PwmPlatformDriver, GFP_KERNEL)?.into())
+> > > +        Ok(Th1520PwmPlatformDriver)
+> > >      }
+> > >  }   =20
+> >=20
+> > Yes, this looks good. =20
+>=20
+> OK, I have applied that to linux-next from today.
 
-Missing diff?
+This now needs to be applied to the merge of the modules tree.
 
-Thanks Stephen!
-
+--=20
 Cheers,
-Miguel
+Stephen Rothwell
+
+--Sig_/Ko4yq+X8sdLejEw9AknKUp5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmkyUm8ACgkQAVBC80lX
+0GwPtAf/TsUTpO/W0G/lbhUIbqMD3VqCffX51rSJbyv2TibXR3svbN5WUs7XXxv3
+MJR/BuQLG3EDMml+oYwaXx0vUx0/aYvtkn5ErHyB0HxN2PXGIfk0jF8hpDHEdfH6
+A7Mc0XM6gtXPGEGqQHc2ydQqCxrNT3cwrmKuFyFvf8isqhY5UYyrV5fs7GzRGdDt
+sTqqygnTGHI1K8gDtmDXH1YmNMC8oAvxvGGMgKnnG0wXbWiHoOjTcUUesaVbcxo4
+JBUlZKQCJMEQWWzZAitS+OsV/I5emIyDQbJkM2kjEFlw1vVgaeFuBfd4tj3T4liO
+rKtik2+QaiQnlBa/2iQYGl1+d9Kypg==
+=6gAj
+-----END PGP SIGNATURE-----
+
+--Sig_/Ko4yq+X8sdLejEw9AknKUp5--
 

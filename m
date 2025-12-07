@@ -1,91 +1,98 @@
-Return-Path: <linux-next+bounces-9368-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9369-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D96CCAB684
-	for <lists+linux-next@lfdr.de>; Sun, 07 Dec 2025 16:21:08 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F89ACAB9C5
+	for <lists+linux-next@lfdr.de>; Sun, 07 Dec 2025 21:43:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D19CA3000B73
-	for <lists+linux-next@lfdr.de>; Sun,  7 Dec 2025 15:20:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E6371301463D
+	for <lists+linux-next@lfdr.de>; Sun,  7 Dec 2025 20:43:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B2EB2459F3;
-	Sun,  7 Dec 2025 15:20:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBEC42C17A1;
+	Sun,  7 Dec 2025 20:43:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="F08NmBhi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gpWaOSU8"
 X-Original-To: linux-next@vger.kernel.org
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA2923EAB9;
-	Sun,  7 Dec 2025 15:20:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3AEA1B0F23;
+	Sun,  7 Dec 2025 20:43:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765120856; cv=none; b=WlXN8vu32k34D3CLVMy3YBN3TrOPIKyEy4REcgeD3lf6IPtY3CDi8FIhG4F0G3IAU4KdwOIqj51dqhTBAFEIkv+aiUzo5ex1SUH6XyWWLy5pwzM2V/tebN5MbTXWtKkchlk85c+vn1mOAA8C4rcNYFCBIVWsjTbTYV0IJ1qth+g=
+	t=1765140215; cv=none; b=R0gswCh6GHGRGUHcbHnX/U0IjGFmKfMzAY3iOmrdEslPHM7Nw3QGchVvIeIBHs9nmNCM7BMdYZ5CTAQshjeTL9W4Fmk3kzL6vwlelr1cwOXtviJ4ps+qRM0Hqz9VRIJzRdnl0ZVoWtDuf+qT4jbE00AuetgmTCCYj3m/J4Sge+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765120856; c=relaxed/simple;
-	bh=4sw29FNF+hDXvAnVpBSFpwowyDJGsGQ0TKMzDyV2VxQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D9SWaEkWEemJUuci4esqQlgXvGxiGoTbe20pVBfEQbAxMlSHDNKwHGdPweOxY2i48v5rJwde61jyC81TCOAVwzvPXU7IEudu222z109b0Druob4udiSVPbFoD7eaUNA4M0pb+/fQogSgdsCYzB7+DI600texEPFi+WR3LJARqbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=F08NmBhi; arc=none smtp.client-ip=199.89.1.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4dPTK01KZ0z1XM31H;
-	Sun,  7 Dec 2025 15:18:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1765120706; x=1767712707; bh=4sw29FNF+hDXvAnVpBSFpwow
-	yDJGsGQ0TKMzDyV2VxQ=; b=F08NmBhi6FhcjTjsh7iau1T2jSqJoYseX++LZML1
-	eF9QgmBE8fEAqeqYqQb+SQaIpYS5VVbdB8Hkdma6M8I4+TR9Eg+jPS3DUSEwNXMQ
-	Sx2SHT22ftvysaeUb8HGbQpyKZcL7pAEglwVzK4iUETGe8ApKCPZ73C5Hh026Mdk
-	bfXK3XkdaVVLXArm4/XvIpiEyE5ka2lNnBtDMOV+i9ZGCrdu4rlAFB0Lzuojwpq+
-	BCCohZ7CD4ExBTzNsFEimQDj+Ln0sLVmWwoil9JHkv8TcnQOCuY+Yv/QwW9K8xNt
-	nAzPSR6Fl5ncU9ECx1HsPFkuvoYjUofSuaIcZxEA92anRQ==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id G6PJ7d-KBR5B; Sun,  7 Dec 2025 15:18:26 +0000 (UTC)
-Received: from [192.168.51.14] (c-73-231-117-72.hsd1.ca.comcast.net [73.231.117.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4dPTJt3GHkz1XM5kt;
-	Sun,  7 Dec 2025 15:18:21 +0000 (UTC)
-Message-ID: <46cf2cb9-76f4-4d73-be3d-88fcbe7055f4@acm.org>
-Date: Sun, 7 Dec 2025 07:18:18 -0800
+	s=arc-20240116; t=1765140215; c=relaxed/simple;
+	bh=CvPBUv9C3Xu+KLMZEv4kHMblvCy1wzeAXiAhnsTJ+kE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FDbaw+XADxkCuB9mgP7TCfNpUGO5dyzWCoTJnCN3OjRFc6CK2zSv2TLIZGGndDca3gY4xzX70iENMwM4P3zeQOzIvIT7UmxiPBXY1+U8HIl3v+PkisnjvdTeUJfuykyf3QPOQ4hnbBaA7ewt2YoyDucNFV7A6qVy7BhTz31h0C0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gpWaOSU8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14D8FC116B1;
+	Sun,  7 Dec 2025 20:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765140215;
+	bh=CvPBUv9C3Xu+KLMZEv4kHMblvCy1wzeAXiAhnsTJ+kE=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=gpWaOSU8ceg7Du0//QwXT0qW3WRuHUTdvjS9AOBU/w9UTrr3eCyxLFgzVzsLFfKPu
+	 70XfpxBByUS2T/yhMeO75z5nWP/sNOEyO22uzNZIyMXSKMa6C8ruSxLev55Z2dXg27
+	 HTXialpmGjQVhba9vy2FoH4iy+VI0E5kbZj4vCui8hyFKafvSng1oBCTy0Xad//4gj
+	 TR6zIPmVHhuJFvrErO1XM9iCZH5rlDO4uw7yMK8oWehXrRg+WIsRpfdC1Lp7eovbtR
+	 gJZXTHK+zgoovP4haWxMHsI7brpbzJcK5lnovF7l4Cb12cn8dyadUrEW8A19YO9ASy
+	 mtTj+Y3DeF77g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id BF996CE0CB8; Sun,  7 Dec 2025 12:43:32 -0800 (PST)
+Date: Sun, 7 Dec 2025 12:43:32 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: linux-next: manual merge of the rcu tree with the ftrace tree
+Message-ID: <8e93322e-9e0d-4414-b9ce-7c098477dbe8@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20251114135226.64831207@canb.auug.org.au>
+ <20251114074255.3e535084@gandalf.local.home>
+ <aRdBVFSmgvPWuY2k@localhost.localdomain>
+ <054ceff1-87b7-4729-8589-b7dd22887bc1@paulmck-laptop>
+ <aRxu_ycww5U9qxJR@localhost.localdomain>
+ <f79a2e18-d9c3-40db-97ed-c334b90cf3ba@paulmck-laptop>
+ <370911ae-ce3c-4ebd-a348-452c73c06597@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [linux-next] potential deadlock in ufshcd?
-To: Alexey Klimov <alexey.klimov@linaro.org>, linux-scsi@vger.kernel.org,
- mani@kernel.org, linux-arm-msm@vger.kernel.org
-Cc: alim.akhtar@samsung.com, avri.altman@wdc.com, linux-next@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <DERQ2FF2WO70.3I04I9XAG5V6D@linaro.org>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <DERQ2FF2WO70.3I04I9XAG5V6D@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <370911ae-ce3c-4ebd-a348-452c73c06597@paulmck-laptop>
 
-On 12/6/25 7:07 PM, Alexey Klimov wrote:
-> Is it a known problem? I can test potential changes to resolve this
-> or try to collect more debug data if needed.
+On Mon, Dec 01, 2025 at 04:57:54PM -0800, Paul E. McKenney wrote:
+> On Tue, Nov 18, 2025 at 07:04:07AM -0800, Paul E. McKenney wrote:
+> > On Tue, Nov 18, 2025 at 02:05:03PM +0100, Frederic Weisbecker wrote:
 
-Please help with testing these two kernel patches:
-* "[PATCH] ufs: core: Fix a deadlock in the frequency scaling code"
-(https://lore.kernel.org/linux-scsi/20251204181548.1006696-1-bvanassche@acm.org/).
-* "[PATCH] ufs: core: Fix an error handler crash"
-(https://lore.kernel.org/linux-scsi/20251204170457.994851-1-bvanassche@acm.org/).
+[ . . . ]
 
-Thanks,
+> > > So for now I'm still keeping it outside -next. I hope it is not a necessary
+> > > change in your srcu series?
+> > 
+> > My thought is to put the patch with Steven's suggested removal on my
+> > -rcu stack and see what kernel test robot thinks of it.  ;-)
+> 
+> Unless I hear otherwise, I will push this into -next after the RCU
+> patches land.  If all goes well, I will send the pull request to Linus.
+> So please let me know if you would prefer some other course of action.
 
-Bart.
+If I continue to hear no objections in the next 20 hours or so, I will
+push this into -next:
+
+fca6fa23c5a5 ("tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_CALL() with SRCU-fast")
+
+							Thanx, Paul
 

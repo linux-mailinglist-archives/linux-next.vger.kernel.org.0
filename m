@@ -1,124 +1,117 @@
-Return-Path: <linux-next+bounces-9370-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9371-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12138CABA19
-	for <lists+linux-next@lfdr.de>; Sun, 07 Dec 2025 22:35:42 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B3DACABAB4
+	for <lists+linux-next@lfdr.de>; Mon, 08 Dec 2025 00:16:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CCBAB30142C1
-	for <lists+linux-next@lfdr.de>; Sun,  7 Dec 2025 21:35:29 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 34AE93002D6C
+	for <lists+linux-next@lfdr.de>; Sun,  7 Dec 2025 23:15:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FE17246BB2;
-	Sun,  7 Dec 2025 21:35:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B7662C159C;
+	Sun,  7 Dec 2025 23:15:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="NO9XXrKy"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pdP1IOPS"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F15722173D;
-	Sun,  7 Dec 2025 21:35:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582CA155C97
+	for <linux-next@vger.kernel.org>; Sun,  7 Dec 2025 23:15:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765143327; cv=none; b=qXxjRq0RnPAPFL2yCsOM7zYb2/WZwKt08kEEZZ/3XaI+882vr/LXKGp/ZDU+oa4/MiSQ63mKw41Non8OvWpds4KD92rhEWupHs7mpDAuKXR/4FJmC0hBJYFDwOztQRwV02/bwpv5nQADHpVUMYjC9Up79bQdRpTPRYI8UAJwtz0=
+	t=1765149357; cv=none; b=bY9YMPA1B7X22QkCD6OmiH/gmtrFrAnHUROmfVFNXj3tImiHrmC9aFHOWJFV9A4IVqutMf7eHA4hgZoSOLyQsur2StUzt6p8R84i26T76I3Rh027ZwEApYi5ve/lQSLhEuBVimMQzWPAiW57Z5zSRmF5XKh3VsDOgxP6eNeO6ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765143327; c=relaxed/simple;
-	bh=9GNOlvVC9agtAvRTCw0woLqh6y4k89CpbFCe7tACn7Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hHo8j/KaTFdUnai6QuBqs0P+44zgEEdNvQJruhS2f8gf19+1xS9XRZ38FCw63h71VPKx3sBoM47CCqc9U4qI3CninaUbZ+e9vM7wqkx+kixgwEB3VzVrqqJGzJmEHGXkIsMNVqDmS2NGW8qwmNQ02KuZNSyLYWTSyiEZ0YQlImA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=NO9XXrKy; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1765143312;
-	bh=/4cNmOlP3N1MM6WMET4vScazPML/doqaGPiPKBn1Us8=;
-	h=Date:From:To:Cc:Subject:From;
-	b=NO9XXrKyPPfsC67RkukCb/YLJhbFf/NH5sbKeWgFLi4ET0knFWpYrdyuPW9ggXLsg
-	 TK9wEy3CGYW5CbZGh0AC+4Ll7j0MRmTVXjXetE5N2c/zN/VPZkqEUEUD5FEnygEQOd
-	 M+GB3w8PDXm6bUoFLFdjrlsEn2bkms5HfzK6gW/B70kCAO45Wb8w/Nq5SwGg8JG4Wv
-	 hVhkQeId8LVvxjRFNuqzneSHu7QXrbqQS8bDPDq0zhkKHckPTMOgjYKTLtio/+7L7Q
-	 wDENQfaUblN60GDPzJtPbdlF7GkL5kN8mF3//0F62VxriqPx0Orn/l/XbLEU29IBJo
-	 bymx3oaVfY/IA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dPdgh0TqTz4wD1;
-	Mon, 08 Dec 2025 08:35:12 +1100 (AEDT)
-Date: Mon, 8 Dec 2025 08:35:11 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm-hotfixes tree
-Message-ID: <20251208083511.6dc45509@canb.auug.org.au>
+	s=arc-20240116; t=1765149357; c=relaxed/simple;
+	bh=JrawoIvD5t0mSOtoyYriDOG37dzck5mS9GT3TPZS81w=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=ByalMl3mKATOsb/mDBRDVwXA7wFh4RyNKMxDug1kXrp7ayusMGVknwoEx8NGLD1MxZs1vSRS2QjnTnmQwfhER2P6pzKP2EoHJhMyESw2k7RtW6sfayvv8z0rMAsHE76kVjAKohpisVjdCM24Ze5H/M4a1oR227cjy2UVW0hQtjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pdP1IOPS; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-42b38693c4dso1782636f8f.3
+        for <linux-next@vger.kernel.org>; Sun, 07 Dec 2025 15:15:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1765149354; x=1765754154; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JrawoIvD5t0mSOtoyYriDOG37dzck5mS9GT3TPZS81w=;
+        b=pdP1IOPSL8KY3IxDXkN4DeLPaWDErmLm++ZI+K2V3F+iMdk+9svTMBxzeqVufMDb4c
+         VqS0L7/Isr8sWDqpKcmaZJ7jqmS1XHlXUnKWDTVHd2TyLKYqz2PCy83D4GPHMZV/52Df
+         HjF3Hv1rTIWM3HSXELgBZWu/XQgNv95rW/QizddCHo9oxvDXmrX+KDc4I4CeH9tdnwSC
+         SMZErt8fRPdW5UsPGNwjLL5Npe+jLhhhnz45DcBDgS8StOECkK4HH9n8EliAj7JApJwq
+         N/ukRV+Lm/XWSRpWGFBGggtyd7zPcECJ7eQHAhruKBpMZD0NvHoT+wk/yLkWZkMj9e4r
+         y5pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765149354; x=1765754154;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JrawoIvD5t0mSOtoyYriDOG37dzck5mS9GT3TPZS81w=;
+        b=vVrXBl/J+43jHrG6C/ksiMZmPC0VgLD0u/m9x+FM6ZJMTAp8dinH8KLGSE4ownjUPk
+         vddHLtJtSb108TJ4UntFlQ5HAdrRIrD8dGkTZrkIMp7dSHIKZCQ+MoD4fA8tc+uS8KAU
+         NNRMi36hd6OZgNZLHUvhAoyaI73tBFZZAl7jVd8TFLcdByMjdc8TFEYA7Q7i4qzf+YO4
+         SUTVjoEkRazFmVQuNpUNNzS1fKa9HaNIfca6yIc4msSc4IhYj9itTZfJRiJAwV4vHWsg
+         bSbZg0bszoAnUzwulWa0S6bclB2uC7X81+dcEgRQEijSw9oKj1b/pkTiexvreDebuv+e
+         aZOg==
+X-Forwarded-Encrypted: i=1; AJvYcCV594GIGpPIz+34bJJALepKkPJRtB8WwojzD0zsGowTLL280/7lJP5EzovB+d5Me7JAWBM0PlIkVmW1@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWh3p5hF4QJVy9LR4l1f3dJDO1Fb8VP1VxrVnXZqAtOila7cJZ
+	/R+GsMhTzj2xKeO4NZaZqJBeac+iqvsX2MeEeWnltJdWuDlRm5BQz2XdE9whrb4Ckts=
+X-Gm-Gg: ASbGncvKmArxeoXZYeUVHi6zTVkKXyNCXLyXufKb5idxt6NYlVPdHcbFOAjGolJ4rle
+	KXVRVbHLqZY6gtpyPEtLhsUpBpJMEdHyHFAApCIhvcxLqkIQCgagulhskFvOJbOPrVojGfSoQHr
+	r3Yyx9eIswqeW/hyS3kupttHSDmm36X+X+pCxre+rFdeRvVBaCx5oKwaWUeQ+YhqGGxgTdUm7gB
+	CLCjK2rWmkSvuKaC07GtX+TABRkaJtIwIEh+NbJIFYx+GTO7GLGSolgOdXWrreCWKggv21UETCN
+	B+qaEpX5Ju0j228kc/sXUPl21q4/s6/7h+b3sSdL2Y5QD5YfrFlQwYtIyAyLpjakYE4nXLZ8yQe
+	/bbJ0QxWpk5H/oF2B0P/pzCqeQqcwiTDIL3tT5rim/H0w2I9ORZsHx446bmL5Q+dO3m4chsd/ll
+	sx7TLEuo5DKIDfrCX1
+X-Google-Smtp-Source: AGHT+IG265bGsuH8yFF78i9r8fah0BbcyblFqGg1lC2v8CBn3ElR0sMxydVKkkvoEWSpFSE0ekKljA==
+X-Received: by 2002:a05:6000:1a85:b0:42b:40b5:e64c with SMTP id ffacd0b85a97d-42f89f6340dmr5988631f8f.30.1765149353630;
+        Sun, 07 Dec 2025 15:15:53 -0800 (PST)
+Received: from localhost ([2a02:c7c:5e34:8000:da07:24c6:f91a:9817])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42f7d222478sm21783666f8f.20.2025.12.07.15.15.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 07 Dec 2025 15:15:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7XSMcqyt=qM1=e9ydmdPmIi";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-
---Sig_/7XSMcqyt=qM1=e9ydmdPmIi
-Content-Type: text/plain; charset=US-ASCII
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 07 Dec 2025 23:15:51 +0000
+Message-Id: <DESD81PA9NI9.NKA6IOV0ROX9@linaro.org>
+Subject: Re: [linux-next] potential deadlock in ufshcd?
+From: "Alexey Klimov" <alexey.klimov@linaro.org>
+To: "Bart Van Assche" <bvanassche@acm.org>, <linux-scsi@vger.kernel.org>,
+ <mani@kernel.org>, <linux-arm-msm@vger.kernel.org>
+Cc: <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
+ <linux-next@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.20.0
+References: <DERQ2FF2WO70.3I04I9XAG5V6D@linaro.org>
+ <46cf2cb9-76f4-4d73-be3d-88fcbe7055f4@acm.org>
+In-Reply-To: <46cf2cb9-76f4-4d73-be3d-88fcbe7055f4@acm.org>
 
-Hi all,
+On Sun Dec 7, 2025 at 3:18 PM GMT, Bart Van Assche wrote:
+> On 12/6/25 7:07 PM, Alexey Klimov wrote:
+>> Is it a known problem? I can test potential changes to resolve this
+>> or try to collect more debug data if needed.
+>
+> Please help with testing these two kernel patches:
+> * "[PATCH] ufs: core: Fix a deadlock in the frequency scaling code"
+> (https://lore.kernel.org/linux-scsi/20251204181548.1006696-1-bvanassche@a=
+cm.org/).
 
-After merging the mm-hotfixes tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Thanks! This looks like that one about fixing deadlock does
+the job. I provided tested-by tag there.
 
-In file included from arch/x86/include/asm/bug.h:193,
-                 from include/linux/bug.h:5,
-                 from include/linux/kasan.h:5,
-                 from mm/kasan/common.c:14:
-mm/kasan/common.c: In function '__kasan_unpoison_vmap_areas':
-mm/kasan/common.c:594:34: error: 'KASAN_VMALLOC_KEEP_TAG' undeclared (first=
- use in this function); did you mean 'KASAN_VMALLOC_PAGE_RANGE'?
-  594 |         if (WARN_ON_ONCE(flags & KASAN_VMALLOC_KEEP_TAG))
-      |                                  ^~~~~~~~~~~~~~~~~~~~~~
-include/asm-generic/bug.h:120:32: note: in definition of macro 'WARN_ON_ONC=
-E'
-  120 |         int __ret_warn_on =3D !!(condition);                       =
-       \
-      |                                ^~~~~~~~~
-mm/kasan/common.c:594:34: note: each undeclared identifier is reported only=
- once for each function it appears in
-  594 |         if (WARN_ON_ONCE(flags & KASAN_VMALLOC_KEEP_TAG))
-      |                                  ^~~~~~~~~~~~~~~~~~~~~~
-include/asm-generic/bug.h:120:32: note: in definition of macro 'WARN_ON_ONC=
-E'
-  120 |         int __ret_warn_on =3D !!(condition);                       =
-       \
-      |                                ^~~~~~~~~
+> * "[PATCH] ufs: core: Fix an error handler crash"
+> (https://lore.kernel.org/linux-scsi/20251204170457.994851-1-bvanassche@ac=
+m.org/).
 
-Caused by commit
+I didn't test this one yet though.
 
-  6b83afdcfa93 ("kasan: unpoison vms[area] addresses with a common tag")
-
-I have reverted that commit (and the following 2 fixes) for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/7XSMcqyt=qM1=e9ydmdPmIi
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmk18w8ACgkQAVBC80lX
-0GyO7AgAkWJBz5laS6Wp6IGv94Fbf0GJ/TDtImk/nPLcPlrK1Cu0QxBLopJKKIWt
-kyd4MfVh7CGqyNo21fZ366App83Xkw2pCpYANvfnOqbNf0MGtN00j91K8AuLM0iB
-HcmDdBNmD4b35gNwAY/o7bVQiNkQjA6/Iz60jA7CjkeEM8HrMH0R+M4hqkbw0oG8
-fDlofDHOitVJchPtIqtGriMcMhQ0da2nyAVfS/zTaC8vVRctPbF514wur3remSl0
-hzySiS8yziAKRHCwOntmyCjyzp0d7w7hobbqgN2tgEZtuLFIhukzzBaC40ftoinA
-ZQYe3qzoVuipdw0mdsUI9P3EYn0Wbw==
-=3+qc
------END PGP SIGNATURE-----
-
---Sig_/7XSMcqyt=qM1=e9ydmdPmIi--
+Best regards,
+Alexey
 

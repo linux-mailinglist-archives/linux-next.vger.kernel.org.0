@@ -1,98 +1,124 @@
-Return-Path: <linux-next+bounces-9369-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9370-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F89ACAB9C5
-	for <lists+linux-next@lfdr.de>; Sun, 07 Dec 2025 21:43:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 12138CABA19
+	for <lists+linux-next@lfdr.de>; Sun, 07 Dec 2025 22:35:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E6371301463D
-	for <lists+linux-next@lfdr.de>; Sun,  7 Dec 2025 20:43:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CCBAB30142C1
+	for <lists+linux-next@lfdr.de>; Sun,  7 Dec 2025 21:35:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBEC42C17A1;
-	Sun,  7 Dec 2025 20:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FE17246BB2;
+	Sun,  7 Dec 2025 21:35:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gpWaOSU8"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="NO9XXrKy"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3AEA1B0F23;
-	Sun,  7 Dec 2025 20:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F15722173D;
+	Sun,  7 Dec 2025 21:35:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765140215; cv=none; b=R0gswCh6GHGRGUHcbHnX/U0IjGFmKfMzAY3iOmrdEslPHM7Nw3QGchVvIeIBHs9nmNCM7BMdYZ5CTAQshjeTL9W4Fmk3kzL6vwlelr1cwOXtviJ4ps+qRM0Hqz9VRIJzRdnl0ZVoWtDuf+qT4jbE00AuetgmTCCYj3m/J4Sge+o=
+	t=1765143327; cv=none; b=qXxjRq0RnPAPFL2yCsOM7zYb2/WZwKt08kEEZZ/3XaI+882vr/LXKGp/ZDU+oa4/MiSQ63mKw41Non8OvWpds4KD92rhEWupHs7mpDAuKXR/4FJmC0hBJYFDwOztQRwV02/bwpv5nQADHpVUMYjC9Up79bQdRpTPRYI8UAJwtz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765140215; c=relaxed/simple;
-	bh=CvPBUv9C3Xu+KLMZEv4kHMblvCy1wzeAXiAhnsTJ+kE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FDbaw+XADxkCuB9mgP7TCfNpUGO5dyzWCoTJnCN3OjRFc6CK2zSv2TLIZGGndDca3gY4xzX70iENMwM4P3zeQOzIvIT7UmxiPBXY1+U8HIl3v+PkisnjvdTeUJfuykyf3QPOQ4hnbBaA7ewt2YoyDucNFV7A6qVy7BhTz31h0C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gpWaOSU8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14D8FC116B1;
-	Sun,  7 Dec 2025 20:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765140215;
-	bh=CvPBUv9C3Xu+KLMZEv4kHMblvCy1wzeAXiAhnsTJ+kE=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=gpWaOSU8ceg7Du0//QwXT0qW3WRuHUTdvjS9AOBU/w9UTrr3eCyxLFgzVzsLFfKPu
-	 70XfpxBByUS2T/yhMeO75z5nWP/sNOEyO22uzNZIyMXSKMa6C8ruSxLev55Z2dXg27
-	 HTXialpmGjQVhba9vy2FoH4iy+VI0E5kbZj4vCui8hyFKafvSng1oBCTy0Xad//4gj
-	 TR6zIPmVHhuJFvrErO1XM9iCZH5rlDO4uw7yMK8oWehXrRg+WIsRpfdC1Lp7eovbtR
-	 gJZXTHK+zgoovP4haWxMHsI7brpbzJcK5lnovF7l4Cb12cn8dyadUrEW8A19YO9ASy
-	 mtTj+Y3DeF77g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id BF996CE0CB8; Sun,  7 Dec 2025 12:43:32 -0800 (PST)
-Date: Sun, 7 Dec 2025 12:43:32 -0800
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: linux-next: manual merge of the rcu tree with the ftrace tree
-Message-ID: <8e93322e-9e0d-4414-b9ce-7c098477dbe8@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20251114135226.64831207@canb.auug.org.au>
- <20251114074255.3e535084@gandalf.local.home>
- <aRdBVFSmgvPWuY2k@localhost.localdomain>
- <054ceff1-87b7-4729-8589-b7dd22887bc1@paulmck-laptop>
- <aRxu_ycww5U9qxJR@localhost.localdomain>
- <f79a2e18-d9c3-40db-97ed-c334b90cf3ba@paulmck-laptop>
- <370911ae-ce3c-4ebd-a348-452c73c06597@paulmck-laptop>
+	s=arc-20240116; t=1765143327; c=relaxed/simple;
+	bh=9GNOlvVC9agtAvRTCw0woLqh6y4k89CpbFCe7tACn7Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hHo8j/KaTFdUnai6QuBqs0P+44zgEEdNvQJruhS2f8gf19+1xS9XRZ38FCw63h71VPKx3sBoM47CCqc9U4qI3CninaUbZ+e9vM7wqkx+kixgwEB3VzVrqqJGzJmEHGXkIsMNVqDmS2NGW8qwmNQ02KuZNSyLYWTSyiEZ0YQlImA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=NO9XXrKy; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1765143312;
+	bh=/4cNmOlP3N1MM6WMET4vScazPML/doqaGPiPKBn1Us8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=NO9XXrKyPPfsC67RkukCb/YLJhbFf/NH5sbKeWgFLi4ET0knFWpYrdyuPW9ggXLsg
+	 TK9wEy3CGYW5CbZGh0AC+4Ll7j0MRmTVXjXetE5N2c/zN/VPZkqEUEUD5FEnygEQOd
+	 M+GB3w8PDXm6bUoFLFdjrlsEn2bkms5HfzK6gW/B70kCAO45Wb8w/Nq5SwGg8JG4Wv
+	 hVhkQeId8LVvxjRFNuqzneSHu7QXrbqQS8bDPDq0zhkKHckPTMOgjYKTLtio/+7L7Q
+	 wDENQfaUblN60GDPzJtPbdlF7GkL5kN8mF3//0F62VxriqPx0Orn/l/XbLEU29IBJo
+	 bymx3oaVfY/IA==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dPdgh0TqTz4wD1;
+	Mon, 08 Dec 2025 08:35:12 +1100 (AEDT)
+Date: Mon, 8 Dec 2025 08:35:11 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, Linux Kernel
+ Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mm-hotfixes tree
+Message-ID: <20251208083511.6dc45509@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <370911ae-ce3c-4ebd-a348-452c73c06597@paulmck-laptop>
+Content-Type: multipart/signed; boundary="Sig_/7XSMcqyt=qM1=e9ydmdPmIi";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-On Mon, Dec 01, 2025 at 04:57:54PM -0800, Paul E. McKenney wrote:
-> On Tue, Nov 18, 2025 at 07:04:07AM -0800, Paul E. McKenney wrote:
-> > On Tue, Nov 18, 2025 at 02:05:03PM +0100, Frederic Weisbecker wrote:
+--Sig_/7XSMcqyt=qM1=e9ydmdPmIi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-[ . . . ]
+Hi all,
 
-> > > So for now I'm still keeping it outside -next. I hope it is not a necessary
-> > > change in your srcu series?
-> > 
-> > My thought is to put the patch with Steven's suggested removal on my
-> > -rcu stack and see what kernel test robot thinks of it.  ;-)
-> 
-> Unless I hear otherwise, I will push this into -next after the RCU
-> patches land.  If all goes well, I will send the pull request to Linus.
-> So please let me know if you would prefer some other course of action.
+After merging the mm-hotfixes tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-If I continue to hear no objections in the next 20 hours or so, I will
-push this into -next:
+In file included from arch/x86/include/asm/bug.h:193,
+                 from include/linux/bug.h:5,
+                 from include/linux/kasan.h:5,
+                 from mm/kasan/common.c:14:
+mm/kasan/common.c: In function '__kasan_unpoison_vmap_areas':
+mm/kasan/common.c:594:34: error: 'KASAN_VMALLOC_KEEP_TAG' undeclared (first=
+ use in this function); did you mean 'KASAN_VMALLOC_PAGE_RANGE'?
+  594 |         if (WARN_ON_ONCE(flags & KASAN_VMALLOC_KEEP_TAG))
+      |                                  ^~~~~~~~~~~~~~~~~~~~~~
+include/asm-generic/bug.h:120:32: note: in definition of macro 'WARN_ON_ONC=
+E'
+  120 |         int __ret_warn_on =3D !!(condition);                       =
+       \
+      |                                ^~~~~~~~~
+mm/kasan/common.c:594:34: note: each undeclared identifier is reported only=
+ once for each function it appears in
+  594 |         if (WARN_ON_ONCE(flags & KASAN_VMALLOC_KEEP_TAG))
+      |                                  ^~~~~~~~~~~~~~~~~~~~~~
+include/asm-generic/bug.h:120:32: note: in definition of macro 'WARN_ON_ONC=
+E'
+  120 |         int __ret_warn_on =3D !!(condition);                       =
+       \
+      |                                ^~~~~~~~~
 
-fca6fa23c5a5 ("tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_CALL() with SRCU-fast")
+Caused by commit
 
-							Thanx, Paul
+  6b83afdcfa93 ("kasan: unpoison vms[area] addresses with a common tag")
+
+I have reverted that commit (and the following 2 fixes) for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/7XSMcqyt=qM1=e9ydmdPmIi
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmk18w8ACgkQAVBC80lX
+0GyO7AgAkWJBz5laS6Wp6IGv94Fbf0GJ/TDtImk/nPLcPlrK1Cu0QxBLopJKKIWt
+kyd4MfVh7CGqyNo21fZ366App83Xkw2pCpYANvfnOqbNf0MGtN00j91K8AuLM0iB
+HcmDdBNmD4b35gNwAY/o7bVQiNkQjA6/Iz60jA7CjkeEM8HrMH0R+M4hqkbw0oG8
+fDlofDHOitVJchPtIqtGriMcMhQ0da2nyAVfS/zTaC8vVRctPbF514wur3remSl0
+hzySiS8yziAKRHCwOntmyCjyzp0d7w7hobbqgN2tgEZtuLFIhukzzBaC40ftoinA
+ZQYe3qzoVuipdw0mdsUI9P3EYn0Wbw==
+=3+qc
+-----END PGP SIGNATURE-----
+
+--Sig_/7XSMcqyt=qM1=e9ydmdPmIi--
 

@@ -1,117 +1,88 @@
-Return-Path: <linux-next+bounces-9371-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9372-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B3DACABAB4
-	for <lists+linux-next@lfdr.de>; Mon, 08 Dec 2025 00:16:00 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B2EFCABB1F
+	for <lists+linux-next@lfdr.de>; Mon, 08 Dec 2025 01:18:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 34AE93002D6C
-	for <lists+linux-next@lfdr.de>; Sun,  7 Dec 2025 23:15:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D13A63011A45
+	for <lists+linux-next@lfdr.de>; Mon,  8 Dec 2025 00:18:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B7662C159C;
-	Sun,  7 Dec 2025 23:15:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pdP1IOPS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AB8C45BE3;
+	Mon,  8 Dec 2025 00:18:15 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582CA155C97
-	for <linux-next@vger.kernel.org>; Sun,  7 Dec 2025 23:15:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D175922083;
+	Mon,  8 Dec 2025 00:18:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765149357; cv=none; b=bY9YMPA1B7X22QkCD6OmiH/gmtrFrAnHUROmfVFNXj3tImiHrmC9aFHOWJFV9A4IVqutMf7eHA4hgZoSOLyQsur2StUzt6p8R84i26T76I3Rh027ZwEApYi5ve/lQSLhEuBVimMQzWPAiW57Z5zSRmF5XKh3VsDOgxP6eNeO6ec=
+	t=1765153095; cv=none; b=PYkCNIeH1JDdvguUA7Yi0+CNy7fC5pqh3n9/1hRpBi/sLi/6H7NVz3yctOPZ3tTnw56961J8yGxkLbr+es5nE9FyPDq5N3lanoN9vgn8KEB+K5ostSrKXJm6Iw61rDNyjeMH17g2O/wLEjRfkj4a+oGW7/blsXUJ7ICMh4/pGMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765149357; c=relaxed/simple;
-	bh=JrawoIvD5t0mSOtoyYriDOG37dzck5mS9GT3TPZS81w=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=ByalMl3mKATOsb/mDBRDVwXA7wFh4RyNKMxDug1kXrp7ayusMGVknwoEx8NGLD1MxZs1vSRS2QjnTnmQwfhER2P6pzKP2EoHJhMyESw2k7RtW6sfayvv8z0rMAsHE76kVjAKohpisVjdCM24Ze5H/M4a1oR227cjy2UVW0hQtjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pdP1IOPS; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-42b38693c4dso1782636f8f.3
-        for <linux-next@vger.kernel.org>; Sun, 07 Dec 2025 15:15:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1765149354; x=1765754154; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JrawoIvD5t0mSOtoyYriDOG37dzck5mS9GT3TPZS81w=;
-        b=pdP1IOPSL8KY3IxDXkN4DeLPaWDErmLm++ZI+K2V3F+iMdk+9svTMBxzeqVufMDb4c
-         VqS0L7/Isr8sWDqpKcmaZJ7jqmS1XHlXUnKWDTVHd2TyLKYqz2PCy83D4GPHMZV/52Df
-         HjF3Hv1rTIWM3HSXELgBZWu/XQgNv95rW/QizddCHo9oxvDXmrX+KDc4I4CeH9tdnwSC
-         SMZErt8fRPdW5UsPGNwjLL5Npe+jLhhhnz45DcBDgS8StOECkK4HH9n8EliAj7JApJwq
-         N/ukRV+Lm/XWSRpWGFBGggtyd7zPcECJ7eQHAhruKBpMZD0NvHoT+wk/yLkWZkMj9e4r
-         y5pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765149354; x=1765754154;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JrawoIvD5t0mSOtoyYriDOG37dzck5mS9GT3TPZS81w=;
-        b=vVrXBl/J+43jHrG6C/ksiMZmPC0VgLD0u/m9x+FM6ZJMTAp8dinH8KLGSE4ownjUPk
-         vddHLtJtSb108TJ4UntFlQ5HAdrRIrD8dGkTZrkIMp7dSHIKZCQ+MoD4fA8tc+uS8KAU
-         NNRMi36hd6OZgNZLHUvhAoyaI73tBFZZAl7jVd8TFLcdByMjdc8TFEYA7Q7i4qzf+YO4
-         SUTVjoEkRazFmVQuNpUNNzS1fKa9HaNIfca6yIc4msSc4IhYj9itTZfJRiJAwV4vHWsg
-         bSbZg0bszoAnUzwulWa0S6bclB2uC7X81+dcEgRQEijSw9oKj1b/pkTiexvreDebuv+e
-         aZOg==
-X-Forwarded-Encrypted: i=1; AJvYcCV594GIGpPIz+34bJJALepKkPJRtB8WwojzD0zsGowTLL280/7lJP5EzovB+d5Me7JAWBM0PlIkVmW1@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWh3p5hF4QJVy9LR4l1f3dJDO1Fb8VP1VxrVnXZqAtOila7cJZ
-	/R+GsMhTzj2xKeO4NZaZqJBeac+iqvsX2MeEeWnltJdWuDlRm5BQz2XdE9whrb4Ckts=
-X-Gm-Gg: ASbGncvKmArxeoXZYeUVHi6zTVkKXyNCXLyXufKb5idxt6NYlVPdHcbFOAjGolJ4rle
-	KXVRVbHLqZY6gtpyPEtLhsUpBpJMEdHyHFAApCIhvcxLqkIQCgagulhskFvOJbOPrVojGfSoQHr
-	r3Yyx9eIswqeW/hyS3kupttHSDmm36X+X+pCxre+rFdeRvVBaCx5oKwaWUeQ+YhqGGxgTdUm7gB
-	CLCjK2rWmkSvuKaC07GtX+TABRkaJtIwIEh+NbJIFYx+GTO7GLGSolgOdXWrreCWKggv21UETCN
-	B+qaEpX5Ju0j228kc/sXUPl21q4/s6/7h+b3sSdL2Y5QD5YfrFlQwYtIyAyLpjakYE4nXLZ8yQe
-	/bbJ0QxWpk5H/oF2B0P/pzCqeQqcwiTDIL3tT5rim/H0w2I9ORZsHx446bmL5Q+dO3m4chsd/ll
-	sx7TLEuo5DKIDfrCX1
-X-Google-Smtp-Source: AGHT+IG265bGsuH8yFF78i9r8fah0BbcyblFqGg1lC2v8CBn3ElR0sMxydVKkkvoEWSpFSE0ekKljA==
-X-Received: by 2002:a05:6000:1a85:b0:42b:40b5:e64c with SMTP id ffacd0b85a97d-42f89f6340dmr5988631f8f.30.1765149353630;
-        Sun, 07 Dec 2025 15:15:53 -0800 (PST)
-Received: from localhost ([2a02:c7c:5e34:8000:da07:24c6:f91a:9817])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42f7d222478sm21783666f8f.20.2025.12.07.15.15.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 07 Dec 2025 15:15:52 -0800 (PST)
+	s=arc-20240116; t=1765153095; c=relaxed/simple;
+	bh=M+Mh4Q+nozt4i1gx//qkqSfG6e7z8XKsmxYGFVD6wdk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EyTI2GmXt0GUnnP2NRBQ0hft23M8DvoSke/5W2HMfqVxhdbVIMFajYR85E+HxZWmXkp20nDffUdjDyv3Eal7+/4RJUyhklFP3+ob2z3sdSmRA+5DxTPwJl8+ZYHpuBtflGSKR+cdCcenSD1ZSzrKNp1N3mwg1ZmzvoD+2wEA0Rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 04D39BBEC2;
+	Mon,  8 Dec 2025 00:18:04 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf11.hostedemail.com (Postfix) with ESMTPA id F3A3D2002F;
+	Mon,  8 Dec 2025 00:18:00 +0000 (UTC)
+Date: Sun, 7 Dec 2025 19:17:56 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>, Stephen Rothwell
+ <sfr@canb.auug.org.au>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Boqun
+ Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, Masami
+ Hiramatsu <mhiramat@kernel.org>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Sebastian Andrzej Siewior
+ <bigeasy@linutronix.de>
+Subject: Re: linux-next: manual merge of the rcu tree with the ftrace tree
+Message-ID: <20251207191756.3ac61680@debian>
+In-Reply-To: <8e93322e-9e0d-4414-b9ce-7c098477dbe8@paulmck-laptop>
+References: <20251114135226.64831207@canb.auug.org.au>
+	<20251114074255.3e535084@gandalf.local.home>
+	<aRdBVFSmgvPWuY2k@localhost.localdomain>
+	<054ceff1-87b7-4729-8589-b7dd22887bc1@paulmck-laptop>
+	<aRxu_ycww5U9qxJR@localhost.localdomain>
+	<f79a2e18-d9c3-40db-97ed-c334b90cf3ba@paulmck-laptop>
+	<370911ae-ce3c-4ebd-a348-452c73c06597@paulmck-laptop>
+	<8e93322e-9e0d-4414-b9ce-7c098477dbe8@paulmck-laptop>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 07 Dec 2025 23:15:51 +0000
-Message-Id: <DESD81PA9NI9.NKA6IOV0ROX9@linaro.org>
-Subject: Re: [linux-next] potential deadlock in ufshcd?
-From: "Alexey Klimov" <alexey.klimov@linaro.org>
-To: "Bart Van Assche" <bvanassche@acm.org>, <linux-scsi@vger.kernel.org>,
- <mani@kernel.org>, <linux-arm-msm@vger.kernel.org>
-Cc: <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
- <linux-next@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.20.0
-References: <DERQ2FF2WO70.3I04I9XAG5V6D@linaro.org>
- <46cf2cb9-76f4-4d73-be3d-88fcbe7055f4@acm.org>
-In-Reply-To: <46cf2cb9-76f4-4d73-be3d-88fcbe7055f4@acm.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: F3A3D2002F
+X-Stat-Signature: twg1gf1hosqpb5rxtdbrp5i6fpydkuic
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18H3R1Eroeyso9bB2Gcbr29d3dB/rgl6MM=
+X-HE-Tag: 1765153080-852249
+X-HE-Meta: U2FsdGVkX1+8KMvfnbUJnpY9OaKOZrcnpRjwzvo+saw/ulhoaXOgdPCKVgj869y3FUG+/kGfqde14lf8ImB3TPG5myPivE7Jg5QLha1odFP+R/viNo4Lo3w5c6Zj3aqxk24r5sJSCA+CwBeU/Jr3SatGYsiIpK1u2drQfOxNHgUUzeORuUvIaVwBedSnfJzqozoiqQ9CAYomDqunj3pUjybVqb7R/zEkuS1+AmCeJJUQMx1p5H3KCx+oFfezZ9HhuXUeckTBS+AhrV/ktuS6ZRYOKP8TlpGPyligZ0gXUTMMP0S/IxXtvXdYv7WQuH1Ti3DQdE7Y4e0EyeoXbXUuuQWn7YaVP6Kp
 
-On Sun Dec 7, 2025 at 3:18 PM GMT, Bart Van Assche wrote:
-> On 12/6/25 7:07 PM, Alexey Klimov wrote:
->> Is it a known problem? I can test potential changes to resolve this
->> or try to collect more debug data if needed.
->
-> Please help with testing these two kernel patches:
-> * "[PATCH] ufs: core: Fix a deadlock in the frequency scaling code"
-> (https://lore.kernel.org/linux-scsi/20251204181548.1006696-1-bvanassche@a=
-cm.org/).
+On Sun, 7 Dec 2025 12:43:32 -0800
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
-Thanks! This looks like that one about fixing deadlock does
-the job. I provided tested-by tag there.
+> If I continue to hear no objections in the next 20 hours or so, I will
+> push this into -next:
+> 
+> fca6fa23c5a5 ("tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_CALL() with SRCU-fast")
 
-> * "[PATCH] ufs: core: Fix an error handler crash"
-> (https://lore.kernel.org/linux-scsi/20251204170457.994851-1-bvanassche@ac=
-m.org/).
+Hi Paul,
 
-I didn't test this one yet though.
+Can you repost the patch as a normal patch (start its own thread) so
+that I can look at it separately. I'm currently in Tokyo so I'll likely
+get distracted a lot this week.
 
-Best regards,
-Alexey
+-- Steve
 

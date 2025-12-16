@@ -1,160 +1,132 @@
-Return-Path: <linux-next+bounces-9418-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9419-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CFDBCC0738
-	for <lists+linux-next@lfdr.de>; Tue, 16 Dec 2025 02:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D6CBCC076B
+	for <lists+linux-next@lfdr.de>; Tue, 16 Dec 2025 02:32:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 30C22301765E
-	for <lists+linux-next@lfdr.de>; Tue, 16 Dec 2025 01:25:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 449C63014D96
+	for <lists+linux-next@lfdr.de>; Tue, 16 Dec 2025 01:32:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B465927056F;
-	Tue, 16 Dec 2025 01:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F02C40855;
+	Tue, 16 Dec 2025 01:32:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="jMPVFjfr"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mwmdzoit"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F76326CE0A;
-	Tue, 16 Dec 2025 01:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72E7F155C97
+	for <linux-next@vger.kernel.org>; Tue, 16 Dec 2025 01:31:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765848322; cv=none; b=fFcMPoeO1Rrw7ZX0YgKam2X9RLrv166+oyG8RHg1usIDsWEiyiXGr3bNNgl9HVKl33xgyWQYmNdPHGNg30RpAy4iT/pAVQJUadEUi4fO41Jn4od2CzbXpOfIZtazJUjgCIQDIB8lQItDGHZz1O1Buiy9DjP5/58LqsRyzKIIHjY=
+	t=1765848722; cv=none; b=Edb/hRUciZXbUvz7wFN3MgLrQKakY7JdutEpbkoWr/9sq131TV1PzMWm6k3THVrRjCOtYXl9fKV8U0MQNpLqq26eMDxwqU3HTWo/VcPRKsa3oHpu63iP3QOJTX5yf0ABNh66XIdxFov34WdzN+rwQW+RzQT2D8sHFsvf1Zc2IzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765848322; c=relaxed/simple;
-	bh=3zSPmz/NCkE7wWGBlwPS2JqQRbZqsgUd+xF3nDaHKA0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JqzDIQGL64E59irC6MGubLMKDGt/GH8RUPYv0ArKZA6Jf7je2jIVXFZAc8YDDIh42AFcH9ZHDUqrMVI3BEDuv+g3AYpR8c5X76mEOrOrsQYOImiznRvp3N3ObA/BiR6Fx2ouOkb6qHTl3SJjznANOms8mtag5/0Q3nqrBp7CgO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=jMPVFjfr; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1765848317;
-	bh=0plY8aRXrmAzEnRYdeWviS9sqQo6p5zP5wPOiczpzbE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=jMPVFjfrFR+MtukDfHy7Qw4juRI0EqSXNyoaQ/soObaLLCnEbK679LqGLWFCUB8Ub
-	 587xYIhje4IAUflSFydVt6rDw13De8l4Mo4L+vtfHSVFSdhQFFaLkR4/QAoTMIbkFm
-	 2OzHdJ7cBz2xLJDN1jJJZ480L+CjmKLvZgkCB3v3OSNRuuU+5LOAtScOc+x70z1GQO
-	 enF4kIHe8IFkzbBs7K7IoPdY1cuj4Gv6XsK50j9BSNIbwCXXTOGEVfoqyNQVW0s9Gd
-	 FSXz7Vbl1/Cj7i+Hdja9PyhNDgLXnssFrUapfOswQ3mnZ1K1ebhdytgWlzIdoW2SxN
-	 pfpKyDVcDaQzQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dVfPR2z5Kz4wCm;
-	Tue, 16 Dec 2025 12:25:15 +1100 (AEDT)
-Date: Tue, 16 Dec 2025 12:25:14 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>
-Cc: KernelCI bot <bot@kernelci.org>, kernelci@lists.linux.dev,
- kernelci-results@groups.io, regressions@lists.linux.dev, gus@collabora.com,
- linux-next@vger.kernel.org, bpf <bpf@vger.kernel.org>, Networking
- <netdev@vger.kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>
-Subject: Re: [REGRESSION] next/pending-fixes: (build) error: unknown warning
- option '-Wno-suggest-attribute=format'; did...
-Message-ID: <20251216122514.7ee70d5f@canb.auug.org.au>
-In-Reply-To: <176584314280.2550.10885082269394184097@77bfb67944a2>
-References: <176584314280.2550.10885082269394184097@77bfb67944a2>
+	s=arc-20240116; t=1765848722; c=relaxed/simple;
+	bh=LC8r05fLe2hYe563z3Xy94j/vIQLfyFhduWP99i9SmE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PIV0c8gYb+OsEEWCF1tBsQdFmjRLplAbQ6iymT3UvhiOH1ai7hqt8nf8cg2XnVWSBqszm97iUjCCD6gSdmx+mRjsck1HV0BKVOaMuOpFgIn40leLhIDGsD2xzPIGuGwktJ7bpAVtZnVZU01+owzRqnQ89dGLXvPuhvq/uC1vGFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mwmdzoit; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <3cd2c37e-458f-409c-86e9-cd3c636fb071@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1765848712;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XXNvXf2b3Eq9z1G5L0H6owGsJ0eChNfXY/EEyOk4EJY=;
+	b=mwmdzoitBuqdbkA0dRmrsTwrH7HkU9Sf9k9MXxDGx7uq4CWVJuCp9mBeOxpdm6WI2tlon1
+	QE6jVbY8XMhuvCR9QeAr1GaaJhRWZGnWz1D5P1LVMKdYiP2L5twumkd7KwF6rDOA9+/DJd
+	6j9pWObl9qL3Jz1WsqCnSSr15HKa+e0=
+Date: Mon, 15 Dec 2025 17:31:42 -0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/69et5i_lNvN.91T_ot13ewr";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Subject: Re: [REGRESSION] next/pending-fixes: (build) error: unknown warning
+ option '-Wno-suggest-attribute=format'; did...
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>
+Cc: KernelCI bot <bot@kernelci.org>, kernelci@lists.linux.dev,
+ kernelci-results@groups.io, regressions@lists.linux.dev, gus@collabora.com,
+ linux-next@vger.kernel.org, bpf <bpf@vger.kernel.org>,
+ Networking <netdev@vger.kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <176584314280.2550.10885082269394184097@77bfb67944a2>
+ <20251216122514.7ee70d5f@canb.auug.org.au>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20251216122514.7ee70d5f@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
---Sig_/69et5i_lNvN.91T_ot13ewr
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 12/15/25 5:25 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> On Mon, 15 Dec 2025 23:59:03 -0000 KernelCI bot <bot@kernelci.org> wrote:
+>>
+>> Hello,
+>>
+>> New build issue found on next/pending-fixes:
+>>
+>> ---
+>>  error: unknown warning option '-Wno-suggest-attribute=format'; did you mean '-Wno-property-attribute-mismatch'? [-Werror,-Wunknown-warning-option] in kernel/bpf/helpers.o (scripts/Makefile.build:287) [logspec:kbuild,kbuild.compiler.error]
+>> ---
+>>
+>> - dashboard: https://d.kernelci.org/i/maestro:32e32983183c2c586f588a4a3a7cda83311d5be9
+>> - giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>> - commit HEAD:  326785a1dd4cea4065390fb99b0249781c9912bf
+>>
+>>
+>> Please include the KernelCI tag when submitting a fix:
+>>
+>> Reported-by: kernelci.org bot <bot@kernelci.org>
+>>
+>>
+>> Log excerpt:
+>> =====================================================
+>>   CC      kernel/bpf/helpers.o
+>> error: unknown warning option '-Wno-suggest-attribute=format'; did you mean '-Wno-property-attribute-mismatch'? [-Werror,-Wunknown-warning-option]
+>>
+>> =====================================================
+>>
+>>
+>> # Builds where the incident occurred:
+>>
+>> ## defconfig on (arm64):
+>> - compiler: clang-21
+>> - config: https://files.kernelci.org/kbuild-clang-21-arm64-mainline-694097d2cbfd84c3cdba292d/.config
+>> - dashboard: https://d.kernelci.org/build/maestro:694097d2cbfd84c3cdba292d
+>>
+>>
+>> #kernelci issue maestro:32e32983183c2c586f588a4a3a7cda83311d5be9
+>>
+>> --
+>> This is an experimental report format. Please send feedback in!
+>> Talk to us at kernelci@lists.linux.dev
+>>
+>> Made with love by the KernelCI team - https://kernelci.org
+>>
+> 
+> Presumably caused by commit
+> 
+>  ba34388912b5 ("bpf: Disable false positive -Wsuggest-attribute=format warning")
 
-Hi all,
+Hi Stephen,
 
-On Mon, 15 Dec 2025 23:59:03 -0000 KernelCI bot <bot@kernelci.org> wrote:
->
-> Hello,
->=20
-> New build issue found on next/pending-fixes:
->=20
-> ---
->  error: unknown warning option '-Wno-suggest-attribute=3Dformat'; did you=
- mean '-Wno-property-attribute-mismatch'? [-Werror,-Wunknown-warning-option=
-] in kernel/bpf/helpers.o (scripts/Makefile.build:287) [logspec:kbuild,kbui=
-ld.compiler.error]
-> ---
->=20
-> - dashboard: https://d.kernelci.org/i/maestro:32e32983183c2c586f588a4a3a7=
-cda83311d5be9
-> - giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-> - commit HEAD:  326785a1dd4cea4065390fb99b0249781c9912bf
->=20
->=20
-> Please include the KernelCI tag when submitting a fix:
->=20
-> Reported-by: kernelci.org bot <bot@kernelci.org>
->=20
->=20
-> Log excerpt:
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
->   CC      kernel/bpf/helpers.o
-> error: unknown warning option '-Wno-suggest-attribute=3Dformat'; did you =
-mean '-Wno-property-attribute-mismatch'? [-Werror,-Wunknown-warning-option]
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
->=20
->=20
-> # Builds where the incident occurred:
->=20
-> ## defconfig on (arm64):
-> - compiler: clang-21
-> - config: https://files.kernelci.org/kbuild-clang-21-arm64-mainline-69409=
-7d2cbfd84c3cdba292d/.config
-> - dashboard: https://d.kernelci.org/build/maestro:694097d2cbfd84c3cdba292d
->=20
->=20
-> #kernelci issue maestro:32e32983183c2c586f588a4a3a7cda83311d5be9
->=20
-> --
-> This is an experimental report format. Please send feedback in!
-> Talk to us at kernelci@lists.linux.dev
->=20
-> Made with love by the KernelCI team - https://kernelci.org
->=20
+A potential hotfix is here:
+https://lore.kernel.org/bpf/d80c77cf-c570-4f3b-960f-bbd2d0316fac@linux.dev/
 
-Presumably caused by commit
+Needs acks/nacks.
 
- ba34388912b5 ("bpf: Disable false positive -Wsuggest-attribute=3Dformat wa=
-rning")
+> 
+> in the bpf tree.
 
-in the bpf tree.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/69et5i_lNvN.91T_ot13ewr
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlAtPoACgkQAVBC80lX
-0Gwnlwf/c8kn9K6aG0sl1X13gll7DqASHge6iKGaTEZHx/RSIDn/b4V+PGysnXHe
-MAymJ9jhvWXmxAsbQ7Jz9wS1D17NALYYSWinxetr8gxKKqd4q4+pL4R56r0yqqQz
-u7PGLi0RUPSvX7rlHtT0Fs2PECd0i18O3z7omnRfITxLTKhJXF7th1GE5XBEHdSI
-JQPfqDKe7zwencS4pZSksdkCAmOE68IQDvODSiXwe1C5v3+owbGde2XF0u39Q0q3
-yuBB6D1/s7T9uy1n1N547bPs+QK3HWGrTigsrYUTuuoYs0ZF9xJKahyWG76+MDfo
-rrwxXS9dFO/HcmRmV7LpwhzWzwZcWg==
-=OyqN
------END PGP SIGNATURE-----
-
---Sig_/69et5i_lNvN.91T_ot13ewr--
 

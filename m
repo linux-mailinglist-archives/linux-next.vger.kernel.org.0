@@ -1,137 +1,103 @@
-Return-Path: <linux-next+bounces-9408-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9409-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9196CC049A
-	for <lists+linux-next@lfdr.de>; Tue, 16 Dec 2025 01:00:03 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65936CC0603
+	for <lists+linux-next@lfdr.de>; Tue, 16 Dec 2025 01:53:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 85C1C3014DB7
-	for <lists+linux-next@lfdr.de>; Mon, 15 Dec 2025 23:59:09 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B996F3002E8F
+	for <lists+linux-next@lfdr.de>; Tue, 16 Dec 2025 00:53:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D827732F751;
-	Mon, 15 Dec 2025 23:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DCEF212560;
+	Tue, 16 Dec 2025 00:53:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="KM5ZwUU3"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="kQwijw4U"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E37432D0CC
-	for <linux-next@vger.kernel.org>; Mon, 15 Dec 2025 23:59:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4196282866;
+	Tue, 16 Dec 2025 00:53:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765843148; cv=none; b=Z5FRlkPeadwDZHk8jK0HizfzXwMwncY9D5o7KI53Xr90Xz0FFUnq+GoZe2ichWNyT21WpI7p2uri1dnSenawBb/Wi1S6GqNs8OTxUcyz3jwqbtud7O2aIaXl2u8O8Tqmev/GpCSMYO+K3pgp9wFv8gf4jA8j5pq+OHIFbdJ9zhE=
+	t=1765846387; cv=none; b=ZlbSUV3BoMBKuTxrqnSqsIsr0ImkgGsnHLB+G3334iCncQ1sSuhaUPGIQA3qEuMWs5yaoAoTWKR9BeCAtfqiiquG1roE7zKy4i05W3TOpJsmRqN4NVhk9+b4EroJ2LhXT6R1kBi7VV+nm0Hy7Xv8qDhpxoaz/oyPZi4hPWFA55o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765843148; c=relaxed/simple;
-	bh=aUUqaYm/em1vfd4H8MXlLWDsJWRcYiIvgnLSp4zmUgg=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=mlwx3zQr30gDx4Q1icyHOISHt1s1bwSMeLp7AW7U4JjhGp5FmHzoJhIreu/Pmf0uqe4Z5f9eKvHGgNQ+LAI+b5W9kQmZ3jVNagsvdSH04OuU8If2Zx1xbbNX9it2qLgMXFRLod9RhNVmQ2RmLvtHpzvsKfVx93kpPXYI3Jc/b8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=KM5ZwUU3; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-bc09b3d3b06so2373244a12.2
-        for <linux-next@vger.kernel.org>; Mon, 15 Dec 2025 15:59:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1765843145; x=1766447945; darn=vger.kernel.org;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XhJoYwe/PCXYwVu0tT+tOeoeCxiWwbIjyVtrV3UZN5A=;
-        b=KM5ZwUU3FkVv48lefilKIvq3yJkgh8aEo9yr0CLw8HFD8etE2eddxyoHpMR9fgKNZD
-         DoOtmXybJAqqx89dJ/ALIVnPri5jJ2z9LPCQXVNqHx76iYRUQwD5SaUsZmTRl+BRVMzK
-         GtnOU+BqRVFZGLxBfo0+ya80R95Y7WsYgDSEdPiECRfs64g7ps7Rk2z8Opt4xHT7WCfw
-         8XPwMGF7AGkrw+6OOXyRhzzdB8s0lr2ESFZxypnKcewi2SrtyFCB/zFR+b+aUTyA6p87
-         L50gkAQ08CYdIYV03dwSMIfoU2IaNZVDwpURQDD/dAXjrrvZAcBJG1m20yDy6m6v8/O0
-         nzlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765843145; x=1766447945;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XhJoYwe/PCXYwVu0tT+tOeoeCxiWwbIjyVtrV3UZN5A=;
-        b=vzacH0TfWzq4ODorvq7pwueloOe1L0P4v5DJ4DftUDCNPXKxR4qHo50Ky59mjUMy2T
-         E+jMWORD6qStWuNIVOzkCpisMCYXviGcUXHiy/++EYCZY8+A9KbyLX5qQdoZNM7d8YWe
-         heDGwy2nIiafLbrVcEZnX52p1PmzY/YEHJv8xzulKxOjvKU+mz0lsoQgVq0iw/2r/3zp
-         ckcCLWXJmeRvQG5oPv2q96YFTTE8qB94uEWAAqgQjBDrpjdXVJy8hGkA3bAAeIKdicBb
-         aPyIjgelbGJOb1cJBhQRMu1R8Racd7G20GnxCb8/lvWFXiVOiQIPdKUd1CpVxObw1h0e
-         yE4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW5/eKur2RyU5JajPKh5BxEGoq5HnEGko54XwNvjuloFVGtmxkrGh9UPVWqQxhfHF6+hG2KgrzEsLSj@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4eMal/esCBL2Hc7Gopyk0J5NL75wFGEx/+M+iMiK8fg1ANDsn
-	Fwv94R2HtWmHljgiZg0EK7OT+PQhoOeKM7bsTEBeWRhHtBHTJqaMlLSmLrq6BrQ7Eyk=
-X-Gm-Gg: AY/fxX655WeU5LqugaZkkWJ6vEjziaypQ037g6LAGe3h+0MgmgfkxVIfd33JOrfDwOF
-	rJ8rRBi/EhHOeqnWljPuuCMyHNzhw2BtSb3tlFKps4LJfWDnvfd4bSJuFOLEEbdZcFQRb+mIjyA
-	CAO4MG5/x5J+VGM0YaGEGAVr0L3Xz7FbBl6UUf0sDQYzXxQH+cv9OhP/PWEBK08hV/hCn7XQEYU
-	uT3wEYFdDNCuVTvWrBzxLFUeyYNAmRZTDdw6x9V9jRQocmWBVmwugu+A9zJSM7B8iPFJToj0nTh
-	uqb5CM1fJUFrN8x/lEQw+q1hYVdJJfUkt6dPKRX//YDn17XR7hlgBugu63Cc7pJbzn3O8W9R/3z
-	TE8PXbuvSqgTyuPMBW1B1st9ADPRiUR1GJK40zk623uv3lKCAaR4OMZoypC4/TileQlS5E8RLWv
-	c9TRte
-X-Google-Smtp-Source: AGHT+IEqhN1ubWSuDskzmKUIzAWT6acagrsS0UulZfFDX0DFIKjAjc0DJL4MefNQrAh+wtGqeexThg==
-X-Received: by 2002:a05:7300:cd86:b0:2a4:3593:468a with SMTP id 5a478bee46e88-2ac303f26a3mr8104130eec.38.1765843145335;
-        Mon, 15 Dec 2025 15:59:05 -0800 (PST)
-Received: from 77bfb67944a2 ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ae4f05463dsm63520eec.32.2025.12.15.15.59.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Dec 2025 15:59:04 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1765846387; c=relaxed/simple;
+	bh=qiEJ9WdjFlmurn+Qi5zvbgKKi2gHImGpOiwAAPnOYDw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=GBApep1CU9kphVhukEgcQE5sEnLPOKlwxzv6DyBeFT8J5Wlro13/A46O2hQxWhdiO/LqYbHNs5H9kwxHSFqytatKMd+1M+UCgTmhkRuSt8bdiTk/91J39o2YsDSuuLGp3fJVAANiD6NmLiL5SnTB6wIugbslZbEAYoaYQEKhsi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=kQwijw4U; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1765846374;
+	bh=K4vEVvBXtU9OSyVeFd4X/YTxY48RaUqJFvrbr9JUXnI=;
+	h=Date:From:To:Cc:Subject:From;
+	b=kQwijw4U6MUutWNhfF1Hf7PmgXFLX/HUGNbBtBYhXpMyRA/9ae2qX6qy5551yVQ5r
+	 imXNTH/8uoaJGgyeBp0ygq7rDBhRruN6aiGZyBcEegHqrH4o1/FyS71zCcWzBqOFrK
+	 CVYMIlUIBC+xP6A9CULpuPy9h55s4evhmdkGUhw3UlrHG/HfLs/SmIuaHeEjWLb4WM
+	 3sSJJ2SKmbERmmZGi6SlE8VFdcun2oAsc8BuIVXHxBpRC5SQVyruCwyJGbrtbS9gOD
+	 5v0KXR6+Jvv3Ce/Pd7TpDSRgSpzzDukGXzDMVA+5fItY+q0YxETHPU/mu5cCwEbLr4
+	 E/nKJb2210Zwg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dVdh61GZbz4wBD;
+	Tue, 16 Dec 2025 11:52:54 +1100 (AEDT)
+Date: Tue, 16 Dec 2025 11:52:52 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Benjamin Coddington <bcodding@hammerspace.com>, Linux Kernel Mailing
+ List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the vfs-brauner tree
+Message-ID: <20251216115252.709078e8@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: [REGRESSION] next/pending-fixes: (build) error: unknown warning
- option
- '-Wno-suggest-attribute=format'; did...
-From: KernelCI bot <bot@kernelci.org>
-To: kernelci-results@groups.io
-Cc: regressions@lists.linux.dev, gus@collabora.com, linux-next@vger.kernel.org
-Reply-To: kernelci@lists.linux.dev
-Date: Mon, 15 Dec 2025 23:59:04 -0000
-Message-ID: <176584314421.2550.17138936004167130394@77bfb67944a2>
+Content-Type: multipart/signed; boundary="Sig_/Erzdz6GPoVtR8tP3XQ7nPqx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/Erzdz6GPoVtR8tP3XQ7nPqx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
+After merging the vfs-brauner tree, today's linux-next build (htmldocs)
+produced these warnings:
 
+Documentation/filesystems/api-summary:56: fs/namei.c:4952: WARNING: Inline =
+emphasis start-string without end-string. [docutils]
+Documentation/filesystems/api-summary:56: fs/namei.c:4942: ERROR: Unknown t=
+arget name: "o". [docutils]
 
-Hello,
+Introduced by commit
 
-New build issue found on next/pending-fixes:
+  977de00dfcf8 ("VFS: move dentry_create() from fs/open.c to fs/namei.c")
 
----
- error: unknown warning option '-Wno-suggest-attribute=format'; did you mean '-Wno-property-attribute-mismatch'? [-Werror,-Wunknown-warning-option] in kernel/trace/bpf_trace.o (scripts/Makefile.build:287) [logspec:kbuild,kbuild.compiler.error]
----
+--=20
+Cheers,
+Stephen Rothwell
 
-- dashboard: https://d.kernelci.org/i/maestro:5264eacd00c08c60a249ef82374e5e5418baeed5
-- giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-- commit HEAD:  326785a1dd4cea4065390fb99b0249781c9912bf
+--Sig_/Erzdz6GPoVtR8tP3XQ7nPqx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-Please include the KernelCI tag when submitting a fix:
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlArWQACgkQAVBC80lX
+0GzQHwgAosbjPg4diLDpILCGGQOOhp5FI4V0fQ9NkV8/P6YyQ+GNgEi43b2lFkAy
+i/w+m/a0gUFexZulZM5/ndEyjshNnMg55AU/fRFdSVHZl0ATdwsmnu4CBSVgmUZt
+fbItX54mLCkBQSbjVyct17yfcAoaUBcyYHVlyDtNRWWVNNpLKY2ZsJII7VbHf1Cu
+WAVGWqg1Gb+iFRrcf/zlV3Gay5yvVwCmifK9PV3lr7DIJj/1FHGwQkRPjgcwcBq5
+0/exnT6dnCAX6tahor+k1o5XJ/tgucMGMn8mPeKle8/XAr6GQcVNrwpntFyj6hUe
+HZLAAZGwBw4cBDauRJQJm6Ww4xlFmw==
+=SKti
+-----END PGP SIGNATURE-----
 
-Reported-by: kernelci.org bot <bot@kernelci.org>
-
-
-Log excerpt:
-=====================================================
-  CC      kernel/trace/bpf_trace.o
-error: unknown warning option '-Wno-suggest-attribute=format'; did you mean '-Wno-property-attribute-mismatch'? [-Werror,-Wunknown-warning-option]
-
-=====================================================
-
-
-# Builds where the incident occurred:
-
-## aspeed_g5_defconfig on (arm):
-- compiler: clang-21
-- config: https://files.kernelci.org/kbuild-clang-21-arm-mainline-aspeed_g5-694097e2cbfd84c3cdba2939/.config
-- dashboard: https://d.kernelci.org/build/maestro:694097e2cbfd84c3cdba2939
-
-
-#kernelci issue maestro:5264eacd00c08c60a249ef82374e5e5418baeed5
-
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
+--Sig_/Erzdz6GPoVtR8tP3XQ7nPqx--
 

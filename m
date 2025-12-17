@@ -1,38 +1,38 @@
-Return-Path: <linux-next+bounces-9443-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9444-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69982CC81FB
-	for <lists+linux-next@lfdr.de>; Wed, 17 Dec 2025 15:17:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFF5FCC8ED9
+	for <lists+linux-next@lfdr.de>; Wed, 17 Dec 2025 18:00:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E7E81309FA4D
-	for <lists+linux-next@lfdr.de>; Wed, 17 Dec 2025 14:11:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BDAE4317C42B
+	for <lists+linux-next@lfdr.de>; Wed, 17 Dec 2025 16:51:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2537E38E169;
-	Wed, 17 Dec 2025 14:04:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C48E3358C7;
+	Wed, 17 Dec 2025 15:58:52 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 627BD38E156;
-	Wed, 17 Dec 2025 14:04:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF19029BDBF;
+	Wed, 17 Dec 2025 15:58:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765980290; cv=none; b=tVfFLDKLGwO1WEUXtEZ/4wOEmCcSc+90AEXiTBpWT/NUT1QHKG89p1t0Bv1dLD0MNPouqv8jVfsGcJmATiOk3kBlIPhjw7pyxvWiYt+WdMbu0fEL7I+TXWXQbrCcnjZNGesu71zAApbslmP1NkFTb6Prk7KdLravVnykSmaxtWo=
+	t=1765987132; cv=none; b=YDM3ibFnAbrMeILuIDOptBvliQw8DEWjXO6SdKgYp0tjXY8x1NczLvPwP5t0pfXKUxYhGsCTGDaupW7PJkhfL8svk1v3TrIDeUhTqyh45u0UtC6r+RSjGlC9qIzZVqTFQg0aoFM45N9JNUmXjOI7/VQMoHlKg7zIJjNnEkl7VjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765980290; c=relaxed/simple;
-	bh=jp23SWpHEeLIbdkTtAQLMFAksW5ULZkl04cxtZw2d5I=;
+	s=arc-20240116; t=1765987132; c=relaxed/simple;
+	bh=c9p7nKa7wUIsxbqGewMslBjAHRiRonXQ1idP1aHRLGw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CrehuhqTcMhaVaglzJrIqGD9Goyt3RfARaJLYpxc7vo7O2N87yf9dvGjc0Tz5+lO36BzuRpCv+J2Jv0dRAxhJxkp0371Hxed4tTAJBUpofCx1DC9x8R/RduEbeudPneRydAok4GHZUNmOXkyoULvJJ97zAH5TB79q/i2G0Bu75c=
+	 In-Reply-To:Content-Type; b=blurCcZn2/lRBGPjM5p/R3XqrwyUl3KVnb4F2XV9o02PvduoXIlUE0fkv60+HFIdlDwcT2VBSODXPmbQsvKzXr/DRcLRyP7MhkSrLFw5VnByhFgdVtjPnvtNgtec+87x0WzDyIH/b1/fptyT2Cp3P9dqa6XmhqhWRotDNoEDWMk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 02B37339;
-	Wed, 17 Dec 2025 06:04:39 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8BDD4FEC;
+	Wed, 17 Dec 2025 07:58:41 -0800 (PST)
 Received: from [10.57.45.201] (unknown [10.57.45.201])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0A54F3F73B;
-	Wed, 17 Dec 2025 06:04:43 -0800 (PST)
-Message-ID: <6c56ee08-b2f0-4c79-aff0-46723ddc06dc@arm.com>
-Date: Wed, 17 Dec 2025 14:04:41 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9751F3F5CA;
+	Wed, 17 Dec 2025 07:58:46 -0800 (PST)
+Message-ID: <60dab726-b29b-471f-9590-98772c0a72b5@arm.com>
+Date: Wed, 17 Dec 2025 15:58:43 +0000
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -62,8 +62,7 @@ On 17/12/2025 13:24, Boris Brezillon wrote:
 > Closes: https://lore.kernel.org/dri-devel/20251216120049.3ed7e06e@canb.auug.org.au/
 > Signed-off-by: Boris Brezillon <boris.brezillon@collabora.com>
 
-Reviewed-by: Steven Price <steven.price@arm.com>
-Fixes: ea78ec982653 ("drm/panthor: Expose the selected coherency protocol to the UMD")
+Pushed to drm-misc-next.
 
 > ---
 >  include/uapi/drm/panthor_drm.h | 2 +-

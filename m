@@ -1,154 +1,183 @@
-Return-Path: <linux-next+bounces-9438-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9439-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF0F8CC5FDC
-	for <lists+linux-next@lfdr.de>; Wed, 17 Dec 2025 05:59:09 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 901AACC6174
+	for <lists+linux-next@lfdr.de>; Wed, 17 Dec 2025 06:44:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E3CF3301DE02
-	for <lists+linux-next@lfdr.de>; Wed, 17 Dec 2025 04:59:08 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 341AF301C646
+	for <lists+linux-next@lfdr.de>; Wed, 17 Dec 2025 05:44:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75793224244;
-	Wed, 17 Dec 2025 04:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24AB51FF7C7;
+	Wed, 17 Dec 2025 05:44:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="gjGIyKWU"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="VNk9Fj7l"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f193.google.com (mail-pg1-f193.google.com [209.85.215.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E568F224B0E
-	for <linux-next@vger.kernel.org>; Wed, 17 Dec 2025 04:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20811DC1AB
+	for <linux-next@vger.kernel.org>; Wed, 17 Dec 2025 05:44:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765947548; cv=none; b=aNiGUi+e4lvIr6rf5vMEoeoqNxelEbXN7Ir4rQtkmzhQNop4/O7YJW39AQO41sL/A+yHYOMkjlILg3xQc3a9Kb3MtXW0106FhXZENNKdF5pqwjjS5gvfVCpBIx3jSex7TCm81lye/8nP8qMVvuTOND+/rdVw3k5r7kbwW0QfZls=
+	t=1765950264; cv=none; b=RdnDFxiVDcsy9i19W82whJKVfLG6DA0Y3YxsrjRGIdRBLTKuGpTtGBJCzQp5RY7/I3CpxGwOmBpnuzhkiL5KNYTOz0Q/BBEUk+tdnL0AwNEwKJNZdv3FtwS50VtugfklLJIOu6nhnKel9JxAtgsUm2ma/7fFbhoRTndMkUbLMnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765947548; c=relaxed/simple;
-	bh=2rjZ51Vjdxk+txEo87MW63UU7GVDR4jpXeIFmeA0kOc=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=no9zVbQpmLaQaDtHLbhTaTr+v+4nIwccum3H38GkP9+lV/l/BT0cdFqboZKLvX7mnhKNeuhQbg+rVm36Z+OV05f8JXQESDRYR/ApfkXD3x3TTTsQBlVEhJslZtOqSWRZtCHsJjoGCTI+RBVi6hzZHlYJTEkF4CxVX/x9bf84b/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=gjGIyKWU; arc=none smtp.client-ip=209.85.215.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f193.google.com with SMTP id 41be03b00d2f7-bd1b0e2c1eeso4153878a12.0
-        for <linux-next@vger.kernel.org>; Tue, 16 Dec 2025 20:59:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1765947546; x=1766552346; darn=vger.kernel.org;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xBrg7Q8Znv4r+TiPh36klQqmUa7ldZYP8Xo+HQPHlb4=;
-        b=gjGIyKWU2EmRnWFvdH6dH6xObscBybgTP9ltpw8WZcxK2VlbzoNxGY4w1xto9hzMjw
-         DvSD9I7YLZpjxjVgvRRXXjxYhqunpNKX0Xc+kAxSq50qnhFokTT5JmdB1Tl9HtgOw1Uz
-         /OzAx7Sn67xqWYfY7kYY/dgP0Cg6dAqo1WQW9xF0gfU9otdNnACTHgG6egwdjAUUbJu3
-         Ose71Q+f0SMD0u1Jz2vyZ6+MUUW0SmIDLqFTfNOBJ+FxTdLTtlO/Fwvk8OXedY2we5pC
-         lRTLgNGg6b02tYGHtIFKNtLfTfqgZn4g0cptyZJJ1ptBnEZPocWVFshCkFRugnrR3ZF1
-         mTzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765947546; x=1766552346;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xBrg7Q8Znv4r+TiPh36klQqmUa7ldZYP8Xo+HQPHlb4=;
-        b=vhPkF0pe/dghQvfYNZmSifhdf/iiJ6DbWqv+n2XB+l6B1F5aYTlVwA40FSBBJjK4ea
-         M+cZCZmL9ayw0GNBDAwSiplJIhmlMfPUHoohM6kXRirUDa1nBlRb1sRfI+8AvAPRXYX+
-         V4rBRNE1dsXjXmu0q47gYAp/GUj6OJZKnJk4p55xfxrW4KWtsAXxWZSVWDsnN6/+96k9
-         P8pkLRo0lEjacShK9toc+DdcMT8CBs0S9jISyW0ncYLEqbH84l1u4mvZix7GSjm/qmlH
-         cWnTL+3rKYlvyxCsTV1rUL1+4k+YZh+IzXyFgaWll4VOIvMEXHBFyNGxlcocwx0kbNyP
-         4lQA==
-X-Forwarded-Encrypted: i=1; AJvYcCWFBry94blPJiykDL4gGgODd0x6WC+OXVcZ1sTgvSHyJe0o0updfdde5rQBW8fdaFr3AZPBNFmd3uV6@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGOvsfUNllMdpCQ7vQU21/Pa2ys4hGFVqpsZ02CPQzDQ6Eqgo6
-	E8CRALEpa8Ow4oEOvyNrLP80yua/DyAwpFdyNy7r2QD6Fay9iTAS4AtcT73X9OCOTT8=
-X-Gm-Gg: AY/fxX6vbVzHyeh2jP+DPfpHI3YLmkPTlBg8FLKLRtbW3H0E5xbTHWSsrsN4l9efbGR
-	xB0VLpQVk+Yvnz4/uvrxdMx1coOjnP8FwRXCUJp2sfzPpePxqZjQ3tGGApwGMt04bpXxRBvGBeK
-	+ywVyLdYuO7bf3bgYFowZIm2BvYBb5s6GxGuuieEw7NdGjwX2NOgsvbTHJ6j/SWoiM4XxlSPUE9
-	UjdzDbtMfZryDkY6q8mSWkQ0O9beQ1L5OHe7GuAeoD3Cs1dGRPyHlZWnpPni4WNDu7W8W/2OXmd
-	cuoAghC/RBNKf9UzKIbsiCrY69KX94xNSqbz/Sr4H2TVzPqCeU+eKz+L/qPlTI54Cetk/F6h8vk
-	mXNgzjdu3DBGhGujrCpzA38DMGI93smEz4cv5w1mA8OtHclz6gV4u9j7R158qZAsuHrmd5eJikG
-	FdDfir
-X-Google-Smtp-Source: AGHT+IHYy6TyAlFopXPufQBE1gewJ7kye+X47uFRCWdMX+ULvifQW3rCWBn4TdxZ35bmuKJ2ysXLpA==
-X-Received: by 2002:a05:7301:5407:b0:2ac:2d2f:8ea with SMTP id 5a478bee46e88-2ac2f399f88mr8191467eec.0.1765947545938;
-        Tue, 16 Dec 2025 20:59:05 -0800 (PST)
-Received: from 77bfb67944a2 ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ac3c13d60bsm22088844eec.0.2025.12.16.20.59.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 20:59:05 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1765950264; c=relaxed/simple;
+	bh=gHNXC+ATtz/XkEaAwiAMk6UNGyUrGkIB6aKeuXanHV0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=M0BcFnOQQ+ZoEK7l+QMmfvC4jY9Pl/yxCoJL4rU0aOJt8LNfDdcA+HQMTc1Aa2Vik3PRUHBHj58GDzQT3yz99hq2Gq7Nfnpx9jfL01S/0PJaQHnH+OZCThSIs0DCI111myvdTIr1N+pu8KU6dXk37ISE8rcbb39W7UfVRLDWQnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=VNk9Fj7l; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1765950257;
+	bh=fiLw2KPV86hA1E94DMqK/j4wDkK1THXL/uYcXmRwguU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=VNk9Fj7l63lOJ6uI5883HKjX1oOLekMuL00m+QZYRAETRQ4mqPSl/bZyeO+4E5SF7
+	 DLPR4V+bw8UURMc8KLQBuRj4wHN11VdqUnSk6VX7tqcVapsIqIRZ7rAyDw+gJGnSVF
+	 8VRfh19nIKjiL0S1u0qRO4eSjxahrNZV/Fm2Q6RoDnZVnytenH4XL1lyT/8bZ2aTZU
+	 eL7HUx0Le8L2FjA9Fjfd6PRX9LfKT7UP8gbC3daKEy1tHdVtXOMX83YQrnrpOU7Gx2
+	 D8Nw8U5iSi3p3PGIe9gppfOw9P2zt8lTbA0O4hS9qtyE+i5PjBofHodWJX8USfCV3T
+	 g1p+P+8GK8XgQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dWN5r3Xqrz4w1j;
+	Wed, 17 Dec 2025 16:44:16 +1100 (AEDT)
+Date: Wed, 17 Dec 2025 16:43:46 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
+Cc: KernelCI bot <bot@kernelci.org>, kernelci@lists.linux.dev,
+ kernelci-results@groups.io, regressions@lists.linux.dev, gus@collabora.com,
+ linux-next@vger.kernel.org, Nick Hu <nick.hu@sifive.com>
+Subject: Re: [REGRESSION] next/master: (build) initialization of
+ =?UTF-8?B?4oCYaW50?= (*)(void =?UTF-8?B?KinigJk=?= from incompatible
+ pointer type...
+Message-ID: <20251217164346.37b36bea@canb.auug.org.au>
+In-Reply-To: <176594754327.3108.9546235188357594114@77bfb67944a2>
+References: <176594754327.3108.9546235188357594114@77bfb67944a2>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: 
- =?utf-8?q?=5BREGRESSION=5D_next/master=3A_=28build=29_initialization_of_?=
- =?utf-8?q?=E2=80=98int_=28*=29=28void_*=29=E2=80=99_from_incompatible_point?=
- =?utf-8?q?er_type=2E=2E=2E?=
-From: KernelCI bot <bot@kernelci.org>
-To: kernelci-results@groups.io
-Cc: regressions@lists.linux.dev, gus@collabora.com, linux-next@vger.kernel.org
-Reply-To: kernelci@lists.linux.dev
-Date: Wed, 17 Dec 2025 04:59:05 -0000
-Message-ID: <176594754466.3108.13726691997450676710@77bfb67944a2>
+Content-Type: multipart/signed; boundary="Sig_/HPId+XtKQd8xLE.CPgPo0Eq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
+--Sig_/HPId+XtKQd8xLE.CPgPo0Eq
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
+On Wed, 17 Dec 2025 04:59:03 -0000 KernelCI bot <bot@kernelci.org> wrote:
+>
+> New build issue found on next/master:
+>=20
+> ---
+>  initialization of =E2=80=98int (*)(void *)=E2=80=99 from incompatible po=
+inter type =E2=80=98int (*)(void)=E2=80=99 [-Wincompatible-pointer-types] i=
+n drivers/irqchip/irq-riscv-aplic-main.o (drivers/irqchip/irq-riscv-aplic-m=
+ain.c) [logspec:kbuild,kbuild.compiler.error]
+> ---
+>=20
+> - dashboard: https://d.kernelci.org/i/maestro:c537d0d22aa608b88bb407d6e02=
+b6a733d3f78cf
+> - giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+> - commit HEAD:  12b95d29eb979e5c4f4f31bb05817bc935c52050
+> - tags: next-20251217
+>=20
+> Please include the KernelCI tag when submitting a fix:
+>=20
+> Reported-by: kernelci.org bot <bot@kernelci.org>
+>=20
+>=20
+> Log excerpt:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+> drivers/irqchip/irq-riscv-aplic-main.c:111:20: error: initialization of =
+=E2=80=98int (*)(void *)=E2=80=99 from incompatible pointer type =E2=80=98i=
+nt (*)(void)=E2=80=99 [-Wincompatible-pointer-types]
+>   111 |         .suspend =3D aplic_syscore_suspend,
+>       |                    ^~~~~~~~~~~~~~~~~~~~~
+> drivers/irqchip/irq-riscv-aplic-main.c:111:20: note: (near initialization=
+ for =E2=80=98aplic_syscore_ops.suspend=E2=80=99)
+> drivers/irqchip/irq-riscv-aplic-main.c:112:19: error: initialization of =
+=E2=80=98void (*)(void *)=E2=80=99 from incompatible pointer type =E2=80=98=
+void (*)(void)=E2=80=99 [-Wincompatible-pointer-types]
+>   112 |         .resume =3D aplic_syscore_resume,
+>       |                   ^~~~~~~~~~~~~~~~~~~~
+> drivers/irqchip/irq-riscv-aplic-main.c:112:19: note: (near initialization=
+ for =E2=80=98aplic_syscore_ops.resume=E2=80=99)
+> drivers/irqchip/irq-riscv-aplic-main.c: In function =E2=80=98aplic_probe=
+=E2=80=99:
+> drivers/irqchip/irq-riscv-aplic-main.c:375:17: error: implicit declaratio=
+n of function =E2=80=98register_syscore_ops=E2=80=99; did you mean =E2=80=
+=98register_syscore=E2=80=99? [-Wimplicit-function-declaration]
+>   375 |                 register_syscore_ops(&aplic_syscore_ops);
+>       |                 ^~~~~~~~~~~~~~~~~~~~
+>       |                 register_syscore
+>=20
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+>=20
+>=20
+> # Builds where the incident occurred:
+>=20
+> ## defconfig on (riscv):
+> - compiler: gcc-14
+> - config: https://files.kernelci.org/kbuild-gcc-14-riscv-build-only-69422=
+a0bcbfd84c3cdbdaaa0/.config
+> - dashboard: https://d.kernelci.org/build/maestro:69422a0bcbfd84c3cdbdaaa0
+>=20
+>=20
+> #kernelci issue maestro:c537d0d22aa608b88bb407d6e02b6a733d3f78cf
+>=20
+> --
+> This is an experimental report format. Please send feedback in!
+> Talk to us at kernelci@lists.linux.dev
+>=20
+> Made with love by the KernelCI team - https://kernelci.org
+>=20
 
+Caused by commit
 
-Hello,
+  1c546bb43361 ("irqchip/riscv-aplic: Preserve APLIC states across suspend/=
+resume")
 
-New build issue found on next/master:
+=46rom the tip tree
+(https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git#master).
 
----
- initialization of ‘int (*)(void *)’ from incompatible pointer type ‘int (*)(void)’ [-Wincompatible-pointer-types] in drivers/irqchip/irq-riscv-aplic-main.o (drivers/irqchip/irq-riscv-aplic-main.c) [logspec:kbuild,kbuild.compiler.error]
----
+The call back arguments and the registration method changed in
+v6.19-rc1 in commit
 
-- dashboard: https://d.kernelci.org/i/maestro:ed08c10e7ce8b2654d125d029bb2aac6dc72096d
-- giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-- commit HEAD:  12b95d29eb979e5c4f4f31bb05817bc935c52050
-- tags: next-20251217
+  a97fbc3ee3e2 ("syscore: Pass context data to callbacks")
 
-Please include the KernelCI tag when submitting a fix:
+--=20
+Cheers,
+Stephen Rothwell
 
-Reported-by: kernelci.org bot <bot@kernelci.org>
+--Sig_/HPId+XtKQd8xLE.CPgPo0Eq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-Log excerpt:
-=====================================================
-drivers/irqchip/irq-riscv-aplic-main.c:111:20: error: initialization of ‘int (*)(void *)’ from incompatible pointer type ‘int (*)(void)’ [-Wincompatible-pointer-types]
-  111 |         .suspend = aplic_syscore_suspend,
-      |                    ^~~~~~~~~~~~~~~~~~~~~
-drivers/irqchip/irq-riscv-aplic-main.c:111:20: note: (near initialization for ‘aplic_syscore_ops.suspend’)
-drivers/irqchip/irq-riscv-aplic-main.c:112:19: error: initialization of ‘void (*)(void *)’ from incompatible pointer type ‘void (*)(void)’ [-Wincompatible-pointer-types]
-  112 |         .resume = aplic_syscore_resume,
-      |                   ^~~~~~~~~~~~~~~~~~~~
-drivers/irqchip/irq-riscv-aplic-main.c:112:19: note: (near initialization for ‘aplic_syscore_ops.resume’)
-drivers/irqchip/irq-riscv-aplic-main.c: In function ‘aplic_probe’:
-drivers/irqchip/irq-riscv-aplic-main.c:375:17: error: implicit declaration of function ‘register_syscore_ops’; did you mean ‘register_syscore’? [-Wimplicit-function-declaration]
-  375 |                 register_syscore_ops(&aplic_syscore_ops);
-      |                 ^~~~~~~~~~~~~~~~~~~~
-      |                 register_syscore
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlCQxIACgkQAVBC80lX
+0Gx67wf6Ay/fTJzyfRyAJtYcjKP09oHkpELwepiTCjWtCWb9o8Rt/it2uNoMZQfs
+9BfN1GLiRZ7Z9WxcOV5oHDdWrySF0w5DIWDyHFKeTzGc1tVFlKJtjhBiLLRy+TnL
+YW6axY65Fo7csxR63cvFc6l9uuW3Lpb6S8ZdHyTXNhgL9ZVfayYhaf8ZdiiP4Hc0
+TzoJ2xAyZApV9g6Tp9TrZBGCTGb3EXAnUk6fVB1DJNbHF/ILVKgWD+cBq/BAQPq1
+dzkzvly20yFrK8r4LYdCSy/ILLlORUYjIB84+baDXvojuScoBePB4foyIA+o3+bC
+iqWX37iTflW3qHacY/fbLGbb+wmchw==
+=4WGB
+-----END PGP SIGNATURE-----
 
-=====================================================
-
-
-# Builds where the incident occurred:
-
-## defconfig on (riscv):
-- compiler: gcc-14
-- config: https://files.kernelci.org/kbuild-gcc-14-riscv-build-only-69422a0bcbfd84c3cdbdaaa0/.config
-- dashboard: https://d.kernelci.org/build/maestro:69422a0bcbfd84c3cdbdaaa0
-
-## defconfig+allnoconfig on (riscv):
-- compiler: clang-21
-- config: https://files.kernelci.org/kbuild-clang-21-riscv-defconfig-694229a2cbfd84c3cdbdaa14/.config
-- dashboard: https://d.kernelci.org/build/maestro:694229a2cbfd84c3cdbdaa14
-
-
-#kernelci issue maestro:ed08c10e7ce8b2654d125d029bb2aac6dc72096d
-
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
+--Sig_/HPId+XtKQd8xLE.CPgPo0Eq--
 

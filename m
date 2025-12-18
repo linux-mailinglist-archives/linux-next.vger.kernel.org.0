@@ -1,106 +1,105 @@
-Return-Path: <linux-next+bounces-9460-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9461-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBA5ECCA6EC
-	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 07:20:08 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1699FCCA952
+	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 08:07:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6F0043018196
-	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 06:20:07 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8AC59304CC0E
+	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 07:07:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876942FF672;
-	Thu, 18 Dec 2025 06:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA34513C918;
+	Thu, 18 Dec 2025 07:07:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="LnLUPnin"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ntVljVSZ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D41972FC86B;
-	Thu, 18 Dec 2025 06:20:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44EC823A99F;
+	Thu, 18 Dec 2025 07:07:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766038806; cv=none; b=WowDz2OCYvoCYNBg6uL0PBpMtzEbp72kTxy450wbxQSvdpFTY6RWpRB8VvsTVbxlHQKbvSKS6JZxHrQtB70wYFW9+fzNAgPfjgwgl/w8Obe2REJjKzMcu3VXdr9+gvYrhzyBet963VpC90iACaDG+P92ShnEhkNQflqHFxLXUng=
+	t=1766041648; cv=none; b=WIJZoexSlADB34tMJ6VqtXwH83Cv5tiHRsz2hr0SNT3NodZ/02CXFFZic3hJDxnP2WQ2wQhQrThwkyqpAeIX5gNCkNqTaEW0m4UjPy3+trlFLb1jJMougJ7jDYXudqh3ftzuURmQjBtxEuExO/LvDUUPLOTjP/Td2/lrbeQbwQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766038806; c=relaxed/simple;
-	bh=zanl88OdP4qH8+u5i8UdZR0IrMCD5CqK/I2Z3Wpd0OI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=M3k+AUIpr1gmNVAq95Tv+JyyyH2/dvdgCvtnXa4LmETYvFXdeNcMO7+YhVSJsAcasj3/HTgnxX/+qga9s+onS7Rh7bhXTtjRK/tjMPzO67Qty4/+7T96PWmXQVRNE7y9niXEFYHYHsOfcz7EGGcRbIg4K1yC/ERLpL23y7vaijs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=LnLUPnin; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1766041648; c=relaxed/simple;
+	bh=wM9Vu+TbKzimy8ZPyrTYK3liFaG0FBW/opNwYtAzAkM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Tgded20UBepVo/1NWyBP9eG5rub8fFbKv9Duam9mwdufkvEVACbupKpJiDmFitoM+j4mEkm+kWs+237OTjyLkPKgKIF5Tb+f0Ynbxffe4KUCq1/yr1c700CyD0N0mQXlToTxfPz8kFQC+G87ne8YHm7XAVLs4OACpf8aJhaDTiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ntVljVSZ; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1766038798;
-	bh=jwurk9mxVsyNNCPyp0tCgt/fBa6iLHhBce/nZ1wafm8=;
+	s=202503; t=1766041642;
+	bh=dOLMd9gQdgGFvZVAt/z8fMrq6phMUnqAujwDVbKAFqw=;
 	h=Date:From:To:Cc:Subject:From;
-	b=LnLUPninevSRJL6dgKzODzHs9Dj3hvCSiszXe/vcygoqRSRIJth208UZtBPxHQzc7
-	 Ryt8LelAqSXuXPAnUvK5t+lSpJ5eQG2gOWQVjiFXhrTNn8vLPdq86RbVYnDgoHUqHd
-	 xAF7mRqnkGSGrimBrjU2kju6c9cwX247OVMO/j0oXiwC7SgMBnF/ai2hd5qmp0WvaX
-	 cRbYqL2IpUWeaEUezX8z45I6lQEn6SwZKbyQpOoSx0jc7O49cz1lOvo0xes3fHlSPp
-	 GGGt5uKWZCHownSjeHBqTXlDBKclqFDGGICbfqsLEscVP0uF6xDOwkiYiyfiFbqj5H
-	 DHCgUv8QPf6fA==
+	b=ntVljVSZ8VCup8fzVxMyhLfv39GpvFTfulb8jiTn4MgBTeZa/8l3B6hoZuXDmmq/3
+	 5mbDdpgOu6NkMRLdGgJRmIRBIkuVa/+OlZdJPd+C7HcNMkveY5fam1O0mKQIjiZ7m9
+	 KBijMnWBKzcu3FSs8Go+m+vup94refY8DujNCn4XI917xpnEG5TAzPzxMtWc8Ngfch
+	 HW6+UeNV6J6pFCEd/o04gJqPL51pNmtZBWvdQROLgWcx6ctAIPtnZuP2GznESQQimh
+	 dYw6sEVk88KcG1Gsn8XxA2vyRLeVeIt8k8ZkhVWFSZH383gbHm6Uq0xeDHLpsLz0bq
+	 m7SWZARpPeK1g==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dX0rZ4Sjgz4wDn;
-	Thu, 18 Dec 2025 17:19:58 +1100 (AEDT)
-Date: Thu, 18 Dec 2025 17:19:57 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dX1vG1nyYz4wDn;
+	Thu, 18 Dec 2025 18:07:22 +1100 (AEDT)
+Date: Thu, 18 Dec 2025 18:07:21 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the tip tree
-Message-ID: <20251218171957.6d7eab70@canb.auug.org.au>
+To: Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc: Linux-kernel Mailing List <linux-kernel@vger.kernel.org>, Mark Brown
+ <broonie@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Linus
+ Torvalds <torvalds@linux-foundation.org>
+Subject: linux-next: changing maintainership
+Message-ID: <20251218180721.20eb878e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gBAzRSdB33z4VwNH_1fhKf7";
+Content-Type: multipart/signed; boundary="Sig_/_M9xq1uhiG/dORbR=DMwzEr";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/gBAzRSdB33z4VwNH_1fhKf7
+--Sig_/_M9xq1uhiG/dORbR=DMwzEr
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the tip tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+Some of you already know this, but this is a general announcement.
 
-In file included from kernel/events/core.c:60:
-include/linux/kvm_types.h:9:10: fatal error: asm/kvm_types.h: No such file =
-or directory
-    9 | #include <asm/kvm_types.h>
-      |          ^~~~~~~~~~~~~~~~~
+I will be stepping down as Linux-Next maintainer on Jan 16, 2026.  Mark
+Brown has generously volunteered to take up the challenge.  He has
+helped in the past filling in when I have been unavailable, so
+hopefully knows what he is getting in to.  I hope you will all treat
+him with the same (or better) level of respect that I have received.
 
-Caused by commit
+It has been a long but mostly interesting task and I hope it has been
+helpful to others.  It seems a long time since I read Andrew Morton's
+"I have a dream" email and decided that I could help out there - little
+did I know what I was heading for.
 
-  23faa33d88df ("perf: Use EXPORT_SYMBOL_FOR_KVM() for the mediated APIs")
-
-I have used the tip tree from next-20251217 for today.
-
+I hope to still be around the kernel community, but just not so active.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/gBAzRSdB33z4VwNH_1fhKf7
+--Sig_/_M9xq1uhiG/dORbR=DMwzEr
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlDnQ4ACgkQAVBC80lX
-0Gy2Xwf6A3ISEOJzyfHDAo4P+YT2Kg0iKJhG+fv3zgV39Z9dpevGDSDc4vXxLacm
-hUP2YS36cLXaD1nRhGjLa8LNs+0tBcGmeTFbNz8ApxeYFxR2VJeBdZ9BpNsGPNgM
-LeELboXU2W4JHt5rEkWR6zw7kAHpx+pqwYncvMSpbnKMQeKdeMz5KhF8ujVMCb0e
-f4/9h+39rkSR0iASxRs/HGiITuQeL55ek0/V/czVSfEZNhhM9G7nRQj4HeO88C1A
-yLn/7G9ba8aNN7J9bBB4ZfQi2bSHZbDVSeM3mYAH9CTg07irJ6C1s95SaVmwjHJt
-/EoxcPR9nZZ4fHzPC4thowFUGT3FIA==
-=smZn
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlDqCkACgkQAVBC80lX
+0Gx6LQf9HP3eAr8AARDJ8t+auiGFCzO09rXXLZXkHuuF6FdaHwePW5Ejb9xSnWCB
+YqqbTUeoJ0Ywtl/b1mKf+cDSIe06/Oy8ijEiH88pI3TsO8TyeVFagkE+BbQOo/s4
+wf+L9t3gFSJki2uk/FZXn5XfHFbWoyRhWbDQEfCqRG3+NihsIHMkwkGa5hUw+ZW2
+SgKP/Ed0WKdXMbCSAKZbGN4Mx/BbT7lUvnbl9RNQ89HGTcIc/gY8cpJxI42SICL6
+iJ44VWSB+bA0KUDeuoEKXnJKcV/Y9+FvsMK0sJYGmd/8zBp7O3Wyxl4orHjXfhpd
+kCWaHL3OxQovmylym8rh9O/tFyEzxw==
+=YLPF
 -----END PGP SIGNATURE-----
 
---Sig_/gBAzRSdB33z4VwNH_1fhKf7--
+--Sig_/_M9xq1uhiG/dORbR=DMwzEr--
 

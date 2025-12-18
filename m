@@ -1,156 +1,135 @@
-Return-Path: <linux-next+bounces-9466-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9467-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99C79CCB639
-	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 11:32:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B159CCB833
+	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 11:59:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0CA063028FC6
-	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 10:27:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E90FD304FB94
+	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 10:59:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E836933FE1F;
-	Thu, 18 Dec 2025 10:15:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3163E2FF148;
+	Thu, 18 Dec 2025 10:59:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="CW4flpKy"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="j5Q+BBwC"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3E033F8CE;
-	Thu, 18 Dec 2025 10:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761A61F9F70;
+	Thu, 18 Dec 2025 10:59:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766052950; cv=none; b=JV+ArIUHzfyxUwjvO3P/JqjOlSRb2NFVPEbwnIaid575JoIRKm86YCpcqjtpMKDQvhEvyKP4IJ7U03xM83toOTYtZkSWjfA1tfYq9RWIOuPci29wc4W3s8e8ZEg+EiO80tQRTxDhVUxDhWM81RdxY2q4uvXPcj61yNjkhq7Lc/4=
+	t=1766055560; cv=none; b=FawYDaiFyZrO+YcSJvf0T60niuImdlLyftUzLTDZQjykVXFg354DiE2cNs8HnSnEO6oE+PbFqUx93QqHhN3V3qiT5kCmhCHy2RwMPxFkqPBUYEcY815shkc0BLaKbVb+HFURP486cyjwi9UugR6y0sHNnyM8pFMcucEr7dN5bFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766052950; c=relaxed/simple;
-	bh=OqGAGm459SDoHt0LZX+GXQvPbvWbXdY4kWNyXTshrvQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rHZ3LyBy8SONTxmrhnjGh6VIFnazoCGhOweqUhWpsu2512Rj3z6+ESI4K9L81b2CNlR20dr3GxhXzl03RU9clmVfrFdi+MwfEacgWSvRtFypFg6mt+ts9lVr7+u969oBpMcWVy47lCZUFo/BRYUWRwj0WDshjaRbDQ7NlVyYLP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=CW4flpKy; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1766055560; c=relaxed/simple;
+	bh=R56FURjxWPG2CQ4cd2qmfuhDHP+NYe9N/yxYOUKVheM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lm2bNyP35aE079z0GQLdooX7nnaftkyzHYx5OGBs21xRIAkOD8wyBp3zO6PbmsOOY+a/9+A4jw6MNovFGfqHxGToDGgxYypj5Osza0XM2MS3vp8joo8BGW9tNpDXhpSdT/4NkstVMQ5+urzYhxtZQrt8rV5CBx0Ol8siB0sVtT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=j5Q+BBwC; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1766052943;
-	bh=mDKvZjwjDliqWsfATo3vmeEhy847txyyBEc2t0Yb0kk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=CW4flpKyyT2FSwi//0qULyYz5ggFwaecR+jtHSFyfeq7BU6qTe16m2YHRE/eMo3E/
-	 FqhPT6KwhMSqZSq8C21zJvoV5fEEWlgwPurAoUwCAUuaByVEa50g3qF/pG2G/GbFfP
-	 8lX+zIvjDtl3Xxwowh1ytpngC5EQ1a1tc/2eTGU46zLy2k13bm3Bm/gEcxtcMJkGFq
-	 3XnmmlhsX4pNAhff2YYWxIAMSPrQh9tW/RIQfCsQCy8D3eD40jGnbkQ7vaQDcuPv0O
-	 /juPiVp//Z6gPA6sC03jJxEElo/cvT9TQiwEGC+/VxgaRMvonI7Uk+YIExlnC9B/Gk
-	 kzbp81gPhmFpQ==
+	s=202503; t=1766055554;
+	bh=gapBsFcFpK1z2g0n8LubszGKmA02aSty5TCmrKgZ05I=;
+	h=Date:From:To:Cc:Subject:From;
+	b=j5Q+BBwCJaKnBoF1jIBTS5DrOWDAVDmQjtSbJXD0mpMYxFO9fMgBZVm1N7biQdMKc
+	 DyeC512y7fXwLEMlOiTzbJ9RoD7P0C1d+Ni+hse1uZCUfhBDj+adI/PZ+Gj93GhHPg
+	 tE6AC4lHCFzlnTA7NXfUfe0Vw6fNmwtB8ZaFvJZRszai9RY94Fa1FIF5O75n6MBeq4
+	 u/tMdeNDdVAC6kQSQzRbEwC/yAsZy4s/aoGU9F9FkDr+YeKGzj/6K9ec0UOcxm7hRJ
+	 mG45CrO8X82cIh4aFw47A5REYoFHnT5PNITvu3GfqT7yG0am1W8PoYN6ZQ6Y+S4A7l
+	 wmVVawzsj2vQg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dX64b2jPCz4w0L;
-	Thu, 18 Dec 2025 21:15:43 +1100 (AEDT)
-Date: Thu, 18 Dec 2025 21:15:42 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dX72n4WPNz4w1g;
+	Thu, 18 Dec 2025 21:59:13 +1100 (AEDT)
+Date: Thu, 18 Dec 2025 21:59:12 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Rob Herring <robh@kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the devicetree tree
-Message-ID: <20251218211542.20a57515@canb.auug.org.au>
-In-Reply-To: <20251216121924.07a826d7@canb.auug.org.au>
-References: <20251118143843.0046d6dd@canb.auug.org.au>
-	<20251128161000.08b3ba05@canb.auug.org.au>
-	<CAL_JsqJw+b=Ro1=cz7wMwwUdPr9eE3C=Snr0skYwTjn1RjX5cg@mail.gmail.com>
-	<20251129093141.2d04c8ad@canb.auug.org.au>
-	<20251216121924.07a826d7@canb.auug.org.au>
+To: Marcel Holtmann <marcel@holtmann.org>, Johan Hedberg
+ <johan.hedberg@gmail.com>
+Cc: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>, Stefan
+ =?UTF-8?B?U8O4cmVuc2Vu?= <ssorensen@roku.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the bluetooth tree
+Message-ID: <20251218215912.1597e25f@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/a7lLMRExoB07ofipxcoIIfP";
+Content-Type: multipart/signed; boundary="Sig_/CIec0nTWgL.mCS+P9=z0oDP";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/a7lLMRExoB07ofipxcoIIfP
-Content-Type: text/plain; charset=UTF-8
+--Sig_/CIec0nTWgL.mCS+P9=z0oDP
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 16 Dec 2025 12:19:24 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Sat, 29 Nov 2025 09:31:41 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > On Fri, 28 Nov 2025 08:54:34 -0600 Rob Herring <robh@kernel.org> wrote:=
- =20
-> > >
-> > > On Thu, Nov 27, 2025 at 11:10=E2=80=AFPM Stephen Rothwell <sfr@canb.a=
-uug.org.au> wrote:   =20
-> > > >
-> > > > On Tue, 18 Nov 2025 14:38:43 +1100 Stephen Rothwell <sfr@canb.auug.=
-org.au> wrote:     =20
-> > > > >
-> > > > > After merging the devicetree tree, today's linux-next build (arm64
-> > > > > defconfig) produced these warnings:
-> > > > >
-> > > > > scripts/Makefile.dtbs:20: .dtbo is not applied to any base: rp1.d=
-tbo
-> > > > > scripts/Makefile.dtbs:20: .dtbo is not applied to any base: mt798=
-6a-bananapi-bpi-r3-emmc.dtbo mt7986a-bananapi-bpi-r3-nand.dtbo mt7986a-bana=
-napi-bpi-r3-nor.dtbo mt7986a-bananapi-bpi-r3-sata.dtbo mt7986a-bananapi-bpi=
--r3-sd.dtbo mt7988a-bananapi-bpi-r4-emmc.dtbo mt7988a-bananapi-bpi-r4-pro-c=
-n15.dtbo mt7988a-bananapi-bpi-r4-pro-cn18.dtbo mt7988a-bananapi-bpi-r4-pro-=
-emmc.dtbo mt7988a-bananapi-bpi-r4-pro-sd.dtbo mt7988a-bananapi-bpi-r4-sd.dt=
-bo mt8395-radxa-nio-12l-8-hd-panel.dtbo
-> > > > > scripts/Makefile.dtbs:20: .dtbo is not applied to any base: k3-am=
-62x-phyboard-lyra-gpio-fan.dtbo k3-am62-lp-sk-nand.dtbo k3-am642-phyboard-e=
-lectra-gpio-fan.dtbo k3-am642-phyboard-electra-pcie-usb2.dtbo k3-am642-phyb=
-oard-electra-x27-gpio1-spi1-uart3.dtbo k3-am642-phyboard-electra-peb-c-010.=
-dtbo k3-am6xx-phycore-disable-eth-phy.dtbo k3-am6xx-phycore-disable-rtc.dtb=
-o k3-am6xx-phycore-disable-spi-nor.dtbo k3-am6xx-phycore-qspi-nor.dtbo k3-j=
-721e-evm-gesi-exp-board.dtbo k3-am67a-kontron-sa67-gpios.dtbo
-> > > > >
-> > > > > Exposed by commit
-> > > > >
-> > > > >   d8c8a575f5aa ("kbuild: Ensure .dtbo targets are applied to a ba=
-se .dtb")     =20
-> > > >
-> > > > I am still seeing these warnings.     =20
-> > >=20
-> > > Patches are posted to fix all of them[1][2][3].
-> > >=20
-> > > Rob
-> > >=20
-> > > [1] https://lore.kernel.org/all/20251117211503.728354-2-robh@kernel.o=
-rg/
-> > > [2] https://lore.kernel.org/all/20251117211306.725678-1-robh@kernel.o=
-rg/
-> > > [3] https://lore.kernel.org/all/20251117211316.725960-1-robh@kernel.o=
-rg/   =20
-> >=20
-> > Thanks. =20
->=20
-> I am still seeing these warnings.
+After merging the bluetooth tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-Since yesterday (I think) I have started getting these messages twice.
+In file included from include/linux/byteorder/big_endian.h:5,
+                 from arch/powerpc/include/uapi/asm/byteorder.h:14,
+                 from arch/powerpc/include/asm/qspinlock_types.h:6,
+                 from arch/powerpc/include/asm/spinlock_types.h:10,
+                 from include/linux/spinlock_types_raw.h:7,
+                 from include/linux/ratelimit_types.h:7,
+                 from include/linux/printk.h:9,
+                 from include/asm-generic/bug.h:31,
+                 from arch/powerpc/include/asm/bug.h:116,
+                 from include/linux/ktime.h:24,
+                 from include/linux/poll.h:7,
+                 from include/net/bluetooth/bluetooth.h:29,
+                 from net/bluetooth/mgmt_config.c:7:
+net/bluetooth/mgmt_config.c: In function 'read_def_system_config':
+include/uapi/linux/byteorder/big_endian.h:34:26: error: conversion from 'un=
+signed int' to 'short unsigned int' changes value from '536870912' to '0' [=
+-Werror=3Doverflow]
+   34 | #define __cpu_to_le32(x) ((__force __le32)__swab32((x)))
+      |                          ^
+include/linux/byteorder/generic.h:88:21: note: in expansion of macro '__cpu=
+_to_le32'
+   88 | #define cpu_to_le32 __cpu_to_le32
+      |                     ^~~~~~~~~~~~~
+net/bluetooth/mgmt_config.c:40:19: note: in expansion of macro 'cpu_to_le32'
+   40 |                 { cpu_to_le32(_param_code_), sizeof(__u32) }, \
+      |                   ^~~~~~~~~~~
+net/bluetooth/mgmt_config.c:127:17: note: in expansion of macro 'TLV_SET_U3=
+2'
+  127 |                 TLV_SET_U32(0x0020, idle_timeout),
+      |                 ^~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+Caused by commit
+
+  afa20d8099dd ("Bluetooth: mgmt: Add idle_timeout to configurable system p=
+arameters")
+
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/a7lLMRExoB07ofipxcoIIfP
+--Sig_/CIec0nTWgL.mCS+P9=z0oDP
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlD1E4ACgkQAVBC80lX
-0GwP7wf6A17uYiVWxeCELJz1AN11SL8MzAwBL31Pwa6F4uUonwv4hG4+x7BVxCgF
-fXghfN4bNLOZFjnzEt1vaXfm+/NBohXqIrJaVX9uoqrxrj00RquSWx40+83QL1Q/
-Y8gPSliPWa2Di4rGMBjlhFQu/n+0Wj/+kh3JY4JFqeGOCLn1nz3eGlE8Y/v4MYUR
-jdXOcKW7KItlAbs9vkKOQPxUcTTI4npqxNWPb5wyalm7ZzjYmvPuHLrasw3uwVTS
-ePXuHGj0NSBVmWH+Dq/hwlVhCAGAOWfKM3d9h+eFVgRr2/H17O2unGUbawOcH/ms
-WVN7VYtOK4r5TZJeppZ4IzyGIxaPSg==
-=Etpm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlD3oAACgkQAVBC80lX
+0Gzq/Qf/f+K3A257ZD+7e0Hav3Y+27FFezq1Vtd9Tp+gECDrAXtTmqZxVBXPX+Xq
+bBCLQRdYvXeG+E3EjGzaYVq8feRmBCpIK06TUTzeOo5J/B2zlwZSkPQLjjyOCi8Y
+mNHHJtU3jta6AzTThQEvp0nTro8efZEtNU7Z5ZMpUMFeIG3bZNemHlM4HGPaMyNc
+9mDqC7OCTglO5aGQZRl5PVwmIhrqcr9QASGd4UAt3QA8x7ZPkQiW6pFEVQ7lL9AF
+5j2TH7nYV23vjBgOT0VqScAPUR/DVUz4f+qw2BGizd2jRDNaCPgRMntrqH9qnQtf
+4Gjd/MAF9ZFaeKb2ox1jl8sksCG22Q==
+=L2pK
 -----END PGP SIGNATURE-----
 
---Sig_/a7lLMRExoB07ofipxcoIIfP--
+--Sig_/CIec0nTWgL.mCS+P9=z0oDP--
 

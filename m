@@ -1,105 +1,74 @@
-Return-Path: <linux-next+bounces-9456-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9457-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F3BACCA40C
-	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 05:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D4E88CCA485
+	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 06:09:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8F032300B939
-	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 04:31:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A2E0F301E90F
+	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 05:09:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 602FA13B7AE;
-	Thu, 18 Dec 2025 04:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="ryFntvmv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F15F224B01;
+	Thu, 18 Dec 2025 05:09:40 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890BC1E4BE;
-	Thu, 18 Dec 2025 04:31:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 638281624E9;
+	Thu, 18 Dec 2025 05:09:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766032269; cv=none; b=YRqnqc8BuLVt4ScC8tW1soSLNwx/u7q8DLOBKd+OZse7Na+pgQ0/X0zcL+Xedriuxr6fgM7RsLb9eopvTvFKjRd+Xynp8COTah22DVIlJpFk1c4tH7irwL9SQFYAdAaJcpLHV8OO/g1b/2atnhWUCxYt0QmThxZPM3Ez8edq+Eg=
+	t=1766034580; cv=none; b=pYl2wDnVcsubfqR2iP8tbnlp62PgeDzGukr1+3EYRnOVHmvQ3RazMWO+QSpU7t0dxxaf3eJWHfFPC561u77bDrTQceMOifuKKT44Q1BF/nWiWpb+z5VXhsjas/KYAjSh0hd3JG5FEtPYspxh9ZXvlM67XyJG74C79nwUz0gRuj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766032269; c=relaxed/simple;
-	bh=6FTfXxgU1YlhG1zePbAXNVHq3mfoZ27mqEQ3+vMhWNE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=LTt7A+jf1P7p9YriRSH1/MLtuPcdo0pTfFYpidT99eilIhSQ2zK0km0CgiC5D3jq+l25gLSc/hCyWYhvh7SuKfHWmhFCgsPd4ufz/cPOxkayqJ0slsFHEy0hQcwcYc1RwYmxpSltqpQM8bSe8vukqZDKM66xfe7/Nn6sfmfjcOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=ryFntvmv; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1766032253;
-	bh=qRAn1Mm3Dk8902ZCQdpAq/dFJNkxKidGdQ/HijMv5VQ=;
-	h=Date:From:To:Cc:Subject:From;
-	b=ryFntvmvdtvkGzaEVmOUCqKJes0HoYByBHO6AM7RHLnm+iqxDrcIuiGFHXnY+qJaB
-	 yxk8HjrGINcxfEw80uim/LvPxrwUeQpNYyyGxw0OYGMLJX1FAUffskLnuHcGPO1qVU
-	 dWHHH1+eZ7GetWLp9APf4wHRQUc2xITY3ZkFszldFzahxxY1FTL3gWBoE7ydA1bFKi
-	 Yw9GerBsmoDIAXjqm6VzoZZRYmuxAn/R5Dc89GIxg7rTLuuW3h/x+ebKDK6yH0sNSH
-	 iUQuPHRKwKFD35O0ee6xmp+5RscE8nTm+6+pWmN2po150tWQbZxq1X0ckbRbCeQMyi
-	 BGShf22hL1kUQ==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dWyQg5JTGz4w0L;
-	Thu, 18 Dec 2025 15:30:51 +1100 (AEDT)
-Date: Thu, 18 Dec 2025 15:30:50 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Finn Thain <fthain@linux-m68k.org>, Peter Zijlstra
- <peterz@infradead.org>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the mm-nonmm-unstable tree
-Message-ID: <20251218153050.44da4a78@canb.auug.org.au>
+	s=arc-20240116; t=1766034580; c=relaxed/simple;
+	bh=L7cRCh9XfiweJ1Paw9yyzJ6Nb1yyIuKHaR3qh2dwQB4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T0CM08UyY3wXp5dfvMGiBuIle3ocHaqaZtsN8jkIEIPSrGw1MgeiWDKf+HJKIc3sOFwxqvrWc7UugnkCCGIxTv1Wo56Us1L7bUPU7Ua7le5vsvVoGaQXUBKVbPt8U+JBRIEesKVcvSDzK8J3+LK5Q+RpDU7j7r2JE9SQrGtjoaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
+Received: by verein.lst.de (Postfix, from userid 2407)
+	id 1C77667373; Thu, 18 Dec 2025 06:09:27 +0100 (CET)
+Date: Thu, 18 Dec 2025 06:09:26 +0100
+From: Christoph Hellwig <hch@lst.de>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: David Chinner <david@fromorbit.com>, Carlos Maiolino <cem@kernel.org>,
+	Christoph Hellwig <hch@lst.de>, linux-xfs@vger.kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the xfs tree
+Message-ID: <20251218050926.GA1764@lst.de>
+References: <20251218080618.2e214d02@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+fWEd.nMN3H3DrOkJtdbCwD";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251218080618.2e214d02@canb.auug.org.au>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 
---Sig_/+fWEd.nMN3H3DrOkJtdbCwD
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Dec 18, 2025 at 08:06:18AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   8dc15b7a6e59 ("xfs: fix XFS_ERRTAG_FORCE_ZERO_RANGE for zoned file system")
+> 
+> Fixes tag
+> 
+>   Fixes: ea9989668081 ("xfs: error tag to force zeroing on debug kernels")
+> 
+> has these problem(s):
+> 
+>   - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: 66d78a11479c ("xfs: error tag to force zeroing on debug kernels")
 
-Hi all,
+Yes, that's correct.
 
-After merging the mm-nonmm-unstable tree, today's linux-next build
-(x86_64 allmodconfig) failed like this:
-
-x86_64-linux-gnu-ld: error: unplaced orphan section `__bug_table' from `arc=
-h/x86/boot/compressed/sev-handle-vc.o'
-
-Caused by commit
-
-  e7980cd46155 ("atomic: add alignment check to instrumented atomic operati=
-ons")
-
-I have reverted that commit and the following one for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+fWEd.nMN3H3DrOkJtdbCwD
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlDg3oACgkQAVBC80lX
-0GyDZQf8C1+j7IhCvgL6N+1cva1pe/+I9VzaA76E5IZmOUJIeyWyEB3ZeOwdyXUF
-zEAMxBAikeJxo5I9zoiR/uLlQKU9GFd0mAGoXA5GfGaZFHvqQ7kUZD8F/wIVRPsg
-dZ3ZdjLHbuXZsFChQocLK8ewLk+Kr7L+oyZQU6NeqvOtKm8BIWnqisfrFBN9a530
-KWpqHGKB6WigWUci/0Zikl5QbiLhxtcYp8OG4A39rYuy3JOIuA85uxcKOMdxJcqG
-KAoIIY2wgDln9UcxTL54twjMwwJQy/dcDCh520rNjvDVynvDmThpEvJi6VOHUGe8
-HEFWh2r+HuqEI/hMRn+HeVwp0Tl/Fw==
-=ezZE
------END PGP SIGNATURE-----
-
---Sig_/+fWEd.nMN3H3DrOkJtdbCwD--
 

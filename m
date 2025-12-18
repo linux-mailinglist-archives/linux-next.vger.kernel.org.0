@@ -1,108 +1,107 @@
-Return-Path: <linux-next+bounces-9462-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9463-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D16DACCAA63
-	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 08:29:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31ACBCCB05B
+	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 09:55:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id ABAA430B212A
-	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 07:25:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AACFA300B29A
+	for <lists+linux-next@lfdr.de>; Thu, 18 Dec 2025 08:52:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96877328B4D;
-	Thu, 18 Dec 2025 07:18:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61871279355;
+	Thu, 18 Dec 2025 08:52:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="HQ3JaF+7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GQIvwNyV"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E9C31D750;
-	Thu, 18 Dec 2025 07:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B7C1DE3AD;
+	Thu, 18 Dec 2025 08:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766042338; cv=none; b=Grqmhv9UwEfBAArKzVTvDuvmBT4o8ym6LrkoXwri1YZe4L3UbVsMmLikY2lSVMfeuZoAVZnA3JfwIRigXBLs1LgwS1epy6JW2DgQ9lIxqUXxVQ4ifF13AGPrGpJrlpmQoFcivfFJxS0bOAxxym1SuuiDeD0wzmoD27WvgMIwlNQ=
+	t=1766047931; cv=none; b=OS7Zc56I4EOiUG/r5ydr6gjcgB2uSCDYY732Br3COPcOC0FWdikbkfcc80Ct6a15HUf/2DG2E3g5GP5sIGqPlt0cpmX/uhkVy2MUSg2Fu76fzKJGlzOr4e8n1zhkq5JyzWg0z4kHSSIRy50JaI/krKz8U6Bx41r3hVCjKjqMcrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766042338; c=relaxed/simple;
-	bh=tUZgC0jEYNQRSOPwlfKJ/5QBXCW7Jbz0c5sY8//ezd4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Gz3graIhZc3unA7eNs1A89P36POP3+A8IG8Sdk/YsCMVUQqb6KCPAFRb4zIaTrQDzI4aHVsJR7OqVsUJdk8V+kmk04DIiiNdh5U/QCQMWjad2zF+FXNn14os2nFWt7lqzsMBpFej9W7yerk0huLZS7IMCdx2jMMML0wvWC1QJMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=HQ3JaF+7; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1766042331;
-	bh=dV2QF3aZTvcrLSnBc8QTRuWUVaq6WHoSpjHOlOgycio=;
-	h=Date:From:To:Cc:Subject:From;
-	b=HQ3JaF+7KlY/qNc0ezSOWgQ/zCllILbS27CJcPcpJG6gg/XvAGGxaTtmxlMcUzB3Z
-	 6ZTQmAN0sJIlk+rBgn9/9uSSy9Hq56Us60AizDQ2tz7RIoj0xy/9lsjJ6Bzh/8g7/+
-	 eMMMvE1ahViCtnAZ5MVEAr12UWQcpYDrVCOearW6lyk9lMmB5siOyDbMVJQa6rrhKG
-	 vGE1HR0ai2mOP095uLMpv9xBB9wr/imI5SL6IJrv3ZCnKwHVm39ACjkkN5U1MX5tDm
-	 z3M03PbXlwZSBDO2S86kvHEGRDbe3zjrdPTQn2e4YZ96KUVdg6TC4SaCwzuTCkF2SD
-	 1OGk7DLyydv6A==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dX28W5ZlCz4wD7;
-	Thu, 18 Dec 2025 18:18:51 +1100 (AEDT)
-Date: Thu, 18 Dec 2025 18:18:50 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, Rosen Penev
- <rosenp@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the gpio-brgl tree
-Message-ID: <20251218181850.5d69e0ee@canb.auug.org.au>
+	s=arc-20240116; t=1766047931; c=relaxed/simple;
+	bh=wPVeWbaV/mwCI6wvoQy5rlvkZpQ6uzq6IJ6NyaKuRWc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rNHA+8qppw15w7Pef33lrPAr6EuXoEJ5jkzoNkjIVct/xidSm8crai3KcaniXKyWePRoi6da0l3s4fR14zqzKCwrNQtYQRzfic1eYXkUoJAM8LYUuHMccABoTVG+GHo0JG2l4PlbwO90pFJmvvdf0mQS/zJNxcVfHmUDmZwClcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GQIvwNyV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7142DC116D0;
+	Thu, 18 Dec 2025 08:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766047928;
+	bh=wPVeWbaV/mwCI6wvoQy5rlvkZpQ6uzq6IJ6NyaKuRWc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GQIvwNyV6dkZz4shrsoRnVzhIMlDarKLWFIJw9nVeFIoAGMcDyPWNaFq1uGuI/WmV
+	 Gp77xfFIEHHi0N3Z/WKGx86ST3b11q7dRmWfvYEYeiBinsgrgUbneSebT+/79T1lN4
+	 o9EvEPSyV39YehEVeKMt8Hv/xoONd6Cs24E4Xps5aXAd0aoEx4rSgMbasCKwcYMqvD
+	 N9yTEsqBPGpEz4sEnKcNOgigfXabuGi2/4KQaB9VaIdBntThR/Ha3HK3/67PJRAJJz
+	 VAGHudViQeNVouHTuhz9W8cS0Qt7mNEksHK7zk3y1M8UezeR+4rF6uItDD/tFv0Hc1
+	 0KNqLPiga/9bg==
+Date: Thu, 18 Dec 2025 08:52:04 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Linux-Next Mailing List <linux-next@vger.kernel.org>,
+	Linux-kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: linux-next: changing maintainership
+Message-ID: <df68e9a1-2b98-423d-915d-58f224db6374@sirena.org.uk>
+References: <20251218180721.20eb878e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Uxe7gzbheSgURev++ILIqsx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="czttHzHEHpyrHXOp"
+Content-Disposition: inline
+In-Reply-To: <20251218180721.20eb878e@canb.auug.org.au>
+X-Cookie: Close cover before striking.
 
---Sig_/Uxe7gzbheSgURev++ILIqsx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+--czttHzHEHpyrHXOp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-After merging the gpio-brgl tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+On Thu, Dec 18, 2025 at 06:07:21PM +1100, Stephen Rothwell wrote:
 
-drivers/gpio/gpio-realtek-otto.c: In function 'realtek_gpio_probe':
-drivers/gpio/gpio-realtek-otto.c:375:21: error: cast from pointer to intege=
-r of different size [-Werror=3Dpointer-to-int-cast]
-  375 |         dev_flags =3D (unsigned int) device_get_match_data(dev);
-      |                     ^
-cc1: all warnings being treated as errors
+> Some of you already know this, but this is a general announcement.
 
-Caused by commit
+> I will be stepping down as Linux-Next maintainer on Jan 16, 2026.  Mark
+> Brown has generously volunteered to take up the challenge.  He has
+> helped in the past filling in when I have been unavailable, so
+> hopefully knows what he is getting in to.  I hope you will all treat
+> him with the same (or better) level of respect that I have received.
 
-  3203d8f573af ("gpio: realtek-otto: add COMPILE_TEST")
+> It has been a long but mostly interesting task and I hope it has been
+> helpful to others.  It seems a long time since I read Andrew Morton's
+> "I have a dream" email and decided that I could help out there - little
+> did I know what I was heading for.
 
-I have used the gpio-brgl tree from next-20251217 for today.
+> I hope to still be around the kernel community, but just not so active.
 
---=20
-Cheers,
-Stephen Rothwell
+Thanks Stephen for all your work over the many years you've been doing
+-next, these are certainly going to be big shoes to try to fill.
 
---Sig_/Uxe7gzbheSgURev++ILIqsx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Thanks also to Arm for agreeing to support me doing this.
+
+--czttHzHEHpyrHXOp
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlDqtoACgkQAVBC80lX
-0GyNSQgAgJPoyoCA+7jkCLqLvN2mYqCK3otjQC/GEyuVoFUGG4Zh5/L/5yhokMgm
-a5wGfejkC+bA12UT2yPXAR/RswglaeoOA0JH2vzBhPximzDTmcRLTueVWpkRQw7h
-Ra+h7iOGj/w8/azJQZUoO5LRh4hNKL4Jzgrlu3ayvzT84mUiXmRV8rK+gy/ocnyd
-gTUYfWa9AwXXd3jG5XvI4pg286Zho7WaOZyk5hEi1Z9/LF6PlEjBlpdqjXkRp6hl
-XWdT4vXX4LZdt43jY6B9r3jJAq8vgTo7D0a89TWB59KSs1pFjbRk/qoWREri6SZE
-sLaRCq9Cvqs1mlpoN0wzCIVpS+6xdA==
-=s7G2
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlDwLMACgkQJNaLcl1U
+h9Bwpwf8D11kcKCCSDfb6+PrIKrl+frw/nmri34Tb/xtZ3ARU5VhXbpFfTa7cP/v
+3AvT6fGMD8/WaWxmOvgcAi7g9ZAgeRSOcJKr67p5LOEdSXL6QTuyc5pfY+AQ/vkb
+qMlfJ9/mg3G6olxU484NOaVbgw/D7pXMkeX8T7QzWffhywXsgfu/r4JaID6DdgSq
+imYVGdUJ+aVBixOJQc7jX4AjlaDa/gl7dOH4ZI5K5Mz5mXl4ZNYRYGNBRl4r6aEP
+LwaW9zkbQkQGXTAA+qngvRbSOQxBwihw3O/apu44ocYUF4D73Zv3B9ZvghpVrG4C
+omr8DER9mwdynyWBXuhffLtotfub7Q==
+=dS48
 -----END PGP SIGNATURE-----
 
---Sig_/Uxe7gzbheSgURev++ILIqsx--
+--czttHzHEHpyrHXOp--
 

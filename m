@@ -1,92 +1,74 @@
-Return-Path: <linux-next+bounces-9480-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9481-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6698FCCF724
-	for <lists+linux-next@lfdr.de>; Fri, 19 Dec 2025 11:47:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C35ACCF7E9
+	for <lists+linux-next@lfdr.de>; Fri, 19 Dec 2025 11:57:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E4F5230E25F0
-	for <lists+linux-next@lfdr.de>; Fri, 19 Dec 2025 10:41:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 91BE73016997
+	for <lists+linux-next@lfdr.de>; Fri, 19 Dec 2025 10:54:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66CC73016EB;
-	Fri, 19 Dec 2025 10:41:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD10A21B196;
+	Fri, 19 Dec 2025 10:54:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="jW5+qfGH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jxEsnN0f"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4683043D5;
-	Fri, 19 Dec 2025 10:41:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49D818CC13;
+	Fri, 19 Dec 2025 10:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766140887; cv=none; b=oCNIedHeO3MSXWaFmQbrt8CXG4aF7lT2YuSRbqXFv9E8VXU1tK4SMdPayzRDuBwzHx0m6CgZRS5d94Gmz9zz77v1QOIp8LqXG+gor8tANyZpb4XPib6udI6BmmFBoSKQlptF0+CKP/si21S37E+4yvUA3KQUqdPzXf2skXnUtNo=
+	t=1766141640; cv=none; b=fP4toxVlRUdm2nUnUdQd7/Irc3d7+SY14hQPsrWEWi/ciM9LGpyFrQtuGlGikYvmDBcuj5vv3cg22sHL1+WCb1dViWWNbr2m2XLtiLxImyEu5UZ9WIUhQTOhHI3qK7jYpTVA0907SIEZJkQs5uvfTsFPk92z0+opM7NkwIbWPjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766140887; c=relaxed/simple;
-	bh=GUPeKx2HfaAsa0qCCS5pDfW4jS1cFZtkL3JDInLPxl0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=A8gZCrweK3qwmRGElj73CId+vpTHZFTE6LhOzQITBbPuWB/hwFg+xqM3VkYTaSedvlxfcURAcGjnEcsNiBfxd9zLXVXXdhbB8eacNPfxhtTR7dTGoEEY8hBkfrUHh/KKtwLlQECFBMhwPHvrSd4iTRi9mEb7TnLK8Qt3Zvb6rak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=jW5+qfGH reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
-Received: from localhost (localhost [127.0.0.1])
-	by smtp.simply.com (Simply.com) with ESMTP id 4dXkbT3lgYz1DDXY;
-	Fri, 19 Dec 2025 11:41:09 +0100 (CET)
-Received: from [10.10.15.26] (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by smtp.simply.com (Simply.com) with ESMTPSA id 4dXkbS5GCWz1DDZ8;
-	Fri, 19 Dec 2025 11:41:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
-	s=simplycom2; t=1766140869;
-	bh=rPYKzMzzkMlI3+PEHzVdZY0zLYuvrAY5XrMxkR8ZOvs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=jW5+qfGH1wicRr1VKTl+oh2pKohw6dhiUeIIiUWIjXw93FtpH5JgzYeYYl5dUbsn6
-	 PyAj+XCfMXyRMsfj+BX6WA6QZWsW9GfMqSlzrJ/SacjxrGpIWpplCiXl1JGcW9y/Fy
-	 nQ+Q0Z4J/LTUIgZyXwTRAsnMMVm7hknsTir1x1WANU2kMlkHXpr1RyzlnOd76zG38z
-	 eGvgbfFaM+SwLSg9yKdQ6yViOx6JmUucifniNDIPJ89lSo9IA12pYmIT0u8S5yaP2H
-	 P9f3n9lqMUo9kCocX7EDGlfUVxWPxw9jbDxgF+03ryYlbUpCyeqvxR7nECmZ2mLAEJ
-	 uMT1cTuVZJ4Fg==
-Message-ID: <a5a8f631-bcac-4801-9a2f-814bb2e199f8@gaisler.com>
-Date: Fri, 19 Dec 2025 11:41:08 +0100
+	s=arc-20240116; t=1766141640; c=relaxed/simple;
+	bh=YTEQwo+ZX/Nw8UGivL0Yf4MRTj6c8XaEpASlQ9EPvNw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VNl3GnonR3m5bIs08/Si5ejI4IbNlg8HXOgp6wRl65jUGGhIP2rKAtkaxueHzajeie9XbWsHsXbZlAtOLmdXGFS08/0D0DoDHWUUyErHMPOsxZ3L+BimNm1hKz6o/qVXVVpTeElDbUpYTMZLYFKzt2jNn9EO+x95Tv9HTAciCMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jxEsnN0f; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF480C116B1;
+	Fri, 19 Dec 2025 10:53:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766141640;
+	bh=YTEQwo+ZX/Nw8UGivL0Yf4MRTj6c8XaEpASlQ9EPvNw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=jxEsnN0fSV+k4+TaPq2z8+23BSmuqT5mZ4gpljTcja9DpLbgWnX5Zix4Oa+Bb2yUy
+	 ohIxDYCu+FaGC8C1fYpjzR0I0iV6LRF2hbUrFr4Osxb4NeiWn+tPe2qCmlzUB+XWoF
+	 j5i90+y5hLFl0CB6NCbGPFh3H3P2z5nZwHWm89UaP+TiE8Xb7wwzrlGsBkffyGfLnX
+	 B8BszX/xSitizil23WbLp1Mv32+C4gmz29NHcBNKE2IdtVWW90AUWK0UikZ9cWsIkD
+	 /br7J2OSnW75kD3mgLxe5KXdJf8CnGFoXnG3LExg5ZAPhqK67rrbGa3FsX1kEXdcmi
+	 ebLDqTcguc+BA==
+From: Miguel Ojeda <ojeda@kernel.org>
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Mark Brown <broonie@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-kernel@vger.kernel.org,
+	linux-next@vger.kernel.org
+Subject: Re: linux-next: changing maintainership
+Date: Fri, 19 Dec 2025 11:53:54 +0100
+Message-ID: <20251219105354.101616-1-ojeda@kernel.org>
+In-Reply-To: <20251218180721.20eb878e@canb.auug.org.au>
+References: <20251218180721.20eb878e@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: trees being removed
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Christoph Lameter <cl@linux-foundation.org>,
- Chuck Lever <chuck.lever@oracle.com>, Dennis Zhou <dennis@kernel.org>,
- Dipen Patel <dipenp@nvidia.com>,
- Gabriel Krisman Bertazi <krisman@collabora.com>,
- Ingo Molnar <mingo@kernel.org>, Jean Delvare <jdelvare@suse.de>,
- Lee Jones <lee@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Matthew Wilcox <willy@infradead.org>, Miguel Ojeda <ojeda@kernel.org>,
- Oded Gabbay <ogabbay@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
- Tejun Heo <tj@kernel.org>, Tyler Hicks <code@tyhicks.com>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-References: <20251215184126.39dae2c7@canb.auug.org.au>
-Content-Language: en-US
-From: Andreas Larsson <andreas@gaisler.com>
-In-Reply-To: <20251215184126.39dae2c7@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2025-12-15 08:41, Stephen Rothwell wrote:
-> These trees of fixes will be kept in any case (please let me know if
-> they should go):
-...
-> sparc-fixes		2024-01-21 14:11:32 -0800
->   https://git.kernel.org/pub/scm/linux/kernel/git/alarsson/linux-sparc.git#for-linus
-Thank you for keeping. Has been updated.
+On Thu, 18 Dec 2025 18:07:21 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> It has been a long but mostly interesting task and I hope it has been
+> helpful to others.
+
+Thanks Stephen for all these years and, personally, thanks for allowing
+me to have the Rust branch there for more than a year before it got
+initially merged. I think that helped a lot to convince people we were
+not breaking things :)
 
 Cheers,
-Andreas
-
+Miguel
 

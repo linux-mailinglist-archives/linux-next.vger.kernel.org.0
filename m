@@ -1,161 +1,192 @@
-Return-Path: <linux-next+bounces-9484-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9485-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA4A6CCFB3A
-	for <lists+linux-next@lfdr.de>; Fri, 19 Dec 2025 13:07:01 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3070CCFB97
+	for <lists+linux-next@lfdr.de>; Fri, 19 Dec 2025 13:12:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8541130C3B88
-	for <lists+linux-next@lfdr.de>; Fri, 19 Dec 2025 12:01:51 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3A7C5303D915
+	for <lists+linux-next@lfdr.de>; Fri, 19 Dec 2025 12:12:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12880324B1B;
-	Fri, 19 Dec 2025 12:01:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8D95331216;
+	Fri, 19 Dec 2025 12:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C6ae90Q4"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cB7yQ9Lq";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Wu2QoCqW"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA01333065E;
-	Fri, 19 Dec 2025 12:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1CF7331213
+	for <linux-next@vger.kernel.org>; Fri, 19 Dec 2025 12:06:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766145701; cv=none; b=gxqmXrhVP17XDYwWkjeQ0DJkhePoI0D/0XPUDWLO4GBkXYM0wCMKMzjF7EbIOSTsdinUkr/VHMDkl/DR+nQw4HCRulBK45WhFaEmxTphV8H43vJSdw+EsaRfyf7HtK3785wJKTog0VIGfHlBbAa+JpA91SNwK2fQuyZqfuIogtU=
+	t=1766145970; cv=none; b=Pn6sufYuENDXev24Ja73JmIQvUWfIE4xY5whhhDvVTiKwE/6/R7XgD1JSssLSscTrbQVs+UyhUFysGifA/sx7tMzBGQlNFrso+io1DiRNzCCcAftyl7BiCNOTRiVMLMXhYxF8c1lQH5bgWp8m4Yx3oIQ0b8/pmvh5SF/FDIKI5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766145701; c=relaxed/simple;
-	bh=3cFhrUXDRu5VGh/RtGvrfASXI4/QGZTDrcyQQgTatT0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=obE9RJA+kKtvo033Z0EnvpvqzPkkArtMOhK3WDFHuzYjVVgFxG+5qXbyhG/OHRkVy8tOdcjIOkpAnFq5izU5lBAKDqzSm3CFa++D3Trw1+WRaH9Lr2gFVQ6R2/4a02DuRLPgPBRUXklGmUDb2oD1syol/VkvZZkek16+MrQjYk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C6ae90Q4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77BDCC113D0;
-	Fri, 19 Dec 2025 12:01:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766145701;
-	bh=3cFhrUXDRu5VGh/RtGvrfASXI4/QGZTDrcyQQgTatT0=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=C6ae90Q44mepeDvBKzvFQ9mQM04ogHze8jXTnP8G/FQ34ifTELFr0IHYICmbUjM6C
-	 Swb0277Z8iPEd/X0psILSbeopBYiDq3mgFp8uotl9DBT3OjpqP7k6H7RQhgwI/nCGi
-	 Lrb9yjgtzhYAx+oULfmpqqfxDAGkBVz3LY+s9N2iSREXuXuQbSDaRQH1dW5pc/nsEU
-	 k2L+f1so9vtl3WZFX5ZywU96ETu63TNp9TGt3KgH2OhFNrK3Q1NGdApIdRlY12Pq3B
-	 hYycpBMPOGWQvIyY9acJ2roidoZ0krsPpHXo17EsUxYlj7WhB/Wpq1K2esOqGFVYLE
-	 l2G5Z9KFBzqxg==
-Message-ID: <484f43b8-aefd-467b-8cc1-a3505a29cf2c@kernel.org>
-Date: Fri, 19 Dec 2025 13:01:31 +0100
+	s=arc-20240116; t=1766145970; c=relaxed/simple;
+	bh=OrQ8y/KjF2b52Z42pepnzJIGsTvgzBt0zknnPclnRfY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eQeDq42g65o2SvbHurH8XMFxeU+MmNs4nQaQ2B3JA4PVgRqEX9eEBPNOYAT9HFmqk47yIGuYGMWnKI1uawNvVhrIUt+ZMPG97d7k13Ks2Kb8Kkcfned73CEMRbU3ajeNmfwGKPBDgVbY/W//nBdrsJ6GNcpozTv5adoRwd2EsWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cB7yQ9Lq; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Wu2QoCqW; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BJAxZ3m3939280
+	for <linux-next@vger.kernel.org>; Fri, 19 Dec 2025 12:06:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=IzZI2a7rRCVL15CfB9tR9LFf9hfnkjtO41d
+	ZrsPqj0M=; b=cB7yQ9Lq/yg53Z8nr3HzqlavFtAd25Rs04Uybg0kvQkuLc63HyS
+	mGbcxFhTnnSmrGGdoZ4JhEkaDQkFWI71ZR3/Sl03omQWlKd7gocphpgwXWmZ3Ski
+	+5I7TjQlC4Cu/odNcd0u8j8gAS7Mb5mLp/26Nrv7P38nXCbRvm7G62KqvMFubD+h
+	GaQ4JxMamqU8jTk9V//9uGJdahNzwvOrHKa7KxOf6lN7Ffle3kOlAO6lj1xIHQpA
+	ZieOQSR/2xtbPI4XCazFqrKzbGmgyK9efK8o/jmWsReMhIQ9guX+8GCZZnpRCA0Q
+	sQHtS80pGFappFVIio04tiDhnDqJc1RRl6g==
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b4r2c2juy-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-next@vger.kernel.org>; Fri, 19 Dec 2025 12:06:06 +0000 (GMT)
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-78c5eff63feso24587207b3.0
+        for <linux-next@vger.kernel.org>; Fri, 19 Dec 2025 04:06:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1766145966; x=1766750766; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IzZI2a7rRCVL15CfB9tR9LFf9hfnkjtO41dZrsPqj0M=;
+        b=Wu2QoCqWAI4eGpWBiMM/o5FMKzfia1n4P9Fo6wkv+zk/KH7v+7IhTs4xzQ2+WxYMvr
+         lHC7IEFRBGswuEFgOUuAm/FsrYB6gBLKPENU5yyaj7W81HcBb8LYFs82ehV6yERCh41z
+         8adCqabqstjRW5TX7AQZI0KEMyDdlMVuhOA3w8iUJoBgCyBkK4oPFi6TFdwpV7gyhxu8
+         54mhUsgL+dg+DQtpWz98KNjPjU6v/yhwTjVnCzAQzkQ6ba/S4BTOyI10WeE4Py9fN8iI
+         V8gu7XAcwBDqf6FCHdAAgDdpD+NpLSEe4G9IoIohbFDq8I6V2dpDc5CChs1HX6Xs8f7f
+         mXzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766145966; x=1766750766;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IzZI2a7rRCVL15CfB9tR9LFf9hfnkjtO41dZrsPqj0M=;
+        b=MWXGbJSY1yhvQiAapOWdq/E86IXDmOJnxbUl3e0Zi8o9D3AnXdF6CWQXYbTxKsYvnQ
+         CHf3RmCs0fzLubhNHUifDpLSgUNPosoSNnlQhYzeoEkOV3pmuFQdKuCjEto9otNSftOw
+         WHIpgiOLKj/N5PwdI3Qal0nR9AGxqFcJHMsnh+FJV9Sngq0Nh6taPJbhA22MFS80Zpzi
+         OXgRlVH48a3X9POy7XqMjtvKyZfwgIL/+JrHPXFfsb2fQPXl2EwmgTYZi+teHgkxP1AK
+         WKkXTOjxJmJUAODmKkl+5h1DEMuwZ+HCcitVYgEzX4N9lXdVKHrr+0g6bRcm/M8EjnYU
+         FeYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV/KlA+wQKDE4n4p38l807pWGwWfOTToOLr8qiKg/jBymVKe7v9pwZI75hdPNnvg0VBOdoNUJuAei5x@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzj+uTYMZGrAcSnpI/0DzyS0D0zJshEOdx4PjdfqzErdUMVfB0w
+	PGKNP9zwaVH93vEr1d/whtEFskcAFc3GZMyCtuPCyFghmyHRVSA1iGY7ROP8+avveitrogGqi0G
+	dxWJY364wTKUZXbNq3QRNILEw8bRzCnSYew8FMveIx0WrPUBW4VJXsuCMvthajDiU
+X-Gm-Gg: AY/fxX7P190oKrQQXtgxd73BmgTQ3kcLXK7JEjdT2arK+wzqaX1plpzNBo1rL85pPd9
+	/CGF9qzFhdMH8r/ib0ORkVV6FFQ4hj0swF1BzXyAQm710zpLc9UNkDqQZiwmTsJPtkByjWnJXIy
+	FV+PBlw2jFeqhZK/BBpjk/f5bvvDHyl6gM0HHt1oAzPoBPKAnfkOrb6GRXVF7AxcC76Dgld22ho
+	nIHvKsnQBkaV39LQE7wprmuM3NCiKJvNa6g6EfwvhfYpjX91Yuo8uZm4NjFKkPm9jPS+3x02EN+
+	98acYmCWj2SxPLj6oPNnLZPTxEst/AHHJej0K4yO23QC1WmoXtq8aIEGu1JdG1UPZq84mD+c2Vi
+	JIb2dDyEmIPDhwIft+uYfAZPWk+fCgHPnUbMsf1EQyq6DeFJQlXuLUtZvsEDKtqOp3u8=
+X-Received: by 2002:a05:690c:6f12:b0:788:1eae:3d7f with SMTP id 00721157ae682-78fb41ee82fmr20049087b3.70.1766145965953;
+        Fri, 19 Dec 2025 04:06:05 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHVUKSymR3id5+my9YAHLROv2LOA8PHDxmbDvRUDqXYMkV1DyoXnr4nuO8/Jg718H4lOaa92Q==
+X-Received: by 2002:a05:690c:6f12:b0:788:1eae:3d7f with SMTP id 00721157ae682-78fb41ee82fmr20048747b3.70.1766145965376;
+        Fri, 19 Dec 2025 04:06:05 -0800 (PST)
+Received: from quoll.home (83.31.98.88.ipv4.supernova.orange.pl. [83.31.98.88])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8037f37edasm210625266b.58.2025.12.19.04.06.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Dec 2025 04:06:04 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+To: 
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+        Oded Gabbay <ogabbay@kernel.org>, dri-devel@lists.freedesktop.org,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: [PATCH] accel: MAINTAINERS: Mark the subsystem as Odd Fixes
+Date: Fri, 19 Dec 2025 13:05:59 +0100
+Message-ID: <20251219120559.60710-2-krzysztof.kozlowski@oss.qualcomm.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: linux-next: trees being removed
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, dri-devel <dri-devel@lists.freedesktop.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Andreas Larsson <andreas@gaisler.com>,
- Christoph Lameter <cl@linux-foundation.org>,
- Chuck Lever <chuck.lever@oracle.com>, Dennis Zhou <dennis@kernel.org>,
- Dipen Patel <dipenp@nvidia.com>,
- Gabriel Krisman Bertazi <krisman@collabora.com>,
- Ingo Molnar <mingo@kernel.org>, Jean Delvare <jdelvare@suse.de>,
- Lee Jones <lee@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Matthew Wilcox <willy@infradead.org>, Miguel Ojeda <ojeda@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>, Tejun Heo <tj@kernel.org>,
- Tyler Hicks <code@tyhicks.com>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
- <ukleinek@kernel.org>
-References: <20251215184126.39dae2c7@canb.auug.org.au>
- <5f50d00f-faa1-4035-82c6-921147d3a08a@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <5f50d00f-faa1-4035-82c6-921147d3a08a@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1665; i=krzysztof.kozlowski@oss.qualcomm.com;
+ h=from:subject; bh=OrQ8y/KjF2b52Z42pepnzJIGsTvgzBt0zknnPclnRfY=;
+ b=owEBbQKS/ZANAwAKAcE3ZuaGi4PXAcsmYgBpRT+nfHacbjEENJE+UJfAwvezLjldazQSLrWpM
+ wfCdSpAhgqJAjMEAAEKAB0WIQTd0mIoPREbIztuuKjBN2bmhouD1wUCaUU/pwAKCRDBN2bmhouD
+ 194oEACJ0OCpm3VKKrUBljRA29g2YHeosnb+8JieIUND6E3gLEmw7qYK0eg4EZAQE4+BIwrwkxb
+ f5VIGR4codnrZsMIPAF4XPaiyl2936HGQsgWCpMigBAPdJtm0dBMheW9PyXh0DrtZ/BZdJGy4kQ
+ CJoOjpTX4q4/RyX2PPOamJcAlT5fYpf29R6RsZSAl4DDcOIvTEyBB0toZXzPHaicd0qgzIHCdlK
+ oy2vr8EQXw1MSzN4xZTu90+IIzjHycaGYhj26pqIjW3oXVliyMEUMKeH8t7uYuFsuAYTs1rUx0D
+ GQdeNx8CilaprzmAEo1cNLuL3pBU52DM0NDTw2rDdEBI5RSWf50ZWfL+ci4mRjKX2tsFIFpJU7L
+ siggW+tptnYC0pTVyvyQ+OY9vah2QAglkEE0InSZD8SW7CR6yaw5qUXhvWURHYwDNafE0aczA7v
+ qKo86dEHrRyB2TW5pqNAy+5hLTxA2kiGWZKlG+Goa04ayLT7h/wsFyVYGiCWNjlyqoT8njHN0w2
+ SKauAtQHJiMCuo9/bIamYpNIwgme5TgJeVmJK+TUNj8Q61E+0hASmDZ/RDaubPYvqEsEsUYihPo
+ 7dh7sEt16PSHAaCHx2J2H6vQdrxazGbtLlYlpwWPINOHKjjilXaZcSBUaMOsa0PYEt7tqr2ShJl sJ5sX+vAMH7IJYg==
+X-Developer-Key: i=krzysztof.kozlowski@oss.qualcomm.com; a=openpgp; fpr=9BD07E0E0C51F8D59677B7541B93437D3B41629B
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: xaENpUiKW-Un8wCz6iw7H8h6IZEZBKiq
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE5MDEwMCBTYWx0ZWRfX8qH0idIQYOhN
+ lpyO03DmYju8LUjYanwgsouDa/rtdY1GrNmWFKNA0SZChfY6ELNvJmDIPrsWrTFrRT1CzW8d9Hu
+ L9jW02JusWIFnFjJzCNhhcfI5PjoVjIs9yoMxNYjJNwwdNMCfpsUaRv5CZBf1IXo3BhbyXndTjF
+ s79QQs1AZNMz4WtiW4q9u3WbMV+dZDFwqSh6Pm1Ddnc5J7MpBSiVICxMenujH66hqZmOcaRU3xI
+ sJwo7k6iK+OiF+Gt9j5O74lpT2dWtc+Up5XYpgESB6BE7DCkEzNCeMhC9QgIrXUhWxpHPpDeSuj
+ bk3D8xXprfY22hOy+qUN4/3LIUKSEFveSHvt33I30tVIhEHkdab2/DDlh1sSDLOO5N2Lp5TeiBk
+ hoUVo0Qye3DS9JPHiblkgybMxeyUGU3TBLr63EOC5Z131p+SVS6ZVW5KRbz22sRLMAAhK4Q2Nxi
+ 9lKjnz/Z5IWxNadD5PA==
+X-Authority-Analysis: v=2.4 cv=feSgCkQF c=1 sm=1 tr=0 ts=69453fae cx=c_pps
+ a=g1v0Z557R90hA0UpD/5Yag==:117 a=qe4J/qXhiWkb1JZGYKbLYA==:17
+ a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=rOUgymgbAAAA:8 a=e5mUnYsNAAAA:8 a=pGLkceISAAAA:8
+ a=EUspDBNiAAAA:8 a=YL6Xjd1eAAAA:8 a=KJwMiqYiu87tZNhqNnAA:9
+ a=MFSWADHSvvjO3QEy5MdX:22 a=MP9ZtiD8KjrkvI0BhSjB:22 a=Vxmtnl_E_bksehYqCbjh:22
+ a=yLS1KB8ZbIgHeRWbGdJx:22
+X-Proofpoint-ORIG-GUID: xaENpUiKW-Un8wCz6iw7H8h6IZEZBKiq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-19_03,2025-12-17_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 phishscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
+ spamscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0 clxscore=1011
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512190100
 
-On 19/12/2025 12:53, Krzysztof Kozlowski wrote:
-> On 15/12/2025 08:41, Stephen Rothwell wrote:
->> Hi all,
->>
->> The following trees are going to be removed from linux-next because they
->> have not been updated in more than a year.  If you want a tree kept,
->> please just reply and let me know (and update its branch).  If you want
->> a tree restored after it has been removed, just let me know (and update
->> its branch).
->>
->> Tree			Last commit date
->>   URL
->>   comits (if any)
->> ----			----------------
->> accel			2024-05-03 11:00:53 +1000
->>   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git#habanalabs-next
-> 
-> +Cc few DRM addresses,
-> 
-> Shall we make DRM accel subsystem orphaned in this case? This tree is
-> still mentioned in "DRM COMPUTE ACCELERATORS DRIVERS AND FRAMEWORK"
-> maintainers entry, but if no work is happening, no updates to Git repo,
-> then does that mean project is effectively dead now?
-> 
-> To be fair, the patches are still posted [1] but if nothing is picked up
-> to the repo then maybe new maintainers are needed? Or repo did move to
-> other place silently?
-> 
-> [1] https://lore.kernel.org/all/?q=dfn%3Adrivers%2Faccel%2F
-> 
+The git tree mentioned in MAINTAINERS entry for computer accelerators
+was not updated for three years (last tag or branch pushed is v6.1-rc1)
+and is being dropped from linux-next [1], thus should not be considered
+official maintainer's tree anymore (patches appearing there would not be
+visible in the linux-next).  Also, there were not so many reviews from
+its maintainer [2], so it seems this subsystem could use another pair of
+hands.  Mark it as "Odd Fixes" to indicate that subsystem could use help
+or is just not that active anymore.
 
-I dig a bit more and individual drivers are still picked up via
-drm-misc, but I guess Oded has much less time now [1] and even recent
-changes to drivers/accel/drm_accel.c went via other person. With tree
-being dropped from the next, it should probably be removed from the
-MAINTAINERS. I'll just send a patch, easier to comment there.
+Link: https://lore.kernel.org/r/20251215184126.39dae2c7@canb.auug.org.au/ [1]
+Link: https://lore.kernel.org/all/?q=f%3A%22Oded+Gabbay%22 [2]
+Cc: Oded Gabbay <ogabbay@kernel.org>
+Cc: dri-devel@lists.freedesktop.org
+Cc: David Airlie <airlied@gmail.com>
+Cc: Simona Vetter <simona@ffwll.ch>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+---
+ MAINTAINERS | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-[1] https://lore.kernel.org/all/?q=f%3A%22Oded+Gabbay%22
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0dbf349fc1ed..d97e5b41b998 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -7740,9 +7740,8 @@ F:	include/uapi/drm/rocket_accel.h
+ DRM COMPUTE ACCELERATORS DRIVERS AND FRAMEWORK
+ M:	Oded Gabbay <ogabbay@kernel.org>
+ L:	dri-devel@lists.freedesktop.org
+-S:	Maintained
++S:	Odd Fixes
+ C:	irc://irc.oftc.net/dri-devel
+-T:	git https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/accel.git
+ F:	Documentation/accel/
+ F:	drivers/accel/
+ F:	include/drm/drm_accel.h
+-- 
+2.51.0
 
-
-Best regards,
-Krzysztof
 

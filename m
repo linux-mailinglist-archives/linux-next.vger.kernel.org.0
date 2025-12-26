@@ -1,100 +1,106 @@
-Return-Path: <linux-next+bounces-9505-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9506-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AFABCDC234
-	for <lists+linux-next@lfdr.de>; Wed, 24 Dec 2025 12:35:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39BC4CDED30
+	for <lists+linux-next@lfdr.de>; Fri, 26 Dec 2025 17:45:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 37EB4300DC97
-	for <lists+linux-next@lfdr.de>; Wed, 24 Dec 2025 11:35:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D71C030056E7
+	for <lists+linux-next@lfdr.de>; Fri, 26 Dec 2025 16:45:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7047131770E;
-	Wed, 24 Dec 2025 11:35:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A68BA28642B;
+	Fri, 26 Dec 2025 16:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q/RxVBRS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tD0gO0Az"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F933164D3;
-	Wed, 24 Dec 2025 11:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CDAB335BA;
+	Fri, 26 Dec 2025 16:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766576114; cv=none; b=XpN02Dbv664OdIh1p8BZDkOPLy4pWLnj8sxF1D2J4uYy+CYS/RgOz+CfX7t/dlF071utb3uAQtmGhqLgwnJTzxRC2kjrVaLQD7pYjpGy3MLw25OkQ8uWP3MWbBJsWWolThm3y700ZDRKLfeSPyIyiAJtxwADSAxuVE7HPoVnqOM=
+	t=1766767538; cv=none; b=j4/9hmxig9X0yoVNQYYjPU8X2fbszP0bF1wH5F5IQyYJdGgGm6XsOnDMnhYMojdhwA+HFLdKl7faTN3/2vrTJpnWwOneu5yt/rHe2Y2TmciAEj260cBy4YNbN2HIuD068itLtC+q1viFlIwCoIiz3bD5Sow7YctsO1VU3rugRqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766576114; c=relaxed/simple;
-	bh=Sx0CZNiJLuiJ3GYVMjO8d8pC2m6Ll3K0KZdivmQHsCE=;
+	s=arc-20240116; t=1766767538; c=relaxed/simple;
+	bh=+x7xE01sFDbthitjuhJ5PVMzRZt4sWuu6lI+r6JeZw4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HcYxfEgd7l0lQfGkmv8SD+anNYphYWPMLsa8uWTbFLqTV2aHWOzh5aL7oUp02MRsbEJER5ZHuuxTdn3AiifBqfX8GhYPrAW6CUkniUTh8rEb4N4Ws8hCSj5QXW2xsXKCQtgguiZVAXUO0zDPfdpmtS0SQ4xT294T5fCHPVK5618=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q/RxVBRS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 782D5C116D0;
-	Wed, 24 Dec 2025 11:35:13 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=mNV+a5H9nDtidoYbHICK/NGuAuPN6FGqFDBlEwkmzrZyJJVzFPNgZ9HcaSSyAmawzmHxBuSf0EzLNGJH9jPh/rhdTUJQuWpEh1vTNT901S73mv4t3tAFie4z0L44ts5D8O9a2SkDYcF+XEABUnbJGtj2HN7ERXtMJxuzAx6hkcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tD0gO0Az; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E25C4CEF7;
+	Fri, 26 Dec 2025 16:45:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766576113;
-	bh=Sx0CZNiJLuiJ3GYVMjO8d8pC2m6Ll3K0KZdivmQHsCE=;
+	s=k20201202; t=1766767538;
+	bh=+x7xE01sFDbthitjuhJ5PVMzRZt4sWuu6lI+r6JeZw4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q/RxVBRSstAano71q40300IjVMEiW8AzOAuLoDPeYIilRLUasheBmP9IwF5IYWfp/
-	 y0jeqz0gbiZ6lCWjN04OV+ZSh4J8dM2gNoHUQMgBoFQqeHUgdBXIfl71lkXzz7K9hI
-	 afDdOHdwZhP8gfSA+dqIof7DFaodwP+ucz/K0T8Ctk0uaQvv6rHbob3y51+whGAIYX
-	 939Y3EBzBV8Y+hnvxrjKNaMOcLmUdTN1MIaXvnBcuyja0/19DbymfYYywlijQ0cRBh
-	 YqjZmkmgy1Y+dxsFR6SwNA/jruS2YH1kB74rp2RhgywEaPU+fgbQmTD/21PqRhF/Y8
-	 G1tKczBGaZvjQ==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id A47BF1AC56B3; Wed, 24 Dec 2025 20:35:08 +0900 (JST)
-Date: Wed, 24 Dec 2025 11:35:08 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: Brahmajit Das <listout@listout.xyz>,
-	Amadeusz =?utf-8?B?U8WCYXdpxYRza2k=?= <amade@asmblr.net>,
-	linux-sound@vger.kernel.org, linux-next@vger.kernel.org,
-	cezary.rojewski@intel.com, liam.r.girdwood@linux.intel.com,
-	peter.ujfalusi@linux.intel.com, tiwai@suse.com
-Subject: Re: [PATCH] ASoC: Intel: avs: replace strcmp with sysfs_streq
-Message-ID: <aUvP7FL6c1snBc_S@sirena.co.uk>
-References: <20251221185531.6453-1-listout@listout.xyz>
- <176650962400.445350.17331328109538303145.b4-ty@kernel.org>
- <20251223192409.50a6e4ab@fedora>
- <aUsBgVbloPqBa6sZ@localhost>
- <877bucgpob.wl-tiwai@suse.de>
+	b=tD0gO0AzxZACZBcmquahpIkAVkxqfAy+4Q77/ww5Pkmz+22tcwhYhRKkqQUTzEJ3m
+	 /8zEmi1Jjtiv2WhQ4aZyFzentI9+rGj/dhDk1Xk8Im+emMdtKBSt9LI8xC/crSKEQ6
+	 rw82sMmj8CY8pxEAxzMmVLCH9qH+Kz6M9/0JtvjIZbdxqL8DAyE39wWRfLMv0D/Qus
+	 JL0fmGB8oMqxaiPLRGYFxEvytMbABD91sIPM5jOJ58ytkI7/r1ZEO2ptfFOAuwBVvg
+	 MO2VshFr78PwF6izr5EM3nombnhmRbSBW735q6CnUnrJ79elRqEW21o3rEWuBCRE7V
+	 dAhX6xrY0U66A==
+Date: Fri, 26 Dec 2025 11:45:36 -0500
+From: Sasha Levin <sashal@kernel.org>
+To: Finn Thain <fthain@linux-m68k.org>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Stephen Rothwell <sfr@canb.auug.org.au>, x86@kernel.org,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mm-nonmm-unstable
+ tree
+Message-ID: <aU67sD1u83Qrpvdu@laps>
+References: <20251218153050.44da4a78@canb.auug.org.au>
+ <fcc9ca3e-8c04-43c0-606c-e798bc0cf9ce@linux-m68k.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="D15Gv740fcRis8Yd"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <877bucgpob.wl-tiwai@suse.de>
-X-Cookie: Think big.  Pollute the Mississippi.
+In-Reply-To: <fcc9ca3e-8c04-43c0-606c-e798bc0cf9ce@linux-m68k.org>
 
+On Sun, Dec 21, 2025 at 01:58:17PM +1100, Finn Thain wrote:
+>
+>On Thu, 18 Dec 2025, Stephen Rothwell wrote:
+>
+>> After merging the mm-nonmm-unstable tree, today's linux-next build
+>> (x86_64 allmodconfig) failed like this:
+>>
+>> x86_64-linux-gnu-ld: error: unplaced orphan section `__bug_table' from `arch/x86/boot/compressed/sev-handle-vc.o'
+>>
+>
+>I found that I could reproduce the same build failure after applying
+>Peter's patch to v6.19-rc1. So it's not confined to linux-next. I used
+>allnoconfig with CONFIG_LD_ORPHAN_WARN_LEVEL=error and
+>CONFIG_AMD_MEM_ENCRYPT=y because allmodconfig takes forever to build.
+>
+>The patch in question is this one:
+>https://lore.kernel.org/lkml/0c18fd08ef19497768070783da28086e01d11a00.1765866665.git.fthain@linux-m68k.org/
+>
+>I may have found a solution for the problem, but I don't understand this
+>code, so I've Cc'd Ard et al. I don't know whether the __bug_table section
+>is relevant to sev-handle-vc.c. If that section is not desired, I propose
+>to make this change to Peter's patch --
 
---D15Gv740fcRis8Yd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I think that the issue here is that we're trying to use WARN in the early boot
+context. We should probably add CONFIG_DEBUG_ATOMIC to the list of configs we
+disable for that:
 
-On Wed, Dec 24, 2025 at 11:05:56AM +0100, Takashi Iwai wrote:
+diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+index 4f86c5903e03..bb36dcef7d08 100644
+--- a/arch/x86/boot/compressed/misc.h
++++ b/arch/x86/boot/compressed/misc.h
+@@ -14,6 +14,7 @@
+  #undef CONFIG_ARCH_HAS_LAZY_MMU_MODE
+  #undef CONFIG_KASAN
+  #undef CONFIG_KASAN_GENERIC
++#undef CONFIG_DEBUG_ATOMIC
 
-> I believe it's a false positive, too.
-> Or is it about potentially unterminated strings?
-
-Regardless of the warning being spurious or not the cleanup seems like a
-sensible one.
-
---D15Gv740fcRis8Yd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlLz+sACgkQJNaLcl1U
-h9DMjgf/X882mx1ReqUoyWevrkkmbrYqDryadYnmjMq0FdRjYG4kOgbNLPrQBTkj
-wR5OkH3QKQ3VBO8cCfCpx7zaLj02ieePGQ1HMa5OaGgk8Zto8J+JKgBAW//etkBl
-oTUO/TRi/YjWpOda0WJNPaceetQvMWM0eHcqYhCngjPCWBbl8i6i6ll+iRPsQNrX
-VhUd+ip4skoh10AehiGohe2bqZSiyRSEIvaClyjJQsGCiggU7S5mTdXOo/5b0XS2
-Lpn7xZXlEDunS5LDLDZCFNNZGhJgNX2D4+zCXe5M8j0EX6WuZ5m535jUHmLYes+L
-CL+juZ4QuJ6lqkzqGgpYkb24WXy+UQ==
-=4Hab
------END PGP SIGNATURE-----
-
---D15Gv740fcRis8Yd--
+-- 
+Thanks,
+Sasha
 

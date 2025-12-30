@@ -1,59 +1,59 @@
-Return-Path: <linux-next+bounces-9509-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9510-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1ACFCE8FC0
-	for <lists+linux-next@lfdr.de>; Tue, 30 Dec 2025 09:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DB47CCE90A5
+	for <lists+linux-next@lfdr.de>; Tue, 30 Dec 2025 09:33:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CD6213025FBE
-	for <lists+linux-next@lfdr.de>; Tue, 30 Dec 2025 08:09:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CD31A3010A92
+	for <lists+linux-next@lfdr.de>; Tue, 30 Dec 2025 08:32:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C1742F7AD0;
-	Tue, 30 Dec 2025 08:09:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2051A2FD1BC;
+	Tue, 30 Dec 2025 08:32:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b="g2CuOUwe"
+	dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b="gLnP3QjF"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6393009EC;
-	Tue, 30 Dec 2025 08:09:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B733296BBC;
+	Tue, 30 Dec 2025 08:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767082158; cv=none; b=Ah2TNJnIVjI+5AntibnKRr6muaSXlghNblLmQVtkZWJBa3mB3HuDzbUz8F4xAbC2RoKJ1bLYzH443GWXpjviWZko09rolnqqTCOXsC5+pYZqkMXsqEFtN9Ai+fFgQU1NDQTcnXDnVl7EzB1CR6cM4GjaWbNwInmIKMTr+YyF7QI=
+	t=1767083558; cv=none; b=LcC6eZ6LM7B5HKZQg1H0ZTioCPnpvuUM0Jx/2q2zCps2VFgFUlKYqFX8jd3xwnE4eItrt8pMKbO28bUP/4HG1qmOg+7NIMq/svsKHmZ+6q91HpZ/oeC+GLSN6XH8gJ1e8BiV+p+9KWR+VgxxXiWS+/msJ8FeGUNO8EKRh00DLFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767082158; c=relaxed/simple;
-	bh=EE8iG00lFFYRdgbODTVxEAf3ou7WLZTCeBo8k7Pty/g=;
+	s=arc-20240116; t=1767083558; c=relaxed/simple;
+	bh=+64jrnCjkzrDgt+liLo7SMl2Mbn0RK5z+P/Tv6odsKo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YERz0w5oXTlx4LAx/R/uBnQY2kMVjuUID1EfRXMJYS96DqzTkc76qdKFc9CfNvD4qDiEG8q5XOehCuMRgH7npa5Grp9f9bRQ+HcEOrJGpR5uvzB/1EHg2ZExyMJCF3rXvwg9jGAdG7a9jRUdGrA2S/xCZcauC5HeD56rHNJIAXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b=g2CuOUwe; arc=none smtp.client-ip=80.241.56.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=mRfRo4wy+dV5pTbGavX1O6kXo1Zjz1sKU33Fs7p1+oypiQUJFB5xSQd8vkP2nIWe83x0Us8a8zX8iO6aiPFrMBOAkGjHN24Pt29YracPVvaQCkUb76mJF2WloYJUi++3wgsnFhUkpWi9I5rlR2q1FqPA/JxfgbK9q6RRMhiRTww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz; spf=pass smtp.mailfrom=listout.xyz; dkim=pass (2048-bit key) header.d=listout.xyz header.i=@listout.xyz header.b=gLnP3QjF; arc=none smtp.client-ip=80.241.56.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=listout.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=listout.xyz
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4dgQTb47WLz9tf6;
-	Tue, 30 Dec 2025 08:59:15 +0100 (CET)
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4dgRCs601nz9t83;
+	Tue, 30 Dec 2025 09:32:25 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=listout.xyz; s=MBO0001;
-	t=1767081555;
+	t=1767083545;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ZvnsWEuPgN8jE9Mwi9uKyXKkrad7PSMDsiT4kslg5Q4=;
-	b=g2CuOUwe6z94nH+xHtbNM59Ulh0TKIkrEZWHQGpuFLKjTbVO6HxgK8H65b8tE7Z2PmNHJW
-	k7rzCZ7u/m5LI9qEsbNol1cClAHaVK4zT4TnMBJ8Zhmezc3SGuZoy+auJsVaBVXZgU4WMy
-	FWTJuyPbL3R45JKc7x9Y3oD0hh9JEfvhxayhEhUVke8C59XWpS7PfQw0XXsBmY4wub79DO
-	azSLbd+pbFyk7Yfr1427ZUE0F7CXvLLeOUJKebLPG110VF1GKkHuuIjU+HH3QpPtAnv8/S
-	wp/+4cLmtfhNsgxKyWv9K0kjnbCH696SLoCxTshfscqbkC6oPBgYflMgUHaWFA==
-Date: Tue, 30 Dec 2025 13:29:08 +0530
+	bh=WB8PDAH+L+yyJ3NdQUj01EhV7SO3kbIqZR36MISVRkM=;
+	b=gLnP3QjFKcp692wYnwQ4sQn7Gx/0ifYDybvBctaP+3xMLYW/8//sLyunEf0yo+KIk++35M
+	oB8yT6oR/wTM/OkOXZJz9egK//6oburLQWvyQE3mrhE1iLyTlU0NodVm4jSU8km64YYGz+
+	Fh1C7jcX9K+9dVhvLCFpNbhp445K32Vfy/kbAliD+KcyQfB4khCBwghWVMSB6RM6pAjlpI
+	DnwbUG5JLaejYwmfV7rmUU1/8ECPCZAIXnzpcI51qAT2Tw5HO5gkwO/Nus+4cGP+POo2iY
+	zaqL2dGsAPmJj3nshh6QXaASdrM0W+A1JjrjGb0uMu9En+JDVs4cZt0ZEtxbsg==
+Date: Tue, 30 Dec 2025 14:02:21 +0530
 From: Brahmajit Das <listout@listout.xyz>
 To: Cezary Rojewski <cezary.rojewski@intel.com>
 Cc: Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.de>, 
 	linux-sound@vger.kernel.org, linux-next@vger.kernel.org, liam.r.girdwood@linux.intel.com, 
 	peter.ujfalusi@linux.intel.com, tiwai@suse.com
 Subject: Re: [PATCH] ASoC: Intel: avs: replace strcmp with sysfs_streq
-Message-ID: <aVOFeKLgan1McTTa@localhost>
+Message-ID: <aVOKgHJ4NXs5mKe_@localhost>
 References: <20251221185531.6453-1-listout@listout.xyz>
  <176650962400.445350.17331328109538303145.b4-ty@kernel.org>
  <20251223192409.50a6e4ab@fedora>
@@ -81,25 +81,38 @@ On 29.12.2025 11:03, Cezary Rojewski wrote:
 > > Regardless of the warning being spurious or not the cleanup seems like a
 > > sensible one.
 > 
-> Right now I leaning towards Amadeusz' opinion - looks like we're masking an
-> issue. id->tplg_name is being used in strcmp() context few times in this
-> file yet compiler complains about one particular location.
-> 
-> gcc-16 is quite recent. It's good that we get the kernel building but after
-> the Christmas break some digging may be in order : )
-> 
-> 
+...
 > Brahmajit,
 > 
 > While I'm sure you did, just to be sure - did you try clean-rebuild with the
 > 44-hardcode proposed by Amadeusz? We wouldn't want any old-artifacts to get
 > in the way.
+> 
+> 
+> Kind regards,
+> Czarek
 
-Hi Cezary,
+Czarek,
 
-Yes, I did make clean and make allmodconfig after reverting my changes
-and hardcoding 44 as Amadeusz suggested.
+Not sure if it would help but I tracked or narrowed down the issue to
+this section of the code in the avs_condpaths_walk function.
 
+
+	if (avs_tplg_path_template_id_equal(&template->source,
+										&template->sink) && dir)
+		continue;
+
+If I just comment that code segment out, then it builds successfully;
+both with and without the hard coded name length.
+
+I was also looking into GCC bugzilla and there seems to lot of reports
+saying these kind of error could be bogus or false positive. I'm not
+familiar with GCC internal or experienced in compilers to say/understand
+whether this case in particular is a false positive or not.
+
+BTW I can't seem to send the email to Amadeusz, hence removing them from
+the CC-list
+> msmtp: recipient address amade@asmblr.net not accepted by the server
 -- 
 Regards,
 listout

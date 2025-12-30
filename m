@@ -1,141 +1,223 @@
-Return-Path: <linux-next+bounces-9512-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9513-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57491CE9A6D
-	for <lists+linux-next@lfdr.de>; Tue, 30 Dec 2025 13:28:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00C07CE9F83
+	for <lists+linux-next@lfdr.de>; Tue, 30 Dec 2025 15:48:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 43B0430329DA
-	for <lists+linux-next@lfdr.de>; Tue, 30 Dec 2025 12:25:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BD6B83015EDB
+	for <lists+linux-next@lfdr.de>; Tue, 30 Dec 2025 14:48:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 011F22EDD78;
-	Tue, 30 Dec 2025 12:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 136BC30E851;
+	Tue, 30 Dec 2025 14:48:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=asmblr.net header.i=@asmblr.net header.b="x0wNEmuP"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uYv0aP1s";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="rwawA58b";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uYv0aP1s";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="rwawA58b"
 X-Original-To: linux-next@vger.kernel.org
-Received: from shared-aoh59.rev.nazwa.pl (shared-aoh59.rev.nazwa.pl [85.128.243.59])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19E41D416C;
-	Tue, 30 Dec 2025 12:25:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.128.243.59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE8330E829
+	for <linux-next@vger.kernel.org>; Tue, 30 Dec 2025 14:48:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767097557; cv=none; b=vFjlicby1wl8dzQTEfv5LJA3ufwUHpcMeglJhROL2NpAgHi56J467BnAgQHGDggnaXuSkgbod3NRn/BT1k2az9Giv8LfVf1X3imbcy8GXUY7IVN4zsvkZelz4mDEftQ9kxgmnBp+r/v53q26+akVwk5IEcUEw7741LMPKxy2Mjw=
+	t=1767106084; cv=none; b=SbI9vXLniKD1/lwDnSeoZVyy0o5xzkbYmbVHjfc8qaKi4STaprT5WwJLq4dBi7Zo+CNX6r39HZ824NFmPmVgUOzdNtVjCNlrAryzSssQt/T2qdAt2BvQC0DNOMSP6HW26QZ5j5QH5CXerqFbxN0aFeECqh6vejinUFcT92eo2NY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767097557; c=relaxed/simple;
-	bh=MQRkymz0aI75p72QKuUuSGmmcfQqw5F7Xa7YToTDrkY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aBJgHr/hmDSmo1KZTLG6L8fIcZjkW8n9dxOCs3dPrwEGQlWIsqjAZGJgwlTTjTr7QAjcNUikTZ/4M1QMtvblMyMbLqN1KopvR8R5lRKL0ytylILuhPqQcQvxmjLfYR/IBaP3YnAW72uRn8nvVBJsdLjelGTlXfrC4MdR3WiNtxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=asmblr.net; spf=pass smtp.mailfrom=asmblr.net; dkim=pass (2048-bit key) header.d=asmblr.net header.i=@asmblr.net header.b=x0wNEmuP; arc=none smtp.client-ip=85.128.243.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=asmblr.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=asmblr.net
-X-Virus-Scanned: by amavisd-new using ClamAV (24)
-X-Spam-Flag: NO
-X-Spam-Score: -0.635
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=asmblr.net;
-	s=1706450368.internal; t=1767097543;
-	bh=Ih1oNrDIRN30m9hjYu0UQBdcWcllJnU2Yu6b5P76YOg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=x0wNEmuPTMAy74VTM4S8zfmfEBJgcC2bjBwiYm1LQlflOXGDIyAodTmstN0pn2cdO
-	 dwVRzJ8aLSl2beE0KKLlD2RHLXJlaklm2hYJq3pIv8NcTIjNkU29ZggKI6tG6jZAW2
-	 Q5GmMe7klhzE2PvWBjxw/XUeB3wRIxfByCO5lTzlcCJyVeNGiUDNNg2mD4+VZMjg26
-	 xY8w1iRbXFlpwkBC3oGutI4S/U1kCMRQyUrWy5r7+C+n5x0mBf+pEGgRINOu9vbfFa
-	 c6/Xpq82vDtb4AAKpCZfDX+cXw2IPm/4w6u8Coh5GLmpTfO6POGkXe8l2NG7PfGdIW
-	 7DyUjZFBz/S9A==
-Received: from fedora (91-150-220-202.dynamic.play.pl [91.150.220.202])
-	by server753313.nazwa.pl (Postfix) with ESMTP id 439A91BD578;
-	Tue, 30 Dec 2025 13:25:43 +0100 (CET)
-Date: Tue, 30 Dec 2025 13:25:42 +0100
-From: Amadeusz =?UTF-8?B?U8WCYXdpxYRza2k=?= <amade@asmblr.net>
-To: Cezary Rojewski <cezary.rojewski@intel.com>
-Cc: Brahmajit Das <listout@listout.xyz>, Mark Brown <broonie@kernel.org>,
- Takashi Iwai <tiwai@suse.de>, <linux-sound@vger.kernel.org>,
- <linux-next@vger.kernel.org>, <liam.r.girdwood@linux.intel.com>,
- <peter.ujfalusi@linux.intel.com>, <tiwai@suse.com>, Richard Biener
- <rguenther@suse.de>, Richard Biener <rguenth@gcc.gnu.org>
-Subject: Re: [PATCH] ASoC: Intel: avs: replace strcmp with sysfs_streq
-Message-ID: <20251230132542.27c99ab5@fedora>
-In-Reply-To: <4b85c90a-727e-43a2-b1bc-91dd00045e90@intel.com>
-References: <20251221185531.6453-1-listout@listout.xyz>
-	<176650962400.445350.17331328109538303145.b4-ty@kernel.org>
-	<20251223192409.50a6e4ab@fedora>
-	<aUsBgVbloPqBa6sZ@localhost>
-	<877bucgpob.wl-tiwai@suse.de>
-	<aUvP7FL6c1snBc_S@sirena.co.uk>
-	<3cd18fd0-6fef-4804-9474-41a500329e6f@intel.com>
-	<aVOKgHJ4NXs5mKe_@localhost>
-	<4b85c90a-727e-43a2-b1bc-91dd00045e90@intel.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1767106084; c=relaxed/simple;
+	bh=86YxvffXdzhiRDnZ7Cz3ttihzhPnIkUW8CUHVCS1mLY=;
+	h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:References:
+	 Cc:In-Reply-To:To; b=egLl8b6BlRZVU6PprORrYfqfeDH3Ba/FxDi8b8/rN/OBhhGVxquUW7QMt/45GoW/GUFyVxHswsbxmU6xwXJBK7/nFJBGITy589cR8W16rpzDqtNKGZUvMg4OqvKqPOxaF8jXMT4m3KJnd4kQPyICDTzt9qkkOiGqH90RwTie4FE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uYv0aP1s; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=rwawA58b; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uYv0aP1s; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=rwawA58b; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 4ECF833683;
+	Tue, 30 Dec 2025 14:47:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1767106073; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2f129EplgPD25oA6CVml3VSpc9/LxaEOBuvabgGLHCM=;
+	b=uYv0aP1sxIlVrAh4kbrrG3g4MOBzEOy6aZj4Seo49yeSZNRIJeFZo9SxDDS5tcAh0fR3NR
+	+iyDcGx/0GMx6qrt8Nzg+HvJXZoxut31U2RcGDHVjkvV1wgpcxdZERcNmlfBzNLRDOLybd
+	27IT8JtAT8J1hEOd2KQQjhUi4aYKRyM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1767106073;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2f129EplgPD25oA6CVml3VSpc9/LxaEOBuvabgGLHCM=;
+	b=rwawA58bhb59k2H1cV7HEIKQrDx1KPJReRoggjcopiKt5k0cp1PHOcJYegwDs7mYiDj5M3
+	M2ko68+gaSz5u6Dw==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=uYv0aP1s;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=rwawA58b
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1767106073; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2f129EplgPD25oA6CVml3VSpc9/LxaEOBuvabgGLHCM=;
+	b=uYv0aP1sxIlVrAh4kbrrG3g4MOBzEOy6aZj4Seo49yeSZNRIJeFZo9SxDDS5tcAh0fR3NR
+	+iyDcGx/0GMx6qrt8Nzg+HvJXZoxut31U2RcGDHVjkvV1wgpcxdZERcNmlfBzNLRDOLybd
+	27IT8JtAT8J1hEOd2KQQjhUi4aYKRyM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1767106073;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2f129EplgPD25oA6CVml3VSpc9/LxaEOBuvabgGLHCM=;
+	b=rwawA58bhb59k2H1cV7HEIKQrDx1KPJReRoggjcopiKt5k0cp1PHOcJYegwDs7mYiDj5M3
+	M2ko68+gaSz5u6Dw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3A46F13879;
+	Tue, 30 Dec 2025 14:47:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id t7YzDhnmU2klIAAAD6G6ig
+	(envelope-from <rguenther@suse.de>); Tue, 30 Dec 2025 14:47:53 +0000
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From: Richard Biener <rguenther@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-NA-AI-Spam-Probability: 0.48
-X-NA-AI-Is-Spam: no
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH] ASoC: Intel: avs: replace strcmp with sysfs_streq
+Date: Tue, 30 Dec 2025 15:47:27 +0100
+Message-Id: <3F5AC302-8FC6-40A7-A180-F10B46A2E077@suse.de>
+References: <20251230132542.27c99ab5@fedora>
+Cc: Cezary Rojewski <cezary.rojewski@intel.com>,
+ Brahmajit Das <listout@listout.xyz>, Mark Brown <broonie@kernel.org>,
+ Takashi Iwai <tiwai@suse.de>, linux-sound@vger.kernel.org,
+ linux-next@vger.kernel.org, liam.r.girdwood@linux.intel.com,
+ peter.ujfalusi@linux.intel.com, tiwai@suse.com,
+ Richard Biener <rguenth@gcc.gnu.org>
+In-Reply-To: <20251230132542.27c99ab5@fedora>
+To: =?utf-8?Q?Amadeusz_S=C5=82awi=C5=84ski?= <amade@asmblr.net>
+X-Mailer: iPhone Mail (23C55)
+X-Spam-Flag: NO
+X-Spam-Score: -5.51
+X-Rspamd-Queue-Id: 4ECF833683
+X-Spamd-Result: default: False [-5.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	DWL_DNSWL_LOW(-1.00)[suse.de:dkim];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	URIBL_BLOCKED(0.00)[asmblr.net:email,suse.de:dkim,suse.de:mid,intel.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,gnu.org:url];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	APPLE_IOS_MAILER_COMMON(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid,gnu.org:url,intel.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Level: 
 
-On Tue, 30 Dec 2025 10:36:27 +0100
-Cezary Rojewski <cezary.rojewski@intel.com> wrote:
 
-> On 2025-12-30 9:32 AM, Brahmajit Das wrote:
-> > 
-> > Not sure if it would help but I tracked or narrowed down the issue to
-> > this section of the code in the avs_condpaths_walk function.
-> > 
-> > 
-> > 	if (avs_tplg_path_template_id_equal(&template->source,
-> > 										&template->sink) && dir)
-> > 		continue;
-> > 
-> > If I just comment that code segment out, then it builds successfully;
-> > both with and without the hard coded name length.  
-> 
-> Outstanding! Thank you for this exercise.
 
-Yes, I also managed to reproduce it on my machine.
+> Am 30.12.2025 um 13:25 schrieb Amadeusz S=C5=82awi=C5=84ski <amade@asmblr.=
+net>:
+>=20
+> =EF=BB=BFOn Tue, 30 Dec 2025 10:36:27 +0100
+> Cezary Rojewski <cezary.rojewski@intel.com> wrote:
+>=20
+>>> On 2025-12-30 9:32 AM, Brahmajit Das wrote:
+>>>=20
+>>> Not sure if it would help but I tracked or narrowed down the issue to
+>>> this section of the code in the avs_condpaths_walk function.
+>>>=20
+>>>=20
+>>>    if (avs_tplg_path_template_id_equal(&template->source,
+>>>                                        &template->sink) && dir)
+>>>        continue;
+>>>=20
+>>> If I just comment that code segment out, then it builds successfully;
+>>> both with and without the hard coded name length. =20
+>>=20
+>> Outstanding! Thank you for this exercise.
+>=20
+> Yes, I also managed to reproduce it on my machine.
+>=20
+> You can also just reverse the order in
+> avs_tplg_path_template_id_equal() to:
+> return !strcmp(id->tplg_name, id2->tplg_name) && id->id =3D=3D id2->id;
+> which for some reason makes the error disappear.
+>=20
+>>> I was also looking into GCC bugzilla and there seems to lot of reports
+>>> saying these kind of error could be bogus or false positive. I'm not
+>>> familiar with GCC internal or experienced in compilers to say/understand=
 
-You can also just reverse the order in
-avs_tplg_path_template_id_equal() to:
-return !strcmp(id->tplg_name, id2->tplg_name) && id->id == id2->id;
-which for some reason makes the error disappear.
+>>> whether this case in particular is a false positive or not. =20
+>>=20
+>> Wouldn't be the first time, though having successful builds ain't wrong
+>> either. After all we have git log and incremental changes/reverts are
+>> not a problem.
+>>=20
+>=20
+> I've bisected it down on GCC side to:
+> https://gcc.gnu.org/git/gitweb.cgi?p=3Dgcc.git;a=3Dcommitdiff;h=3Dfc628345=
+33f357125b9c1934f80c2ba249adbf9e
+> in particular it seems to be caused by code added in gcc/tree-ssa-pre.cc
+> I'm not that familiar with how GCC works, but to me it seems like maybe
+> it loses size information during this conversion.
+>=20
+> I would make normal bug report, but apparently I can't just make GCC
+> bugzilla account, so adding Richard to CC, while I go through request
+> process for an account.
+>=20
+> @Richard
+> Hi, we seem to have hit a slight problem while building kernel with pre
+> release GCC caused by one of your patches, full thread is available
+> here:
+> https://lore.kernel.org/linux-sound/20251221185531.6453-1-listout@listout.=
+xyz/T/#u
+> and my reasoning above.
 
-> > I was also looking into GCC bugzilla and there seems to lot of reports
-> > saying these kind of error could be bogus or false positive. I'm not
-> > familiar with GCC internal or experienced in compilers to say/understand
-> > whether this case in particular is a false positive or not.  
-> 
-> Wouldn't be the first time, though having successful builds ain't wrong 
-> either. After all we have git log and incremental changes/reverts are 
-> not a problem.
-> 
+It would be great if you can share preprocessed source to reproduce the issu=
+e, ideally attached to a new bugreport on the GCC bugzilla.
 
-I've bisected it down on GCC side to:
-https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;a=commitdiff;h=fc62834533f357125b9c1934f80c2ba249adbf9e
-in particular it seems to be caused by code added in gcc/tree-ssa-pre.cc
-I'm not that familiar with how GCC works, but to me it seems like maybe
-it loses size information during this conversion.
+I=E2=80=99ll note the diagnostic in question is highly dependent on prior op=
+timization and known to be prone to false positives.  I=E2=80=99ll investiga=
+te after holidays.
 
-I would make normal bug report, but apparently I can't just make GCC
-bugzilla account, so adding Richard to CC, while I go through request
-process for an account.
+Richard=20
 
-@Richard
-Hi, we seem to have hit a slight problem while building kernel with pre
-release GCC caused by one of your patches, full thread is available
-here:
-https://lore.kernel.org/linux-sound/20251221185531.6453-1-listout@listout.xyz/T/#u
-and my reasoning above.
+>>> BTW I can't seem to send the email to Amadeusz, hence removing them from=
 
-> > BTW I can't seem to send the email to Amadeusz, hence removing them from
-> > the CC-list  
-> >> msmtp: recipient address amade@asmblr.net not accepted by the server  
-> 
-> That's weird. The @linux.intel.com is gone but what you mentioned is the 
-> correct one.
+>>> the CC-list =20
+>>>> msmtp: recipient address amade@asmblr.net not accepted by the server =20=
 
-Yup, that's weird, but nothing lost, I'm subscribed to mailing list ;)
+>>=20
+>> That's weird. The @linux.intel.com is gone but what you mentioned is the
+>> correct one.
+>=20
+> Yup, that's weird, but nothing lost, I'm subscribed to mailing list ;)
 

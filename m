@@ -1,223 +1,203 @@
-Return-Path: <linux-next+bounces-9513-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9514-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00C07CE9F83
-	for <lists+linux-next@lfdr.de>; Tue, 30 Dec 2025 15:48:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5F1ECECD10
+	for <lists+linux-next@lfdr.de>; Thu, 01 Jan 2026 06:20:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BD6B83015EDB
-	for <lists+linux-next@lfdr.de>; Tue, 30 Dec 2025 14:48:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DEEAD30084E4
+	for <lists+linux-next@lfdr.de>; Thu,  1 Jan 2026 05:20:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 136BC30E851;
-	Tue, 30 Dec 2025 14:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98B491E5018;
+	Thu,  1 Jan 2026 05:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uYv0aP1s";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="rwawA58b";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="uYv0aP1s";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="rwawA58b"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Y+nMMuCo"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE8330E829
-	for <linux-next@vger.kernel.org>; Tue, 30 Dec 2025 14:48:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90392A1BA;
+	Thu,  1 Jan 2026 05:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767106084; cv=none; b=SbI9vXLniKD1/lwDnSeoZVyy0o5xzkbYmbVHjfc8qaKi4STaprT5WwJLq4dBi7Zo+CNX6r39HZ824NFmPmVgUOzdNtVjCNlrAryzSssQt/T2qdAt2BvQC0DNOMSP6HW26QZ5j5QH5CXerqFbxN0aFeECqh6vejinUFcT92eo2NY=
+	t=1767244844; cv=none; b=buPIglNE8bucXDGLsquzUk3QPXzzil5syjeBZwDfOddMjZrsttzv7duUiYHGTTXUcLicq35IS8SrSmmUYYi+DagVJ7x8yAsb1qK+OMHCrTCmTdBatMuEdQPYoEMwJUWVWaXvxem0uhGBIB0Kw6dKVs1xmAPJ3a5LqtEl4PXngRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767106084; c=relaxed/simple;
-	bh=86YxvffXdzhiRDnZ7Cz3ttihzhPnIkUW8CUHVCS1mLY=;
-	h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:References:
-	 Cc:In-Reply-To:To; b=egLl8b6BlRZVU6PprORrYfqfeDH3Ba/FxDi8b8/rN/OBhhGVxquUW7QMt/45GoW/GUFyVxHswsbxmU6xwXJBK7/nFJBGITy589cR8W16rpzDqtNKGZUvMg4OqvKqPOxaF8jXMT4m3KJnd4kQPyICDTzt9qkkOiGqH90RwTie4FE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uYv0aP1s; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=rwawA58b; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=uYv0aP1s; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=rwawA58b; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 4ECF833683;
-	Tue, 30 Dec 2025 14:47:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1767106073; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2f129EplgPD25oA6CVml3VSpc9/LxaEOBuvabgGLHCM=;
-	b=uYv0aP1sxIlVrAh4kbrrG3g4MOBzEOy6aZj4Seo49yeSZNRIJeFZo9SxDDS5tcAh0fR3NR
-	+iyDcGx/0GMx6qrt8Nzg+HvJXZoxut31U2RcGDHVjkvV1wgpcxdZERcNmlfBzNLRDOLybd
-	27IT8JtAT8J1hEOd2KQQjhUi4aYKRyM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1767106073;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2f129EplgPD25oA6CVml3VSpc9/LxaEOBuvabgGLHCM=;
-	b=rwawA58bhb59k2H1cV7HEIKQrDx1KPJReRoggjcopiKt5k0cp1PHOcJYegwDs7mYiDj5M3
-	M2ko68+gaSz5u6Dw==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=uYv0aP1s;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=rwawA58b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1767106073; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2f129EplgPD25oA6CVml3VSpc9/LxaEOBuvabgGLHCM=;
-	b=uYv0aP1sxIlVrAh4kbrrG3g4MOBzEOy6aZj4Seo49yeSZNRIJeFZo9SxDDS5tcAh0fR3NR
-	+iyDcGx/0GMx6qrt8Nzg+HvJXZoxut31U2RcGDHVjkvV1wgpcxdZERcNmlfBzNLRDOLybd
-	27IT8JtAT8J1hEOd2KQQjhUi4aYKRyM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1767106073;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2f129EplgPD25oA6CVml3VSpc9/LxaEOBuvabgGLHCM=;
-	b=rwawA58bhb59k2H1cV7HEIKQrDx1KPJReRoggjcopiKt5k0cp1PHOcJYegwDs7mYiDj5M3
-	M2ko68+gaSz5u6Dw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3A46F13879;
-	Tue, 30 Dec 2025 14:47:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id t7YzDhnmU2klIAAAD6G6ig
-	(envelope-from <rguenther@suse.de>); Tue, 30 Dec 2025 14:47:53 +0000
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From: Richard Biener <rguenther@suse.de>
+	s=arc-20240116; t=1767244844; c=relaxed/simple;
+	bh=sQt7pWitgF3wxvAgk6qDcZfoCRTLRw7l7GhBhW0rFHI=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=XVQUzbf9UxikGj1nefgEiNXY7Jj4Z/ECZI9WKafXTTk0PJwrYV+GhxbPjECZvtN0loYBTgxTtV6IHvJOiq2/W61EaRnHBWzW+CEjv9FgKeTXY1RXleXlQ/XcvB+WmJp4QIL8IWGzAG6XYZmLBpeNS9vLCfd//pw7n2BfPQ6UbP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Y+nMMuCo; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BVIdLUD024314;
+	Thu, 1 Jan 2026 05:20:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pp1; bh=0SjfIVcoDD8wgg5bN+RborcvdwGW
+	ClxZsBOnt7RSZkk=; b=Y+nMMuCoERFSA3UAEfu4yljYlZiqJwnhelTF83aOJZca
+	BtkADFcYHkfEXTRFSB/TZ4H1fwERIEQGYxDhuc6AXE4jjbeRYp+9fFEOTNxEM72N
+	YPNcfSpKilXPx4FkBlAv2zHW/4T5YGWHObspNKakJI5hS6aig6I9WlXMdeqVQp8p
+	zKpc/Qc/eyRZR4Vgahyj10GQBJjaVM5sXHDOf8ntlwi5HQW/oiAf57p4MG5zXFQN
+	Qx97ieDV1Kt2BzS1DQpTUpMjwQDrON5gs92d4cQWgzclUIaCnLjVBNV3rgqQaF7y
+	sJY881mKVVayRsAcfazpe40z2qvgI3+aKW//W5kQPg==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ba74uavcj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 01 Jan 2026 05:20:07 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6012BtZm008053;
+	Thu, 1 Jan 2026 05:20:06 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4bav0k19n4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 01 Jan 2026 05:20:06 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6015K6VJ64356704
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 1 Jan 2026 05:20:06 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6CED05803F;
+	Thu,  1 Jan 2026 05:20:06 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4712C58060;
+	Thu,  1 Jan 2026 05:20:04 +0000 (GMT)
+Received: from [9.61.255.156] (unknown [9.61.255.156])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  1 Jan 2026 05:20:03 +0000 (GMT)
+Message-ID: <193bd91f-d6d7-43e4-8d9b-308908717b68@linux.ibm.com>
+Date: Thu, 1 Jan 2026 10:50:02 +0530
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH] ASoC: Intel: avs: replace strcmp with sysfs_streq
-Date: Tue, 30 Dec 2025 15:47:27 +0100
-Message-Id: <3F5AC302-8FC6-40A7-A180-F10B46A2E077@suse.de>
-References: <20251230132542.27c99ab5@fedora>
-Cc: Cezary Rojewski <cezary.rojewski@intel.com>,
- Brahmajit Das <listout@listout.xyz>, Mark Brown <broonie@kernel.org>,
- Takashi Iwai <tiwai@suse.de>, linux-sound@vger.kernel.org,
- linux-next@vger.kernel.org, liam.r.girdwood@linux.intel.com,
- peter.ujfalusi@linux.intel.com, tiwai@suse.com,
- Richard Biener <rguenth@gcc.gnu.org>
-In-Reply-To: <20251230132542.27c99ab5@fedora>
-To: =?utf-8?Q?Amadeusz_S=C5=82awi=C5=84ski?= <amade@asmblr.net>
-X-Mailer: iPhone Mail (23C55)
-X-Spam-Flag: NO
-X-Spam-Score: -5.51
-X-Rspamd-Queue-Id: 4ECF833683
-X-Spamd-Result: default: False [-5.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	DWL_DNSWL_LOW(-1.00)[suse.de:dkim];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	URIBL_BLOCKED(0.00)[asmblr.net:email,suse.de:dkim,suse.de:mid,intel.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,gnu.org:url];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	APPLE_IOS_MAILER_COMMON(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid,gnu.org:url,intel.com:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Level: 
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Content-Language: en-GB
+To: Linux Next Mailing List <linux-next@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Subject: [next-20251219]Build Failure on IBM Power system
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: kuoOx2TSRiIz5u9zg3bU6jdyOJ0QgNqh
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTAxMDA0NiBTYWx0ZWRfX/Ede+1yZ4rmi
+ 3se2Vp+7zlyBLZF0gIgHKDse6yABCrsYM1iPB57VuBnMu/e+afY2zUZbrkLCmGw7TJDQ8otnB1j
+ c7II7sMbQVkyESMMbXCyewBszHirtUPcqSZ3XGkCw6PuLqdVUaaq+Cb0wuEKOkO7TB76rCYaiRK
+ Q0uGON5BHnb5ZpuFaYwbyuRcPAvqMzNPVHY1Gn7j11p89MQOoJeipvRPtZO6Kv4iC3te4jsLX0s
+ s5IH2SnbYuVQHs38W7itjEiFfe6axi1P8oIAvSrfI2JEjHe0+gIiqG8l0EaS4q7yosQWV1E23+3
+ ZVO7Mu6OGPmJNBtZhPrdrwvs0H+dcWFXIdkves1vsKhbQexqTr8aYA2hSCHiMW9PJut9/GpgH3c
+ likxDs6FS4CPjRLLAeZ4MhpSSHNWYc3+R0CsixkaqRHXe8dIHVoScezIIhPt/xWeq7W1OWcr9oQ
+ KyS33N7iBe6m6sV+WHg==
+X-Authority-Analysis: v=2.4 cv=AN8t5o3d c=1 sm=1 tr=0 ts=69560407 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=e5mUnYsNAAAA:8 a=JfrnYn6hAAAA:8 a=VnNF1IyMAAAA:8
+ a=CI-9MVhQOQwJVvpQJMkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=Vxmtnl_E_bksehYqCbjh:22 a=1CNFftbPRP8L7MoqJWF3:22
+X-Proofpoint-GUID: kuoOx2TSRiIz5u9zg3bU6jdyOJ0QgNqh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-01_02,2025-12-31_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 impostorscore=0 adultscore=0 suspectscore=0 malwarescore=0
+ bulkscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2512120000 definitions=main-2601010046
+
+Greetings!!!
+
+
+IBM CI has reported a build failure on next-20251219 build.
+
+
+Build Failure:
+
+cc1: some warnings being treated as errors
+make[4]: *** [scripts/Makefile.build:287: kernel/sched/build_policy.o] 
+Error 1
+make[4]: *** Waiting for unfinished jobs....
+make[3]: *** [scripts/Makefile.build:556: kernel/sched] Error 2
+make[3]: *** Waiting for unfinished jobs....
+make[2]: *** [scripts/Makefile.build:556: kernel] Error 2
+make[2]: *** Waiting for unfinished jobs....
+
+
+IBM CI has bisected this issue to below commit.
+
+
+5d1f0b2f278eb55aebe29210fbc8f352c53497d6 is the first bad commit
+commit 5d1f0b2f278eb55aebe29210fbc8f352c53497d6
+Author: Peter Zijlstra <peterz@infradead.org>
+Date:   Wed Dec 10 09:06:50 2025 +0100
+
+
+Bisection Logs:
+
+#git bisect log
+git bisect log
+git bisect start
+# status: waiting for both good and bad commits
+# good: [8f0b4cce4481fb22653697cced8d0d04027cb1e8] Linux 6.19-rc1
+git bisect good 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+# status: waiting for bad commit, 1 good commit known
+# bad: [cc3aa43b44bdb43dfbac0fcb51c56594a11338a8] Add linux-next 
+specific files for 20251219
+git bisect bad cc3aa43b44bdb43dfbac0fcb51c56594a11338a8
+# good: [600a692707acda49434d6c2c03dda20f46e09749] Merge branch 
+'libcrypto-next' of 
+https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
+git bisect good 600a692707acda49434d6c2c03dda20f46e09749
+# good: [816a7181ac38fd22243edb557537b2aecb9eeb76] Merge branch 
+'drm-xe-next' of https://gitlab.freedesktop.org/drm/xe/kernel.git
+git bisect good 816a7181ac38fd22243edb557537b2aecb9eeb76
+# good: [7157d55093613cf905cfd665772eae35d5c388f0] Merge branch 
+'for-next' of 
+https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
+git bisect good 7157d55093613cf905cfd665772eae35d5c388f0
+# bad: [52af2cfd69d264f1a370693966acf5d96943add8] Merge branch 
+'extcon-next' of 
+https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git
+git bisect bad 52af2cfd69d264f1a370693966acf5d96943add8
+# bad: [502068d3b65cc8695f8da83a7f19c90805c958ca] next-20251217/tip
+git bisect bad 502068d3b65cc8695f8da83a7f19c90805c958ca
+# bad: [c06f166058309936567065e737f6f5d9609a1a87] Merge branch into 
+tip/master: 'sched/core'
+git bisect bad c06f166058309936567065e737f6f5d9609a1a87
+# good: [e2292f5c21542354246687d8e3e48a58b046e27b] Merge branch into 
+tip/master: 'irq/msi'
+git bisect good e2292f5c21542354246687d8e3e48a58b046e27b
+# good: [fb9a7458e508ef1beae8d80ee40c2cd1b5b45f3a] sched/fair: Clean up 
+comments in 'struct cfs_rq'
+git bisect good fb9a7458e508ef1beae8d80ee40c2cd1b5b45f3a
+# good: [527a521029c3edd38fb9fc96cd58e3fd7393d28e] sched/fair: Sort out 
+'blocked_load*' namespace noise
+git bisect good 527a521029c3edd38fb9fc96cd58e3fd7393d28e
+# good: [7ac422cf7b16ec524bcd8e017459e328a4103f63] 
+perf/x86/intel/cstate: Add Diamond Rapids support
+git bisect good 7ac422cf7b16ec524bcd8e017459e328a4103f63
+# bad: [5d1f0b2f278eb55aebe29210fbc8f352c53497d6] sched/core: Rework 
+sched_class::wakeup_preempt() and rq_modified_*()
+git bisect bad 5d1f0b2f278eb55aebe29210fbc8f352c53497d6
+# first bad commit: [5d1f0b2f278eb55aebe29210fbc8f352c53497d6] 
+sched/core: Rework sched_class::wakeup_preempt() and rq_modified_*()
 
 
 
-> Am 30.12.2025 um 13:25 schrieb Amadeusz S=C5=82awi=C5=84ski <amade@asmblr.=
-net>:
->=20
-> =EF=BB=BFOn Tue, 30 Dec 2025 10:36:27 +0100
-> Cezary Rojewski <cezary.rojewski@intel.com> wrote:
->=20
->>> On 2025-12-30 9:32 AM, Brahmajit Das wrote:
->>>=20
->>> Not sure if it would help but I tracked or narrowed down the issue to
->>> this section of the code in the avs_condpaths_walk function.
->>>=20
->>>=20
->>>    if (avs_tplg_path_template_id_equal(&template->source,
->>>                                        &template->sink) && dir)
->>>        continue;
->>>=20
->>> If I just comment that code segment out, then it builds successfully;
->>> both with and without the hard coded name length. =20
->>=20
->> Outstanding! Thank you for this exercise.
->=20
-> Yes, I also managed to reproduce it on my machine.
->=20
-> You can also just reverse the order in
-> avs_tplg_path_template_id_equal() to:
-> return !strcmp(id->tplg_name, id2->tplg_name) && id->id =3D=3D id2->id;
-> which for some reason makes the error disappear.
->=20
->>> I was also looking into GCC bugzilla and there seems to lot of reports
->>> saying these kind of error could be bogus or false positive. I'm not
->>> familiar with GCC internal or experienced in compilers to say/understand=
+If you happen to fix this issue, please add below tag.
 
->>> whether this case in particular is a false positive or not. =20
->>=20
->> Wouldn't be the first time, though having successful builds ain't wrong
->> either. After all we have git log and incremental changes/reverts are
->> not a problem.
->>=20
->=20
-> I've bisected it down on GCC side to:
-> https://gcc.gnu.org/git/gitweb.cgi?p=3Dgcc.git;a=3Dcommitdiff;h=3Dfc628345=
-33f357125b9c1934f80c2ba249adbf9e
-> in particular it seems to be caused by code added in gcc/tree-ssa-pre.cc
-> I'm not that familiar with how GCC works, but to me it seems like maybe
-> it loses size information during this conversion.
->=20
-> I would make normal bug report, but apparently I can't just make GCC
-> bugzilla account, so adding Richard to CC, while I go through request
-> process for an account.
->=20
-> @Richard
-> Hi, we seem to have hit a slight problem while building kernel with pre
-> release GCC caused by one of your patches, full thread is available
-> here:
-> https://lore.kernel.org/linux-sound/20251221185531.6453-1-listout@listout.=
-xyz/T/#u
-> and my reasoning above.
 
-It would be great if you can share preprocessed source to reproduce the issu=
-e, ideally attached to a new bugreport on the GCC bugzilla.
+Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
 
-I=E2=80=99ll note the diagnostic in question is highly dependent on prior op=
-timization and known to be prone to false positives.  I=E2=80=99ll investiga=
-te after holidays.
 
-Richard=20
 
->>> BTW I can't seem to send the email to Amadeusz, hence removing them from=
+Regards,
 
->>> the CC-list =20
->>>> msmtp: recipient address amade@asmblr.net not accepted by the server =20=
+Venkat.
 
->>=20
->> That's weird. The @linux.intel.com is gone but what you mentioned is the
->> correct one.
->=20
-> Yup, that's weird, but nothing lost, I'm subscribed to mailing list ;)
+
 

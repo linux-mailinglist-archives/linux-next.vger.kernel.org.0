@@ -1,203 +1,196 @@
-Return-Path: <linux-next+bounces-9514-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9515-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5F1ECECD10
-	for <lists+linux-next@lfdr.de>; Thu, 01 Jan 2026 06:20:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E5069CECEDA
+	for <lists+linux-next@lfdr.de>; Thu, 01 Jan 2026 10:22:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DEEAD30084E4
-	for <lists+linux-next@lfdr.de>; Thu,  1 Jan 2026 05:20:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B4E5D30076A5
+	for <lists+linux-next@lfdr.de>; Thu,  1 Jan 2026 09:22:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98B491E5018;
-	Thu,  1 Jan 2026 05:20:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF21280308;
+	Thu,  1 Jan 2026 09:22:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Y+nMMuCo"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="a5CfWcRn"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B90392A1BA;
-	Thu,  1 Jan 2026 05:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F7F22F388;
+	Thu,  1 Jan 2026 09:21:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767244844; cv=none; b=buPIglNE8bucXDGLsquzUk3QPXzzil5syjeBZwDfOddMjZrsttzv7duUiYHGTTXUcLicq35IS8SrSmmUYYi+DagVJ7x8yAsb1qK+OMHCrTCmTdBatMuEdQPYoEMwJUWVWaXvxem0uhGBIB0Kw6dKVs1xmAPJ3a5LqtEl4PXngRY=
+	t=1767259323; cv=none; b=Mha4aXi1UP80MPSjLHCXBJ8WuUyse/8i5a5Ug+8q91svOZ6Q4tvO0bU1cQFcGMfMls8DuiVx2q24CIACpr0RxR6tduaMPCseF1ai9HyA8QjTr+Jjzf2v+ez+I/YP95g4UBLrF9HwEJiPWJUjGNLJj96kLUQpEdWCAtYJkVWbSSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767244844; c=relaxed/simple;
-	bh=sQt7pWitgF3wxvAgk6qDcZfoCRTLRw7l7GhBhW0rFHI=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=XVQUzbf9UxikGj1nefgEiNXY7Jj4Z/ECZI9WKafXTTk0PJwrYV+GhxbPjECZvtN0loYBTgxTtV6IHvJOiq2/W61EaRnHBWzW+CEjv9FgKeTXY1RXleXlQ/XcvB+WmJp4QIL8IWGzAG6XYZmLBpeNS9vLCfd//pw7n2BfPQ6UbP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Y+nMMuCo; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5BVIdLUD024314;
-	Thu, 1 Jan 2026 05:20:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
-	content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pp1; bh=0SjfIVcoDD8wgg5bN+RborcvdwGW
-	ClxZsBOnt7RSZkk=; b=Y+nMMuCoERFSA3UAEfu4yljYlZiqJwnhelTF83aOJZca
-	BtkADFcYHkfEXTRFSB/TZ4H1fwERIEQGYxDhuc6AXE4jjbeRYp+9fFEOTNxEM72N
-	YPNcfSpKilXPx4FkBlAv2zHW/4T5YGWHObspNKakJI5hS6aig6I9WlXMdeqVQp8p
-	zKpc/Qc/eyRZR4Vgahyj10GQBJjaVM5sXHDOf8ntlwi5HQW/oiAf57p4MG5zXFQN
-	Qx97ieDV1Kt2BzS1DQpTUpMjwQDrON5gs92d4cQWgzclUIaCnLjVBNV3rgqQaF7y
-	sJY881mKVVayRsAcfazpe40z2qvgI3+aKW//W5kQPg==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ba74uavcj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 01 Jan 2026 05:20:07 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 6012BtZm008053;
-	Thu, 1 Jan 2026 05:20:06 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4bav0k19n4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 01 Jan 2026 05:20:06 +0000
-Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6015K6VJ64356704
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 1 Jan 2026 05:20:06 GMT
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6CED05803F;
-	Thu,  1 Jan 2026 05:20:06 +0000 (GMT)
-Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4712C58060;
-	Thu,  1 Jan 2026 05:20:04 +0000 (GMT)
-Received: from [9.61.255.156] (unknown [9.61.255.156])
-	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  1 Jan 2026 05:20:03 +0000 (GMT)
-Message-ID: <193bd91f-d6d7-43e4-8d9b-308908717b68@linux.ibm.com>
-Date: Thu, 1 Jan 2026 10:50:02 +0530
+	s=arc-20240116; t=1767259323; c=relaxed/simple;
+	bh=/mVHcyIBYA41kVdzB34+Lqn95bry4C3DSCCBDqCZerE=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=TIV4xcfAVCFbsYnjnywUMj0H36soJ+uMWAS20q8/CZafWaKyaSfTJXttLo30e5ZDsoU1/ND+TKGV1TIQ37SUL9wkJZ+mDxU3bPEFsVk1mLYpEvrBLivoVH4ThPuGcQBrNC9hhOhqcC06Fr4GpLn3dKSE5yJQ/BrClYeX1XFMEgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=a5CfWcRn; arc=none smtp.client-ip=202.12.124.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id EACDA7A0040;
+	Thu,  1 Jan 2026 04:21:58 -0500 (EST)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Thu, 01 Jan 2026 04:21:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1767259318; x=1767345718; bh=4Q3BncsmsRAe/KKpDmA6P1xD/P55g252gRH
+	WPhEdpBU=; b=a5CfWcRnxKjJq54b12n7r0b74GJqFibhyVwIRuxOJXbEcvi3esz
+	+9db2HSoMVL2LSjKXkOeXv3pkxOW4IpVq0zEvx65NAUGa6lKmoY99UC5xbRd/cCg
+	HeHwTbXGuhfWHj6CgQgOPjVgovoDPWu3Ax2xgpFZ97XpaXt9KkWVk4HN8nz1JFQN
+	14QB4beGrdkDWgsjleqsa8R0T/wyMuqiO0Pvmg3QfNWDqfFcvIS/I/PZDh+zD1YD
+	fxWQ6GaoGvp9cPQWz9IY1qaT1OFA1K9QEnUqscOWF6tTqufQdIZagsgqBG9N3DjN
+	oW2AKQ5+TWfaXh2384b9CGH+DwzxYcIRI4Q==
+X-ME-Sender: <xms:tTxWaXz-NoBQlbuRJa0oVY3WlIaX2AV2eaPkZHfOsl4Pg7GbfqvoYQ>
+    <xme:tTxWaXfTz-T8GPK_ou_QY7dHFK4D7_lIr_i5OFOAT2utalwVDD5Lysvh9Peq3kNz0
+    qVJlJYsjtily9tNN_S4SY_hgYnLyXCycdcvxJ-34duf0MS5uRIx8yA>
+X-ME-Received: <xmr:tTxWac61qNHZnzV4-bHyhP_qx5HdXUrGztZUsNGY-HqSFOGlbB9v8OS5-20XIjC68Ia8-D75YW_aOJGuRg-eVEBVMBTUCbI6-24>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdekheegtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpeffhffvvefujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfvhhgr
+    ihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvg
+    hrnhepkeffjefgfeduuddufeffjeffvdeifeefudfgkeevgfeftdejueehhedtteegvdek
+    necuffhomhgrihhnpeduledqrhgtuddrshhopdhkvghrnhgvlhdrohhrghenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfthhhrghinheslhhi
+    nhhugidqmheikehkrdhorhhgpdhnsggprhgtphhtthhopedutddpmhhouggvpehsmhhtph
+    houhhtpdhrtghpthhtohepshgrshhhrghlsehkvghrnhgvlhdrohhrghdprhgtphhtthho
+    pehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopegrrhgusgeskh
+    gvrhhnvghlrdhorhhgpdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurght
+    ihhonhdrohhrghdprhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorhhgpdhrtghpth
+    htoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehsfhhrsegtrghnsgdrrghu
+    uhhgrdhorhhgrdgruhdprhgtphhtthhopeigkeeisehkvghrnhgvlhdrohhrghdprhgtph
+    htthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:tTxWacICjXjbm5Fcz2wNF8LkiE4elOL2gzyZ4g4w7DA3ACqstN5jAw>
+    <xmx:tTxWaUy8qsJUnNRu6W2rDLwYyGYehJ4X_lhrCpNHpKmknyIFR9zPRw>
+    <xmx:tTxWaUJH07zF7n6kJWYQu_bnwi0XitldoFGBVJo9XYaWBlws3Vlcug>
+    <xmx:tTxWaTW-nfTCcqMrgiLIoT2BAUTEAYL_aLx4LVPiHj42kEmFMx5MgQ>
+    <xmx:tjxWaUMXzXXIfpnUnXRBN8j-Y6gAFko82TTvBHa3FfiFObbsxkz86Gjc>
+Feedback-ID: i58a146ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 1 Jan 2026 04:21:54 -0500 (EST)
+Date: Thu, 1 Jan 2026 20:21:46 +1100 (AEDT)
+From: Finn Thain <fthain@linux-m68k.org>
+To: Sasha Levin <sashal@kernel.org>
+cc: Peter Zijlstra <peterz@infradead.org>, Ard Biesheuvel <ardb@kernel.org>, 
+    Andrew Morton <akpm@linux-foundation.org>, Will Deacon <will@kernel.org>, 
+    Arnd Bergmann <arnd@arndb.de>, Stephen Rothwell <sfr@canb.auug.org.au>, 
+    x86@kernel.org, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+    Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the mm-nonmm-unstable
+ tree
+In-Reply-To: <df9fbd22-a648-ada4-fee0-68fe4325ff82@linux-m68k.org>
+Message-ID: <4a3455a6-a0dc-f7fb-8b68-da471bb312c7@linux-m68k.org>
+References: <20251218153050.44da4a78@canb.auug.org.au> <fcc9ca3e-8c04-43c0-606c-e798bc0cf9ce@linux-m68k.org> <aU67sD1u83Qrpvdu@laps> <df9fbd22-a648-ada4-fee0-68fe4325ff82@linux-m68k.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-To: Linux Next Mailing List <linux-next@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Subject: [next-20251219]Build Failure on IBM Power system
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kuoOx2TSRiIz5u9zg3bU6jdyOJ0QgNqh
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTAxMDA0NiBTYWx0ZWRfX/Ede+1yZ4rmi
- 3se2Vp+7zlyBLZF0gIgHKDse6yABCrsYM1iPB57VuBnMu/e+afY2zUZbrkLCmGw7TJDQ8otnB1j
- c7II7sMbQVkyESMMbXCyewBszHirtUPcqSZ3XGkCw6PuLqdVUaaq+Cb0wuEKOkO7TB76rCYaiRK
- Q0uGON5BHnb5ZpuFaYwbyuRcPAvqMzNPVHY1Gn7j11p89MQOoJeipvRPtZO6Kv4iC3te4jsLX0s
- s5IH2SnbYuVQHs38W7itjEiFfe6axi1P8oIAvSrfI2JEjHe0+gIiqG8l0EaS4q7yosQWV1E23+3
- ZVO7Mu6OGPmJNBtZhPrdrwvs0H+dcWFXIdkves1vsKhbQexqTr8aYA2hSCHiMW9PJut9/GpgH3c
- likxDs6FS4CPjRLLAeZ4MhpSSHNWYc3+R0CsixkaqRHXe8dIHVoScezIIhPt/xWeq7W1OWcr9oQ
- KyS33N7iBe6m6sV+WHg==
-X-Authority-Analysis: v=2.4 cv=AN8t5o3d c=1 sm=1 tr=0 ts=69560407 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=e5mUnYsNAAAA:8 a=JfrnYn6hAAAA:8 a=VnNF1IyMAAAA:8
- a=CI-9MVhQOQwJVvpQJMkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=Vxmtnl_E_bksehYqCbjh:22 a=1CNFftbPRP8L7MoqJWF3:22
-X-Proofpoint-GUID: kuoOx2TSRiIz5u9zg3bU6jdyOJ0QgNqh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-01_02,2025-12-31_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 impostorscore=0 adultscore=0 suspectscore=0 malwarescore=0
- bulkscore=0 priorityscore=1501 lowpriorityscore=0 phishscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2512120000 definitions=main-2601010046
-
-Greetings!!!
+Content-Type: text/plain; charset=us-ascii
 
 
-IBM CI has reported a build failure on next-20251219 build.
+On Mon, 29 Dec 2025, Finn Thain wrote:
+
+> On Fri, 26 Dec 2025, Sasha Levin wrote:
+> 
+> > On Sun, Dec 21, 2025 at 01:58:17PM +1100, Finn Thain wrote:
+> > >
+> > >On Thu, 18 Dec 2025, Stephen Rothwell wrote:
+> > >
+> > >> After merging the mm-nonmm-unstable tree, today's linux-next build 
+> > >> (x86_64 allmodconfig) failed like this:
+> > >>
+> > >> x86_64-linux-gnu-ld: error: unplaced orphan section `__bug_table' from
+> > >> `arch/x86/boot/compressed/sev-handle-vc.o'
+> > >>
+> > >
+> > >I found that I could reproduce the same build failure after applying 
+> > >Peter's patch to v6.19-rc1. So it's not confined to linux-next. I 
+> > >used allnoconfig with CONFIG_LD_ORPHAN_WARN_LEVEL=error and 
+> > >CONFIG_AMD_MEM_ENCRYPT=y because allmodconfig takes forever to build.
+> > >
+> > >The patch in question is this one: 
+> > >https://lore.kernel.org/lkml/0c18fd08ef19497768070783da28086e01d11a00.1765866665.git.fthain@linux-m68k.org/
+> > >
+> > >I may have found a solution for the problem, but I don't understand 
+> > >this code, so I've Cc'd Ard et al. I don't know whether the 
+> > >__bug_table section is relevant to sev-handle-vc.c. If that section 
+> > >is not desired, I propose to make this change to Peter's patch --
+> > 
+> > I think that the issue here is that we're trying to use WARN in the 
+> > early boot context. We should probably add CONFIG_DEBUG_ATOMIC to the 
+> > list of configs we disable for that:
+> > 
+> > diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+> > index 4f86c5903e03..bb36dcef7d08 100644
+> > --- a/arch/x86/boot/compressed/misc.h
+> > +++ b/arch/x86/boot/compressed/misc.h
+> > @@ -14,6 +14,7 @@
+> >  #undef CONFIG_ARCH_HAS_LAZY_MMU_MODE
+> >  #undef CONFIG_KASAN
+> >  #undef CONFIG_KASAN_GENERIC
+> > +#undef CONFIG_DEBUG_ATOMIC
+> > 
+> 
+> Thanks for sending that suggestion. It does fix the problem on x86_64. 
+> However, the problem also affects arm, arm64, riscv, riscv64 and 
+> loongarch. The fix I proposed (i.e. test __DISABLE_EXPORTS) works on all 
+> of the affected architectures because 
+> drivers/firmware/efi/libstub/Makefile puts -D__DISABLE_EXPORTS in 
+> CFLAGS, just as arch/x86/boot/compressed/Makefile does.
+> 
+> AFAICT, when I put -UCONFIG_DEBUG_ATOMIC in CFLAGS, it doesn't override 
+> that macro definition autoconf.h. And there is no equivalent of 
+> arch/x86/boot/compressed/misc.h in drivers/firmware/efi/libstub so I 
+> can't simply add #undef CONFIG_DEBUG_ATOMIC there.
+> 
+
+I'd better correct myself. That header does actually exist:
+drivers/firmware/efi/libstub/efistub.h
+I overlooked it somehow.
+
+> If __DISABLE_EXPORTS is not the appropriate macro for this purpose, then 
+> we need a new macro (e.g. __DISABLE_BUG_TABLE) or else we need a new 
+> header, to be included by some unknown set of .c files (that might 
+> accidentally #include bug.h) so that this new header could do #undef 
+> CONFIG_DEBUG_ATOMIC. My inclination is to implement 
+> -D__DISABLE_BUG_TABLE but I'm open to suggestions.
+> 
+
+After I sent patches using -D__DISABLE_BUG_TABLE, I figured out that your 
+#undef suggestion has some appeal: by confining the preprocessor tricks to 
+drivers/firmware/efi/libstub/, we might avoid spreading them across 
+include/linux/ which has a certain tidyness to it.
+
+The only problem is fragility. The ordering of #include and #undef 
+directives is critical and complicated. I can't seem to get it right.
+The following patch produces a build failure.
+
+diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+index fd855e32c9b9..8442eebaada1 100644
+--- a/arch/x86/boot/compressed/misc.h
++++ b/arch/x86/boot/compressed/misc.h
+@@ -8,6 +8,7 @@
+  * we just keep it from happening. (This list needs to be extended when new
+  * paravirt and debugging variants are added.)
+  */
++#include <generated/autoconf.h>
+ #undef CONFIG_PARAVIRT
+ #undef CONFIG_PARAVIRT_XXL
+ #undef CONFIG_PARAVIRT_SPINLOCKS
 
 
-Build Failure:
+Problem is, you can't do #undef unless you know that #define has already 
+taken place, and you can't #define again if #undef has already taken 
+place...
 
-cc1: some warnings being treated as errors
-make[4]: *** [scripts/Makefile.build:287: kernel/sched/build_policy.o] 
-Error 1
-make[4]: *** Waiting for unfinished jobs....
-make[3]: *** [scripts/Makefile.build:556: kernel/sched] Error 2
-make[3]: *** Waiting for unfinished jobs....
-make[2]: *** [scripts/Makefile.build:556: kernel] Error 2
-make[2]: *** Waiting for unfinished jobs....
-
-
-IBM CI has bisected this issue to below commit.
-
-
-5d1f0b2f278eb55aebe29210fbc8f352c53497d6 is the first bad commit
-commit 5d1f0b2f278eb55aebe29210fbc8f352c53497d6
-Author: Peter Zijlstra <peterz@infradead.org>
-Date:   Wed Dec 10 09:06:50 2025 +0100
-
-
-Bisection Logs:
-
-#git bisect log
-git bisect log
-git bisect start
-# status: waiting for both good and bad commits
-# good: [8f0b4cce4481fb22653697cced8d0d04027cb1e8] Linux 6.19-rc1
-git bisect good 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-# status: waiting for bad commit, 1 good commit known
-# bad: [cc3aa43b44bdb43dfbac0fcb51c56594a11338a8] Add linux-next 
-specific files for 20251219
-git bisect bad cc3aa43b44bdb43dfbac0fcb51c56594a11338a8
-# good: [600a692707acda49434d6c2c03dda20f46e09749] Merge branch 
-'libcrypto-next' of 
-https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git
-git bisect good 600a692707acda49434d6c2c03dda20f46e09749
-# good: [816a7181ac38fd22243edb557537b2aecb9eeb76] Merge branch 
-'drm-xe-next' of https://gitlab.freedesktop.org/drm/xe/kernel.git
-git bisect good 816a7181ac38fd22243edb557537b2aecb9eeb76
-# good: [7157d55093613cf905cfd665772eae35d5c388f0] Merge branch 
-'for-next' of 
-https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
-git bisect good 7157d55093613cf905cfd665772eae35d5c388f0
-# bad: [52af2cfd69d264f1a370693966acf5d96943add8] Merge branch 
-'extcon-next' of 
-https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git
-git bisect bad 52af2cfd69d264f1a370693966acf5d96943add8
-# bad: [502068d3b65cc8695f8da83a7f19c90805c958ca] next-20251217/tip
-git bisect bad 502068d3b65cc8695f8da83a7f19c90805c958ca
-# bad: [c06f166058309936567065e737f6f5d9609a1a87] Merge branch into 
-tip/master: 'sched/core'
-git bisect bad c06f166058309936567065e737f6f5d9609a1a87
-# good: [e2292f5c21542354246687d8e3e48a58b046e27b] Merge branch into 
-tip/master: 'irq/msi'
-git bisect good e2292f5c21542354246687d8e3e48a58b046e27b
-# good: [fb9a7458e508ef1beae8d80ee40c2cd1b5b45f3a] sched/fair: Clean up 
-comments in 'struct cfs_rq'
-git bisect good fb9a7458e508ef1beae8d80ee40c2cd1b5b45f3a
-# good: [527a521029c3edd38fb9fc96cd58e3fd7393d28e] sched/fair: Sort out 
-'blocked_load*' namespace noise
-git bisect good 527a521029c3edd38fb9fc96cd58e3fd7393d28e
-# good: [7ac422cf7b16ec524bcd8e017459e328a4103f63] 
-perf/x86/intel/cstate: Add Diamond Rapids support
-git bisect good 7ac422cf7b16ec524bcd8e017459e328a4103f63
-# bad: [5d1f0b2f278eb55aebe29210fbc8f352c53497d6] sched/core: Rework 
-sched_class::wakeup_preempt() and rq_modified_*()
-git bisect bad 5d1f0b2f278eb55aebe29210fbc8f352c53497d6
-# first bad commit: [5d1f0b2f278eb55aebe29210fbc8f352c53497d6] 
-sched/core: Rework sched_class::wakeup_preempt() and rq_modified_*()
-
-
-
-If you happen to fix this issue, please add below tag.
-
-
-Reported-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-
-
-
-Regards,
-
-Venkat.
-
-
+Anyway, that's just BTW: I don't feel any need to revise the patches I 
+sent.
 

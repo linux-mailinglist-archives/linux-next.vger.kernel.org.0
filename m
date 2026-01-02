@@ -1,174 +1,125 @@
-Return-Path: <linux-next+bounces-9517-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9518-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A21ACED8B1
-	for <lists+linux-next@lfdr.de>; Fri, 02 Jan 2026 00:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E56F1CEDFBC
+	for <lists+linux-next@lfdr.de>; Fri, 02 Jan 2026 08:29:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CAEE130056F9
-	for <lists+linux-next@lfdr.de>; Thu,  1 Jan 2026 23:15:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 06ABF3005B8C
+	for <lists+linux-next@lfdr.de>; Fri,  2 Jan 2026 07:29:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2391419CD1B;
-	Thu,  1 Jan 2026 23:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05CD92C235D;
+	Fri,  2 Jan 2026 07:29:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PpgS51Ov"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VFtQsoPS"
 X-Original-To: linux-next@vger.kernel.org
-Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2DC717A586;
-	Thu,  1 Jan 2026 23:15:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5FBB275114
+	for <linux-next@vger.kernel.org>; Fri,  2 Jan 2026 07:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767309352; cv=none; b=C6tc9mS9IyrqZTDTVnMQldv4qcTg+dBPEEUniaYprcwPVH+an7N4WqvqqhInJ5wwFAc6+EpEIBgKNhAqRUrosn0sgca7yNeczGtk0XR9xg0O39rZrltjwhNkntG8nEsq28OII3Pxoxf0klJ5+/lqxqhN3qXOYQ3jXl7so6a/RGA=
+	t=1767338994; cv=none; b=UoJpSfXgkGrWRciA3lgyxbztNuZfbeiAO0EJipSa+R8iDVLKDyEOeoCbieJDqv1Cr9TdRVit0s2iejwQ66gPd3bJmtdACAcPQguVaOs8hWh5xi+1ivvKJOubbHZsF3azgjzPUPB4VLR/QXxS6jktNG9OEtFj4r6x9597oFqNWNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767309352; c=relaxed/simple;
-	bh=713u+FjkUUPYLP+jnsXIwYlCMCLklecAUvjVzxhyfEY=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=US0YuurRT5wp6RYYI1ihwKy12E1Al74qmjJ3Bw3xSNmNtEWahUH0sDeLVxnM+saKms/xhxAT7h4wtbSuzAcIusTt8JfCF68yxcGvi6/HzUYOOEC9iNbMv6sIdUYMtOvW57HPEKhgS/it3T6CH+sfj5glrtINKHWjgLb4mYpVUQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=none smtp.mailfrom=linux-m68k.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PpgS51Ov; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.phl.internal (Postfix) with ESMTP id DFE92EC02FE;
-	Thu,  1 Jan 2026 18:15:47 -0500 (EST)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Thu, 01 Jan 2026 18:15:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1767309347; x=1767395747; bh=fXeiVUpN14yoAK2l+zb0ArNGoy3quSVAU4q
-	+Y4KikI0=; b=PpgS51Ov/lNXXc/GoSgcgMFTxiVW4cVE7RZJxO6mt5LUXOT4UTv
-	gpzhj8de4DJ+QqD9TXhAquv9hQsO1PRc7xZ5tuvZNfNCX73MfczRxCdpo6ooylzO
-	o+dfhzyLl+PZZOz0DfBHyU+Xv2UFJRqav+swr0fOg323+aFajeeMCFru6EZK5+Eb
-	+e1KRSn5v7YYnvSzKODkpEj3Ah89eGF7qmHK20uX67ITTFSiRj1aIf0MdYLUgEpz
-	63AobVQy1VQaFsD7jvIp0bHbW2oY8z/Lb9dVi+E6l0D/wPjga+5PlcLwBvqD8+tY
-	rxAU00sV6bwKNMkY3Q4qAdiYWyZ1BpCgcjw==
-X-ME-Sender: <xms:IwBXaYJN0XFlbrfpo-XCCtvXTGN8z001D3CggkG2sDNkI0rvF85HlQ>
-    <xme:IwBXaT83ym4g79SD7ej5FOgFDxaA05a2gC3PylLjfV-AcdsuHEvhPqtutM3lHKNKi
-    xyanv1cgciqUv-I1-3NZBY_cw8n13iDvbl0FwQt19P5YI8NDUCfb1Q>
-X-ME-Received: <xmr:IwBXaUFZITKwY_w2UQpVx4KdxaRET7et_Uw40LlXUqQRYzjo4JfXcC3B3nx-7DNcgzaRqDZhaB0I946t8hLpvnVFtqbClc0Z8E8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdekjedtjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhnucfvhhgr
-    ihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrfgrthhtvg
-    hrnhepleeuheelheekgfeuvedtveetjeekhfffkeeffffftdfgjeevkeegfedvueehueel
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepfhhthh
-    grihhnsehlihhnuhigqdhmieekkhdrohhrghdpnhgspghrtghpthhtohepuddupdhmohgu
-    vgepshhmthhpohhuthdprhgtphhtthhopehrughunhhlrghpsehinhhfrhgruggvrggurd
-    horhhgpdhrtghpthhtohepshgrshhhrghlsehkvghrnhgvlhdrohhrghdprhgtphhtthho
-    pehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopegrrhgusgeskh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfohhunhgurght
-    ihhonhdrohhrghdprhgtphhtthhopeifihhllheskhgvrhhnvghlrdhorhhgpdhrtghpth
-    htoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehsfhhrsegtrghnsgdrrghu
-    uhhgrdhorhhgrdgruhdprhgtphhtthhopeigkeeisehkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:IwBXae6j_SZKj4P91UNzf0iH5okDj8X3Dh1xwJq3n-V2o-IBn9Tb2g>
-    <xmx:IwBXadY2OUXJMkYfBHOtzDFuS4G2M6Kcq9ozMdE0ZBCFOoNL22-3eQ>
-    <xmx:IwBXachu5yxHNYjkOfudjOcPP7Jh67I46Ne3XK5DKtaIAcJOCicPSA>
-    <xmx:IwBXaffoCmY8DewDAxPmFMKp1CKPADFjYZypWt7aaovuG3l0LIejoQ>
-    <xmx:IwBXaT0w4mg21VJjOarA73Ziw2-jzq2jNQ9AtwKR665vvOCOu9d70lAB>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Jan 2026 18:15:45 -0500 (EST)
-Date: Fri, 2 Jan 2026 10:15:39 +1100 (AEDT)
-From: Finn Thain <fthain@linux-m68k.org>
-To: Randy Dunlap <rdunlap@infradead.org>
-cc: Sasha Levin <sashal@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-    Ard Biesheuvel <ardb@kernel.org>, 
-    Andrew Morton <akpm@linux-foundation.org>, Will Deacon <will@kernel.org>, 
-    Arnd Bergmann <arnd@arndb.de>, Stephen Rothwell <sfr@canb.auug.org.au>, 
-    x86@kernel.org, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-    Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the mm-nonmm-unstable
- tree
-In-Reply-To: <77d3d65a-9ef0-451e-b24f-1b3f38cf822b@infradead.org>
-Message-ID: <84ebf3ef-1385-1b11-772b-7bccac4d25ae@linux-m68k.org>
-References: <20251218153050.44da4a78@canb.auug.org.au> <fcc9ca3e-8c04-43c0-606c-e798bc0cf9ce@linux-m68k.org> <aU67sD1u83Qrpvdu@laps> <df9fbd22-a648-ada4-fee0-68fe4325ff82@linux-m68k.org> <4a3455a6-a0dc-f7fb-8b68-da471bb312c7@linux-m68k.org>
- <77d3d65a-9ef0-451e-b24f-1b3f38cf822b@infradead.org>
+	s=arc-20240116; t=1767338994; c=relaxed/simple;
+	bh=gl2uoXbjs+jJYec1j1smL6aMW95lGb1X6nY3IHN22pQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hdc+dGFLt/uuRwmU00jodrfHox/KorLeyfyu/o88+VEb+OzcuBlj0N5USm5ogI99MkMBxntx9GJHpRV/MN1hXayr5s7YCF0g5zF+9McdVAhKUlQSbDDseb4hsOX7kw1NVNCal+Pegdtfci3Qa6Pt06thlgrp/6GWGDpicWEMQ9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VFtQsoPS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 762F6C4AF09
+	for <linux-next@vger.kernel.org>; Fri,  2 Jan 2026 07:29:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767338994;
+	bh=gl2uoXbjs+jJYec1j1smL6aMW95lGb1X6nY3IHN22pQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=VFtQsoPS+TsxM0ohQvybS95VXMuMyCm5deUoGqTEngMcXr/iLTq3zgmwDecDX1r+x
+	 4mKChAvPXBEaWBRIRZFWHsF7vtcuUJAdDtuWKurYj4zblaAKHx1wdob3kk7n2A1Eu/
+	 GwGV1F3HLuAtbUX9nUdy3wDTdN6i97RpeDkVb7PNZ2I9slDBlu3IDkCjece/A4gHDC
+	 0HjqA1e6w/41m1XAAf7vTfROaqzPWRmkK53HtdgzV6vj0h95VQp9hFav+qet1q8/qW
+	 qvbBOyYNOONVDYrtOzlBKw3jRIrAqMaFa2X53lQthF9N1AxAXZssLYtXa5Smp9GHAG
+	 nRWqbm4F3YxLA==
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-34f2a0c4574so2237798a91.1
+        for <linux-next@vger.kernel.org>; Thu, 01 Jan 2026 23:29:54 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU3kjmHvUukGrgaoaGDm/MErl733I38yX/4GnEl4xAjMU2N0AWVZCoShtb7HLr2B/FM9Pkha3r9nGm5@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRJnY7tFF/pOq0I+ta+4Q+Zg6R2L2F9AW8xQVbP74vo/ZAW2jC
+	YegO1115N0iPAjatKYibY59vLmnpMOCyBOvR0NK7s8rCYiahFjokgADwjMmXLLTHEUDmM0WKw3C
+	pyNsnqGMVLAF+vzQ/o9Vra9qvGS/jJtw=
+X-Google-Smtp-Source: AGHT+IGE+hLSD8705WZBJaWGrQc/lj87cSmqD0ZBcyI7D5pdwZSC2fmIzBPLehAjrarZ8q4dQYlZlb0VwFHhJPlrask=
+X-Received: by 2002:a17:90b:4a44:b0:32d:db5b:7636 with SMTP id
+ 98e67ed59e1d1-34e921e0556mr39029534a91.27.1767338994056; Thu, 01 Jan 2026
+ 23:29:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+References: <20251218153050.44da4a78@canb.auug.org.au> <fcc9ca3e-8c04-43c0-606c-e798bc0cf9ce@linux-m68k.org>
+ <aU67sD1u83Qrpvdu@laps>
+In-Reply-To: <aU67sD1u83Qrpvdu@laps>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Fri, 2 Jan 2026 08:29:42 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXFjttKG3JF=aw9KgRup-ge-WeUnncfEfTZmUVSfi4F6fg@mail.gmail.com>
+X-Gm-Features: AQt7F2qf031FXDju5gNzdS0_tgySBY0_zmFjsgMRkJDQscwe4TEHY2iFAOTc0Vs
+Message-ID: <CAMj1kXFjttKG3JF=aw9KgRup-ge-WeUnncfEfTZmUVSfi4F6fg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the mm-nonmm-unstable tree
+To: Sasha Levin <sashal@kernel.org>
+Cc: Finn Thain <fthain@linux-m68k.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Will Deacon <will@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Stephen Rothwell <sfr@canb.auug.org.au>, x86@kernel.org, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
+On Fri, 26 Dec 2025 at 17:45, Sasha Levin <sashal@kernel.org> wrote:
+>
+> On Sun, Dec 21, 2025 at 01:58:17PM +1100, Finn Thain wrote:
+> >
+> >On Thu, 18 Dec 2025, Stephen Rothwell wrote:
+> >
+> >> After merging the mm-nonmm-unstable tree, today's linux-next build
+> >> (x86_64 allmodconfig) failed like this:
+> >>
+> >> x86_64-linux-gnu-ld: error: unplaced orphan section `__bug_table' from `arch/x86/boot/compressed/sev-handle-vc.o'
+> >>
+> >
+> >I found that I could reproduce the same build failure after applying
+> >Peter's patch to v6.19-rc1. So it's not confined to linux-next. I used
+> >allnoconfig with CONFIG_LD_ORPHAN_WARN_LEVEL=error and
+> >CONFIG_AMD_MEM_ENCRYPT=y because allmodconfig takes forever to build.
+> >
+> >The patch in question is this one:
+> >https://lore.kernel.org/lkml/0c18fd08ef19497768070783da28086e01d11a00.1765866665.git.fthain@linux-m68k.org/
+> >
+> >I may have found a solution for the problem, but I don't understand this
+> >code, so I've Cc'd Ard et al. I don't know whether the __bug_table section
+> >is relevant to sev-handle-vc.c. If that section is not desired, I propose
+> >to make this change to Peter's patch --
+>
+> I think that the issue here is that we're trying to use WARN in the early boot
+> context. We should probably add CONFIG_DEBUG_ATOMIC to the list of configs we
+> disable for that:
+>
+> diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
+> index 4f86c5903e03..bb36dcef7d08 100644
+> --- a/arch/x86/boot/compressed/misc.h
+> +++ b/arch/x86/boot/compressed/misc.h
+> @@ -14,6 +14,7 @@
+>   #undef CONFIG_ARCH_HAS_LAZY_MMU_MODE
+>   #undef CONFIG_KASAN
+>   #undef CONFIG_KASAN_GENERIC
+> +#undef CONFIG_DEBUG_ATOMIC
+>
 
-On Thu, 1 Jan 2026, Randy Dunlap wrote:
+In spite of the prior art, #undef'ing CONFIG_ options is the worst
+possible way of dealing with this, as it could result in
+inconsistencies (as Finn already found). And it is definitely not
+something that belongs in generic code - the x86 decompressor is
+somewhat of a lost cause at this point, I'm afraid.
 
-> > The following patch produces a build failure.
-> > 
-> > diff --git a/arch/x86/boot/compressed/misc.h b/arch/x86/boot/compressed/misc.h
-> > index fd855e32c9b9..8442eebaada1 100644
-> > --- a/arch/x86/boot/compressed/misc.h
-> > +++ b/arch/x86/boot/compressed/misc.h
-> > @@ -8,6 +8,7 @@
-> >   * we just keep it from happening. (This list needs to be extended when new
-> >   * paravirt and debugging variants are added.)
-> >   */
-> > +#include <generated/autoconf.h>
-> >  #undef CONFIG_PARAVIRT
-> >  #undef CONFIG_PARAVIRT_XXL
-> >  #undef CONFIG_PARAVIRT_SPINLOCKS
-> > 
-> > 
-> > Problem is, you can't do #undef unless you know that #define has already 
-> > taken place, and you can't #define again if #undef has already taken 
-> > place...
-> > 
-> > Anyway, that's just BTW: I don't feel any need to revise the patches I 
-> > sent.
-> > 
-> 
-> Hi,
-> You mean something more than
-> 
-> +#include <generated/autoconf.h>
-> +#ifdef CONFIG_PARAVIRT
->  #undef CONFIG_PARAVIRT
-> +#endif
-> +#ifdef CONFIG_PARAVIRT_XXL
->  #undef CONFIG_PARAVIRT_XXL
-> +#endif
-> +#ifdef CONFIG_PARAVIRT_SPINLOCKS
->  #undef CONFIG_PARAVIRT_SPINLOCKS
-> +#endif
-> 
-
-That's not what I meant. Perhaps I should have said, you can't #undef 
-unless you know that #include has already taken place. That is, if some 
-header does #undef CONFIG_FOO on the assumption that #include 
-<generated/autoconf.h> has already taken place, then it is fragile.
-
-autoconf.h contains no multiple inclusion guard, and it gets included by 
-multiple other headers, so it is prone to 0, 1 or N inclusions. Ordering 
-with respect to #undef CONFIG_FOO is anyone's guess...
-
-FYI, the build failure I was referring to looks like this. It's actually 
-caused by solving the fragility problem I just described above...
-
-  LD      arch/x86/boot/compressed/vmlinux
-x86_64-linux-ld: error: unplaced orphan section `.altinstructions' from `arch/x86/boot/compressed/ident_map_64.o'
-x86_64-linux-ld: error: unplaced orphan section `.altinstr_replacement' from `arch/x86/boot/compressed/ident_map_64.o'
-x86_64-linux-ld: error: unplaced orphan section `.altinstr_aux' from `arch/x86/boot/compressed/ident_map_64.o'
-x86_64-linux-ld: arch/x86/boot/compressed/ident_map_64.o: in function `ident_p4d_init':
-ident_map_64.c:(.text+0x57f): undefined reference to `__pti_set_user_pgtbl'
-x86_64-linux-ld: arch/x86/boot/compressed/ident_map_64.o: in function `kernel_ident_mapping_init':
-ident_map_64.c:(.text+0x8ab): undefined reference to `__pti_set_user_pgtbl'
-x86_64-linux-ld: arch/x86/boot/compressed/ident_map_64.o:(.altinstr_aux+0x2): undefined reference to `boot_cpu_data'
-x86_64-linux-ld: arch/x86/boot/compressed/ident_map_64.o:(.altinstr_aux+0x14): undefined reference to `boot_cpu_data'
-x86_64-linux-ld: arch/x86/boot/compressed/ident_map_64.o:(.altinstr_aux+0x26): undefined reference to `boot_cpu_data'
-x86_64-linux-ld: arch/x86/boot/compressed/vmlinux: hidden symbol `__pti_set_user_pgtbl' isn't defined
-x86_64-linux-ld: final link failed: bad value
-make[3]: *** [arch/x86/boot/compressed/Makefile:119: arch/x86/boot/compressed/vmlinux] Error 1
-make[2]: *** [arch/x86/boot/Makefile:96: arch/x86/boot/compressed/vmlinux] Error 2
-make[1]: *** [arch/x86/Makefile:310: bzImage] Error 2
-make: *** [Makefile:248: __sub-make] Error 2
-
-If you wish to try that experiment, you'll probably need something like this:
-
-./scripts/config -e WERROR -e LD_ORPHAN_WARN --set-str LD_ORPHAN_WARN_LEVEL error -e EFI_STUB -e CPU_SUP_AMD -e AMD_MEM_ENCRYPT
+In this case, I'd prefer it if we added a helper, rather than
+duplicating the same check 3 times. But in this check, testing for
+__DISABLE_EXPORTS is perfectly reasonable: it is already used in this
+manner across architectures.
 

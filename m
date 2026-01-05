@@ -1,132 +1,84 @@
-Return-Path: <linux-next+bounces-9542-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9543-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2071CF2E8A
-	for <lists+linux-next@lfdr.de>; Mon, 05 Jan 2026 11:07:48 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45C86CF4B74
+	for <lists+linux-next@lfdr.de>; Mon, 05 Jan 2026 17:34:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 98E6C301CEBD
-	for <lists+linux-next@lfdr.de>; Mon,  5 Jan 2026 10:04:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 918FE308AF10
+	for <lists+linux-next@lfdr.de>; Mon,  5 Jan 2026 16:27:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DE2E2EC09D;
-	Mon,  5 Jan 2026 10:04:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE0F3054C7;
+	Mon,  5 Jan 2026 16:08:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OJCh75EC"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9FE2749D9
-	for <linux-next@vger.kernel.org>; Mon,  5 Jan 2026 10:04:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD7452F88;
+	Mon,  5 Jan 2026 16:08:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767607494; cv=none; b=EAc6NutaqlAiX8rwfv3gvAw/nJ4d5RtOBvVRu6usrHUXVOot0O3AQYpHafGCcOQz+lHUIU/1OX//8iv7pLCU9rMKDVAtHr3pQ/9CIVLP/1UplvDa6UP4bQA6O9nDRgLVPDB+hdl+vBv6fcSGCWUGeHNo8HU0Pzg89Z2911Uy5ow=
+	t=1767629289; cv=none; b=DOQ38v4uix/Lkg/lqffTkZCJoBU5yE+gwBqVbQ0gPSpOnUCcXO3meJ4NmnTVn7vMjxP0gq0s7HDqXskDsml1gQCBWYg59dIRBZgnoFKb+zozHFlX+BhJrkVcrLHy6W1JS881W6roEXUWB8xFMsd9iCvmlVX5B92ptpjrmvl1XwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767607494; c=relaxed/simple;
-	bh=h2D8NgM6vupskFuc6uQe+5pn56KbOmJjWVi2paQ/29c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BjbkIZl2xrzrmO25ZMlrxyF5NaKuGz4IJ5rpk73oG2iFD0FhXww249PCh1dGnqBJ1Oui7CEO0DZv/iQcRfsEG+S58XQh9QbWLKAofNIcFkTXf7wOoERW49p44TEI043Oml3q3NZ2HOWycygRIhXVIHKsPTUmaZtYK1Juiws35Q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-5e19e72c2a7so2831120137.3
-        for <linux-next@vger.kernel.org>; Mon, 05 Jan 2026 02:04:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767607491; x=1768212291;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6BAOQcdbZfHZNCL22UxCDiey6SSzvVw32cZ3lQ7se9k=;
-        b=bRsDmfLU0gmqYTznGSrCqRjewd2FmrD7IxK2PSvxGvpmLbqHVVNEkaZo4BiU0RfkEf
-         wJvT30/C8pWwG7dZ6zq7SdfumNfXc07t43PBKXCMbSRUuXz5KzEc+ur8SdiUBk65ahkm
-         ftXClnBdbWJ9SHRobXUBVaj5/RSrOTOcyykq8pM1Mw3wKn29YlbZWKFs9+wKDw5LmLHd
-         qsHHdxXgA484g50SVt7Pvf76m7H6wvWnbtBK7+ZkO+0hAMM4EyjAfeJNQhRNOdjmqTPQ
-         P6fsXXYX0xaWkoME8bc5QoW1jdYvXqSmVcuLGXnC4bw+CN2AytMr1/n9wFRWNppJhzSF
-         m66g==
-X-Forwarded-Encrypted: i=1; AJvYcCXxaEO1FkIxaf4a5YSw4sERqKN0tnycH0qF/VWVmwA2eMDXZkFaGM1bZJLhF+7A28qvRzESLdlcXJJi@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJ+rtiUBS6TzthPpXtcq5RNljeoV5nML8Fm7Fh4sghlBmH7jdp
-	D+JxacnIU002h6pqqclQIkRxaUVxLd/E3CN+6OBxOzxpyWDvx100oBOUQJTMP9Ym
-X-Gm-Gg: AY/fxX6PdPo0ZbgF6pKW0GRdSnSoH6QUW1E911JJwZoBSOt4ga9qTP20AAkcxe5uDUq
-	fah+vWiDgH+XJPYq6UwcS+G0nToRqw4Bl1bXyN88NkRlUQ7G1dqQ67XfPU5eBbz8STIWh3DItZS
-	7Lu/tiHropxexqHEUFSDXuBDQvTeelr7Ci9oyEt7RtPi0b7cXhMASVI01HsU3ycJsDjnB9FyfK2
-	vg8YTIR08EaHV1VindZTwvzpT1nCLCyXZBVYrY6DqTfLJXjW/EBoDLtmNiIx72pY0uqFW+JaLt4
-	YYl5UBwmdBEpXb65Qh+JgeyDaHYMEdf6zdfWmTigVLeDBHdwy3YCkiIgJOfK2Qvh/XqQ/qrwTwQ
-	um23gcUKQ7g5QRTdpxTR/C+om7Gg6ZYJCl6geb5MgVjHlNfRGOO96KunNoCvqUNc0W9UJKuvC6m
-	S8v8SgcwQQv3b5oDHLsOok6B1pYF3WmW/CZ2mv8Je6iF88dAlw
-X-Google-Smtp-Source: AGHT+IFzRNiKbru299PucQ/G0P1Bv7ijkz+Jx1L/REfbOT7ucYQK1t1QFCdka4i+/RS08+TN7hF2pg==
-X-Received: by 2002:a05:6102:e12:b0:5db:417d:923d with SMTP id ada2fe7eead31-5eb1a7c1375mr12828420137.22.1767607490931;
-        Mon, 05 Jan 2026 02:04:50 -0800 (PST)
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5eb1a85ba53sm16022306137.0.2026.01.05.02.04.50
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jan 2026 02:04:50 -0800 (PST)
-Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-5dde4444e0cso4831850137.0
-        for <linux-next@vger.kernel.org>; Mon, 05 Jan 2026 02:04:50 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWdPGCq6b+zxHzdOy9f+DYgVlQQ9t1fo1Gf5YHqg298tZEXjJ6CzHOuNoUCgg/8aI9sTtKKYv/5eovE@vger.kernel.org
-X-Received: by 2002:a05:6102:e12:b0:5db:417d:923d with SMTP id
- ada2fe7eead31-5eb1a7c1375mr12828415137.22.1767607490429; Mon, 05 Jan 2026
- 02:04:50 -0800 (PST)
+	s=arc-20240116; t=1767629289; c=relaxed/simple;
+	bh=7lgEQSsnT42EUGV1Bj9jkcpbrnMcDYj425yn5aSiU/k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u8agdsoWHxM4yzbtJmQtcjqUrBIPDLsNPFs5/v2rB8jOX7d0HNyEytSyUAZ4cDibHfs/sBvngbC9ikQT1Fz9RQkLYsFqHeiO7RSG+AVpPouYhFayClwAShNOC4kYTf/oquWZbTVPIONr8uDxV5BS3wndSDCrga/yLfmAoOcYmhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OJCh75EC; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=3xGG1j0Tpe3YTwwy4um25JZwbfKElSF19Nugb/Hs3KA=; b=OJCh75ECOgxt1Xmg97VNjk07N2
+	ZNxvsxZ3NtH2b5was/xsBcKfog6mcMFcQsbHn7d1PTfGFMQHNA04S+L9kLrB1MLFVEicWL7bQGr7W
+	b3Yt6arrAXxAaE7rO6V3cIzqicuurcxPOTiTH0A+WL/XAXM+tFufE2J4axYfCLGmuKO0T4MEgbBC7
+	0Wggz5aeebJaYs7+iiMwXR0fTvC9/7yyugERrN4g+PgPOnbG6GSbBPgwnPr6V78e8MYbwsPAJUr0/
+	JYFZfyIjpl/NAeD1fFN370964xO5/4Ux9XhHywhekGcXbdkcaR3HOcE8wSJa1CxLGbFFyk3sGOzeT
+	LM8i9W1Q==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vcn7i-00000008WJ1-3GPn;
+	Mon, 05 Jan 2026 16:08:02 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id B3C17300E8E; Mon, 05 Jan 2026 17:08:01 +0100 (CET)
+Date: Mon, 5 Jan 2026 17:08:01 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Finn Thain <fthain@linux-m68k.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the
+ mm-nonmm-unstable tree
+Message-ID: <20260105160801.GB2393663@noisy.programming.kicks-ass.net>
+References: <20260105084320.3efe68d2@canb.auug.org.au>
+ <20260104173009.72c9689ae6f8c2ea81cbf11b@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260105133854.166d32b8@canb.auug.org.au>
-In-Reply-To: <20260105133854.166d32b8@canb.auug.org.au>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 5 Jan 2026 11:04:39 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUVcLLs6BzmVTaikqVqtevuT9N2F1W6iBpD=1WTpWNXdw@mail.gmail.com>
-X-Gm-Features: AQt7F2pVoTqAdQnr-VTbXTdFBY80gxdnoEfjF0NjjP2py39WFKdhSj3ONylGRcw
-Message-ID: <CAMuHMdUVcLLs6BzmVTaikqVqtevuT9N2F1W6iBpD=1WTpWNXdw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the tip tree with the renesas tree
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, 
-	"H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260104173009.72c9689ae6f8c2ea81cbf11b@linux-foundation.org>
 
-Hi Stephen,
+On Sun, Jan 04, 2026 at 05:30:09PM -0800, Andrew Morton wrote:
+> On Mon, 5 Jan 2026 08:43:20 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+> > Hi all,
+> > 
+> > Commit
+> > 
+> >   3d73f718d762 ("atomic: add alignment check to instrumented atomic operations")
+> > 
+> > is missing a Signed-off-by from its author.
+> 
+> yup.  iirc, Finn has asked Peter to send us a signoff for this.
 
-On Mon, 5 Jan 2026 at 03:39, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Today's linux-next merge of the tip tree got a conflict in:
->
->   arch/arm64/boot/dts/renesas/r9a09g077.dtsi
->
-> between commit:
->
->   2d8568dddc7b ("arm64: dts: renesas: r9a09g077: Add ICU support")
->
-> from the renesas tree and commit:
->
->   9b1138aef9a2 ("arm64: dts: renesas: r9a09g077: Add ICU support")
->
-> from the tip tree.
->
-> I fixed it up (I arbitrarily used the former version) and can carry the
-> fix as necessary. This is now fixed as far as linux-next is concerned,
-
-Your arbitrary choice is the correct one ;-)
-
-In general, please never take DTS patches through a non-soc tree unless
-an Acked-by is provided.  In this particular case, the commit in the
-tip tree is not only incorrect, but is also a dependency for later
-commits, so it has to go through the renesas tree.
-
-The same applies to the corresponding r9a09g087 commits.
-
-Thank you!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Replied to some recent posting there -- that patch doing wrong.
 

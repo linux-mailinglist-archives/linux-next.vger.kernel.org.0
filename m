@@ -1,115 +1,131 @@
-Return-Path: <linux-next+bounces-9531-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9532-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45E3CCF1AC7
-	for <lists+linux-next@lfdr.de>; Mon, 05 Jan 2026 03:48:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B7769CF1C6D
+	for <lists+linux-next@lfdr.de>; Mon, 05 Jan 2026 04:59:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AB48930184FA
-	for <lists+linux-next@lfdr.de>; Mon,  5 Jan 2026 02:41:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0E8203016DEE
+	for <lists+linux-next@lfdr.de>; Mon,  5 Jan 2026 03:59:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472292D781B;
-	Mon,  5 Jan 2026 02:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3E8631987B;
+	Mon,  5 Jan 2026 03:59:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="pfvZRVsZ"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="cCrUbzOZ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C12D2D7DD3;
-	Mon,  5 Jan 2026 02:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A41A314A9F;
+	Mon,  5 Jan 2026 03:59:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767580916; cv=none; b=MD5xElFhx+o0wU76hiijGtpbS4abAJHwh0BtxgP+QUrUQWfawciTPRcrk8kQCLC6OxquvWINMZYDJoHlzGRoFOoRH1rmwlR4iKwEmalv1uJXJEqw+SDnToOS+oJwb/l1tDjvWO3apTME2t7nEy2KmcXfEkQ3vNEZCL+IOg7go4w=
+	t=1767585576; cv=none; b=WLs9vdSFtUQgA+739UhPCy5Pc80JooKIMQJkEMgyx6e/A3G1i/iHEy5o7+/w6/gVNl6gvpmZ3ouzzh1E/nfq24jJnhteXpnD9UE+Dl4v3/qewFXJCYFmr619FgtVKjiWbQho+QkoGpu2Iub0/51VcigxQVRrNZrMIVm0pA0rvwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767580916; c=relaxed/simple;
-	bh=AYW2b0Zy3+wslJPEloHOZfVYtzp28LEz8ZW2+4ScAEI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aZswZL/iK/2vuG870n6kJ2eg/q3xIys+IrOIZPBPN7huVIYkSQhjj18jfeRdG27QAzfKB+VJd66KFS7AvUGodBtSFfsSa7l2Q8VNWVpcu+apJ1p9mmvjfT/OG+n85HJaK5zxxE69URWp9Jr0iDWsT9rrZM2ot8IO0NpogfVtPJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=pfvZRVsZ; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1767585576; c=relaxed/simple;
+	bh=l+VPSILndeQHfuEwZe8q+EHsXabFKFn3otjAv3ZxFJo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=LYJdEubXCQDjeCdZRyHOGnNH3oUHq6cRyv7I0agJ0ARG2+y5za6afBj4K/B1ONzcsP83z0E2vt/yGAj3Mt2qEuXsW63Ltlg5pRRZTmoO4LhPmd/3kXTkWlNlhv657fHIJCt4Y9I47g8SBiEanLbzr++GAxoQDTLqHuqffRJh4IM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=cCrUbzOZ; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1767580912;
-	bh=lXp7ZXtf/cXQUJdzjXc4EQ8W2tw8kFEMooBYCm2n2l0=;
+	s=202503; t=1767585569;
+	bh=GfInJBI5d1ABe7ub0kHRVSQne9HpaFmdqNJZWYo/Ig0=;
 	h=Date:From:To:Cc:Subject:From;
-	b=pfvZRVsZfsXxps+0LSAusQiJtoAsG7a+XydqE1Hv14kQkKWXpsqNABo4W3MGC3Lus
-	 YPByqHYEF01BgM70SxwGbXhzioCZJ3LfE32ze/seynjLEnK18M81XHeJhY2+2UvTHh
-	 VBkR2gtm2d7C9u2hjLxsXD1IhThKOz7dEPRxr5TJgsQczrNU1KJOZdf4SB08If5rjd
-	 Ol/woiQMGEuSmBokfgbnjBW52KQl7mVSsgVg0duJlVCCD01KS9o6M10kXsGQu8xaRv
-	 wUipr1dvxTp9asbNJ3kKjJMkCMDTJ2yTHoEpwe8Y9nQnpOkEYZRbG1WVqOtd0PUmPQ
-	 oKcJWd7KBETsw==
+	b=cCrUbzOZx1nOFPqwhJZ+iMcUjd2mZS3+w6IW8TGabBpjoGVWon2UD+s+lPwpZYk11
+	 8e3mzTOuo/Y8+KpeVtSjNPXfdMwHLkM8rXXY5QtRhMoRTlYxTrVdvKnvWxRrJrxN5g
+	 2Fx3097rPfCFnqbA+3lMFZwE4IluPWKa0RKeR42y0teH8SzXgtnkK5tO3IzuXQDrgh
+	 L7MXMAHFWK0MPpj53vuTNI5N66MXRmp6VdBqFnt39nVSVx57WJ+npejYgxVoHqzbN4
+	 DxuzSvj34dPjy8ukYqUNzHIr3Dte7Jd+qHnkt2VVxiSJ0NLS2WpGomn4wtJuhqhTpm
+	 TZpEZxD4LU0dQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dkz8c1mlbz4w11;
-	Mon, 05 Jan 2026 13:41:52 +1100 (AEDT)
-Date: Mon, 5 Jan 2026 13:41:51 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dl0t86NDmz4wCp;
+	Mon, 05 Jan 2026 14:59:28 +1100 (AEDT)
+Date: Mon, 5 Jan 2026 14:59:28 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the tip tree with the renesas tree
-Message-ID: <20260105134151.1302f303@canb.auug.org.au>
+To: Kishon Vijay Abraham I <kishon@kernel.org>, Vinod Koul
+ <vkoul@kernel.org>
+Cc: Abel Vesa <abel.vesa@linaro.org>, Abel Vesa <abelvesa@kernel.org>, Linux
+ Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>, Ziyue Zhang <ziyue.zhang@oss.qualcomm.com>
+Subject: linux-next: manual merge of the phy-next tree with the phy tree
+Message-ID: <20260105145928.2f78ad36@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mcPq3TtDaxRZl_VIHRj_Mul";
+Content-Type: multipart/signed; boundary="Sig_/BhSS86Eg8iW7BqBrqndv49b";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/mcPq3TtDaxRZl_VIHRj_Mul
+--Sig_/BhSS86Eg8iW7BqBrqndv49b
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+Today's linux-next merge of the phy-next tree got a conflict in:
 
-  arch/arm64/boot/dts/renesas/r9a09g087.dtsi
+  Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml
 
 between commit:
 
-  666e5eabd623 ("arm64: dts: renesas: r9a09g087: Add ICU support")
+  393e132efcc5 ("dt-bindings: phy: qcom,sc8280xp-qmp-pcie-phy: Update pcie =
+phy bindings for qcs8300")
 
-from the renesas tree and commit:
+from the phy tree and commit:
 
-  97232dc43e83 ("arm64: dts: renesas: r9a09g087: Add ICU support")
+  25671c378210 ("dt-bindings: phy: sc8280xp-qmp-pcie: Document Glymur PCIe =
+Gen4 2-lanes PHY")
 
-from the tip tree.
+from the phy-next tree.
 
-I fixed it up (I arbitrarily used the former version) and can carry the
-fix as necessary. This is now fixed as far as linux-next is concerned,
-but any non trivial conflicts should be mentioned to your upstream
-maintainer when your tree is submitted for merging.  You may also want
-to consider cooperating with the maintainer of the conflicting tree to
-minimise any particularly complex conflicts.
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/mcPq3TtDaxRZl_VIHRj_Mul
+diff --cc Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.=
+yaml
+index f5068df20cfe,82316aa5e15f..000000000000
+--- a/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-pcie-phy.yaml
+@@@ -178,8 -182,8 +181,9 @@@ allOf
+          compatible:
+            contains:
+              enum:
++               - qcom,glymur-qmp-gen4x2-pcie-phy
+                - qcom,glymur-qmp-gen5x4-pcie-phy
+ +              - qcom,qcs8300-qmp-gen4x2-pcie-phy
+                - qcom,sa8775p-qmp-gen4x2-pcie-phy
+                - qcom,sa8775p-qmp-gen4x4-pcie-phy
+                - qcom,sc8280xp-qmp-gen3x1-pcie-phy
+
+--Sig_/BhSS86Eg8iW7BqBrqndv49b
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlbJO8ACgkQAVBC80lX
-0GwHrgf/VUvCg/3De0QwxGDbx3zd35ba/3zZjooZS9+Oeuj4IoEXK851K2DmNRLo
-887dAatIQcVE8xnhYt2DEMTurAv343sOaYrphGPLn20EYk1q+M1a8VwcFZBWR1Aw
-4gVCC+XG/qR3xX18To+2hGeSmSBbKBj9OvOma3Fzd5kc/Io67sbWdIFS+wRVffCR
-DlIMLwQ1JDnnElbTvhHd8xI1IoRrux4idXJn3sxixl+hzp0aKF/vNLMG+iU4u0KP
-CNa4ASVVh4/JERVj99AxKyKYPeBzc+6sGESvbHsLtk4b2gxvXrQblGHNgUD52t+f
-IE9KRDwRQnlaRQyb4tK7QsFomxfz9g==
-=ajIO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlbNyAACgkQAVBC80lX
+0GwunQf+PHSizKaDH0jtYO0wuygPKAmtuWGaOloliFKkR9iBZwKFsPBM79EW1TQv
+fevlgAylJsCZqykebtfrGPh3p3LiYvtxrARLMQYnwN1kNvOpWYVH0YvY2o7hCVGb
+U5AGU+dQF3fKGmku8jkhmA6e0q6xxDkcnc9CUrmkULkHblR9sgG4Pnd+6yxPx/bU
+PeoujNEdT+Rz95/2esvR2DA1s5ZkNmIrqzNlBVwWzd2TgMwcDQuUmK/7BiBvzgY6
+AFRNveeMgpkmlMi9GmoI9rIJ4PmWPI5O/KaLE1fm1KhaJMRcE3BSX0afSxz5wgOa
+jLRlfDBIs+BUJUrR5rP9bbWyHFrybw==
+=ZOX/
 -----END PGP SIGNATURE-----
 
---Sig_/mcPq3TtDaxRZl_VIHRj_Mul--
+--Sig_/BhSS86Eg8iW7BqBrqndv49b--
 

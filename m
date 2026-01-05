@@ -1,191 +1,104 @@
-Return-Path: <linux-next+bounces-9534-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9535-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42BA3CF1CE0
-	for <lists+linux-next@lfdr.de>; Mon, 05 Jan 2026 05:42:52 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04969CF1D4C
+	for <lists+linux-next@lfdr.de>; Mon, 05 Jan 2026 05:57:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 02CEB30084E4
-	for <lists+linux-next@lfdr.de>; Mon,  5 Jan 2026 04:42:51 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 954FC300C2B5
+	for <lists+linux-next@lfdr.de>; Mon,  5 Jan 2026 04:57:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDA9F26D4C3;
-	Mon,  5 Jan 2026 04:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BD0631AA90;
+	Mon,  5 Jan 2026 04:57:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="SThXviUy"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oCFTD19T"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A31211A09;
-	Mon,  5 Jan 2026 04:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 976E92BCF7F;
+	Mon,  5 Jan 2026 04:57:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767588169; cv=none; b=ZWV1o0GMJbzqxs4ReL9QMbhV3drm1xER/7dMgy/RWEL9PYQ4q8QRl2jKya4Braexjt9PaGJWbqxyC4FPVhyekUhz6+mb1fFgPZQKCiHURelicoHBh+yv91BPy2ByYnYZyh0OjDbnPITa0qMv7ss8Azjib+EnpC+MWlOs7kgoTM8=
+	t=1767589061; cv=none; b=GxxmeZevc1SIj3vmWZbzammB0FfQiws9RpaDw2R2goxh3BkBCYojzPSkMWDazzQMCn9vQAeaSZc0fCHx1g4zldPiAOpaz6A0F7qkOv7mLxcNl0SXmlRvTxDkHATNr2kLOB8KQ2ICO0Zt/8MwUUnkkaHDb+cvsof5AV0PjjQeYe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767588169; c=relaxed/simple;
-	bh=dXiWgTyEjxqNNsv3uqM102MsL2PhA5sqoedfDkqR1TA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=fSdenpEl+wkYciT4PIu6DhCWNcyyQHiYXYI1OfHw7qrpQA9kMlZYunQNuIt9lsxooEcHaZJAtQLVnQ0gTfDjnZ+PPFIkJ+NC5iuEprvxz+SqLluVEidPfjWWUahsAIRBVQjWet93ReLYOpQzgstGz3ly2FT3Muy0GBInbZO0aN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=SThXviUy; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1767589061; c=relaxed/simple;
+	bh=4NMGDkbkAqsThD3dQP9d/k18Foh7z4K8NS4kQRUCBZw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=ArD/cvBQOaMCDx3TZydCvMaA2j2qP3+MfV9OH2s/9PhOVFwZpiKmBVwigwYiKFZmogCgdo1PCYUPe06vO0E31qJdNBmM4J2ZF354GWFNLhfSlePURPWSj7DOoLc4MkYjhLW+SFHTkbQ/K4mGdyvaCVHPPeXD6P9azVNHfhpbk6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oCFTD19T; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1767588164;
-	bh=KM0IYgL+E+rOotctSZrIyDzov9FtwrXaHMIOytlyfwo=;
+	s=202503; t=1767589056;
+	bh=92VY6OEmaTZZIFAl4VC6nS4a/om3Rxq94YffNwRAQo8=;
 	h=Date:From:To:Cc:Subject:From;
-	b=SThXviUy1WMW6dHa7UqioOgKAqA4Co4/PZAra/oBJ7wTzFZrbYzgfTr0KqMtmuxOE
-	 IoOgLXc9QjxuiktvZjSzQNXdot6xHUtToykROln7dNVO/KyV5B4EMqYQG91xvt8Zjh
-	 2dw+okgK7rH0A6aDQHCmZerFHckmJBMR7lA2/peH4ZPz21sM7+ZqBTz877Vr4o/rKZ
-	 Wmdya3WE+xd/Odn93PIuwLcP0yvs2vAZk/4RlPZlGxKznvs7UTAmkrn9CjCUx3/X3e
-	 tjZfWZaDerGXwtuD7xwefVH6BL1O5Kt0doF7Qev/qQRvZSuML+LpABlF85MmlQfO3f
-	 8Ff0CH3HakN1g==
+	b=oCFTD19TmMuKgXIaF+nRUZXsK9H/4SLNgDnk8JjTQZrIMm0WwT5BYCXMcZaOyqid0
+	 ouXJ5hSXl61tg6TDKl5k1ONSzCCmBBEv3LFdiGt+tPlfgFMDS97ntBS6mGNxV3U6EH
+	 Cf/fH0VmVyM8HxNzXetOg7pzAWRzrvchHOYtQ1nIcjzDjFYHnqyTknsS2Pb9bXT8W3
+	 QJiJv/NKunY6uNZKJQRcuxYFETAGgIgIdGY1+Z07wixvCiZ2jcQ0L2yjNqNSHWI1MW
+	 WadwZPw3oWNo+rGvGB3DCmRr+n5R3CoBEENckbqyp01xBA1R2Ix/YRkOfsTwxZmArn
+	 vdEp0e9uKm2UQ==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dl1r35CpGz4w26;
-	Mon, 05 Jan 2026 15:42:43 +1100 (AEDT)
-Date: Mon, 5 Jan 2026 15:42:43 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dl29C5NnBz4wCx;
+	Mon, 05 Jan 2026 15:57:35 +1100 (AEDT)
+Date: Mon, 5 Jan 2026 15:57:35 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Kalle Valo
- <kvalo@kernel.org>, Jeff Johnson <jjohnson@kernel.org>
-Cc: Ath10k List <ath10k@lists.infradead.org>, Jeff Johnson
- <jeff.johnson@oss.qualcomm.com>, Kiran Venkatappa
- <quic_kiranv@quicinc.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Manivannan Sadhasivam
- <manivannan.sadhasivam@oss.qualcomm.com>
-Subject: linux-next: manual merge of the mhi tree with the ath-next tree
-Message-ID: <20260105154243.7cd5d049@canb.auug.org.au>
+To: Simona Vetter <simona.vetter@ffwll.ch>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Intel Graphics
+ <intel-gfx@lists.freedesktop.org>, DRI <dri-devel@lists.freedesktop.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the drm-misc tree
+Message-ID: <20260105155735.3b4012b6@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dwyl=qoOBjFf8weXgWQttsc";
+Content-Type: multipart/signed; boundary="Sig_/mQg3VFDK4CcorqkjrtTadez";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/dwyl=qoOBjFf8weXgWQttsc
+--Sig_/mQg3VFDK4CcorqkjrtTadez
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the mhi tree got a conflict in:
+After merging the drm-misc tree, today's linux-next build (htmldocs)
+produced this warning:
 
-  drivers/net/wireless/ath/ath12k/mhi.c
+Documentation/gpu/drm-kms-helpers:197: drivers/gpu/drm/drm_bridge.c:1521: E=
+RROR: Unexpected indentation. [docutils]
+Documentation/gpu/drm-kms-helpers:197: drivers/gpu/drm/drm_bridge.c:1523: W=
+ARNING: Block quote ends without a blank line; unexpected unindent. [docuti=
+ls]
 
-between commits:
+Introduced by commit
 
-  7f54938fc525 ("wifi: ath12k: Move Wi-Fi 7 MHI configuration to dedicated =
-file")
-  a72027045263 ("wifi: ath12k: Modularize driver into common and Wi-Fi 7 sp=
-ecific components")
-  bce3b73d1ca7 ("wifi: ath12k: Rename ath12k_* symbols to ath12k_wifi7_* fo=
-r clarity")
-
-from the ath-next tree and commit:
-
-  51731792a25c ("net: qrtr: Drop the MHI auto_queue feature for IPCR DL cha=
-nnels")
-
-from the mhi tree.
-
-I fixed it up (I used the former version of this file and then
-applied the following merge resolution patch) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
-=46rom 667166ff448d06ed3ef9671bf6c8fe7337b71b0a Mon Sep 17 00:00:00 2001
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 5 Jan 2026 15:39:19 +1100
-Subject: [PATCH] fix up for "net: qrtr: Drop the MHI auto_queue feature for
- IPCR DL channels"
-
-interacting with commits
-
-  7f54938fc525 ("wifi: ath12k: Move Wi-Fi 7 MHI configuration to dedicated =
-file"
-)
-  a72027045263 ("wifi: ath12k: Modularize driver into common and Wi-Fi 7 sp=
-ecifi
-c components")
-  bce3b73d1ca7 ("wifi: ath12k: Rename ath12k_* symbols to ath12k_wifi7_* fo=
-r clarity")
-
-from the ath-next tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/net/wireless/ath/ath12k/wifi7/mhi.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/net/wireless/ath/ath12k/wifi7/mhi.c b/drivers/net/wire=
-less/ath/ath12k/wifi7/mhi.c
-index b8d972659314..988affafcfd1 100644
---- a/drivers/net/wireless/ath/ath12k/wifi7/mhi.c
-+++ b/drivers/net/wireless/ath/ath12k/wifi7/mhi.c
-@@ -20,7 +20,6 @@ static const struct mhi_channel_config ath12k_wifi7_mhi_c=
-hannels_qcn9274[] =3D {
- 		.lpm_notify =3D false,
- 		.offload_channel =3D false,
- 		.doorbell_mode_switch =3D false,
--		.auto_queue =3D false,
- 	},
- 	{
- 		.num =3D 21,
-@@ -34,7 +33,6 @@ static const struct mhi_channel_config ath12k_wifi7_mhi_c=
-hannels_qcn9274[] =3D {
- 		.lpm_notify =3D false,
- 		.offload_channel =3D false,
- 		.doorbell_mode_switch =3D false,
--		.auto_queue =3D true,
- 	},
- };
-=20
-@@ -85,7 +83,6 @@ static const struct mhi_channel_config ath12k_wifi7_mhi_c=
-hannels_wcn7850[] =3D {
- 		.lpm_notify =3D false,
- 		.offload_channel =3D false,
- 		.doorbell_mode_switch =3D false,
--		.auto_queue =3D false,
- 	},
- 	{
- 		.num =3D 21,
-@@ -99,7 +96,6 @@ static const struct mhi_channel_config ath12k_wifi7_mhi_c=
-hannels_wcn7850[] =3D {
- 		.lpm_notify =3D false,
- 		.offload_channel =3D false,
- 		.doorbell_mode_switch =3D false,
--		.auto_queue =3D true,
- 	},
- };
-=20
---=20
-2.52.0
+  9da0e06abda8 ("drm/bridge: deprecate of_drm_find_bridge()")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/dwyl=qoOBjFf8weXgWQttsc
+--Sig_/mQg3VFDK4CcorqkjrtTadez
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlbQUMACgkQAVBC80lX
-0GxBUggAmkD+perai2g191EGYlpdqfBI+KTIVetnYPkdDxV/L+PS9ahK1RGvM63N
-eSG7s3ciyg3XJifzAaQTxH9MtvEVE/HdyKF9Xn0iG8QNAvTFVmdJxRY6FwS02Y3P
-i4II+iBDNi/3IQfxPFQcH/13Zp8YnnBMqXa2cgZtNXt6PaWd8LKRDMSMhsEn0rM0
-0wjm8TRNoiInCNJu3p06Zn8dxP2yAubnPrAhMlLR6EGoi6LjyC4wN+dV/pg1V3UM
-RcqaX88f76VIxwra5Xv71gp4dixhLgdC0C5Gem3hp5xcMN6YqQzNeprZfuzbqmzW
-s4VgYVbGZ9YZMaA+gA82IZ3j2Z3e4w==
-=blP5
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlbRL8ACgkQAVBC80lX
+0GyEuAf/T0+PXVWEAkBFuCVUBXiA1pl6OPWL+FdWThgz+5DP24PFdJNMOsaDhfYf
+y11ZPc98EI0yFuQCmxfI2FQq6te2/TZO3FPCIXysJXKYiG9AZz6EUyzIpgQNE8kq
+JnveUlv1mUr+iobiU5dBfeuN4xKDmdMP07V3GRc5TMBgIKVskmMbjwuDjpAVvtbK
+Apudp/QcXoS+eJWy1PFWGxgei+Zo7njQdnTAhOxggIVH1SRUL2hYpu6v9abRY1jP
+7Q6WeJ5jdNdeEOlf8K90fhGpvy4mbpOpjiPp/ybSwmQsD4GqNrGH1SOXYCXfRpgK
+LtOW+RqRXpqScJaadtJbvb+1Qeg4MA==
+=IQUf
 -----END PGP SIGNATURE-----
 
---Sig_/dwyl=qoOBjFf8weXgWQttsc--
+--Sig_/mQg3VFDK4CcorqkjrtTadez--
 

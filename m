@@ -1,147 +1,115 @@
-Return-Path: <linux-next+bounces-9529-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9530-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B1FBCF1A70
-	for <lists+linux-next@lfdr.de>; Mon, 05 Jan 2026 03:38:21 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B363CF1A7F
+	for <lists+linux-next@lfdr.de>; Mon, 05 Jan 2026 03:39:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id A7DC230012E9
-	for <lists+linux-next@lfdr.de>; Mon,  5 Jan 2026 02:38:20 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E47BB301510E
+	for <lists+linux-next@lfdr.de>; Mon,  5 Jan 2026 02:39:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC1D731AAB8;
-	Mon,  5 Jan 2026 02:38:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E20831B117;
+	Mon,  5 Jan 2026 02:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="YecCtn4l"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="m+v0XQJV"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61E331AA9B;
-	Mon,  5 Jan 2026 02:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D6831B133;
+	Mon,  5 Jan 2026 02:38:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767580699; cv=none; b=rLmQGrKRtDk/94xD3UPg0sA/X+WjL2vJgf/5Yhs3HQRYOGLXFoM/Ec5PdJst9jZ4rhrl7+kKQk9WB6ylOgIVzjQQpDoUVjurtf0ve3ph5VYBmqOz5ORURoGYubUMUPX2n5Z/siExiaDbtkf4/4iUe/wAVggOv0uPbfsvk9sH0lE=
+	t=1767580742; cv=none; b=s/F+h4LuDBknCDan8hgytcHcghXRmKW7hBJ6etROxdfU04afHo1x7caBpZxNNPxAc91IEyLSMiTZPX6Om8lIR4ZYNa2PG0QcnPQ2s04W7TGjLmmKNdxubPGMs9K+Yizrx33ClAUp+GD+vfbgT5d6m5OR+g+NtL3LX70mdhmK4Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767580699; c=relaxed/simple;
-	bh=52wZE7gO6QMm5QpQWnFBi0J8PIBlhOyqamynRmIEAnE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=VH/IidzJg7tZNPJVTerec4gnSDkxXWIqrFnDhxFrx/BySUk7v/LUHm17vn15npCDf4cFlSP3GCVkgwz5Cialy/TX8+T+/gVsejT7QhINbJ2nLN2UsJpwvrVyyxdWOSDLj9Y9od/58ScGsW+3vhB2d0aNd/SZ/t9VKDhj7VYgUBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=YecCtn4l; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1767580742; c=relaxed/simple;
+	bh=kLMAqaX258C46AQmIpIh9JcAF1ndbyKjnSv5/5KFkNk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=iHw22o52Y6HcPBimzliL4gVghkfi0xgg6bv/iAIDp/72VZGPq/rF9SFuctReRKz5CiCONlAEvGalhHKTZF55I6HSfF2PyXLdOpyeaE5eN+WCaTvIre1JYe5gPfI5Cf3Ax5ZefplFGyorpMpbU1Rw7kxUCx5DepaPA7UD2nXhCcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=m+v0XQJV; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1767580693;
-	bh=IvYy8+SFlgXlbORH+cWUW3xw4G5yJ/9fCeS0Hqh1sp0=;
+	s=202503; t=1767580737;
+	bh=4b0Qgsdj6PhUN0Eh709p9p2/uj4wKui/kg8oHBw+irg=;
 	h=Date:From:To:Cc:Subject:From;
-	b=YecCtn4lZWPl2/CxzT1PQFFCeIEUX8nqnb3G1ESLdM96VWg2fnglUhUpDbz7u/SjB
-	 7sbeTk1T6lWaxNAE0bo5nO0E+pg1PDjGuWo+JgvNjGw1RNNE6zsDVUfh1nq9F5VCEZ
-	 kfxXHqOtjfV/6DMBacZBD2BV+Cy8V4kukRxMbTJc63JT+l76UE/o3X8FMlsCJ4HruK
-	 OEjA9rKtp5zgiFTKS9JD7geYISm5aoQlQrrRO1QQSlPSIt8J8FpfT4kM8oNhgW56xf
-	 i7It/JMwvusm7hz0o+Fcf7E0F+rMqKba6lZGqT5a4bliwYuVf03RF/ZmN5z6lrXCLo
-	 q1XzKHUmRLayA==
+	b=m+v0XQJVAyeC9/VxY9ayErwLMJVzyVbH3bTz1BBgh/NhnZLmYCOHfJunxQ8oQgKBm
+	 fSrFQvNt9ZCqhUUL4O296zzn71Q8uCPbCLswFGDn4WZiDHjU61OzL/I283yArdXNZg
+	 Jcda4zlus1ZIvEXn24wud6BzxNMhYEtWBH7pf61PbAsilx/z2clcBly/UEDLvb7adV
+	 XBOuj8oUFbTprVwiVBYEBaDyYX56Ta8XcV5zxllLtHQUrDjopEKffHoWVbJQoUF2lq
+	 j+cgOxqGj6eszfP1gdKNVWP/OLy85SPlqKeiSdYDxwH4j5HOjyde/TkR5hmWv3VH9F
+	 BoW54DE1W/D/A==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dkz4N15Hbz4w0H;
-	Mon, 05 Jan 2026 13:38:11 +1100 (AEDT)
-Date: Mon, 5 Jan 2026 13:38:10 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dkz5C0RHdz4wDk;
+	Mon, 05 Jan 2026 13:38:55 +1100 (AEDT)
+Date: Mon, 5 Jan 2026 13:38:54 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Helge Deller <deller@gmx.de>, Dave Airlie <airlied@redhat.com>
-Cc: Jani Nikula <jani.nikula@intel.com>, DRI
- <dri-devel@lists.freedesktop.org>, Linux Kernel Mailing List
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
+ "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>, Geert
+ Uytterhoeven <geert+renesas@glider.be>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Prasanna Kumar T S M
- <ptsm@linux.microsoft.com>
-Subject: linux-next: manual merge of the fbdev tree with the drm tree
-Message-ID: <20260105133810.37a2af1d@canb.auug.org.au>
+ <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the tip tree with the renesas tree
+Message-ID: <20260105133854.166d32b8@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nHn4+IosAIeOIutk54cEsVY";
+Content-Type: multipart/signed; boundary="Sig_/QfunTAlH9ukuF_tR1wxVpcJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/nHn4+IosAIeOIutk54cEsVY
+--Sig_/QfunTAlH9ukuF_tR1wxVpcJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the fbdev tree got a conflict in:
+Today's linux-next merge of the tip tree got a conflict in:
 
-  drivers/gpu/drm/Kconfig
+  arch/arm64/boot/dts/renesas/r9a09g077.dtsi
 
 between commit:
 
-  6d2b55f7d701 ("drm/hyperv: move Kconfig under driver directory")
+  2d8568dddc7b ("arm64: dts: renesas: r9a09g077: Add ICU support")
 
-from the drm tree and commit:
+from the renesas tree and commit:
 
-  18e7e9aa3237 ("drm/hyperv: Remove reference to hyperv_fb driver")
+  9b1138aef9a2 ("arm64: dts: renesas: r9a09g077: Add ICU support")
 
-from the fbdev tree.
+from the tip tree.
 
-I fixed it up (I used the former version of this files and applied the
-following merge resolution patch) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 5 Jan 2026 13:29:10 +1100
-Subject: [PATCH] fix up for "drm/hyperv: Remove reference to hyperv_fb driv=
-er"
-
-interacting with commit
-
-  6d2b55f7d701 ("drm/hyperv: move Kconfig under driver directory")
-
-from the drm tree.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/hyperv/Kconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/hyperv/Kconfig b/drivers/gpu/drm/hyperv/Kconfig
-index 86234f6a73f2..e48e35fb7f8b 100644
---- a/drivers/gpu/drm/hyperv/Kconfig
-+++ b/drivers/gpu/drm/hyperv/Kconfig
-@@ -8,7 +8,6 @@ config DRM_HYPERV
- 	help
- 	 This is a KMS driver for Hyper-V synthetic video device. Choose this
- 	 option if you would like to enable drm driver for Hyper-V virtual
--	 machine. Unselect Hyper-V framebuffer driver (CONFIG_FB_HYPERV) so
--	 that DRM driver is used by default.
-+	 machine.
-=20
- 	 If M is selected the module will be called hyperv_drm.
---=20
-2.52.0
+I fixed it up (I arbitrarily used the former version) and can carry the
+fix as necessary. This is now fixed as far as linux-next is concerned,
+but any non trivial conflicts should be mentioned to your upstream
+maintainer when your tree is submitted for merging.  You may also want
+to consider cooperating with the maintainer of the conflicting tree to
+minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/nHn4+IosAIeOIutk54cEsVY
+--Sig_/QfunTAlH9ukuF_tR1wxVpcJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlbJBIACgkQAVBC80lX
-0GxIZQgAiTumsYcrtsyrScYPxFmTY7cwgpIcZQzhRdDCtx4Uc27G4SSwycGqmQ7o
-4v7hiVq2H5HxWydZhwhmj+No52YCE72Dd8A6g4Z8zk9TOwYoudOaho8l+/NsEqE1
-d3vbT3TSQMWvjOlZObPp+1Tfj4ql6q9qDKqyCcLXsvMy+PnozgM9HITk0vaFSSLd
-KcjCF1ZL+6I5dJuH2l5TvVWKc70ha6IJuGGO4ykGCOX0+HuCQeocCVBQJEzKG/n2
-FH1x2QWIDjRogOyu7547CSGPwCL2jIMF8rV51ln71w94cjjtBYui+RMOTWc0Zoz9
-yDnB7FZbXo8qYnBo727swWbfocklsA==
-=LyDh
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmlbJD4ACgkQAVBC80lX
+0GyO8Af/UlyaJkhJEqKtYNiMMkGWLRW+m8N9sDWed0KvT5kc2hd3Mp7QsYXTfCAJ
+gNwbJu8DomGJAh3EJSlt+koXJootQuJIdgeV9Emmw0M8tS0PQ/GXMVpvftZA/6gA
+kheZ0xHTVzeXSlYfEaz3FBg+PL7wIQxoKvDQc37d6kqdMvsxZh+WD6RXHOcxO5xE
+EK5CRrDx2lX/be7OUZ2l8H7czasBE0fjSXBJEGF9BasL7gQNzvBCzItX21xoNUTT
+NXhGa6BYZ0tdDnu9mYPfLplU1rkptdvyyWLSIR1eFgkUmpEJx8XlSECDUjsajaVQ
+oXmkUWtTNULbjWR4hNt/zlUSB+GdNQ==
+=fgfM
 -----END PGP SIGNATURE-----
 
---Sig_/nHn4+IosAIeOIutk54cEsVY--
+--Sig_/QfunTAlH9ukuF_tR1wxVpcJ--
 

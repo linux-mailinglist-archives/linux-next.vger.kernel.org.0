@@ -1,154 +1,162 @@
-Return-Path: <linux-next+bounces-9552-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9553-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id E758BCF677C
-	for <lists+linux-next@lfdr.de>; Tue, 06 Jan 2026 03:30:23 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CAA4CF67FA
+	for <lists+linux-next@lfdr.de>; Tue, 06 Jan 2026 03:44:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E61E03024254
-	for <lists+linux-next@lfdr.de>; Tue,  6 Jan 2026 02:30:22 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6FAA73008703
+	for <lists+linux-next@lfdr.de>; Tue,  6 Jan 2026 02:44:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB0111F1932;
-	Tue,  6 Jan 2026 02:30:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="WJ1WyFDO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9724236435;
+	Tue,  6 Jan 2026 02:44:39 +0000 (UTC)
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pg1-f196.google.com (mail-pg1-f196.google.com [209.85.215.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1901818024
-	for <linux-next@vger.kernel.org>; Tue,  6 Jan 2026 02:30:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E61CE20468E;
+	Tue,  6 Jan 2026 02:44:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767666621; cv=none; b=PK6z32L6+WxtQ4VIgnI0ki6LWQi7RJnHfjCdlVJxlZhhR5AapMGq/PPnXXak1ZZxOq4XdifTd4Ymr2F0XCoJQzTh2400wJgNtB2sBO7q1O6gQMmeiLxXoTl3L49A4mxBOS6NQvT7KjCKfaraJBD/irQrJ9QSzojI1qIpa4tM/tQ=
+	t=1767667479; cv=none; b=aGJj8yQxMSJI1UjIy1wNip69DSuA5HTKnDmJD3umP8lRBvwaPRwb4FXScbDh0475OVFLjI+JTOm7medB0B/6KLH3DIW2QEq7f2HWLeRIH7fcPKkMpCJLIF3MPjmgbeoh1UM9t9lRsy1z7OD4CG0s7xyfVRvIgn3Xf11hVaGiguM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767666621; c=relaxed/simple;
-	bh=6K/I9VQ+IgYfarLrB/6Xd/NjOHJFD84cxhY9vKsS9m0=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=m1SAGofNmh4YhincP6MJbqYpd3VX7lLJzOtOf8WnPHYSNFCBc3kbUr66hPI9niCUrBj9g9kSlSBxKkbnd34mQ9Q3B53Ef+YN7B6oeDRxlOiM0v2CjiNXis5YuZYkbwiJChjSfUyB7j9+KY8i6lWwIhe3SRKDBAG+uj25fGwuUzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=WJ1WyFDO; arc=none smtp.client-ip=209.85.215.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f196.google.com with SMTP id 41be03b00d2f7-c0ec27cad8cso300127a12.1
-        for <linux-next@vger.kernel.org>; Mon, 05 Jan 2026 18:30:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1767666619; x=1768271419; darn=vger.kernel.org;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6/wK/E6YCKp5v0chT8T2wZCnVJUI4BbFkckGecLN2mM=;
-        b=WJ1WyFDOgfMUhi9n4CGUL+FITbPUlmc3FUBfLREMEoGLIm7IysXoQ4AnXSeDv6JpwB
-         rETDs2/r4AUqJ7LstVVwMlJndh4CVU8joUHIId8NLQI4o4Ya2oylC2Zx3i8VnTWNkUxm
-         sNgwlUsXDb8yVeDUAsoUKObmgo4WlxtSDXv90opKfF3kgB4QxVuMFqijZA7ockniXWWr
-         ISNeRVf3rB7Iz/jwe1IksiF6FrCYc1x7yMn1Ngmm1vBeRSpP5piz8RpEnfP0Nwy19fQd
-         LuSJcDGBrT4LMA3s9HZHY4MZNZn3f2dWWMreWhHnl2sHKG6HA3exZ9PfdXdN5R2v8tdE
-         TLYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767666619; x=1768271419;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6/wK/E6YCKp5v0chT8T2wZCnVJUI4BbFkckGecLN2mM=;
-        b=JasACHZSmGkPlpwTq18I/KgSD52CYkQIXUqZGt6+jZ0BoxZOk0kXN6w3nk/i1aNAJe
-         jTqEafeDwped+8c7vxD9jvjTOjk30/O2xLuyNmVu+4kL0fiMsZCnwCz2R4wR+nSJaRI/
-         tyr6kSQNAWbNxgk9I5UlqF+r4q9KeoBAbIJK2M+L+tah8kcPj1XEseFuZh3Qd9WHn5+E
-         PcApTgAQFE04caUmwE93DseTCtT0Y8/AgXT+S2nrSbnKnRWYHbc68zst0QDXzfuPtHe3
-         IHsJCNXrMeQYJpFY1vjNhblbp/zYDmfrlhMXINzYYb4GsKiqjg7dGmekw543IvMdIhgJ
-         cE+w==
-X-Gm-Message-State: AOJu0YxVp/Z+X8ckbQOTFCsN4gMkV21GDW8wHewmlmB9vP4GRGhfYnKQ
-	IhR3QcvJUa75O2z2K89BxjyRcYuw7nGfCTD0A4tyzblhYKQs2LDx/OPqmmS2vJ0GnF4=
-X-Gm-Gg: AY/fxX7k7DGwHPxzeTEnhTeKA9TPK06Cz23oiKtgx/r1Zdt9i93TCExdH/FEh8yjXjN
-	KwrDu04Swu3L475y2krZQDtTvTKxHn2ETEdVSlW5Xg5N2w1dcmxXwqp9JKX2hn8FX7ZR2IyhxbZ
-	sQWdQWiJEXHheD8T1g5bnN7qcpIaINRJfcmL/xP4QRYd9t4w98Ws7uuG55tedKsro+UvbjYJ+Fe
-	2DtIIAzYPxTZEylVbxXeajWfxx4+dm5Dm3ea5LAtNBTFdOGxaxVSWYL3kkPh9RUA4+6kVf5ABkv
-	WuNIno0yH4IpAdQEEq8oUQ0uFvEzUJVyGMEp/4L07lOac+f476J5KPyZXE9fq40ZOZmCV0Uv7XS
-	tCJkBOlFgJJm4drdCpmri0v8Ne2PSusgdfn1QSCFgZRkL+BCg29hDKFP9yyfnQIev+Dvn4u35iT
-	AgAMH+
-X-Google-Smtp-Source: AGHT+IE8MHjBjEYmoEQP9nuzRcqIGTy6+ZL5vaRTnU0e1+k2He630SwBak18i/zxjD4j/Q0sN8XOvg==
-X-Received: by 2002:a05:693c:621a:b0:2b0:2e5:228b with SMTP id 5a478bee46e88-2b16f954d25mr948561eec.33.1767666618653;
-        Mon, 05 Jan 2026 18:30:18 -0800 (PST)
-Received: from 0dbd87e801fb ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1707b13bdsm1245157eec.24.2026.01.05.18.30.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jan 2026 18:30:18 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1767667479; c=relaxed/simple;
+	bh=xl8NxzKHk60ABfeTu1tc38ZYZqWuMncWIqmfh9j+rVE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fgNCpWOxVUzuWNfa12dzHi8vYcqEWUrO0lksE+XqZIpwHs6tCV+OSg5zp5WeNQSUKkQWIp8sOzbhPMkrK30pdg0/OJ6hNTTPegVlmrJIhmatZjoiy2qGqsk9tu6RheOvQxux7LPe2mTwW8Et8MKJ3wWvBLjrLWfQkBN7DD6b1+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dlb862KVLzYQtgV;
+	Tue,  6 Jan 2026 10:43:34 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 2181340577;
+	Tue,  6 Jan 2026 10:44:34 +0800 (CST)
+Received: from [10.67.111.176] (unknown [10.67.111.176])
+	by APP4 (Coremail) with SMTP id gCh0CgA35vYQd1xp4sMoCw--.16779S2;
+	Tue, 06 Jan 2026 10:44:33 +0800 (CST)
+Message-ID: <014d87db-f389-4bba-be79-f5650ad08003@huaweicloud.com>
+Date: Tue, 6 Jan 2026 10:44:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: linux-next: manual merge of the bpf-next tree with the
+ mm-unstable tree
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, bpf <bpf@vger.kernel.org>,
+ Networking <netdev@vger.kernel.org>, Chen Ridong <chenridong@huawei.com>,
+ JP Kobryn <inwardvessel@gmail.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>
+References: <20260105130413.273ee0ee@canb.auug.org.au>
+ <CAADnVQKkphWpwKE17bGQao36dH8xqCyV-iXDcagrO7s-VOPE-w@mail.gmail.com>
+Content-Language: en-US
+From: Chen Ridong <chenridong@huaweicloud.com>
+In-Reply-To: <CAADnVQKkphWpwKE17bGQao36dH8xqCyV-iXDcagrO7s-VOPE-w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: [STATUS] next/master - f8f97927abf7c12382dddc93a144fc9df7919b77
-From: KernelCI bot <bot@kernelci.org>
-To: kernelci-results@groups.io
-Cc: linux-next@vger.kernel.org
-Reply-To: kernelci@lists.linux.dev
-Date: Tue, 06 Jan 2026 02:30:18 -0000
-Message-ID: <176766661762.8999.18055498503866811308@0dbd87e801fb>
+X-CM-TRANSID:gCh0CgA35vYQd1xp4sMoCw--.16779S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZw1ruF48tF1UCFWkCw43trb_yoW5XrWrpF
+	ZrA3W3KayUArWrJF4Ska4j9a4fZw1xXw12yr9Ig348ZFy3tw1fXasxCws8CF15CF9YgF13
+	trZxtw1kGw43AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8
+	ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1
+	7KsUUUUUU==
+X-CM-SenderInfo: hfkh02xlgr0w46kxt4xhlfz01xgou0bp/
 
 
 
+On 2026/1/6 10:15, Alexei Starovoitov wrote:
+> On Sun, Jan 4, 2026 at 6:04 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Hi all,
+>>
+>> Today's linux-next merge of the bpf-next tree got a semantic conflict in:
+>>
+>>   include/linux/memcontrol.h
+>>   mm/memcontrol-v1.c
+>>   mm/memcontrol.c
+>>
+>> between commit:
+>>
+>>   eb557e10dcac ("memcg: move mem_cgroup_usage memcontrol-v1.c")
+>>
+>> from the mm-unstable tree and commit:
+>>
+>>   99430ab8b804 ("mm: introduce BPF kfuncs to access memcg statistics and events")
+>>
+>> from the bpf-next tree producing this build failure:
+>>
+>> mm/memcontrol-v1.c:430:22: error: static declaration of 'mem_cgroup_usage' follows non-static declaration
+>>   430 | static unsigned long mem_cgroup_usage(struct mem_cgroup *memcg, bool swap)
+>>       |                      ^~~~~~~~~~~~~~~~
+>> In file included from mm/memcontrol-v1.c:3:
+>> include/linux/memcontrol.h:953:15: note: previous declaration of 'mem_cgroup_usage' with type 'long unsigned int(struct mem_cgroup *, bool)' {aka 'long unsigned int(struct mem_cgroup *, _Bool)'}
+>>   953 | unsigned long mem_cgroup_usage(struct mem_cgroup *memcg, bool swap);
+>>       |               ^~~~~~~~~~~~~~~~
+>>
+>> I fixed it up (I reverted the mm-unstable tree commit) and can carry the
+>> fix as necessary. This is now fixed as far as linux-next is concerned,
+>> but any non trivial conflicts should be mentioned to your upstream
+>> maintainer when your tree is submitted for merging.  You may also want
+>> to consider cooperating with the maintainer of the conflicting tree to
+>> minimise any particularly complex conflicts.
+> 
+> Hey All,
+> 
+> what's the proper fix here?
+> 
+> Roman,
+> 
+> looks like adding mem_cgroup_usage() to include/linux/memcontrol.h
+> wasn't really necessary, since kfuncs don't use it anyway?
+> Should we just remove that line in bpf-next?
+> 
 
+I agree, mem_cgroup_usage() is not declared in next.
 
-Hello,
+I'm wondering why there is a difference between next and bpf-next.
 
-Status summary for next/master
+> Just:
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index 6a5d65487b70..229ac9835adb 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -950,7 +950,6 @@ static inline void mod_memcg_page_state(struct page *page,
+>  }
+> 
+>  unsigned long memcg_events(struct mem_cgroup *memcg, int event);
+> -unsigned long mem_cgroup_usage(struct mem_cgroup *memcg, bool swap);
+>  unsigned long memcg_page_state(struct mem_cgroup *memcg, int idx);
+>  unsigned long memcg_page_state_output(struct mem_cgroup *memcg, int item);
+>  bool memcg_stat_item_valid(int idx);
+> 
+> compiles fine.
+> 
+> If you agree pls send an official patch.
+> 
 
-Dashboard:
-https://d.kernelci.org/c/next/master/f8f97927abf7c12382dddc93a144fc9df7919b77/
+-- 
+Best regards,
+Ridong
 
-giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-branch: master
-commit hash: f8f97927abf7c12382dddc93a144fc9df7919b77
-origin: maestro
-test start time: 2026-01-05 06:10:23.373000+00:00
-
-Builds:	   52 ✅    2 ❌    0 ⚠️
-Boots: 	  162 ✅    6 ❌    0 ⚠️
-Tests: 	17932 ✅ 2055 ❌ 5116 ⚠️
-
-### POSSIBLE REGRESSIONS
-
-  No possible regressions observed.
-
-
-### FIXED REGRESSIONS
-    
-Hardware: bcm2711-rpi-4-b
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-14
-      - kselftest.dt
-      last run: https://d.kernelci.org/test/maestro:695b5e3acbfd84c3cdd98937
-      history:  > ❌  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh
-      last run: https://d.kernelci.org/test/maestro:695b7af7cbfd84c3cdd9e7d2
-      history:  > ❌  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_mmc_7e300000
-      last run: https://d.kernelci.org/test/maestro:695b7af7cbfd84c3cdd9e7e4
-      history:  > ❌  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_wifi-pwrseq
-      last run: https://d.kernelci.org/test/maestro:695b7af7cbfd84c3cdd9e7d3
-      history:  > ❌  > ✅  
-            
-
-
-### UNSTABLE TESTS
-
-  No unstable tests observed.
-
-
-
-This branch has 2 pre-existing build issues. See details in the dashboard.
-
-Sent every day if there were changes in the past 24 hours.
-Legend: ✅ PASS   ❌ FAIL  ⚠️ INCONCLUSIVE
-
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
-
-Made with love by the KernelCI team - https://kernelci.org
 

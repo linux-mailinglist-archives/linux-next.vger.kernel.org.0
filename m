@@ -1,164 +1,278 @@
-Return-Path: <linux-next+bounces-9567-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9568-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93E25CFBADA
-	for <lists+linux-next@lfdr.de>; Wed, 07 Jan 2026 03:14:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7D17CFBBFE
+	for <lists+linux-next@lfdr.de>; Wed, 07 Jan 2026 03:36:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6A02E304A96B
-	for <lists+linux-next@lfdr.de>; Wed,  7 Jan 2026 02:14:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 72E753093B22
+	for <lists+linux-next@lfdr.de>; Wed,  7 Jan 2026 02:30:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 982D9261586;
-	Wed,  7 Jan 2026 02:11:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB661E0E14;
+	Wed,  7 Jan 2026 02:30:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="oQ4TeERV"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="Gl/05ZxA"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f196.google.com (mail-dy1-f196.google.com [74.125.82.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFD4D265CAD;
-	Wed,  7 Jan 2026 02:11:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 861E51E5201
+	for <linux-next@vger.kernel.org>; Wed,  7 Jan 2026 02:30:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767751878; cv=none; b=YRqKmNmgkZvt6fq7dX1cLAz21KhmqB506i0tZnuQPJT9st9lcRf62KN8wdvlJuifVh9kv/Hs1OPc2AM8PrcY4iMp0MzGTRLIWsJ3llPbN7AtXlIzP6vb+qH8q8TvuV1ubdIaPiRuPLsk1q4HwoZ7YbQY4J29rtyIbt3DjqaN188=
+	t=1767753011; cv=none; b=E0Bv6p8jQwcGb7RFREXDhbR0yvgCnKwyf7J2DnK+nfhnaBaxDm5Lvowx1+Ftl9ID39NcHyjl/EjH6IlSozOK/FPH95Us0nCmTK1tYn23kg7jDWtFLf8Ae0kwULufkrkwVRnXUp12EVt0TBNmVdMJjW3wy7zidd5+73y78Dl69As=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767751878; c=relaxed/simple;
-	bh=+937GN33pfx0GXuZCPC2uXwUhx4WHyoeYF1a+KbaICA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=QXskZcJfuDmHGctu7POJK0B3MwP73Bdt+hTRH43Yk51z8C+03lnZFqDzaQNjz/OtVmbG7Dr0tI9s3g3B//1qlE3O0ZlGrON+oS0cWo+ismvRHzeBAggA5wJJ4OZmMCthsBD7Oa0kKsYuHqW+9Vc7Q/SLEmZ7H21+PdzJ/exqgTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=oQ4TeERV; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1767751873;
-	bh=twbtpiOcgyDeFxbwY1UA80Aq7mw8adM1hIxtaNwhYxo=;
-	h=Date:From:To:Cc:Subject:From;
-	b=oQ4TeERVnn5ujFHqSA88iEZLXDv19UbQbdsC0x1ARnbg2gA5Qlj2XsZMx88NCvN7N
-	 CjRxnvAfbUd210T+P3Rh2AbJVGMygWIaA0Wbq3FFS9wX5kkU58nI7Ir70aTnyadLrD
-	 r379SNxwDGPpAROhXO4uFRwP5E9B3cF8evA6LXnDhM5I+V6M5rfvhMWwNkZ89CfRiM
-	 C0v8twxr1WPeDr00c0rHkX2v64kfkfTX6TWJMLiqKTnF+2Kj1stkxl5Zgr3nqVP7Om
-	 PhQmh0Zp5xOraKiFfPLQvpzbKMzbCtQkkD0QgtHUvkukALudfj9wkkZZ5Inl3cPT/f
-	 IN8se2FJMzZtA==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dmBNK3dvyz4wQc;
-	Wed, 07 Jan 2026 13:11:13 +1100 (AEDT)
-Date: Wed, 7 Jan 2026 13:11:12 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- "Cc: Andrew Morton" <akpm@linux-foundation.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Marco Elver <elver@google.com>,
- Pasha Tatashin <pasha.tatashin@soleen.com>
-Subject: linux-next: manual merge of the tip tree with the mm-nonmm-stable
- tree
-Message-ID: <20260107131112.69183629@canb.auug.org.au>
+	s=arc-20240116; t=1767753011; c=relaxed/simple;
+	bh=rEWFXTKoXlSluhC2b3MOqieyM7kMKCBuzuAgNenuvi4=;
+	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=HhL49LGEFlPf0XqY4TL760fQHWWRo8l4iidDbOEQOWKhM0WG5UNVxPbf/QR9SlJrTJ3MUTVgWa16IUZ1WCMrPkHPPRaHj8ZBQAA1bB8x4B4eyf/0UPaM/HuVrAdoBvPVngtfxsXYS9RNZ2v+oBjecd0NYJwKGRnaZDZA6ywzyr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=Gl/05ZxA; arc=none smtp.client-ip=74.125.82.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-dy1-f196.google.com with SMTP id 5a478bee46e88-2ae29ddaed9so163890eec.0
+        for <linux-next@vger.kernel.org>; Tue, 06 Jan 2026 18:30:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1767753006; x=1768357806; darn=vger.kernel.org;
+        h=message-id:date:reply-to:cc:to:from:subject
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CadpWJ5RxdOaaMBm07QVLi8XIp/SKQ+egNPNTNlZumw=;
+        b=Gl/05ZxApbMT9aBzUyX5J16Ndgreoh5wyP++ERYo6MjNe5BnRS/jCARfsfjwnbtr1O
+         +ZdOqFI0bPmuOJPAd5fWxZ20dCMIWDGq/mVTPLTRMwemeLULNFB7k3rw3SVPJzsrn92Q
+         cypLZnskkSBM1xVr2nr4D/+zcvNFDFsfcULuYPI4Yq3z5w4Q8jP/tB0Aar9bb3CTiMdw
+         dnpqpJdBjvmWjCA+IpWGza5TcLnP5f0P17a4uR924xT7qKxaMPnHWSt6+rFIM1BeWG1h
+         KFeUSHhZ5m/+ZyKsGCfgxWfHQP+pvk/MDxGo5n4sabZLbDVTa5j7zKVP9e22OvUpXLAp
+         PSjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767753006; x=1768357806;
+        h=message-id:date:reply-to:cc:to:from:subject
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CadpWJ5RxdOaaMBm07QVLi8XIp/SKQ+egNPNTNlZumw=;
+        b=tnnpwZ4COyRHfGuxFhRgvdHzgw03WdmZthpt1kP9mohURcHfw2xWEv0LCJ8ePSdwyi
+         maKy/0+GnQ7+Zr65DyweWuKScu/kiv8GXIHZMPRY266X56DeEJ669M8ZzVJF3cTP6K36
+         sutP0ZfVhH+89vAaw+TZfqEVrXAEV3mfFZqLWnUywaftfkr0JyojNpxrrBa5Gl4o60Gz
+         ZA81KwYPIV+W4PfooQlIMT9yxwVgbFP0nty2yjpeDFzR2Q6K+4QpKigOa2BM38uR3Ezt
+         DTwcXI4kE3qXnm7vYdfKGTwO8npwuJGsqD/KcDv6LUCFCK2QJUoBBNiC0SKYlSMwG5R6
+         0hLw==
+X-Gm-Message-State: AOJu0YwG+KbGIQa2/MARQZpYrwEyYhoe0ndnIHmpj25yml/sdiBlPJZW
+	rQAdAKEVw+g80dFfb5tC/8pTzwZijUksGwFZZlSv8Hr7ZOwVLcXwCiR7YjstxoZ90Vs=
+X-Gm-Gg: AY/fxX7Sifcz2SdmzsGI3VEXZ7rShKNaOmpu/Ppc7BiDuiED+ZggCmtix5f96GjDc/d
+	VoswLklyD8V5p+SndztMq06A4QGj7g26TdZr4lfP9dbr+1RNkZ2RznxiadfiO46d4/Ol9Jq8N/s
+	4WIUyniuQkHuP83lAMe96nZzxx+bXvV5JDdJx8TF2QYT5dtf/v97ibqitCrfhtLoWQhTFzqirS1
+	luqzIAHJGN0N6jS7FQtj6/2t168QxE5plYJCM7vVSb9AO2lbs1X2BwGfqHGeaF6Wmuv36ytR9Id
+	t8bIFVwt39urZ3vJ0aCQMYLtaYXtYsUPXo2hDSpy8kGGGyNkh9hhsiBjI7ql1iT3nzasEv+VaZF
+	fwslAsagvklEbQzZxhincxhRlTXLKA0UHQ4Y8nRo/XXWsP+l4ZDE4umijOSl2IWDTmOcWfgNWpn
+	5L7nKl
+X-Google-Smtp-Source: AGHT+IGGpUFUB87siCC2/6OYjwKT78Xueeeb25Q6NRKYtho6yfv+N6NBRGAdIE40HxH1ImcOd/dEAg==
+X-Received: by 2002:a05:7300:d511:b0:2ae:5abb:ecb5 with SMTP id 5a478bee46e88-2b16fe7868dmr3166594eec.14.1767753006236;
+        Tue, 06 Jan 2026 18:30:06 -0800 (PST)
+Received: from 0dbd87e801fb ([20.38.40.137])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1706a1383sm5499523eec.9.2026.01.06.18.30.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jan 2026 18:30:05 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IPFYw7+nKTq+VnqNGxJ28OB";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
+Subject: [STATUS] next/master - 6cd6c12031130a349a098dbeb19d8c3070d2dfbe
+From: KernelCI bot <bot@kernelci.org>
+To: kernelci-results@groups.io
+Cc: linux-next@vger.kernel.org
+Reply-To: kernelci@lists.linux.dev
+Date: Wed, 07 Jan 2026 02:30:05 -0000
+Message-ID: <176775300468.9466.14126958168909943159@0dbd87e801fb>
 
---Sig_/IPFYw7+nKTq+VnqNGxJ28OB
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
 
-  lib/Kconfig.debug
 
-between commit:
+Hello,
 
-  e8a6a3f8fc19 ("tests/liveupdate: add in-kernel liveupdate test")
+Status summary for next/master
 
-from the mm-nonmm-stable tree and commit:
+Dashboard:
+https://d.kernelci.org/c/next/master/6cd6c12031130a349a098dbeb19d8c3070d2dfbe/
 
-  9b00c1609dee ("compiler-context-analysis: Add test stub")
+giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+branch: master
+commit hash: 6cd6c12031130a349a098dbeb19d8c3070d2dfbe
+origin: maestro
+test start time: 2026-01-06 02:03:03.018000+00:00
 
-from the tip tree.
+Builds:	   52 ✅    2 ❌    0 ⚠️
+Boots: 	  165 ✅    3 ❌    0 ⚠️
+Tests: 	19274 ✅ 2071 ❌ 5166 ⚠️
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+### POSSIBLE REGRESSIONS
+    
+Hardware: mt8183-kukui-jacuzzi-juniper-sku16
+  > Config: defconfig+lab-setup+arm64-chromebook+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y
+    - Architecture/compiler: arm64/gcc-14
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_mmc_11240000
+      last run: https://d.kernelci.org/test/maestro:695c82b7cbfd84c3cddbec84
+      history:  > ✅  > ❌  
+            
+      - kselftest.dt.dt_test_unprobed_devices_sh_wifi-pwrseq
+      last run: https://d.kernelci.org/test/maestro:695c82b7cbfd84c3cddbec40
+      history:  > ✅  > ❌  
+            
+Hardware: mt8186-corsola-steelix-sku131072
+  > Config: defconfig+lab-setup+arm64-chromebook+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y
+    - Architecture/compiler: arm64/gcc-14
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_mmc_11240000
+      last run: https://d.kernelci.org/test/maestro:695c82a0cbfd84c3cddbe9a7
+      history:  > ✅  > ❌  
+            
+      - kselftest.dt.dt_test_unprobed_devices_sh_wifi-pwrseq
+      last run: https://d.kernelci.org/test/maestro:695c82a0cbfd84c3cddbe92d
+      history:  > ✅  > ❌  
+            
+Hardware: sun50i-h5-libretech-all-h3-cc
+  > Config: defconfig+lab-setup+kselftest
+    - Architecture/compiler: arm64/gcc-14
+      - kselftest.device_error_logs
+      last run: https://d.kernelci.org/test/maestro:695c8b8fcbfd84c3cddc0813
+      history:  > ✅  > ❌  
+            
+      - kselftest.device_error_logs.devices_error_logs_test_device_error_logs_py
+      last run: https://d.kernelci.org/test/maestro:695c8cfacbfd84c3cddc12cf
+      history:  > ✅  > ❌  
+            
+Hardware: x1e80100
+  > Config: defconfig+lab-setup+kselftest
+    - Architecture/compiler: arm64/gcc-14
+      - kselftest-timers-ramdisk.timers_rtcpie
+      last run: https://d.kernelci.org/test/maestro:695c9373cbfd84c3cddc2c31
+      history:  > ✅  > ❌  
+            
+Hardware: dell-latitude-5400-4305U-sarien
+  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
+    - Architecture/compiler: x86_64/gcc-14
+      - kselftest.cpufreq.hibernate
+      last run: https://d.kernelci.org/test/maestro:695c810ecbfd84c3cddbd4a9
+      history:  > ✅  > ❌  > ❌  
+            
+      - kselftest.cpufreq.hibernate.cpufreq_main_sh
+      last run: https://d.kernelci.org/test/maestro:695c810ecbfd84c3cddbd4aa
+      history:  > ✅  > ❌  
+            
 
---=20
-Cheers,
-Stephen Rothwell
 
-diff --cc lib/Kconfig.debug
-index 36564f85bc95,22ea11f24e92..000000000000
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@@ -2802,29 -2827,20 +2824,43 @@@ config LINEAR_RANGES_TES
- =20
-  	  If unsure, say N.
- =20
- +config LIVEUPDATE_TEST
- +	bool "Live Update Kernel Test"
- +	default n
- +	depends on LIVEUPDATE
- +	help
- +	  Enable a built-in kernel test module for the Live Update
- +	  Orchestrator.
- +
- +	  This module validates the File-Lifecycle-Bound subsystem by
- +	  registering a set of mock FLB objects with any real file handlers
- +	  that support live update (such as the memfd handler).
- +
- +	  When live update operations are performed, this test module will
- +	  output messages to the kernel log (dmesg), confirming that its
- +	  registration and various callback functions (preserve, retrieve,
- +	  finish, etc.) are being invoked correctly.
- +
- +	  This is a debugging and regression testing tool for developers
- +	  working on the Live Update subsystem. It should not be enabled in
- +	  production kernels.
- +
- +	  If unsure, say N
- +
-+ config CONTEXT_ANALYSIS_TEST
-+ 	bool "Compiler context-analysis warnings test"
-+ 	depends on EXPERT
-+ 	help
-+ 	  This builds the test for compiler-based context analysis. The test
-+ 	  does not add executable code to the kernel, but is meant to test that
-+ 	  common patterns supported by the analysis do not result in false
-+ 	  positive warnings.
-+=20
-+ 	  When adding support for new context locks, it is strongly recommended
-+ 	  to add supported patterns to this test.
-+=20
-+ 	  If unsure, say N.
-+=20
-  config CMDLINE_KUNIT_TEST
-  	tristate "KUnit test for cmdline API" if !KUNIT_ALL_TESTS
-  	depends on KUNIT
+### FIXED REGRESSIONS
+    
+Hardware: mt8183-kukui-jacuzzi-juniper-sku16
+  > Config: defconfig+lab-setup+arm64-chromebook+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y
+    - Architecture/compiler: arm64/gcc-14
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_dma-controller0_14001000
+      last run: https://d.kernelci.org/test/maestro:695c82b7cbfd84c3cddbeca9
+      history:  > ❌  > ✅  
+            
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_dsi_14014000
+      last run: https://d.kernelci.org/test/maestro:695c82b7cbfd84c3cddbeca6
+      history:  > ❌  > ✅  
+            
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_i2c_11008000_anx7625_58
+      last run: https://d.kernelci.org/test/maestro:695c82b7cbfd84c3cddbec9e
+      history:  > ❌  > ✅  
+            
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_i2c_11008000_anx7625_58_aux-bus_panel
+      last run: https://d.kernelci.org/test/maestro:695c82b7cbfd84c3cddbec9d
+      history:  > ❌  > ✅  
+            
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_ovl_14008000
+      last run: https://d.kernelci.org/test/maestro:695c82b7cbfd84c3cddbec81
+      history:  > ❌  > ✅  
+            
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_ovl_14009000
+      last run: https://d.kernelci.org/test/maestro:695c82b7cbfd84c3cddbec80
+      history:  > ❌  > ✅  
+            
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_ovl_1400a000
+      last run: https://d.kernelci.org/test/maestro:695c82b7cbfd84c3cddbec7f
+      history:  > ❌  > ✅  
+            
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_rdma_1400b000
+      last run: https://d.kernelci.org/test/maestro:695c82b7cbfd84c3cddbec74
+      history:  > ❌  > ✅  
+            
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_rdma_1400c000
+      last run: https://d.kernelci.org/test/maestro:695c82b7cbfd84c3cddbec73
+      history:  > ❌  > ✅  
+            
+Hardware: acer-chromebox-cxi4-puff
+  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
+    - Architecture/compiler: x86_64/gcc-14
+      - kselftest.cpufreq.suspend
+      last run: https://d.kernelci.org/test/maestro:695c7f56cbfd84c3cddbc77c
+      history:  > ❌  > ✅  
+            
+      - kselftest.cpufreq.suspend.cpufreq_main_sh
+      last run: https://d.kernelci.org/test/maestro:695c80a7cbfd84c3cddbcdd0
+      history:  > ❌  > ✅  
+            
+Hardware: dell-latitude-5400-4305U-sarien
+  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
+    - Architecture/compiler: x86_64/gcc-14
+      - kselftest.cpufreq.suspend
+      last run: https://d.kernelci.org/test/maestro:695c7f59cbfd84c3cddbc797
+      history:  > ❌  > ✅  
+            
+      - kselftest.cpufreq.suspend.cpufreq_main_sh
+      last run: https://d.kernelci.org/test/maestro:695c81cccbfd84c3cddbe365
+      history:  > ❌  > ✅  
+            
 
---Sig_/IPFYw7+nKTq+VnqNGxJ28OB
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
+### UNSTABLE TESTS
+    
+Hardware: bcm2711-rpi-4-b
+  > Config: defconfig+lab-setup+kselftest
+    - Architecture/compiler: arm64/gcc-14
+      - kselftest.dt
+      last run: https://d.kernelci.org/test/maestro:695c8b96cbfd84c3cddc0858
+      history:  > ❌  > ✅  > ❌  > ❌  
+            
+      - kselftest.dt.dt_test_unprobed_devices_sh
+      last run: https://d.kernelci.org/test/maestro:695d4f5ccbfd84c3cddce544
+      history:  > ❌  > ✅  > ❌  > ❌  
+            
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_mmc_7e300000
+      last run: https://d.kernelci.org/test/maestro:695d4f5ccbfd84c3cddce556
+      history:  > ❌  > ✅  > ❌  > ❌  
+            
+      - kselftest.dt.dt_test_unprobed_devices_sh_wifi-pwrseq
+      last run: https://d.kernelci.org/test/maestro:695d4f5ccbfd84c3cddce545
+      history:  > ❌  > ✅  > ❌  > ❌  
+            
+Hardware: mt8183-kukui-jacuzzi-juniper-sku16
+  > Config: defconfig+lab-setup+arm64-chromebook+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y
+    - Architecture/compiler: arm64/gcc-14
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_mmc_11240000_qca-wifi_1
+      last run: https://d.kernelci.org/test/maestro:695c82b7cbfd84c3cddbec83
+      history:  > ✅  > ⚠️  
+            
+Hardware: mt8186-corsola-steelix-sku131072
+  > Config: defconfig+lab-setup+arm64-chromebook+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y
+    - Architecture/compiler: arm64/gcc-14
+      - kselftest.dt.dt_test_unprobed_devices_sh_soc_mmc_11240000_bluetooth_2
+      last run: https://d.kernelci.org/test/maestro:695c82a0cbfd84c3cddbe9a5
+      history:  > ✅  > ⚠️  
+            
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmldwMAACgkQAVBC80lX
-0Gyzvgf/bI9LUKwMMB23fdqcU20eJKnGmqh6jSr+Bruut/bDerRz548cmpJhwuDt
-zEKvCfqTfaPHWc47SIWRRy2x8sAQtCbuRjnrLnZZQwBTpyaqRXZ2VJvbWwLjE7c0
-bLU40cPEWdfcp15iAwTT5cY2bFautILhQbOKwlxVLbo+xyBOeI4WJB8BVbCEKkOT
-z32d0bcNt1GjyotKuHev+4/07fg2VPnWWwiAQkmIAIOlsRq+Vt1qFq3vPA9wWs2f
-tJiSJYB5Ddczut/pIINnaoV2IWRuJTncZLXsg66lTebjAqgM1EQqQAwbAtdizV3j
-tLjCJZehzuLl7Sq77S4lTHm9sdgemA==
-=h74T
------END PGP SIGNATURE-----
 
---Sig_/IPFYw7+nKTq+VnqNGxJ28OB--
+
+This branch has 2 pre-existing build issues. See details in the dashboard.
+
+Sent every day if there were changes in the past 24 hours.
+Legend: ✅ PASS   ❌ FAIL  ⚠️ INCONCLUSIVE
+
+--
+This is an experimental report format. Please send feedback in!
+Talk to us at kernelci@lists.linux.dev
+
+Made with love by the KernelCI team - https://kernelci.org
 

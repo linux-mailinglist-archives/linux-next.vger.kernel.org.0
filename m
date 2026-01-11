@@ -1,490 +1,194 @@
-Return-Path: <linux-next+bounces-9608-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9609-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D951D0CD7F
-	for <lists+linux-next@lfdr.de>; Sat, 10 Jan 2026 03:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 13CE0D0EA71
+	for <lists+linux-next@lfdr.de>; Sun, 11 Jan 2026 12:03:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 7FED030092AB
-	for <lists+linux-next@lfdr.de>; Sat, 10 Jan 2026 02:31:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A58DE3002842
+	for <lists+linux-next@lfdr.de>; Sun, 11 Jan 2026 11:03:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 543541C3C08;
-	Sat, 10 Jan 2026 02:31:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77974227E95;
+	Sun, 11 Jan 2026 11:03:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="PR/ckLhM"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="H51IW24t"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-dy1-f195.google.com (mail-dy1-f195.google.com [74.125.82.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A11817B50A
-	for <linux-next@vger.kernel.org>; Sat, 10 Jan 2026 02:31:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 118F91F583D;
+	Sun, 11 Jan 2026 11:02:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768012285; cv=none; b=ew5H0UfR0PJ+SG0wT1GIsZKCoIpQMuebDS7ZRnzSLsWcXJUvb4sri4cw1hvju79VWhvxuIkEXnkKv/4rOG4I+aZyFNQidnO+W+dMzecZORji+AT6dbhyV3OA22EYRBuF1jHePbNeaixf4fXLoDU3X/HAXfed39pNrLJyHkOZxJ8=
+	t=1768129384; cv=none; b=Hh0YMw15s1jD+uhkWOGbIyVdxq6dj2ZJVlkO5GnNzCSxFuLr9PTTN4PKD6vrHVnEw4H0eq5PXUk6Mg54KaNsX13+OmKF9qOAEL98OEHfmdhcI+GNxC3nXBf2dwvD+Fs1JogUtxWOal7fMil2NDJNrF4Aulk7GS1Ip6nucdhQNTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768012285; c=relaxed/simple;
-	bh=VF/jPjc+09efTlcHyg5FqxSRDVmY1Sz+h+nMwLgb9fI=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=hNhMcrF1rg6ZtxbRxcMNsIhnsEIj+To2hwOi8yLysmQArm+wkmzC9lR4Ay5P1H75oBAjVhaxcq5Xh3Xjlrgh0qTSdh2wh9qzsoy6GfckiAbEukw5SGgoYRTZCRagzJhV4jEIrc13oSfjXYGbVjjRwNbNCgTTS3x04mmii1uQjQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=PR/ckLhM; arc=none smtp.client-ip=74.125.82.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-dy1-f195.google.com with SMTP id 5a478bee46e88-2b0ea1edf11so11470487eec.0
-        for <linux-next@vger.kernel.org>; Fri, 09 Jan 2026 18:31:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1768012282; x=1768617082; darn=vger.kernel.org;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=esK8M2HWgJvBnKJTJUwUWEQwzA4o1sfgjBJmOxOL5rQ=;
-        b=PR/ckLhMJidYU1sCvhs3cgrFLRZxDwJE8PBqo8yozPBXh7qbzXyuOdoX/PUBPRUX0l
-         814qtkwJS3q+NvuuPoF9zV8UpDAe4hfeEv1U5QGYZz2d0RHtLvOfd80ZJZz0nbqDnAEA
-         F+B0uVWYmCc77VjUc2fQZVwGxAd6qPNgXCRlEMSdRJDfrYAXKNNWyQt+/2fH5C7+eDTw
-         /ITXxXlMbIEyLjIHP810WXIX636Tg/TZDN2gHfEDCIsU/U8aGs4kscemW3tucGpOcSQ6
-         iXhd+zyqr5RZLx4czZ2hbTRm2bQqzy0EvVqRwrQ0Kxcj8Tmszy+DjhX0B7UplAbzZxtw
-         QYZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768012282; x=1768617082;
-        h=message-id:date:reply-to:cc:to:from:subject
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=esK8M2HWgJvBnKJTJUwUWEQwzA4o1sfgjBJmOxOL5rQ=;
-        b=vbiTGOUU2VVBhsPS/RMc00tlSDXOsIHwljO9tfizRadDMQpWOv6jJPo3znp/INmhsz
-         4BURTW3Lu6oZEwlMKVWQVqROuVWilBcmVXCivz7ICk1F68FMBXEsiT3kMpYrW2DhfJDK
-         fTth5nbH3yyuu7oIzoX8/LgJEuoDGclz3QLwCVOWwCXx2sZZ4ph2IuImSHV11aOv0QDM
-         h+QqRco92N6d3vlDvl5/1pHuXgz1kw74C0oMpH1gDNHeUg0ZYmJ0DxJF9cXfwlN8+SeW
-         cAQMSrFhR+G+RT/rq6ge45GAs0fdTLjB9UlyczjRcXGi4wetYsLTHUBinfO2OwmAB65I
-         1Amw==
-X-Gm-Message-State: AOJu0YwDM5jQ5LMqLSEdetGgexqUORwpMRcthq8yt09W5wQ2mDCsjOfc
-	lW021865fmw+xrE7f5qln84w+H+SZflqc3ajcH3v2PYYOZ9pBomJWJEXSoiTGsK6eMWt1s7Z66v
-	b6bUFK0E=
-X-Gm-Gg: AY/fxX4m2tGR9C+4iEQlp8yqKex0LC+drOL7q6/3YPi6zwvjI802shCED3WJtG6JXPp
-	JOC7saC11i/oIq/kkl+o0kXeL6X6aqruj8k3NX6MNK4jmooiZ8q+VLH8PoEBIoIvQQwNrVmcJT9
-	jTYlvAq5znmPHCPzc18dPj4biUo88tbhyZtF0GTpgb6Rbm0CJrRsnmZX7ZCuMOVZM7HwCeLI2vk
-	69n+MR/Lu7AFQ60wP5t80v+zWAVRM6mSmkEWAQKbVUqxN1HpKareUL65kld002Zgn5LRmPvpUmY
-	EURvgiUKcEV5tIe77nau/26SgEe2IcU0P+cIYvMYyX7o6eDh/uznH2ojhpGWNMC/y70twYOdVbz
-	6dAkF6y4/nomuJsfRvs0BKec44qXVNMJm9B7Q8a/QW/3wV5ILygiMm9BjlimiO+zbLfn4n7djrm
-	rHo1zZ
-X-Google-Smtp-Source: AGHT+IETi2wlDfbBoA9qGyIbPX+wnjyg9pXaEoMKOY1JKvXiDfAFq4sfiTFRSvcNaZjtK+rceDMuKQ==
-X-Received: by 2002:a05:7301:fa6:b0:2a4:6bb6:c84a with SMTP id 5a478bee46e88-2b17d2344b9mr7929804eec.6.1768012281948;
-        Fri, 09 Jan 2026 18:31:21 -0800 (PST)
-Received: from 1c5061884604 ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b170675076sm12470376eec.2.2026.01.09.18.31.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jan 2026 18:31:21 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1768129384; c=relaxed/simple;
+	bh=JhSTTOpYP/ZSmAVa1zBgYdj7HPwOHT1gYA4c+twwMM4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aRBxgjCwijFF8qJ6ci8x7eFZzD7hVsNDxgLK/siA8calc8Za8zutGQqTrVaHCQHhjOU8hBtlH8CDMf16inl7c94fnZZOsgOSp3Fmn883vpcI7+k3n9bQerRaJOMbNqxTcnxLWWU85F/7/4Jm0f4g2blLt8HXkyAh9JCJoyUoFP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=H51IW24t; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 31AD640E0173;
+	Sun, 11 Jan 2026 11:02:49 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id iC5ih3854wdv; Sun, 11 Jan 2026 11:02:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1768129365; bh=ioCbGqO+/DH6msLkcSyXAlEBWFuzrO7Sv/1CIOh4If0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=H51IW24tl4/vqDxkVujYl/X/GfgPC4oxaXkSD3/xzJlsEpH3yLjRzQii7K5OhzbL6
+	 V4zAufz2MvlrbCr/jRcqc8qgafVKsfMdL6N6g3qOELHC3c+nuAAowIhPnwtUGXjp8F
+	 qDZp+2rNUow0y1Lc40iUcQ1TaOQbvUTzFLJ4eX0kLQTDt2a3q/fkLBq2NgZagit2jf
+	 rGxxLBMFXjrpI4zfgNMnjYoRQ1g+xmFDIzn1q9xRglD0BjpjmBOmpsuYMRMj79kTmP
+	 WbQr1BcU9lZ767IvY3jmYn/D37+ldLvho8YVd8uF451SIb75WI1UEzsMHwef97eb4u
+	 uGzroEnu6vtBubarlXnfYt1H6/vYlrAlKYuG2thAMJfQO8MHCxaReAbc4UcvLxnxpw
+	 K9XvPJUHTdPGKK7N89A83oZILjLm54rTK5JyeB/DEOmqX1CqM1wZfJcGggnMA0s6ll
+	 bymz/r4f86ds6G45WZ2LGCFJB2twNZRMX9mLxzpibSXiW92FtSxR0Z5gWRqMmhK/aa
+	 jHo3k6IWbkw8xSCNZTwGyRCFBSdd5MnsaLZngQMFmwzy1evauw8UkKXXbOMHe7nG/e
+	 Gn3xqOoDDUXkdbNgmxg6lNTk+7X8meslPZJoIybzhzDERH5OCEVko0l/5Y6me1C4Ye
+	 zlRlVD02weCx/pC5cxEdwIJM=
+Received: from zn.tnic (pd953023b.dip0.t-ipconnect.de [217.83.2.59])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 8762C40E00DE;
+	Sun, 11 Jan 2026 11:02:37 +0000 (UTC)
+Date: Sun, 11 Jan 2026 12:02:31 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20260111110231.GAaWODR6gOvIp6KzD6@fat_crate.local>
+References: <20260107134710.15363555@canb.auug.org.au>
+ <20260107144753.7071f5f2@canb.auug.org.au>
+ <20260107105222.GAaV465o3HUxGxBXGe@fat_crate.local>
+ <20260109172955.GDaWE7E2xNc9WJlsNt@fat_crate.local>
+ <20260109111744.07e51bf5c0bde0e419d09b34@linux-foundation.org>
+ <20260109192404.GEaWFV1MUzYGNjq2eK@fat_crate.local>
+ <20260109113921.5769acfa1d0c08628aeb7217@linux-foundation.org>
+ <20260109195410.GGaWFc4o-TL_jhOTxF@fat_crate.local>
+ <20260109140026.efda2135377239ba8964d139@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: [STATUS] next/master - f417b7ffcbef7d76b0d8860518f50dae0e7e5eda
-From: KernelCI bot <bot@kernelci.org>
-To: kernelci-results@groups.io
-Cc: linux-next@vger.kernel.org
-Reply-To: kernelci@lists.linux.dev
-Date: Sat, 10 Jan 2026 02:31:21 -0000
-Message-ID: <176801228083.1215.14395372319158233877@1c5061884604>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260109140026.efda2135377239ba8964d139@linux-foundation.org>
 
+On Fri, Jan 09, 2026 at 02:00:26PM -0800, Andrew Morton wrote:
+> Yeah.  But it's quite rare, isn't it?  Collisions maybe a couple of
+> times a year?  (And this one wasn't MM!).  If ~6% of MM patches alter
+> x86 then that's 200-300/year, holy cow.  Given how cheap and quick it
+> is to resolve these things, should we be optimizing for these
+> rare collisions?
 
+Probably not but if we're optimizing anyway, might as well take care of that
+too. :)
 
+But I agree - such collisions are very seldom. Luckily.
+ 
+> We did have one significant runtime problem from this about two years
+> ago.  For which I got thoroughly smacked around, while silently blaming
+> you guys ;)  You were cc'ed ~8 times over ~4 months!
 
+Probably it was somewhere in the mail firehose... :-\
 
-Hello,
+> Well what do I do and how long should we wait?
 
-Status summary for next/master
+That would be the timeframe we all agree upon...
 
-Dashboard:
-https://d.kernelci.org/c/next/master/f417b7ffcbef7d76b0d8860518f50dae0e7e5eda/
+> See the mm-new thing below.  This should help.
+> 
+> I think the typical profile here is a patchset that makes lots of MM
+> changes and some incidental x86 modifications, with dependency in both
+> directions.  I can be on the alert for significant alterations and mark
+> these for extra x86 consideration, although a single-line change can of
+> course break things.  I'd prefer to be able to get these patchsets into
+> mm's testing branches promptly, to maximize the overall contribution's
+> time-under-test.
 
-giturl: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-branch: master
-commit hash: f417b7ffcbef7d76b0d8860518f50dae0e7e5eda
-origin: maestro
-test start time: 2026-01-09 04:33:21.639000+00:00
+Yap, and if you take a look at the patches you mentioned upthread - I did look
+at the x86 bits in the clear_page set so that that is reviewed and can go
+together through your tree.
 
-Builds:	   52 ✅    2 ❌    0 ⚠️
-Boots: 	  142 ✅   16 ❌    0 ⚠️
-Tests: 	17572 ✅ 1903 ❌ 4295 ⚠️
+> Could I ask that when triaging these emails, you let me know promptly
+> if you'd prefer I not merge it, or to not upstream it without full x86
+> review, or whatever you want?  I can annotate or drop the patchset and
+> things will proceed smootly.
 
-### POSSIBLE REGRESSIONS
-    
-Hardware: bcm2711-rpi-4-b
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-14
-      - kselftest.dt.dt_test_unprobed_devices_sh_leds
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde5012f
-      history:  > ✅  > ✅  > ✅  > ❌  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_regulator-cam1
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde5012c
-      history:  > ✅  > ✅  > ✅  > ❌  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_regulator-sd-io-1v8
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde5012b
-      history:  > ✅  > ✅  > ✅  > ❌  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_regulator-sd-vcc
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde5012a
-      history:  > ✅  > ✅  > ✅  > ❌  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_hdmi_7ef00700
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde5011a
-      history:  > ✅  > ✅  > ✅  > ❌  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_hdmi_7ef05700
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde50119
-      history:  > ✅  > ✅  > ✅  > ❌  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_hvs_7e400000
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde50118
-      history:  > ✅  > ✅  > ✅  > ❌  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_mailbox_7e00b840
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde50110
-      history:  > ✅  > ✅  > ✅  > ❌  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_serial_7e201000_bluetooth
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde50105
-      history:  > ✅  > ✅  > ✅  > ❌  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_watchdog_7e100000
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde50100
-      history:  > ✅  > ✅  > ✅  > ❌  > ❌  
-            
-Hardware: mt8195-cherry-tomato-r2
-  > Config: defconfig+lab-setup+arm64-chromebook+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y
-    - Architecture/compiler: arm64/gcc-14
-      - fluster.debian.v4l2.gstreamer_h264.validate-fluster-results
-      last run: https://d.kernelci.org/test/maestro:69609ca9cbfd84c3cde39371
-      history:  > ✅  > ✅  > ❌  
-            
-Hardware: sun50i-h5-libretech-all-h3-cc
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-14
-      - kselftest.device_error_logs
-      last run: https://d.kernelci.org/test/maestro:6960a06bcbfd84c3cde3a98c
-      history:  > ✅  > ❌  > ❌  > ❌  > ❌  
-            
-      - kselftest.device_error_logs.devices_error_logs_test_device_error_logs_py
-      last run: https://d.kernelci.org/test/maestro:6960a1d0cbfd84c3cde3b6d1
-      history:  > ✅  > ❌  > ❌  > ❌  > ❌  
-            
-Hardware: x1e80100
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-14
-      - kselftest-timers-ramdisk.timers_rtcpie
-      last run: https://d.kernelci.org/test/maestro:6960ab4acbfd84c3cde3e666
-      history:  > ✅  > ❌  > ❌  
-            
+The problem is, most of the time there's so much email so that all of us are
+drowning in it to even be able to react. Remember the last time where Peter
+and I were asking you to drop a patch from your queue? I think you didn't even
+react because of -ETOOMUCHMAIL.
 
+So to make things simpler, maybe we could say:
 
-### FIXED REGRESSIONS
-    
-Hardware: bcm2711-rpi-4-b
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-14
-      - kselftest.device_error_logs
-      last run: https://d.kernelci.org/test/maestro:6960a065cbfd84c3cde3a959
-      history:  > ❌  > ❌  > ❌  > ✅  > ✅  
-            
-Hardware: k3-am625-verdin-wifi-mallow
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-14
-      - kselftest.dt.dt_test_unprobed_devices_sh_bus_f0000_mmc_fa20000
-      last run: https://d.kernelci.org/test/maestro:6960a34dcbfd84c3cde3c8c0
-      history:  > ❌  > ❌  > ❌  > ✅  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_wifi-pwrseq
-      last run: https://d.kernelci.org/test/maestro:6960a34dcbfd84c3cde3c880
-      history:  > ❌  > ❌  > ❌  > ✅  > ✅  
-            
-Hardware: meson-g12b-a311d-khadas-vim3
-  > Config: defconfig+preempt_rt
-    - Architecture/compiler: arm64/gcc-14
-      - rt-tests.rt-migrate-test
-      last run: https://d.kernelci.org/test/maestro:69609affcbfd84c3cde3878a
-      history:  > ❌  > ❌  > ❌  > ❌  > ✅  
-            
-      - rt-tests.rt-migrate-test.rt-migrate-test
-      last run: https://d.kernelci.org/test/maestro:69609b78cbfd84c3cde389db
-      history:  > ❌  > ❌  > ❌  > ❌  > ✅  
-            
-Hardware: mt8183-kukui-jacuzzi-juniper-sku16
-  > Config: defconfig+lab-setup+arm64-chromebook+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y
-    - Architecture/compiler: arm64/gcc-14
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_dma-controller0_14001000
-      last run: https://d.kernelci.org/test/maestro:69609c56cbfd84c3cde38ebd
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_dsi_14014000
-      last run: https://d.kernelci.org/test/maestro:69609c56cbfd84c3cde38eba
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_i2c_11008000_anx7625_58
-      last run: https://d.kernelci.org/test/maestro:69609c56cbfd84c3cde38eb2
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_i2c_11008000_anx7625_58_aux-bus_panel
-      last run: https://d.kernelci.org/test/maestro:69609c56cbfd84c3cde38eb1
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_ovl_14008000
-      last run: https://d.kernelci.org/test/maestro:69609c56cbfd84c3cde38e9e
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_ovl_14009000
-      last run: https://d.kernelci.org/test/maestro:69609c56cbfd84c3cde38e9d
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_ovl_1400a000
-      last run: https://d.kernelci.org/test/maestro:69609c56cbfd84c3cde38e9c
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_rdma_1400b000
-      last run: https://d.kernelci.org/test/maestro:69609c56cbfd84c3cde38e91
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_rdma_1400c000
-      last run: https://d.kernelci.org/test/maestro:69609c56cbfd84c3cde38e90
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-Hardware: mt8390-genio-700-evk
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-14
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_i2c_11e01000_rt1715_4e
-      last run: https://d.kernelci.org/test/maestro:6960a1b2cbfd84c3cde3b0fb
-      history:  > ❌  > ❌  > ❌  > ✅  > ✅  
-            
-Hardware: mt8395-genio-1200-evk
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-14
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_i2c_11d01000_pmic_34_tcpc
-      last run: https://d.kernelci.org/test/maestro:6960a1b4cbfd84c3cde3b5de
-      history:  > ❌  > ❌  > ❌  > ✅  > ✅  
-            
-Hardware: acer-chromebox-cxi4-puff
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-14
-      - kselftest.cpufreq.suspend.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:696093eecbfd84c3cde36101
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-Hardware: dell-latitude-5400-4305U-sarien
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-14
-      - kselftest.cpufreq.suspend
-      last run: https://d.kernelci.org/test/maestro:696092cecbfd84c3cde357c5
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
-      - kselftest.cpufreq.suspend.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:6960a292cbfd84c3cde3bf2a
-      history:  > ❌  > ✅  > ✅  > ✅  > ✅  
-            
+- patches which touch x86 only and there are no mm dependencies, go only
+  through us. Including kexec. I think you'd like this because it'll take some
+  of your load off
 
+- mixed sets would probably need a week or so reaction time from us. If no
+  reaction, I guess you take 'em. And we'll try to send acks/reviews. This
+  will become even easier when we get the AI to review. Apparently, trying to
+  get people to review more hasn't had any palpable success over the years so
+  might as well let AI replace them here. :-P
 
-### UNSTABLE TESTS
-    
-Hardware: acer-R721T-grunt
-  > Config: defconfig+preempt_rt+x86-board
-    - Architecture/compiler: x86_64/gcc-14
-      - rt-tests.pi-params
-      last run: https://d.kernelci.org/test/maestro:6960926fcbfd84c3cde35028
-      history:  > ✅  > ✅  > ✅  > ✅  > ⚠️  
-            
-Hardware: bcm2711-rpi-4-b
-  > Config: defconfig+lab-setup+kselftest
-    - Architecture/compiler: arm64/gcc-14
-      - kselftest.dt
-      last run: https://d.kernelci.org/test/maestro:6960a071cbfd84c3cde3a9d1
-      history:  > ❌  > ✅  > ✅  > ❌  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde500fd
-      history:  > ❌  > ✅  > ✅  > ❌  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_mmc_7e300000
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde5010e
-      history:  > ❌  > ✅  > ✅  > ❌  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_usb_7e980000
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde50101
-      history:  > ✅  > ✅  > ✅  > ⚠️  > ⚠️  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_wifi-pwrseq
-      last run: https://d.kernelci.org/test/maestro:6960d6e4cbfd84c3cde500fe
-      history:  > ❌  > ✅  > ✅  > ❌  > ❌  
-            
-Hardware: hp-11A-G6-EE-grunt
-  > Config: defconfig+preempt_rt+x86-board
-    - Architecture/compiler: x86_64/gcc-14
-      - rt-tests.pi-params
-      last run: https://d.kernelci.org/test/maestro:69609294cbfd84c3cde3524f
-      history:  > ✅  > ✅  > ✅  > ✅  > ⚠️  
-            
-Hardware: mt8183-kukui-jacuzzi-juniper-sku16
-  > Config: defconfig+lab-setup+arm64-chromebook+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y
-    - Architecture/compiler: arm64/gcc-14
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_mmc_11240000
-      last run: https://d.kernelci.org/test/maestro:69609c56cbfd84c3cde38ea1
-      history:  > ✅  > ❌  > ❌  > ✅  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_mmc_11240000_qca-wifi_1
-      last run: https://d.kernelci.org/test/maestro:69609c56cbfd84c3cde38ea0
-      history:  > ✅  > ⚠️  > ⚠️  > ✅  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_wifi-pwrseq
-      last run: https://d.kernelci.org/test/maestro:69609c55cbfd84c3cde38e5e
-      history:  > ✅  > ❌  > ❌  > ✅  > ✅  
-            
-Hardware: mt8186-corsola-steelix-sku131072
-  > Config: defconfig+lab-setup+arm64-chromebook+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y
-    - Architecture/compiler: arm64/gcc-14
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_mmc_11240000
-      last run: https://d.kernelci.org/test/maestro:69609c4fcbfd84c3cde38ddd
-      history:  > ✅  > ❌  > ❌  > ✅  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_mmc_11240000_bluetooth_2
-      last run: https://d.kernelci.org/test/maestro:69609c4fcbfd84c3cde38ddc
-      history:  > ✅  > ⚠️  > ⚠️  > ✅  > ✅  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_wifi-pwrseq
-      last run: https://d.kernelci.org/test/maestro:69609c4fcbfd84c3cde38d9c
-      history:  > ✅  > ❌  > ❌  > ✅  > ✅  
-            
-Hardware: mt8195-cherry-tomato-r2
-  > Config: defconfig+lab-setup+arm64-chromebook+CONFIG_MODULE_COMPRESS=n+CONFIG_MODULE_COMPRESS_NONE=y
-    - Architecture/compiler: arm64/gcc-14
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_dma-controller_14f08000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde397f0
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_dma-controller_14f09000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde397ef
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_dma-controller_14f0a000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde397ee
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_dma-controller_14f23000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde397ed
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_dma-controller_14f24000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde397ec
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_dma-controller_14f25000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde397eb
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_jpeg-decoder_1a040000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde3974c
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_jpeg-decoder_1a040000_jpgdec_0_0
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde3974b
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_jpeg-decoder_1a040000_jpgdec_0_10000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde3974a
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_jpeg-decoder_1a040000_jpgdec_1_0
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde39749
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_jpeg-encoder_1a030000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde39748
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_jpeg-encoder_1a030000_jpgenc_0_0
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde39747
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_jpeg-encoder_1a030000_jpgenc_1_0
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde39746
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_video-codec_18000000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde396f7
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_video-codec_18000000_video-codec_10000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde396f6
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_video-codec_18000000_video-codec_2000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde396f5
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_video-codec_18000000_video-codec_25000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde396f4
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-      - kselftest.dt.dt_test_unprobed_devices_sh_soc_video-codec_1a020000
-      last run: https://d.kernelci.org/test/maestro:69609ceccbfd84c3cde396f3
-      history:  > ✅  > ✅  > ❌  > ✅  > ❌  
-            
-Hardware: qemu
-  > Config: defconfig+preempt_rt
-    - Architecture/compiler: x86_64/gcc-14
-      - rt-tests.cyclicdeadline
-      last run: https://d.kernelci.org/test/maestro:6960919ecbfd84c3cde34c7f
-      history:  > ✅  > ✅  > ✅  > ✅  > ⚠️  
-            
-      - rt-tests.cyclictest
-      last run: https://d.kernelci.org/test/maestro:69609199cbfd84c3cde34c66
-      history:  > ✅  > ✅  > ✅  > ✅  > ⚠️  
-            
-      - rt-tests.pi-params
-      last run: https://d.kernelci.org/test/maestro:6960919acbfd84c3cde34c72
-      history:  > ✅  > ✅  > ✅  > ✅  > ⚠️  
-            
-      - rt-tests.pmqtest
-      last run: https://d.kernelci.org/test/maestro:6960919dcbfd84c3cde34c78
-      history:  > ✅  > ✅  > ✅  > ✅  > ⚠️  
-            
-      - rt-tests.ptsematest
-      last run: https://d.kernelci.org/test/maestro:6960919acbfd84c3cde34c6c
-      history:  > ✅  > ✅  > ✅  > ✅  > ⚠️  
-            
-      - rt-tests.signaltest
-      last run: https://d.kernelci.org/test/maestro:69609226cbfd84c3cde34f73
-      history:  > ✅  > ✅  > ✅  > ✅  > ⚠️  
-            
-      - rt-tests.sigwaittest
-      last run: https://d.kernelci.org/test/maestro:69609204cbfd84c3cde34ecb
-      history:  > ✅  > ✅  > ✅  > ✅  > ⚠️  
-            
-      - rt-tests.svsematest
-      last run: https://d.kernelci.org/test/maestro:696091e5cbfd84c3cde34d2e
-      history:  > ✅  > ✅  > ✅  > ✅  > ⚠️  
-            
-Hardware: dell-latitude-5400-4305U-sarien
-  > Config: x86_64_defconfig+lab-setup+x86-board+kselftest
-    - Architecture/compiler: x86_64/gcc-14
-      - kselftest.cpufreq.hibernate
-      last run: https://d.kernelci.org/test/maestro:696092c6cbfd84c3cde3549d
-      history:  > ✅  > ❌  > ❌  > ✅  
-            
-      - kselftest.cpufreq.hibernate.cpufreq_main_sh
-      last run: https://d.kernelci.org/test/maestro:6960a1c5cbfd84c3cde3b6bf
-      history:  > ✅  > ❌  > ✅  
-            
+How does that sound?
 
+> Incidentally, we recently added an "mm-new" branch to mm.git.  It's
+> withheld from linux-next, New material enters here and typically will
+> be moved into mm-unstable (and hence -next) after 2-3 days.  This is
+> mainly to try to avoid breaking linux-next.  This means if you see an
+> added-to-mm-new email, the patch won't be submitted to -next for a few
+> days.
 
+Ack, good to know.
 
-This branch has 2 pre-existing build issues. See details in the dashboard.
+> IOW, that email is advance notification that the patch might appear in
+> linux-next a few days from now.  Hopefully that helps a bit?
 
-Sent every day if there were changes in the past 24 hours.
-Legend: ✅ PASS   ❌ FAIL  ⚠️ INCONCLUSIVE
+Right.
 
---
-This is an experimental report format. Please send feedback in!
-Talk to us at kernelci@lists.linux.dev
+> I'd love me some acked-bys :)
 
-Made with love by the KernelCI team - https://kernelci.org
+Yeah, we'll try to be more verbose...
+
+> I dunno, Boris.  Is it really worth the up-front and ongoing work for
+> something which happens so rarely and which Stephen handles so slickly?
+
+Nah, if anything and as said, we'd address this as a by-product of other
+workflow optimizations.
+
+> Yeah, that sucks.  I always pull his tree, do my test merge then do a
+> couple of build tests before sending the pull request.  I wish the guy
+> would publish his .configs so we can do `make linusconfig' to avoid the
+> grumpygrams.
+
+So he builds an allmodconfig, AFAIK, of every pull request, with both
+compilers.
+
+That's what I do too with our pull requests come merge window: I merge them
+locally and build allmodconfigs of each one. This has caught pretty much every
+issue, AFAIR.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 

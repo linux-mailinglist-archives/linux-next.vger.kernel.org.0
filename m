@@ -1,127 +1,108 @@
-Return-Path: <linux-next+bounces-9610-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9611-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F4ECD15396
-	for <lists+linux-next@lfdr.de>; Mon, 12 Jan 2026 21:31:29 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 237F4D15619
+	for <lists+linux-next@lfdr.de>; Mon, 12 Jan 2026 22:06:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 54EF33020C50
-	for <lists+linux-next@lfdr.de>; Mon, 12 Jan 2026 20:31:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E770F300EF4A
+	for <lists+linux-next@lfdr.de>; Mon, 12 Jan 2026 21:06:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B457A329377;
-	Mon, 12 Jan 2026 20:31:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14EB7322B72;
+	Mon, 12 Jan 2026 21:06:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Yd+9DHFw"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="WktBhvKT"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838B82DBF40;
-	Mon, 12 Jan 2026 20:31:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0D330F938;
+	Mon, 12 Jan 2026 21:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768249887; cv=none; b=c+wN8MU/8tJrGa26w7P+882eOnLqRfnGoIyrKkNQNHj0Mcx+4G7ZlwjGs+6goXImj0Y3EcF8wwDaUK8raBaF3PgHoEW6w4R8GuotVSHBRHSuSb2a8330ZQmu+LGIxPs715wdQ70IxHOjeKn2lMpfhmGbr++wqxAfa74USOj+hu4=
+	t=1768251979; cv=none; b=dEZA5HiPkBjPjMVA7UxjK15TjtbknJkLsjVzBuwmkrJHReUhoJ1jF+SyN/40LMpspV3dIHJ2C1v0MPjXAn5SRuLwS01jaGPkmkUdkZ1NU45JtFdlhMfC+qo+TxriQ4TRUmcKfEPRDLnSalXBpaLUATj818TzyAioAAok9jm55HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768249887; c=relaxed/simple;
-	bh=9qLqmADt1r54ImwPUmntPrfr7Tj5A7lzjzOYKHBiRlA=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=apl/FcMJl6IPKRJvj8qEAwekKNn7YVuv57WyvYLeJp1Jw6EEL8ZTvnNYOrkhMdFbkf09DytPRckbxcTWYVMclkzJ+89/AcmcveDwOYTwgVWIIYmzLbf5P8TP/N51olV71yttYFgodPwe1tCTbskRvL1vtXuYsqAo0DexTqWpcdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Yd+9DHFw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C58C116D0;
-	Mon, 12 Jan 2026 20:31:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1768249887;
-	bh=9qLqmADt1r54ImwPUmntPrfr7Tj5A7lzjzOYKHBiRlA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Yd+9DHFwoIpIobZZJZVo9iVx2XzBoLJM0M18da/UXLbNbTTK58TS96VupbCz6ZlCZ
-	 glsJijJVkrxpP/xQp79KYxtEbc9u+X9Jy5xuE4KfLlm7Lz6DEU8spuqfonBn0OQbqw
-	 356GzpPKaBnRpWUolBYcvuVBsmehaWhUe1GUzpb0=
-Date: Mon, 12 Jan 2026 12:31:26 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Stephen Rothwell <sfr@canb.auug.org.au>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>, Linux Kernel
- Mailing List <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+	s=arc-20240116; t=1768251979; c=relaxed/simple;
+	bh=jepYMYjvaJVOIuZfrODYVP0WHdD9AJtXfV4BS0Txg4Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=KoO2ixldJ1ByGJ8BwMqaWbFIj952t5ZhMVrLdPSz69o9p/1JaeWYpQ3wBFSCMXm7GTDZ10AIEEJ4zMVZbQEfogCn9Y0aZgqf74rhpZR+uLucsQ2A2gUCQxswPhhRNGcG6/TaSm/jhttoAfzlFPxirbYFXNNGWE2bLjemaNWOZUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=WktBhvKT; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1768251967;
+	bh=Hw38B4RdIQlah3uh29jp8Hq/gi+gbGZyPV72yTtiMf4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=WktBhvKTwFDz7eE12ymhDTYkCk/8rY2TEv6+cRmYc3T4OdC9CW/g3t5OiEDX1fUsy
+	 wodSl+GAPGsZHLbApoNkdVe+AET4ZkpyeO3R0gd2Y4YYDW/hH07Vf2YwwABdHWI6ED
+	 0+n4NlWJJ0ZoNJVGDAq5OBiXkYPYqyfrsEofbOoNuJjnkbEmhEH6i7OmktycAG+bZz
+	 vdez2pmErOB/7I8oGVFWleOOOEsMv2TL4U5+KVBNHUldDvLfI2Ji12yQIawcS5g29L
+	 wg1TlypDMGUilnPIw2qXRCxrF1iPfxPy2lLn9N5ghI5PUL+pkrRPgdKHo3L3j75hCa
+	 tCPDmHL3YCgmg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dqlKW3Bsnz4wQb;
+	Tue, 13 Jan 2026 08:06:07 +1100 (AEDT)
+Date: Tue, 13 Jan 2026 08:06:06 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: Andy Gross <agross@kernel.org>
+Cc: Brian Masney <bmasney@redhat.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-Id: <20260112123126.83e94ae2fe17829e32b0ea75@linux-foundation.org>
-In-Reply-To: <20260111110231.GAaWODR6gOvIp6KzD6@fat_crate.local>
-References: <20260107134710.15363555@canb.auug.org.au>
-	<20260107144753.7071f5f2@canb.auug.org.au>
-	<20260107105222.GAaV465o3HUxGxBXGe@fat_crate.local>
-	<20260109172955.GDaWE7E2xNc9WJlsNt@fat_crate.local>
-	<20260109111744.07e51bf5c0bde0e419d09b34@linux-foundation.org>
-	<20260109192404.GEaWFV1MUzYGNjq2eK@fat_crate.local>
-	<20260109113921.5769acfa1d0c08628aeb7217@linux-foundation.org>
-	<20260109195410.GGaWFc4o-TL_jhOTxF@fat_crate.local>
-	<20260109140026.efda2135377239ba8964d139@linux-foundation.org>
-	<20260111110231.GAaWODR6gOvIp6KzD6@fat_crate.local>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Subject: linux-next: Fixes tag needs some work in the qcom tree
+Message-ID: <20260113080606.07743e2b@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/XD7Kz0TpDw0N1W4QwDg5pPL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+
+--Sig_/XD7Kz0TpDw0N1W4QwDg5pPL
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 11 Jan 2026 12:02:31 +0100 Borislav Petkov <bp@alien8.de> wrote:
+Hi all,
 
-> > Could I ask that when triaging these emails, you let me know promptly
-> > if you'd prefer I not merge it, or to not upstream it without full x86
-> > review, or whatever you want?  I can annotate or drop the patchset and
-> > things will proceed smootly.
-> 
-> The problem is, most of the time there's so much email so that all of us are
-> drowning in it to even be able to react. Remember the last time where Peter
-> and I were asking you to drop a patch from your queue? I think you didn't even
-> react because of -ETOOMUCHMAIL.
+In commit
 
-oops.  When triaging Subjects, something which is clearly x86 gets less
-love.
+  35a48f41b63f ("clk: qcom: regmap-divider: convert from divider_ro_round_r=
+ate() to divider_ro_determine_rate()")
 
-> So to make things simpler, maybe we could say:
-> 
-> - patches which touch x86 only and there are no mm dependencies, go only
->   through us. Including kexec. I think you'd like this because it'll take some
->   of your load off
+Fixes tag
 
-Sure.
+  Fixes: 859a7e020b23 ("clk: qcom: regmap-divider: convert from divider_rou=
+nd_rate() to divider_determine_rate()")
 
-> - mixed sets would probably need a week or so reaction time from us.
+has these problem(s):
 
-No probs.
+  - Target SHA1 does not exist
 
-> If no
->   reaction, I guess you take 'em. And we'll try to send acks/reviews. This
->   will become even easier when we get the AI to review.
+Also, the subject in the fixes tag is the same as the fixing commit,
+so I have not idea which commit was intended.
 
-I'm optimistic.  Did you see Mathieu's review of a Gemini review? 
-https://lkml.kernel.org/r/6fbb17fe-f2b1-4233-9834-5a5020cd87b3@efficios.com
+--=20
+Cheers,
+Stephen Rothwell
 
-> Apparently, trying to
->   get people to review more hasn't had any palpable success over the years so
->   might as well let AI replace them here. :-P
+--Sig_/XD7Kz0TpDw0N1W4QwDg5pPL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Yeah.  I've been paying a lot of attention to the review economy
-lately, I'm hopeful we can do some things to help level the playing
-field, take load off those few who do so much of it.  Early days.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmllYj4ACgkQAVBC80lX
+0GyISwgAiTmlWb4DhsiEzvv6xXoQjC0urAvmpxWiIOuBBoTHgHv2kIvrvgTsK6tf
+Aj7OsrxXy1+cUZgQW/qh2vdaGln2ZzSu8kEnRoAlxiQproUSjQmt8Ag8OF8Mw498
+lk5YK20uyJrWqRIpxle+CKP7vkCTqBB/x36d/6zzp6XKgP7Smngho4i0virFfHDZ
+hVHjoOeciOUxZvqGrfZunK3bbNnGE4dQcZfXR0Y6faNWNXuvOmJ9hb1qJr8yFwaG
+W5TWuBf55WeSdZgBcZYfbZq2iPxJEyX/vXRfyQ2UGapPR2h/U3Rknx2EKGKFIEhQ
+M9nYFXFF/lbYDI/6IEVld5ewNTzh8A==
+=SE1B
+-----END PGP SIGNATURE-----
 
-> > Yeah, that sucks.  I always pull his tree, do my test merge then do a
-> > couple of build tests before sending the pull request.  I wish the guy
-> > would publish his .configs so we can do `make linusconfig' to avoid the
-> > grumpygrams.
-> 
-> So he builds an allmodconfig, AFAIK, of every pull request, with both
-> compilers.
-> 
-> That's what I do too with our pull requests come merge window: I merge them
-> locally and build allmodconfigs of each one. This has caught pretty much every
-> issue, AFAIR.
-
-OK.  arm allnoconfig is fun.  It's super fast.  It's nommu and finds
-things...
+--Sig_/XD7Kz0TpDw0N1W4QwDg5pPL--
 

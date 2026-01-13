@@ -1,118 +1,174 @@
-Return-Path: <linux-next+bounces-9627-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9628-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3513ED16E40
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 07:48:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AB93D16E88
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 07:53:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 2B8AA3009286
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 06:48:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7FEFF3026BF9
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 06:53:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D26130CDB1;
-	Tue, 13 Jan 2026 06:48:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09E1D368293;
+	Tue, 13 Jan 2026 06:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OMWxG0o5"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="ZcQkIPrJ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ezxv/6CV"
 X-Original-To: linux-next@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DAC29B78D;
-	Tue, 13 Jan 2026 06:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7FD21D5AA;
+	Tue, 13 Jan 2026 06:53:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768286906; cv=none; b=CrmaIcaBbkz4GocJC77jwamsXRETc+NydezD8NX5AfiXkCY6vUXOhBedsjCY6ltpcyXWVC2/g52irljVMpUUQcVhv5AL5Ismb66haHb4QZICxXBvXfIp2Y5ULJWI9zXAF3Jk4ym2quyVPZD3ZHVB0fyLoyp/abiF8syRSUUwKMk=
+	t=1768287216; cv=none; b=Y1S76IdMlrRb27rSeD5qorQtZs7S+igvRqrtCiS3yxAcVxPcnQlGOipjO4WI/zQmSSZM+X3593NiFDeM9e7Wtk1IWXQzea9vwcGU+rcn6+zz6ssu9WC9VK3cV9pOEUIXhlppUT+nyN8k8rKqeiXoZ10vVlyYqs4TH4Xf9MTblnI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768286906; c=relaxed/simple;
-	bh=1Yguu3Gho8fGASKbhSkWsmof8nQfXlMaJnIS1PvdS6U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WlrVXbeh0miIxvKXHfYVZtR8SusfSt4ri+hQRv/LRyRDbDFzQuDJksecnNdNTAVVG8cR1BMgODi6oLYOTrZLq/1ah+f72imkuAGPea+8+/exgZomuEhh1x+D2iweQRxEWGm4G9KQPbYN0bZUWVPnqs5EqdEheJnySQRIectenbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OMWxG0o5; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=Z2YPkRxl+2FC6VVp+D++HuYXvSCOX9NylT5cPCraFlY=; b=OMWxG0o5BF5MOoJ/ALmZO6S9qu
-	uiiXx0PPRbBOs+der2Tkz6sh/AKiWpVqbCvAmN/tVek3EHWyOozD75Fmnee0amb4wGcTXbmsrdhZZ
-	MSL+lfRRjxrwnx5fb4Y0+uZTEnBPLfp3GreDHJvUsPRHok6+fPUSTAYh6ft2BPfuAZHpJTV2AMArE
-	osjgoxK96165fKOz7KI8M+35U1SptUNa8vwXgFrfLXkAMZbjQLA4y9kOcW0Qbr2rUMHt5LxZ2UDQu
-	XDQyDd/Mk4xELjvlYw78uXNB1pCfVHDG0G1MD++nG6zCZKUBlHb95Ks/Zist/Z4I96Bif1VE17d/S
-	kVrSb2bQ==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vfYCV-00000006cFw-2x3e;
-	Tue, 13 Jan 2026 06:48:23 +0000
-Message-ID: <516c7da3-2aff-41ad-93c3-44b95f8dd118@infradead.org>
-Date: Mon, 12 Jan 2026 22:48:22 -0800
+	s=arc-20240116; t=1768287216; c=relaxed/simple;
+	bh=+obunNCIe1GF3nLtYjisFmO4n2mnfsLI9qmM+IE97cA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=e1iRgfjWfvcz0OfhbCO9TCIIltpRh5pR++wAhjc7GGFKtpg3frLWT6vgQ0BxvqDuYy4ttxd+BIbOg1LJynRqJ2T9pa6khamntk66BUwSKUv4eeSUzvpwAngQz71pt73NwiWXaa9fBlBD/K3JtpYAZD6Q+ZLbxDl3G9+UsoRX3n8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=ZcQkIPrJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ezxv/6CV; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 426B21400180;
+	Tue, 13 Jan 2026 01:53:34 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Tue, 13 Jan 2026 01:53:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1768287214; x=1768373614; bh=VVfsSGH8lP
+	q/Vw1AIRuDkvkaTTNBp50pFwH7lmY8zXM=; b=ZcQkIPrJ9H72/Egfiu0oA6nHjP
+	jRV07sX9XTlgsC9zLV0Ewf2XyMAInvlGvRNv/Vh2jZyfeRg9Xe6YT29EHAOqAF/V
+	hZZfUmlmKxuixhuY0IK8YKFdP78i4mz58M1TLVQSvO0czc52w9/61OmB/nnChq4P
+	MZ+Ja36Zd4QuHbEXQr8/coJ2oVqB6aC+sg1S9tKDFt0A3HDuM/bUwVdfnL4G5+z9
+	eIqj+tMk1GyMMjIcdt4QMxGKuDraqLFDdELJSHzBH2nZZz9xfe0Vob8gQ8KmXYr8
+	QYUvkI70fwY06T+e0icCytsUPTCUyroVZA7V78yZxelKOsa7k4+dCcB04IPQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1768287214; x=1768373614; bh=VVfsSGH8lPq/Vw1AIRuDkvkaTTNBp50pFwH
+	7lmY8zXM=; b=Ezxv/6CVyil7staREjwjtgDobWIjjbWAyFOG9NtmZ9IDisXRgq5
+	490VEtuN1cC68QWRXN2LcAQtcd559OfGIObvxD/YYSahiVEXZuh3AdyQMBr7yeLi
+	c903+hG8sCrCAc1L5au8UljV976gqAEpNlKVrxCP4GlcN350AsMvFFDTxZSeJD3G
+	3EwsU4pKVXLlszUsAn3QMa7RvDOI4dFrthQ7BcYaRd8rK6buewY9htS/qIdcmsU/
+	A+BGWqd/h/P1/l0SAOn2vP2JuaMQlGYW7kzJMF4L/kEg9SeKT7EntlVSjH7ZO/BE
+	twTCMlld+a8CEnyxux2hb8dYwZdIgeFiacA==
+X-ME-Sender: <xms:7etlaYh0M0IbnYZ_4ZV94ThJvYMLnoazI6z-Eo8te_CLPgP6pGTdjg>
+    <xme:7etlaWMVe_jY17_ThMUEdsed22hDztCt2InqSxbaYCAwIIl3IhLlYMVg2QL3aSuB0
+    b8eWN0EqcNK0QI9mOZ5Jpp6on28Ucl5tuNzT9SRbvNfxhvAow>
+X-ME-Received: <xmr:7etlaTeVTRLhiZS5txc5TVPGWXavRlksJfn8tiV2ODGfeAETiEsW-VtjtrPdGo3VpCqVenJ_xxe-uxablm0eXdHHy_ld51Hu_gwaig>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduudelieehucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepheegvdevvd
+    eljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefhgfehkeetnecuvehluhhsthgv
+    rhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrd
+    gtohhmpdhnsggprhgtphhtthhopeduvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthht
+    oheprhguuhhnlhgrphesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehsfhhrse
+    gtrghnsgdrrghuuhhgrdhorhhgrdgruhdprhgtphhtthhopegrkhhpmheslhhinhhugidq
+    fhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohepkhhhthhsrghisehgohhoghhlvg
+    drtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehlihhnuhigqdhnvgigthesvhhgvghrrdhkvghrnhgvlh
+    drohhrgh
+X-ME-Proxy: <xmx:7etlaYwx6l1uK4UyKkaypbGIkswgLG8GTiK-Mb652RSi1yasD6yLXw>
+    <xmx:7etlaQ10xlxAWJZ2gZDwaSpKNoxRRgNYdEpitfIJw_DJzOvqLvZLmQ>
+    <xmx:7etlaXeXn09Q475F_dIaFsFj02ax2GZ5HcnA0PTIOvr8EGYpKwwEsA>
+    <xmx:7etladX4d18y_K9IYhGdDk4AZvXlBhqGXIwWM9Ae_0UIY7OiO3qNdg>
+    <xmx:7utlafKuWHNAumMgPj8V819PoHMGZOqTEHUucqosPf0KaAVCS6mQ2qFl>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 13 Jan 2026 01:53:33 -0500 (EST)
+Date: Tue, 13 Jan 2026 07:53:31 +0100
+From: Greg KH <greg@kroah.com>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kuen-Han Tsai <khtsai@google.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the usb tree with the
+ nn-nonmm-unstable tree
+Message-ID: <2026011356-hemstitch-rundown-ca92@gregkh>
+References: <20260113150752.2e2238f2@canb.auug.org.au>
+ <3ad768b3-6c66-4e23-9bfb-145887313b78@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Documentation: hwmon: coretemp: Fix malformed RST table
-To: Laveesh Bansal <laveeshb@laveeshbansal.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Guenter Roeck <linux@roeck-us.net>, linux-kernel@vger.kernel.org,
- linux-next@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20260113155444.57c7775b@canb.auug.org.au>
- <20260113055425.966495-1-laveeshb@laveeshbansal.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20260113055425.966495-1-laveeshb@laveeshbansal.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3ad768b3-6c66-4e23-9bfb-145887313b78@infradead.org>
 
-Hi--
-
-On 1/12/26 9:54 PM, Laveesh Bansal wrote:
-> Widen the processor column in the TjMax table to accommodate longer
-> entries like "Celeron/Pentium Processors (Goldmont Plus/Gemini Lake)"
-> which exceed the previous 47-character column width.
+On Mon, Jan 12, 2026 at 10:44:29PM -0800, Randy Dunlap wrote:
+> Gi,
 > 
-> Fixes: 099cc1051df7 ("Documentation: hwmon: coretemp: Update supported CPUs and TjMax values")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Closes: https://lore.kernel.org/linux-next/20260113155444.57c7775b@canb.auug.org.au/
-> Signed-off-by: Laveesh Bansal <laveeshb@laveeshbansal.com>
-> ---
->  Documentation/hwmon/coretemp.rst | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> On 1/12/26 8:07 PM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the usb tree, today's linux-next build (arm
+> > multi_v7_defconfig) failed like this:
+> > 
+> > In file included from drivers/usb/gadget/function/f_ncm.c:27:
+> > drivers/usb/gadget/function/f_ncm.c: In function 'ncm_opts_dev_addr_store':
+> > drivers/usb/gadget/function/u_ether_configfs.h:243:31: error: implicit declaration of function 'hex_to_bin' [-Wimplicit-function-declaration]
+> >   243 |                         num = hex_to_bin(*p++) << 4;                            \
+> >       |                               ^~~~~~~~~~
+> > drivers/usb/gadget/function/f_ncm.c:1600:1: note: in expansion of macro 'USB_ETHER_OPTS_ATTR_DEV_ADDR'
+> >  1600 | USB_ETHER_OPTS_ATTR_DEV_ADDR(ncm);
+> >       | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > 
+> > Caused by commit
+> > 
+> >   30034bbf280f ("kernel.h: drop hex.h and update all hex.h users")
+> > 
+> > from the mm-nonmm-unstable tree interacting with commits
+> > 
+> >   e065c6a7e46c ("usb: gadget: u_ether: add gether_opts for config caching")
+> >   56a512a9b410 ("usb: gadget: f_ncm: align net_device lifecycle with bind/unbind")
+> > 
+> > from the USB tree.
+> > 
+> > I have applied the following merge resolution patch for today.
+> > 
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Tue, 13 Jan 2026 14:36:59 +1100
+> > Subject: [PATCH] fix up for "usb: gadget: u_ether: add gether_opts for config
+> >  caching"
+> > 
+> > interacting with commit
+> > 
+> >  30034bbf280f ("kernel.h: drop hex.h and update all hex.h users")
+> > 
+> > from the mm-nonmm-unstable tree.
+> > 
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  drivers/usb/gadget/function/u_ether_configfs.h | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/usb/gadget/function/u_ether_configfs.h b/drivers/usb/gadget/function/u_ether_configfs.h
+> > index 39d3a261496d..c2f8903d1400 100644
+> > --- a/drivers/usb/gadget/function/u_ether_configfs.h
+> > +++ b/drivers/usb/gadget/function/u_ether_configfs.h
+> > @@ -18,6 +18,7 @@
+> >  #include <linux/mutex.h>
+> >  #include <linux/netdevice.h>
+> >  #include <linux/rtnetlink.h>
+> > +#include <linux/hex.h>
 > 
-> diff --git a/Documentation/hwmon/coretemp.rst b/Documentation/hwmon/coretemp.rst
-> index 3afb179e0ced..a3943656fab6 100644
-> --- a/Documentation/hwmon/coretemp.rst
-> +++ b/Documentation/hwmon/coretemp.rst
-> @@ -69,8 +69,8 @@ for your CPU, you can pass the correct TjMax value as a module parameter
->  Appendix A. Known TjMax lists (TBD):
->  Some information comes from ark.intel.com
->  
-> -=============== =============================================== ================
-> -Process		Processor					TjMax(C)
-> +=============== ======================================================= ================
-> +Process		Processor						TjMax(C)
->  
->  22nm		Core i5/i7 Processors
->  		i7 3920XM, 3820QM, 3720QM, 3667U, 3520M		105
-> @@ -228,4 +228,4 @@ Process		Processor					TjMax(C)
->  65nm		Celeron Processors
->  		T1700/1600					100
->  		560/550/540/530					100
-> -=============== =============================================== ================
-> +=============== ======================================================= ================
+> LGTM. What is the procedure for this? (my first AFAIK)
 
-Did you test this?
+I can take a patch for this now in my tree, as it would "just work" for
+that, right?
 
-Test result:
-linux-next/Documentation/hwmon/coretemp.rst:90: ERROR: Malformed table.
-Text in column margin in table line 19.
+thanks,
 
-Look the numbers that should be in the TjMax(C) column. They aren't.
-Please update and send v2.
-
-Thanks.
--- 
-~Randy
-
+greg k-h
 

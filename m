@@ -1,110 +1,172 @@
-Return-Path: <linux-next+bounces-9622-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9623-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B771D16C08
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 06:54:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F7A1D16C92
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 07:17:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 39C343011194
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 05:54:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3EAAB303C236
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 06:16:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D971364050;
-	Tue, 13 Jan 2026 05:54:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05CBF32862D;
+	Tue, 13 Jan 2026 06:16:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=laveeshbansal.com header.i=laveeshb@laveeshbansal.com header.b="YWcG22de"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Vc++aZfL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E03433B3;
-	Tue, 13 Jan 2026 05:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768283686; cv=pass; b=Azc+LBq+RAyJxMnYl/Yr1O0ikwyNmy+a+/hHaffG1h5QN09K9BBW/E2awzqEKEyD7EcWwYbr9Gfn2SfQ+Z1E8nUxjKw3JyVzfhCk2jjdZF1Qkfb+IsnYSdZc0xbVWc/dQtlKPUN5+pLtnv5EeZFJVsx+oouoHbqBviqCYJ2ABG0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768283686; c=relaxed/simple;
-	bh=GriPIkMwEiolukwo/HQUI5brOgWZQuRAMohwDuCqGUg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tB03PYgN3C7a6Yf6eBU75QL88OeFaex+8rgq4XFM9Rzee2qJook3qsO95tMZ8oz0MChQngjE7vqA9d3BWhlTieHIm3CH7zHKVmiku/P5iljp6B+kULLZUnzma1ySxrPze69fbth5MaU3QNrGcLxTTUEbg1lZnqDL0XRxDXbnLxg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=laveeshbansal.com; spf=pass smtp.mailfrom=laveeshbansal.com; dkim=pass (1024-bit key) header.d=laveeshbansal.com header.i=laveeshb@laveeshbansal.com header.b=YWcG22de; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=laveeshbansal.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=laveeshbansal.com
-ARC-Seal: i=1; a=rsa-sha256; t=1768283669; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=KRlLKJ9bOb1AtmMUb/u6dRcXD8RepGyHzMt5gGqa4pvu6KnKGmf0UJ4TcOd6DOlKDdBH0QT1j+8pNdpJw9Is7f+wRUla2FfkiDKuH9fz3Gk3oN+2CTRXeW5qqrC9fmcnmn8I9E3yChNHu6OrZXZyia6fu+dX233oQV1Jkd8bGpY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1768283669; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=3BuypCs03Zm3wmsqKYvX7X1od+dzGNjMSqit1lK68qk=; 
-	b=UqEjs/19Jl8wCahK/5QbDX5gW3WwKPtNLtXureGPdoJV54yeb75oJ/zH4k1EEZchvA6ZQLx2qsJ+2qfZ+LY4t/WVUClBZILrBikYT3g2IRASvRPuMbM8pNAjF72A4QTUhHfDdirsIMz1mTsopxEPFB/nv7h5zUzYWwMriemhihU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=laveeshbansal.com;
-	spf=pass  smtp.mailfrom=laveeshb@laveeshbansal.com;
-	dmarc=pass header.from=<laveeshb@laveeshbansal.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768283669;
-	s=zoho; d=laveeshbansal.com; i=laveeshb@laveeshbansal.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=3BuypCs03Zm3wmsqKYvX7X1od+dzGNjMSqit1lK68qk=;
-	b=YWcG22deZK42lWVqnWh/iuigxKuVT+vKiKkvwU7WF++iSVownjUGdvYlzUPwTpxQ
-	Vt7o0Y1ofReEeDbMsVgi1W7D8+m4Lh8QHfFFFPpI5lfB0GdTv/+1Q+d7Nj/zvsFoOTm
-	fj76aD1NxWfyq3JNtIFlTSE+VXPEMUpdonNALhoM=
-Received: by mx.zohomail.com with SMTPS id 1768283666368192.6753733795232;
-	Mon, 12 Jan 2026 21:54:26 -0800 (PST)
-From: Laveesh Bansal <laveeshb@laveeshbansal.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Guenter Roeck <linux@roeck-us.net>,
-	linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Laveesh Bansal <laveeshb@laveeshbansal.com>
-Subject: [PATCH] Documentation: hwmon: coretemp: Fix malformed RST table
-Date: Tue, 13 Jan 2026 05:54:25 +0000
-Message-ID: <20260113055425.966495-1-laveeshb@laveeshbansal.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260113155444.57c7775b@canb.auug.org.au>
-References: <20260113155444.57c7775b@canb.auug.org.au>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C543530C62F;
+	Tue, 13 Jan 2026 06:16:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768285002; cv=none; b=uCS821wYAp7W7QpxbJkpOsGkgp/2QCXljazjqC+ZpIlKdRjx+/QtcpwWJ6psZwuagdx6AsAP2AokR5D4x7Av3XS3Og8yhxEXDj2U1zfl0vYV6TPUlcpiZWpSTqwIAttgOtPmA2PO25RWLFanAEgOUu6i8zskC6YVaVuhZoF5fCo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768285002; c=relaxed/simple;
+	bh=gwYog2yWkILne/uAzUmg5SLLW7BGAalPbgUvpHrN5uc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=GIoD8yREXKQZ3TFayi/glBcnkyGLU0iRmSSobUPROCobD9S2aGURvlLu7xIYXd5dSHIENVk19MqJDlp8ySIFvTqEl8KI6aVCqaMzKoN2muQHc3a/WoPpl87ULraHCXPZCrRjJsao8EadUMAWoz8Jd5AxP9MGxECs6AqAcA5AVXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Vc++aZfL; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+	s=202503; t=1768284995;
+	bh=cSbee1z1O436wXLvlU5AQ4uXuwyWU7NpC5/DBlBWO0w=;
+	h=Date:From:To:Cc:Subject:From;
+	b=Vc++aZfLFDDRwp/flwWLjrZbzKMiJP0R/FJzq3prQiUkvu6LdOzWtGpWY7se2GieK
+	 g48luRTj/i4zgAoah7nH85qp2/lzUPMn0JVU+LIf7njz7TAa9fHdwTQco9K/kyseio
+	 OrfA42zuBcvfM1E2LZHgc05NWYFajJOgqFoQR1zzov7DhukxhcmsG0N83oW6khib8C
+	 nPItFnoX9Ib1C8jPX9DYfX/qA+023Bc2b+fOhHCGRTE6n/Eb8PVPn3JZ1b9St5mewv
+	 i4gRXPzfJKU5FQ2qMGGFYVB6Ri75xUd9aBjp15I3uQq2M2LGLOAjulj0jeimvZQSYL
+	 guQNL8N4X8dpw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dqzXg0g21z4w0Q;
+	Tue, 13 Jan 2026 17:16:34 +1100 (AEDT)
+Date: Tue, 13 Jan 2026 17:16:33 +1100
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+To: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Networking <netdev@vger.kernel.org>, Michael Chan
+ <michael.chan@broadcom.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
+ Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20260113171633.1536cc74@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Type: multipart/signed; boundary="Sig_/ibQmQTlDxduYNNkZ=PQk3_l";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 
-Widen the processor column in the TjMax table to accommodate longer
-entries like "Celeron/Pentium Processors (Goldmont Plus/Gemini Lake)"
-which exceed the previous 47-character column width.
+--Sig_/ibQmQTlDxduYNNkZ=PQk3_l
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 099cc1051df7 ("Documentation: hwmon: coretemp: Update supported CPUs and TjMax values")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Closes: https://lore.kernel.org/linux-next/20260113155444.57c7775b@canb.auug.org.au/
-Signed-off-by: Laveesh Bansal <laveeshb@laveeshbansal.com>
+Hi all,
+
+After merging the net-next tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
+
+drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c: In function 'bnxt_ptp_init':
+drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:1141:13: error: implicit decl=
+aration of function 'boot_cpu_has'; did you mean 'boot_cpu_init'? [-Wimplic=
+it-function-declaration]
+ 1141 |             boot_cpu_has(X86_FEATURE_ART))
+      |             ^~~~~~~~~~~~
+      |             boot_cpu_init
+drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:1141:26: error: 'X86_FEATURE_=
+ART' undeclared (first use in this function); did you mean 'X86_FEATURE_ANY=
+'?
+ 1141 |             boot_cpu_has(X86_FEATURE_ART))
+      |                          ^~~~~~~~~~~~~~~
+      |                          X86_FEATURE_ANY
+drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c:1141:26: note: each undeclare=
+d identifier is reported only once for each function it appears in
+
+Caused by commit
+
+  c470195b989f ("bnxt_en: Add PTP .getcrosststamp() interface to get device=
+/host times")
+
+boot_cpu_has() only exists for X86 ...
+
+I have applied the folloring hack for today:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 13 Jan 2026 16:51:58 +1100
+Subject: [PATCH] fix up for "bnxt_en: Add PTP .getcrosststamp() interface to
+ get device/host times"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- Documentation/hwmon/coretemp.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Documentation/hwmon/coretemp.rst b/Documentation/hwmon/coretemp.rst
-index 3afb179e0ced..a3943656fab6 100644
---- a/Documentation/hwmon/coretemp.rst
-+++ b/Documentation/hwmon/coretemp.rst
-@@ -69,8 +69,8 @@ for your CPU, you can pass the correct TjMax value as a module parameter
- Appendix A. Known TjMax lists (TBD):
- Some information comes from ark.intel.com
- 
--=============== =============================================== ================
--Process		Processor					TjMax(C)
-+=============== ======================================================= ================
-+Process		Processor						TjMax(C)
- 
- 22nm		Core i5/i7 Processors
- 		i7 3920XM, 3820QM, 3720QM, 3667U, 3520M		105
-@@ -228,4 +228,4 @@ Process		Processor					TjMax(C)
- 65nm		Celeron Processors
- 		T1700/1600					100
- 		560/550/540/530					100
--=============== =============================================== ================
-+=============== ======================================================= ================
--- 
-2.43.0
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c b/drivers/net/et=
+hernet/broadcom/bnxt/bnxt_ptp.c
+index 75ad385f5f79..20f5a9f38fee 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_ptp.c
+@@ -882,6 +882,7 @@ void bnxt_tx_ts_cmp(struct bnxt *bp, struct bnxt_napi *=
+bnapi,
+ 	}
+ }
+=20
++#ifdef X86_FEATURE_ART
+ static int bnxt_phc_get_syncdevicetime(ktime_t *device,
+ 				       struct system_counterval_t *system,
+ 				       void *ctx)
+@@ -924,6 +925,7 @@ static int bnxt_ptp_getcrosststamp(struct ptp_clock_inf=
+o *ptp_info,
+ 	return get_device_system_crosststamp(bnxt_phc_get_syncdevicetime,
+ 					     ptp, NULL, xtstamp);
+ }
++#endif
+=20
+ static const struct ptp_clock_info bnxt_ptp_caps =3D {
+ 	.owner		=3D THIS_MODULE,
+@@ -1137,9 +1139,11 @@ int bnxt_ptp_init(struct bnxt *bp)
+ 		if (bnxt_ptp_pps_init(bp))
+ 			netdev_err(bp->dev, "1pps not initialized, continuing without 1pps supp=
+ort\n");
+ 	}
++#ifdef X86_FEATURE_ART
+ 	if ((bp->fw_cap & BNXT_FW_CAP_PTP_PTM) && pcie_ptm_enabled(bp->pdev) &&
+ 	    boot_cpu_has(X86_FEATURE_ART))
+ 		ptp->ptp_info.getcrosststamp =3D bnxt_ptp_getcrosststamp;
++#endif
+=20
+ 	ptp->ptp_clock =3D ptp_clock_register(&ptp->ptp_info, &bp->pdev->dev);
+ 	if (IS_ERR(ptp->ptp_clock)) {
+--=20
+2.52.0
 
+
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ibQmQTlDxduYNNkZ=PQk3_l
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmll40EACgkQAVBC80lX
+0GzUwQf/RWC50gqZ0/DmGrLkCT1s2mKBTAr2KsOAAlmNAayfym7gktMKFIABEwQl
+wHJK6T+v2Zslf/Ad4jztMbFuRSyDljQiz4I+KuvnPXv+AKTc/ZYhQZ2zR5UWHmrP
++68T+BSGfSzfBIM7G542AoGlYj21dxRUEEVlcl1pApuvzFhnHZ3IkkbzMgiyG85L
+DbLpuQbMPFffyCs9YqSR8bL8Lsg3YX7WD2BFqiSc5LK+1WWBUz9evo2VQRjM3JQP
+PoApT/lD6zUz8Spe8aUT9eAdK3QWXJRzpI1ohTTIwn0StmgVCrcnViyZgetI1K01
+AQp0XgdBJ/4VhuNGoE58OM1qRpveNw==
+=TLLL
+-----END PGP SIGNATURE-----
+
+--Sig_/ibQmQTlDxduYNNkZ=PQk3_l--
 

@@ -1,191 +1,223 @@
-Return-Path: <linux-next+bounces-9642-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9639-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71985D1A319
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 17:22:36 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB7DDD19DEC
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 16:26:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 12E25300F690
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 16:22:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5D22D300EDFE
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 15:24:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B0E2EBBB0;
-	Tue, 13 Jan 2026 16:22:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 707FC30171A;
+	Tue, 13 Jan 2026 15:24:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NsJ9rgBW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AhP/y80K"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail-pf1-f196.google.com (mail-pf1-f196.google.com [209.85.210.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65F872EA169
-	for <linux-next@vger.kernel.org>; Tue, 13 Jan 2026 16:22:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A00A70830;
+	Tue, 13 Jan 2026 15:24:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768321349; cv=none; b=IzCc/NRJEqqMzK8SSOFkozyNlBb1XhBEGJjPiuSlxxb8IugynoXIShaUfu2lsNBdUvLMDmGtm0Mt80n3VnwCPbLIBaRPLhce4ahA/b5IHiakD1CFlFzW33QDAqwnIlUpp5Kq/Nw4JuUWSwnTlSd3znZfyQakFEeaByOPWWue2es=
+	t=1768317890; cv=none; b=XdegkTWPinoSs4zuGe3Wp8HwcJjHo6L4MZaD22vdtzqkw0YY8umok1101Z+xwxVBxQLp+Wzk9ygeaFtZT+0hXbrJWGyI570T2Nlu/6uBIV2WtW99kighKwH6ce0b4lTIIOaudjxw6dtQ3kvFcopwXwGILaf2NXwrWitYadXssuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768321349; c=relaxed/simple;
-	bh=iqLbJUskSKL4N9IDtD++X0NNSt+LYTZ6yAIiJzJtIKE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lT+ntGcBcWSpOC2vViU4uYwMeMpzcPUKbTa3m/X5I+xG8of+StiPAOVuRGpq7knEaCQCScmvOhePdaXkIzyOiT93ykSj22c/iloTEH872Kt5b1VQihsiDlvc6q2hY5+NcDDOFROQNNJjPcEJmdbWEfDp1t1mU9U+3SWRBRfeEsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NsJ9rgBW; arc=none smtp.client-ip=209.85.210.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f196.google.com with SMTP id d2e1a72fcca58-81f5381d168so2096933b3a.2
-        for <linux-next@vger.kernel.org>; Tue, 13 Jan 2026 08:22:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768321348; x=1768926148; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=bLrLTIifRNqu5HnU5w9pTdgCpPu1ucQ1Ea9E1Sqzz/M=;
-        b=NsJ9rgBW1/u8irXJPvf907HjKyZ6yDq01fd947JvLeUWJHNH8LvJLONBu8p9WHvL+b
-         4O3FAzDhodsjepp28dyRhef9HSkJpdsMaqq5PN/Biy1ZZHRELqNmGv4ETsh9KpwmK29G
-         II/KSbG97tz4B5piyvwdOwLfPhsV0JD+jgv3pZUtSpo8HVbI2DII9+d8O3GzTcuyfSKH
-         cWBfDhO/zHq7dKFSIZXIMwcvWHFQ+ijYbspOB4EbrCLMafj0eNFA7SQ/APNgv2j0Cf83
-         OUxBOcJ6YH4EwxUrKJORDWku+jGN/JSuUYZ+ZGm+pby4JwPuuGMpRKXnoGWmnLu6Nxdd
-         LgGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768321348; x=1768926148;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bLrLTIifRNqu5HnU5w9pTdgCpPu1ucQ1Ea9E1Sqzz/M=;
-        b=bqzDs4xxmsUcLcIi9Blv2VYct9zR2OjMAa0sQ+EpwooHChdMaeUJ4TCmGtb6pOLd1d
-         D2cJeGkpyemaUnDAhdS2BvAcptr0FaxCOy+LXo3Q01lVXgLnuZFWcr4+fP6hEqZTbXax
-         AD7O2V90EdpUHZG7GmcWRhD2wBvLMRIEbYMimqpX9ySnRgwQ/EMBaKHYPaAxlVVPsvlf
-         QQUngiFQdSxZvfv/FiZo0N/gWyZP0VUExhbERE1sJe656iUfuqHlmk4gA2YR45pLMa/I
-         tnaWdUt0cvPt5BmIglOiREZEhV2fjwbLxWU+dW8YYGRVmuvl/OMCyJyfBPRYcth0mIEx
-         61GA==
-X-Forwarded-Encrypted: i=1; AJvYcCXn3EqtUG3wEnTrNjtihXYIQi2lMyqoJptSXAE/sorB5xJjK7y/vDbs8rew2/n8zw72dC0s8jtowUpa@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJxlIEqEzrDgGKSWGQlchzG59oTxZSGUlBWrU4zSbbL5sjz79u
-	yKmXj0SH1naVA16nAg8pFCgK56pGDC6mhYPxmKSqM79WEyJG5mgkzetYQzgOYHp3
-X-Gm-Gg: AY/fxX5/GNIv5y0vNO2NKCeOOEn0kO++RbPCFJ3cHz92KIvsHxIYs/mTxEq1nlX5fHr
-	muQ5nqOtt7I2njuE/rw/WNlh9H3fIGy9y4kojg8GG+Ke4lgFyglpkvbTXjy6DlCS0cKyEQgAS3e
-	5b8CuF4+feff9b6Mv6rQaTPuddUE52dBlIFzxJ7+6s0yCV40cjEmwcI9UAYzMoMxhswIMBi9Cdq
-	WCp/VNgL51C5ZjJcjO9z3xFb9f1Gj/R/hFNFouQxSR1x1QZo79V02woxRKx+va5IFKGplmiVIpn
-	a23aesRzoincfx544OcAw8WAOlFxrFkgZDl0Irx08ed/mQeCK0mmBvz5VFBVSD4tT4OyCN0fMjE
-	0rygXW93Q3G5isvphlTExeAJtbGcgaP0x9d9x9D2Dk/Hx4hUp6uEZQJCBD5/lyLB4wZFbM0soao
-	KQAoHnwWchfYb0RQ1YqMDa1IDwTF844i937VW1KfYgS1tirSrN8arDHLaFyETd
-X-Google-Smtp-Source: AGHT+IHKSKZQgADOl4Pfjd3+mTQKk94xUzc05noeHLNnu6YOzYzqI6HhXwvi4DcrMT5Jb//EbsxJjA==
-X-Received: by 2002:a05:7301:1124:b0:2ae:5dc2:3b08 with SMTP id 5a478bee46e88-2b17d208e7fmr20636867eec.18.1768315941203;
-        Tue, 13 Jan 2026 06:52:21 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b175bee31dsm15888653eec.32.2026.01.13.06.52.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jan 2026 06:52:20 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <e7b367a2-bcb7-4ac9-83ee-ef55d4c2e303@roeck-us.net>
-Date: Tue, 13 Jan 2026 06:52:18 -0800
+	s=arc-20240116; t=1768317890; c=relaxed/simple;
+	bh=taak2UygMZbdacgSedIXzlFkiSjhrP80UZpBg3+A9T4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=uKXTvmE5KTGkqPCVLoOGTPkma+MkZEPTRbdD2om7mf9QskYtaoc0d7f4ICyUmbcgMPwF4/nEgpSpUuR56u4sq8avld39mnCnmW0ZV3XKfB2A7R3m8D9YQh1fepebnWItR0z07A8mVoKv0476oS4Ipa0TETk11QbKO8rX/h4UuBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AhP/y80K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22D46C116C6;
+	Tue, 13 Jan 2026 15:24:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768317889;
+	bh=taak2UygMZbdacgSedIXzlFkiSjhrP80UZpBg3+A9T4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=AhP/y80KVpZcmRV1+NMKLTI7A3S3B1azBgUpQ1DJUoaoH/TdnGwIdSpNdf4iOtRl5
+	 VMjPXhRqRohFjpEbWulvcJ9JjRwozK8fucaQwQiM8u0Gja1ik0Q3sTcW/6IIEq+3d5
+	 hHD4PWcpVpfgVDOn0SV7bboOAc09bk7OwyDufmZublxhYqPbm49WVLbdvElM/VF8he
+	 HvtLSZJ2jXKm2fI/o+QkcMPrelVltHLBYAFKn1iSoIrObiMteKseVxFxZCfeELV8Ah
+	 IWAlUHyqaY0szCLSQBji+FnqKNi/kZEfK8gaMPepsMkMAyl1jzdeApqJdvxGLgQf5K
+	 W731h5A9eUm3w==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Bert Karwatzki <spasswolf@web.de>, linux-kernel@vger.kernel.org
+Cc: Bert Karwatzki <spasswolf@web.de>, linux-next@vger.kernel.org, Mario
+ Limonciello <mario.limonciello@amd.com>, Sebastian Andrzej Siewior
+ <bigeasy@linutronix.de>, Clark Williams <clrkwllms@kernel.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Christian =?utf-8?Q?K=C3=B6nig?=
+ <christian.koenig@amd.com>,
+ regressions@lists.linux.dev, linux-pci@vger.kernel.org,
+ linux-acpi@vger.kernel.org, "Rafael J . Wysocki"
+ <rafael.j.wysocki@intel.com>, acpica-devel@lists.linux.dev, Robert Moore
+ <robert.moore@intel.com>, Saket Dumbre <saket.dumbre@intel.com>, Bjorn
+ Helgaas <bhelgaas@google.com>, Clemens Ladisch <clemens@ladisch.de>,
+ Jinchao Wang <wangjinchao600@gmail.com>, Yury Norov
+ <yury.norov@gmail.com>, Anna Schumaker <anna.schumaker@oracle.com>,
+ Baoquan He <bhe@redhat.com>, "Darrick J. Wong" <djwong@kernel.org>, Dave
+ Young <dyoung@redhat.com>, Doug Anderson <dianders@chromium.org>,
+ "Guilherme G. Piccoli" <gpiccoli@igalia.com>, Helge Deller
+ <deller@gmx.de>, Ingo Molnar <mingo@kernel.org>, Jason Gunthorpe
+ <jgg@ziepe.ca>, Joanthan Cameron <Jonathan.Cameron@huawei.com>, Joel
+ Granados <joel.granados@kernel.org>, John Ogness
+ <john.ogness@linutronix.de>, Kees Cook <kees@kernel.org>, Li Huafei
+ <lihuafei1@huawei.com>, "Luck, Tony" <tony.luck@intel.com>, Luo Gengkun
+ <luogengkun@huaweicloud.com>, Max Kellermann <max.kellermann@ionos.com>,
+ Nam Cao <namcao@linutronix.de>, oushixiong <oushixiong@kylinos.cn>, Petr
+ Mladek <pmladek@suse.com>, Qianqiang Liu <qianqiang.liu@163.com>, Sergey
+ Senozhatsky <senozhatsky@chromium.org>, Sohil Mehta
+ <sohil.mehta@intel.com>, Tejun Heo <tj@kernel.org>, Thomas Zimemrmann
+ <tzimmermann@suse.de>, Thorsten Blum <thorsten.blum@linux.dev>, Ville
+ Syrjala <ville.syrjala@linux.intel.com>, Vivek Goyal <vgoyal@redhat.com>,
+ Yicong Yang <yangyicong@hisilicon.com>, Yunhui Cui
+ <cuiyunhui@bytedance.com>, Andrew Morton <akpm@linux-foundation.org>,
+ W_Armin@gmx.de
+Subject: Re: NMI stack overflow during resume of PCIe bridge with
+ CONFIG_HARDLOCKUP_DETECTOR=y
+In-Reply-To: <20260113094129.3357-1-spasswolf@web.de>
+References: <20260113094129.3357-1-spasswolf@web.de>
+Date: Tue, 13 Jan 2026 16:24:46 +0100
+Message-ID: <87h5spk01t.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] Documentation: hwmon: coretemp: Fix malformed RST
- table
-To: Laveesh Bansal <laveeshb@laveeshbansal.com>, linux-hwmon@vger.kernel.org,
- linux-doc@vger.kernel.org
-Cc: corbet@lwn.net, rdunlap@infradead.org, sfr@canb.auug.org.au,
- linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-References: <20260113075322.978737-1-laveeshb@laveeshbansal.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <20260113075322.978737-1-laveeshb@laveeshbansal.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 1/12/26 23:53, Laveesh Bansal wrote:
-> Shorten the Celeron/Pentium processor entries in the TjMax table to fit
-> within the 47-character column width, fixing the RST table parsing error.
-> 
-> The following entries exceeded the column width:
->    - "Celeron/Pentium Processors (Goldmont/Apollo Lake)" (49 chars)
->    - "Celeron/Pentium Processors (Goldmont Plus/Gemini Lake)" (54 chars)
->    - "Celeron/Pentium Processors (Tremont/Jasper Lake)" (48 chars)
-> 
-> Drop "Processors" from these entries as this preserves all searchable
-> technical keywords (Celeron, Pentium, Goldmont, Gemini Lake, etc.) while
-> "Processors" is implied by the chip names and adds no search value.
-> 
-> Fixes: 099cc1051df7 ("Documentation: hwmon: coretemp: Update supported CPUs and TjMax values")
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Closes: https://lore.kernel.org/linux-next/20260113155444.57c7775b@canb.auug.org.au/
-> Signed-off-by: Laveesh Bansal <laveeshb@laveeshbansal.com>
-> ---
-> v2:
->    - Shorten text instead of widening columns (widening would require
->      adjusting 101 data rows to realign TjMax values)
-> 
-> Tested with:
->    - python3 -m docutils Documentation/hwmon/coretemp.rst /dev/null
->    - make htmldocs
-> 
-> Open to alternative approaches if anyone has a better solution.
-> ---
->   Documentation/hwmon/coretemp.rst | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/coretemp.rst b/Documentation/hwmon/coretemp.rst
-> index 3afb179e0ced..3ba44b57d028 100644
-> --- a/Documentation/hwmon/coretemp.rst
-> +++ b/Documentation/hwmon/coretemp.rst
-> @@ -120,12 +120,12 @@ Process		Processor					TjMax(C)
->   		x5-E3940/E3930					105
->   		x7-E3950					105
->   
-> -14nm		Celeron/Pentium Processors (Goldmont/Apollo Lake)
-> +14nm		Celeron/Pentium (Goldmont/Apollo Lake)
+On Tue, Jan 13 2026 at 10:41, Bert Karwatzki wrote:
+> Here's the result in case of the crash:
+> 2026-01-12T04:24:36.809904+01:00 T1510;acpi_ex_system_memory_space_handler 255: logical_addr_ptr = ffffc066977b3000
+> 2026-01-12T04:24:36.846170+01:00 C14;exc_nmi: 0
 
-I updated the patch to split the affected lines.
+Here the NMI triggers in non-task context on CPU14
 
-		Celeron/Pentium Processors
-		(Goldmont/Apollo Lake)
+> 2026-01-12T04:24:36.960760+01:00 C14;exc_nmi: 10.3
+> 2026-01-12T04:24:36.960760+01:00 C14;default_do_nmi 
+> 2026-01-12T04:24:36.960760+01:00 C14;nmi_handle: type=0x0
+> 2026-01-12T04:24:36.960760+01:00 C14;nmi_handle: a=0xffffffffa1612de0
+> 2026-01-12T04:24:36.960760+01:00 C14;nmi_handle: a->handler=perf_event_nmi_handler+0x0/0xa6
+> 2026-01-12T04:24:36.960760+01:00 C14;perf_event_nmi_handler: 0
+> 2026-01-12T04:24:36.960760+01:00 C14;perf_event_nmi_handler: 1
+> 2026-01-12T04:24:36.960760+01:00 C14;perf_event_nmi_handler: 2
+> 2026-01-12T04:24:36.960760+01:00 C14;x86_pmu_handle_irq: 2
+> 2026-01-12T04:24:36.960760+01:00 C14;x86_pmu_handle_irq: 2.6
+> 2026-01-12T04:24:36.960760+01:00 C14;__perf_event_overflow: 0
+> 2026-01-12T04:24:36.960760+01:00 C14;__perf_event_overflow: 6.99: overflow_handler=watchdog_overflow_callback+0x0/0x10d
+> 2026-01-12T04:24:36.960760+01:00 C14;watchdog_overflow_callback: 0
+> 2026-01-12T04:24:36.960760+01:00 C14;__ktime_get_fast_ns_debug: 0.1
+> 2026-01-12T04:24:36.960760+01:00 C14;tk_clock_read_debug: read=read_hpet+0x0/0xf0
+> 2026-01-12T04:24:36.960760+01:00 C14;read_hpet: 0
+> 2026-01-12T04:24:36.960760+01:00 C14;read_hpet: 0.1
 
-Guenter
+> 2026-01-12T04:24:36.960760+01:00 T0;exc_nmi: 0
 
+This one triggers in task context of PID0, aka idle task, but it's not
+clear on which CPU that happens. It's probably CPU13 as that continues
+with the expected 10.3 output, but that's almost ~1.71 seconds later.
+
+> 2026-01-12T04:24:38.674625+01:00 C13;exc_nmi: 10.3
+> 2026-01-12T04:24:38.674625+01:00 C13;default_do_nmi 
+> 2026-01-12T04:24:38.674625+01:00 C13;nmi_handle: type=0x0
+> 2026-01-12T04:24:38.674625+01:00 C13;nmi_handle: a=0xffffffffa1612de0
+> 2026-01-12T04:24:38.674625+01:00 C13;nmi_handle: a->handler=perf_event_nmi_handler+0x0/0xa6
+> 2026-01-12T04:24:38.674625+01:00 C13;perf_event_nmi_handler: 0
+> 2026-01-12T04:24:38.674625+01:00 C13;perf_event_nmi_handler: 1
+> 2026-01-12T04:24:38.674625+01:00 C13;perf_event_nmi_handler: 2
+> 2026-01-12T04:24:38.674625+01:00 C13;x86_pmu_handle_irq: 2
+> 2026-01-12T04:24:38.674625+01:00 C13;x86_pmu_handle_irq: 2.6
+> 2026-01-12T04:24:38.674625+01:00 C13;__perf_event_overflow: 0
+> 2026-01-12T04:24:38.674625+01:00 C13;__perf_event_overflow: 6.99: overflow_handler=watchdog_overflow_callback+0x0/0x10d
+> 2026-01-12T04:24:38.674625+01:00 C13;watchdog_overflow_callback: 0
+> 2026-01-12T04:24:38.674625+01:00 C13;__ktime_get_fast_ns_debug: 0.1
+> 2026-01-12T04:24:38.674625+01:00 C13;tk_clock_read_debug: read=read_hpet+0x0/0xf0
+> 2026-01-12T04:24:38.674625+01:00 C13;read_hpet: 0
+> 2026-01-12T04:24:38.674625+01:00 C13;read_hpet: 0.1
+
+> 2026-01-12T04:24:38.674625+01:00 T0;exc_nmi: 0
+
+Same picture as above, but this time on CPU2 with a delay of 0.68
+seconds
+
+> 2026-01-12T04:24:39.355101+01:00 C2;exc_nmi: 10.3
+> 2026-01-12T04:24:39.355101+01:00 C2;default_do_nmi 
+> 2026-01-12T04:24:39.355101+01:00 C2;nmi_handle: type=0x0
+> 2026-01-12T04:24:39.355101+01:00 C2;nmi_handle: a=0xffffffffa1612de0
+> 2026-01-12T04:24:39.355101+01:00 C2;nmi_handle: a->handler=perf_event_nmi_handler+0x0/0xa6
+> 2026-01-12T04:24:39.355101+01:00 C2;perf_event_nmi_handler: 0
+> 2026-01-12T04:24:39.355101+01:00 C2;perf_event_nmi_handler: 1
+> 2026-01-12T04:24:39.355101+01:00 C2;perf_event_nmi_handler: 2
+> 2026-01-12T04:24:39.355101+01:00 C2;x86_pmu_handle_irq: 2
+> 2026-01-12T04:24:39.355101+01:00 C2;x86_pmu_handle_irq: 2.6
+> 2026-01-12T04:24:39.355101+01:00 C2;__perf_event_overflow: 0
+> 2026-01-12T04:24:39.355101+01:00 C2;__perf_event_overflow: 6.99: overflow_handler=watchdog_overflow_callback+0x0/0x10d
+> 2026-01-12T04:24:39.355101+01:00 C2;watchdog_overflow_callback: 0
+> 2026-01-12T04:24:39.355101+01:00 C2;__ktime_get_fast_ns_debug: 0.1
+> 2026-01-12T04:24:39.355101+01:00 C2;tk_clock_read_debug: read=read_hpet+0x0/0xf0
+> 2026-01-12T04:24:39.355101+01:00 C2;read_hpet: 0
+> 2026-01-12T04:24:39.355101+01:00 C2;read_hpet: 0.1
+
+> 2026-01-12T04:24:39.355101+01:00 T0;exc_nmi: 0
+
+Again on CPU0 with a delay of 0.06 seconds
+
+> 2026-01-12T04:24:39.410207+01:00 C0;exc_nmi: 10.3
+> 2026-01-12T04:24:39.410207+01:00 C0;default_do_nmi 
+> 2026-01-12T04:24:39.410207+01:00 C0;nmi_handle: type=0x0
+> 2026-01-12T04:24:39.410207+01:00 C0;nmi_handle: a=0xffffffffa1612de0
+> 2026-01-12T04:24:39.410207+01:00 C0;nmi_handle: a->handler=perf_event_nmi_handler+0x0/0xa6
+> 2026-01-12T04:24:39.410207+01:00 C0;perf_event_nmi_handler: 0
+> 2026-01-12T04:24:39.410207+01:00 C0;perf_event_nmi_handler: 1
+> 2026-01-12T04:24:39.410207+01:00 C0;perf_event_nmi_handler: 2
+> 2026-01-12T04:24:39.410207+01:00 C0;x86_pmu_handle_irq: 2
+> 2026-01-12T04:24:39.410207+01:00 C0;x86_pmu_handle_irq: 2.6
+> 2026-01-12T04:24:39.410207+01:00 C0;__perf_event_overflow: 0
+> 2026-01-12T04:24:39.410207+01:00 C0;__perf_event_overflow: 6.99: overflow_handler=watchdog_overflow_callback+0x0/0x10d
+> 2026-01-12T04:24:39.410207+01:00 C0;watchdog_overflow_callback: 0
+> 2026-01-12T04:24:39.410207+01:00 C0;__ktime_get_fast_ns_debug: 0.1
+> 2026-01-12T04:24:39.410207+01:00 C0;tk_clock_read_debug: read=read_hpet+0x0/0xf0
+> 2026-01-12T04:24:39.410207+01:00 C0;read_hpet: 0
+> 2026-01-12T04:24:39.410207+01:00 C0;read_hpet: 0.1
+
+> 2026-01-12T04:24:39.410207+01:00 T0;exc_nmi: 0
+
+....
+
+> In the case of the crash the interrupt handler never returns because when accessing
+> the HPET another NMI is triggered. This goes on until a crash happens, probably because
+> of stack overflow.
+
+No. NMI nesting is only one level deep and immediately returns:
+
+        if (this_cpu_read(nmi_state) != NMI_NOT_RUNNING) {
+		this_cpu_write(nmi_state, NMI_LATCHED);
+		return;
+	}
+
+
+So it's not a stack overflow. What's more likely is that after a while
+_ALL_ CPUs are hung up in the NMI handler after they tripped over the
+HPET read.
+
+> The behaviour described here seems to be similar to the bug that commit
+> 3d5f4f15b778 ("watchdog: skip checks when panic is in progress") is fixing, but
+> this is actually a different bug as kernel 6.18 (which contains 3d5f4f15b778)
+> is also affected (I've conducted 5 tests with 6.18 so far and got 4 crashes (crashes occured
+> after (0.5h, 1h, 4.5h, 1.5h) of testing)). 
+> Nevertheless these look similar enough to CC the involved people.
+
+There is nothing similar.
+
+Your problem originates from a screwed up hardware state which in turn
+causes the HPET to go haywire for unknown reasons.
+
+What is the physical address of this ACPI handler access:
+
+       logical_addr_ptr = ffffc066977b3000
+
+along with the full output of /proc/iomem
+
+Thanks,
+
+        tglx
 

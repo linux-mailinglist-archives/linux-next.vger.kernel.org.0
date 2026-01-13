@@ -1,100 +1,138 @@
-Return-Path: <linux-next+bounces-9640-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9641-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7893DD1A04A
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 16:50:43 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99AD7D1A2E9
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 17:20:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 980B83012C4B
-	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 15:48:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D9B423009750
+	for <lists+linux-next@lfdr.de>; Tue, 13 Jan 2026 16:19:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D22F2E0914;
-	Tue, 13 Jan 2026 15:48:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EA062DA760;
+	Tue, 13 Jan 2026 16:19:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Nnss7xi7"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="bSt62rP3"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B3BC2E6CCE;
-	Tue, 13 Jan 2026 15:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90822836B1;
+	Tue, 13 Jan 2026 16:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768319316; cv=none; b=GtUVTir01smRgGGqGmt3msPc4mbGBKL7VDBPgwCO+VkbhRiLoaHgvczrQMeUYrg4hy3N4rKM+Y/tPxuqeAvnYGCOXfdu4vPz6aGtbNUNFyTNyrD9Ty121OtZSk924oVUJ0cUL3LQEtiQUQ6FSdE+ElfDdJlgnIMF7a9vhV6xbTE=
+	t=1768321193; cv=none; b=j1PIHt6X2mvpBaQvuR/NjY4QQaiebG7rt9qOugGR47vauIb6ZcQ8+ijWT2XwL7PnPuPut79BPxY9lux97HLTY/aCWQC+wSm7oqThm5A8Hu7dXMZX1Lg7mNbdiB+n1duqInq7WfPjbC+tlNpV3aCbXyDah66FfNkSLo5m7CWv2hQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768319316; c=relaxed/simple;
-	bh=H23NoiDTcJWPhrvi0+rJI0Q7CNhuFfh+dseXr4Z1Hu4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gQPtyCIYqwcFpR53FQ3y5UzY2KTfmxr1PJmx67UO0CNfGTl2QCCLnMxTZGpr9Hu/CgKLwW7KAZUbsP1x/Ucn1svlcBBZvpLy7RFww559wnIaxGeXLYBj7/9GXLWUI2trRRm72pyz5kcaOcrQwL6RUavCbuvdYnah4uhBWgQ88+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Nnss7xi7; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id CDC2540E01A9;
-	Tue, 13 Jan 2026 15:48:31 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id xP0gvcZowi5X; Tue, 13 Jan 2026 15:48:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1768319308; bh=qH/QwcqUveG8ATrXyKNUCy/ONqU9MpS5vB0I+Q+ncB0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Nnss7xi7SzKTj5HXhN+pgfX4wdJOSUOTxezIh3SH0EZghKEWp27cDovB2pCslxSyC
-	 STODJS/4zNiFDEjuNJGhgIq/YLv4y5areYDZ8ddZvwe6+NP5b8oTPTUo4p0zXR+ND2
-	 0wPdA9t2ehLrSn8iGYidCBRdca8l+M9Wyfvsin35F3WYmBUvy6Hs6/+CTDbFAaLVbM
-	 JbgZUJ18+4VJvEflUBlQbbIglETgfMMM/RyGAhwSIwvEIli5y5VwtHCw1/IwWbAtnC
-	 uFyIg+DXbkVztz9stz4Cgh6vjiEBe4p06s1VUxD8QlSbjjeNdvN6X23fuJBlmCn6WO
-	 ZxaD/tR2V+6juSK0oVizjs9vag4EuLlbtX9HfYOZcArhHL4kGe2UnK/ce7yeiRD6rc
-	 lodzbsZ1vxAJ+ZPbQ7sKewP3IR0cX91y64HSpM0hITe1C4Bm87UJaDEUXvQEmQViiQ
-	 ZS4909OGaQJqUr5mpvCGrxGNxmJejY2ki02R8vTbUGXTWxuUKUz9/zWzYAbgegJcNL
-	 gg8e86msKHeiNHmySC1JypNvsoLEkKa+gLz2v+pdwgsBijEgppMrlbKZdYA2xfZ16J
-	 AY7YR/DI20xk5wSNXoKHv3JuDjzo+TrarK6n7iZjjmCPW1gg9YHzuwJwcx9wkY9hfQ
-	 ONLPXiL1x/KVFl65vP91Wdtw=
-Received: from zn.tnic (pd953023b.dip0.t-ipconnect.de [217.83.2.59])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with UTF8SMTPSA id 940E240E00DA;
-	Tue, 13 Jan 2026 15:48:21 +0000 (UTC)
-Date: Tue, 13 Jan 2026 16:48:14 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20260113154814.GLaWZpPpzJcSRuLFjA@fat_crate.local>
-References: <20260107134710.15363555@canb.auug.org.au>
- <20260107144753.7071f5f2@canb.auug.org.au>
+	s=arc-20240116; t=1768321193; c=relaxed/simple;
+	bh=3SBUDUSg032YdNQugE/A6UbCvUL2kWPTmr5jCJFI3SE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K1WQVPcARVXJz7Y+DJZa0dBVOKKsw5+AASdLk9Xa/aGlYP5OkIGLioyW6qYuNrcTCCO5FyxAdXQKdy36L+u8ichJlkPnWOhDtigdEVAIHjdkbYrbvIc/TEiWcxCIHt5pJ7SU9b2Md2QUEIhbkjVKg7NWXArEaNSfjBJ/j3HLNj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=bSt62rP3; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=WDqoLGxmdtNlpqkgAnKp8A4MMg8bcpe4ZbFlPH09aeA=; b=bSt62rP3j9P9Dne7STT4kRtlhJ
+	J2js/GE5z/G3KyBx9J+GJXpuI3cTWfczMSlhyCVB3mZio9Uj0v9Np4VNm+y34Z8CrHXeYy0o4hD+8
+	tgeIIENtpaMJ3JGB82WUpO2T45ZK9z05h82H3ZC8CgzCV041lxB6Ernz9xfZe0hDftxXC22hMoWaT
+	11NTrRoqSHh3yR97GH6MptgHUWoM/S+TprSyDU+4OKprYLu8ZZH9cQwsGXvxi6BBS2NKY/HxmIXXO
+	CVb0YhYpEKYMxjUyZzfQ/Ba+Ch6GViEXA/wlUwXPpug/3aUFhgzY+rrKONVRfc6mNHCOeKcejltI9
+	60RSI1Kg==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vfh7W-00000007SU1-0DEN;
+	Tue, 13 Jan 2026 16:19:50 +0000
+Message-ID: <4f221696-7a67-4fce-83d9-d5573f16ca6f@infradead.org>
+Date: Tue, 13 Jan 2026 08:19:49 -0800
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260107144753.7071f5f2@canb.auug.org.au>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] Documentation: hwmon: coretemp: Fix malformed RST
+ table
+To: Laveesh Bansal <laveeshb@laveeshbansal.com>, linux-hwmon@vger.kernel.org,
+ linux-doc@vger.kernel.org
+Cc: linux@roeck-us.net, corbet@lwn.net, sfr@canb.auug.org.au,
+ linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+References: <20260113075322.978737-1-laveeshb@laveeshbansal.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20260113075322.978737-1-laveeshb@laveeshbansal.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jan 07, 2026 at 02:47:53PM +1100, Stephen Rothwell wrote:
-> So this still failed with yesterday's tip tree, so clearly there is
-> some other change in today's linux-next that has exposed this.  Instead
-> of using the old version of the tip tree, I have just reverted this
-> commit for today.
 
-This issue should be resolved now in the next tip/master incarnation.
 
-Holler if you still see issues.
+On 1/12/26 11:53 PM, Laveesh Bansal wrote:
+> Shorten the Celeron/Pentium processor entries in the TjMax table to fit
+> within the 47-character column width, fixing the RST table parsing error.
+> 
+> The following entries exceeded the column width:
+>   - "Celeron/Pentium Processors (Goldmont/Apollo Lake)" (49 chars)
+>   - "Celeron/Pentium Processors (Goldmont Plus/Gemini Lake)" (54 chars)
+>   - "Celeron/Pentium Processors (Tremont/Jasper Lake)" (48 chars)
+> 
+> Drop "Processors" from these entries as this preserves all searchable
+> technical keywords (Celeron, Pentium, Goldmont, Gemini Lake, etc.) while
+> "Processors" is implied by the chip names and adds no search value.
+> 
+> Fixes: 099cc1051df7 ("Documentation: hwmon: coretemp: Update supported CPUs and TjMax values")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Closes: https://lore.kernel.org/linux-next/20260113155444.57c7775b@canb.auug.org.au/
+> Signed-off-by: Laveesh Bansal <laveeshb@laveeshbansal.com>
 
-Thx.
+Works for me. Thanks.
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+
+> ---
+> v2:
+>   - Shorten text instead of widening columns (widening would require
+>     adjusting 101 data rows to realign TjMax values)
+> 
+> Tested with:
+>   - python3 -m docutils Documentation/hwmon/coretemp.rst /dev/null
+>   - make htmldocs
+> 
+> Open to alternative approaches if anyone has a better solution.
+> ---
+>  Documentation/hwmon/coretemp.rst | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/hwmon/coretemp.rst b/Documentation/hwmon/coretemp.rst
+> index 3afb179e0ced..3ba44b57d028 100644
+> --- a/Documentation/hwmon/coretemp.rst
+> +++ b/Documentation/hwmon/coretemp.rst
+> @@ -120,12 +120,12 @@ Process		Processor					TjMax(C)
+>  		x5-E3940/E3930					105
+>  		x7-E3950					105
+>  
+> -14nm		Celeron/Pentium Processors (Goldmont/Apollo Lake)
+> +14nm		Celeron/Pentium (Goldmont/Apollo Lake)
+>  		J3455/J3355					105
+>  		N3450/N3350					105
+>  		N4200						105
+>  
+> -14nm		Celeron/Pentium Processors (Goldmont Plus/Gemini Lake)
+> +14nm		Celeron/Pentium (Goldmont Plus/Gemini Lake)
+>  		J4105/J4005					105
+>  		N4100/N4000					105
+>  		N5000						105
+> @@ -133,7 +133,7 @@ Process		Processor					TjMax(C)
+>  10nm		Atom Processors (Tremont/Elkhart Lake)
+>  		x6000E						105
+>  
+> -10nm		Celeron/Pentium Processors (Tremont/Jasper Lake)
+> +10nm		Celeron/Pentium (Tremont/Jasper Lake)
+>  		N4500/N5100/N6000 series			105
+>  
+>  45nm		Xeon Processors 5400 Quad-Core
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+~Randy
 

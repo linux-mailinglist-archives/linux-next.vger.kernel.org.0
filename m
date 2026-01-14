@@ -1,98 +1,145 @@
-Return-Path: <linux-next+bounces-9660-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9661-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AB80D213C8
-	for <lists+linux-next@lfdr.de>; Wed, 14 Jan 2026 21:55:29 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1B1BD219E4
+	for <lists+linux-next@lfdr.de>; Wed, 14 Jan 2026 23:38:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BC81E309D9F3
-	for <lists+linux-next@lfdr.de>; Wed, 14 Jan 2026 20:53:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9B017301D329
+	for <lists+linux-next@lfdr.de>; Wed, 14 Jan 2026 22:38:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7718A357A24;
-	Wed, 14 Jan 2026 20:53:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDE8D38A9BC;
+	Wed, 14 Jan 2026 22:38:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="Kp9T/zWt"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="i+bFDRt4"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025BA3559F1;
-	Wed, 14 Jan 2026 20:53:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 783663A89C7;
+	Wed, 14 Jan 2026 22:38:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768424029; cv=none; b=Cz58DQE2dgPjzaxJf7V4fx5KeK63FNdgLXLrvqnISYHJDoremBWuaJ/d1b3363hGoY79xyhp6GKIzMTwC7MhrlOjL/GHM95jTLa+zlTNWvTCvbsmi7HMgtjqdsESx1cF4YP89SSDSq79B5n1/NmxU04AVqxG02rPS0czt1X/bX4=
+	t=1768430327; cv=none; b=u/O0mjITngGLuP0+2U2eHTov9Hj5KKr9LoUbFRb0vG9AKRC3hADDa9PsyZSxkx+nz1vt9U/fJkfs3iQfYMypkmtOKgLWzGfuoohsIJxTtSpiHDtRi7RZT5+fR2Kr0yumJWKiPwH+eNMbCEOA08hohdyn0foQ0MwuTndNmsdAShw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768424029; c=relaxed/simple;
-	bh=4eW37fPd/Cdu9dh9S9lE7GbXYXMjfexOnaCCXwq780E=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=aEIbQEQ4xgx9Q5ZKDR7DGdupheBTXXut/Xy9I6g2MTIUjEmCRiXg44efAXs1jU1yD3rxAzKR18L2eNUKcl2Jrl+ke9PE60JzKRZjnf5u8RUYBlMEnnePwYVHlemwUKETZTZBCN0FHrhhovagNtWUYbXbxeCByELcxVDKrOExBF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=Kp9T/zWt; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1768430327; c=relaxed/simple;
+	bh=xaJvIk2DJ5DkE6EsKWZlJYZXTNwFIl97sDGDFg8aIwk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=dDwVt+pVKt1UjFdQ5BW9lyAZoPBbd0jBFpfjqVnTD8Zsz1BJ9Zr8XajnErdxJ/gjYRnzT4lUiGlN+c/Za5bMaA0cV/QoafEAAIFIyg98Awf0q+mHhXIrBaa/5Nqyb07B/Ofmi4TQTw2Psa7xBpDqnkKO8rG2neolksV/VjB2eDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=i+bFDRt4; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1768424022;
-	bh=A4/n64SB75kIWeEU+EWMxcFfNtAF2hHW5wwL0GMwKwE=;
+	s=202503; t=1768430309;
+	bh=BtSACyDLs5AomhIHUOymj3ak4lN6Fa97oUNc6C68NE8=;
 	h=Date:From:To:Cc:Subject:From;
-	b=Kp9T/zWtgmUATr3SHuvqlgCRF93dshnstTg3mZT1EfaTi8NkxFCh8J6TxQA9L0ZwW
-	 ofK6c2xkRD2pC8ukdRNbZTJzujgL9NHukZ08jpijQ+jEj5dtxtzXaRQe0yGuT8OhzN
-	 nEz+B0pYVCY1Wsd3jiPj4HDKsNm30PqaLcbsijlnaSyRnxWkm4UKVszrN7m1SkMEUC
-	 whFfgglPQ7PCCGpQ5LeR46yERAwoiDveS2jN+eAqUnKFZ/HhSKXa9CrtokRHhIsFY3
-	 FuTz8ViOF8e1IpUxXvpopk/lHy5olF6r/PhxjHKtmkU7oghDT1kZwyCLxzEY7WiMXr
-	 hVFkuykkVutGA==
+	b=i+bFDRt4q53Uk6JfAsa4EskHNZv5jWg3kk2C2ce7Bs8EGG0J5Lx/aoV6YBx8lFgKF
+	 xCJ7ah/QO8Gb3BR6AM4Exakt67aGM43XUC70hOn6npjF01qWMwWstgUO7e2KDOIzI8
+	 gbW42AQdBg6WTqPwFK7R27ddbtgyb0dfxLwqHLH2luu2B6irt76aXWgEi3IrndIp/k
+	 YRk96EckeOQIq7OyJA3vvuKu5SgscDTp/YAlDmLI2iykyQpzawiOzEDAh3Oqwb254E
+	 OvIT32XZs2Yfi4/Xbj/9gQcGw8hfMD7Zv4qwe1DTsVRp8PsmJoa5qFCjB32yHmCVWJ
+	 o/E/F3Q9so9ew==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4dryyF2Z4Cz4w2D;
-	Thu, 15 Jan 2026 07:53:41 +1100 (AEDT)
-Date: Thu, 15 Jan 2026 07:53:40 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ds1H968cdz4w26;
+	Thu, 15 Jan 2026 09:38:29 +1100 (AEDT)
+Date: Thu, 15 Jan 2026 09:38:28 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Jens Wiklander <jens.wiklander@linaro.org>
-Cc: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@baylibre.com>,
- Jarkko Sakkinen <jarkko@kernel.org>, Linux Kernel Mailing List
+To: Al Viro <viro@ZenIV.linux.org.uk>, Christian Brauner
+ <brauner@kernel.org>
+Cc: Jeff Layton <jlayton@kernel.org>, Linux Kernel Mailing List
  <linux-kernel@vger.kernel.org>, Linux Next Mailing List
  <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the tee tree
-Message-ID: <20260115075340.72b35a93@canb.auug.org.au>
+Subject: linux-next: manual merge of the vfs tree with the vfs-brauner tree
+Message-ID: <20260115093828.318572ea@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KoOADVkMEYE_o+mAVfX6MZl";
+Content-Type: multipart/signed; boundary="Sig_/3oNr6q7BopKIEhWJa9bAN2S";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/KoOADVkMEYE_o+mAVfX6MZl
+--Sig_/3oNr6q7BopKIEhWJa9bAN2S
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+Today's linux-next merge of the vfs tree got a conflict in:
 
-  e4280e3ec728 ("tpm/tpm_ftpm_tee: Fix kdoc after function renames")
+  Documentation/filesystems/porting.rst
 
-is missing a Signed-off-by from its author.
+between commit:
+
+  2b10994be716 ("filelock: default to returning -EINVAL when ->setlease ope=
+ration is NULL")
+
+from the vfs-brauner tree and commits:
+
+  d04faed9ff84 ("non-consuming variant of do_renameat2()")
+  7335480a8461 ("non-consuming variant of do_linkat()")
+  82f616740547 ("non-consuming variant of do_symlinkat()")
+  efa68e343b3b ("non-consuming variant of do_mkdirat()")
+  f2a62ccef4ad ("non-consuming variant of do_mknodat()")
+  5f6a811e9abe ("non-consuming variants of do_{unlinkat,rmdir}()")
+
+from the vfs tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/KoOADVkMEYE_o+mAVfX6MZl
+diff --cc Documentation/filesystems/porting.rst
+index ed3ac56e3c76,2b4dddfe6c66..000000000000
+--- a/Documentation/filesystems/porting.rst
++++ b/Documentation/filesystems/porting.rst
+@@@ -1336,7 -1339,6 +1336,15 @@@ in-tree filesystems have done)
+ =20
+  **mandatory**
+ =20
+ +The ->setlease() file_operation must now be explicitly set in order to pr=
+ovide
+ +support for leases. When set to NULL, the kernel will now return -EINVAL =
+to
+ +attempts to set a lease. Filesystems that wish to use the kernel-internal=
+ lease
+ +implementation should set it to generic_setlease().
+++
+++---
+++
+++**mandatory**
+++
++ do_{mkdir,mknod,link,symlink,renameat2,rmdir,unlink}() are gone; filename=
+_...()
++ counterparts replace those.  The difference is that the former used to co=
+nsume
++ filename references; the latter do not.
+
+--Sig_/3oNr6q7BopKIEhWJa9bAN2S
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmloAlQACgkQAVBC80lX
-0GwvGQgAg7gHNLtwGauytJBaId81RYxTgzpTR83WkrPpRgyKeuKtfnZPKC48MQbK
-fbwM2Mm3FpMYEzJ3PbAvGDtoF214c7KKIfDAZg4/nsi5nJWY7U4bki10PP4CdGCS
-Id1ahdYyQsAmCjZTAE2A+fjFG0A3uea0Uy7F5ZB5Km8c2ow37gWZCNMNiMK/6V+k
-r/QVIV5GenmKFMqbflHH5tEdkkCPbkBd3ZoDvFRr7HHY7dT24BUNQk2ye64JAylf
-vaAoHhmHXcYKn2jL8jV3MZ+Vl3TWGBrZDZFVJ+YAyrSY4aO9VOQzXkQy5zKSvuQt
-tNpKCySIW+Btt/P8+6wkDwGE6FD77g==
-=FbDF
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmloGuQACgkQAVBC80lX
+0Gz6FQf/bSonuMEp8y72wpch0alYzVpxaKGvlCScC9PM4cIF6ztxBS0hhLyZ9vSC
+ym/SXHo2X5Nj2+R8ENaN3nADreHpRlNF50SNWFT3SY4pepYINmary8d7FTVjgzZY
+t94I+thaZ6OMZpFSvzIKiJevr+gPHa8XwBzfknKoBKhRkinbBzbsX0CnqmvvwL98
+muTZIxNcJYjav6N41QEnTBr6ojBO9AoLqzdaVJ7pRPGYY3faPjyw3Umn2wkVSztO
+096qIXkyj79K7+LTTfaArs5k3airm+tynb8WySKJ7uIB/HbMQ5JqfcboV/NC/rVH
+hqaXTD0HrMI20M7Eq9623pmqdnMH0w==
+=fh0L
 -----END PGP SIGNATURE-----
 
---Sig_/KoOADVkMEYE_o+mAVfX6MZl--
+--Sig_/3oNr6q7BopKIEhWJa9bAN2S--
 

@@ -1,103 +1,104 @@
-Return-Path: <linux-next+bounces-9662-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9663-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29CF7D21A55
-	for <lists+linux-next@lfdr.de>; Wed, 14 Jan 2026 23:44:43 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19910D21D0B
+	for <lists+linux-next@lfdr.de>; Thu, 15 Jan 2026 01:16:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 81C3430041A9
-	for <lists+linux-next@lfdr.de>; Wed, 14 Jan 2026 22:41:12 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 6130C300CEDC
+	for <lists+linux-next@lfdr.de>; Thu, 15 Jan 2026 00:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A8E63AEF53;
-	Wed, 14 Jan 2026 22:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97FF8C8E6;
+	Thu, 15 Jan 2026 00:16:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="c7xNaxuQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LCDYTRdN"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 412C338A729;
-	Wed, 14 Jan 2026 22:41:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E6C3D76;
+	Thu, 15 Jan 2026 00:16:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768430470; cv=none; b=Izlgm8E67e3GDtPwJBiIhfIjf+kvbWsCitvm0K1EATCBTJMbSY8qC1yN+aQepkIOSizyJn/ka77R/1xzanFUov4ciFfv/NfQNbYzQjWCZ6MJZaNmHMs09Gg2/pBEQC7hH0bYfXyxp8JgUQ1IeD1n6g+pcjlKB/P5DcPvNQ+Q/bk=
+	t=1768436206; cv=none; b=LqNeIsPTCYzPTww10yRRJUiyLUKHlSuVbKNzMbGW+uCtE6w1db+eB1/y2w+4L8rnpIz9TJVs15VLCcIRHcsWOIKhOnI2o4pSxC/9zFWX5wKtQkf4gic+TjBeDICBhSXSr6K1juru3UUtiHihtoyg7dqGp70Fds/1rY2N6s/ZZmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768430470; c=relaxed/simple;
-	bh=PFkEVn9XZqioqL5ChGbnRCRS8oTrWGkwVQ5SsSFNJDY=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=A+ZAs35pvycaSk3I1r/3qoM0o4KVyamsCeFAlTwfdAd2ubodcHWuLYY5VSVwB5mKUtH5laXwNUd0t/JWB2LdT1cpj+qzLX94P64F2RCed6y2dDvqvj5Z90D1P5d3WbqoPuLm6EBHyMhoR0viGUxpBPZYM1j5CDFAwvc6fbYtVDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=c7xNaxuQ; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1768430461;
-	bh=s6LvTc3yM+uhboJ0PNPBcMW6HNUKaIiZMapO0y/2VCs=;
-	h=Date:From:To:Cc:Subject:From;
-	b=c7xNaxuQCY56ZurMLhNJjTrZeMsIDEMtHO9tu8x5phJF6l+fDjG5clIHzz5nKWpTI
-	 xsHbqUSgpUFGG9sEWD44bUIcYi7650g6s3fqz54+8vBRcdGaGq+K01Ysv1G6Hn0t+4
-	 jw4EIaSAH3A6j/W7d5SoWw4g5KZbmPAAildGIeJypJ4muXXm6JuQTnZvCGnh+o+xJe
-	 45kUEIsBc83efEQ5WReynK71vb0Aw3TGz6wVvsFneCpXu9VG1Q3NY8LoqHUS4yislI
-	 4mOLLYabGBSEyPxbU37gJ88o1a82TL5J9XO7xo/B5qCJL2l7TCui+KfpcY56dtKZWB
-	 frSBynsuz+8tg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ds1L472y7z4w9k;
-	Thu, 15 Jan 2026 09:41:00 +1100 (AEDT)
-Date: Thu, 15 Jan 2026 09:40:59 +1100
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: David Sterba <dsterba@suse.cz>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patch in the btrfs tree
-Message-ID: <20260115094059.38cc4f76@canb.auug.org.au>
+	s=arc-20240116; t=1768436206; c=relaxed/simple;
+	bh=RffiwAtOY32T1nDXMi8J9zBQHviBvXo5QpeQW7mm2K4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PJgS2HpAj65wtAc+IKJyoaEK7BZUrBl/0sp8GNvmpPMj11wDEJ7qrKm1/vdm4RP4HqN9F+uAkUfHe6bTf/BgRamhhQbQ0M4IdNrysfPFZfz94TIzupgIJDKewsDvmqLLTgdeuYmeNQ0rUkGagj+Chg1x1KZqBVHUiqjAaRw4Syc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LCDYTRdN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2ABEC4CEF7;
+	Thu, 15 Jan 2026 00:16:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768436206;
+	bh=RffiwAtOY32T1nDXMi8J9zBQHviBvXo5QpeQW7mm2K4=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=LCDYTRdNYUjAsmKMgtMn3m1TFXvMBtLS24zxyoKdUpTH8Ztpo0efaq728SP2iyyN1
+	 EN6AMSxQzh76vjTzdXWGoynlE8/TUCHEAOQNDRCkEMYhUc0azGrnyeN4MYeLOGSY+D
+	 /Wd24rByOn59NEcWARaHC/xtYQ5OYOqH7ubhJ42dazoDERfDPXzhbPYCUNmHX7CIq/
+	 mg9l3F0NEpqoIBZusCmGd16GjHWk0DG1ZD7j3tqil+SgS21FufbNoHXYERSpStNLgT
+	 uGBGYRkR5h9TkaaF/jVoyrHIrmzmaBtW0lA/ZNnU/i9XZK4w1/LyRQWNVdZlQr8Gh+
+	 //Mv/H66wssTg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 8C8EACE0864; Wed, 14 Jan 2026 16:16:45 -0800 (PST)
+Date: Wed, 14 Jan 2026 16:16:45 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-next@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+	Mark Brown <broonie@kernel.org>, kernel-team@meta.com
+Subject: Re: Shutdown-time hangs in -next in locktorture
+Message-ID: <8f3c3045-f393-44b3-83b0-a0e1d5d20633@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <7f63c3aa-5cf7-47a6-bdd9-d16d9ea65c63@paulmck-laptop>
+ <20251220125201.GZ3911114@noisy.programming.kicks-ass.net>
+ <288a2295-fc1b-4a32-a3cf-990edc967655@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e4gKB1COiBDfXnIPNU1v=+7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <288a2295-fc1b-4a32-a3cf-990edc967655@paulmck-laptop>
 
---Sig_/e4gKB1COiBDfXnIPNU1v=+7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sat, Dec 20, 2025 at 08:49:01AM -0800, Paul E. McKenney wrote:
+> On Sat, Dec 20, 2025 at 01:52:01PM +0100, Peter Zijlstra wrote:
+> > On Fri, Dec 19, 2025 at 04:29:26PM -0800, Paul E. McKenney wrote:
+> > > Hello, Peter,
+> > > 
+> > > I started hitting shutdown-time hangs in next-20251217 which persist
+> > > in next-20251219.  This hang happens on both x86 and arm64.  Once I
+> > > figured out that the failure is high probability, but not deterministic,
+> > > bisection converged here:
+> > > 
+> > > 5d1f0b2f278e ("sched/core: Rework sched_class::wakeup_preempt() and rq_modified_*()")
+> > 
+> > That commit no longer exists in tip/sched/core; it was fixed a few days
+> > ago, except other problems made -next use an old tip branch which has
+> > caused this fix to have delayed visibility :-(
+> 
+> Very good, I will retry later.
 
-Hi all,
+A bit later than I was planning, but here we are on next-20260113.  This
+has a very similar failure on arm64 with that same repeat-by as before:
 
-The following commit is also in the btrfs-fixes tree as a different commit
-(but the same patch):
+tools/testing/selftests/rcutorture/bin/torture.sh --duration 20 --do-none --do-normal --do-locktorture --do-kasan --configs-locktorture "LOCK09"
 
-  0735a4556440 ("btrfs: remove zoned statistics from sysfs")
+Bisection converges here:
 
-This is commit
+704069649b5b ("sched/core: Rework sched_class::wakeup_preempt() and rq_modified_*()")
 
-  437cc6057e01 ("btrfs: remove zoned statistics from sysfs")
+This commit does not revert cleanly, but retesting on both this commit
+and the previous commit confirms the bisection result.
 
-in the btrfs =3D-fixes tree.
+I have not yet checked this carefully on x86.
 
-This is causing a small conflict between those trees.
+Or is this another case of stale commits in -next?  If not, please let
+me know if there are debug options/patches that would be helpful.
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/e4gKB1COiBDfXnIPNU1v=+7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmloG3sACgkQAVBC80lX
-0Gy4lggAipTQYc+8EZt5cyEhnRJNOhW/4GhOxbS7JwB2YlSirPwo4fK2GsNuCIHS
-o9j8frx9a1TON+wpYC+jhW+gulhDUh2daiC5G26Dl9o0Gfxj0r41WtaMH1JRxzA3
-NkxXwjvzP4Aig/MU9Ekv16VwF2Ki7DA2nMYUo3XDSHMXN/tlBY/06kxTV+TBBsmp
-cNUvtD8fQd0SkzkGvstW0MeuQ7giadWki7WO9Lw3fSrWgZPW+cizUF+L6W4Z1XSU
-Q25XGLRVG/lwMapXp4y7RctStHUo/uXUsW0Go4PPonSh13ajeYmU01s0JB46E0c0
-WzoM0C6EGo3YJ7mrwkhb5u+YOmSnbw==
-=kf/1
------END PGP SIGNATURE-----
-
---Sig_/e4gKB1COiBDfXnIPNU1v=+7--
+							Thanx, Paul
 

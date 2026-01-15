@@ -1,119 +1,128 @@
-Return-Path: <linux-next+bounces-9669-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9670-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46E16D2258B
-	for <lists+linux-next@lfdr.de>; Thu, 15 Jan 2026 05:05:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 15BF0D22664
+	for <lists+linux-next@lfdr.de>; Thu, 15 Jan 2026 05:56:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 37A64302E152
-	for <lists+linux-next@lfdr.de>; Thu, 15 Jan 2026 04:05:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C35363029232
+	for <lists+linux-next@lfdr.de>; Thu, 15 Jan 2026 04:55:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 703D02C21F6;
-	Thu, 15 Jan 2026 04:05:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 052D32D2491;
+	Thu, 15 Jan 2026 04:55:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="D0jqZ2gq"
+	dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b="UV/Dp3BA"
 X-Original-To: linux-next@vger.kernel.org
 Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363E2EEA8;
-	Thu, 15 Jan 2026 04:05:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5949523ABBF;
+	Thu, 15 Jan 2026 04:55:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768449905; cv=none; b=gyRL6ARdHZlxz32ljHvL6w7hUYONAyzq9z0ybWXC55uYKXsD3oJAPBzEXktwvpsMpFerYmIuHx3VJNm6g07fSRRza8gcqz+40WDtMcT8HLPUsl2Q7C9JiIVdh1zf9nqE85Sl5d1uH3k72yBtBrZi8OLfMR7ah7mqIQJcezuT7RU=
+	t=1768452952; cv=none; b=BiEXQeTUK8CSWkn1aohn3dq1rcMSmQYYIGvnFkAyF7sAUojIQ2ehkcqKaW9fDtuasFDTQypIXv9dECU8EIDx14JlLgIlYKlW2jAulDP3eINQiVpp+3ABSYaWrHkS6yFxtImb1VIXJSPvbgrgZXcb0N9cyRxELBELjvtjiDkkWmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768449905; c=relaxed/simple;
-	bh=CVDT4nfPl/YUTfnsH5tWAgcWiBsnRi+2tpnbua9lDo4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WZHjlA14TWs+XzoOdXW/MK8i7JRHXqdAYPTU/4TBMYuFe20b2KW4kF7EKS0JBBkRexNtYCs+D+60QaZdNMZw4MHpI3EVfwDEDLFLJsuAkc9Uv8WN+j+Hny6hpY7yEVe4yez29XVPIvLOHFCXSv7Vz6wlPS2BLbnEVrmhmlxl5Cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=D0jqZ2gq; arc=none smtp.client-ip=150.107.74.76
+	s=arc-20240116; t=1768452952; c=relaxed/simple;
+	bh=UUQEBfZiWiNCtMm0nujS8Ugd/XAPg8P570wMVI9rVLo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lx0oxviAeL69IXEpuUbLzvr+hYWgRGpAxEJoaLHhuy5KTePYd+3Zy+fMsCUMAwalc+Od2ZViBd3/ffPfcfpkl9ayyLu8Om9bqUkzJe+4wiy4W2zrNHGYcOKeWaY/U1kYCt9TqQ+9nqE0Pe9YcEkMcrrPzBu0jZ7zqqJrnq4zbQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au; spf=pass smtp.mailfrom=canb.auug.org.au; dkim=pass (2048-bit key) header.d=canb.auug.org.au header.i=@canb.auug.org.au header.b=UV/Dp3BA; arc=none smtp.client-ip=150.107.74.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canb.auug.org.au
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canb.auug.org.au
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-	s=202503; t=1768449900;
-	bh=hq+hJV8BVHJ5HmPRg4MRE3fLYZsogUOrmkN5HjE9FXY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=D0jqZ2gqEVG8YBzGLSt2apfiYPcBooiVt6qeYsmw7uyg34FapZUQORmF848To7Kxh
-	 i3lyj0Vcj0euKfWYqpw91gHjqk5OF5GuWL1DRvRogYmyQxt1NZMAC8gJxb7rKQ/Drr
-	 iFlDz2qZmY+aFVQFnXP5f1inE6+n66o0HZuLbTRAGBaX3FlRn5Bn362EXBrZEg9c97
-	 zPeLs2m43i16uzPcqvHOegNDnqhR/ktbTbKIwBjJKRMSyZT/xT8DTA3aiwE61NCbsU
-	 d60priJ/ndvZDCZAucqgmq3DDO3eUUwSmpFYjJqDtdHx4UzVyr66rW7MJGzTFgJiGD
-	 K4cA8OfArPNrw==
+	s=202503; t=1768452947;
+	bh=t5DGis806N4zH3zFWRN5zIYVDivFt0E107PqySBjSPA=;
+	h=Date:From:To:Cc:Subject:From;
+	b=UV/Dp3BApuyeda7rlHsH75DrOVQiDP3o4HjNtU4XXKeJ18w57Gm1GDvrwUCMtYGhT
+	 laQzf/WB/2k/wgUzrAqW4m3TCMG4qoZikuSjD/zdIgxYDF+eogVr8GxB87b3aN3NDw
+	 18iL/0RuUnUR4qq+n2hJKS95POcjgt+Lli9eoWc4sTPe1P3/ZKiSUPUAYDdcz5Jt59
+	 1Gp/KnqjWk8ov/wZO5JKGnd+vVRAB5akW3swlzCtHO8s/3JlBTVth2RhnPeSyAhWU2
+	 c7odtmvTIbKLlfd5ORjnv5bih1T7iakA2DJ1DOIRQ79fFK92jB6CkUWQCci6nqRnuF
+	 mlbury9DDPopg==
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ds8Wv5fLbz4wCG;
-	Thu, 15 Jan 2026 15:04:59 +1100 (AEDT)
-Date: Thu, 15 Jan 2026 15:04:58 +1100
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4ds9fW4LKxz4wCJ;
+	Thu, 15 Jan 2026 15:55:47 +1100 (AEDT)
+Date: Thu, 15 Jan 2026 15:55:46 +1100
 From: Stephen Rothwell <sfr@canb.auug.org.au>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Linux Next
- Mailing List <linux-next@vger.kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: linux-next: build warning after merge of the vfs tree
-Message-ID: <20260115150458.4ad09c28@canb.auug.org.au>
-In-Reply-To: <20260115031053.GY3634291@ZenIV>
-References: <20260115140132.6e0c05a0@canb.auug.org.au>
-	<20260115031053.GY3634291@ZenIV>
+To: Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+ <angelogioacchino.delregno@kernel.org>
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Sjoerd Simons <sjoerd@collabora.com>, Linux Kernel Mailing List
+ <linux-kernel@vger.kernel.org>, Linux Next Mailing List
+ <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the mediatek tree
+Message-ID: <20260115155546.5670f815@canb.auug.org.au>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TV3cemW3SXoIB8jsvj5ynCg";
+Content-Type: multipart/signed; boundary="Sig_/fUJ5+f=14wUTQ56sl/UR2EM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 
---Sig_/TV3cemW3SXoIB8jsvj5ynCg
+--Sig_/fUJ5+f=14wUTQ56sl/UR2EM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Al,
+Hi all,
 
-On Thu, 15 Jan 2026 03:10:53 +0000 Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Thu, Jan 15, 2026 at 02:01:32PM +1100, Stephen Rothwell wrote:
-> >=20
-> > After merging the vfs tree, today's linux-next build (htmldocs) produced
-> > this warning:
-> >=20
-> > Documentation/filesystems/porting.rst:1348: ERROR: Unknown target name:=
- "filename". [docutils]
-> >=20
-> > Introduced by commit
-> >=20
-> >   7335480a8461 ("non-consuming variant of do_linkat()") =20
->=20
-> Egads...  That's from "filename_{link,renameat2}()" in there (there's also
-> "do_{link,renameat2}()" earlier in the same line, but that didn't produce
-> a warning.
->=20
-> Any suggestions re better way to spell it for .rst?
+After merging the mediatek tree, today's linux-next build (arm64
+defconfig) produced these warnings:
 
-It eventually becomes (literally) "filename_..." so that might be the
-issue.  Maybe quote it like 'function_...()'?
+arch/arm64/boot/dts/mediatek/mt7981b-openwrt-one.dts:98.3-13: Warning (reg_=
+format): /soc/ethernet@15100000/mac@0:reg: property has invalid length (4 b=
+ytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+arch/arm64/boot/dts/mediatek/mt7981b-openwrt-one.dts:108.3-13: Warning (reg=
+_format): /soc/ethernet@15100000/mac@1:reg: property has invalid length (4 =
+bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+arch/arm64/boot/dts/mediatek/mt7981b-openwrt-one.dtb: Warning (pci_device_r=
+eg): Failed prerequisite 'reg_format'
+arch/arm64/boot/dts/mediatek/mt7981b-openwrt-one.dtb: Warning (pci_device_b=
+us_num): Failed prerequisite 'reg_format'
+arch/arm64/boot/dts/mediatek/mt7981b-openwrt-one.dtb: Warning (i2c_bus_reg)=
+: Failed prerequisite 'reg_format'
+arch/arm64/boot/dts/mediatek/mt7981b-openwrt-one.dtb: Warning (spi_bus_reg)=
+: Failed prerequisite 'reg_format'
+arch/arm64/boot/dts/mediatek/mt7981b-openwrt-one.dts:96.15-103.4: Warning (=
+avoid_default_addr_size): /soc/ethernet@15100000/mac@0: Relying on default =
+#address-cells value
+arch/arm64/boot/dts/mediatek/mt7981b-openwrt-one.dts:96.15-103.4: Warning (=
+avoid_default_addr_size): /soc/ethernet@15100000/mac@0: Relying on default =
+#size-cells value
+arch/arm64/boot/dts/mediatek/mt7981b-openwrt-one.dts:106.15-111.4: Warning =
+(avoid_default_addr_size): /soc/ethernet@15100000/mac@1: Relying on default=
+ #address-cells value
+arch/arm64/boot/dts/mediatek/mt7981b-openwrt-one.dts:106.15-111.4: Warning =
+(avoid_default_addr_size): /soc/ethernet@15100000/mac@1: Relying on default=
+ #size-cells value
 
-Maybe Jon or Mauro have a suggestion.
+Introduced by commit
+
+  ecc68d72b50d ("arm64: dts: mediatek: mt7981b-openwrt-one: Enable Ethernet=
+")
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/TV3cemW3SXoIB8jsvj5ynCg
+--Sig_/fUJ5+f=14wUTQ56sl/UR2EM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmloZ2oACgkQAVBC80lX
-0Gz3Mwf/aTEGYAHl37vTzIk23pdN38eRKEL4HzvpkF8bwIjo1o+k8Yq3EzEXwak2
-qUsrsFenW6AcX4TKVAD3vvl5C1yERLCAcSGvr72s1ykrVvvrRcPm7EFbQ95JVW24
-29X385eZ7tAeSt+0tDwYRVKY7nSiAt2kAWq8oa78H17FBoXEgLzHFsmKX8L0GHuu
-kA+w2Xq29biy+ENZkUkZxZ2GgbhOZqWq4v8MCELGhaS0TmweIAdy15U2QrcyL7Pv
-PZCcZVXJZnVyQWFNvSXoCglqP85HdTV2c0IAYDh8gE/MybijCGA1fZ//QExWRPDB
-ClC9ackr33ifXFIEv24UmD2dgAedMA==
-=uyTG
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmloc1IACgkQAVBC80lX
+0GzFdgf/WqIZM8WlzDCv6TAK2be4yPOgA/Ym459V/FOs/BU1edyJHzKtO02/zAq8
+fLW1ZIRER6Wv/r6FKcp0zj+bmoGJQbBu78kEtAAgKsuDABi2lNFn73TIZF+hH3Kg
+p7wmpOj7liNMuP0cFPYtL9eDzslAo+JWd6DnH21jTq+bu/0KCAU6wRTJvK3tGcIn
+OUupKL6kNpJM6Cl70VujHQWjzlRNiRYj/aGh8YJ7CY8esk9n+HivPpJgikZ9t/jj
+jl01R6GzqM9GsZqqIY+QiUeK/XqCQI0ogFdfvnxjJMRM9Q90lIIW0cvkfqcuFST7
+tFEX/VojwJ8L9mR+v8hUXUH86w5QrA==
+=4102
 -----END PGP SIGNATURE-----
 
---Sig_/TV3cemW3SXoIB8jsvj5ynCg--
+--Sig_/fUJ5+f=14wUTQ56sl/UR2EM--
 

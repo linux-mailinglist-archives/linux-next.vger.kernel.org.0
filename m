@@ -1,125 +1,113 @@
-Return-Path: <linux-next+bounces-9672-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9673-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 969EED232BF
-	for <lists+linux-next@lfdr.de>; Thu, 15 Jan 2026 09:35:24 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4BFDCD23BB6
+	for <lists+linux-next@lfdr.de>; Thu, 15 Jan 2026 10:54:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C4B4830C6CC1
-	for <lists+linux-next@lfdr.de>; Thu, 15 Jan 2026 08:29:10 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id DD538307F923
+	for <lists+linux-next@lfdr.de>; Thu, 15 Jan 2026 09:38:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 767B8332EB6;
-	Thu, 15 Jan 2026 08:28:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95E0135C182;
+	Thu, 15 Jan 2026 09:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="My6NHHYx"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RibPwSQL"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520C2332900;
-	Thu, 15 Jan 2026 08:28:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35BC3352F8A
+	for <linux-next@vger.kernel.org>; Thu, 15 Jan 2026 09:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768465719; cv=none; b=EVYpmqjyTugXnGQuLVFfhw3Sdwbtol7x8UjmG+YBBZsVyNBmtfc+9U4TDCu4ODkb7javZXwNP30sFpZ3ZhTGfZF+t9thtM7+ZxYpY/aUAKJYWfrSOgbJQHzaZDIz3UHZxGsohZJaLKc4UPLWFue/W4OGYMrJ51H0B6DsKzfLPzM=
+	t=1768469881; cv=none; b=fdufRXkgV8sVSWAHEAA6yuzRuzDJGdMGHGf/ZgzTozrtYLzvhDzGq3mcS9qxZrvL0prmI+n5uHGz6wExhH6zyk5+hueHL8ilBVRP14NGttMyEhsvcsAqsvm3iEzTl99753EztqQrvGT2G6Bo9GGawxU2okySR6hclz7iEflh3fU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768465719; c=relaxed/simple;
-	bh=ZmnY43kOhofcKK8JnCcgalrrKL2yzg9y8T+UCN/kvdw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ijHW6LZqq7Uj4fF/eDgg6OTRYYiZR3L/9uf0Un8KH0P7URzLK9MA453QnXubmKQZLiLHMY4NKmRap4AzkIUrxNvENT4TCg3KIXNhv8bx+IESy7kTlM/vidYe+Cly4dvp1qmViWjzY5uof7Z0HWnlCKEaUFb7UXYQaZzPJv+bVDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=My6NHHYx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73C42C116D0;
-	Thu, 15 Jan 2026 08:28:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768465718;
-	bh=ZmnY43kOhofcKK8JnCcgalrrKL2yzg9y8T+UCN/kvdw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=My6NHHYx0chEE9H9UtfNNrP8INF8WLSnvwDMhwSFbMxWY/ZH3S0s8hPif4k1gvboZ
-	 y3+FgG+x1cs9fW+Gurjt4ICmjZs8C5caDmE/qTbO7jY6K7xvLMJmKDGm5+bjwLzxAt
-	 at6hMHeub8ys/8UkAalmN7vTm5KJ+Y2J21l6yWTDoVSSkX6er0C85C4gpWJjWYMV88
-	 bdo05qZo4RUIwyO5BADo/biSj47RFvH05Q8KIg9k28eLJkgmrIei1PdewDOWvq7P1k
-	 nTu9czAufxm5MZ0wx8hIcWU1TZIAw0N+WH+BBtz5uvHH8OQNuxGIHHK+N8TJaEQ85R
-	 wrhQ08bu+nCfw==
-Date: Thu, 15 Jan 2026 09:28:34 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Stephen Rothwell <sfr@canb.auug.org.au>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Next Mailing List
- <linux-next@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, Mauro
- Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: linux-next: build warning after merge of the vfs tree
-Message-ID: <20260115092834.05f3bf66@foz.lan>
-In-Reply-To: <20260115150458.4ad09c28@canb.auug.org.au>
-References: <20260115140132.6e0c05a0@canb.auug.org.au>
-	<20260115031053.GY3634291@ZenIV>
-	<20260115150458.4ad09c28@canb.auug.org.au>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1768469881; c=relaxed/simple;
+	bh=31MXXW+XLDByV39jfilLyK7/z4pRRPDoHZIo2UpSBU8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YKzGCHNNKJ6XmBqGbSELgD8bn3auPvcRUCV86TZlF3fylvvSD1xRo9ebt1ykOlt9C+j/13El2Rv6RVJaIq5wXUgSWkb8UqEULWlspKXk7jOne4vn6LnLMuBKaJk9XLcd0IPP/qv07fpOiRRFHCncJyw5CH5W6YUFkEjgvAwM0jA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RibPwSQL; arc=none smtp.client-ip=209.85.160.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-3ece54945d9so274410fac.0
+        for <linux-next@vger.kernel.org>; Thu, 15 Jan 2026 01:38:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1768469879; x=1769074679; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kS+DE3VvLL37Zs5JnUtHjQiVJ4RJntX5JOD6AzfXMlA=;
+        b=RibPwSQLuSqocHQ4alDwWwCysniVe4Si9DWdZNySzWAn6fuebth8CWI/E7vfaOMNoo
+         JwglXKUYX3yhHSsaDa2OlgY9NGiHUVJHGCquHDc7GXxD7oGohVhpQaPgXh7igHNEmdMl
+         BrREVAtAqdymick5paMeGw6ba3udKgcxH7qsTAmGaj0ryD8bQmILz3opOni7mte9bgnt
+         9ljVdbSg50tGUwr626EUIcL3u/QlMsslxqGo2IhXFSMbcGwX5jSSemw/Iv2FIsoKnkd0
+         AyZ8oFFFvzQs0hdUlf4tY1PnT7/POrS9rydOWO0omiDwYGav04PdjXzcRLzpYIYvOsEi
+         F/hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768469879; x=1769074679;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=kS+DE3VvLL37Zs5JnUtHjQiVJ4RJntX5JOD6AzfXMlA=;
+        b=iVGg/3Cd6V2fIS9ysI0i+3RE7ezUctj5b5xoh2s8oMSx85Xk26tvLaolFzz12+hFby
+         2AtlmFn1C+l+Pvl/sKJImECIRHPtr94jxW9XdMPNxLQeloDil77G707t1MhImaIlhZUi
+         UWLtx2MwweWwhrQR6NOYaUAII9cLxnfrARLVzuaBOkBuvXXaRP71aolVGTheqSy/iHbw
+         YZQgVP7YtCMmHQfVkpHWoiWDoAeACgFzEKH1Qx8oSd3yz2+EpQT4EEXC/Zmb6Sdrh0MS
+         1gLcaKxkX+mg/XJ1QzG1P9F8keoYqPGEsy2iQU+ztLk0yXu3ISS1yXcUQUpox1tfhh+j
+         oSpg==
+X-Forwarded-Encrypted: i=1; AJvYcCVrKZ9HQwsyn4vvy11lyI9yhIBCD610Atp5mUCL89wtwdf550e8ANR432W/1AXoGS/rbtOEEApeE7tC@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzCyFgJw4W7mlo6GzczF2Vjob78pA21gInulIOMwKxuX/6SEo/
+	pfAK5zWMQInEMCeq2p4VL6dtpdAdEBMmBKAGLafI7VqTGRrWURsGfW77QXEw4HHlwTxm6KNZ0QM
+	Tn7jFWwrbhF0ts5GdD2wd2n5LT4deMY+QNeb9CDREKA==
+X-Gm-Gg: AY/fxX50+mC5og0IcPsu6f9UbH1yxjPy6p3pHenGyAuktduitV7A/OaWO0g6XH9XEm7
+	79e0q6KHSUlyEhl5M9Y/1Bbb0hzUAsu6lUEoeuvqShTX5co+WqzRCK/5HdGrYxfrNnWM48cVGd1
+	+Fpgw6QWW0Ctod/xiaRbV3lwH1bhQjS/7jLF76NC1McuRwGt04kfwUooZu3w9UUDAIDbeW/fMeX
+	jIfTrmkEX4jsIrIPVJyuDTn0IfspVNhml2XTgHSgF1uadsETHHaBgbs6XW1KEGX9eil/e4J4G7h
+	HHDOL85haEUUyJ0VmY38HAkAHQ==
+X-Received: by 2002:a05:6820:c00e:b0:65f:7470:38be with SMTP id
+ 006d021491bc7-66100700a94mr2686776eaf.61.1768469879020; Thu, 15 Jan 2026
+ 01:37:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260115075340.72b35a93@canb.auug.org.au>
+In-Reply-To: <20260115075340.72b35a93@canb.auug.org.au>
+From: Jens Wiklander <jens.wiklander@linaro.org>
+Date: Thu, 15 Jan 2026 10:37:47 +0100
+X-Gm-Features: AZwV_Qhd8NW7dCfiPBRpz5zsD0CzVbecM3UHQ51eTvXFLKPF25QrzbTmiuyK0Jo
+Message-ID: <CAHUa44FWsVw8maFFkj5WxnuoEQJbr_X19rmz+YvPdbhRKxCcMg@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the tee tree
+To: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	Jarkko Sakkinen <jarkko@kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Em Thu, 15 Jan 2026 15:04:58 +1100
-Stephen Rothwell <sfr@canb.auug.org.au> escreveu:
+Hi Stephen,
 
-> Hi Al,
-> 
-> On Thu, 15 Jan 2026 03:10:53 +0000 Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > On Thu, Jan 15, 2026 at 02:01:32PM +1100, Stephen Rothwell wrote:  
-> > > 
-> > > After merging the vfs tree, today's linux-next build (htmldocs) produced
-> > > this warning:
-> > > 
-> > > Documentation/filesystems/porting.rst:1348: ERROR: Unknown target name: "filename". [docutils]
-> > > 
-> > > Introduced by commit
-> > > 
-> > >   7335480a8461 ("non-consuming variant of do_linkat()")    
-> > 
-> > Egads...  That's from "filename_{link,renameat2}()" in there (there's also
-> > "do_{link,renameat2}()" earlier in the same line, but that didn't produce
-> > a warning.
+On Wed, Jan 14, 2026 at 9:53=E2=80=AFPM Stephen Rothwell <sfr@canb.auug.org=
+.au> wrote:
+>
+> Hi all,
+>
+> Commit
+>
+>   e4280e3ec728 ("tpm/tpm_ftpm_tee: Fix kdoc after function renames")
+>
+> is missing a Signed-off-by from its author.
 
-Based on the error message, I suspect it is trying to create an internal
-cross-reference to a "filename" reference:
-
-	$ ack "Unknown target name" sphinx_latest/
-	sphinx_latest/lib/python3.13/site-packages/docutils/transforms/references.py
-	907:                        f'Unknown target name: "{node["refname"]}".',
-
-I can't explain why filename_{} was handled differently than do_{},
-but had you check the html output? Maybe there is out there a "do"
-reference, which was incorrectly used here.
-
-What I suggest here (and on similar cases) is to either:
-
-1) Split it (and similar cases) into: 
-
-	"filename_link() and filename_renameat2()" 
-
-   which would give sphinx automarkup the opportunity to create
-   cross references
-
-   (my preference)
-
-2) tell Sphinx that this is a literal with ``filename_{link,renameat2}()``
-
-> > 
-> > Any suggestions re better way to spell it for .rst?  
-> 
-> It eventually becomes (literally) "filename_..." so that might be the
-> issue.  Maybe quote it like 'function_...()'?
-
-The issue is that unmatched underscores (or asterisk) at either beginning 
-of end of a word has special meaning on Sphinx.
-
-> 
-> Maybe Jon or Mauro have a suggestion.
+The commit is updated now.
 
 Thanks,
-Mauro
+Jens
+
+>
+> --
+> Cheers,
+> Stephen Rothwell
 

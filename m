@@ -1,52 +1,51 @@
-Return-Path: <linux-next+bounces-9680-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9681-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F419D30E8E
-	for <lists+linux-next@lfdr.de>; Fri, 16 Jan 2026 13:11:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 776C7D30EC4
+	for <lists+linux-next@lfdr.de>; Fri, 16 Jan 2026 13:12:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4B90F30635F1
-	for <lists+linux-next@lfdr.de>; Fri, 16 Jan 2026 12:11:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4F23B3039304
+	for <lists+linux-next@lfdr.de>; Fri, 16 Jan 2026 12:12:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41379389452;
-	Fri, 16 Jan 2026 12:11:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7D43376BCF;
+	Fri, 16 Jan 2026 12:12:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oLnHl6WG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qIxgCFY+"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA933876CF;
-	Fri, 16 Jan 2026 12:11:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CAD26F28D;
+	Fri, 16 Jan 2026 12:12:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768565481; cv=none; b=A6dQ8jFQrsuRsbYaDizKQG/5cFnGTVG64jSt4ko/9mESAPWE1geEI6kIPjeoof9xDbf7PVFV0hx1ABbnAZdHMPZwdHR+XxDhF0eu2qwMgXXKF9WF58TQm/ydYedI51ZS/AUmeqzREsmHytGb56BiT3I/Vnqlhz0ui8v1N7IUtdg=
+	t=1768565564; cv=none; b=IisnjJzyTPtti6Ei2GdRysdWGgT+XNGcvrHMFTP7knv2e7FTMIP+RMtXhT7KS/3b7m3sUz8vlEkcrOzXRgEezsiwWXxDGRzxepaRvNSirUnFbFYQsnAx8IVYLrOfBxmMOwgPV72eC6nWSHsydXYo4MqWY6TUyN+uP1wFB7W87Pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768565481; c=relaxed/simple;
-	bh=aBdjzpTtcZ0qI5CFPQSxaEtJCSirsILmgGsCZ2lTJWg=;
+	s=arc-20240116; t=1768565564; c=relaxed/simple;
+	bh=iDj/jl9kceo8F1LpSpgXEhog7/oRm9aK3wz+trKiWz4=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VrW+vKBUtUIA8AGu35kHH4u5j0lfW0IUu/E4ouhVhqjjrx0EA4IqD3meexS3Zg2yeWKvBeJR0vKRG9A0nkoxQZowc7rbxLjwgbrrdmcXeu4EV2BmlDZHaV5XvXBycAZjGaP3MLQMOkDRa7CTmgL3AYnuP07+H2aejgBM/cI5FsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oLnHl6WG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF8CC116C6;
-	Fri, 16 Jan 2026 12:11:19 +0000 (UTC)
+	 Content-Disposition; b=NtlCCRA76aQJGbHgmJxTjFMLpmk/ZiSUSm7YCS6/dhZqHHHM0jY5d1t3HwM/cl8SSrPjw+V/d+d2wshDxd/V7xk1faQ6nuQ5Eu/RZvRUtrhOgmIKGPoAJGc6BCzLX8oMH1ykfEooDSWoSnfvAenhAv6duyKxzEj5r0r8GDXDXsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qIxgCFY+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C0E7C116C6;
+	Fri, 16 Jan 2026 12:12:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768565480;
-	bh=aBdjzpTtcZ0qI5CFPQSxaEtJCSirsILmgGsCZ2lTJWg=;
+	s=k20201202; t=1768565564;
+	bh=iDj/jl9kceo8F1LpSpgXEhog7/oRm9aK3wz+trKiWz4=;
 	h=Date:From:To:Cc:Subject:From;
-	b=oLnHl6WG/A0nXEAeinmh1XWCBJCoL1jQ+9hP3DCxyQaJBaJjEqohNgOy4PrZa4r2x
-	 g+1MYdXDhI5/fUOtnV3chdzvMX3w9aK1y33uvRUIxXeIE+qkP8FDFE1tbrBYYkRRgu
-	 oM+oVlwf2BoAQv0OyUsPHsrVg4/lDEig6NV8FRPgmsACrEtIrI69VQPcnbNwmRzdZy
-	 G1hd979ucpS0x1Scn8ZQwEPdhG4J5tkm9J1AXtrx9CCYlbQTqXZyxWK2G+BNKw5Fn+
-	 fRGxhFj+L7kmeyM1PANJe1ye3rh+vt1nX4D5BAbLMl980Uai2YkcgqSF9eSoJp5qA4
-	 TWtZJ1hQO9Lng==
-Date: Fri, 16 Jan 2026 12:11:16 +0000
+	b=qIxgCFY+zJOpLpyHfw6R99nhQUG8KBtCYoC6wflejIKw6v5C54CCTt52Hh2Cjb680
+	 oIXRPV9T7PJDxPpgSyePgGSwv40REMdN2oXVerZoEWAFUht3wlsGi3Jd7vQiNcOpCJ
+	 bo4hdcqnBa85X5UczU+Vpqzh/ELntvk7vKAQtBJpdpQ9Nxod9pvcSZRi12WLVEEM3D
+	 QNi3MF2dNGvJPexalwnbVhCza0J/TphV4OtEvMhEdwGYFirWOyk1+HNVJgVDJNPlL2
+	 UZqPdtTpqxerSaej4yiT9ZbhQZiGRhH/kRieiTKyB6oMxhzYQsxtnzHvR1FZAX2h5/
+	 8YQbBZtXjHoEA==
+Date: Fri, 16 Jan 2026 12:12:40 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>, soc@kernel.org
-Cc: ARM <linux-arm-kernel@lists.infradead.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the arm-soc-fixes tree
-Message-ID: <a28b9f46-c0eb-44da-9555-0534f7ea6eaf@sirena.org.uk>
+To: Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@kernel.org>
+Cc: linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Fixes tag needs some work in the mediatek tree
+Message-ID: <6961b3ff-a5c7-4f96-9f4d-13daf1e98abc@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -54,12 +53,12 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="IUSLUm3ia2TJc8nT"
+	protocol="application/pgp-signature"; boundary="eS3eeAGzOjiy/aer"
 Content-Disposition: inline
 X-Cookie: I've only got 12 cards.
 
 
---IUSLUm3ia2TJc8nT
+--eS3eeAGzOjiy/aer
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -67,33 +66,34 @@ Hi,
 
 In commit
 
-  2150467fc61dd ("Revert "arm64: tegra: Add interconnect properties for Tegra210"")
+  e1c9223adf1c2 ("arm64: dts: mediatek: mt7988a: Fix PCI-Express T-PHY node address")
 
 Fixes tag
 
-  Fixes: 59a42707a094 ("arm64: tegra: Add interconnect properties for Tegra210")
+  Fixes: ("f693e6ba55ae arm64: dts: mediatek: mt7988: Add t-phy for ssusb1")
 
 has these problem(s):
 
-  - Target SHA1 does not exist
+  - No SHA1 recognised
+
 
 Thanks,
 Mark
 
---IUSLUm3ia2TJc8nT
+--eS3eeAGzOjiy/aer
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlqKuQACgkQJNaLcl1U
-h9Acewf/U6NL9jU73dD9EFyIMJR2O8crW//rETggk/uIKDwSoGbHF+Te70MPu5BS
-9tB0wpRmkEFLNE9/UUUD1UfQtEakRzieNuc4vm6HqIYeDPcTDXszIHeWP2W6VCqi
-IPZHIirbWV+3/y4MC/a4Wu5h3d4duWDWMWyC7KnMpwJZJUKTlM6TYsd5FSZFXu29
-aQWqoQwQ3D0cJnNvanPQQ7uCrYBvRu0c1kbXmbYrUpOmfRH1fGxm4Re9jVW968gm
-D1Df6p7SUpDcE14Xf8KDeTBCi9aDBXWB7JC4po0YNNTg4ZW25HsmdkAy172sg/6W
-5nH5ENK1iKWvb0PNAJp+TycADDa4MQ==
-=xXHR
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlqKzcACgkQJNaLcl1U
+h9AVhAf/anIDXZGmE7nqHZCE0RG52qq6KZSX9JbEiakGC3KUAmC2W1cNhwZq77s8
+L1VFsqBgpATg+yg7iHpcwRJHFOhv6tlscx9P0uuKjQ+VY0EqXmVKaDXS1DwfC+o0
+PD3SZ7KNpV3F5aU/NviYFIATbnWotfTblNs6NWh5Ap0bQVUa3f6bhG9BcPpvVXr7
+4QMKovEDK9aQXd40O75BJc9QqXlXSs6CIZe6lY3mtMu5UPNuEnxvpkYVFMcuToTz
+ZU4QTo7WaWRBr8hGsBjGglJ5fsi9SAIvgCvSIu0OCQ2TRyTAEVu58BZvza++D/aC
+lvjrXkqqVfGxxjvsdSrGEncIUPIyNg==
+=ahK5
 -----END PGP SIGNATURE-----
 
---IUSLUm3ia2TJc8nT--
+--eS3eeAGzOjiy/aer--
 

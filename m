@@ -1,121 +1,93 @@
-Return-Path: <linux-next+bounces-9689-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9690-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8420ED32178
-	for <lists+linux-next@lfdr.de>; Fri, 16 Jan 2026 14:49:46 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD459D37AE1
+	for <lists+linux-next@lfdr.de>; Fri, 16 Jan 2026 18:55:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D60E03004877
-	for <lists+linux-next@lfdr.de>; Fri, 16 Jan 2026 13:49:42 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 94D9F30101E0
+	for <lists+linux-next@lfdr.de>; Fri, 16 Jan 2026 17:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22732274B53;
-	Fri, 16 Jan 2026 13:49:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750A9395DAC;
+	Fri, 16 Jan 2026 17:54:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U1VPBLnq"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="P6xat0hp"
 X-Original-To: linux-next@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F165C230BD9;
-	Fri, 16 Jan 2026 13:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D295325739;
+	Fri, 16 Jan 2026 17:54:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768571381; cv=none; b=kjuQMw9bDuikCIxgEXu2dpoYJlx9OW66Ohte9Xx6egZTCl6ySL3umFWVf9AsC0mo78vVYdLPo00WqSsTrQlqFPnQzLjc3nmBwYwAyNjpt6wJYvjbmSQ77JSXt16WZuzR3D+A6W9aYtfANH+l1pD/T+0pbsxUaRghpi/fQejuf2Q=
+	t=1768586080; cv=none; b=gtMjCvEDG1L81fN2pLVsWP456uf2CoXfL6aoud8AiddJiXC0YsiVTzzOz8AA5EQepam46WdLMgirhZGD+OSAKREYmZcxklJ8zHiG9HZjIBoyAtLig+uKySMhYKqhuaG/ExNuT/HpuAOPQsUnGh/Maff+5ck45YH7j/qU/zSZu+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768571381; c=relaxed/simple;
-	bh=I/f++J7L0sXt18ka6gEu/9VsAU3TtfyQCiktrtix8Tg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=tlqBkEjnpXm8jfS/nVptK5KPSN+oC5E5pofqsQE/pmxU/E97bTvN9B9PdASNSar/DXqOvZJo8AagClQ0VAnVEfDfX0cAFsAoeKkXEP/VGMDagbajKjufK2hTsua43YkB97lIal7KCU7wR1P5nhDgGvtCU3q63yeMR7LTvfh0b5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U1VPBLnq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C79A6C116C6;
-	Fri, 16 Jan 2026 13:49:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768571380;
-	bh=I/f++J7L0sXt18ka6gEu/9VsAU3TtfyQCiktrtix8Tg=;
-	h=Date:From:To:Cc:Subject:From;
-	b=U1VPBLnq9ab7kxomAToT7ogrSS4SfQKySu28j7FbpU1OGT1Df9NeNGL1yytTOYOdZ
-	 VJRy3OOsm7tuz2CNdifxj/ocjkoiyNBX841Cm86OwRTRZdWQtSkLjgl9YPjisxnRLY
-	 kQjB57jmoQbIGXBs28GDe4rKpcGOAm7uwPQWJYi+1xsya+6IqJief35Z1GU21HbLFv
-	 3p6canOgFOebNY4BGupFRvS4fP5Kkn8HUT8TaWPJriaJuhscAqccg03TOYT2NMN684
-	 oyu5bvGx7ImasJvzMz3SqOIG9Ju8M6BQz8ZnutPrQI0LDexNxBgbNImaqEtvqmdk6/
-	 aggzT3Hj0BtpQ==
-Date: Fri, 16 Jan 2026 13:49:35 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Jan 16
-Message-ID: <aWpB78IspwczpLby@sirena.org.uk>
+	s=arc-20240116; t=1768586080; c=relaxed/simple;
+	bh=rxQs3AzoZ/8YwJv1Z2/PWks1eKPuYgztfC+KFC17IaM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TClJwFmEVB02LWerCduBAVVtcY7Inl1i0WU+AD198UeLwYjKyhCqiWNjEBSwnjL7Aq4vWZjQvb9H5H06h3IG4LxYZ0L1ZoeYQt+0xTnHQT2+T56Dp8EXKrSrXevhf/fdVoZwzgca0jmH3eHiT/Fa12oYHXw/WNMDnkNqyDSP2S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=P6xat0hp; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=eDumNZMO0iMgg21fWHALN+B4CnX+ppnm7m1/grDM+JU=; b=P6xat0hptRCfKBnSsMOHf6JNEc
+	4i7On6/c/rFAoPkg0+US1uBmmtfb0N/JQKJsso2cyytd/h7mTPoEonR25AzY09C1Z00m6cBT6lip9
+	KCvEEkfgXrJuDotJmsO+pn9v0q/YL+WerdcBs63pCMpS904V/asYQZ9aYQmleV2fViDzJu4TTm6k6
+	ozJtn8+fTdo82fJ9XnYTyuaXGWJBoQzyo1R7pQRPMFAxX4jRPM36qqHeBjFEpAxSFtdnsMWWae+6E
+	Wylve3iFNQjAL2/myA5nRIEspW2cr90Yv18weUn5Yy7nHS350PF5ygNX//hvNFheTCi+aVuP+jyRB
+	q4vIB9Ew==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99 #2 (Red Hat Linux))
+	id 1vgo3K-00000004MlS-0BMh;
+	Fri, 16 Jan 2026 17:56:06 +0000
+Date: Fri, 16 Jan 2026 17:56:06 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: linux-next: build warning after merge of the vfs tree
+Message-ID: <20260116175606.GB3634291@ZenIV>
+References: <20260115140132.6e0c05a0@canb.auug.org.au>
+ <20260115031053.GY3634291@ZenIV>
+ <20260115150458.4ad09c28@canb.auug.org.au>
+ <20260115092834.05f3bf66@foz.lan>
+ <20260115145754.GZ3634291@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="JEMkA+mYF9VMFRmC"
-Content-Disposition: inline
-
-
---JEMkA+mYF9VMFRmC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20260115145754.GZ3634291@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Hi all,
+On Thu, Jan 15, 2026 at 02:57:54PM +0000, Al Viro wrote:
+> On Thu, Jan 15, 2026 at 09:28:34AM +0100, Mauro Carvalho Chehab wrote:
+> 
+> > 1) Split it (and similar cases) into: 
+> > 
+> > 	"filename_link() and filename_renameat2()" 
+> > 
+> >    which would give sphinx automarkup the opportunity to create
+> >    cross references
+> > 
+> >    (my preference)
+> 
+> The final state right now is (admittedly sloppy)
+> 
+>   do_{mkdir,mknod,link,symlink,renameat2,rmdir,unlink}() are gone; filename_...()
+>   counterparts replace those.  The difference is that the former used to consume
+>   filename references; the latter do not.
+> 
+> Sure, the entire note can be split in 7 notes differing only in the names
+> of removed function and its replacement, but it feels wrong ;-/
 
-Changes since 20260115:
-
-The cxl tree gained a conflict with the cxl-fixes tree.
-
-Non-merge commits (relative to Linus' tree): 6117
- 6133 files changed, 378823 insertions(+), 112960 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There is also the merge.log file in the Next
-directory.  Between each merge, the tree was built with a defconfig
-for arm64, an allmodconfig for x86_64, a multi_v7_defconfig for arm
-and a native build of tools/perf. After the final fixups (if any), I do
-an x86_64 modules_install followed by builds for x86_64 allnoconfig,
-arm64 allyesconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig and pseries_le_defconfig and i386, s390, sparc and
-sparc64 defconfig and htmldocs. And finally, a simple boot test of the
-powerpc pseries_le_defconfig kernel in qemu (with and without kvm
-enabled).
-
-Below is a summary of the state of the merge.
-
-I am currently merging 405 trees (counting Linus' and 122 trees of bug
-fix patches pending for the current release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
-
---JEMkA+mYF9VMFRmC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlqQe8ACgkQJNaLcl1U
-h9DzWQf/dVuFdYpmSMpKjda5xcNB0DpR5LJrnQjq6ICwjVl57yeCv6coH6O9umcU
-hN26pVb4YiZ+djBd6C7BiShjecG9HoaJZPuiB2GKDQmAFj+bX70GZK7eegn60N++
-tV2gQfVFosY9vdxgqpNjeBYKmqA/UwlvpP0VqsxHXV8h6woIs7iflg2G9m3PweF9
-G62a+pxCbjmUEGocp3MgbbQyveW26YVZwRPcr3F7uBZWfH6hda07aIgXrEq1m8Cx
-+j0SoDmItmwlAKgo7AKWEXNFKmEs7pS0Ejqfjs6dwE2HtDQr8X+7GPpnic2aj8aR
-sY1tfrkrTN+HLbRZk/XnM9mIrZ8HzQ==
-=S8w7
------END PGP SIGNATURE-----
-
---JEMkA+mYF9VMFRmC--
+Updated variant pushed out; hopefully it's more palatable now...
 

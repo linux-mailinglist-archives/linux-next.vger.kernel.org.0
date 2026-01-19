@@ -1,107 +1,116 @@
-Return-Path: <linux-next+bounces-9699-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9700-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64C36D3AEBF
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 16:18:22 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68E59D3AEA4
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 16:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 221883046404
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 15:14:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0846630056E3
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 15:15:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 592AD387592;
-	Mon, 19 Jan 2026 15:14:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5107E36164A;
+	Mon, 19 Jan 2026 15:14:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qenAiOx+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gAAp24qQ"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 351C63346BC;
-	Mon, 19 Jan 2026 15:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E73B339857;
+	Mon, 19 Jan 2026 15:14:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768835648; cv=none; b=rTzXzTADWyzMf3SrwDJk1TtAvvTJqoF174xY4mpkeBDzhM9vLIrarSVzCk+V3KTwBce1EeYOCqxPwm+0jAsIOyN+RhirwL73iCtbyvgtW/GqOakq7aZCuAUz8zApf55qvZFRHV9Mx6oFh3sF1NxEyq7AzS/e7XwNhICTsuaNeqo=
+	t=1768835697; cv=none; b=gGF8Bm+fG2yFZncizgcilixuiMMPpa+v+ifriAv8/TXdgPGEQXUENeSy/52fxlLt8jx38UHxl4wfq4xavREQ99GNExejmfZ2NFrsRZp34/SQqlUIJVcrDz2oxmcXoa6LAPDdGAKBSQyhKlC0MrZfQzQl7+OiGGAyGdqAqLKMNOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768835648; c=relaxed/simple;
-	bh=LqorXF1ufKA0SjwThBCq0ZpCV/6wIGaKT3rnzLzhqt4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IQqKItkhmvCwC5jf7oY5WUkXeyxsz3uiKff/aLBILm72I5Av4RHozPYm1caQRqhM0Oi8gZsAKAIXkTn63p+tJfSZsShXKeSp+TGkGkC37B0gk/qHYTN+OfzGYv/1H+Al0wmiYyV448kNLUam4XzhRS+ggdGbM7MSMNLKW2+SRbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qenAiOx+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB24C116C6;
-	Mon, 19 Jan 2026 15:14:06 +0000 (UTC)
+	s=arc-20240116; t=1768835697; c=relaxed/simple;
+	bh=A7Zfxc+qW6Yu/Am58sC5ef7oIFVZy420omyar72MKSs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=oI8jKIXZTbtVA7KMJRZkyqEDtXYVdAdGzzrNITnvQbEfzBmMk9RF9KBlKd0oLs/mF6dhwWIyS3KnYWIm2CWpIptbiI8CCNvc8asoeQajPkdNOIfdhsv6tM4CIGdbI8zaP3hzc5yWTbdq33BSHCeQFcG9xhkj8Ql6iI5Mu/zj6hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gAAp24qQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1181C19424;
+	Mon, 19 Jan 2026 15:14:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768835647;
-	bh=LqorXF1ufKA0SjwThBCq0ZpCV/6wIGaKT3rnzLzhqt4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qenAiOx+TapvNb/qxq5RK4IYfxC09nysxt8eqv31UFmv1aILrmM2vDLZlxLVvcX50
-	 QDDlaqo4rvP8ULy+NAQL5mnnd08idcM8E3gDMYTJdETDSxnyEia3O5iQeIEMrfdA+h
-	 svflqAMY3gLFGI8UW1NyO/zn7N6I/5heo/4L6TGuhnTgAxUUoMPktMnmOuTr3yU8/j
-	 0IrYepdga+WaVmV+3tfcze2cMwOduOyAzUi1xS5XGFZRwKveWVTPKQneYPNA8mC2cP
-	 XN3iPCCjkB+BRPfQV9XHiPE0fOvYL8PgH3cfvscK2N2DcsupNPjcxRKTLByHrstWgP
-	 M0EDZ3JNsRQOQ==
-Date: Mon, 19 Jan 2026 15:14:03 +0000
+	s=k20201202; t=1768835697;
+	bh=A7Zfxc+qW6Yu/Am58sC5ef7oIFVZy420omyar72MKSs=;
+	h=Date:From:To:Cc:Subject:From;
+	b=gAAp24qQ9hbZsk4TPslJDs4Jr1YieqO8VW9ZWxygfsqynwbtsYw5WXMZnIPTVa5Rx
+	 PNuG83kGeVL/XogAMupXJDxS46J4z+2dVsDkIRRiDHur+nCFDdD7GS3Dwu4kHddas8
+	 ybspQYt7cdiEcelTCgChqp6mJktNqJ/Hq0/oiEI3SQ97/r54UUo/fOK3EScqsWzO6X
+	 i5kMk2KDrxX+9h5UymXcP6zCxAOC4uQZDK2fUaUKWezYewfTzSLpnrMZ+XE4RMGxU2
+	 iMN2gyBxVheyf0i0naB3S7ZJwB9lWA/v9CX393hBziliXtZblxr9okGQQDBMFUAvoj
+	 lf5tjJifKGp0Q==
+Date: Mon, 19 Jan 2026 15:14:53 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Benno Lossin <lossin@kernel.org>, Gary Guo <gary@garyguo.net>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+To: Michal Simek <monstr@monstr.eu>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Tamir Duberstein <tamird@kernel.org>
-Subject: Re: linux-next: manual merge of the rust-pin-init tree with the
- rust-fixes tree
-Message-ID: <c2d35fbf-a1ab-406c-af0f-35ecc3ad54a2@sirena.org.uk>
-References: <aW5GPwfJPrQjm-wC@sirena.org.uk>
- <CANiq72=d-U5HJjCogdYdkFsN1B_rkkc2H6zy7TEtwG4erAG_7A@mail.gmail.com>
+	Michael Walle <mwalle@kernel.org>,
+	Michal Simek <michal.simek@amd.com>, Nishanth Menon <nm@ti.com>
+Subject: linux-next: manual merge of the xilinx tree with the ti tree
+Message-ID: <aW5KbYimWKx7obE9@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="+5kQA/tLwz+vPegw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiq72=d-U5HJjCogdYdkFsN1B_rkkc2H6zy7TEtwG4erAG_7A@mail.gmail.com>
-X-Cookie: Does not include installation.
 
+Hi all,
 
---+5kQA/tLwz+vPegw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Today's linux-next merge of the xilinx tree got a conflict in:
 
-On Mon, Jan 19, 2026 at 04:04:22PM +0100, Miguel Ojeda wrote:
-> On Mon, Jan 19, 2026 at 3:57=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
-rote:
+  arch/arm64/configs/defconfig
 
-> > diff --cc scripts/generate_rust_analyzer.py
-> > index 3b645da90092c,d31d938886589..0000000000000
-> > --- a/scripts/generate_rust_analyzer.py
-> > +++ b/scripts/generate_rust_analyzer.py
+between commit:
 
-> It seems the diff is empty :)
+  f69f88211c84d ("arm64: defconfig: Enable the J721E PCI host driver")
 
-> I assume you kept all the union of the dependencies from both, i.e.
-> just using the line from 514e4ed2c9da9?
+from the ti tree and commit:
 
->     ["std", "proc_macro", "proc_macro2", "quote", "syn"],
+  41de0de8033e7 ("arm64: defconfig: Enable missing AMD/Xilinx drivers")
 
-Yes, that's what git does for a noop change.
+from the xilinx tree.
 
---+5kQA/tLwz+vPegw
-Content-Type: application/pgp-signature; name="signature.asc"
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmluSjoACgkQJNaLcl1U
-h9Cengf/an8wVpdNDNKR+9JKXzx8tgx1B0OeGKxQyfp17GRxtbClGerfT/+wSCST
-8lPtQdOszehEuPwwaRgbA2Enav2m6mAE2adKBS4xgqQCv4CuvFiY+YZct3XfNm0P
-fhs8sAZCxTpyIsXesZhpSmK+f6m3yzqWTQleEBtyWtviJ+S0lhRkV8NX/oT1qJiS
-r2LA6LV6UFmPmO2A2Da/pgiiInOKpRDX7pqORuhxtDOVdI8MGmYpiAcC0GAY7afB
-k5I7BYRR6nkYp2MHnqq/RPuJIlenCoOOZ40RtrY3i+atfMYBFoTPxIZfWnAxAmTZ
-J/U1L4d6J6Y+HyP3vjgSTLBCcrGM8Q==
-=usVm
------END PGP SIGNATURE-----
-
---+5kQA/tLwz+vPegw--
+diff --cc arch/arm64/configs/defconfig
+index c46c678c8f6c2,cdb7d69e3b248..0000000000000
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@@ -233,10 -231,12 +233,14 @@@ CONFIG_PCIE_MEDIATEK_GEN3=
+  CONFIG_PCI_TEGRA=y
+  CONFIG_PCIE_RCAR_HOST=y
+  CONFIG_PCIE_RCAR_EP=y
+ +CONFIG_PCIE_RENESAS_RZG3S_HOST=y
+  CONFIG_PCIE_ROCKCHIP_HOST=m
+  CONFIG_PCI_XGENE=y
+ +CONFIG_PCI_J721E_HOST=m
++ CONFIG_PCIE_XILINX=y
++ CONFIG_PCIE_XILINX_DMA_PL=y
++ CONFIG_PCIE_XILINX_NWL=y
++ CONFIG_PCIE_XILINX_CPM=y
+  CONFIG_PCI_IMX6_HOST=y
+  CONFIG_PCI_LAYERSCAPE=y
+  CONFIG_PCI_HISI=y
+@@@ -608,11 -609,11 +618,13 @@@ CONFIG_SPI_STM32_OSPI=
+  CONFIG_SPI_SUN6I=y
+  CONFIG_SPI_TEGRA210_QUAD=m
+  CONFIG_SPI_TEGRA114=m
++ CONFIG_SPI_XILINX=m
++ CONFIG_SPI_ZYNQMP_GQSPI=m
+  CONFIG_SPI_SPIDEV=m
+  CONFIG_SPMI=y
+ +CONFIG_SPMI_APPLE=m
+  CONFIG_SPMI_MTK_PMIF=m
+ +CONFIG_PINCTRL_APPLE_GPIO=m
+  CONFIG_PINCTRL_BRCMSTB=y
+  CONFIG_PINCTRL_BCM2712=y
+  CONFIG_PINCTRL_DA9062=m
 

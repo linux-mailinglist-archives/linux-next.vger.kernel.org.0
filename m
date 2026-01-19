@@ -1,94 +1,98 @@
-Return-Path: <linux-next+bounces-9702-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9703-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5FCDD3AEE8
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 16:23:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B787ED3B00B
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 17:10:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D53A73043919
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 15:21:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8FAF9304698D
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 16:09:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55EF538A71C;
-	Mon, 19 Jan 2026 15:21:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2ACF296BD3;
+	Mon, 19 Jan 2026 16:09:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LHk55XwW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hJgW4/8w"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F30361DDC;
-	Mon, 19 Jan 2026 15:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EEA2288C0A;
+	Mon, 19 Jan 2026 16:09:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768836109; cv=none; b=ScC1/4vh6awPMq46grgT4j3IS/LNqiP2JhaLErXV4NPkLItZiaVFsEVD01Mu3nAFksPJdD2xD2sFOzxxm3olM5cgzB34nAU5v/cD4i+WT3sQBZlyvuTLQS2iGEQr9vz98HziB35ABgzMyskmRAmCC+sJyx5nFJZcH234MexYzTA=
+	t=1768838988; cv=none; b=BtFShVeITO/IfDRhV+wDd2IFEmfbxjE1YSG+g0oDs3WsvFg8f54+GZ24gbPTdspAy7G1rJDmDQZSl3CrqX54vldsEXuxiDBBtJc9b4W0Rj4atTdrRl/tCu0/Pmcbp1XHkZYbcb7/ws7d7blX/wgDPoB841LED0xvxNp4RlCu+TE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768836109; c=relaxed/simple;
-	bh=hP6yANx7F87RWnkcJh47nQU8SBhuU++7n0hYiK1jqEY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kRuPWbJ2jbUS3qIetUSY2xQIgAMozFdnbYTxcwzsrXOKQskzEPlzkjCm0r0C0rcWHvUzr3vJH2KRlbwNLO4rzVlykcYK1CzRRThCR+a24nPz61nOTdUYUHlXfzgW0LK5QdvHOXyR/LeCh7Uqc+uQAWPJC4MPBAATAeYENk176/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LHk55XwW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C4EDC116C6;
-	Mon, 19 Jan 2026 15:21:47 +0000 (UTC)
+	s=arc-20240116; t=1768838988; c=relaxed/simple;
+	bh=zc4sY5FqynenxO/ZE5el0mWkxPgSB264gPFmbsQQBQw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VqDHvU7g7ZNC9Xy1v9WUZpt86Fop766lkCF5VlRueyoFNMV5CLKYZbJQTX7c8Gb0qDhhFZIB+yHHdW+FK9rChdF5iqpedYgDaxCbL+nue1RcjB1IpDhEczULYK+HLZ/vc//EG2wIR4ED2JDxjZhqAU+OtREFOf6AFpPUeOqagUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hJgW4/8w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C47F8C116C6;
+	Mon, 19 Jan 2026 16:09:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768836108;
-	bh=hP6yANx7F87RWnkcJh47nQU8SBhuU++7n0hYiK1jqEY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LHk55XwWFo1X4RctMEQ8g+bZRDJFRGzVgF07sh9JY4BZ3NzX5c8TUaZ40NgmCqYJA
-	 x2BCxOX0UUVfIaweUlZmYhxCAlpZwHwPxfRMU6bTbi8LWVbzn9UZ1kkZ3qlGvhFr//
-	 gb9+J5M5JSwsaCkOv2teBpiD5ZWmjXalXJ4qFy9ksCOGi2aL53WpQFAm4dXhrg4qTh
-	 Hsvw6AUjgJAmFCaczGV4nqlwEeSbMTDdQOVdm2TrdAVcyaq/78oAd1uO+mGWt8tEaz
-	 xPuKGdMgiI9pdbzRkBQ7UetwfZJ6YFzooPVEKVWAF9Zv/b50sZRXY1A076aJHxHuE7
-	 Grstg6R9ca/HQ==
-Date: Mon, 19 Jan 2026 15:21:44 +0000
+	s=k20201202; t=1768838988;
+	bh=zc4sY5FqynenxO/ZE5el0mWkxPgSB264gPFmbsQQBQw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=hJgW4/8wqFM9Zpy3T8KOLdq7GHAGh3cTr2nVcBP7K2BDbbUm5pqMCslbKQJR4XlHd
+	 NeLLgCly5DaLfCiKHeZgmO2yArMLXo+fMsGrFJFVDpno2cpeFcThQ18RBAjU9dEXlb
+	 g4q6oLdcKKz86f1HQJKK3rysUSSrplK7gLMQ6MFlhoOOjsS7qnnQ6RMcGKXciWnDU5
+	 35w4wzV+dyS+muNy0FPmLPxgzS66zbyDso5VNwfjo6Hd0DY7nsEkjagbart3M7bnbG
+	 6gP5LF16Whn8/tUeU6IeleweXSwmzrCTIexAKQe5IL7u8aGgG1DqF9Iid5EshyacZg
+	 x4lzeDCEv/O+Q==
+Date: Mon, 19 Jan 2026 16:09:44 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Michal Simek <michal.simek@amd.com>
-Cc: Michal Simek <monstr@monstr.eu>, Arnd Bergmann <arnd@arndb.de>,
+To: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	Namhyung Kim <namhyung@kernel.org>
+Cc: James Clark <james.clark@linaro.org>, Leo Yan <leo.yan@arm.com>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Michael Walle <mwalle@kernel.org>, Nishanth Menon <nm@ti.com>
-Subject: Re: linux-next: manual merge of the xilinx tree with the ti tree
-Message-ID: <c9d3063a-a652-4db9-8e62-3be34ccb27ef@sirena.org.uk>
-References: <aW5KbYimWKx7obE9@sirena.org.uk>
- <723362a0-579a-4ed4-ad90-dc5eea4ae902@amd.com>
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the perf tree
+Message-ID: <aW5XSAo88_LBPSYI@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="+VuaZBVZ3M17mIkF"
-Content-Disposition: inline
-In-Reply-To: <723362a0-579a-4ed4-ad90-dc5eea4ae902@amd.com>
-X-Cookie: Does not include installation.
-
-
---+VuaZBVZ3M17mIkF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Jan 19, 2026 at 04:17:46PM +0100, Michal Simek wrote:
+Hi all,
 
-> I have sent merge request to Arnd today. My 2 patches are in Linux-next for
-> a while that's why it is new change coming from that second tree.
+After merging the perf tree, today's linux-next build (arm64 perf)
+failed like this:
 
-The merge order is fixed so it's just a question of which tree was
-already merged which shows as the conflicting tree.
+Exception processing /tmp/next/perf/pmu-events/arch/arm64/arm/cortex-a510/pmu.json
+Traceback (most recent call last):
+  File "/tmp/next/build/tools/perf/pmu-events/jevents.py", line 1405, in ftw
+    action(parents, item)
+    ~~~~~~^^^^^^^^^^^^^^^
+  File "/tmp/next/build/tools/perf/pmu-events/jevents.py", line 656, in preprocess_one_file
+    for event in read_json_events(item.path, topic):
+                 ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/tmp/next/build/tools/perf/pmu-events/jevents.py", line 464, in read_json_events
+    events = json.load(open(path), object_hook=JsonEvent)
+  File "/usr/lib/python3.13/json/__init__.py", line 293, in load
+    return loads(fp.read(),
+        cls=cls, object_hook=object_hook,
+        parse_float=parse_float, parse_int=parse_int,
+        parse_constant=parse_constant, object_pairs_hook=object_pairs_hook, **kw)
+  File "/usr/lib/python3.13/json/__init__.py", line 359, in loads
+    return cls(**kw).decode(s)
+           ~~~~~~~~~~~~~~~~^^^
+  File "/usr/lib/python3.13/json/decoder.py", line 345, in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/json/decoder.py", line 361, in raw_decode
+    obj, end = self.scan_once(s, idx)
+               ~~~~~~~~~~~~~~^^^^^^^^
+  File "/tmp/next/build/tools/perf/pmu-events/jevents.py", line 422, in __init__
+    raise argparse.ArgumentTypeError('Cannot find arch std event:', arch_std)
+argparse.ArgumentTypeError: ('Cannot find arch std event:', 'PMU_OVFS')
 
---+VuaZBVZ3M17mIkF
-Content-Type: application/pgp-signature; name="signature.asc"
+Caused by commit
 
------BEGIN PGP SIGNATURE-----
+   a66f6242fbf52 (perf vendor events arm64: Remove uncountable events)
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmluTAcACgkQJNaLcl1U
-h9AQ5Af+NikxdUzWZ3CwSgcyfzIKof39dGMZIZjIXkFxjLFX5zQlzI8YX2abNN8d
-VNignp6MbOMiGybbASS3QYn6XJU4McF7dI86/BkePWSUx1b7x1t8BsDtCP6/a3NA
-aFjIfzCfV8HhlhMYxf5bizXD6V3184bRpvNqSZcd0UEmN878xfeTIavE3WGGBXFH
-G4e/J5y0kAzMqM2/fdgp376rc98pq1grWnPSVdEb+kI3VUh+9/CdijuEc15irbvU
-1zrZayfE8D0WV02H1GhRlHqyCZKtXqscexpeBdHldp6zfqTbBwuwysZRQLQIgJ8d
-uP4i4CQ9dc5aRBdluUe5lM+oFsxDCA==
-=H1mN
------END PGP SIGNATURE-----
-
---+VuaZBVZ3M17mIkF--
+I have used the perf tree from 20260116 instead.
 

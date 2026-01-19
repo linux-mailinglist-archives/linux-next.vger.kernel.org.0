@@ -1,54 +1,59 @@
-Return-Path: <linux-next+bounces-9726-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9727-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C74BD3BAE3
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 23:30:29 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EBE2D3BAE6
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 23:31:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 8AB453009294
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 22:30:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E59F530389BA
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 22:30:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C0D41E32A2;
-	Mon, 19 Jan 2026 22:30:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11B58238C16;
+	Mon, 19 Jan 2026 22:30:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LniVvSB2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qVs8ySJ7"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17EA91CBEB9;
-	Mon, 19 Jan 2026 22:30:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07971DFD96;
+	Mon, 19 Jan 2026 22:30:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768861825; cv=none; b=MZHRcM0JvQMlJ8iVy8H7i+xjoXSIU4IHqEf2xIBxG2yMCQIC0/3wzf3VnoYxkXLEqDj2+2yj4ecuvu70bDM0uH5ZsQgtV2cIhYDkPxv8xf6lDVhCMnwjPKT2OJBgewWLd0zKMY0GSXiczLfw47EUCgpmIkQNa5yhNVM52ydzNEg=
+	t=1768861859; cv=none; b=Yh6xjZw+Ck3mEG+tBofP2LZQF5RbCq6iqyTKLE7q96JLGi/SaPzUxLbiySztjW4JioxvN/JV75XR5DqoLVU0BvVRKxbDKd+asErEh4BRAS72fRqDF11C2SnnVbIUl4k3M0lIrCZqt6IMJnAi8DN/OAx4Jx9Xk81E6ocVGyfseQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768861825; c=relaxed/simple;
-	bh=vqobzR/qbWjcrjyRqa6SkkLI9tSkG4eDhsuvZojmKKg=;
+	s=arc-20240116; t=1768861859; c=relaxed/simple;
+	bh=NgXPV5unaA3nCfYhkbuX0VMeX04lXuYirsqsHatGyB0=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sDvj1kMxp97fsiDboFsCvCM3S9YJYCoBYF/ATgRUDZ1p3M6IRrz9sztUjrrLdl/+YMntJEgLbg8q5BwiexzGnzOBAi7ecPQ7BWBDyDXTV3t2moGwBjAJM5RwsQeGN+k08vHOl69F5P0UIZKOlitEJxnRfEt189OtORHG8u+qB60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LniVvSB2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FB39C116C6;
-	Mon, 19 Jan 2026 22:30:22 +0000 (UTC)
+	 Content-Disposition; b=ULIX2aY64S+e4jIUoCGeJvfdJIklfigTtb0DlxjNsCJMPqcgB0UjgKCV3ZfwjyvFCkSG+MzW0AOtxpj6GElituo7FNSmqU2lcnkAVuzjzthH3blOQVTmHkCVLbd2wgaDo6cOrNwOwZi1VUR2PvB5d0KqxFF+RlRowELYHXzumIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qVs8ySJ7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F911C116C6;
+	Mon, 19 Jan 2026 22:30:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768861824;
-	bh=vqobzR/qbWjcrjyRqa6SkkLI9tSkG4eDhsuvZojmKKg=;
+	s=k20201202; t=1768861858;
+	bh=NgXPV5unaA3nCfYhkbuX0VMeX04lXuYirsqsHatGyB0=;
 	h=Date:From:To:Cc:Subject:From;
-	b=LniVvSB2GvwdJb5zqest9oogshFnDowhySf/9KK/JoxHIse0pS8ngbv62UwOTqvL1
-	 NUN4NlX2g6acIKk1ZCGTtbGgo5ky0xb60CXzQTMgv1E6wDBpcKgBmwf0HetG93Ez+K
-	 03Gehu+WWc/hnjo8C298GWKWcMrDE8s01cJcmqfqGp2BB4CQsY0oyT16NwrDnT+Bt9
-	 1hsOMaHgFl78jLVoOxQZ8a8VxKUe8oBOh6yJaAhUwTtt4d2+DACFFSzTTOykvAaJqX
-	 VoqR35yhY5HrBUUtYlfWMV+aqWi/Njq4fpxSvTtLEWJflTcbDHKZflLq++3lJwxhd2
-	 hSkTl7eftMxVw==
-Date: Mon, 19 Jan 2026 22:30:20 +0000
+	b=qVs8ySJ7Dfv1nkF54HkWxDKDMuc9Z8IShP++HSblHeZgZlEnV3jeMpQBvdmcojiQ4
+	 8m8ykWSlgYYzkFJ9IrvVAA/ipO7Rz4x0tkZelMyWIw1raBsDu8IWCl5NjOu7inlByg
+	 h2hmN4TXIrtZYNDOQS6uYJbIYj/qtvcpn3BAaborevmEnKpxzIaISlABUv0gc86qzk
+	 wuQY1o2Ty/rHMUIZsei2VzNajcMO4te1AXsnjc93mSjBRA7I9UqwteflWUCaWL6gvU
+	 TWHyGwGiv2DFWp/EwMp0FZETgkGZDDTOEr9dV144hhDPXfSGOXaCqjCLwRzZtz6YBW
+	 OwhsiDjNYNXeA==
+Date: Mon, 19 Jan 2026 22:30:52 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Alice Ryhl <aliceryhl@google.com>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Deborah Brouwer <deborah.brouwer@collabora.com>,
-	Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>
+To: Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure in final build
-Message-ID: <aW6wfOjd17D5tUC5@sirena.org.uk>
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kselftest@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>, rust-for-linux@vger.kernel.org
+Subject: linux-next: Tree for Jan 19
+Message-ID: <aW6wnF0E3BPovw3m@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -56,76 +61,101 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="v+y0wOKD1zshv057"
+	protocol="application/pgp-signature"; boundary="h2Pj6ea45PRhsxQe"
 Content-Disposition: inline
 
 
---v+y0wOKD1zshv057
+--h2Pj6ea45PRhsxQe
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
 Hi all,
 
-After merging all trees, today's final linux-next build (arm64
-allyesconfig) failed like this:
+Changes since 20260116:
 
-error[E0560]: struct `drm_panthor_gpu_info` has no field named `pad0`
-  --> /tmp/next/build/drivers/gpu/drm/tyr/gpu.rs:75:13
-   |
-75 |             pad0: 0,
-   |             ^^^^ `drm_panthor_gpu_info` does not have this field
-   |
-   = note: available fields are: `selected_coherency`
+I have started verifying the build of a substantial subset of the
+kselftests on arm64, some of the skipped builds are simply missing build
+dependencies on my machine rather than actual failures - I'll poke at
+this over time.  The subset is listed in Next/kselftest-targets.
 
-Caused by commit
+It also appears that due to having a Rust toolchain on the build server
+allmodconfig and allyesconfig have picked up CONFIG_RUST=y coverage.
 
-   8304c44631c37 (drm/tyr: use generated bindings for GpuInfo)
+The vfs tree gained a conflict with the vfs-brauner tree.
 
-I tried reverting that but got several other build errors:
+The vfs-brauner tree gained a build conflcit with the ntfs3 tree for
+which I applied a fixup.
 
-error: field `device` is never read
-  --> /tmp/next/build/drivers/gpu/drm/tyr/driver.rs:36:5
-   |
-35 | pub(crate) struct TyrDriver {
-   |                   --------- field in this struct
-36 |     device: ARef<TyrDevice>,
-   |     ^^^^^^
-   |
-   = note: `-D dead-code` implied by `-D warnings`
-   = help: to override `-D warnings` add `#[allow(dead_code)]`
+The rust-pin-init tree gained a conflict with the rust-fixes tree.
 
-error: fields `mali` and `sram` are never read
-   --> /tmp/next/build/drivers/gpu/drm/tyr/driver.rs:202:5
-    |
-201 | struct Regulators {
-    |        ---------- fields in this struct
-202 |     mali: Regulator<regulator::Enabled>,
-    |     ^^^^
-203 |     sram: Regulator<regulator::Enabled>,
-    |     ^^^^
+The xilinx tree gained a conflict with the ti tree.
 
-at which point I gave up and marked the driver as BROKEN for today, I
-might take another look tomorrow.
+The perf tree gained a build failure, I have used the version from
+20260116 instead.
 
-I note that the dependency that the rust DRM drivers have on DRM=y means
-that they evade allmodconfig build coverage which is not playing well
-here.  I will move the drm-rust and drm-nova trees to be the last trees
-merged to mitigate this issue, their fixes trees will still be affected.
+The drm tree gained multiple conflicts with Linus' tree.
 
---v+y0wOKD1zshv057
+The drm-misc tree gained a build conflict with the drm tree for which I
+applied a fixup.
+
+The block tree gained a build failure for which I did a revert.
+
+The iommu tree gained a build failure, I used the version from 20260116.
+
+The iio tree gained a build failure, I used the version from 20260116.
+
+The drm-rust tree gained multiple build failures for which I disabled
+the Tyr driver.
+
+Non-merge commits (relative to Linus' tree): 7291
+ 7092 files changed, 419068 insertions(+), 146354 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There is also the merge.log file in the Next
+directory.  Between each merge, the tree was built with a defconfig
+for arm64, an allmodconfig for x86_64, a multi_v7_defconfig for arm,
+an arm64 build of various kselftests and a native build of tools/perf.
+After the final fixups (if any), I do an x86_64 modules_install followed
+by builds for x86_64 allnoconfig, arm64 allyesconfig, powerpc
+allnoconfig (32 and 64 bit), ppc44x_defconfig and pseries_le_defconfig
+and i386, s390, sparc and sparc64 defconfig and htmldocs. And finally, a
+simple boot test of the powerpc pseries_le_defconfig kernel in qemu
+(with and without kvm enabled).
+
+Below is a summary of the state of the merge.
+
+I am currently merging 405 trees (counting Linus' and 122 trees of bug
+fix patches pending for the current release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Thanks to Paul Gortmaker for triage and bug fixes.
+
+--h2Pj6ea45PRhsxQe
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlusHsACgkQJNaLcl1U
-h9CjIAf9FvE2tZfaThc1HowkSSyizOIf2Do/Hc/uFJAfSqXV8gN9E+Imw/6qtqDI
-aBjmQ/pI34f8+S9yfQ4G/brVVSpbkkmUOHLsR8lg9dikUicyjSgK7PBCD66Rxa+/
-91GxIz7qRamwyZL1xdK3sD+hU1DmDc8S/8b7sl2+S6Me5e0IZSEEznEh7M8v47kH
-Cua5JMmW6+V8MiLVXWFVH2Gx9mLaDL6SoWJusFWe9ryrIDoU3aLF3ky2Zxanu3co
-09HYD+Ictbtve3p6XEoIRq2pJGIPMIV3EoguOEJNdPpgREY+xx24WPjGJjUuH5HE
-T4bvR/6Q1OZ+TpYs7yH+/VGjU53XIA==
-=POS6
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlusJwACgkQJNaLcl1U
+h9B0DAf+PVoLIxUPLhoEE10dFfADF3bzyaqGLMtMtQVjXn6tbi1GmJ8tjoxTzMeA
+vYSDri4EbKO5xk3pUEGoSQZ3J8GXyazwYIN0sxNeE3QZKmjkA0V8s6cCjZWbp5ZJ
+tbqtLbVZvoiGM6vpar0D/KAQdBYJbvrOAaAB0P2Fq7uIG0FvQHiodCZ0CMQrRnQn
+dzhUVVlKjqtHplM7difrt2aRb73Cfus7qFmNvL0wbKosIM6AlRIBvJ6RtUbBE5Kf
+9ui8ZYeLSFzeMb+czxZ3n8J9mQj7/19mfmtNMrzLm18Ubc/QJYLvyTvaT7KB1NOT
+bonMdvtRnWlVL7OgNls5OS6p6c6kBQ==
+=Ubpm
 -----END PGP SIGNATURE-----
 
---v+y0wOKD1zshv057--
+--h2Pj6ea45PRhsxQe--
 

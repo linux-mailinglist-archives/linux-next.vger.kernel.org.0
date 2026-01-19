@@ -1,103 +1,89 @@
-Return-Path: <linux-next+bounces-9706-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9707-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D774D3B2BD
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 17:56:38 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB796D3B42C
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 18:26:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 50989318B769
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 16:49:02 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5A63830FD1AE
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 16:53:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2AA438E102;
-	Mon, 19 Jan 2026 16:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED817205E26;
+	Mon, 19 Jan 2026 16:53:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N0tGkDuB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="brK4jAqp"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4D2D38BF7C;
-	Mon, 19 Jan 2026 16:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5655B1EB;
+	Mon, 19 Jan 2026 16:53:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768841034; cv=none; b=gpCRhFHb+0ZXEUewzqN11c1CrYaQ3Vk70WRuJ6ThpfxGSe3LQqHEiBe6oU15Ck8MDiqUQdX9NfDIb5YY+6F7LFkWaeldBQCDxeo4czL2j2roIP/MDkLFA3/kfsFpl9hxuJDUWwqrbibg9axrbOVU9ANX5BI1v3xGGgIA7HVF6yg=
+	t=1768841634; cv=none; b=WOT+kZe/E0/dczqdkjBlf1yODvHjNkmEC7RQzmULCnsJ4fj+u6+vW8MBJXaLhVHFEtA+QZgy02FTLya1fs5vtOsAUl8wXZJslqKKyFFMb4DhipIPggiDkPBdEIFKb3zljn9wFeP+Mg62R8chIgxcKWJROQeuwC2pyB/9dUU4H0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768841034; c=relaxed/simple;
-	bh=d8AVeTir0xGV9ekbuo+6Oa0mwklC2KUedQbU35dHluI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ya7RbXIATNPMUfxoV3TdyRKxnpj/aIYRUtKJUlhU3Ln79mNU7+PL6ulNKhAcNiODNXXSyA+EnbmpzCjLUwKZjOPDIaOBUi3VGVGUKu/4VQTrtvTizJK86YQO3WE+3HcrhKFGe2UoDJXKNKpGda0ZwZ4AHAyA7GNrQIHaisSr9Y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N0tGkDuB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FF0BC116C6;
-	Mon, 19 Jan 2026 16:43:48 +0000 (UTC)
+	s=arc-20240116; t=1768841634; c=relaxed/simple;
+	bh=AJquatnu3rVRP9y4tSNmcDyNY34vgNG0lveCEyGdIko=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=l2eHCFA7cT2PC22REeqAeW0MYzCZCVqHvEfxobsOkx68w3Fvu6g8Vx38trWKucKEvQ42B6bcFLA2nnAKhNIlx5z8C1XAg0XVbJB7craE1HKDeO+plOyNYW8lhAzS1A6owXQcyEcpJSrk07Eiu4NErf9WtTjMIRLSxXK0BK4uwyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=brK4jAqp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 565F0C19424;
+	Mon, 19 Jan 2026 16:53:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768841030;
-	bh=d8AVeTir0xGV9ekbuo+6Oa0mwklC2KUedQbU35dHluI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N0tGkDuBQ7fcTEZI/udm/jOL1Hs/C9sTakYbMdGUNLph+QqSjlMgQd/klg4hck6JT
-	 4woupGlZ05ULypweEBu+xRJT2zT+27jYfvO8wttcQ7bC+5NOeDLmjP5kneaN+30c6J
-	 gfkdOT4UIrmK62v1WZ+bO0x/ssD0Unb3wliD95JpzdrpgoGSlm5TTFPWvMYixea9q3
-	 H49KqOFp4M6Ki1eVb7I/mcOLLK7lohR39qd/GM2nJZkTMKrfpipafQZUKQG+QcM2fb
-	 g6n3Dpy6GneTfYljGODTiDZEQ/0pfaydofdszC8u/m09Osc2UgoEZ9tXE9LPuZZHej
-	 8RmIPOxSQf2Gg==
-Date: Mon, 19 Jan 2026 16:43:46 +0000
+	s=k20201202; t=1768841634;
+	bh=AJquatnu3rVRP9y4tSNmcDyNY34vgNG0lveCEyGdIko=;
+	h=Date:From:To:Cc:Subject:From;
+	b=brK4jAqpyj3AJrN0R6ZNHcCOTRwupCs2lr+lMY7m1IFdWb/SUfVQ/Ukz9r0pgsNDa
+	 d64wNp0npUjfVPh9Twzk3hgsNiDDlCK/R2Qo2XnK43E+WnzXzZf1eM3LdNWM0P1xLD
+	 YuBVkSqIDYTuftZpWcTpasr4nen39bS/d37COB1y9Yvf5JX6/zSf+mwQGYKc/pUYx9
+	 dpg1FLvGFnqKPEGMZRjmZeLdrPW+3Kc22CuBT+wP13lyZC5KdVw656uQxBzp0UzC/0
+	 iILsRA5sxlH+i0O3/LpUvN+5XHHUasXUBDFupHu4PMSniZTUpRYFDLUEpc4Hf2UlpJ
+	 9qcUvSsP6EYRg==
+Date: Mon, 19 Jan 2026 16:53:50 +0000
 From: Mark Brown <broonie@kernel.org>
-To: James Clark <james.clark@linaro.org>
-Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	Namhyung Kim <namhyung@kernel.org>, Leo Yan <leo.yan@arm.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the perf tree
-Message-ID: <576e6cd1-7009-4823-83e2-bfc66fd786e1@sirena.org.uk>
-References: <aW5XSAo88_LBPSYI@sirena.org.uk>
- <25abe5e2-463d-40b1-8f7a-09f845d042ef@linaro.org>
+To: Dave Airlie <airlied@redhat.com>, DRI <dri-devel@lists.freedesktop.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>,
+	Matthew Brost <matthew.brost@intel.com>,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>
+Subject: linux-next: manual merge of the drm tree with the origin tree
+Message-ID: <aW5hnvLrtQfjg0nG@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="QNbkedN8a+hDYSao"
-Content-Disposition: inline
-In-Reply-To: <25abe5e2-463d-40b1-8f7a-09f845d042ef@linaro.org>
-X-Cookie: Does not include installation.
-
-
---QNbkedN8a+hDYSao
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Jan 19, 2026 at 04:37:12PM +0000, James Clark wrote:
-> On 19/01/2026 4:09 pm, Mark Brown wrote:
+Hi all,
 
-> > After merging the perf tree, today's linux-next build (arm64 perf)
-> > failed like this:
+Today's linux-next merge of the drm tree got a conflict in:
 
-> > Exception processing /tmp/next/perf/pmu-events/arch/arm64/arm/cortex-a510/pmu.json
+  drivers/gpu/drm/drm_pagemap.c
 
-> Do you have a clean checkout? a66f6242fbf52 removes this file and at the
-> same time removes the definition from common-and-microarch.json. I think you
-> would get this build error if cortex-a510/pmu.json exists as a stale file
-> with that commit applied.
+between commit:
 
-No, all the -next builds are done incrementally so the working tree will
-start with whatever the last commit that got built was.  This would also
-break bisection cases...
+  754c232384386 ("drm/pagemap, drm/xe: Ensure that the devmem allocation is idle before use")
 
---QNbkedN8a+hDYSao
-Content-Type: application/pgp-signature; name="signature.asc"
+from the origin tree and commits:
 
------BEGIN PGP SIGNATURE-----
+  75af93b3f5d0a ("drm/pagemap, drm/xe: Support destination migration over interconnect")
+  ec265e1f1cfcc ("drm/pagemap: Support source migration over interconnect")
+  3902846af36be ("drm/pagemap Fix error paths in drm_pagemap_migrate_to_devmem")
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmluX0EACgkQJNaLcl1U
-h9CEywf+Jt6UX7abWPd7ZrjksCqhtkzKNKZQawqP5116dtiMM63+8/2ulpvW4+Gu
-xyYOEr6vLWpEHRRaALDH6UKHJSy2v35QVVXDvJczqjuSsXLvX0/Xl19woBZ6GlSD
-R40KhcWOGhK+rpPBkXUaMPfUHNH/EhP+V3DOFCAGh2pyj6q9PnbUqtu2nNRkHnao
-aANSM6P0E5O3WYH+KflxQeZgtK1HJhmOfuVCvHvl7AzVY0Bmh4VT7r3q7FHBRu8f
-po/MQYe99kaZUUHQsfEkozNuxgJaCAj5hHbIdPvYSv4NuJcd/iArQo4zeMLs9PSo
-gZRzlASs+JDCEq5DVrxx128vI/D0xw==
-=uQOD
------END PGP SIGNATURE-----
+from the drm tree.
 
---QNbkedN8a+hDYSao--
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc drivers/gpu/drm/drm_pagemap.c
+index 06c1bd8fc4d17,03ee39a761a41..0000000000000
+--- a/drivers/gpu/drm/drm_pagemap.c
++++ b/drivers/gpu/drm/drm_pagemap.c
 

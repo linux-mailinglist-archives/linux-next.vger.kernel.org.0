@@ -1,56 +1,55 @@
-Return-Path: <linux-next+bounces-9718-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9719-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7357BD3B63A
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 19:54:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id D76AFD3B655
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 19:56:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 317D53046995
-	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 18:54:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 836963007194
+	for <lists+linux-next@lfdr.de>; Mon, 19 Jan 2026 18:56:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0AA238B9AF;
-	Mon, 19 Jan 2026 18:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2BDA288C20;
+	Mon, 19 Jan 2026 18:56:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ldvSI1X7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mEbGdW+Y"
 X-Original-To: linux-next@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD7F2773C6;
-	Mon, 19 Jan 2026 18:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB662773C6;
+	Mon, 19 Jan 2026 18:56:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768848842; cv=none; b=jsb9cTrEOBntFwS3lN4jK42BYfwXCuY1CNb2WzG7ddzt3oa7IAfc6CkjmwxwLQcoIwgxvy0UpW4KlFAMexQYenqdSft0VVDAygQcK7evsj9fLU/DRBsF2gpHJt1h6xtdyTnUG6rj8Q9hiAuExm3oYprYqFnav/gRUEkb2mQeZAg=
+	t=1768848994; cv=none; b=iK+zh5W+QYpLTIAaDyDMoTsK8tHo5v86X5WmOchAQYr74HQ52T63KtA7xlSScamhDdIvd3gRAZEhvwpW5l0whmjR+asU2vu9liZFiP0pEJSk8QGTR/vQ2JTEMx5vi5p38jLWiSQ6U0CHezJvkGNgyeKyUtdFIimhWGrfzX+ffDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768848842; c=relaxed/simple;
-	bh=otdp204VLN47IZwbNbnZPPxzmbM8MHuDiDV5ZEEyles=;
+	s=arc-20240116; t=1768848994; c=relaxed/simple;
+	bh=BQAXjJOujYpYRQIi3FTmyUwlY2i0wn6b0HTy7T8Cgc8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VkU4SziaHZBphEautWYsD0RCCKirq/wT+rBh9cxo/ZZjMRZokwPrtaeLhr5jt5GT5Z/OYBtYHWCL8yN/Yk2gM/GAFCAZbcpJktGqAKw6/wH9rxj31O5cFCjmefSwGuMyGn+NBuDhiNG/nkAurpkpy18Eb4A/PQlPExlDIIimIag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ldvSI1X7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAFFBC116C6;
-	Mon, 19 Jan 2026 18:54:00 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=erlo3oN97r+tkTEQMtc1MjFwxxtLYOTCsNcNc402X7K2ZX6kxPot8YX/4C1MxPegICPdrnNwu8szUk0BlcLivz5JSm+r4FmbvA54dEMvO6XyNcUJaQHoqY4DHAyJJdesPMmLVTo4xRch9n4o1bVmoqcRRArZSP7GYRsz/QaxfR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mEbGdW+Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C278C116C6;
+	Mon, 19 Jan 2026 18:56:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768848842;
-	bh=otdp204VLN47IZwbNbnZPPxzmbM8MHuDiDV5ZEEyles=;
+	s=k20201202; t=1768848994;
+	bh=BQAXjJOujYpYRQIi3FTmyUwlY2i0wn6b0HTy7T8Cgc8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ldvSI1X77CKhhFizj5gD01vnR5tnbqD1X6jUny7IcNsV9vLfMSuX5EMNKWcTYEkQX
-	 h9NfmgqMXjiRVchtpIUcG7tl6D1sg0dQeQVRY7h2B4RFMPd3HX5FtrDpyuTDzBh+oR
-	 guGAaeC+1ihQQk7NK53P7KmfBX7yTTAW3qgYS/saqI/UmAntVy6E0aSgjeJh6utYMa
-	 1Ygc4hDT6oCcMyk7wj7ssBJ1GDxsS9jUinaimsfyN4nGUt4piIOGJbsSSiVhtMZp5M
-	 T+RMGeAHib4+1qPMibn3GWRxzAYRarM8NZL0zMTJcDjRXL3C31sVUWMMMuCOMvgaPq
-	 j3ampdmRCGUTA==
-Date: Mon, 19 Jan 2026 18:53:57 +0000
+	b=mEbGdW+YeNmIRTWXViy/8VxGSH1gMnk8gmjGBhvfw+lQKu2lxPtM4p6KAYewb//KZ
+	 oLJi+CL5cEq2rnUMhZZRVMkcEy41Q3XCI+1Yi2XjAJ30F3dZ6J3TGrOMCOsTc0IT/P
+	 5TtECGdSnOEvUIRsVMiSgeq5yL2fscO97lHbfoUHuzUmHRCc9EevqShx0IcE1xLNkP
+	 qUKm81pRMQnd3ezXpgYnxf5yyfBFHoIOpk7dL9+q5Fin7jQFBYioPv2jTTsGK/0xcp
+	 XN++m9g0jWHQ0xJTBLjFtithSdwD9XPwB1ZAo1A6coD7GptlUoFg9vuQJGRz6gsZeN
+	 /qhnehR+bGKvg==
+Date: Mon, 19 Jan 2026 18:56:30 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Tamir Duberstein <tamird@gmail.com>
-Cc: Andreas Hindborg <a.hindborg@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-	Miguel Ojeda <ojeda@kernel.org>,
+To: Lee Jones <lee@kernel.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Steffen Trumtrar <s.trumtrar@pengutronix.de>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the block tree
-Message-ID: <27b562ca-d79b-4f80-be71-ebf5e26ed9ab@sirena.org.uk>
-References: <aW5xqLq7gatOy1DV@sirena.org.uk>
- <fc855e76-5f3a-458e-82f9-f43c7d23932e@sirena.org.uk>
- <CAJ-ks9=V_JmzEaXUrHPm6K-DyTgkxEhrPCW=2ZgDJpc+4Z83_A@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the leds-lj tree
+Message-ID: <9a44bf97-4c51-49b6-bdec-2959780ff128@sirena.org.uk>
+References: <20260109124558.25b0eebc@canb.auug.org.au>
+ <20260109094147.GC1118061@google.com>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
@@ -58,57 +57,48 @@ List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="P4q8oaxhu/lOV53N"
+	protocol="application/pgp-signature"; boundary="gopJCiM6HwCm8hAK"
 Content-Disposition: inline
-In-Reply-To: <CAJ-ks9=V_JmzEaXUrHPm6K-DyTgkxEhrPCW=2ZgDJpc+4Z83_A@mail.gmail.com>
-X-Cookie: Does not include installation.
+In-Reply-To: <20260109094147.GC1118061@google.com>
+X-Cookie: I'm wearing PAMPERS!!
 
 
---P4q8oaxhu/lOV53N
-Content-Type: text/plain; charset=utf-8
+--gopJCiM6HwCm8hAK
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 19, 2026 at 01:18:09PM -0500, Tamir Duberstein wrote:
-> On Mon, Jan 19, 2026 at 1:13=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
-rote:
-> > On Mon, Jan 19, 2026 at 06:02:20PM +0000, Mark Brown wrote:
+On Fri, Jan 09, 2026 at 09:41:47AM +0000, Lee Jones wrote:
+> On Fri, 09 Jan 2026, Stephen Rothwell wrote:
 
-> > > Caused by commit
+> > ERROR: modpost: missing MODULE_LICENSE() in drivers/leds/rgb/leds-lp5860-core.o
+> > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/rgb/leds-lp5860-core.o
+> > ERROR: modpost: "lp5860_device_init" [drivers/leds/rgb/leds-lp5860-spi.ko] undefined!
+> > ERROR: modpost: "lp5860_device_remove" [drivers/leds/rgb/leds-lp5860-spi.ko] undefined!
 
-> > >   4cef2fcda3ada (rnull: replace `kernel::c_str!` with C-Strings)
+> > Caused by commit
 
-> > > I have used the version from 20260116 instead.
+> >   51f7560294c9 ("leds: Add support for TI LP5860 LED driver chip")
 
-> > Actually that's been there for a while so I'll just revert the commit
-> > instead.
+> > I have used the led-lj tree from next-20160108 for today.
 
-> Ah yes, this is the combination of
-> https://lore.kernel.org/all/20251222-cstr-configfs-v1-1-cc1665c51c43@gmai=
-l.com/
-> and https://lore.kernel.org/all/20251222-cstr-block-v1-1-fdab28bb7367@gma=
-il.com/
-> going through different trees. With both changes, the import becomes
-> unused. Can the import be removed as part of the merge commit?
+> Please provide a follow-up patch post-haste.
 
-I could do that as a merge fixup instead of the revert, I'll have a look
-at some point but not for today.  Someone will need to work out how this
-works when things go to Linus...
+This issue is still present in today's -next.
 
---P4q8oaxhu/lOV53N
+--gopJCiM6HwCm8hAK
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlufcUACgkQJNaLcl1U
-h9CAOQf9G9F1hgcpKKT7REZGX5EsY9O4xkfzGnt4uHPIbW74oTV28DVnK2qOL9++
-N7c7eYitswzvcAgu9SWRrchREorWAPdjL51/4mFudpkA5ma7EzUrJQT11xa+O0Ou
-yQHUrIVjR32kUsS0mJLEzVrAxEq4+TN2FDOYa1gijKPwCYX/SRXbMGFa5AHmP1oa
-QtTeR74yhxa2OT7YRPVWmjIrJmfvF3aJ7DewW0Aj+wJmH/YzTIeStlsTRV9lvOgU
-+I3eRu/p/qwmd3yguD8QX0pChy/Lm8X3s7qtgfDG8tzGJvtIiZui5bEzjhA+/Bqa
-HpHtpzhDndILaMhB9A37e1MZ4lVrPw==
-=zl/9
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlufl0ACgkQJNaLcl1U
+h9Ayfwf9H8D7XAklapPiFrjrFmG555YFBZHfE7vhB2th1AuXowQgLSD8I+LoFNHT
+Fqv0UfoPYY7nT2hzFlC8aqcu+m8N9qm4luDLSFZa1EDvvDjs72I7j1FU+CJIXuj5
+JpFUhcEY8o1w/ZeBHfmSMQVgfNQpcnDiy21G3GY021b5omclgzIjfN1nzj/FXeYQ
+izsR2xArkPIEttv5KKfkDIZh+YGInqVD0VvvQGGvFITCWUQOdYgbk1aDgA/5FUFJ
+EZTA4SGpAtZoxf8V7jPIXYU70ypIbdnEBnQ3ck9XFUaTEqP9OHteibUwGGM105AT
+WsCFgbrDJ73LWyHg4wP3M5UEgm20eQ==
+=gbdy
 -----END PGP SIGNATURE-----
 
---P4q8oaxhu/lOV53N--
+--gopJCiM6HwCm8hAK--
 

@@ -1,178 +1,95 @@
-Return-Path: <linux-next+bounces-9734-lists+linux-next=lfdr.de@vger.kernel.org>
+Return-Path: <linux-next+bounces-9735-lists+linux-next=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D31AD3C29A
-	for <lists+linux-next@lfdr.de>; Tue, 20 Jan 2026 09:53:46 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADAD6D3C2C9
+	for <lists+linux-next@lfdr.de>; Tue, 20 Jan 2026 10:00:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 530C04C6198
-	for <lists+linux-next@lfdr.de>; Tue, 20 Jan 2026 08:39:59 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1AC1F489FDF
+	for <lists+linux-next@lfdr.de>; Tue, 20 Jan 2026 08:46:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6567E3559CA;
-	Tue, 20 Jan 2026 08:39:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3ED33B95ED;
+	Tue, 20 Jan 2026 08:46:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z8+Zh7vE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nC4N6BFX"
 X-Original-To: linux-next@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B95C34214A;
-	Tue, 20 Jan 2026 08:39:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98883469F4;
+	Tue, 20 Jan 2026 08:46:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768898393; cv=none; b=R183tWmUpqcpwfSaE6P9GigGQrj8WJR4qX6vCyeKRxFXDeHNsyqPGuRBohibfhnay+QBXnPrcrd0uyb8WUAfMm7iTfN/qhw1OS1EZV8autY2E3S5jo6Q185Nb/G9b63wicEKK0gCraoTWcaHj6L4FHBNxPMevz3ua+RApwwnby8=
+	t=1768898766; cv=none; b=tNUNgEIPxLfTJWZdGmC06EwDdlJHFIUvruDq9A0XuMCWJWqe3tyFK7cdh2WcGS9Ox6dDpckE6W0fnYpr7xdf3mXmBaebmoTSfYrUyTVQ/0m6zV4X4Tp1PYogJ4mIUCCq8YTVnuVXlVXck1tUlKvUNBYtj+xOobwcnOU5K8AgkO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768898393; c=relaxed/simple;
-	bh=gyknzVYbQz+3C6pNFs49TMdgVch1zIYC5+49dltZUBs=;
+	s=arc-20240116; t=1768898766; c=relaxed/simple;
+	bh=LUD/xrSuUEut3M8Oro3w7nYsqHeryUaCfR7/Qz9pX5s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FiTHGWc5SYby0MsWx4+gZrZFJr8CAf9vdR9+uvkpWy+RWKsovMsBMLCyuHAOJLq+jZ477nknt8ylNgVcFxyvqHQPKddVZQQL1hrYPtgNXM8Qg5n6a//LY75JJI5qDmsYUC/qCjzPLR688nXz6xs/1MmFEkdncRxSzEDtevjo5c0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z8+Zh7vE; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768898392; x=1800434392;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gyknzVYbQz+3C6pNFs49TMdgVch1zIYC5+49dltZUBs=;
-  b=Z8+Zh7vE0C0L5OK8Cc7aXk28a4fhL4FDG4eLIyGUOvUzkfe3qICSGMQ1
-   Vh1j/8ohUwpAsFwxHPBJkilTAIy8pQdMYTCgynqhzmtj9ZXyO3s1Z7SQR
-   l79Q6GGnsd5ik3QnLoVseXYO5mx6vc2+R9SdP5KaTrDMupgLh959yQ0t2
-   eZ0OL1iRKzLT3oFnbh+IyWNBd8lZtc0+roFLOqwqY2pyRCaIBdVx6R2Gp
-   vga7VCA3q11yNmDeOri4+GZ3aXAtNPUgfTMZ3G1nRp6aRYm2fx3D2Vy6g
-   gKAATbXUtBpW6t8sRMFxOotaNGLLyOpvDYkXB9XhingMvnoC/9AJrNGE7
-   g==;
-X-CSE-ConnectionGUID: J2sMaVbDQo2jxRD7XYhKLg==
-X-CSE-MsgGUID: xYtVFVQQTrC0NbbcIF1vZA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11676"; a="73957199"
-X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
-   d="scan'208";a="73957199"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 00:39:51 -0800
-X-CSE-ConnectionGUID: B44mzRXST6+3wL7m0Wqszw==
-X-CSE-MsgGUID: UPRqIYh9R46/J9RdTnNFrA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,240,1763452800"; 
-   d="scan'208";a="206486951"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 20 Jan 2026 00:39:48 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vi7H7-00000000Ojd-3fJu;
-	Tue, 20 Jan 2026 08:39:45 +0000
-Date: Tue, 20 Jan 2026 16:39:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>, Christian Brauner <brauner@kernel.org>,
-	Gao Xiang <hsiangkao@linux.alibaba.com>,
-	"Darrick J. Wong" <djwong@kernel.org>,
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	 Content-Type:Content-Disposition:In-Reply-To; b=FRBQbF1LW+CglUmL7hGxbcRRAHSkTE3T4h/B6EAXEmaMv8/fQkqriE94yNsR5pwHonvyVokKTdhl+oZRbHc5Z+KqkOVUjY63++6EcOqinb3Dh6V4f481UN7gNVGG57fH1iLTS2IeYWcM0wUwEt9wV6GT/C7Vh4l6JfWCkagLf9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nC4N6BFX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2058C19423;
+	Tue, 20 Jan 2026 08:46:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768898765;
+	bh=LUD/xrSuUEut3M8Oro3w7nYsqHeryUaCfR7/Qz9pX5s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nC4N6BFXANyUcWDgLFj/zqzbOkplOa5SfDGM/FtSOjTCEpxZEjrC1qMNWIuOZP/k/
+	 jzPZQS8wQSDl4SVJiBXOp3/SAzRRFSUe9ra2TmzxglRAWCQ+HBWA0/NKzeo+iGAuaA
+	 BzLWaqnJQUQAQ6RhTiQHO/H0ValFbXJlopiIhyKQ2kikVwrtJDLSfDkD2l/Q2mge/f
+	 oDTxxMEHE7w1RkDm7bUp+YD01ZNdkWy8jwhYuhayGTKYtbND5uGbse6e58XnMAzlXR
+	 gUULVKl6x2Rjzk9iQPtdTN0S6lZmPDHZ4ovvxifQfTOpxCYE/bRW1QkiU3y+2xz2bj
+	 DD+mSLdXr7YoA==
+Date: Tue, 20 Jan 2026 08:46:00 +0000
+From: Lee Jones <lee@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Stephen Rothwell <sfr@canb.auug.org.au>,
+	Steffen Trumtrar <s.trumtrar@pengutronix.de>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
 	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the vfs-brauner tree
-Message-ID: <202601201642.SjxE1oMu-lkp@intel.com>
-References: <aW5AGPFq0HPi440m@sirena.org.uk>
+Subject: Re: linux-next: build failure after merge of the leds-lj tree
+Message-ID: <20260120084600.GA1354723@google.com>
+References: <20260109124558.25b0eebc@canb.auug.org.au>
+ <20260109094147.GC1118061@google.com>
+ <9a44bf97-4c51-49b6-bdec-2959780ff128@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-next@vger.kernel.org
 List-Id: <linux-next.vger.kernel.org>
 List-Subscribe: <mailto:linux-next+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-next+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aW5AGPFq0HPi440m@sirena.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9a44bf97-4c51-49b6-bdec-2959780ff128@sirena.org.uk>
 
-Hi Mark,
+On Mon, 19 Jan 2026, Mark Brown wrote:
 
-kernel test robot noticed the following build errors:
+> On Fri, Jan 09, 2026 at 09:41:47AM +0000, Lee Jones wrote:
+> > On Fri, 09 Jan 2026, Stephen Rothwell wrote:
+> 
+> > > ERROR: modpost: missing MODULE_LICENSE() in drivers/leds/rgb/leds-lp5860-core.o
+> > > WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/leds/rgb/leds-lp5860-core.o
+> > > ERROR: modpost: "lp5860_device_init" [drivers/leds/rgb/leds-lp5860-spi.ko] undefined!
+> > > ERROR: modpost: "lp5860_device_remove" [drivers/leds/rgb/leds-lp5860-spi.ko] undefined!
+> 
+> > > Caused by commit
+> 
+> > >   51f7560294c9 ("leds: Add support for TI LP5860 LED driver chip")
+> 
+> > > I have used the led-lj tree from next-20160108 for today.
+> 
+> > Please provide a follow-up patch post-haste.
+> 
+> This issue is still present in today's -next.
 
-[auto build test ERROR on next-20260116]
-[cannot apply to brauner-vfs/vfs.all xiang-erofs/dev-test xiang-erofs/dev xiang-erofs/fixes v6.19-rc6 v6.19-rc5 v6.19-rc4 linus/master v6.19-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Steffen,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mark-Brown/linux-next-build-failure-after-merge-of-the-vfs-brauner-tree/20260119-223859
-base:   next-20260116
-patch link:    https://lore.kernel.org/r/aW5AGPFq0HPi440m%40sirena.org.uk
-patch subject: linux-next: build failure after merge of the vfs-brauner tree
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260120/202601201642.SjxE1oMu-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260120/202601201642.SjxE1oMu-lkp@intel.com/reproduce)
+Please provide a follow-up or I'll have to remove your patch.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601201642.SjxE1oMu-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/ntfs3/inode.c:678:42: error: too many arguments to function call, expected 2, have 3
-     678 |         iomap_read_folio(&ntfs_iomap_ops, &ctx, NULL);
-         |         ~~~~~~~~~~~~~~~~                        ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-       8 | #define NULL ((void *)0)
-         |              ^~~~~~~~~~~
-   include/linux/iomap.h:347:6: note: 'iomap_read_folio' declared here
-     347 | void iomap_read_folio(const struct iomap_ops *ops,
-         |      ^                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     348 |                 struct iomap_read_folio_ctx *ctx);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/ntfs3/inode.c:702:41: error: too many arguments to function call, expected 2, have 3
-     702 |         iomap_readahead(&ntfs_iomap_ops, &ctx, NULL);
-         |         ~~~~~~~~~~~~~~~                        ^~~~
-   include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-       8 | #define NULL ((void *)0)
-         |              ^~~~~~~~~~~
-   include/linux/iomap.h:349:6: note: 'iomap_readahead' declared here
-     349 | void iomap_readahead(const struct iomap_ops *ops,
-         |      ^               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     350 |                 struct iomap_read_folio_ctx *ctx);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +678 fs/ntfs3/inode.c
-
-   647	
-   648	static int ntfs_read_folio(struct file *file, struct folio *folio)
-   649	{
-   650		int err;
-   651		struct address_space *mapping = folio->mapping;
-   652		struct inode *inode = mapping->host;
-   653		struct ntfs_inode *ni = ntfs_i(inode);
-   654		loff_t vbo = folio_pos(folio);
-   655		struct iomap_read_folio_ctx ctx = {
-   656			.cur_folio = folio,
-   657			.ops = &ntfs_iomap_bio_read_ops,
-   658		};
-   659	
-   660		if (unlikely(is_bad_ni(ni))) {
-   661			folio_unlock(folio);
-   662			return -EIO;
-   663		}
-   664	
-   665		if (ni->i_valid <= vbo) {
-   666			folio_zero_range(folio, 0, folio_size(folio));
-   667			folio_mark_uptodate(folio);
-   668			folio_unlock(folio);
-   669			return 0;
-   670		}
-   671	
-   672		if (is_compressed(ni)) {
-   673			/* ni_lock is taken inside ni_read_folio_cmpr after page locks */
-   674			err = ni_read_folio_cmpr(ni, folio);
-   675			return err;
-   676		}
-   677	
- > 678		iomap_read_folio(&ntfs_iomap_ops, &ctx, NULL);
-   679		return 0;
-   680	}
-   681	
+This is blocking testing.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Lee Jones [李琼斯]
 
